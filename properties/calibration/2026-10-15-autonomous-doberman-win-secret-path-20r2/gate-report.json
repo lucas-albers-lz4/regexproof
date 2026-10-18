@@ -1,0 +1,62 @@
+{
+  "artifact_kind": "doberman-secret-path-regression-gate",
+  "cohort_id": "2026-09-12-calibration-20-r2",
+  "external_report_sent": false,
+  "fix_sensitivity": {
+    "all_windows_cases_match_after_fix": true,
+    "backslash_separator_added": true,
+    "kind": "repair_sensitivity_control; not a native Windows replay"
+  },
+  "host_platform": "Linux-6.17.0-42-generic-x86_64-with-glibc2.39",
+  "interpretation": "The exact Python regex and product rules reproduce the Windows-path classification gap. On a non-Windows host, native path canonicalization is not exercised; the report separately checks the pinned canonical path rule's Windows-normalized form against its exact default globs.",
+  "native_windows_runtime": false,
+  "pin": "53ae43c5298a2426c6696147fdd75e2a4aef10e2",
+  "posix_controls": [
+    {
+      "secret_regex_matches": true,
+      "secret_rule_verdict": "AUTH",
+      "target": "C:/repo/.npmrc"
+    },
+    {
+      "secret_regex_matches": true,
+      "secret_rule_verdict": "AUTH",
+      "target": "C:/repo/credentials"
+    }
+  ],
+  "python_version": "3.15.0",
+  "refuted_env_local_candidate": {
+    "default_blocked_glob_matches": true,
+    "interpretation": "Covered by the separate .env.* protected-path rule.",
+    "secret_regex_matches": false,
+    "target": "C:\\repo\\.env.local",
+    "windows_normalized_relative_path": ".env.local"
+  },
+  "regex_id": "1da0edb358526b5f1d6ae780f0116744",
+  "repo_id": "fu351/Doberman-Core",
+  "repository_url": "https://github.com/fu351/Doberman-Core",
+  "result": "pass_current_gap_reproduced",
+  "schema_version": "1",
+  "security_impact": "pending_product_triage",
+  "source_file": "src/doberman/engine/rules/secrets.py",
+  "source_sha256": "a73b183b5ac0da101e1411384e12ffe7da9f48f59947ec76a447974e246179fa",
+  "windows_cases": [
+    {
+      "default_path_policy_matches": false,
+      "native_windows_relative_path": ".npmrc",
+      "normalized_target": "C:\\repo\\.npmrc",
+      "objective_guardrail_verdict": "PASS",
+      "secret_regex_matches": false,
+      "secret_rule_verdict": "PASS",
+      "target": "C:\\repo\\.npmrc"
+    },
+    {
+      "default_path_policy_matches": false,
+      "native_windows_relative_path": "credentials",
+      "normalized_target": "C:\\repo\\credentials",
+      "objective_guardrail_verdict": "PASS",
+      "secret_regex_matches": false,
+      "secret_rule_verdict": "PASS",
+      "target": "C:\\repo\\credentials"
+    }
+  ]
+}

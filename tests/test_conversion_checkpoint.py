@@ -13,8 +13,10 @@ from regexproof.mine.conversion_checkpoint import (
     ConversionCheckpointError,
     build_report,
     build_product_coverage_manifest,
+    build_product_roster,
     canonical_row_to_checkpoint,
     checkpoint_from_canonical_rows,
+    checkpoint_from_attempts,
     dumps_report,
     load_checkpoint,
     wilson_interval,
@@ -132,6 +134,34 @@ def _expected_rows(rows):
     ]
 
 
+def _gate(*, passed=False, replayed=False, mutations=False, cases=0, adopted=False):
+    return {
+        "source_pin_verified": True,
+        "product_engine_replayed": replayed,
+        "mutation_guard_passed": mutations,
+        "differential_cases": cases,
+        "gate_id": "test-example-gate" if passed else None,
+        "local_gate_command": "python -m pytest tests/test_example.py" if passed else None,
+        "local_gate_passed": passed,
+        "consumer_adopted": adopted,
+    }
+
+
+def _roster(rows, cohort):
+    return build_product_roster(
+        [
+            {
+                "repo_id": row["repo_id"], "url": row["url"], "pin": row["pin"],
+                "site": row["site"], "question_id": row["question_id"],
+                "kind": row["kind"], "synthesized": False,
+                "domain": row["domain"], "contract": row["contract"],
+            }
+            for row in rows
+        ],
+        cohort,
+    )
+
+
 def _checkpoint(*rows):
     cohort = _cohort()
     product_coverage_manifest = build_product_coverage_manifest(
@@ -199,7 +229,7 @@ def test_strict_schema_and_exclusions_fail_closed():
         (_row(0, status="unknown"), "status .* unknown"),
         (_row(0, kind="rule_diff"), "kind must be"),
         (_row(0, synthesized=True), "synthesized must be false"),
-        (_row(0, contract=_contract(provenance="agent")), "provenance must be 'human'"),
+        (_row(0, contract=_contract(provenance="agent_derived")), "missing or invalid autonomous adoption"),
         (_row(0, contract=_contract(trust="operator")), "trust must be one of"),
         (_row(0, status="filed", filed_at="not-a-date"), "must be an ISO date"),
     ]
@@ -293,6 +323,114 @@ def test_canonical_checkpoint_requires_complete_digest_bound_coverage():
             pin="a" * 40,
             dispositions=dispositions,
         )
+
+
+def test_v3_checkpoint_counts_unresolved_attempts_and_provenance():
+    cohort = _cohort()
+    decided = _row(0, gt="not_applicable", result="unsat", status="wont_file")
+    unresolved = _row(1, gt="not_run", result="sat", status="wont_file")
+    roster = []
+    for row, status, detail in (
+        (decided, "unsat", None),
+        (unresolved, "timeout", "solver exceeded the per-question budget"),
+    ):
+        roster.append({
+            "repo_id": row["repo_id"], "url": row["url"], "pin": row["pin"],
+            "site": row["site"], "question_id": row["question_id"],
+            "kind": row["kind"], "synthesized": False,
+            "contract": row["contract"], "domain": row["domain"],
+            "status": status, "detail": detail,
+            "gate": _gate(
+                passed=status == "unsat", replayed=status == "unsat",
+                mutations=status == "unsat", cases=12 if status == "unsat" else 0,
+            ),
+        })
+    coverage = _roster([decided, unresolved], cohort)
+    checkpoint = checkpoint_from_attempts(
+        roster, [decided], cohort=cohort, product_coverage_manifest=coverage
+    )
+    report = build_report(checkpoint)
+    assert report["schema_version"] == "3"
+    assert report["counts"]["asked"] == 2
+    assert report["counts"]["sat"] == 0
+    assert report["coverage"] == {
+        "eligible": 2,
+        "attempted": 2,
+        "decided": 1,
+        "not_proven": 1,
+        "not_attempted": 0,
+        "status_breakdown": {"timeout": 1, "unsat": 1},
+        "unresolved_statuses": {"timeout": 1},
+    }
+    assert report["contract_provenance"] == {
+        "human": 2, "autonomous": 0, "machine_pair": 0
+    }
+    assert report["sample_sizes"]["unit"] == "eligible product questions"
+    assert report["useful_gate_outcomes"] == {
+        "decided_contract_backed_proofs": 1,
+        "local_runnable_gates": 1,
+        "useful_regression_gates": 1,
+        "consumer_adopted_gates": 0,
+        "product_engine_replays": 1,
+        "differential_cases": 12,
+    }
+
+
+def test_v3_roster_must_match_results_and_keep_unattempted_visible():
+    cohort = _cohort()
+    row = _row(0)
+    unresolved = _row(1)
+    attempts = [
+        {
+            "repo_id": item["repo_id"], "url": item["url"], "pin": item["pin"],
+            "site": item["site"], "question_id": item["question_id"],
+            "kind": item["kind"], "synthesized": False,
+            "contract": item["contract"], "domain": item["domain"],
+            "status": "not_attempted", "detail": "deferred by the frozen run budget",
+            "gate": _gate(),
+        }
+        for item in (row, unresolved)
+    ]
+    coverage = _roster([row, unresolved], cohort)
+    checkpoint = checkpoint_from_attempts(
+        attempts, [], cohort=cohort, product_coverage_manifest=coverage
+    )
+    report = build_report(checkpoint)
+    assert report["counts"]["asked"] == 0
+    assert report["coverage"]["eligible"] == 2
+    assert report["coverage"]["not_attempted"] == 2
+    assert report["target_status"]["50"]["observed"] == 0
+
+    checkpoint["attempts"].pop()
+    with pytest.raises(ConversionCheckpointError, match="attempt roster does not match"):
+        build_report(checkpoint)
+
+
+def test_v3_keeps_sat_pending_product_replay_in_the_bug_candidate_track():
+    cohort = _cohort()
+    row = _row(0, result="sat", gt="not_run", status="pending_ground_truth")
+    attempt = {
+        "repo_id": row["repo_id"], "url": row["url"], "pin": row["pin"],
+        "site": row["site"], "question_id": row["question_id"],
+        "kind": row["kind"], "synthesized": False,
+        "contract": row["contract"], "domain": row["domain"],
+        "status": "sat_pending_ground_truth",
+        "detail": "witness replay has not been completed",
+        "gate": _gate(),
+    }
+    coverage = _roster([row], cohort)
+    checkpoint = checkpoint_from_attempts(
+        [attempt], [row], cohort=cohort, product_coverage_manifest=coverage
+    )
+    report = build_report(checkpoint)
+    assert report["counts"]["sat"] == 1
+    assert report["counts"]["ground_truthed"] == 0
+    assert report["coverage"]["status_breakdown"] == {
+        "sat_pending_ground_truth": 1
+    }
+    assert report["coverage"]["unresolved_statuses"] == {
+        "sat_pending_ground_truth": 1
+    }
 
 
 def test_duplicate_identity_tampering_and_unknown_repo_fail_closed():

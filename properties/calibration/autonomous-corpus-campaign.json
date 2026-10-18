@@ -1,0 +1,33 @@
+{
+  "schema_version": "1",
+  "campaign_id": "autonomous-contracts-v1",
+  "baseline": "2026-10-13-autonomous-corpus-start",
+  "policy_version": "autonomous-contracts-v1",
+  "cohorts": ["2026-09-12-calibration-20-r2"],
+  "execution": {
+    "max_active_conversion_waves": 1,
+    "max_ranked_reviews_per_wave": 15,
+    "max_adopted_contracts_per_wave": 5,
+    "max_new_questions_per_run": 5,
+    "parallel_walk": false,
+    "solver_timeout_ms": 30000,
+    "local_gate_timeout_seconds": 300,
+    "transient_source_fetch_retries": 2,
+    "solver_retries": 0,
+    "resume_key": ["cohort_manifest_digest", "repository_url", "source_pin", "site", "question_id", "contract_sha256"],
+    "terminal_failures_remain_in_attempt_roster": true,
+    "mine_expansion_while_conversion_queue_nonempty": false
+  },
+  "measurement": {
+    "human_active_minutes": "properties/generated/conversion_review_minutes.jsonl",
+    "agent_run_usage": "properties/generated/autonomous_work.jsonl",
+    "agent_tokens_when_unavailable": null,
+    "agent_cost_usd_when_unavailable": null,
+    "third_party_transmissions_require_separate_authorization": true
+  },
+  "budget_decisions": {
+    "additional_dollar_budget_usd": null,
+    "parallelism_increase": null,
+    "note": "Use existing clone/cache limits. Do not increase concurrency or the mine cap based only on throughput claims."
+  }
+}

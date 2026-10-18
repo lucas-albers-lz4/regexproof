@@ -1,0 +1,210 @@
+[
+  {
+    "contract": {
+      "declared_domain": "printable ASCII intersect [^/?#@\\s], single char",
+      "guarantee": "URL userinfo password alphabet contains no space (matched password reaches redact_secret_text)",
+      "input_source": "provider and operator endpoint text reaching shared logs and state",
+      "provenance": "human",
+      "schema_version": "1",
+      "site": "Agenticstiger/forge-cli@efcf8e4c0087def553a737dc1c4eebda5d8a90cd:fluid_build/observability/secret_redactor.py:151:_URL_USERINFO_RE",
+      "trust": "config"
+    },
+    "detail": null,
+    "domain": "URL userinfo password alphabet contains no space (matched password reaches redact_secret_text) (length-independent single-char)",
+    "gate": {
+      "consumer_adopted": false,
+      "differential_cases": 0,
+      "gate_id": "forge-cli-local-regression-suite-v1",
+      "local_gate_command": ".venv/bin/python -m pytest -q tests/test_forge_cli_harness.py",
+      "local_gate_passed": false,
+      "mutation_guard_passed": false,
+      "product_engine_replayed": false,
+      "source_pin_verified": true
+    },
+    "kind": "property",
+    "pin": "efcf8e4c0087def553a737dc1c4eebda5d8a90cd",
+    "question_id": "FC-forge-cli-url-password-no-space",
+    "repo_id": "Agenticstiger/forge-cli",
+    "site": "Agenticstiger/forge-cli@efcf8e4c0087def553a737dc1c4eebda5d8a90cd:fluid_build/observability/secret_redactor.py:151:_URL_USERINFO_RE",
+    "status": "unsat",
+    "synthesized": false,
+    "url": "https://github.com/Agenticstiger/forge-cli"
+  },
+  {
+    "contract": {
+      "declared_domain": "printable ASCII intersect [^\"'\\s,;}], single char",
+      "guarantee": "Datamesh assignment-value alphabet contains no semicolon (matched value reaches _redact_error_body)",
+      "input_source": "untrusted remote provider error body",
+      "provenance": "human",
+      "schema_version": "1",
+      "site": "Agenticstiger/forge-cli@efcf8e4c0087def553a737dc1c4eebda5d8a90cd:fluid_build/providers/datamesh_manager/datamesh_manager.py:88:_SECRET_ERROR_PATTERNS",
+      "trust": "untrusted-input"
+    },
+    "detail": null,
+    "domain": "Datamesh assignment-value alphabet contains no semicolon (matched value reaches _redact_error_body) (length-independent single-char)",
+    "gate": {
+      "consumer_adopted": false,
+      "differential_cases": 0,
+      "gate_id": "forge-cli-local-regression-suite-v1",
+      "local_gate_command": ".venv/bin/python -m pytest -q tests/test_forge_cli_harness.py",
+      "local_gate_passed": false,
+      "mutation_guard_passed": false,
+      "product_engine_replayed": false,
+      "source_pin_verified": true
+    },
+    "kind": "property",
+    "pin": "efcf8e4c0087def553a737dc1c4eebda5d8a90cd",
+    "question_id": "FC-forge-cli-dmm-value-no-semicolon",
+    "repo_id": "Agenticstiger/forge-cli",
+    "site": "Agenticstiger/forge-cli@efcf8e4c0087def553a737dc1c4eebda5d8a90cd:fluid_build/providers/datamesh_manager/datamesh_manager.py:88:_SECRET_ERROR_PATTERNS",
+    "status": "unsat",
+    "synthesized": false,
+    "url": "https://github.com/Agenticstiger/forge-cli"
+  },
+  {
+    "contract": {
+      "declared_domain": "printable ASCII intersect [^@/], single char",
+      "guarantee": "LLM endpoint userinfo alphabet contains no @ (matched userinfo reaches LlmConfig.redacted_endpoint)",
+      "input_source": "configured LLM endpoint used by the AI setup/test report",
+      "provenance": "human",
+      "schema_version": "1",
+      "site": "Agenticstiger/forge-cli@efcf8e4c0087def553a737dc1c4eebda5d8a90cd:fluid_build/llm/providers.py:287:LlmConfig.redacted_endpoint",
+      "trust": "config"
+    },
+    "detail": null,
+    "domain": "LLM endpoint userinfo alphabet contains no @ (matched userinfo reaches LlmConfig.redacted_endpoint) (length-independent single-char)",
+    "gate": {
+      "consumer_adopted": false,
+      "differential_cases": 0,
+      "gate_id": "forge-cli-local-regression-suite-v1",
+      "local_gate_command": ".venv/bin/python -m pytest -q tests/test_forge_cli_harness.py",
+      "local_gate_passed": false,
+      "mutation_guard_passed": false,
+      "product_engine_replayed": false,
+      "source_pin_verified": true
+    },
+    "kind": "property",
+    "pin": "efcf8e4c0087def553a737dc1c4eebda5d8a90cd",
+    "question_id": "FC-forge-cli-llm-userinfo-no-at",
+    "repo_id": "Agenticstiger/forge-cli",
+    "site": "Agenticstiger/forge-cli@efcf8e4c0087def553a737dc1c4eebda5d8a90cd:fluid_build/llm/providers.py:287:LlmConfig.redacted_endpoint",
+    "status": "unsat",
+    "synthesized": false,
+    "url": "https://github.com/Agenticstiger/forge-cli"
+  },
+  {
+    "contract": {
+      "declared_domain": "ASCII sasl.jaas.config=\"...\" record; value is [a-z]{0,4}\\\"[a-z]{0,4}, total len 1..64",
+      "guarantee": "an escaped-quote sasl.jaas.config value in the product grammar is accepted by _JAAS_CONFIG_RE before redact_secret_text",
+      "input_source": "serialized connector/provider configuration and engine error text",
+      "provenance": "human",
+      "schema_version": "1",
+      "site": "Agenticstiger/forge-cli@efcf8e4c0087def553a737dc1c4eebda5d8a90cd:fluid_build/observability/secret_redactor.py:218:_JAAS_CONFIG_RE",
+      "trust": "untrusted-input"
+    },
+    "detail": null,
+    "domain": "escaped-quote JAAS values in the independent product grammar are accepted by _JAAS_CONFIG_RE (ASCII, total len 1..64)",
+    "gate": {
+      "consumer_adopted": false,
+      "differential_cases": 0,
+      "gate_id": "forge-cli-local-regression-suite-v1",
+      "local_gate_command": ".venv/bin/python -m pytest -q tests/test_forge_cli_harness.py",
+      "local_gate_passed": false,
+      "mutation_guard_passed": false,
+      "product_engine_replayed": false,
+      "source_pin_verified": true
+    },
+    "kind": "property",
+    "pin": "efcf8e4c0087def553a737dc1c4eebda5d8a90cd",
+    "question_id": "FC-forge-cli-jaas-escaped-quote-covered",
+    "repo_id": "Agenticstiger/forge-cli",
+    "site": "Agenticstiger/forge-cli@efcf8e4c0087def553a737dc1c4eebda5d8a90cd:fluid_build/observability/secret_redactor.py:218:_JAAS_CONFIG_RE",
+    "status": "unsat",
+    "synthesized": false,
+    "url": "https://github.com/Agenticstiger/forge-cli"
+  },
+  {
+    "contract": {
+      "declared_domain": "exact ASCII policy-key literals (case-insensitive), len 1..32",
+      "guarantee": "documented sensitive-key forms are accepted by SENSITIVE_ENV_KEY_RE before _render_command_for_log",
+      "input_source": "operator/provider configuration rendered by _render_command_for_log",
+      "provenance": "human",
+      "schema_version": "1",
+      "site": "Agenticstiger/forge-cli@efcf8e4c0087def553a737dc1c4eebda5d8a90cd:fluid_build/build_runners/base.py:54:SENSITIVE_ENV_KEY_RE",
+      "trust": "config"
+    },
+    "detail": null,
+    "domain": "documented ASCII sensitive-key forms are accepted by SENSITIVE_ENV_KEY_RE (key len 1..32)",
+    "gate": {
+      "consumer_adopted": false,
+      "differential_cases": 0,
+      "gate_id": "forge-cli-local-regression-suite-v1",
+      "local_gate_command": ".venv/bin/python -m pytest -q tests/test_forge_cli_harness.py",
+      "local_gate_passed": false,
+      "mutation_guard_passed": false,
+      "product_engine_replayed": false,
+      "source_pin_verified": true
+    },
+    "kind": "property",
+    "pin": "efcf8e4c0087def553a737dc1c4eebda5d8a90cd",
+    "question_id": "FC-forge-cli-sensitive-env-key-covered",
+    "repo_id": "Agenticstiger/forge-cli",
+    "site": "Agenticstiger/forge-cli@efcf8e4c0087def553a737dc1c4eebda5d8a90cd:fluid_build/build_runners/base.py:54:SENSITIVE_ENV_KEY_RE",
+    "status": "unsat",
+    "synthesized": false,
+    "url": "https://github.com/Agenticstiger/forge-cli"
+  },
+  {
+    "contract": {
+      "adoption": {
+        "approved_on": "2026-10-13",
+        "authority": "standing_user_delegation",
+        "contract_sha256": "ba9e12c17f7f6a06b6130089e59d91e3a3f50c62a1dcf6c204d87be2e6ffa2b3",
+        "evidence": [
+          "https://github.com/Agenticstiger/forge-cli/blob/efcf8e4c0087def553a737dc1c4eebda5d8a90cd/fluid_build/build_runners/base.py",
+          "https://github.com/Agenticstiger/forge-cli/blob/efcf8e4c0087def553a737dc1c4eebda5d8a90cd/fluid_build/build_runners/dbt/runner.py",
+          "The dbt runner passes -e and --env argv values through the renderer before they are logged."
+        ],
+        "policy_version": "autonomous-contracts-v1",
+        "rationale": "The sensitive-key expression and pinned dbt command renderer are reviewed together; enumerated configuration keys must have their values replaced before log output.",
+        "review": {
+          "author": "codex-contract-author",
+          "reviewer": "codex-independent-review-pass",
+          "same_model": true
+        },
+        "source_file": "fluid_build/build_runners/base.py",
+        "source_pin": "efcf8e4c0087def553a737dc1c4eebda5d8a90cd",
+        "source_sha256": "5e1274001ae1f3a3d41f8c59c059e5d991db221c8c1fd328a471c7f917207842",
+        "source_url": "https://github.com/Agenticstiger/forge-cli",
+        "status": "approved"
+      },
+      "declared_domain": "pinned forge-cli revision; every documented key with all 5680 ASCII letter-case assignments is replayed as dbt run -e/--env KEY=CLEAR_SENTINEL; additional hand-labeled cases cover empty and delimiter-containing values, repeated entries, and terminal newlines; key forms include optional empty/underscore/hyphen separators for api/private keys",
+      "guarantee": "for documented sensitive KEY=VALUE configuration passed after -e or --env, _render_command_for_log emits KEY=<redacted> and never the value",
+      "input_source": "operator/provider dbt command configuration supplied as argv to the log renderer",
+      "provenance": "agent_derived",
+      "schema_version": "1",
+      "site": "Agenticstiger/forge-cli@efcf8e4c0087def553a737dc1c4eebda5d8a90cd:fluid_build/build_runners/base.py:54:SENSITIVE_ENV_KEY_RE",
+      "trust": "config"
+    },
+    "detail": null,
+    "domain": "the pinned _render_command_for_log replaces the value for every documented sensitive environment key with the exact KEY=<redacted> image",
+    "gate": {
+      "consumer_adopted": false,
+      "differential_cases": 5680,
+      "gate_id": "forge-cli-local-regression-suite-v1",
+      "local_gate_command": ".venv/bin/python -m pytest -q tests/test_forge_cli_harness.py",
+      "local_gate_passed": true,
+      "mutation_guard_passed": true,
+      "product_engine_replayed": true,
+      "source_pin_verified": true
+    },
+    "kind": "property",
+    "pin": "efcf8e4c0087def553a737dc1c4eebda5d8a90cd",
+    "question_id": "FC-forge-cli-sensitive-env-helper-redacts",
+    "repo_id": "Agenticstiger/forge-cli",
+    "site": "Agenticstiger/forge-cli@efcf8e4c0087def553a737dc1c4eebda5d8a90cd:fluid_build/build_runners/base.py:54:SENSITIVE_ENV_KEY_RE",
+    "status": "unsat",
+    "synthesized": false,
+    "url": "https://github.com/Agenticstiger/forge-cli"
+  }
+]

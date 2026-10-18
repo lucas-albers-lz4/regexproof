@@ -1,0 +1,25 @@
+{
+  "schema_version": "1",
+  "gate_id": "anax-orgname-denylist-20r2",
+  "question_ids": [
+    "AN-anax-orgname-denylist-validation"
+  ],
+  "command": [
+    ".venv/bin/python",
+    "scripts/anax-orgname-denylist-regression-gate.py",
+    "--product-only",
+    "--source-root",
+    "/tmp/regexproof-pinned-sources/anax-2f3fa5a506d6565fa68858b7963450567ddda114",
+    "--output",
+    "properties/calibration/2026-10-15-autonomous-anax-org-validate-20r2/gate-report.json"
+  ],
+  "timeout_seconds": 300,
+  "evidence": {
+    "product_engine_replay_question_ids": [
+      "AN-anax-orgname-denylist-validation"
+    ],
+    "differential_case_counts": {
+      "AN-anax-orgname-denylist-validation": 687
+    }
+  }
+}

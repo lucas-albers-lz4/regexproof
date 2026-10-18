@@ -1,0 +1,30 @@
+{
+  "adoption": {
+    "approved_on": "2026-10-15",
+    "authority": "standing_user_delegation",
+    "contract_sha256": "4374d2ea29f9ea6f729e9b2b0f5749338dc95544ab1c02f489d4d85ebb321d22",
+    "evidence": [
+      "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/hooks/brief-filename-guard.sh",
+      "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/README.md"
+    ],
+    "policy_version": "autonomous-contracts-v1",
+    "rationale": "The pinned hook filters newly staged brief filenames before its git-log claim lookup. This source-bound revision preserves the previously reviewed alphabet guarantee and binds it to the frozen 20-r2 source.",
+    "review": {
+      "author": "codex-contract-author",
+      "reviewer": "codex-independent-review-pass",
+      "same_model": true
+    },
+    "source_file": ".agents/hooks/brief-filename-guard.sh",
+    "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+    "source_sha256": "03bcbd91198dbb746f39a7acd1ff98ec1295f95ed49254cd55bc108bf7f6c2f0",
+    "source_url": "https://github.com/marcusquinn/aidevops",
+    "status": "approved"
+  },
+  "declared_domain": "brief task-id alphabet [t0-9], single char, ASCII",
+  "guarantee": "captured brief task-id alphabet contains no semicolon (token reaches git log --grep claim lookup)",
+  "input_source": "agent-staged todo/tasks/tNNN-brief.md filename (pre-commit index)",
+  "provenance": "agent_derived",
+  "schema_version": "1",
+  "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/hooks/brief-filename-guard.sh:84:brief\\.md",
+  "trust": "untrusted-input"
+}

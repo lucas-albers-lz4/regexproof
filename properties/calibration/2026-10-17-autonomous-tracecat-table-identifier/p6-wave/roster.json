@@ -1,0 +1,17 @@
+{
+  "cohort_id": "2026-09-12-calibration-20-r2",
+  "cohort_manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+  "coverage_digest": "01a1c2ec079b2779fcac919ff2d82b6f99dfbcf97c010d51878a681741471723",
+  "identities": [
+    {
+      "contract_sha256": "6dd7a201dab44fac9bb782c93d02229f081105d93511db5e66c8e6c407258bf9",
+      "pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+      "provenance": "agent_derived",
+      "question_id": "TC-table-identifier-double-quote-excluded",
+      "repo_id": "TracecatHQ/tracecat",
+      "site": "TracecatHQ/tracecat@c84d52528a489821f355fc63976fbc7783ae0ad5:tracecat/tables/schemas.py:17:re.compile",
+      "url": "https://github.com/TracecatHQ/tracecat"
+    }
+  ],
+  "schema_version": "2"
+}

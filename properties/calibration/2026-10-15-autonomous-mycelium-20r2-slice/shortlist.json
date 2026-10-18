@@ -1,0 +1,236 @@
+{
+  "bucket": "scripts-bootstrap",
+  "cohort_id": "2026-09-12-calibration-20-r2",
+  "cohort_manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+  "corpus": "mycelium",
+  "dropped": [
+    {
+      "pattern": "^ExecStart=",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "scripts/update_unit_drift_drill.sh:185:105"
+    },
+    {
+      "pattern": "$ph",
+      "reason": "interpolated:$ident",
+      "site": "scripts/bootstrap.sh:146:4"
+    },
+    {
+      "pattern": "NODE_PUBLIC_IP",
+      "reason": "literal-no-metachar",
+      "site": "scripts/bootstrap.sh:122:3"
+    },
+    {
+      "pattern": "REPLACE_WITH_SHA256",
+      "reason": "literal-no-metachar",
+      "site": "scripts/bootstrap.sh:136:3"
+    },
+    {
+      "pattern": "$p",
+      "reason": "interpolated:$ident",
+      "site": "scripts/node-bootstrap.sh:1087:35"
+    },
+    {
+      "pattern": "^# \\{0,1\\}",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "scripts/node-bootstrap.sh:307:57"
+    },
+    {
+      "pattern": "sing-box",
+      "reason": "literal-no-metachar",
+      "site": "scripts/node-bootstrap.sh:621:26"
+    },
+    {
+      "pattern": "(^|[^0-9])([0-9]{1,3}\\.){3}[0-9]{1,3}([^0-9]|$)",
+      "reason": "unencodable:per-alternative-anchor",
+      "site": "scripts/update_unit_drift_drill.sh:332:27"
+    },
+    {
+      "pattern": "^# \\{0,1\\}",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "scripts/fungi:43:4"
+    },
+    {
+      "pattern": "$p",
+      "reason": "interpolated:$ident",
+      "site": "scripts/node-bootstrap.sh:1091:35"
+    },
+    {
+      "pattern": "^# \\{0,1\\}",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "scripts/update_unit_drift_drill.sh:75:36"
+    },
+    {
+      "pattern": "[][\\\\.^$*+?(){}|",
+      "reason": "unencodable:parse-error",
+      "site": "scripts/update_unit_drift_drill.sh:111:37"
+    }
+  ],
+  "dropped_count": 12,
+  "input_rows": 28,
+  "inventory_scope": "scripts/ paths from clean exact-pin checkout; 28 extracted and compiled sites",
+  "keep": [
+    {
+      "call_kind": "substitution",
+      "encodable": true,
+      "file": "scripts/update_unit_drift_drill.sh",
+      "pattern": ".*argv\\[\\]=\\([^;]*\\);.*",
+      "regex_id": "4396c139b7f96c0a43c4c8b848dc1531",
+      "score": 9,
+      "site": "scripts/update_unit_drift_drill.sh:184:3"
+    },
+    {
+      "call_kind": "substitution",
+      "encodable": true,
+      "file": "scripts/node-bootstrap.sh",
+      "pattern": ".*[:.]([0-9]+)$",
+      "regex_id": "1854d02844f05013d064b80f6fc95cce",
+      "score": 7,
+      "site": "scripts/node-bootstrap.sh:1083:60"
+    },
+    {
+      "call_kind": "substitution",
+      "encodable": true,
+      "file": "scripts/node-bootstrap.sh",
+      "pattern": ".*[:.]([0-9]+)$",
+      "regex_id": "70608d86458989187658b7e5dd0441e7",
+      "score": 7,
+      "site": "scripts/node-bootstrap.sh:1084:60"
+    },
+    {
+      "call_kind": "substitution",
+      "encodable": true,
+      "file": "scripts/update_unit_drift_drill.sh",
+      "pattern": ".*--repo-ref[= ]\\{1,\\}\\([^ ]*\\).*",
+      "regex_id": "423008bfee86e0459dd9a2f8085ff89d",
+      "score": 7,
+      "site": "scripts/update_unit_drift_drill.sh:236:35"
+    },
+    {
+      "call_kind": "substitution",
+      "encodable": true,
+      "file": "scripts/fungi",
+      "pattern": ".*version[[:space:]]*",
+      "regex_id": "f0bc2b31d10f6904a12c27c85822b780",
+      "score": 5,
+      "site": "scripts/fungi:101:40"
+    },
+    {
+      "call_kind": "substitution",
+      "encodable": true,
+      "file": "scripts/fungi",
+      "pattern": ".*version[[:space:]]*",
+      "regex_id": "05cb2a3d98e989f2bab789025fcf92ab",
+      "score": 5,
+      "site": "scripts/fungi:84:99"
+    },
+    {
+      "call_kind": "substitution",
+      "encodable": true,
+      "file": "scripts/fungi",
+      "pattern": "^Xray[[:space:]]*",
+      "regex_id": "db44731171ce032e5ae0a391861690df",
+      "score": 5,
+      "site": "scripts/fungi:85:87"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": "scripts/update_unit_drift_drill.sh",
+      "pattern": "^[[:space:]]*#",
+      "regex_id": "0b7131afd0c941baac4b59d27a1ed51c",
+      "score": 5,
+      "site": "scripts/update_unit_drift_drill.sh:120:15"
+    },
+    {
+      "call_kind": "substitution",
+      "encodable": true,
+      "file": "scripts/update_unit_drift_drill.sh",
+      "pattern": "[[:space:]]*$",
+      "regex_id": "31fb6661ca6f4d153c841d90008a2dcb",
+      "score": 5,
+      "site": "scripts/update_unit_drift_drill.sh:120:60"
+    },
+    {
+      "call_kind": "substitution",
+      "encodable": true,
+      "file": "scripts/update_unit_drift_drill.sh",
+      "pattern": "[[:space:]]*$",
+      "regex_id": "340ac4c5878342828e987acf00cfec65",
+      "score": 5,
+      "site": "scripts/update_unit_drift_drill.sh:184:45"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": "scripts/verify-release.sh",
+      "pattern": "^[0-9a-fA-F]{64}[[:space:]]+[*]?[^[:space:]]",
+      "regex_id": "42e4541996b1350d941a7cabbd386d79",
+      "score": 5,
+      "site": "scripts/verify-release.sh:60:10"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": "scripts/fungi",
+      "pattern": "^# fungi \u2014 the one-command",
+      "regex_id": "06b7f2a0599a7f3a1ce27bcc0db3cc0a",
+      "score": 3,
+      "site": "scripts/fungi:42:1"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": "scripts/fungi",
+      "pattern": "127\\.0\\.0\\.1|\\[::1\\]",
+      "regex_id": "c99ceafbe07db2bc3f04fa8497cdff74",
+      "score": 3,
+      "site": "scripts/fungi:77:51"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": "scripts/update_unit_drift_drill.sh",
+      "pattern": "^$",
+      "regex_id": "0e6b0e557ee8e3e08bd3f629f2d84084",
+      "score": 3,
+      "site": "scripts/update_unit_drift_drill.sh:120:86"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": "scripts/update_unit_drift_drill.sh",
+      "pattern": "^$",
+      "regex_id": "019ce3e0b9d15a332bdcd6cccc537748",
+      "score": 3,
+      "site": "scripts/update_unit_drift_drill.sh:184:71"
+    }
+  ],
+  "limit": 15,
+  "path_filter": "scripts/",
+  "schema_version": "1",
+  "seeds": {
+    "ddns-private-ip": {
+      "needle_path": "dynamic_dns_functions.sh",
+      "status": "not-in-top"
+    },
+    "mwan3-dev-capture": {
+      "needle_path": "mwan3.sh",
+      "status": "not-in-top"
+    },
+    "pbr-sanitizer": {
+      "needle_path": "net/pbr/files/etc/init.d/pbr",
+      "status": "not-in-top"
+    }
+  },
+  "source_pin": "d4f01ba6202d50909d1977810d322259482e0b82",
+  "survivor_count": 16,
+  "vocab": [
+    "scripts",
+    "bootstrap",
+    "release",
+    "checksum",
+    "verify",
+    "update",
+    "systemd"
+  ]
+}

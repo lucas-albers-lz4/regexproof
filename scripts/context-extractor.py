@@ -23,8 +23,11 @@ Usage::
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import pathlib
+import re
+import subprocess
 import sys
 
 REACHABILITY = frozenset({"reachable", "unreachable", "unverified"})
@@ -126,11 +129,12 @@ def review_form(
     window: dict,
     *,
     input_format_constraint: str = "",
+    source_binding: dict | None = None,
 ) -> dict:
     """The review form: context + required witness_reachability + evidence
     ref. ``input_format_constraint`` is a REQUIRED structural field at
     adoption (the human states what input format the property constrains)."""
-    return {
+    result = {
         "schema_version": "1",
         "corpus": corpus,
         "site": site,
@@ -140,9 +144,63 @@ def review_form(
         "input_format_constraint": input_format_constraint,
         "review_notes": "",
     }
+    if source_binding is not None:
+        result["source_binding"] = source_binding
+    return result
 
 
-def validate_form(form: dict) -> None:
+def pinned_source_binding(
+    checkout: pathlib.Path, repository_url: str, pin: str, source_file: str
+) -> dict:
+    """Bind a context form to a clean file in the exact source commit."""
+    root = checkout.resolve()
+    repository_url = repository_url.rstrip("/")
+    if not re.fullmatch(r"https://github\.com/[^/\s]+/[^/\s]+", repository_url):
+        sys.exit("error: repository URL must be a canonical GitHub repository URL")
+    if not re.fullmatch(r"[0-9a-f]{40}", pin):
+        sys.exit("error: source pin must be 40 lowercase hexadecimal characters")
+    relative = pathlib.PurePosixPath(source_file)
+    if relative.is_absolute() or ".." in relative.parts or not relative.parts:
+        sys.exit("error: source file must be a safe checkout-relative path")
+    candidate = root.joinpath(*relative.parts)
+    cursor = root
+    for component in relative.parts:
+        cursor = cursor / component
+        if cursor.is_symlink():
+            sys.exit("error: pinned source path must not traverse symlinks")
+    try:
+        resolved = candidate.resolve()
+        resolved.relative_to(root)
+    except ValueError:
+        sys.exit("error: pinned source path resolves outside the checkout")
+    if not resolved.is_file():
+        sys.exit(f"error: pinned source file not found: {source_file}")
+    try:
+        actual_pin = subprocess.run(
+            ["git", "-C", str(root), "rev-parse", "HEAD"],
+            check=True, capture_output=True, text=True, timeout=10,
+        ).stdout.strip()
+        committed = subprocess.run(
+            ["git", "-C", str(root), "show", f"{pin}:{source_file}"],
+            check=True, capture_output=True, timeout=10,
+        ).stdout
+    except (OSError, subprocess.SubprocessError) as exc:
+        sys.exit(f"error: cannot verify pinned source checkout: {exc}")
+    if actual_pin != pin:
+        sys.exit(f"error: checkout pin {actual_pin!r} does not match requested {pin!r}")
+    source_bytes = resolved.read_bytes()
+    if source_bytes != committed:
+        sys.exit("error: source file bytes differ from the pinned commit")
+    return {
+        "repository_url": repository_url,
+        "pin": pin,
+        "path": source_file,
+        "sha256": hashlib.sha256(committed).hexdigest(),
+        "evidence_ref": f"{repository_url}/blob/{pin}/{source_file}",
+    }
+
+
+def validate_form(form: dict, *, checkout: pathlib.Path | None = None) -> None:
     """Structurally enforce the required review fields (Luna r1 #7:
     ``input_format_constraint`` is required, not optional; ``unverified``
     derives ``claimed`` — a real queue-vocabulary state, never an
@@ -204,6 +262,75 @@ def validate_form(form: dict) -> None:
 
     if not any(_is_target(entry) for entry in window["lines"]):
         sys.exit("error: review form window.lines must contain the target line")
+    # The snippet is evidence supplied by the reviewer, not authenticated
+    # source. Still, it must be internally consistent before a queue action
+    # is derived: positive bounds, an exact contiguous window, source text,
+    # and exactly the requested target marked. Short files remain valid.
+    for key in ("window_start", "window_end"):
+        value = window.get(key)
+        if type(value) is not int or value < 1:
+            sys.exit(f"error: review form window.{key} must be a positive integer")
+    start, end = window["window_start"], window["window_end"]
+    if not (start <= target_line <= end
+            and window_lines <= MAX_WINDOW
+            and window_lines == end - start + 1
+            and window_lines == len(window["lines"])):
+        sys.exit("error: review form window bounds/count must match its lines "
+                 "and include the target within the maximum window size")
+    for number, entry in enumerate(window["lines"], start):
+        if (entry["line"] != number
+                or not isinstance(entry.get("text"), str)
+                or type(entry.get("is_target")) is not bool
+                or entry["is_target"] != (number == target_line)):
+            sys.exit("error: review form window.lines must be contiguous text "
+                     "records with exactly the target marked")
+    if not isinstance(form.get("site"), str):
+        sys.exit("error: review form site must be path:line:token")
+    site_path, site_line, _ = parse_site(form["site"])
+
+    def relative_path_key(value: object) -> tuple[str, ...]:
+        # Validation has no checkout: compare lexical checkout-relative paths,
+        # never resolve against the validator's cwd or follow local symlinks.
+        if (not isinstance(value, str) or not value or "\x00" in value
+                or pathlib.PurePosixPath(value).is_absolute()):
+            sys.exit("error: review form paths must be non-empty relative paths")
+        parts = pathlib.PurePosixPath(value).parts
+        # Collapsing '..' would assume preceding components are not symlinks,
+        # which cannot be established from a review form alone.
+        if ".." in parts:
+            sys.exit("error: review form paths must not contain parent traversal")
+        if not parts:
+            sys.exit("error: review form paths must name a file")
+        return tuple(parts)
+
+    if relative_path_key(site_path) != relative_path_key(window["path"]):
+        sys.exit("error: review form site path must match window.path")
+    if site_line != target_line:
+        sys.exit("error: review form site line must match window.target_line")
+    source = form.get("source_binding")
+    if source is not None:
+        if not isinstance(source, dict) or set(source) != {
+            "repository_url", "pin", "path", "sha256", "evidence_ref"
+        }:
+            sys.exit("error: source_binding has an invalid shape")
+        if source.get("path") != window["path"]:
+            sys.exit("error: source_binding.path must match window.path")
+        if not re.fullmatch(r"[0-9a-f]{40}", str(source.get("pin") or "")):
+            sys.exit("error: source_binding.pin must be 40 lowercase hexadecimal characters")
+        if not re.fullmatch(r"[0-9a-f]{64}", str(source.get("sha256") or "")):
+            sys.exit("error: source_binding.sha256 must be 64 lowercase hexadecimal characters")
+        expected_ref = (
+            f"{source.get('repository_url')}/blob/{source.get('pin')}/{source.get('path')}"
+        )
+        if source.get("evidence_ref") != expected_ref:
+            sys.exit("error: source_binding.evidence_ref does not bind the pinned file")
+        if checkout is None:
+            sys.exit("error: --checkout is required to validate pinned source_binding")
+        fresh = pinned_source_binding(
+            checkout, source["repository_url"], source["pin"], source["path"]
+        )
+        if fresh != source:
+            sys.exit("error: source_binding does not match the checked-out source")
     if r == "unreachable":
         form["queue_action"] = "skipped_unreachable"
     elif r == "unverified":
@@ -218,6 +345,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--checkout", type=pathlib.Path, default=None)
     ap.add_argument("--site", default="", help="path:line:token")
     ap.add_argument("--input-format-constraint", default="")
+    ap.add_argument("--repository-url", default="")
+    ap.add_argument("--pin", default="", help="exact 40-character source commit")
     ap.add_argument("--review-form", action="store_true", help="emit review form")
     ap.add_argument("-o", "--output", type=pathlib.Path)
     ap.add_argument("--validate", metavar="FILE", help="validate a review form JSON")
@@ -225,7 +354,7 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.validate:
         form = json.loads(pathlib.Path(args.validate).read_text(encoding="utf-8"))
-        validate_form(form)
+        validate_form(form, checkout=args.checkout)
         print(json.dumps(form, indent=2, sort_keys=True))
         return 0
 
@@ -236,11 +365,18 @@ def main(argv: list[str] | None = None) -> int:
     window = extract_window(args.checkout, path, line, token=token)
     out: dict = window
     if args.review_form:
+        if bool(args.repository_url) != bool(args.pin):
+            ap.error("--repository-url and --pin must be supplied together")
+        binding = (
+            pinned_source_binding(args.checkout, args.repository_url, args.pin, window["path"])
+            if args.pin else None
+        )
         out = review_form(
             args.corpus,
             args.site,
             window,
             input_format_constraint=args.input_format_constraint,
+            source_binding=binding,
         )
         if args.output is None:
             sys.exit(

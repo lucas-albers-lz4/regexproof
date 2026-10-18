@@ -1,0 +1,15 @@
+{
+  "schema_version": "1",
+  "cluster": "real-router",
+  "repository_url": "https://github.com/greydragon888/real-router",
+  "source_pin": "55aa7ef43a9c129beba90823cd8a4db10bb01211",
+  "selection_kind": "targeted_singleton_p6_integration_calibration",
+  "keep": [
+    {
+      "site": "packages/validation-plugin/src/validators/navigation.ts:69:column-25",
+      "pattern": "[\\u0000-\\u001F\\u007F]",
+      "call_kind": "search",
+      "regex_id": "1e31ed0154408e832cf456d8422b6e38"
+    }
+  ]
+}

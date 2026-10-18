@@ -1,0 +1,59 @@
+[
+  {
+    "contract": {
+      "adoption": {
+        "approved_on": "2026-10-16",
+        "authority": "standing_user_delegation",
+        "contract_sha256": "b48b75cf862d9882a7bc2a36746c77f11552777d91127c07d53d05fb76d53411",
+        "evidence": [
+          "https://github.com/TracecatHQ/tracecat/blob/c84d52528a489821f355fc63976fbc7783ae0ad5/packages/tracecat-ee/tracecat_ee/agent/artifacts/mount_only_provider.py",
+          "https://github.com/TracecatHQ/tracecat/blob/c84d52528a489821f355fc63976fbc7783ae0ad5/tracecat/agent/artifacts/working_set.py",
+          "https://github.com/TracecatHQ/tracecat/blob/c84d52528a489821f355fc63976fbc7783ae0ad5/tracecat/agent/artifacts/hydration.py",
+          "https://github.com/TracecatHQ/tracecat/blob/c84d52528a489821f355fc63976fbc7783ae0ad5/tracecat/artifacts/schemas.py",
+          "https://github.com/TracecatHQ/tracecat/blob/c84d52528a489821f355fc63976fbc7783ae0ad5/packages/tracecat-ee/tracecat_ee/agent/artifacts/hydrators.py",
+          "The exact provider applies _safe_path_segment to Artifact.type and Artifact.id before constructing artifact_dir, and to MountedArtifactContent.filename before the host-root write.",
+          "The persisted Artifact schema restricts type to the product artifact variants; built-in enterprise hydrators supply fixed JSON filenames."
+        ],
+        "policy_version": "autonomous-contracts-v1",
+        "rationale": "The source-bound path helper is reached for each artifact type/id and hydrated filename before host filesystem writes. A per-token image contract can establish that none of these values can introduce a separator or dot traversal component. The input is workspace artifact/configuration data; this is a preventive regression guarantee, not a claim of attacker reachability or an existing security impact.",
+        "review": {
+          "author": "Codex P2-to-P6 source review",
+          "reviewer": "Codex contract and source second pass",
+          "same_model": true
+        },
+        "source_file": "packages/tracecat-ee/tracecat_ee/agent/artifacts/mount_only_provider.py",
+        "source_pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+        "source_sha256": "b9ef06e9fa2582b4c376ab8eb526eef1dc9adeb1c7d2d92e1c8da92ac14a3b11",
+        "source_url": "https://github.com/TracecatHQ/tracecat",
+        "status": "approved"
+      },
+      "declared_domain": "All Python str values, including empty strings, NUL, line breaks, Unicode, and arbitrary length, passed to the exact pinned _safe_path_segment helper. Product composition checks use the helper for artifact type/id and hydrated filename components joined beneath host_root. The theorem is component-level and does not prove symlink handling or host_root integrity.",
+      "guarantee": "For every Python string passed to the pinned _safe_path_segment helper, the returned value is nonempty, contains no forward slash or backslash, is not the path component . or .., and uses only ASCII letters, digits, underscore, dot, or hyphen. Each call therefore contributes exactly one relative filesystem path component when the value is joined under the artifact directory. This guarantee excludes symlink ancestry, host_root provenance, and path-name collisions.",
+      "input_source": "MountOnlyArtifactWorkingSetProvider receives persisted Workspace Chat Artifact.type and Artifact.id fields through ArtifactWorkingSetContext.artifacts. Enterprise hydrators return MountedArtifactContent with built-in filenames (case.json, table.json, agent.json). The provider sanitizes each value before composing artifact_dir and writes the resulting relative path under the per-turn host artifact root.",
+      "provenance": "agent_derived",
+      "schema_version": "1",
+      "site": "TracecatHQ/tracecat@c84d52528a489821f355fc63976fbc7783ae0ad5:packages/tracecat-ee/tracecat_ee/agent/artifacts/mount_only_provider.py:31:_SAFE_PATH_SEGMENT_RE",
+      "trust": "config"
+    },
+    "detail": null,
+    "domain": "Each output token from the pinned path-segment substitution is in its ASCII component alphabet; therefore it cannot emit slash or backslash",
+    "gate": {
+      "consumer_adopted": false,
+      "differential_cases": 2467,
+      "gate_id": "tracecat-mount-only-artifact-path-segment",
+      "local_gate_command": "/home/lalbers/gitroot/regexproof/.venv/bin/python /home/lalbers/gitroot/regexproof/scripts/tracecat-artifact-path-segment-regression-gate.py --source-root /tmp/tracecat-p2-review-20261016 --output /home/lalbers/gitroot/regexproof/properties/calibration/2026-10-16-autonomous-tracecat-artifact-path-segment/p6-wave/product-gate.json --skip-proof",
+      "local_gate_passed": true,
+      "mutation_guard_passed": true,
+      "product_engine_replayed": true,
+      "source_pin_verified": true
+    },
+    "kind": "property",
+    "pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+    "question_id": "TC-artifact-path-segment-safe-image",
+    "repo_id": "TracecatHQ/tracecat",
+    "site": "TracecatHQ/tracecat@c84d52528a489821f355fc63976fbc7783ae0ad5:packages/tracecat-ee/tracecat_ee/agent/artifacts/mount_only_provider.py:31:_SAFE_PATH_SEGMENT_RE",
+    "status": "unsat",
+    "synthesized": false,
+    "url": "https://github.com/TracecatHQ/tracecat"
+  }
+]

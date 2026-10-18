@@ -1,0 +1,2052 @@
+[
+  {
+    "contract": {
+      "adoption": {
+        "approved_on": "2026-10-13",
+        "authority": "standing_user_delegation",
+        "contract_sha256": "ba9e12c17f7f6a06b6130089e59d91e3a3f50c62a1dcf6c204d87be2e6ffa2b3",
+        "evidence": [
+          "https://github.com/Agenticstiger/forge-cli/blob/efcf8e4c0087def553a737dc1c4eebda5d8a90cd/fluid_build/build_runners/base.py",
+          "https://github.com/Agenticstiger/forge-cli/blob/efcf8e4c0087def553a737dc1c4eebda5d8a90cd/fluid_build/build_runners/dbt/runner.py",
+          "The dbt runner passes -e and --env argv values through the renderer before they are logged."
+        ],
+        "policy_version": "autonomous-contracts-v1",
+        "rationale": "The sensitive-key expression and pinned dbt command renderer are reviewed together; enumerated configuration keys must have their values replaced before log output.",
+        "review": {
+          "author": "codex-contract-author",
+          "reviewer": "codex-independent-review-pass",
+          "same_model": true
+        },
+        "source_file": "fluid_build/build_runners/base.py",
+        "source_pin": "efcf8e4c0087def553a737dc1c4eebda5d8a90cd",
+        "source_sha256": "5e1274001ae1f3a3d41f8c59c059e5d991db221c8c1fd328a471c7f917207842",
+        "source_url": "https://github.com/Agenticstiger/forge-cli",
+        "status": "approved"
+      },
+      "declared_domain": "pinned forge-cli revision; every documented key with all 5680 ASCII letter-case assignments is replayed as dbt run -e/--env KEY=CLEAR_SENTINEL; additional hand-labeled cases cover empty and delimiter-containing values, repeated entries, and terminal newlines; key forms include optional empty/underscore/hyphen separators for api/private keys",
+      "guarantee": "for documented sensitive KEY=VALUE configuration passed after -e or --env, _render_command_for_log emits KEY=<redacted> and never the value",
+      "input_source": "operator/provider dbt command configuration supplied as argv to the log renderer",
+      "provenance": "agent_derived",
+      "schema_version": "1",
+      "site": "Agenticstiger/forge-cli@efcf8e4c0087def553a737dc1c4eebda5d8a90cd:fluid_build/build_runners/base.py:54:SENSITIVE_ENV_KEY_RE",
+      "trust": "config"
+    },
+    "detail": null,
+    "domain": "the pinned _render_command_for_log replaces the value for every documented sensitive environment key with the exact KEY=<redacted> image",
+    "gate": {
+      "consumer_adopted": false,
+      "differential_cases": 5680,
+      "gate_id": "forge-cli-local-regression-suite-v1",
+      "local_gate_command": ".venv/bin/python -m pytest -q tests/test_forge_cli_harness.py",
+      "local_gate_passed": true,
+      "mutation_guard_passed": true,
+      "product_engine_replayed": true,
+      "source_pin_verified": true
+    },
+    "kind": "property",
+    "pin": "efcf8e4c0087def553a737dc1c4eebda5d8a90cd",
+    "question_id": "FC-forge-cli-sensitive-env-helper-redacts",
+    "repo_id": "Agenticstiger/forge-cli",
+    "site": "Agenticstiger/forge-cli@efcf8e4c0087def553a737dc1c4eebda5d8a90cd:fluid_build/build_runners/base.py:54:SENSITIVE_ENV_KEY_RE",
+    "status": "unsat",
+    "synthesized": false,
+    "url": "https://github.com/Agenticstiger/forge-cli"
+  },
+  {
+    "contract": {
+      "declared_domain": "exact ASCII policy-key literals (case-insensitive), len 1..32",
+      "guarantee": "documented sensitive-key forms are accepted by SENSITIVE_ENV_KEY_RE before _render_command_for_log",
+      "input_source": "operator/provider configuration rendered by _render_command_for_log",
+      "provenance": "human",
+      "schema_version": "1",
+      "site": "Agenticstiger/forge-cli@efcf8e4c0087def553a737dc1c4eebda5d8a90cd:fluid_build/build_runners/base.py:54:SENSITIVE_ENV_KEY_RE",
+      "trust": "config"
+    },
+    "detail": null,
+    "domain": "documented ASCII sensitive-key forms are accepted by SENSITIVE_ENV_KEY_RE (key len 1..32)",
+    "gate": {
+      "consumer_adopted": false,
+      "differential_cases": 0,
+      "gate_id": "forge-cli-local-regression-suite-v1",
+      "local_gate_command": ".venv/bin/python -m pytest -q tests/test_forge_cli_harness.py",
+      "local_gate_passed": false,
+      "mutation_guard_passed": false,
+      "product_engine_replayed": false,
+      "source_pin_verified": true
+    },
+    "kind": "property",
+    "pin": "efcf8e4c0087def553a737dc1c4eebda5d8a90cd",
+    "question_id": "FC-forge-cli-sensitive-env-key-covered",
+    "repo_id": "Agenticstiger/forge-cli",
+    "site": "Agenticstiger/forge-cli@efcf8e4c0087def553a737dc1c4eebda5d8a90cd:fluid_build/build_runners/base.py:54:SENSITIVE_ENV_KEY_RE",
+    "status": "unsat",
+    "synthesized": false,
+    "url": "https://github.com/Agenticstiger/forge-cli"
+  },
+  {
+    "contract": {
+      "declared_domain": "printable ASCII intersect [^@/], single char",
+      "guarantee": "LLM endpoint userinfo alphabet contains no @ (matched userinfo reaches LlmConfig.redacted_endpoint)",
+      "input_source": "configured LLM endpoint used by the AI setup/test report",
+      "provenance": "human",
+      "schema_version": "1",
+      "site": "Agenticstiger/forge-cli@efcf8e4c0087def553a737dc1c4eebda5d8a90cd:fluid_build/llm/providers.py:287:LlmConfig.redacted_endpoint",
+      "trust": "config"
+    },
+    "detail": null,
+    "domain": "LLM endpoint userinfo alphabet contains no @ (matched userinfo reaches LlmConfig.redacted_endpoint) (length-independent single-char)",
+    "gate": {
+      "consumer_adopted": false,
+      "differential_cases": 0,
+      "gate_id": "forge-cli-local-regression-suite-v1",
+      "local_gate_command": ".venv/bin/python -m pytest -q tests/test_forge_cli_harness.py",
+      "local_gate_passed": false,
+      "mutation_guard_passed": false,
+      "product_engine_replayed": false,
+      "source_pin_verified": true
+    },
+    "kind": "property",
+    "pin": "efcf8e4c0087def553a737dc1c4eebda5d8a90cd",
+    "question_id": "FC-forge-cli-llm-userinfo-no-at",
+    "repo_id": "Agenticstiger/forge-cli",
+    "site": "Agenticstiger/forge-cli@efcf8e4c0087def553a737dc1c4eebda5d8a90cd:fluid_build/llm/providers.py:287:LlmConfig.redacted_endpoint",
+    "status": "unsat",
+    "synthesized": false,
+    "url": "https://github.com/Agenticstiger/forge-cli"
+  },
+  {
+    "contract": {
+      "declared_domain": "printable ASCII intersect [^/?#@\\s], single char",
+      "guarantee": "URL userinfo password alphabet contains no space (matched password reaches redact_secret_text)",
+      "input_source": "provider and operator endpoint text reaching shared logs and state",
+      "provenance": "human",
+      "schema_version": "1",
+      "site": "Agenticstiger/forge-cli@efcf8e4c0087def553a737dc1c4eebda5d8a90cd:fluid_build/observability/secret_redactor.py:151:_URL_USERINFO_RE",
+      "trust": "config"
+    },
+    "detail": null,
+    "domain": "URL userinfo password alphabet contains no space (matched password reaches redact_secret_text) (length-independent single-char)",
+    "gate": {
+      "consumer_adopted": false,
+      "differential_cases": 0,
+      "gate_id": "forge-cli-local-regression-suite-v1",
+      "local_gate_command": ".venv/bin/python -m pytest -q tests/test_forge_cli_harness.py",
+      "local_gate_passed": false,
+      "mutation_guard_passed": false,
+      "product_engine_replayed": false,
+      "source_pin_verified": true
+    },
+    "kind": "property",
+    "pin": "efcf8e4c0087def553a737dc1c4eebda5d8a90cd",
+    "question_id": "FC-forge-cli-url-password-no-space",
+    "repo_id": "Agenticstiger/forge-cli",
+    "site": "Agenticstiger/forge-cli@efcf8e4c0087def553a737dc1c4eebda5d8a90cd:fluid_build/observability/secret_redactor.py:151:_URL_USERINFO_RE",
+    "status": "unsat",
+    "synthesized": false,
+    "url": "https://github.com/Agenticstiger/forge-cli"
+  },
+  {
+    "contract": {
+      "declared_domain": "ASCII sasl.jaas.config=\"...\" record; value is [a-z]{0,4}\\\"[a-z]{0,4}, total len 1..64",
+      "guarantee": "an escaped-quote sasl.jaas.config value in the product grammar is accepted by _JAAS_CONFIG_RE before redact_secret_text",
+      "input_source": "serialized connector/provider configuration and engine error text",
+      "provenance": "human",
+      "schema_version": "1",
+      "site": "Agenticstiger/forge-cli@efcf8e4c0087def553a737dc1c4eebda5d8a90cd:fluid_build/observability/secret_redactor.py:218:_JAAS_CONFIG_RE",
+      "trust": "untrusted-input"
+    },
+    "detail": null,
+    "domain": "escaped-quote JAAS values in the independent product grammar are accepted by _JAAS_CONFIG_RE (ASCII, total len 1..64)",
+    "gate": {
+      "consumer_adopted": false,
+      "differential_cases": 0,
+      "gate_id": "forge-cli-local-regression-suite-v1",
+      "local_gate_command": ".venv/bin/python -m pytest -q tests/test_forge_cli_harness.py",
+      "local_gate_passed": false,
+      "mutation_guard_passed": false,
+      "product_engine_replayed": false,
+      "source_pin_verified": true
+    },
+    "kind": "property",
+    "pin": "efcf8e4c0087def553a737dc1c4eebda5d8a90cd",
+    "question_id": "FC-forge-cli-jaas-escaped-quote-covered",
+    "repo_id": "Agenticstiger/forge-cli",
+    "site": "Agenticstiger/forge-cli@efcf8e4c0087def553a737dc1c4eebda5d8a90cd:fluid_build/observability/secret_redactor.py:218:_JAAS_CONFIG_RE",
+    "status": "unsat",
+    "synthesized": false,
+    "url": "https://github.com/Agenticstiger/forge-cli"
+  },
+  {
+    "contract": {
+      "declared_domain": "printable ASCII intersect [^\"'\\s,;}], single char",
+      "guarantee": "Datamesh assignment-value alphabet contains no semicolon (matched value reaches _redact_error_body)",
+      "input_source": "untrusted remote provider error body",
+      "provenance": "human",
+      "schema_version": "1",
+      "site": "Agenticstiger/forge-cli@efcf8e4c0087def553a737dc1c4eebda5d8a90cd:fluid_build/providers/datamesh_manager/datamesh_manager.py:88:_SECRET_ERROR_PATTERNS",
+      "trust": "untrusted-input"
+    },
+    "detail": null,
+    "domain": "Datamesh assignment-value alphabet contains no semicolon (matched value reaches _redact_error_body) (length-independent single-char)",
+    "gate": {
+      "consumer_adopted": false,
+      "differential_cases": 0,
+      "gate_id": "forge-cli-local-regression-suite-v1",
+      "local_gate_command": ".venv/bin/python -m pytest -q tests/test_forge_cli_harness.py",
+      "local_gate_passed": false,
+      "mutation_guard_passed": false,
+      "product_engine_replayed": false,
+      "source_pin_verified": true
+    },
+    "kind": "property",
+    "pin": "efcf8e4c0087def553a737dc1c4eebda5d8a90cd",
+    "question_id": "FC-forge-cli-dmm-value-no-semicolon",
+    "repo_id": "Agenticstiger/forge-cli",
+    "site": "Agenticstiger/forge-cli@efcf8e4c0087def553a737dc1c4eebda5d8a90cd:fluid_build/providers/datamesh_manager/datamesh_manager.py:88:_SECRET_ERROR_PATTERNS",
+    "status": "unsat",
+    "synthesized": false,
+    "url": "https://github.com/Agenticstiger/forge-cli"
+  },
+  {
+    "contract": {
+      "adoption": {
+        "approved_on": "2026-10-15",
+        "authority": "standing_user_delegation",
+        "contract_sha256": "aac841ad61eca3ca7456f39a303a5a10e4ce4fca55def8fca9de57a227b3a347",
+        "evidence": [
+          "https://github.com/Leviticus-Triage/llm-honeypot-intelligence/blob/65624396e263074bb8cb2e049f9a9ec6215ea5c1/scripts/sync-to-github.sh",
+          "https://github.com/Leviticus-Triage/llm-honeypot-intelligence/blob/65624396e263074bb8cb2e049f9a9ec6215ea5c1/scripts/sync-to-github.sh#L26",
+          "https://github.com/Leviticus-Triage/llm-honeypot-intelligence/blob/65624396e263074bb8cb2e049f9a9ec6215ea5c1/scripts/sync-to-github.sh#L69-L76",
+          "https://github.com/Leviticus-Triage/llm-honeypot-intelligence/blob/65624396e263074bb8cb2e049f9a9ec6215ea5c1/scripts/sync-to-github.sh#L81-L110",
+          "https://github.com/Leviticus-Triage/llm-honeypot-intelligence/blob/65624396e263074bb8cb2e049f9a9ec6215ea5c1/scripts/sync-to-github.sh#L154-L189",
+          "https://github.com/Leviticus-Triage/llm-honeypot-intelligence/blob/65624396e263074bb8cb2e049f9a9ec6215ea5c1/docs/setup-guide.md#L174-L176",
+          "https://www.rfc-editor.org/rfc/rfc1918.html"
+        ],
+        "policy_version": "autonomous-contracts-v1",
+        "rationale": "The pinned source labels this helper as a private-IP sanitizer and applies it to generated rule and threat-intelligence files before the automated GitHub commit/push. RFC 1918 defines the three private IPv4 blocks; treating its stated guarantee as the contract exposes the uncovered 10/8 and 172.16/12 cases. This adopts the documented privacy boundary without asserting that a real secret was published.",
+        "review": {
+          "author": "Codex source-review pass",
+          "reviewer": "Codex second source-review pass",
+          "same_model": true
+        },
+        "source_file": "scripts/sync-to-github.sh",
+        "source_pin": "65624396e263074bb8cb2e049f9a9ec6215ea5c1",
+        "source_sha256": "b7cbcd83598d83848516d282de897706da5828df1f1ab6ebcb3f4d87bd203122",
+        "source_url": "https://github.com/Leviticus-Triage/llm-honeypot-intelligence",
+        "status": "approved"
+      },
+      "declared_domain": "ASCII text files with the suffixes selected by sanitize_dir, containing a canonical dotted-decimal IPv4 address in 10.0.0.0/8, 172.16.0.0/12, or 192.168.0.0/16; the broader contract is checked by an address-language counterexample query and exact pinned sed helper replay. POSIX shell text excludes NUL.",
+      "guarantee": "Every canonical RFC 1918 IPv4 address in an eligible generated artifact is replaced with [REDACTED] before the sync script commits or pushes it to the configured GitHub remote.",
+      "input_source": "Rules and threat-intelligence text copied from the ollama-rules-output and ollama-threat-output Docker volumes into the repository before automated synchronization.",
+      "provenance": "agent_derived",
+      "schema_version": "1",
+      "site": "Leviticus-Triage/llm-honeypot-intelligence@65624396e263074bb8cb2e049f9a9ec6215ea5c1:scripts/sync-to-github.sh:76:PRIVATE_IP_PATTERN",
+      "trust": "untrusted-input"
+    },
+    "detail": null,
+    "domain": "COUNTEREXAMPLE FINDER: an RFC 1918 IPv4 token can pass through the exact pinned sed pattern without replacement",
+    "gate": {
+      "consumer_adopted": false,
+      "differential_cases": 65541,
+      "gate_id": "llm-honeypot-exact-pin-shell-boundaries",
+      "local_gate_command": ".venv/bin/python scripts/llm-honeypot-boundary-regression-gate.py --source-root /tmp/regexproof-pinned-sources/llm-honeypot-intelligence-65624396e263074bb8cb2e049f9a9ec6215ea5c1 --output /home/lalbers/gitroot/regexproof/properties/calibration/2026-10-15-p2-llm-honeypot-source-review/product-replay-p6.json",
+      "local_gate_passed": true,
+      "mutation_guard_passed": true,
+      "product_engine_replayed": true,
+      "source_pin_verified": true
+    },
+    "kind": "counterexample_finder",
+    "pin": "65624396e263074bb8cb2e049f9a9ec6215ea5c1",
+    "question_id": "LH-llm-honeypot-private-ip-rfc1918-redaction",
+    "repo_id": "Leviticus-Triage/llm-honeypot-intelligence",
+    "site": "Leviticus-Triage/llm-honeypot-intelligence@65624396e263074bb8cb2e049f9a9ec6215ea5c1:scripts/sync-to-github.sh:76:PRIVATE_IP_PATTERN",
+    "status": "sat",
+    "synthesized": false,
+    "url": "https://github.com/Leviticus-Triage/llm-honeypot-intelligence"
+  },
+  {
+    "contract": {
+      "adoption": {
+        "approved_on": "2026-10-15",
+        "authority": "standing_user_delegation",
+        "contract_sha256": "e7fd7ec708484187bd7151c34d04aadcdb225233815f28cfd4565afd9b9d7fa0",
+        "evidence": [
+          "https://github.com/Leviticus-Triage/llm-honeypot-intelligence/blob/65624396e263074bb8cb2e049f9a9ec6215ea5c1/spiderfoot-toolbox/tor-gateway/rotate-tor.sh",
+          "https://github.com/Leviticus-Triage/llm-honeypot-intelligence/blob/65624396e263074bb8cb2e049f9a9ec6215ea5c1/spiderfoot-toolbox/tor-gateway/rotate-tor.sh#L1-L3",
+          "https://github.com/Leviticus-Triage/llm-honeypot-intelligence/blob/65624396e263074bb8cb2e049f9a9ec6215ea5c1/spiderfoot-toolbox/tor-gateway/rotate-tor.sh#L26-L46",
+          "https://github.com/Leviticus-Triage/llm-honeypot-intelligence/blob/65624396e263074bb8cb2e049f9a9ec6215ea5c1/spiderfoot-toolbox/tor-gateway/entrypoint.sh#L67-L75",
+          "https://spec.torproject.org/control-spec/commands.html"
+        ],
+        "policy_version": "autonomous-contracts-v1",
+        "rationale": "The pinned helper sends AUTHENTICATE, SIGNAL NEWNYM, and QUIT in one control-port stream, then logs success when grep finds 250 OK anywhere in the combined reply. The standing script comment says exit rotation is mandatory; the Tor control specification ties 250 OK to command success and defines non-250 errors. The contract checks that the status of SIGNAL NEWNYM, rather than an earlier authentication reply, controls the result.",
+        "review": {
+          "author": "Codex source-review pass",
+          "reviewer": "Codex second source-review pass",
+          "same_model": true
+        },
+        "source_file": "spiderfoot-toolbox/tor-gateway/rotate-tor.sh",
+        "source_pin": "65624396e263074bb8cb2e049f9a9ec6215ea5c1",
+        "source_sha256": "0670c3cfcb76b47b0b91a000918afaa9ceea077d6c7b77c4f4a66f1c38522334",
+        "source_url": "https://github.com/Leviticus-Triage/llm-honeypot-intelligence",
+        "status": "approved"
+      },
+      "declared_domain": "CRLF-delimited ASCII Tor ControlPort response lines for the three commands issued by send_newnym, including a successful 250 authentication reply followed by a 5xx signal error; no NUL. The property models the response transcript and the real pinned shell function is replayed with a local fake nc command.",
+      "guarantee": "send_newnym reports success only when the reply to SIGNAL NEWNYM is successful; a prior AUTHENTICATE success must not make a later signal failure look successful.",
+      "input_source": "ASCII Tor ControlPort replies to the local AUTHENTICATE, SIGNAL NEWNYM, QUIT command sequence sent by the rotator.",
+      "provenance": "agent_derived",
+      "schema_version": "1",
+      "site": "Leviticus-Triage/llm-honeypot-intelligence@65624396e263074bb8cb2e049f9a9ec6215ea5c1:spiderfoot-toolbox/tor-gateway/rotate-tor.sh:34:250 OK",
+      "trust": "internal"
+    },
+    "detail": null,
+    "domain": "COUNTEREXAMPLE FINDER: an AUTHENTICATE 250 OK followed by a failed SIGNAL NEWNYM reply still makes the pinned grep success predicate true",
+    "gate": {
+      "consumer_adopted": false,
+      "differential_cases": 4,
+      "gate_id": "llm-honeypot-exact-pin-shell-boundaries",
+      "local_gate_command": ".venv/bin/python scripts/llm-honeypot-boundary-regression-gate.py --source-root /tmp/regexproof-pinned-sources/llm-honeypot-intelligence-65624396e263074bb8cb2e049f9a9ec6215ea5c1 --output /home/lalbers/gitroot/regexproof/properties/calibration/2026-10-15-p2-llm-honeypot-source-review/product-replay-p6.json",
+      "local_gate_passed": true,
+      "mutation_guard_passed": true,
+      "product_engine_replayed": true,
+      "source_pin_verified": true
+    },
+    "kind": "counterexample_finder",
+    "pin": "65624396e263074bb8cb2e049f9a9ec6215ea5c1",
+    "question_id": "LH-llm-honeypot-tor-newnym-response-sequencing",
+    "repo_id": "Leviticus-Triage/llm-honeypot-intelligence",
+    "site": "Leviticus-Triage/llm-honeypot-intelligence@65624396e263074bb8cb2e049f9a9ec6215ea5c1:spiderfoot-toolbox/tor-gateway/rotate-tor.sh:34:250 OK",
+    "status": "sat",
+    "synthesized": false,
+    "url": "https://github.com/Leviticus-Triage/llm-honeypot-intelligence"
+  },
+  {
+    "contract": {
+      "adoption": {
+        "approved_on": "2026-10-15",
+        "authority": "standing_user_delegation",
+        "contract_sha256": "992095d408e11b9aad97f844d4b8a0f32e13ae6c546e917ac5cc21e8cd6e6271",
+        "evidence": [
+          "https://github.com/TracecatHQ/tracecat/blob/c84d52528a489821f355fc63976fbc7783ae0ad5/tracecat/integrations/mcp_validation.py",
+          "https://github.com/TracecatHQ/tracecat/blob/c84d52528a489821f355fc63976fbc7783ae0ad5/tracecat/integrations/schemas.py",
+          "https://github.com/TracecatHQ/tracecat/blob/c84d52528a489821f355fc63976fbc7783ae0ad5/tracecat/integrations/service.py",
+          "https://github.com/TracecatHQ/tracecat/blob/c84d52528a489821f355fc63976fbc7783ae0ad5/tracecat/agent/mcp/stdio_probe.py",
+          "https://github.com/TracecatHQ/tracecat/blob/c84d52528a489821f355fc63976fbc7783ae0ad5/docs/automations/integrations/mcp-integrations.mdx",
+          "properties/calibration/2026-10-15-p2-source-inventory-v3/sites.ndjson regex_id=280c0b240b92090a7bdb58b6a70cff57 column=11"
+        ],
+        "policy_version": "autonomous-contracts-v1",
+        "rationale": "The pinned validator comment and public validation error declare an exact ASCII name grammar. MCP stdio create/update paths invoke this validator before persistence; saved environment keys are decrypted and supplied to StdioTransport. The exact source accepts a final-line-feed witness outside its declared grammar. This is a reproduced config-validation gap; no command injection or security impact is claimed.",
+        "review": {
+          "author": "Codex-P2-source-review",
+          "reviewer": "Codex-independent-source-review-pass",
+          "same_model": true
+        },
+        "source_file": "tracecat/integrations/mcp_validation.py",
+        "source_pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+        "source_sha256": "41cf730ba1cb592cae684811bbb4d510961a0a441c156313a804b2593085f895",
+        "source_url": "https://github.com/TracecatHQ/tracecat",
+        "status": "approved"
+      },
+      "declared_domain": "ASCII strings of length 1 through 64 supplied as keys in an MCP stdio environment dictionary. Tracecat's validator comment and error text declare the complete accepted syntax [A-Za-z_][A-Za-z0-9_]*. The counterexample model mirrors CPython re.match with the pinned source's ^...$ anchors, including Python's final-newline behavior; it makes no claim about Unicode keys or arbitrary environment values.",
+      "guarantee": "Every MCP stdio environment key accepted by validate_mcp_env_key must match Tracecat's declared complete syntax [A-Za-z_][A-Za-z0-9_]*; a final line feed is outside that declared language and must be rejected.",
+      "input_source": "Workspace MCP stdio integration configuration: MCPStdioIntegrationCreate.stdio_env keys are validated by MCPIntegrationService.validate_stdio_server_config before the dictionary is encrypted and persisted, and saved keys are later passed as env to StdioTransport.",
+      "provenance": "agent_derived",
+      "schema_version": "1",
+      "site": "TracecatHQ/tracecat@c84d52528a489821f355fc63976fbc7783ae0ad5:tracecat/integrations/mcp_validation.py:178:re.match",
+      "trust": "config"
+    },
+    "detail": null,
+    "domain": "A string accepted as an MCP stdio env key must match Tracecat's complete declared ASCII name syntax; a terminal line feed is outside that grammar",
+    "gate": {
+      "consumer_adopted": false,
+      "differential_cases": 1442,
+      "gate_id": "tracecat-mcp-env-key-declared-grammar",
+      "local_gate_command": "/home/lalbers/gitroot/regexproof/.venv/bin/python /home/lalbers/gitroot/regexproof/scripts/tracecat-mcp-env-key-regression-gate.py --source-root /tmp/regexproof-pinned-sources/tracecat-c84d52528a489821f355fc63976fbc7783ae0ad5 --output /home/lalbers/gitroot/regexproof/properties/calibration/2026-10-15-autonomous-tracecat-mcp-env-key/p6-wave/product-gate.json",
+      "local_gate_passed": true,
+      "mutation_guard_passed": true,
+      "product_engine_replayed": true,
+      "source_pin_verified": true
+    },
+    "kind": "counterexample_finder",
+    "pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+    "question_id": "TC-mcp-env-key-accepts-terminal-lf",
+    "repo_id": "TracecatHQ/tracecat",
+    "site": "TracecatHQ/tracecat@c84d52528a489821f355fc63976fbc7783ae0ad5:tracecat/integrations/mcp_validation.py:178:re.match",
+    "status": "sat",
+    "synthesized": false,
+    "url": "https://github.com/TracecatHQ/tracecat"
+  },
+  {
+    "contract": {
+      "adoption": {
+        "approved_on": "2026-10-15",
+        "authority": "standing_user_delegation",
+        "contract_sha256": "53e40f4edde4e27b36ea9aedb0ee0aa4473925c8737b0348a80c416e5398293f",
+        "evidence": [
+          "https://github.com/chainguard-dev/malcontent/blob/ea3e83e24676a1678a9522141da29b636c9451ab/pkg/report/report.go",
+          "https://github.com/chainguard-dev/malcontent/blob/ea3e83e24676a1678a9522141da29b636c9451ab/pkg/render/markdown.go",
+          "https://github.com/chainguard-dev/malcontent/blob/ea3e83e24676a1678a9522141da29b636c9451ab/cmd/mal/mal.go",
+          "properties/calibration/2026-10-15-autonomous-malcontent-author-markdown-20r2/product-replay.json"
+        ],
+        "policy_version": "autonomous-contracts-v1",
+        "rationale": "The pinned code independently documents Markdown injection escaping for report text, exposes optional third-party YARA rules, parses author metadata through authorWithURLRe and url.Parse, and places the stored author URL in a Markdown link. A full YARA-X-to-report.Generate-to-Markdown replay reproduced a second attacker-chosen HTTPS link. The contract is a counterexample-finding question; the regex model alone is not treated as proof of the output effect.",
+        "review": {
+          "author": "codex-contract-author",
+          "reviewer": "codex-independent-review-pass",
+          "same_model": true
+        },
+        "source_file": "pkg/report/report.go",
+        "source_pin": "ea3e83e24676a1678a9522141da29b636c9451ab",
+        "source_sha256": "bb3ab2bc50fb835f4add14d8c1f6b71140335313c016575bd55eef224fe690de",
+        "source_url": "https://github.com/chainguard-dev/malcontent",
+        "status": "approved"
+      },
+      "declared_domain": "Counterexample domain: one-line ASCII YARA author metadata that matches the Go RE2 search expression, whose captured URL is accepted by net/url.Parse, with a non-prefix reference URL so the later author-URL compatibility branch does not replace the capture. Product reachability is checked by compiling a valid YARA rule, matching a sentinel, calling the exact pinned report.Generate and Markdown renderer with YARA-X 1.19.0. The solver fixes one concrete witness; it does not establish safety for all metadata or downstream Markdown viewers.",
+      "guarantee": "Third-party YARA author metadata accepted by the pinned authorWithURLRe and Go URL parser must not close the generated Markdown author link or add a second hyperlink in Malcontent's Markdown report.",
+      "input_source": "The author metadata value from an operator-enabled third-party YARA rule, read through Malcontent's RuleFS and parsed into a report behavior.",
+      "provenance": "agent_derived",
+      "schema_version": "1",
+      "site": "chainguard-dev/malcontent@ea3e83e24676a1678a9522141da29b636c9451ab:pkg/report/report.go:117:authorWithURLRe",
+      "trust": "config"
+    },
+    "detail": "SAT and real-engine replay recovered from the same-run local gate report after canonical-row serialization failed; solver was not retried",
+    "domain": "The pinned authorWithURLRe search capture must not permit source metadata to close its Markdown link and add a second external link",
+    "gate": {
+      "consumer_adopted": false,
+      "differential_cases": 2034,
+      "gate_id": "malcontent-author-markdown-extra-link-v1",
+      "local_gate_command": ".venv/bin/python scripts/malcontent-author-markdown-regression-gate.py --output /home/lalbers/gitroot/regexproof/properties/calibration/2026-10-15-autonomous-malcontent-author-markdown-20r2/p6-gate-report.json",
+      "local_gate_passed": true,
+      "mutation_guard_passed": true,
+      "product_engine_replayed": true,
+      "source_pin_verified": true
+    },
+    "kind": "counterexample_finder",
+    "pin": "ea3e83e24676a1678a9522141da29b636c9451ab",
+    "question_id": "MC-malcontent-author-metadata-extra-markdown-link",
+    "repo_id": "chainguard-dev/malcontent",
+    "site": "chainguard-dev/malcontent@ea3e83e24676a1678a9522141da29b636c9451ab:pkg/report/report.go:117:authorWithURLRe",
+    "status": "sat",
+    "synthesized": false,
+    "url": "https://github.com/chainguard-dev/malcontent"
+  },
+  {
+    "contract": {
+      "adoption": {
+        "approved_on": "2026-10-15",
+        "authority": "standing_user_delegation",
+        "contract_sha256": "e3513639aae043c6e5a41b06f5d9c81773e125481a70aa5bfc9789d6d0c05fd3",
+        "evidence": [
+          "https://github.com/chainguard-dev/malcontent/blob/ea3e83e24676a1678a9522141da29b636c9451ab/pkg/report/report.go",
+          "https://github.com/chainguard-dev/malcontent/blob/ea3e83e24676a1678a9522141da29b636c9451ab/pkg/render/markdown.go",
+          "https://github.com/chainguard-dev/malcontent/blob/ea3e83e24676a1678a9522141da29b636c9451ab/cmd/mal/mal.go",
+          "properties/calibration/2026-10-15-autonomous-malcontent-description-markdown-20r2/product-replay.json"
+        ],
+        "policy_version": "autonomous-contracts-v1",
+        "rationale": "The pinned source documents Markdown injection escaping, but the third-party YARA description path captures the tool name, interpolates it into Behavior.Description, and adds that raw description to the Markdown table without calling sanitizeMarkdown. A full YARA-X-to-report.Generate-to-Markdown replay reproduces a raw HTTPS Markdown link and table delimiter. This contract is limited to the concrete witness and Markdown structure; downstream consumer impact remains unconfirmed.",
+        "review": {
+          "author": "codex-contract-author",
+          "reviewer": "codex-independent-review-pass",
+          "same_model": true
+        },
+        "source_file": "pkg/report/report.go",
+        "source_pin": "ea3e83e24676a1678a9522141da29b636c9451ab",
+        "source_sha256": "bb3ab2bc50fb835f4add14d8c1f6b71140335313c016575bd55eef224fe690de",
+        "source_url": "https://github.com/chainguard-dev/malcontent",
+        "status": "approved"
+      },
+      "declared_domain": "Counterexample domain: the single one-line ASCII YARA description witness recorded in product-replay.json. It matches the pinned Go RE2 search expression, is transformed by mungeDescription, and is rendered by the exact pinned report.Generate and Markdown renderer with YARA-X 1.19.0. This is a concrete witness only; it does not prove safety or exploitability for other descriptions or downstream Markdown viewers.",
+      "guarantee": "Third-party YARA description metadata matched by threatHuntingKeywordRe must not emit raw Markdown link syntax or an unescaped table-column delimiter in the generated Markdown report.",
+      "input_source": "The description metadata value from an operator-enabled third-party YARA rule, read by Malcontent's RuleFS and passed through mungeDescription into a report behavior.",
+      "provenance": "agent_derived",
+      "schema_version": "1",
+      "site": "chainguard-dev/malcontent@ea3e83e24676a1678a9522141da29b636c9451ab:pkg/report/report.go:118:threatHuntingKeywordRe",
+      "trust": "config"
+    },
+    "detail": null,
+    "domain": "The pinned threatHuntingKeywordRe search capture must not emit a raw Markdown link and table delimiter from third-party description metadata",
+    "gate": {
+      "consumer_adopted": false,
+      "differential_cases": 33209,
+      "gate_id": "malcontent-description-markdown-extra-link-v1",
+      "local_gate_command": ".venv/bin/python scripts/malcontent-description-markdown-regression-gate.py --output /home/lalbers/gitroot/regexproof/properties/calibration/2026-10-15-autonomous-malcontent-description-markdown-20r2/p6-gate-report.json",
+      "local_gate_passed": true,
+      "mutation_guard_passed": true,
+      "product_engine_replayed": true,
+      "source_pin_verified": true
+    },
+    "kind": "counterexample_finder",
+    "pin": "ea3e83e24676a1678a9522141da29b636c9451ab",
+    "question_id": "MC-malcontent-description-metadata-extra-markdown-link",
+    "repo_id": "chainguard-dev/malcontent",
+    "site": "chainguard-dev/malcontent@ea3e83e24676a1678a9522141da29b636c9451ab:pkg/report/report.go:118:threatHuntingKeywordRe",
+    "status": "sat",
+    "synthesized": false,
+    "url": "https://github.com/chainguard-dev/malcontent"
+  },
+  {
+    "contract": {
+      "declared_domain": "ASCII argument after the product's surrounding strip() and quote removal, including one terminal LF; length 2..4; Python re.match semantics at the pinned source",
+      "guarantee": "the root-target boundary does not classify an otherwise exact drive root when an unconsumed terminal newline is present",
+      "input_source": "untrusted agent command argument passed to Windows delete classification",
+      "provenance": "human",
+      "schema_version": "1",
+      "site": "fu351/Doberman-Core@53ae43c5298a2426c6696147fdd75e2a4aef10e2:src/doberman/engine/rules/commands.py:266:_WINDOWS_ROOT_RE",
+      "trust": "untrusted-input"
+    },
+    "detail": null,
+    "domain": "exists an ASCII Windows root-target argument with a terminal newline that Python re.match accepts before the closing $",
+    "gate": {
+      "consumer_adopted": false,
+      "differential_cases": 0,
+      "gate_id": null,
+      "local_gate_command": null,
+      "local_gate_passed": false,
+      "mutation_guard_passed": false,
+      "product_engine_replayed": true,
+      "source_pin_verified": false
+    },
+    "kind": "counterexample_finder",
+    "pin": "53ae43c5298a2426c6696147fdd75e2a4aef10e2",
+    "question_id": "PY-doberman-windows-root-token",
+    "repo_id": "fu351/Doberman-Core",
+    "site": "fu351/Doberman-Core@53ae43c5298a2426c6696147fdd75e2a4aef10e2:src/doberman/engine/rules/commands.py:266:_WINDOWS_ROOT_RE",
+    "status": "sat",
+    "synthesized": false,
+    "url": "https://github.com/fu351/Doberman-Core"
+  },
+  {
+    "contract": {
+      "declared_domain": "ASCII command token including one terminal LF, Python re.IGNORECASE, full anchored match; mkfs suffix is ASCII [A-Za-z0-9_]+; length 1..64",
+      "guarantee": "the disk-wipe command boundary does not accept an unconsumed terminal newline as part of a command token",
+      "input_source": "untrusted agent command token after shlex segment parsing",
+      "provenance": "human",
+      "schema_version": "1",
+      "site": "fu351/Doberman-Core@53ae43c5298a2426c6696147fdd75e2a4aef10e2:src/doberman/engine/rules/commands.py:434:_DISK_WIPE",
+      "trust": "untrusted-input"
+    },
+    "detail": null,
+    "domain": "exists an ASCII disk-wipe token with a terminal newline that Python re.match accepts before the closing $",
+    "gate": {
+      "consumer_adopted": false,
+      "differential_cases": 0,
+      "gate_id": null,
+      "local_gate_command": null,
+      "local_gate_passed": false,
+      "mutation_guard_passed": false,
+      "product_engine_replayed": true,
+      "source_pin_verified": false
+    },
+    "kind": "counterexample_finder",
+    "pin": "53ae43c5298a2426c6696147fdd75e2a4aef10e2",
+    "question_id": "PY-doberman-disk-wipe-token",
+    "repo_id": "fu351/Doberman-Core",
+    "site": "fu351/Doberman-Core@53ae43c5298a2426c6696147fdd75e2a4aef10e2:src/doberman/engine/rules/commands.py:434:_DISK_WIPE",
+    "status": "sat",
+    "synthesized": false,
+    "url": "https://github.com/fu351/Doberman-Core"
+  },
+  {
+    "contract": {
+      "adoption": {
+        "approved_on": "2026-10-15",
+        "authority": "standing_user_delegation",
+        "contract_sha256": "db5d22f87290865e215e0732278b9cf7ad9667271e1845e68a028064c79e2c56",
+        "evidence": [
+          "https://github.com/fu351/Doberman-Core/blob/53ae43c5298a2426c6696147fdd75e2a4aef10e2/src/doberman/engine/rules/secrets.py",
+          "https://github.com/fu351/Doberman-Core/blob/53ae43c5298a2426c6696147fdd75e2a4aef10e2/src/doberman/proxy/normalize.py",
+          "https://github.com/fu351/Doberman-Core/blob/53ae43c5298a2426c6696147fdd75e2a4aef10e2/src/doberman/engine/rules/paths.py",
+          "https://github.com/fu351/Doberman-Core/blob/53ae43c5298a2426c6696147fdd75e2a4aef10e2/src/doberman/canonical.py",
+          "https://github.com/fu351/Doberman-Core/blob/53ae43c5298a2426c6696147fdd75e2a4aef10e2/docs/SETUP.md",
+          "https://github.com/fu351/Doberman-Core/blob/53ae43c5298a2426c6696147fdd75e2a4aef10e2/docs/REASON_CODES.md"
+        ],
+        "policy_version": "autonomous-contracts-v1",
+        "rationale": "The source comment classifies .npmrc and credentials as secret stores; REASON_CODES.md says a recognized secret-file access requires AUTH. The setup guide supports Windows, normalize.py preserves the path target, and the path rule canonicalizes native paths to lowercase slash-separated relative form. Its default globs include .env, PEM/key files and SSH keys but omit .npmrc and credentials, so they do not cover this gap. The direct Python regex and SecretLeakageRule replay establish the current miss; native Windows execution and downstream impact remain explicitly pending.",
+        "review": {
+          "author": "codex-contract-author",
+          "reviewer": "codex-independent-review-pass",
+          "same_model": true
+        },
+        "source_file": "src/doberman/engine/rules/secrets.py",
+        "source_pin": "53ae43c5298a2426c6696147fdd75e2a4aef10e2",
+        "source_sha256": "a73b183b5ac0da101e1411384e12ffe7da9f48f59947ec76a447974e246179fa",
+        "source_url": "https://github.com/fu351/Doberman-Core",
+        "status": "approved"
+      },
+      "declared_domain": "ASCII drive-absolute Windows paths using any drive letter, beginning with <letter>:\\ and containing one or more non-empty directory components made from letters, digits, underscore, hyphen, period, or space, followed by the exact basename .npmrc or credentials; paths are under 256 characters and contain no secret-shaped payload that triggers argument redaction. Evaluate Python re.search with the pinned (?ix) source pattern.",
+      "guarantee": "The secret-store classifier recognizes native Windows paths whose final component is .npmrc or credentials, independent of path content.",
+      "input_source": "Untrusted agent file path supplied under the path key to an intercepted fs_read tool; proxy normalize preserves it as SecurityObject.target and SecretLeakageRule checks that target.",
+      "provenance": "agent_derived",
+      "schema_version": "1",
+      "site": "fu351/Doberman-Core@53ae43c5298a2426c6696147fdd75e2a4aef10e2:src/doberman/engine/rules/secrets.py:223:_SECRET_PATH",
+      "trust": "untrusted-input"
+    },
+    "detail": null,
+    "domain": "BUG DEMO: a Windows drive path to .npmrc or credentials is not recognized by the pinned secret-store search regex",
+    "gate": {
+      "consumer_adopted": false,
+      "differential_cases": 0,
+      "gate_id": "doberman-secret-path-regression-gate-v1",
+      "local_gate_command": "PYTHONPATH=/tmp/regexproof-doberman-deps python3 scripts/doberman-secret-path-regression-gate.py --source-root /tmp/regexproof-pinned-sources/Doberman-Core-53ae43c5298a2426c6696147fdd75e2a4aef10e2 --output properties/calibration/2026-10-15-autonomous-doberman-win-secret-path-20r2/gate-report.json",
+      "local_gate_passed": true,
+      "mutation_guard_passed": true,
+      "product_engine_replayed": true,
+      "source_pin_verified": true
+    },
+    "kind": "bug_demo",
+    "pin": "53ae43c5298a2426c6696147fdd75e2a4aef10e2",
+    "question_id": "PY-doberman-secret-store-windows-miss",
+    "repo_id": "fu351/Doberman-Core",
+    "site": "fu351/Doberman-Core@53ae43c5298a2426c6696147fdd75e2a4aef10e2:src/doberman/engine/rules/secrets.py:223:_SECRET_PATH",
+    "status": "sat",
+    "synthesized": false,
+    "url": "https://github.com/fu351/Doberman-Core"
+  },
+  {
+    "contract": {
+      "adoption": {
+        "approved_on": "2026-10-15",
+        "authority": "standing_user_delegation",
+        "contract_sha256": "d8a26b05f10027b3eb8395d79b3c27a4a06a4f4e9fd006b6f78be9752022aafb",
+        "evidence": [
+          "https://github.com/fu351/Doberman-Core/blob/53ae43c5298a2426c6696147fdd75e2a4aef10e2/src/doberman/hosthooks/codex.py",
+          "https://github.com/fu351/Doberman-Core/blob/53ae43c5298a2426c6696147fdd75e2a4aef10e2/tests/fixtures/codex/README.md",
+          "https://github.com/fu351/Doberman-Core/blob/53ae43c5298a2426c6696147fdd75e2a4aef10e2/tests/unit/test_hosthook_codex.py",
+          "properties/calibration/2026-10-15-p2-doberman-source-review/evidence.json regex_id=f7797e4965e6dd79fda6a4e5f2438f67 column=23"
+        ],
+        "policy_version": "autonomous-contracts-v1",
+        "rationale": "The captured Codex 0.146.1 fixture documents Add, Update, and Delete File directive syntax. The adopted theorem covers one printable-ASCII destination character; the exact-source replay separately exercises longer representative paths and target routing without claiming an unbounded path proof. At this pin, the adapter surfaces extracted destinations as file_write targets for ProtectedPathRule evaluation.",
+        "review": {
+          "author": "Codex source-review pass",
+          "reviewer": "Codex second source-review pass",
+          "same_model": true
+        },
+        "source_file": "src/doberman/hosthooks/codex.py",
+        "source_pin": "53ae43c5298a2426c6696147fdd75e2a4aef10e2",
+        "source_sha256": "0144953c99a6620cbe9128ce7bc7ad6f6e9ea1a64311348db1f70ec0d14f42f3",
+        "source_url": "https://github.com/fu351/Doberman-Core",
+        "status": "approved"
+      },
+      "declared_domain": "One ASCII directive line with zero to three leading ASCII spaces or tabs, one of the exact documented Add File, Update File, or Delete File forms, and a destination consisting of exactly one printable ASCII character from ! through ~. The Z3 theorem covers this one-character domain. The exact-source regression gate separately checks longer representative destinations, CRLF lines, and a mixed multi-directive envelope; these replays do not extend the formal theorem.",
+      "guarantee": "For each documented Add File, Update File, or Delete File directive with one non-whitespace printable-ASCII destination character, the pinned source regex matches the complete directive line and the adapter surfaces the stripped destination as a file_write target.",
+      "input_source": "The plain-text tool_input.command string in a Codex PreToolUse apply_patch payload supplied to Doberman.",
+      "provenance": "agent_derived",
+      "schema_version": "1",
+      "site": "fu351/Doberman-Core@53ae43c5298a2426c6696147fdd75e2a4aef10e2:src/doberman/hosthooks/codex.py:69:_APPLY_PATCH_FILE_RE",
+      "trust": "untrusted-input"
+    },
+    "detail": null,
+    "domain": "One ASCII directive line with zero to three leading ASCII spaces or tabs, one of the exact documented Add File, Update File, or Delete File forms, and a destination consisting of exactly one printable ASCII character from ! through ~. The Z3 theorem covers this one-character domain. The exact-source regression gate separately checks longer representative destinations, CRLF lines, and a mixed multi-directive envelope; these replays do not extend the formal theorem.",
+    "gate": {
+      "consumer_adopted": false,
+      "differential_cases": 385,
+      "gate_id": "doberman-codex-apply-patch-target-extraction",
+      "local_gate_command": "/home/linuxbrew/.linuxbrew/Cellar/python@3.14/3.14.8_2/bin/python3.14 scripts/doberman-codex-apply-patch-regression-gate.py --source-root /tmp/regexproof-pinned-sources/Doberman-Core-53ae43c5298a2426c6696147fdd75e2a4aef10e2 --roster properties/calibration/2026-10-15-p2-doberman-source-review/p6-wave/roster.json --output properties/calibration/2026-10-15-p2-doberman-source-review/p6-wave/product-gate.json",
+      "local_gate_passed": true,
+      "mutation_guard_passed": true,
+      "product_engine_replayed": true,
+      "source_pin_verified": true
+    },
+    "kind": "property",
+    "pin": "53ae43c5298a2426c6696147fdd75e2a4aef10e2",
+    "question_id": "DB-codex-apply-patch-file-target-path",
+    "repo_id": "fu351/Doberman-Core",
+    "site": "fu351/Doberman-Core@53ae43c5298a2426c6696147fdd75e2a4aef10e2:src/doberman/hosthooks/codex.py:69:_APPLY_PATCH_FILE_RE",
+    "status": "unsat",
+    "synthesized": false,
+    "url": "https://github.com/fu351/Doberman-Core"
+  },
+  {
+    "contract": {
+      "adoption": {
+        "approved_on": "2026-10-15",
+        "authority": "standing_user_delegation",
+        "contract_sha256": "9b4e12034ef2e5935a5aa8309d967f71b6c999daadb5093658eadf61cb61e740",
+        "evidence": [
+          "https://github.com/fu351/Doberman-Core/blob/53ae43c5298a2426c6696147fdd75e2a4aef10e2/src/doberman/hosthooks/codex.py",
+          "https://github.com/fu351/Doberman-Core/blob/53ae43c5298a2426c6696147fdd75e2a4aef10e2/tests/fixtures/codex/README.md",
+          "https://github.com/fu351/Doberman-Core/blob/53ae43c5298a2426c6696147fdd75e2a4aef10e2/tests/unit/test_hosthook_codex.py",
+          "properties/calibration/2026-10-15-p2-doberman-source-review/evidence.json regex_id=07feadd45ef45bfb08eb20a6c49cdb3e column=23"
+        ],
+        "policy_version": "autonomous-contracts-v1",
+        "rationale": "The captured Codex 0.146.1 fixture documents Move to directive syntax. The adopted theorem covers one printable-ASCII destination character; the exact-source replay separately exercises longer representative paths and target routing without claiming an unbounded path proof. At this pin, the adapter surfaces extracted destinations as file_write targets for ProtectedPathRule evaluation.",
+        "review": {
+          "author": "Codex source-review pass",
+          "reviewer": "Codex second source-review pass",
+          "same_model": true
+        },
+        "source_file": "src/doberman/hosthooks/codex.py",
+        "source_pin": "53ae43c5298a2426c6696147fdd75e2a4aef10e2",
+        "source_sha256": "0144953c99a6620cbe9128ce7bc7ad6f6e9ea1a64311348db1f70ec0d14f42f3",
+        "source_url": "https://github.com/fu351/Doberman-Core",
+        "status": "approved"
+      },
+      "declared_domain": "One ASCII directive line with zero to three leading ASCII spaces or tabs, the exact documented Move to form, and a destination consisting of exactly one printable ASCII character from ! through ~. The Z3 theorem covers this one-character domain. The exact-source regression gate separately checks longer representative destinations, CRLF lines, and a mixed multi-directive envelope; these replays do not extend the formal theorem.",
+      "guarantee": "For each documented Move to directive with one non-whitespace printable-ASCII destination character, the pinned source regex matches the complete directive line and the adapter surfaces the stripped destination as a file_write target.",
+      "input_source": "The plain-text tool_input.command string in a Codex PreToolUse apply_patch payload supplied to Doberman.",
+      "provenance": "agent_derived",
+      "schema_version": "1",
+      "site": "fu351/Doberman-Core@53ae43c5298a2426c6696147fdd75e2a4aef10e2:src/doberman/hosthooks/codex.py:70:_APPLY_PATCH_MOVE_RE",
+      "trust": "untrusted-input"
+    },
+    "detail": null,
+    "domain": "One ASCII directive line with zero to three leading ASCII spaces or tabs, the exact documented Move to form, and a destination consisting of exactly one printable ASCII character from ! through ~. The Z3 theorem covers this one-character domain. The exact-source regression gate separately checks longer representative destinations, CRLF lines, and a mixed multi-directive envelope; these replays do not extend the formal theorem.",
+    "gate": {
+      "consumer_adopted": false,
+      "differential_cases": 129,
+      "gate_id": "doberman-codex-apply-patch-target-extraction",
+      "local_gate_command": "/home/linuxbrew/.linuxbrew/Cellar/python@3.14/3.14.8_2/bin/python3.14 scripts/doberman-codex-apply-patch-regression-gate.py --source-root /tmp/regexproof-pinned-sources/Doberman-Core-53ae43c5298a2426c6696147fdd75e2a4aef10e2 --roster properties/calibration/2026-10-15-p2-doberman-source-review/p6-wave/roster.json --output properties/calibration/2026-10-15-p2-doberman-source-review/p6-wave/product-gate.json",
+      "local_gate_passed": true,
+      "mutation_guard_passed": true,
+      "product_engine_replayed": true,
+      "source_pin_verified": true
+    },
+    "kind": "property",
+    "pin": "53ae43c5298a2426c6696147fdd75e2a4aef10e2",
+    "question_id": "DB-codex-apply-patch-move-target-path",
+    "repo_id": "fu351/Doberman-Core",
+    "site": "fu351/Doberman-Core@53ae43c5298a2426c6696147fdd75e2a4aef10e2:src/doberman/hosthooks/codex.py:70:_APPLY_PATCH_MOVE_RE",
+    "status": "unsat",
+    "synthesized": false,
+    "url": "https://github.com/fu351/Doberman-Core"
+  },
+  {
+    "contract": {
+      "adoption": {
+        "approved_on": "2026-10-15",
+        "authority": "standing_user_delegation",
+        "contract_sha256": "08a1fa78ea3c703ce240028172737ad05419f1182d7a10bba041c0ddb9076820",
+        "evidence": [
+          "https://github.com/h0tak88r/AutoAR/blob/01cd447ad3b1acfed7e0680596c2c74458a4cf06/internal/scanner/jsendpoints/jsendpoints.go",
+          "https://github.com/h0tak88r/AutoAR/blob/01cd447ad3b1acfed7e0680596c2c74458a4cf06/README.md"
+        ],
+        "policy_version": "autonomous-contracts-v1",
+        "rationale": "The pinned jsendpoints parser extracts capture group 1 from remote JavaScript, then writes returned endpoints into text and dashboard results. The contract is limited to the delimiter exclusion explicitly enforced by the assignment pattern character class; endpoint validity, in-scope status, and extraction completeness remain outside the claim.",
+        "review": {
+          "author": "codex-contract-author",
+          "reviewer": "codex-independent-review-pass",
+          "same_model": true
+        },
+        "source_file": "internal/scanner/jsendpoints/jsendpoints.go",
+        "source_pin": "01cd447ad3b1acfed7e0680596c2c74458a4cf06",
+        "source_sha256": "e9c03be11f7aab2a4310ea4944de5620e500f2400b13e22a3e1ea5b16745c549",
+        "source_url": "https://github.com/h0tak88r/AutoAR",
+        "status": "approved"
+      },
+      "declared_domain": "One ASCII character from capture group 1 of the pinned Go RE2 assignment pattern; the full captured token is 4..200 characters. The property covers exclusion of ASCII double quote, apostrophe, backtick, space, tab, LF, form feed, and CR only. It does not claim endpoint validity, scope safety, or extraction completeness.",
+      "guarantee": "The captured URL-like value from a JavaScript url/href/endpoint assignment contains no quote, backtick, or Go RE2 whitespace delimiter before it is stored in the JavaScript endpoint results.",
+      "input_source": "Untrusted JavaScript response bodies downloaded from the domain scan's JS URL list and passed to extractEndpoints.",
+      "provenance": "agent_derived",
+      "schema_version": "1",
+      "site": "h0tak88r/AutoAR@01cd447ad3b1acfed7e0680596c2c74458a4cf06:internal/scanner/jsendpoints/jsendpoints.go:181:BASE_URL",
+      "trust": "untrusted-input"
+    },
+    "detail": null,
+    "domain": "Every one-character ASCII member of the pinned URL-assignment capture class excludes quote, backtick, and Go RE2 whitespace delimiters",
+    "gate": {
+      "consumer_adopted": false,
+      "differential_cases": 163,
+      "gate_id": "autoar-jsendpoint-capture-20r2",
+      "local_gate_command": ".venv/bin/python scripts/autoar-jsendpoint-capture-regression-gate.py --product-only --source-root /tmp/regexproof-pinned-sources/AutoAR-01cd447ad3b1acfed7e0680596c2c74458a4cf06 --output properties/calibration/2026-10-15-autonomous-autoar-jsendpoint-20r2/gate-report.json",
+      "local_gate_passed": true,
+      "mutation_guard_passed": true,
+      "product_engine_replayed": true,
+      "source_pin_verified": true
+    },
+    "kind": "property",
+    "pin": "01cd447ad3b1acfed7e0680596c2c74458a4cf06",
+    "question_id": "AA-autoar-jsendpoint-assignment-capture-delimiter",
+    "repo_id": "h0tak88r/AutoAR",
+    "site": "h0tak88r/AutoAR@01cd447ad3b1acfed7e0680596c2c74458a4cf06:internal/scanner/jsendpoints/jsendpoints.go:181:BASE_URL",
+    "status": "unsat",
+    "synthesized": false,
+    "url": "https://github.com/h0tak88r/AutoAR"
+  },
+  {
+    "contract": {
+      "adoption": {
+        "approved_on": "2026-10-15",
+        "authority": "standing_user_delegation",
+        "contract_sha256": "1e211fc1a5f6c20cc4d61517f33433096ba5d65bd8bcaaa6642ba348772d08da",
+        "evidence": [
+          "https://github.com/h0tak88r/AutoAR/blob/01cd447ad3b1acfed7e0680596c2c74458a4cf06/internal/scanner/jsendpoints/jsendpoints.go",
+          "https://github.com/h0tak88r/AutoAR/blob/01cd447ad3b1acfed7e0680596c2c74458a4cf06/internal/scanner/subdomainmonitor/subdomainmonitor.go",
+          "https://github.com/h0tak88r/AutoAR/blob/01cd447ad3b1acfed7e0680596c2c74458a4cf06/README.md"
+        ],
+        "policy_version": "autonomous-contracts-v1",
+        "rationale": "The pinned README limits use to authorized, in-scope targets. The subdomain monitor feeds live-host URLs to a collector whose source regex captures absolute script URLs; ResolveReference preserves an absolute URL, and the collector checks only HTTP(S) plus a .js path before requesting it. This adopted candidate contract asks whether untrusted page HTML can induce a loopback request. CDN script fetching may explain cross-origin behavior, and the repository does not state a same-origin rule; local replay will contact only disposable loopback listeners and establishes reachability, not sensitive access or confirmed security impact.",
+        "review": {
+          "author": "codex-contract-author",
+          "reviewer": "codex-independent-review-pass",
+          "same_model": true
+        },
+        "source_file": "internal/scanner/jsendpoints/jsendpoints.go",
+        "source_pin": "01cd447ad3b1acfed7e0680596c2c74458a4cf06",
+        "source_sha256": "e9c03be11f7aab2a4310ea4944de5620e500f2400b13e22a3e1ea5b16745c549",
+        "source_url": "https://github.com/h0tak88r/AutoAR",
+        "status": "approved"
+      },
+      "declared_domain": "An ASCII HTML body served by a caller-supplied live-host fixture contains one absolute script URL of the form http://127.0.0.1:<ephemeral-port>/bundle.js, with a port distinct from the target origin. The formal query asks whether this concrete body belongs to the pinned scriptSrcRe search language. The exact Go collector replay separately checks whether it requests the second local listener and extracts its harmless endpoint body. This establishes code-level reachability only; it does not establish sensitive response access, impact on a production host, or reachability to other private-address classes.",
+      "guarantee": "HTML fetched from a live host in the scanned domain must not cause the collector to issue an HTTP request to IPv4 loopback. The pinned collector violates this boundary when scriptSrcRe accepts an absolute loopback .js URL, ResolveReference preserves it, and downloadFile fetches it.",
+      "input_source": "Untrusted HTML response bodies fetched by CollectEndpointsForHosts for URLs supplied by subdomainmonitor.diffJSEndpoints from the database's live subdomains for the scanned domain.",
+      "provenance": "agent_derived",
+      "schema_version": "1",
+      "site": "h0tak88r/AutoAR@01cd447ad3b1acfed7e0680596c2c74458a4cf06:internal/scanner/jsendpoints/jsendpoints.go:22:scriptSrcRe",
+      "trust": "untrusted-input"
+    },
+    "detail": null,
+    "domain": "COUNTEREXAMPLE FINDER: pinned scriptSrcRe accepts an absolute loopback .js URL from live-host HTML and the exact Go collector fetches it",
+    "gate": {
+      "consumer_adopted": false,
+      "differential_cases": 2,
+      "gate_id": "autoar-jsendpoint-scope-candidate-20r2",
+      "local_gate_command": ".venv/bin/python scripts/autoar-jsendpoint-scope-regression-gate.py --source-root /tmp/regexproof-pinned-sources/AutoAR-01cd447ad3b1acfed7e0680596c2c74458a4cf06 --output properties/calibration/2026-10-15-autonomous-autoar-jsendpoint-scope-escape-20r2/gate-report.json",
+      "local_gate_passed": true,
+      "mutation_guard_passed": true,
+      "product_engine_replayed": true,
+      "source_pin_verified": true
+    },
+    "kind": "counterexample_finder",
+    "pin": "01cd447ad3b1acfed7e0680596c2c74458a4cf06",
+    "question_id": "AA-autoar-jsendpoint-loopback-script-src-fetch",
+    "repo_id": "h0tak88r/AutoAR",
+    "site": "h0tak88r/AutoAR@01cd447ad3b1acfed7e0680596c2c74458a4cf06:internal/scanner/jsendpoints/jsendpoints.go:22:scriptSrcRe",
+    "status": "sat",
+    "synthesized": false,
+    "url": "https://github.com/h0tak88r/AutoAR"
+  },
+  {
+    "contract": {
+      "adoption": {
+        "approved_on": "2026-10-15",
+        "authority": "standing_user_delegation",
+        "contract_sha256": "0f141a8d77e3d423034438f5aaad9907e223d2c829f489ef6312022254d21d6b",
+        "evidence": [
+          "https://github.com/h0tak88r/AutoAR/blob/01cd447ad3b1acfed7e0680596c2c74458a4cf06/internal/utils/phase_logs.go",
+          "https://github.com/h0tak88r/AutoAR/blob/01cd447ad3b1acfed7e0680596c2c74458a4cf06/internal/api/scan_results_api.go",
+          "https://github.com/h0tak88r/AutoAR/blob/01cd447ad3b1acfed7e0680596c2c74458a4cf06/internal/api/api.go",
+          "https://github.com/h0tak88r/AutoAR/blob/01cd447ad3b1acfed7e0680596c2c74458a4cf06/internal/utils/json_output.go"
+        ],
+        "policy_version": "autonomous-contracts-v1",
+        "rationale": "The caller-controlled module query reaches ReadPhaseLogFile, which sanitizes the phase key before composing the filename under phase-logs. The regex replaces dot and path-separator runs before filepath.Join. The contract is limited to that module-derived component; scanID, the results root, symlinks, and collisions between sanitized names are outside scope.",
+        "review": {
+          "author": "codex-contract-author",
+          "reviewer": "codex-independent-review-pass",
+          "same_model": true
+        },
+        "source_file": "internal/utils/phase_logs.go",
+        "source_pin": "01cd447ad3b1acfed7e0680596c2c74458a4cf06",
+        "source_sha256": "3dec250b5802efadac77c6ba9cf9ce19f5fec09a8111674ab13a56d35e601ddc",
+        "source_url": "https://github.com/h0tak88r/AutoAR",
+        "status": "approved"
+      },
+      "declared_domain": "The caller-controlled module query value is a decoded Go string. The formal property is length-independent over the one-character ASCII projection of '.', '/', and '\\'. The exact pinned sanitizer and regression gate additionally cover full strings including all non-NUL ASCII characters, path-shaped inputs, Unicode, controls, and deterministic random cases. The claim applies only to the module-derived filename component; scanID, the configured results root, symlinks, and collisions between distinct sanitized module names are outside scope.",
+      "guarantee": "For the GET /api/scans/:id/logs?module=... path, every '.', '/', and '\\' in the caller-supplied module value is matched by the pinned sanitizeRe before filename construction and is replaced; the resulting module-derived filename component contains no dot or path separator and cannot traverse outside the phase-logs directory through that component.",
+      "input_source": "The caller-controlled module query parameter read by apiGetScanPhaseLogs and passed to ReadPhaseLogFile as phaseKey when the in-memory phase buffer is empty.",
+      "provenance": "agent_derived",
+      "schema_version": "1",
+      "site": "h0tak88r/AutoAR@01cd447ad3b1acfed7e0680596c2c74458a4cf06:internal/utils/phase_logs.go:206:MustCompile",
+      "trust": "untrusted-input"
+    },
+    "detail": null,
+    "domain": "Every one-character ASCII path punctuation token '.', '/', and '\\\\' is matched by the pinned RE2 replacement class before filename joining",
+    "gate": {
+      "consumer_adopted": false,
+      "differential_cases": 662,
+      "gate_id": "autoar-phase-key-component-20r2",
+      "local_gate_command": ".venv/bin/python scripts/autoar-phase-key-regression-gate.py --product-only --source-root /tmp/regexproof-pinned-sources/AutoAR-01cd447ad3b1acfed7e0680596c2c74458a4cf06 --output properties/calibration/2026-10-15-autonomous-autoar-phasekey-20r2/gate-report.json",
+      "local_gate_passed": true,
+      "mutation_guard_passed": true,
+      "product_engine_replayed": true,
+      "source_pin_verified": true
+    },
+    "kind": "property",
+    "pin": "01cd447ad3b1acfed7e0680596c2c74458a4cf06",
+    "question_id": "AA-autoar-phase-log-module-component-safe",
+    "repo_id": "h0tak88r/AutoAR",
+    "site": "h0tak88r/AutoAR@01cd447ad3b1acfed7e0680596c2c74458a4cf06:internal/utils/phase_logs.go:206:MustCompile",
+    "status": "unsat",
+    "synthesized": false,
+    "url": "https://github.com/h0tak88r/AutoAR"
+  },
+  {
+    "contract": {
+      "adoption": {
+        "approved_on": "2026-10-15",
+        "authority": "standing_user_delegation",
+        "contract_sha256": "480327fa8a307a9310911fd45f9e0048fd049181a6fbc9588e60d4eb58096bb9",
+        "evidence": [
+          "https://github.com/json-editor/json-editor/blob/b31ddabecf4ed3209d37a2f5b29956120cd8f9ce/src/editors/enum.js",
+          "https://github.com/json-editor/json-editor/blob/b31ddabecf4ed3209d37a2f5b29956120cd8f9ce/README.md",
+          "properties/calibration/2026-10-15-p2-json-editor-source-review/evidence.json regex_id=21a271471f4c1c1fbc13a331e0f706da column=24"
+        ],
+        "policy_version": "autonomous-contracts-v1",
+        "rationale": "README enum semantics and the exact source call path establish that schema enum values are displayed by EnumEditor; the three ordered replacements run in the string branch before the result is assigned to display_area.innerHTML. The source site is bound to the exact ampersand-regex column from the frozen P2 inventory, which disambiguates two sibling regexes on the same line. The contract is limited to string leaves from application schema configuration and their HTML text rendering.",
+        "review": {
+          "author": "codex-contract-author",
+          "reviewer": "codex-independent-review-pass",
+          "same_model": true
+        },
+        "source_file": "src/editors/enum.js",
+        "source_pin": "b31ddabecf4ed3209d37a2f5b29956120cd8f9ce",
+        "source_sha256": "315aae54dbaf602bb25c08c064187805a3ac279a61aae8cd6d4d49eec0c44b14",
+        "source_url": "https://github.com/json-editor/json-editor",
+        "status": "approved"
+      },
+      "declared_domain": "Exact frozen 20-r2 pin b31ddabecf4ed3209d37a2f5b29956120cd8f9ce and src/editors/enum.js SHA-256 315aae54dbaf602bb25c08c064187805a3ac279a61aae8cd6d4d49eec0c44b14. The Z3 proof domain is one Unicode codepoint through the exact per-codepoint image of the ordered three-replacement string branch, with no length bound on that token. The source uses global single-character replacements in ampersand/less-than/greater-than order; an exact Node gate checks the real whole-string method over every Unicode scalar value, short exhaustive strings, targeted payloads, and seeded strings. This does not claim a formal whole-string theorem for other EnumEditor values, object keys, attributes, URLs, or script/style contexts.",
+      "guarantee": "For each string leaf in an application schema's enum value, the pinned EnumEditor.getHTML string branch applies the ordered ampersand, less-than, and greater-than replacements before the result reaches display_area.innerHTML. Each such codepoint is emitted as its corresponding HTML text entity, so it is displayed as text rather than parsed as element markup. This claim is limited to string leaves; object keys and non-string values are outside the contract.",
+      "input_source": "String leaves from the application-provided schema.enum values, passed through EnumEditor.build and getHTML into the selected-value display_area.innerHTML sink.",
+      "provenance": "agent_derived",
+      "schema_version": "1",
+      "site": "json-editor/json-editor@b31ddabecf4ed3209d37a2f5b29956120cd8f9ce:src/editors/enum.js:123:column-24",
+      "trust": "config"
+    },
+    "detail": null,
+    "domain": "One Unicode codepoint passed through the pinned, ordered EnumEditor string replacements contains no raw less-than or greater-than delimiter",
+    "gate": {
+      "consumer_adopted": false,
+      "differential_cases": 1116985,
+      "gate_id": "json-editor-enum-html-text-escape",
+      "local_gate_command": "/home/lalbers/gitroot/regexproof/.venv/bin/python scripts/json-editor-enum-escape-regression-gate.py --source-root /tmp/regexproof-pinned-sources/json-editor-b31ddabecf4ed3209d37a2f5b29956120cd8f9ce --output /home/lalbers/gitroot/regexproof/properties/calibration/2026-10-15-p2-json-editor-source-review/p6-wave-r3/product-gate.json",
+      "local_gate_passed": true,
+      "mutation_guard_passed": true,
+      "product_engine_replayed": true,
+      "source_pin_verified": true
+    },
+    "kind": "property",
+    "pin": "b31ddabecf4ed3209d37a2f5b29956120cd8f9ce",
+    "question_id": "JE-json-editor-enum-string-html-text-codepoint-image",
+    "repo_id": "json-editor/json-editor",
+    "site": "json-editor/json-editor@b31ddabecf4ed3209d37a2f5b29956120cd8f9ce:src/editors/enum.js:123:column-24",
+    "status": "unsat",
+    "synthesized": false,
+    "url": "https://github.com/json-editor/json-editor"
+  },
+  {
+    "contract": {
+      "adoption": {
+        "approved_on": "2026-10-15",
+        "authority": "standing_user_delegation",
+        "contract_sha256": "fc9955c606d0ee1258043ac8355015ede63a0e654a67c0ba71297a8294a45b37",
+        "evidence": [
+          "https://github.com/magiclabs/magic-js/blob/e9fb233763160316989863b4739c4656133d45b0/packages/@magic-ext/oauth2/src/crypto.ts",
+          "https://www.rfc-editor.org/rfc/rfc7636#section-4.2",
+          "https://www.rfc-editor.org/rfc/rfc7636#appendix-A",
+          "properties/calibration/2026-10-15-p2-magic-js-source-review/evidence.json regex_id=d06037c9ac7d1e32df213c0b6e3ed279 column=53"
+        ],
+        "policy_version": "autonomous-contracts-v1",
+        "rationale": "The helper Base64-encodes SHA-256(code_verifier), removes padding, and maps the standard alphabet to the URL-safe alphabet before the challenge is sent in an OAuth authorization request. RFC 7636 requires the S256 code challenge to be BASE64URL(SHA256(ASCII(code_verifier))) and defines base64url without padding. The contract covers this output mapping only; it does not claim verifier entropy, state generation, server enforcement, or CSRF correctness.",
+        "review": {
+          "author": "codex-contract-author",
+          "reviewer": "codex-independent-review-pass",
+          "same_model": true
+        },
+        "source_file": "packages/@magic-ext/oauth2/src/crypto.ts",
+        "source_pin": "e9fb233763160316989863b4739c4656133d45b0",
+        "source_sha256": "08e53d21148d56ade6377e2a3d4c96a12a0f6fdbb502f9adc485e97f026e4d8f",
+        "source_url": "https://github.com/magiclabs/magic-js",
+        "status": "approved"
+      },
+      "declared_domain": "RFC 7636 S256 code-challenge bytes pass through the exact three-replacement chain; the Z3 theorem is per input codepoint with no length bound. Exact Node replay checks the RFC 7636 vector and seeded 32-byte digests.",
+      "guarantee": "The pinned OAuth2 helper encodes SHA-256(code_verifier) as unpadded Base64URL before placing code_challenge in the authorization request.",
+      "input_source": "A 32-byte SHA-256 digest returned by CryptoJS for the SDK-generated PKCE verifier.",
+      "provenance": "agent_derived",
+      "schema_version": "1",
+      "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-ext/oauth2/src/crypto.ts:22:column-53",
+      "trust": "internal"
+    },
+    "detail": null,
+    "domain": "RFC 7636 S256 code-challenge bytes pass through the exact three-replacement chain; the Z3 theorem is per input codepoint with no length bound. Exact Node replay checks the RFC 7636 vector and seeded 32-byte digests.",
+    "gate": {
+      "consumer_adopted": false,
+      "differential_cases": 2049,
+      "gate_id": "magic-js-base64url-output-image",
+      "local_gate_command": "/home/lalbers/gitroot/regexproof/.venv/bin/python scripts/magic-js-base64url-regression-gate.py --source-root /tmp/regexproof-pinned-sources/magic-js-e9fb233763160316989863b4739c4656133d45b0 --output properties/calibration/2026-10-15-p2-magic-js-source-review/p6-wave-r1/product-gate.json",
+      "local_gate_passed": true,
+      "mutation_guard_passed": true,
+      "product_engine_replayed": true,
+      "source_pin_verified": true
+    },
+    "kind": "property",
+    "pin": "e9fb233763160316989863b4739c4656133d45b0",
+    "question_id": "ME-oauth2-pkce-s256-base64url",
+    "repo_id": "magiclabs/magic-js",
+    "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-ext/oauth2/src/crypto.ts:22:column-53",
+    "status": "unsat",
+    "synthesized": false,
+    "url": "https://github.com/magiclabs/magic-js"
+  },
+  {
+    "contract": {
+      "adoption": {
+        "approved_on": "2026-10-15",
+        "authority": "standing_user_delegation",
+        "contract_sha256": "07e4e311f4f676b3b6adbfbecf2e2ab45b309d297a4cd969e4bede39c93de750",
+        "evidence": [
+          "https://github.com/magiclabs/magic-js/blob/e9fb233763160316989863b4739c4656133d45b0/packages/@magic-ext/oauth2/src/utils/base64.ts",
+          "https://www.rfc-editor.org/rfc/rfc4648#section-5",
+          "https://www.w3.org/TR/webauthn-3/#dom-publickeycredential-tojson",
+          "properties/calibration/2026-10-15-p2-magic-js-source-review/evidence.json regex_id=aabb6589206de6bbbd7584f5c993a2fb column=26"
+        ],
+        "policy_version": "autonomous-contracts-v1",
+        "rationale": "The exact Base64URL encoder feeds WebAuthn credential JSON fields such as rawId, authenticatorData, clientDataJSON, signatures, and attestationObject. The WebAuthn JSON conversion path names this representation, and RFC 4648 section 5 defines its URL-safe alphabet and optional omitted padding. The contract is limited to the encoder output; it does not claim authentication, decoder rejection of malformed input, or server-side credential validity.",
+        "review": {
+          "author": "codex-contract-author",
+          "reviewer": "codex-independent-review-pass",
+          "same_model": true
+        },
+        "source_file": "packages/@magic-ext/oauth2/src/utils/base64.ts",
+        "source_pin": "e9fb233763160316989863b4739c4656133d45b0",
+        "source_sha256": "1fc563aeb8272d0eb72660799f2d52e275cddb4af55883aeb258b24acdd149fa",
+        "source_url": "https://github.com/magiclabs/magic-js",
+        "status": "approved"
+      },
+      "declared_domain": "One Unicode codepoint passed through the exact encode replacement image with no length bound. Exact Node replay runs the source-authenticated replacement chain for every 0-, 1-, and 2-byte input plus seeded longer buffers.",
+      "guarantee": "For each binary WebAuthn credential response field serialized by the pinned OAuth2 PublicKeyCredential.toJSON polyfill, the encoder emits the WebAuthn Base64URLString representation: URL-safe Base64 without padding.",
+      "input_source": "ArrayBuffer values from PublicKeyCredential.rawId and AuthenticatorResponse fields returned by the browser API.",
+      "provenance": "agent_derived",
+      "schema_version": "1",
+      "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-ext/oauth2/src/utils/base64.ts:4:column-26",
+      "trust": "untrusted-input"
+    },
+    "detail": null,
+    "domain": "One Unicode codepoint passed through the exact encode replacement image with no length bound. Exact Node replay runs the source-authenticated replacement chain for every 0-, 1-, and 2-byte input plus seeded longer buffers.",
+    "gate": {
+      "consumer_adopted": false,
+      "differential_cases": 67841,
+      "gate_id": "magic-js-base64url-output-image",
+      "local_gate_command": "/home/lalbers/gitroot/regexproof/.venv/bin/python scripts/magic-js-base64url-regression-gate.py --source-root /tmp/regexproof-pinned-sources/magic-js-e9fb233763160316989863b4739c4656133d45b0 --output properties/calibration/2026-10-15-p2-magic-js-source-review/p6-wave-r1/product-gate.json",
+      "local_gate_passed": true,
+      "mutation_guard_passed": true,
+      "product_engine_replayed": true,
+      "source_pin_verified": true
+    },
+    "kind": "property",
+    "pin": "e9fb233763160316989863b4739c4656133d45b0",
+    "question_id": "ME-oauth2-webauthn-base64url",
+    "repo_id": "magiclabs/magic-js",
+    "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-ext/oauth2/src/utils/base64.ts:4:column-26",
+    "status": "unsat",
+    "synthesized": false,
+    "url": "https://github.com/magiclabs/magic-js"
+  },
+  {
+    "contract": {
+      "adoption": {
+        "approved_on": "2026-10-15",
+        "authority": "standing_user_delegation",
+        "contract_sha256": "1d09735ade9b5d438961b11c7a59793eb9ef56581aea77562968fd7a722e4a06",
+        "evidence": [
+          "https://github.com/magiclabs/magic-js/blob/e9fb233763160316989863b4739c4656133d45b0/packages/@magic-ext/passkey/src/utils/base64.ts",
+          "https://www.rfc-editor.org/rfc/rfc4648#section-5",
+          "https://www.w3.org/TR/webauthn-3/#dom-publickeycredential-tojson",
+          "properties/calibration/2026-10-15-p2-magic-js-source-review/evidence.json regex_id=d3567fa6611519d8a0fcb76412be684d column=26"
+        ],
+        "policy_version": "autonomous-contracts-v1",
+        "rationale": "The exact Base64URL encoder feeds WebAuthn credential JSON fields such as rawId, authenticatorData, clientDataJSON, signatures, and attestationObject. The WebAuthn JSON conversion path names this representation, and RFC 4648 section 5 defines its URL-safe alphabet and optional omitted padding. The contract is limited to the encoder output; it does not claim authentication, decoder rejection of malformed input, or server-side credential validity.",
+        "review": {
+          "author": "codex-contract-author",
+          "reviewer": "codex-independent-review-pass",
+          "same_model": true
+        },
+        "source_file": "packages/@magic-ext/passkey/src/utils/base64.ts",
+        "source_pin": "e9fb233763160316989863b4739c4656133d45b0",
+        "source_sha256": "b2307e07627a0ab69d0bb2107e0776356f8af913a9cfc3ff02533e32132e8bbc",
+        "source_url": "https://github.com/magiclabs/magic-js",
+        "status": "approved"
+      },
+      "declared_domain": "One Unicode codepoint passed through the exact encode replacement image with no length bound. Exact Node replay runs the source-authenticated replacement chain for every 0-, 1-, and 2-byte input plus seeded longer buffers.",
+      "guarantee": "For each binary WebAuthn credential response field serialized by the pinned Passkey PublicKeyCredential.toJSON polyfill, the encoder emits the WebAuthn Base64URLString representation: URL-safe Base64 without padding.",
+      "input_source": "ArrayBuffer values from PublicKeyCredential.rawId and AuthenticatorResponse fields returned by the browser API.",
+      "provenance": "agent_derived",
+      "schema_version": "1",
+      "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-ext/passkey/src/utils/base64.ts:11:column-26",
+      "trust": "untrusted-input"
+    },
+    "detail": null,
+    "domain": "One Unicode codepoint passed through the exact encode replacement image with no length bound. Exact Node replay runs the source-authenticated replacement chain for every 0-, 1-, and 2-byte input plus seeded longer buffers.",
+    "gate": {
+      "consumer_adopted": false,
+      "differential_cases": 67841,
+      "gate_id": "magic-js-base64url-output-image",
+      "local_gate_command": "/home/lalbers/gitroot/regexproof/.venv/bin/python scripts/magic-js-base64url-regression-gate.py --source-root /tmp/regexproof-pinned-sources/magic-js-e9fb233763160316989863b4739c4656133d45b0 --output properties/calibration/2026-10-15-p2-magic-js-source-review/p6-wave-r1/product-gate.json",
+      "local_gate_passed": true,
+      "mutation_guard_passed": true,
+      "product_engine_replayed": true,
+      "source_pin_verified": true
+    },
+    "kind": "property",
+    "pin": "e9fb233763160316989863b4739c4656133d45b0",
+    "question_id": "ME-passkey-base64url",
+    "repo_id": "magiclabs/magic-js",
+    "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-ext/passkey/src/utils/base64.ts:11:column-26",
+    "status": "unsat",
+    "synthesized": false,
+    "url": "https://github.com/magiclabs/magic-js"
+  },
+  {
+    "contract": {
+      "adoption": {
+        "approved_on": "2026-10-15",
+        "authority": "standing_user_delegation",
+        "contract_sha256": "00224fc43e2c47dba1776258ebc618735a4ca049fabc1c5108c421013cbacd3c",
+        "evidence": [
+          "https://github.com/magiclabs/magic-js/blob/e9fb233763160316989863b4739c4656133d45b0/packages/@magic-ext/react-native-bare-oauth/src/crypto.ts",
+          "https://www.rfc-editor.org/rfc/rfc7636#section-4.2",
+          "https://www.rfc-editor.org/rfc/rfc7636#appendix-A",
+          "properties/calibration/2026-10-15-p2-magic-js-source-review/evidence.json regex_id=80496e166f99c86adc3befb5c11b0236 column=53"
+        ],
+        "policy_version": "autonomous-contracts-v1",
+        "rationale": "The helper Base64-encodes SHA-256(code_verifier), removes padding, and maps the standard alphabet to the URL-safe alphabet before the challenge is sent in an OAuth authorization request. RFC 7636 requires the S256 code challenge to be BASE64URL(SHA256(ASCII(code_verifier))) and defines base64url without padding. The contract covers this output mapping only; it does not claim verifier entropy, state generation, server enforcement, or CSRF correctness.",
+        "review": {
+          "author": "codex-contract-author",
+          "reviewer": "codex-independent-review-pass",
+          "same_model": true
+        },
+        "source_file": "packages/@magic-ext/react-native-bare-oauth/src/crypto.ts",
+        "source_pin": "e9fb233763160316989863b4739c4656133d45b0",
+        "source_sha256": "63544bcecd9a1522663606418afcacac1877fe5ff2e9e9563c6603d1d11fc71a",
+        "source_url": "https://github.com/magiclabs/magic-js",
+        "status": "approved"
+      },
+      "declared_domain": "RFC 7636 S256 code-challenge bytes pass through the exact three-replacement chain; the Z3 theorem is per input codepoint with no length bound. Exact Node replay checks the RFC 7636 vector and seeded 32-byte digests.",
+      "guarantee": "The pinned React Native bare OAuth helper encodes SHA-256(code_verifier) as unpadded Base64URL before placing code_challenge in the authorization request.",
+      "input_source": "A 32-byte SHA-256 digest returned by CryptoJS for the SDK-generated PKCE verifier.",
+      "provenance": "agent_derived",
+      "schema_version": "1",
+      "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-ext/react-native-bare-oauth/src/crypto.ts:25:column-53",
+      "trust": "internal"
+    },
+    "detail": null,
+    "domain": "RFC 7636 S256 code-challenge bytes pass through the exact three-replacement chain; the Z3 theorem is per input codepoint with no length bound. Exact Node replay checks the RFC 7636 vector and seeded 32-byte digests.",
+    "gate": {
+      "consumer_adopted": false,
+      "differential_cases": 2049,
+      "gate_id": "magic-js-base64url-output-image",
+      "local_gate_command": "/home/lalbers/gitroot/regexproof/.venv/bin/python scripts/magic-js-base64url-regression-gate.py --source-root /tmp/regexproof-pinned-sources/magic-js-e9fb233763160316989863b4739c4656133d45b0 --output properties/calibration/2026-10-15-p2-magic-js-source-review/p6-wave-r1/product-gate.json",
+      "local_gate_passed": true,
+      "mutation_guard_passed": true,
+      "product_engine_replayed": true,
+      "source_pin_verified": true
+    },
+    "kind": "property",
+    "pin": "e9fb233763160316989863b4739c4656133d45b0",
+    "question_id": "ME-rn-bare-pkce-s256-base64url",
+    "repo_id": "magiclabs/magic-js",
+    "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-ext/react-native-bare-oauth/src/crypto.ts:25:column-53",
+    "status": "unsat",
+    "synthesized": false,
+    "url": "https://github.com/magiclabs/magic-js"
+  },
+  {
+    "contract": {
+      "adoption": {
+        "approved_on": "2026-10-15",
+        "authority": "standing_user_delegation",
+        "contract_sha256": "323a23991ab50e0978632e69b6e4afb5951cc0c1858b08d1c24dff0b2b02ffa0",
+        "evidence": [
+          "https://github.com/magiclabs/magic-js/blob/e9fb233763160316989863b4739c4656133d45b0/packages/@magic-ext/react-native-expo-oauth/src/crypto.ts",
+          "https://www.rfc-editor.org/rfc/rfc7636#section-4.2",
+          "https://www.rfc-editor.org/rfc/rfc7636#appendix-A",
+          "properties/calibration/2026-10-15-p2-magic-js-source-review/evidence.json regex_id=e7c3db9abfe611235db53a7af0e585e1 column=53"
+        ],
+        "policy_version": "autonomous-contracts-v1",
+        "rationale": "The helper Base64-encodes SHA-256(code_verifier), removes padding, and maps the standard alphabet to the URL-safe alphabet before the challenge is sent in an OAuth authorization request. RFC 7636 requires the S256 code challenge to be BASE64URL(SHA256(ASCII(code_verifier))) and defines base64url without padding. The contract covers this output mapping only; it does not claim verifier entropy, state generation, server enforcement, or CSRF correctness.",
+        "review": {
+          "author": "codex-contract-author",
+          "reviewer": "codex-independent-review-pass",
+          "same_model": true
+        },
+        "source_file": "packages/@magic-ext/react-native-expo-oauth/src/crypto.ts",
+        "source_pin": "e9fb233763160316989863b4739c4656133d45b0",
+        "source_sha256": "37051fbfab1c76717d216f73d06af87f3fa04f0e08e77ec338f45ed87c117b00",
+        "source_url": "https://github.com/magiclabs/magic-js",
+        "status": "approved"
+      },
+      "declared_domain": "RFC 7636 S256 code-challenge bytes pass through the exact three-replacement chain; the Z3 theorem is per input codepoint with no length bound. Exact Node replay checks the RFC 7636 vector and seeded 32-byte digests.",
+      "guarantee": "The pinned React Native Expo OAuth helper encodes SHA-256(code_verifier) as unpadded Base64URL before placing code_challenge in the authorization request.",
+      "input_source": "A 32-byte SHA-256 digest returned by CryptoJS for the SDK-generated PKCE verifier.",
+      "provenance": "agent_derived",
+      "schema_version": "1",
+      "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-ext/react-native-expo-oauth/src/crypto.ts:25:column-53",
+      "trust": "internal"
+    },
+    "detail": null,
+    "domain": "RFC 7636 S256 code-challenge bytes pass through the exact three-replacement chain; the Z3 theorem is per input codepoint with no length bound. Exact Node replay checks the RFC 7636 vector and seeded 32-byte digests.",
+    "gate": {
+      "consumer_adopted": false,
+      "differential_cases": 2049,
+      "gate_id": "magic-js-base64url-output-image",
+      "local_gate_command": "/home/lalbers/gitroot/regexproof/.venv/bin/python scripts/magic-js-base64url-regression-gate.py --source-root /tmp/regexproof-pinned-sources/magic-js-e9fb233763160316989863b4739c4656133d45b0 --output properties/calibration/2026-10-15-p2-magic-js-source-review/p6-wave-r1/product-gate.json",
+      "local_gate_passed": true,
+      "mutation_guard_passed": true,
+      "product_engine_replayed": true,
+      "source_pin_verified": true
+    },
+    "kind": "property",
+    "pin": "e9fb233763160316989863b4739c4656133d45b0",
+    "question_id": "ME-rn-expo-pkce-s256-base64url",
+    "repo_id": "magiclabs/magic-js",
+    "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-ext/react-native-expo-oauth/src/crypto.ts:25:column-53",
+    "status": "unsat",
+    "synthesized": false,
+    "url": "https://github.com/magiclabs/magic-js"
+  },
+  {
+    "contract": {
+      "adoption": {
+        "approved_on": "2026-10-15",
+        "authority": "standing_user_delegation",
+        "contract_sha256": "1ff71f9c38086d2fc023842782e618a6d2dcafcf5f98d0d0325451d322ad80be",
+        "evidence": [
+          "https://github.com/magiclabs/magic-js/blob/e9fb233763160316989863b4739c4656133d45b0/packages/@magic-ext/wallet-kit/src/utils/base64.ts",
+          "https://www.rfc-editor.org/rfc/rfc4648#section-5",
+          "https://www.w3.org/TR/webauthn-3/#dom-publickeycredential-tojson",
+          "properties/calibration/2026-10-15-p2-magic-js-source-review/evidence.json regex_id=391688fc4ca696e393db3abe1344951b column=26"
+        ],
+        "policy_version": "autonomous-contracts-v1",
+        "rationale": "The exact Base64URL encoder feeds WebAuthn credential JSON fields such as rawId, authenticatorData, clientDataJSON, signatures, and attestationObject. The WebAuthn JSON conversion path names this representation, and RFC 4648 section 5 defines its URL-safe alphabet and optional omitted padding. The contract is limited to the encoder output; it does not claim authentication, decoder rejection of malformed input, or server-side credential validity.",
+        "review": {
+          "author": "codex-contract-author",
+          "reviewer": "codex-independent-review-pass",
+          "same_model": true
+        },
+        "source_file": "packages/@magic-ext/wallet-kit/src/utils/base64.ts",
+        "source_pin": "e9fb233763160316989863b4739c4656133d45b0",
+        "source_sha256": "b2307e07627a0ab69d0bb2107e0776356f8af913a9cfc3ff02533e32132e8bbc",
+        "source_url": "https://github.com/magiclabs/magic-js",
+        "status": "approved"
+      },
+      "declared_domain": "One Unicode codepoint passed through the exact encode replacement image with no length bound. Exact Node replay runs the source-authenticated replacement chain for every 0-, 1-, and 2-byte input plus seeded longer buffers.",
+      "guarantee": "For each binary WebAuthn credential response field serialized by the pinned Wallet Kit PublicKeyCredential.toJSON polyfill, the encoder emits the WebAuthn Base64URLString representation: URL-safe Base64 without padding.",
+      "input_source": "ArrayBuffer values from PublicKeyCredential.rawId and AuthenticatorResponse fields returned by the browser API.",
+      "provenance": "agent_derived",
+      "schema_version": "1",
+      "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-ext/wallet-kit/src/utils/base64.ts:11:column-26",
+      "trust": "untrusted-input"
+    },
+    "detail": null,
+    "domain": "One Unicode codepoint passed through the exact encode replacement image with no length bound. Exact Node replay runs the source-authenticated replacement chain for every 0-, 1-, and 2-byte input plus seeded longer buffers.",
+    "gate": {
+      "consumer_adopted": false,
+      "differential_cases": 67841,
+      "gate_id": "magic-js-base64url-output-image",
+      "local_gate_command": "/home/lalbers/gitroot/regexproof/.venv/bin/python scripts/magic-js-base64url-regression-gate.py --source-root /tmp/regexproof-pinned-sources/magic-js-e9fb233763160316989863b4739c4656133d45b0 --output properties/calibration/2026-10-15-p2-magic-js-source-review/p6-wave-r2/product-gate.json",
+      "local_gate_passed": true,
+      "mutation_guard_passed": true,
+      "product_engine_replayed": true,
+      "source_pin_verified": true
+    },
+    "kind": "property",
+    "pin": "e9fb233763160316989863b4739c4656133d45b0",
+    "question_id": "ME-wallet-kit-base64url",
+    "repo_id": "magiclabs/magic-js",
+    "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-ext/wallet-kit/src/utils/base64.ts:11:column-26",
+    "status": "unsat",
+    "synthesized": false,
+    "url": "https://github.com/magiclabs/magic-js"
+  },
+  {
+    "contract": {
+      "adoption": {
+        "approved_on": "2026-10-15",
+        "authority": "standing_user_delegation",
+        "contract_sha256": "494cbc6e8061b3c44ea15d48af39a0a566308d3b493712ff30e511d6dd2ed107",
+        "evidence": [
+          "https://github.com/magiclabs/magic-js/blob/e9fb233763160316989863b4739c4656133d45b0/packages/@magic-ext/webauthn/src/utils/base64.ts",
+          "https://www.rfc-editor.org/rfc/rfc4648#section-5",
+          "https://www.w3.org/TR/webauthn-3/#dom-publickeycredential-tojson",
+          "properties/calibration/2026-10-15-p2-magic-js-source-review/evidence.json regex_id=9d74cad7da31ec1d69bd83ae6d906dce column=26"
+        ],
+        "policy_version": "autonomous-contracts-v1",
+        "rationale": "The exact Base64URL encoder feeds WebAuthn credential JSON fields such as rawId, authenticatorData, clientDataJSON, signatures, and attestationObject. The WebAuthn JSON conversion path names this representation, and RFC 4648 section 5 defines its URL-safe alphabet and optional omitted padding. The contract is limited to the encoder output; it does not claim authentication, decoder rejection of malformed input, or server-side credential validity.",
+        "review": {
+          "author": "codex-contract-author",
+          "reviewer": "codex-independent-review-pass",
+          "same_model": true
+        },
+        "source_file": "packages/@magic-ext/webauthn/src/utils/base64.ts",
+        "source_pin": "e9fb233763160316989863b4739c4656133d45b0",
+        "source_sha256": "b2307e07627a0ab69d0bb2107e0776356f8af913a9cfc3ff02533e32132e8bbc",
+        "source_url": "https://github.com/magiclabs/magic-js",
+        "status": "approved"
+      },
+      "declared_domain": "One Unicode codepoint passed through the exact encode replacement image with no length bound. Exact Node replay runs the source-authenticated replacement chain for every 0-, 1-, and 2-byte input plus seeded longer buffers.",
+      "guarantee": "For each binary WebAuthn credential response field serialized by the pinned WebAuthn PublicKeyCredential.toJSON polyfill, the encoder emits the WebAuthn Base64URLString representation: URL-safe Base64 without padding.",
+      "input_source": "ArrayBuffer values from PublicKeyCredential.rawId and AuthenticatorResponse fields returned by the browser API.",
+      "provenance": "agent_derived",
+      "schema_version": "1",
+      "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-ext/webauthn/src/utils/base64.ts:11:column-26",
+      "trust": "untrusted-input"
+    },
+    "detail": null,
+    "domain": "One Unicode codepoint passed through the exact encode replacement image with no length bound. Exact Node replay runs the source-authenticated replacement chain for every 0-, 1-, and 2-byte input plus seeded longer buffers.",
+    "gate": {
+      "consumer_adopted": false,
+      "differential_cases": 67841,
+      "gate_id": "magic-js-base64url-output-image",
+      "local_gate_command": "/home/lalbers/gitroot/regexproof/.venv/bin/python scripts/magic-js-base64url-regression-gate.py --source-root /tmp/regexproof-pinned-sources/magic-js-e9fb233763160316989863b4739c4656133d45b0 --output properties/calibration/2026-10-15-p2-magic-js-source-review/p6-wave-r2/product-gate.json",
+      "local_gate_passed": true,
+      "mutation_guard_passed": true,
+      "product_engine_replayed": true,
+      "source_pin_verified": true
+    },
+    "kind": "property",
+    "pin": "e9fb233763160316989863b4739c4656133d45b0",
+    "question_id": "ME-webauthn-base64url",
+    "repo_id": "magiclabs/magic-js",
+    "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-ext/webauthn/src/utils/base64.ts:11:column-26",
+    "status": "unsat",
+    "synthesized": false,
+    "url": "https://github.com/magiclabs/magic-js"
+  },
+  {
+    "contract": {
+      "adoption": {
+        "approved_on": "2026-10-15",
+        "authority": "standing_user_delegation",
+        "contract_sha256": "b6615df46cf810bfc7a8e83ba4352a373b1f72fdfbfd1f6aafdd21ca6d1c2245",
+        "evidence": [
+          "https://github.com/magiclabs/magic-js/blob/e9fb233763160316989863b4739c4656133d45b0/packages/@magic-sdk/provider/src/util/base64-json.ts",
+          "https://www.rfc-editor.org/rfc/rfc4648#section-5",
+          "https://www.w3.org/TR/webauthn-3/#dom-publickeycredential-tojson",
+          "properties/calibration/2026-10-15-p2-magic-js-source-review/evidence.json regex_id=67d8a25db747c86892aa65a39d0cb68b column=26"
+        ],
+        "policy_version": "autonomous-contracts-v1",
+        "rationale": "The exact Base64URL encoder feeds WebAuthn credential JSON fields such as rawId, authenticatorData, clientDataJSON, signatures, and attestationObject. The WebAuthn JSON conversion path names this representation, and RFC 4648 section 5 defines its URL-safe alphabet and optional omitted padding. The contract is limited to the encoder output; it does not claim authentication, decoder rejection of malformed input, or server-side credential validity.",
+        "review": {
+          "author": "codex-contract-author",
+          "reviewer": "codex-independent-review-pass",
+          "same_model": true
+        },
+        "source_file": "packages/@magic-sdk/provider/src/util/base64-json.ts",
+        "source_pin": "e9fb233763160316989863b4739c4656133d45b0",
+        "source_sha256": "4d0836fa5938b3e627fcf3fba739f465e3f48354e70e4c94ce96c222d472269b",
+        "source_url": "https://github.com/magiclabs/magic-js",
+        "status": "approved"
+      },
+      "declared_domain": "One Unicode codepoint passed through the exact encode replacement image with no length bound. Exact Node replay runs the source-authenticated replacement chain for every 0-, 1-, and 2-byte input plus seeded longer buffers.",
+      "guarantee": "For each binary WebAuthn credential response field serialized by the pinned Provider PublicKeyCredential.toJSON polyfill, the encoder emits the WebAuthn Base64URLString representation: URL-safe Base64 without padding.",
+      "input_source": "ArrayBuffer values from PublicKeyCredential.rawId and AuthenticatorResponse fields returned by the browser API.",
+      "provenance": "agent_derived",
+      "schema_version": "1",
+      "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-sdk/provider/src/util/base64-json.ts:54:column-26",
+      "trust": "untrusted-input"
+    },
+    "detail": null,
+    "domain": "One Unicode codepoint passed through the exact encode replacement image with no length bound. Exact Node replay runs the source-authenticated replacement chain for every 0-, 1-, and 2-byte input plus seeded longer buffers.",
+    "gate": {
+      "consumer_adopted": false,
+      "differential_cases": 67841,
+      "gate_id": "magic-js-base64url-output-image",
+      "local_gate_command": "/home/lalbers/gitroot/regexproof/.venv/bin/python scripts/magic-js-base64url-regression-gate.py --source-root /tmp/regexproof-pinned-sources/magic-js-e9fb233763160316989863b4739c4656133d45b0 --output properties/calibration/2026-10-15-p2-magic-js-source-review/p6-wave-r2/product-gate.json",
+      "local_gate_passed": true,
+      "mutation_guard_passed": true,
+      "product_engine_replayed": true,
+      "source_pin_verified": true
+    },
+    "kind": "property",
+    "pin": "e9fb233763160316989863b4739c4656133d45b0",
+    "question_id": "ME-provider-webauthn-base64url",
+    "repo_id": "magiclabs/magic-js",
+    "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-sdk/provider/src/util/base64-json.ts:54:column-26",
+    "status": "unsat",
+    "synthesized": false,
+    "url": "https://github.com/magiclabs/magic-js"
+  },
+  {
+    "contract": {
+      "adoption": {
+        "approved_on": "2026-10-15",
+        "authority": "standing_user_delegation",
+        "contract_sha256": "40cd17120597b424cde7a660f858e9d77538da09bdf84b9fbcaeda825d9b98de",
+        "evidence": [
+          "https://github.com/magiclabs/magic-js/blob/e9fb233763160316989863b4739c4656133d45b0/packages/@magic-sdk/provider/src/util/web-crypto.ts",
+          "https://www.rfc-editor.org/rfc/rfc7515#section-7.1",
+          "https://www.rfc-editor.org/rfc/rfc9449",
+          "properties/calibration/2026-10-15-p2-magic-js-source-review/evidence.json regex_id=060e2b7aec4f211fcb52aa249cfa65d2 column=27"
+        ],
+        "policy_version": "autonomous-contracts-v1",
+        "rationale": "binToUrlBase64 creates each DPoP JWS compact component from the JSON header/claims bytes and Web Crypto signature bytes. The transformation removes padding and maps the two standard Base64 symbols to the URL-safe alphabet before dot-joining the three components. RFC 7515 requires these protected-header, payload, and signature components to use unpadded Base64URL. The contract covers this output mapping only; it does not claim DPoP claim validity, key custody, or server acceptance.",
+        "review": {
+          "author": "codex-contract-author",
+          "reviewer": "codex-independent-review-pass",
+          "same_model": true
+        },
+        "source_file": "packages/@magic-sdk/provider/src/util/web-crypto.ts",
+        "source_pin": "e9fb233763160316989863b4739c4656133d45b0",
+        "source_sha256": "e0c48f0e2f17326411a6de87e40fa5fe6d9e6c01424df3a4265b016e80f93d6a",
+        "source_url": "https://github.com/magiclabs/magic-js",
+        "status": "approved"
+      },
+      "declared_domain": "The reachable DPoP components are passed through the exact source replacement chain. The Z3 theorem is per input codepoint with no length bound; exact Node replay covers all one- and two-byte inputs, representative JSON text, and seeded byte buffers.",
+      "guarantee": "The pinned web-crypto DPoP helper encodes the protected header, claims, and signature as unpadded Base64URL before joining the JWS compact representation.",
+      "input_source": "Binary JSON header/claims and signature bytes generated by the pinned DPoP implementation and Web Crypto signing API.",
+      "provenance": "agent_derived",
+      "schema_version": "1",
+      "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-sdk/provider/src/util/web-crypto.ts:106:column-27",
+      "trust": "internal"
+    },
+    "detail": null,
+    "domain": "The reachable DPoP components are passed through the exact source replacement chain. The Z3 theorem is per input codepoint with no length bound; exact Node replay covers all one- and two-byte inputs, representative JSON text, and seeded byte buffers.",
+    "gate": {
+      "consumer_adopted": false,
+      "differential_cases": 67841,
+      "gate_id": "magic-js-base64url-output-image",
+      "local_gate_command": "/home/lalbers/gitroot/regexproof/.venv/bin/python scripts/magic-js-base64url-regression-gate.py --source-root /tmp/regexproof-pinned-sources/magic-js-e9fb233763160316989863b4739c4656133d45b0 --output properties/calibration/2026-10-15-p2-magic-js-source-review/p6-wave-r2/product-gate.json",
+      "local_gate_passed": true,
+      "mutation_guard_passed": true,
+      "product_engine_replayed": true,
+      "source_pin_verified": true
+    },
+    "kind": "property",
+    "pin": "e9fb233763160316989863b4739c4656133d45b0",
+    "question_id": "ME-provider-dpop-base64url",
+    "repo_id": "magiclabs/magic-js",
+    "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-sdk/provider/src/util/web-crypto.ts:106:column-27",
+    "status": "unsat",
+    "synthesized": false,
+    "url": "https://github.com/magiclabs/magic-js"
+  },
+  {
+    "contract": {
+      "adoption": {
+        "approved_on": "2026-10-15",
+        "authority": "standing_user_delegation",
+        "contract_sha256": "569f0d7217b959757d3ee84744ecbff612356727663078e73da9e3652c503a70",
+        "evidence": [
+          "https://github.com/magiclabs/magic-js/blob/e9fb233763160316989863b4739c4656133d45b0/packages/@magic-sdk/react-native-bare/src/native-crypto/utils/uint8.ts",
+          "https://www.rfc-editor.org/rfc/rfc7515#section-7.1",
+          "https://www.rfc-editor.org/rfc/rfc9449",
+          "properties/calibration/2026-10-15-p2-magic-js-source-review/evidence.json regex_id=53b9bb2ec809d82012a74705bd6d9c92 column=24"
+        ],
+        "policy_version": "autonomous-contracts-v1",
+        "rationale": "The helper encodes DPoP header, claims, and signature bytes into the compact proof string. Its source documentation names Base64Url and RFC 4648, and the surrounding signing code joins the three encoded components with dots. The contract covers the helper output alphabet and padding only; it does not establish key custody, DPoP claim validity, or proof acceptance by a server.",
+        "review": {
+          "author": "codex-contract-author",
+          "reviewer": "codex-independent-review-pass",
+          "same_model": true
+        },
+        "source_file": "packages/@magic-sdk/react-native-bare/src/native-crypto/utils/uint8.ts",
+        "source_pin": "e9fb233763160316989863b4739c4656133d45b0",
+        "source_sha256": "49e76dc6132fc7524736a41057712451bcd3c459647529b646631dc94e7828e1",
+        "source_url": "https://github.com/magiclabs/magic-js",
+        "status": "approved"
+      },
+      "declared_domain": "The reachable DPoP components are passed through the exact source replacement chain. The Z3 theorem is per input codepoint with no length bound; exact Node replay covers all one- and two-byte inputs, representative JSON text, and seeded byte buffers.",
+      "guarantee": "The pinned React Native bare DPoP helper encodes each header, claims, and signature component using unpadded Base64URL before joining the JWS compact representation.",
+      "input_source": "ASCII JSON text for the DPoP header/claims and signature bytes returned by the device crypto signing API.",
+      "provenance": "agent_derived",
+      "schema_version": "1",
+      "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-sdk/react-native-bare/src/native-crypto/utils/uint8.ts:71:column-24",
+      "trust": "internal"
+    },
+    "detail": null,
+    "domain": "The reachable DPoP components are passed through the exact source replacement chain. The Z3 theorem is per input codepoint with no length bound; exact Node replay covers all one- and two-byte inputs, representative JSON text, and seeded byte buffers.",
+    "gate": {
+      "consumer_adopted": false,
+      "differential_cases": 67841,
+      "gate_id": "magic-js-base64url-output-image",
+      "local_gate_command": "/home/lalbers/gitroot/regexproof/.venv/bin/python scripts/magic-js-base64url-regression-gate.py --source-root /tmp/regexproof-pinned-sources/magic-js-e9fb233763160316989863b4739c4656133d45b0 --output properties/calibration/2026-10-15-p2-magic-js-source-review/p6-wave-r2/product-gate.json",
+      "local_gate_passed": true,
+      "mutation_guard_passed": true,
+      "product_engine_replayed": true,
+      "source_pin_verified": true
+    },
+    "kind": "property",
+    "pin": "e9fb233763160316989863b4739c4656133d45b0",
+    "question_id": "ME-rn-bare-dpop-base64url",
+    "repo_id": "magiclabs/magic-js",
+    "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-sdk/react-native-bare/src/native-crypto/utils/uint8.ts:71:column-24",
+    "status": "unsat",
+    "synthesized": false,
+    "url": "https://github.com/magiclabs/magic-js"
+  },
+  {
+    "contract": {
+      "adoption": {
+        "approved_on": "2026-10-15",
+        "authority": "standing_user_delegation",
+        "contract_sha256": "0af6fb1556f832afec6a2d0f10f9cc1a21f3af32586ab15fdfc143cc60838967",
+        "evidence": [
+          "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/hooks/brief-filename-guard.sh",
+          "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/README.md"
+        ],
+        "policy_version": "autonomous-contracts-v1",
+        "rationale": "The pinned hook extracts the task ID from a staged brief filename and uses it in the git-log claim lookup. This source-bound revision preserves the previously reviewed finite-domain capture guarantee and binds it to the frozen 20-r2 source.",
+        "review": {
+          "author": "codex-contract-author",
+          "reviewer": "codex-independent-review-pass",
+          "same_model": true
+        },
+        "source_file": ".agents/hooks/brief-filename-guard.sh",
+        "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+        "source_sha256": "03bcbd91198dbb746f39a7acd1ff98ec1295f95ed49254cd55bc108bf7f6c2f0",
+        "source_url": "https://github.com/marcusquinn/aidevops",
+        "status": "approved"
+      },
+      "declared_domain": "t[0-9]+ ASCII, len 2..16, hyphen-free, BusyBox grep -E (bash =~ as ERE)",
+      "guarantee": "hyphen-free brief task-id tokens are captured in full into git log --grep claim lookup",
+      "input_source": "agent-staged todo/tasks/tNNN-brief.md filename (pre-commit index)",
+      "provenance": "agent_derived",
+      "schema_version": "1",
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/hooks/brief-filename-guard.sh:105:t[0-9]+",
+      "trust": "untrusted-input"
+    },
+    "detail": null,
+    "domain": "brief filename t-ID (no hyphen) is captured in full by ^todo/tasks/(t[0-9]+)-brief\\.md$ \u2014 proven for len 2..16 [t0-9]+",
+    "gate": {
+      "consumer_adopted": false,
+      "differential_cases": 32,
+      "gate_id": "aidevops-posix-shell-hook-guards-busybox",
+      "local_gate_command": ".venv/bin/python scripts/ci-check-busybox-aidevops.py",
+      "local_gate_passed": true,
+      "mutation_guard_passed": true,
+      "product_engine_replayed": true,
+      "source_pin_verified": true
+    },
+    "kind": "property",
+    "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+    "question_id": "AI-aidevops-brief-tid-capture",
+    "repo_id": "marcusquinn/aidevops",
+    "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/hooks/brief-filename-guard.sh:105:t[0-9]+",
+    "status": "unsat",
+    "synthesized": false,
+    "url": "https://github.com/marcusquinn/aidevops"
+  },
+  {
+    "contract": {
+      "adoption": {
+        "approved_on": "2026-10-15",
+        "authority": "standing_user_delegation",
+        "contract_sha256": "4374d2ea29f9ea6f729e9b2b0f5749338dc95544ab1c02f489d4d85ebb321d22",
+        "evidence": [
+          "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/hooks/brief-filename-guard.sh",
+          "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/README.md"
+        ],
+        "policy_version": "autonomous-contracts-v1",
+        "rationale": "The pinned hook filters newly staged brief filenames before its git-log claim lookup. This source-bound revision preserves the previously reviewed alphabet guarantee and binds it to the frozen 20-r2 source.",
+        "review": {
+          "author": "codex-contract-author",
+          "reviewer": "codex-independent-review-pass",
+          "same_model": true
+        },
+        "source_file": ".agents/hooks/brief-filename-guard.sh",
+        "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+        "source_sha256": "03bcbd91198dbb746f39a7acd1ff98ec1295f95ed49254cd55bc108bf7f6c2f0",
+        "source_url": "https://github.com/marcusquinn/aidevops",
+        "status": "approved"
+      },
+      "declared_domain": "brief task-id alphabet [t0-9], single char, ASCII",
+      "guarantee": "captured brief task-id alphabet contains no semicolon (token reaches git log --grep claim lookup)",
+      "input_source": "agent-staged todo/tasks/tNNN-brief.md filename (pre-commit index)",
+      "provenance": "agent_derived",
+      "schema_version": "1",
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/hooks/brief-filename-guard.sh:84:brief\\.md",
+      "trust": "untrusted-input"
+    },
+    "detail": null,
+    "domain": "captured brief task-id alphabet contains no semicolon (token reaches git log --grep claim lookup) (length-independent single-char)",
+    "gate": {
+      "consumer_adopted": false,
+      "differential_cases": 2,
+      "gate_id": "aidevops-posix-shell-hook-guards-busybox",
+      "local_gate_command": ".venv/bin/python scripts/ci-check-busybox-aidevops.py",
+      "local_gate_passed": true,
+      "mutation_guard_passed": true,
+      "product_engine_replayed": true,
+      "source_pin_verified": true
+    },
+    "kind": "property",
+    "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+    "question_id": "AI-aidevops-brief-tid-no-semicolon",
+    "repo_id": "marcusquinn/aidevops",
+    "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/hooks/brief-filename-guard.sh:84:brief\\.md",
+    "status": "unsat",
+    "synthesized": false,
+    "url": "https://github.com/marcusquinn/aidevops"
+  },
+  {
+    "contract": {
+      "adoption": {
+        "approved_on": "2026-10-15",
+        "authority": "standing_user_delegation",
+        "contract_sha256": "52591f32b47e65181ccbcf490d2a1fced28257ec96eb037dd7fbe61824058a37",
+        "evidence": [
+          "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/hooks/credential-emission-pre-push.sh",
+          "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/README.md"
+        ],
+        "policy_version": "autonomous-contracts-v1",
+        "rationale": "The pinned pre-push hook uses these identifiers to detect unsanitized credential-bearing emits in added shell lines. This source-bound revision preserves the previously reviewed alphabet guarantee and binds it to the frozen 20-r2 source.",
+        "review": {
+          "author": "codex-contract-author",
+          "reviewer": "codex-independent-review-pass",
+          "same_model": true
+        },
+        "source_file": ".agents/hooks/credential-emission-pre-push.sh",
+        "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+        "source_sha256": "85d0191e0599b6e7c7d439c049b079e5f21c6a8934861259475846db9d6afca6",
+        "source_url": "https://github.com/marcusquinn/aidevops",
+        "status": "approved"
+      },
+      "declared_domain": "identifier alphabet [a-z_], single char, ASCII",
+      "guarantee": "credential-emission detector identifier alphabet contains no semicolon (matched $remote_url/$origin_url tokens flag unsanitized emits)",
+      "input_source": "added lines in .agents/scripts|hooks/*.sh diffs (pre-push)",
+      "provenance": "agent_derived",
+      "schema_version": "1",
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/hooks/credential-emission-pre-push.sh:103:remote_url",
+      "trust": "untrusted-input"
+    },
+    "detail": null,
+    "domain": "credential-emission detector identifier alphabet contains no semicolon (matched $remote_url/$origin_url tokens flag unsanitized emits) (length-independent single-char)",
+    "gate": {
+      "consumer_adopted": false,
+      "differential_cases": 2,
+      "gate_id": "aidevops-posix-shell-hook-guards-busybox",
+      "local_gate_command": ".venv/bin/python scripts/ci-check-busybox-aidevops.py",
+      "local_gate_passed": true,
+      "mutation_guard_passed": true,
+      "product_engine_replayed": true,
+      "source_pin_verified": true
+    },
+    "kind": "property",
+    "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+    "question_id": "AI-aidevops-cred-ident-no-semicolon",
+    "repo_id": "marcusquinn/aidevops",
+    "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/hooks/credential-emission-pre-push.sh:103:remote_url",
+    "status": "unsat",
+    "synthesized": false,
+    "url": "https://github.com/marcusquinn/aidevops"
+  },
+  {
+    "contract": {
+      "adoption": {
+        "approved_on": "2026-10-15",
+        "authority": "standing_user_delegation",
+        "contract_sha256": "b188de0e4219be565c2c68c84b024de9d3bc3588d5025a2629126729ea5ed345",
+        "evidence": [
+          "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/hooks/scope-guard-pre-push.sh",
+          "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/README.md"
+        ],
+        "policy_version": "autonomous-contracts-v1",
+        "rationale": "The pinned scope guard scans operator-authored brief lines for the Files Scope heading and fails closed when scope is absent. This source-bound revision preserves the previously reviewed heading alphabet guarantee and binds it to the frozen 20-r2 source.",
+        "review": {
+          "author": "codex-contract-author",
+          "reviewer": "codex-independent-review-pass",
+          "same_model": true
+        },
+        "source_file": ".agents/hooks/scope-guard-pre-push.sh",
+        "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+        "source_sha256": "9e0b9c250138acfa70d6c6392d869001df2b1cb5e2e149b05f2e75bdb8fdeec2",
+        "source_url": "https://github.com/marcusquinn/aidevops",
+        "status": "approved"
+      },
+      "declared_domain": "Files Scope heading alphabet [# \\tA-Za-z], single char, ASCII",
+      "guarantee": "Files Scope heading alphabet contains no semicolon (heading detect fail-closes the scope guard)",
+      "input_source": "operator-authored todo/tasks/tNNN-brief.md Files Scope heading",
+      "provenance": "agent_derived",
+      "schema_version": "1",
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/hooks/scope-guard-pre-push.sh:137:Files",
+      "trust": "config"
+    },
+    "detail": null,
+    "domain": "Files Scope heading alphabet contains no semicolon (heading detect fail-closes the scope guard) (length-independent single-char)",
+    "gate": {
+      "consumer_adopted": false,
+      "differential_cases": 2,
+      "gate_id": "aidevops-posix-shell-hook-guards-busybox",
+      "local_gate_command": ".venv/bin/python scripts/ci-check-busybox-aidevops.py",
+      "local_gate_passed": true,
+      "mutation_guard_passed": true,
+      "product_engine_replayed": true,
+      "source_pin_verified": true
+    },
+    "kind": "property",
+    "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+    "question_id": "AI-aidevops-scope-heading-no-semicolon",
+    "repo_id": "marcusquinn/aidevops",
+    "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/hooks/scope-guard-pre-push.sh:137:Files",
+    "status": "unsat",
+    "synthesized": false,
+    "url": "https://github.com/marcusquinn/aidevops"
+  },
+  {
+    "contract": {
+      "adoption": {
+        "approved_on": "2026-10-15",
+        "authority": "standing_user_delegation",
+        "contract_sha256": "c8d7d71b14f9d27e8fcbf3d7e1dda161c435bab47343fae27987da5652879436",
+        "evidence": [
+          "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/hooks/task-id-collision-guard.sh",
+          "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/README.md"
+        ],
+        "policy_version": "autonomous-contracts-v1",
+        "rationale": "The pinned commit-footer parser extracts issue digits before the gh issue view lookup. This source-bound revision preserves the previously reviewed finite-domain capture guarantee and binds it to the frozen 20-r2 source.",
+        "review": {
+          "author": "codex-contract-author",
+          "reviewer": "codex-independent-review-pass",
+          "same_model": true
+        },
+        "source_file": ".agents/hooks/task-id-collision-guard.sh",
+        "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+        "source_sha256": "91abddb42b622d2cc1ed280c51d82dad8c78299bb9fb47717ea0a053006d3934",
+        "source_url": "https://github.com/marcusquinn/aidevops",
+        "status": "approved"
+      },
+      "declared_domain": "digits [0-9]{1,8}, ASCII, BusyBox grep -oE | tr -d '#'",
+      "guarantee": "digit-only issue numbers are captured in full into gh issue view",
+      "input_source": "commit-message Resolves/Closes/Fixes/Ref/For #NNN footers",
+      "provenance": "agent_derived",
+      "schema_version": "1",
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/hooks/task-id-collision-guard.sh:378:#[0-9]+",
+      "trust": "untrusted-input"
+    },
+    "detail": null,
+    "domain": "GitHub issue numbers (digits only) are captured in full by grep -oE '#[0-9]+' | tr -d '#' before gh issue view \u2014 proven for len 1..8 digits",
+    "gate": {
+      "consumer_adopted": false,
+      "differential_cases": 32,
+      "gate_id": "aidevops-posix-shell-hook-guards-busybox",
+      "local_gate_command": ".venv/bin/python scripts/ci-check-busybox-aidevops.py",
+      "local_gate_passed": true,
+      "mutation_guard_passed": true,
+      "product_engine_replayed": true,
+      "source_pin_verified": true
+    },
+    "kind": "property",
+    "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+    "question_id": "AI-aidevops-gh-issue-digit-capture",
+    "repo_id": "marcusquinn/aidevops",
+    "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/hooks/task-id-collision-guard.sh:378:#[0-9]+",
+    "status": "unsat",
+    "synthesized": false,
+    "url": "https://github.com/marcusquinn/aidevops"
+  },
+  {
+    "contract": {
+      "adoption": {
+        "approved_on": "2026-10-15",
+        "authority": "standing_user_delegation",
+        "contract_sha256": "81625627f63dbabf94e2ea02819148bda43d550bb77deea8d4e54b84665848a9",
+        "evidence": [
+          "https://github.com/mycelium0/mycelium/blob/d4f01ba6202d50909d1977810d322259482e0b82/scripts/verify-release.sh",
+          "https://github.com/mycelium0/mycelium/blob/d4f01ba6202d50909d1977810d322259482e0b82/README.md",
+          "https://github.com/mycelium0/mycelium/blob/d4f01ba6202d50909d1977810d322259482e0b82/QUICKSTART.md",
+          "https://github.com/mycelium0/mycelium/blob/d4f01ba6202d50909d1977810d322259482e0b82/docs/RELEASING.md",
+          "Pinned comments identify empty/truncated and HTTP 200 HTML checksum inputs; README, QUICKSTART, and release docs say integrity-only output does not verify authenticity."
+        ],
+        "policy_version": "autonomous-contracts-v1",
+        "rationale": "The source-pinned preflight requires one well-formed SHA256 record before calling the platform checksum command; the contract isolates this guard from authenticity and downstream checksum semantics.",
+        "review": {
+          "author": "codex-contract-author",
+          "reviewer": "codex-independent-review-pass",
+          "same_model": true
+        },
+        "source_file": "scripts/verify-release.sh",
+        "source_pin": "d4f01ba6202d50909d1977810d322259482e0b82",
+        "source_sha256": "df394a764f2ebd906ffbc9d6bafa58af896b39e895e503a271da3baf710e2b58",
+        "source_url": "https://github.com/mycelium0/mycelium",
+        "status": "approved"
+      },
+      "declared_domain": "One ASCII LF-delimited checksum or error-response line, excluding NUL. The solver property covers every line of length 0..63. The guarantee covers checksum-record preflight only and does not establish authenticity or model the external checksum utility.",
+      "guarantee": "When a downloaded SHA256SUMS file has no line beginning with exactly 64 ASCII hexadecimal digits followed by POSIX whitespace, an optional `*` marker, and a non-whitespace filename character, verify-release.sh fails before calling the platform checksum command and cannot print an integrity success result. This is a preflight guarantee only; it does not establish release authenticity.",
+      "input_source": "The SHA256SUMS text file accompanying a downloaded release artifact; it remains untrusted network input until signature verification succeeds. The helper documents integrity-only operation while the maintainer signing key is unavailable.",
+      "provenance": "agent_derived",
+      "schema_version": "1",
+      "site": "mycelium0/mycelium@d4f01ba6202d50909d1977810d322259482e0b82:scripts/verify-release.sh:60:sums_n",
+      "trust": "untrusted-input"
+    },
+    "detail": null,
+    "domain": "At the frozen 20-r2 pin, a single ASCII SHA256SUMS line shorter than 64 characters cannot pass the pinned verifier's checksum-record preflight",
+    "gate": {
+      "consumer_adopted": false,
+      "differential_cases": 3814,
+      "gate_id": "mycelium-20r2-release-preflight",
+      "local_gate_command": ".venv/bin/python scripts/mycelium-release-preflight-regression-gate.py --source-pin d4f01ba6202d50909d1977810d322259482e0b82",
+      "local_gate_passed": true,
+      "mutation_guard_passed": true,
+      "product_engine_replayed": true,
+      "source_pin_verified": true
+    },
+    "kind": "property",
+    "pin": "d4f01ba6202d50909d1977810d322259482e0b82",
+    "question_id": "MY-mycelium-20r2-release-preflight-requires-64-hex",
+    "repo_id": "mycelium0/mycelium",
+    "site": "mycelium0/mycelium@d4f01ba6202d50909d1977810d322259482e0b82:scripts/verify-release.sh:60:sums_n",
+    "status": "unsat",
+    "synthesized": false,
+    "url": "https://github.com/mycelium0/mycelium"
+  },
+  {
+    "contract": {
+      "adoption": {
+        "approved_on": "2026-10-15",
+        "authority": "standing_user_delegation",
+        "contract_sha256": "638cd5d8ac2bcbb72f33dc8090d6b87b9922ae3fd3200f61c215ea892149d6ce",
+        "evidence": [
+          "https://github.com/netspooky/inhale/blob/889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8/iModules/rDownload.py",
+          "https://github.com/netspooky/inhale/blob/889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8/README.md#L118-L130",
+          "https://github.com/netspooky/inhale/blob/889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8/inhale.py#L28-L30",
+          "https://github.com/netspooky/inhale/blob/889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8/iModules/rDownload.py#L106-L123"
+        ],
+        "policy_version": "autonomous-contracts-v1",
+        "rationale": "The pinned README explicitly describes -o OUTDIR as the directory where scraped files are stored, and the pinned CLI routes -u and each -l entry to getSingleFile. That helper applies re.sub(r\"https?://\", \"\", ...) to the caller URL and concatenates the remainder to fpath before creating directories and opening the file. A source-grounded replay with the documented traversal-shaped URL confirms that the current path resolves outside -o. This contract is the documented output-directory behavior for that concrete URL class; it records a reproduced candidate and does not claim an attack occurred in a deployment.",
+        "review": {
+          "author": "Codex source-review pass",
+          "reviewer": "Codex second source-review pass",
+          "same_model": true
+        },
+        "source_file": "iModules/rDownload.py",
+        "source_pin": "889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8",
+        "source_sha256": "3350a9a3d1be11e44dfff3756f90b03f349cc0a59246959047fe4ed0633c6414",
+        "source_url": "https://github.com/netspooky/inhale",
+        "status": "approved"
+      },
+      "declared_domain": "The concrete ASCII absolute URL https://downloads.example/../../escape.bin, supplied through the CLI's -u remote-file option or a line in the operator-provided -l URL list. The source strips the leading https:// with re.sub, concatenates the remaining URL text to the configured -o directory, and creates/writes the resulting local path. The counterexample is verified by replaying the exact pinned helper with synthetic response bytes inside a temporary directory; no network request is made.",
+      "guarantee": "For a URL supplied to the remote-file or URL-list mode, getSingleFile stores downloaded bytes beneath the configured -o output directory.",
+      "input_source": "An operator-supplied URL passed through -u or read from an operator-supplied -l URL list; getSingleFile derives a local output path from the URL and writes the HTTP response bytes there.",
+      "provenance": "agent_derived",
+      "schema_version": "1",
+      "site": "netspooky/inhale@889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8:iModules/rDownload.py:111:url",
+      "trust": "config"
+    },
+    "detail": null,
+    "domain": "The concrete printable-ASCII HTTPS URL witness; stripping the exact https?:// prefix leaves a URL-derived relative path containing /../../. Ground truth resolves the pinned getSingleFile destination against a temporary -o output directory.",
+    "gate": {
+      "consumer_adopted": false,
+      "differential_cases": 3,
+      "gate_id": "inhale-url-output-path-confinement",
+      "local_gate_command": "/home/lalbers/gitroot/regexproof/.venv/bin/python scripts/inhale-output-path-regression-gate.py --source-root /tmp/regexproof-pinned-sources/inhale-889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8 --output /home/lalbers/gitroot/regexproof/properties/calibration/2026-10-15-p2-inhale-source-review/p6-wave-r1/product-replay-p6.json",
+      "local_gate_passed": true,
+      "mutation_guard_passed": true,
+      "product_engine_replayed": true,
+      "source_pin_verified": true
+    },
+    "kind": "counterexample_finder",
+    "pin": "889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8",
+    "question_id": "IH-inhale-file-url-output-root-confinement",
+    "repo_id": "netspooky/inhale",
+    "site": "netspooky/inhale@889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8:iModules/rDownload.py:111:url",
+    "status": "sat",
+    "synthesized": false,
+    "url": "https://github.com/netspooky/inhale"
+  },
+  {
+    "contract": {
+      "adoption": {
+        "approved_on": "2026-10-15",
+        "authority": "standing_user_delegation",
+        "contract_sha256": "1c6a9e52deabba8c246092f93ee4c2e1333967ab7516f63da3006dfa6f2c1df2",
+        "evidence": [
+          "https://github.com/netspooky/inhale/blob/889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8/iModules/rDownload.py",
+          "https://github.com/netspooky/inhale/blob/889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8/README.md#L118-L130",
+          "https://github.com/netspooky/inhale/blob/889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8/inhale.py#L28-L30",
+          "https://github.com/netspooky/inhale/blob/889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8/iModules/rDownload.py#L128-L135",
+          "https://github.com/netspooky/inhale/blob/889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8/iModules/rDownload.py#L58-L84"
+        ],
+        "policy_version": "autonomous-contracts-v1",
+        "rationale": "The pinned README explicitly describes -o OUTDIR as the directory where scraped files are stored, and the pinned CLI routes -r to parseDir. That helper applies re.sub(r\"https?://\", \"\", ...) to the root URL and concatenates the remainder to fpath before creating the target and calling download_directory. A source-grounded replay with the documented traversal-shaped URL confirms that the current root path resolves outside -o. This contract is the documented output-directory behavior for that concrete URL class; it records a reproduced candidate and does not claim an attack occurred in a deployment.",
+        "review": {
+          "author": "Codex source-review pass",
+          "reviewer": "Codex second source-review pass",
+          "same_model": true
+        },
+        "source_file": "iModules/rDownload.py",
+        "source_pin": "889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8",
+        "source_sha256": "3350a9a3d1be11e44dfff3756f90b03f349cc0a59246959047fe4ed0633c6414",
+        "source_url": "https://github.com/netspooky/inhale",
+        "status": "approved"
+      },
+      "declared_domain": "The concrete ASCII absolute URL https://downloads.example/../../directory.bin, supplied to the CLI's -r remote-directory option. The source strips the leading https:// with re.sub, concatenates the remaining URL text to the configured -o directory, and creates that local target before crawling. The counterexample is verified by replaying the exact pinned helper with a synthetic binary response inside a temporary directory; no network request is made.",
+      "guarantee": "For a remote-directory URL supplied through -r, parseDir's root destination remains beneath the configured -o output directory.",
+      "input_source": "An operator-supplied remote-directory URL passed through -r; parseDir derives its local destination from the URL and the configured output directory before fetching it.",
+      "provenance": "agent_derived",
+      "schema_version": "1",
+      "site": "netspooky/inhale@889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8:iModules/rDownload.py:129:url",
+      "trust": "config"
+    },
+    "detail": null,
+    "domain": "The concrete printable-ASCII HTTPS URL witness; stripping the exact https?:// prefix leaves a URL-derived relative path containing /../../. Ground truth resolves the pinned parseDir destination against a temporary -o output directory.",
+    "gate": {
+      "consumer_adopted": false,
+      "differential_cases": 3,
+      "gate_id": "inhale-url-output-path-confinement",
+      "local_gate_command": "/home/lalbers/gitroot/regexproof/.venv/bin/python scripts/inhale-output-path-regression-gate.py --source-root /tmp/regexproof-pinned-sources/inhale-889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8 --output /home/lalbers/gitroot/regexproof/properties/calibration/2026-10-15-p2-inhale-source-review/p6-wave-r1/product-replay-p6.json",
+      "local_gate_passed": true,
+      "mutation_guard_passed": true,
+      "product_engine_replayed": true,
+      "source_pin_verified": true
+    },
+    "kind": "counterexample_finder",
+    "pin": "889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8",
+    "question_id": "IH-inhale-directory-url-output-root-confinement",
+    "repo_id": "netspooky/inhale",
+    "site": "netspooky/inhale@889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8:iModules/rDownload.py:129:url",
+    "status": "sat",
+    "synthesized": false,
+    "url": "https://github.com/netspooky/inhale"
+  },
+  {
+    "contract": {
+      "adoption": {
+        "approved_on": "2026-10-15",
+        "authority": "standing_user_delegation",
+        "contract_sha256": "b4498e6291105f692c8b281ee975f8a1b3e17c205ec2d5efbe17916790fe2e22",
+        "evidence": [
+          "https://github.com/open-horizon/anax/blob/2f3fa5a506d6565fa68858b7963450567ddda114/cli/cliutils/cliutils.go",
+          "https://github.com/open-horizon/anax/blob/2f3fa5a506d6565fa68858b7963450567ddda114/cli/exchange/org.go",
+          "https://github.com/open-horizon/anax/blob/2f3fa5a506d6565fa68858b7963450567ddda114/cli/cliutils/cliutils_test.go"
+        ],
+        "policy_version": "autonomous-contracts-v1",
+        "rationale": "The pinned source comment and unit cases define the deny-list predicate. Both call sites check it before making an Exchange operation and terminate with a CLI input error when it matches. Scope is limited to those characters and those two commands.",
+        "review": {
+          "author": "codex-contract-author",
+          "reviewer": "codex-independent-review-pass",
+          "same_model": true
+        },
+        "source_file": "cli/cliutils/cliutils.go",
+        "source_pin": "2f3fa5a506d6565fa68858b7963450567ddda114",
+        "source_sha256": "19e98c2f753ff03e83aa442a21cd352f8926efdff20d44d3c111016d908509d0",
+        "source_url": "https://github.com/open-horizon/anax",
+        "status": "approved"
+      },
+      "declared_domain": "Formal projection: one ASCII code point tested against the literal deny-list class in the pinned Go regexp.MatchString call, with Go RE2 whitespace semantics. The product gate checks string-level MatchString behavior over all non-NUL ASCII bytes, representative control/string positions, Unicode samples, and deterministic random strings; no length bound is used. The claim covers only the listed rejected characters and the OrgCreate/OrgDel call sites.",
+      "guarantee": "ValidateOrg returns true for an organization string containing an underscore, comma, Go RE2 ASCII whitespace, question mark, or apostrophe. OrgCreate and OrgDel reject such input with CLI_INPUT_ERROR before their Exchange operation. This is a deny-list guarantee only; it does not define a complete allowed-name grammar or establish URL-path safety for other characters.",
+      "input_source": "The organization argument supplied to the hzn exchange org create or delete command and passed to cliutils.ValidateOrg.",
+      "provenance": "agent_derived",
+      "schema_version": "1",
+      "site": "open-horizon/anax@2f3fa5a506d6565fa68858b7963450567ddda114:cli/cliutils/cliutils.go:2277:MatchString",
+      "trust": "untrusted-input"
+    },
+    "detail": null,
+    "domain": "The pinned Go RE2 organization deny-list class matches exactly the documented invalid ASCII characters in its one-character projection",
+    "gate": {
+      "consumer_adopted": false,
+      "differential_cases": 687,
+      "gate_id": "anax-orgname-denylist-20r2",
+      "local_gate_command": ".venv/bin/python scripts/anax-orgname-denylist-regression-gate.py --product-only --source-root /tmp/regexproof-pinned-sources/anax-2f3fa5a506d6565fa68858b7963450567ddda114 --output properties/calibration/2026-10-15-autonomous-anax-org-validate-20r2/gate-report.json",
+      "local_gate_passed": true,
+      "mutation_guard_passed": true,
+      "product_engine_replayed": true,
+      "source_pin_verified": true
+    },
+    "kind": "property",
+    "pin": "2f3fa5a506d6565fa68858b7963450567ddda114",
+    "question_id": "AN-anax-orgname-denylist-validation",
+    "repo_id": "open-horizon/anax",
+    "site": "open-horizon/anax@2f3fa5a506d6565fa68858b7963450567ddda114:cli/cliutils/cliutils.go:2277:MatchString",
+    "status": "unsat",
+    "synthesized": false,
+    "url": "https://github.com/open-horizon/anax"
+  },
+  {
+    "contract": {
+      "adoption": {
+        "approved_on": "2026-10-15",
+        "authority": "standing_user_delegation",
+        "contract_sha256": "7aadd1106a944e0bb91143ea7b6b8b93f5c741b41b2944175ae0543fd90a8318",
+        "evidence": [
+          "https://github.com/panther-labs/panther-analysis/blob/0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a/.scripts/claude_review.py",
+          "https://github.com/panther-labs/panther-analysis/blob/0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a/.scripts/claude_review.py#L20-L55",
+          "https://github.com/panther-labs/panther-analysis/blob/0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a/.scripts/claude_review.py#L79-L110",
+          "https://github.com/panther-labs/panther-analysis/blob/0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a/.scripts/claude_review.py#L224-L229",
+          "https://github.com/panther-labs/panther-analysis/blob/0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a/.scripts/pre-commit-wrapper.sh#L1-L12",
+          "https://github.com/panther-labs/panther-analysis/blob/0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a/Makefile#L93-L98",
+          "https://github.com/panther-labs/panther-analysis/blob/0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a/.claude/commands/pr-review.md#L1-L10"
+        ],
+        "policy_version": "autonomous-contracts-v1",
+        "rationale": "The pinned slash-command review policy says to exclude any changed file matching secrets, and the pre-commit wrapper runs claude_review.py before lint. The exact helper filters paths before reading staged contents and constructing the Claude prompt, but its secrets\\.json branch does not reject secrets.py. This adopts only the path-selection guarantee; it does not establish that any real file contained a secret or that a Claude service received data.",
+        "review": {
+          "author": "Codex source-review pass",
+          "reviewer": "Codex second source-review pass",
+          "same_model": true
+        },
+        "source_file": ".scripts/claude_review.py",
+        "source_pin": "0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a",
+        "source_sha256": "bb84d899da9cd10d82712610419f7802d84900541fd1e1c48a94223a12bc4024",
+        "source_url": "https://github.com/panther-labs/panther-analysis",
+        "status": "approved"
+      },
+      "declared_domain": "ASCII repository-relative paths using slash separators, with one of the reviewable suffixes .py, .yml, .yaml, or .sql, containing the literal lower-case substring secrets. The formal counterexample is the concrete path secrets.py; the product gate stages synthetic paths and inspects whether get_changed_files returns them and read_file_contents includes their sentinel bytes. No Claude process or external service is invoked.",
+      "guarantee": "Before staged contents are read into the pre-commit Claude review prompt, get_changed_files excludes every staged reviewable path containing the literal lower-case substring secrets.",
+      "input_source": "Repository-relative paths and file contents staged in the local Git index before the pre-commit review hook.",
+      "provenance": "agent_derived",
+      "schema_version": "1",
+      "site": "panther-labs/panther-analysis@0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a:.scripts/claude_review.py:21:EXCLUDE_PATTERNS",
+      "trust": "untrusted-input"
+    },
+    "detail": null,
+    "domain": "Counterexample domain: the concrete staged path secrets.py, a reviewable ASCII Git path containing the literal lower-case substring secrets.",
+    "gate": {
+      "consumer_adopted": false,
+      "differential_cases": 9,
+      "gate_id": "panther-precommit-secret-path-review-filter",
+      "local_gate_command": ".venv/bin/python scripts/panther-secret-path-regression-gate.py --source-root /tmp/regexproof-pinned-sources/panther-analysis-0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a --output /home/lalbers/gitroot/regexproof/properties/calibration/2026-10-15-p2-panther-source-review/p6-wave-r1/product-replay-p6.json",
+      "local_gate_passed": true,
+      "mutation_guard_passed": true,
+      "product_engine_replayed": true,
+      "source_pin_verified": true
+    },
+    "kind": "counterexample_finder",
+    "pin": "0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a",
+    "question_id": "PA-panther-staged-secrets-file-excluded-from-review-prompt",
+    "repo_id": "panther-labs/panther-analysis",
+    "site": "panther-labs/panther-analysis@0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a:.scripts/claude_review.py:21:EXCLUDE_PATTERNS",
+    "status": "sat",
+    "synthesized": false,
+    "url": "https://github.com/panther-labs/panther-analysis"
+  },
+  {
+    "contract": {
+      "adoption": {
+        "approved_on": "2026-10-15",
+        "authority": "standing_user_delegation",
+        "contract_sha256": "b3fd8a5fd9f203c22babfb9dabc8fcbc56a03cfcfc7e51e4692216632f40f09d",
+        "evidence": [
+          "https://github.com/xibosignage/xibo-cms/blob/978def55c8e68cab3a50a7ee4725039da753f0a1/frontend/src/pages/Administration/Applications/Authorize/AuthorizeApplication.tsx",
+          "https://github.com/xibosignage/xibo-cms/blob/978def55c8e68cab3a50a7ee4725039da753f0a1/lib/Middleware/CsrfGuard.php",
+          "https://github.com/xibosignage/xibo-cms/blob/978def55c8e68cab3a50a7ee4725039da753f0a1/lib/routes-react.php",
+          "https://github.com/xibosignage/xibo-cms/blob/978def55c8e68cab3a50a7ee4725039da753f0a1/web/json/index.php"
+        ],
+        "policy_version": "autonomous-contracts-v1",
+        "rationale": "The pinned SPA helper reads the non-HttpOnly XSRF-TOKEN cookie into the hidden csrfToken field of the native OAuth consent POST. The exact route is mounted in the JSON entrypoint with CsrfGuard; middleware falls back to the csrfToken form field and compares it to the session token with hash_equals. issueToken produces a 40-character lowercase-hex value using bin2hex(random_bytes(20)). The contract asks only that the capture body cannot absorb a cookie separator; the exact-source Node replay checks complete helper behavior and an exact capture-widening mutation.",
+        "review": {
+          "author": "codex-contract-author",
+          "reviewer": "codex-independent-review-pass",
+          "same_model": true
+        },
+        "source_file": "frontend/src/pages/Administration/Applications/Authorize/AuthorizeApplication.tsx",
+        "source_pin": "978def55c8e68cab3a50a7ee4725039da753f0a1",
+        "source_sha256": "8377f717735d9efe5c0148e2691c3d36e91395b91ebaaa61045601d073128513",
+        "source_url": "https://github.com/xibosignage/xibo-cms",
+        "status": "approved"
+      },
+      "declared_domain": "The formal proof covers every single ASCII character admitted by the exact capture body [^;], without a length bound. The exact-pin product replay covers server-issued 40-character lowercase-hex tokens in semicolon-separated document.cookie strings with exactly one XSRF-TOKEN pair, placed first, between neighboring cookies, and last; decodeURIComponent must leave these server-issued tokens unchanged. The replay mutates the exact pinned capture body to (.*) and checks that a following cookie pair is then included. The proof models the capture body only; it does not formalize JavaScript RegExp search or duplicate cookie-name ordering.",
+      "guarantee": "The captured value for the XSRF-TOKEN cookie cannot include a semicolon, so it cannot absorb a following cookie pair into the csrfToken submitted by the OAuth consent form.",
+      "input_source": "The browser document.cookie string read by getCsrfTokenFromCookie for the OAuth application consent form. The server creates the session token with bin2hex(random_bytes(20)), exposes it in the XSRF-TOKEN cookie, and the hidden csrfToken form field is checked by CsrfGuard against the session value with hash_equals.",
+      "provenance": "agent_derived",
+      "schema_version": "1",
+      "site": "xibosignage/xibo-cms@978def55c8e68cab3a50a7ee4725039da753f0a1:frontend/src/pages/Administration/Applications/Authorize/AuthorizeApplication.tsx:42:38",
+      "trust": "untrusted-input"
+    },
+    "detail": null,
+    "domain": "The exact pinned capture body [^;] admits no ASCII semicolon; the product gate separately replays complete JavaScript helper behavior",
+    "gate": {
+      "consumer_adopted": false,
+      "differential_cases": 1007,
+      "gate_id": "xibo-csrf-cookie-capture-20r2",
+      "local_gate_command": "python scripts/xibo-csrf-cookie-regression-gate.py --output properties/calibration/2026-10-15-autonomous-xibo-csrf-cookie-20r2/gate-report.json",
+      "local_gate_passed": true,
+      "mutation_guard_passed": true,
+      "product_engine_replayed": true,
+      "source_pin_verified": true
+    },
+    "kind": "property",
+    "pin": "978def55c8e68cab3a50a7ee4725039da753f0a1",
+    "question_id": "XC-xibo-csrf-cookie-capture-isolation",
+    "repo_id": "xibosignage/xibo-cms",
+    "site": "xibosignage/xibo-cms@978def55c8e68cab3a50a7ee4725039da753f0a1:frontend/src/pages/Administration/Applications/Authorize/AuthorizeApplication.tsx:42:38",
+    "status": "unsat",
+    "synthesized": false,
+    "url": "https://github.com/xibosignage/xibo-cms"
+  }
+]

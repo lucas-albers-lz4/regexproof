@@ -168,6 +168,7 @@ def compile_posix_shell(
     *,
     max_length: int,
     domain: str = "ascii",
+    syntax: str = "bre",
 ) -> CompileResult:
     """Compile an ALREADY-NORMALIZED posix-shell pattern via the pcre path.
 
@@ -180,7 +181,15 @@ def compile_posix_shell(
     # helpers at module import)
 
     result = compile_pcre(
-        pattern, flags=flags, call_kind=call_kind, max_length=max_length
+        pattern,
+        flags=flags,
+        call_kind=call_kind,
+        max_length=max_length,
+        # grep/sed and the Python/PCRE dialects treat `$` as matching before
+        # one final LF. Bash `[[ value =~ regex ]]` applies ERE anchors to the
+        # complete value, so the POSIX-shell extractor's bash_ksh route must
+        # not inherit PCRE's newline exception.
+        trailing_dollar_nl=syntax != "bash_ksh",
     )
     return CompileResult(
         mirror=result.mirror,

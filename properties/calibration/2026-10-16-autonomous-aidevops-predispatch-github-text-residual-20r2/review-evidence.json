@@ -1,0 +1,4003 @@
+{
+  "candidates": [
+    {
+      "call_kind": "search",
+      "decision": "skipped",
+      "pattern": "^[0-9]+$",
+      "rank": 1,
+      "rationale": "The source PR extractor uses only decimal capture groups before this guard, and the resulting number is passed as a path component. This post-extraction check has no distinct regex guarantee beyond that parser.",
+      "reason_code": "redundant_numeric_validation",
+      "regex_id": "da131ed2a545cd8f1bd1999bb0fbbba7",
+      "shortlist_site": ".agents/scripts/pre-dispatch-validator-helper.sh:1062:column-4",
+      "site": ".agents/scripts/pre-dispatch-validator-helper.sh:1062:column-4",
+      "source_binding": {
+        "evidence_ref": "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/pre-dispatch-validator-helper.sh",
+        "path": ".agents/scripts/pre-dispatch-validator-helper.sh",
+        "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+        "repository_url": "https://github.com/marcusquinn/aidevops",
+        "sha256": "b68445d5eaf510e820831422c6e064ac58bbdc4496483ad562df30786e3723b5"
+      },
+      "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "window": {
+        "lines": [
+          {
+            "is_target": false,
+            "line": 1037,
+            "text": "_rf_search_merged_pr_numbers() {"
+          },
+          {
+            "is_target": false,
+            "line": 1038,
+            "text": "\tlocal slug=\"$1\""
+          },
+          {
+            "is_target": false,
+            "line": 1039,
+            "text": "\tlocal search_after=\"$2\""
+          },
+          {
+            "is_target": false,
+            "line": 1040,
+            "text": "\tlocal search_date=\"${search_after%%T*}\""
+          },
+          {
+            "is_target": false,
+            "line": 1041,
+            "text": "\tlocal limit=\"${AIDEVOPS_REVIEW_FEEDBACK_SUPERSESSION_LIMIT:-25}\""
+          },
+          {
+            "is_target": false,
+            "line": 1042,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 1043,
+            "text": "\tif [[ -z \"$search_date\" || \"$search_date\" == \"$search_after\" ]]; then"
+          },
+          {
+            "is_target": false,
+            "line": 1044,
+            "text": "\t\treturn 1"
+          },
+          {
+            "is_target": false,
+            "line": 1045,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 1046,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 1047,
+            "text": "\tgh api -X GET search/issues \\"
+          },
+          {
+            "is_target": false,
+            "line": 1048,
+            "text": "\t\t-f q=\"repo:${slug} is:pr is:merged merged:>=${search_date}\" \\"
+          },
+          {
+            "is_target": false,
+            "line": 1049,
+            "text": "\t\t-f sort=updated \\"
+          },
+          {
+            "is_target": false,
+            "line": 1050,
+            "text": "\t\t-f order=desc \\"
+          },
+          {
+            "is_target": false,
+            "line": 1051,
+            "text": "\t\t-f per_page=\"$limit\" \\"
+          },
+          {
+            "is_target": false,
+            "line": 1052,
+            "text": "\t\t--jq '.items[]?.number' 2>/dev/null"
+          },
+          {
+            "is_target": false,
+            "line": 1053,
+            "text": "\treturn $?"
+          },
+          {
+            "is_target": false,
+            "line": 1054,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 1055,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 1056,
+            "text": "_rf_extract_source_pr_number() {"
+          },
+          {
+            "is_target": false,
+            "line": 1057,
+            "text": "\tlocal issue_body=\"$1\""
+          },
+          {
+            "is_target": false,
+            "line": 1058,
+            "text": "\tlocal issue_title=\"$2\""
+          },
+          {
+            "is_target": false,
+            "line": 1059,
+            "text": "\tlocal source_pr=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 1060,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 1061,
+            "text": "\tsource_pr=$(printf '%s\\n%s\\n' \"$issue_body\" \"$issue_title\" | sed -En 's/.*source_pr=([0-9]+).*/\\1/p; s/.*fingerprint=source-pr-([0-9]+).*/\\1/p; s/.*\\*\\*Source PR\\*\\*:[[:space:]]*#?([0-9]+).*/\\1/p; s/.*Review followup:[[:space:]]*PR[[:space:]]*#?([0-9]+).*/\\1/p; s/.*feedback-route:(start|complete):review:PR([0-9]+):.*/\\2/p; s/.*Review Feedback routed from PR[[:space:]]*#?([0-9]+).*/\\1/p' | head -1)"
+          },
+          {
+            "is_target": true,
+            "line": 1062,
+            "text": "\tif [[ \"$source_pr\" =~ ^[0-9]+$ ]]; then"
+          },
+          {
+            "is_target": false,
+            "line": 1063,
+            "text": "\t\tprintf '%s\\n' \"$source_pr\""
+          },
+          {
+            "is_target": false,
+            "line": 1064,
+            "text": "\t\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 1065,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 1066,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 1067,
+            "text": "\treturn 1"
+          },
+          {
+            "is_target": false,
+            "line": 1068,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 1069,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 1070,
+            "text": "_rf_extract_routed_review_sha() {"
+          },
+          {
+            "is_target": false,
+            "line": 1071,
+            "text": "\tlocal issue_body=\"$1\""
+          },
+          {
+            "is_target": false,
+            "line": 1072,
+            "text": "\tlocal source_pr=\"$2\""
+          },
+          {
+            "is_target": false,
+            "line": 1073,
+            "text": "\tlocal source_sha=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 1074,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 1075,
+            "text": "\t[[ \"$source_pr\" =~ ^[0-9]+$ ]] || return 1"
+          },
+          {
+            "is_target": false,
+            "line": 1076,
+            "text": "\tsource_sha=$(printf '%s' \"$issue_body\" | sed -En \"s/.*feedback-route:start:review:PR${source_pr}:SHA([0-9a-fA-F]{40}):.*/\\\\1/p\" | head -1)"
+          },
+          {
+            "is_target": false,
+            "line": 1077,
+            "text": "\tif [[ \"$source_sha\" =~ ^[0-9a-fA-F]{40}$ ]]; then"
+          },
+          {
+            "is_target": false,
+            "line": 1078,
+            "text": "\t\tprintf '%s\\n' \"$source_sha\""
+          },
+          {
+            "is_target": false,
+            "line": 1079,
+            "text": "\t\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 1080,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 1081,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 1082,
+            "text": "\treturn 1"
+          },
+          {
+            "is_target": false,
+            "line": 1083,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 1084,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 1085,
+            "text": "_rf_extract_routed_review_payload() {"
+          },
+          {
+            "is_target": false,
+            "line": 1086,
+            "text": "\tlocal issue_body=\"$1\""
+          },
+          {
+            "is_target": false,
+            "line": 1087,
+            "text": "\tlocal source_pr=\"$2\""
+          }
+        ],
+        "path": ".agents/scripts/pre-dispatch-validator-helper.sh",
+        "target_line": 1062,
+        "token": "column-4",
+        "window_end": 1087,
+        "window_lines": 51,
+        "window_start": 1037
+      }
+    },
+    {
+      "call_kind": "search",
+      "decision": "skipped",
+      "pattern": "^[0-9]+$",
+      "rank": 2,
+      "rationale": "The source PR number is already returned from fixed decimal capture groups; this guard is defense in depth before interpolation into a sed expression, but the same input is constrained by its producer.",
+      "reason_code": "redundant_dynamic_regex_guard",
+      "regex_id": "47e5aebec9439ac88a112ac690214f25",
+      "shortlist_site": ".agents/scripts/pre-dispatch-validator-helper.sh:1075:column-1",
+      "site": ".agents/scripts/pre-dispatch-validator-helper.sh:1075:column-1",
+      "source_binding": {
+        "evidence_ref": "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/pre-dispatch-validator-helper.sh",
+        "path": ".agents/scripts/pre-dispatch-validator-helper.sh",
+        "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+        "repository_url": "https://github.com/marcusquinn/aidevops",
+        "sha256": "b68445d5eaf510e820831422c6e064ac58bbdc4496483ad562df30786e3723b5"
+      },
+      "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "window": {
+        "lines": [
+          {
+            "is_target": false,
+            "line": 1050,
+            "text": "\t\t-f order=desc \\"
+          },
+          {
+            "is_target": false,
+            "line": 1051,
+            "text": "\t\t-f per_page=\"$limit\" \\"
+          },
+          {
+            "is_target": false,
+            "line": 1052,
+            "text": "\t\t--jq '.items[]?.number' 2>/dev/null"
+          },
+          {
+            "is_target": false,
+            "line": 1053,
+            "text": "\treturn $?"
+          },
+          {
+            "is_target": false,
+            "line": 1054,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 1055,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 1056,
+            "text": "_rf_extract_source_pr_number() {"
+          },
+          {
+            "is_target": false,
+            "line": 1057,
+            "text": "\tlocal issue_body=\"$1\""
+          },
+          {
+            "is_target": false,
+            "line": 1058,
+            "text": "\tlocal issue_title=\"$2\""
+          },
+          {
+            "is_target": false,
+            "line": 1059,
+            "text": "\tlocal source_pr=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 1060,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 1061,
+            "text": "\tsource_pr=$(printf '%s\\n%s\\n' \"$issue_body\" \"$issue_title\" | sed -En 's/.*source_pr=([0-9]+).*/\\1/p; s/.*fingerprint=source-pr-([0-9]+).*/\\1/p; s/.*\\*\\*Source PR\\*\\*:[[:space:]]*#?([0-9]+).*/\\1/p; s/.*Review followup:[[:space:]]*PR[[:space:]]*#?([0-9]+).*/\\1/p; s/.*feedback-route:(start|complete):review:PR([0-9]+):.*/\\2/p; s/.*Review Feedback routed from PR[[:space:]]*#?([0-9]+).*/\\1/p' | head -1)"
+          },
+          {
+            "is_target": false,
+            "line": 1062,
+            "text": "\tif [[ \"$source_pr\" =~ ^[0-9]+$ ]]; then"
+          },
+          {
+            "is_target": false,
+            "line": 1063,
+            "text": "\t\tprintf '%s\\n' \"$source_pr\""
+          },
+          {
+            "is_target": false,
+            "line": 1064,
+            "text": "\t\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 1065,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 1066,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 1067,
+            "text": "\treturn 1"
+          },
+          {
+            "is_target": false,
+            "line": 1068,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 1069,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 1070,
+            "text": "_rf_extract_routed_review_sha() {"
+          },
+          {
+            "is_target": false,
+            "line": 1071,
+            "text": "\tlocal issue_body=\"$1\""
+          },
+          {
+            "is_target": false,
+            "line": 1072,
+            "text": "\tlocal source_pr=\"$2\""
+          },
+          {
+            "is_target": false,
+            "line": 1073,
+            "text": "\tlocal source_sha=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 1074,
+            "text": ""
+          },
+          {
+            "is_target": true,
+            "line": 1075,
+            "text": "\t[[ \"$source_pr\" =~ ^[0-9]+$ ]] || return 1"
+          },
+          {
+            "is_target": false,
+            "line": 1076,
+            "text": "\tsource_sha=$(printf '%s' \"$issue_body\" | sed -En \"s/.*feedback-route:start:review:PR${source_pr}:SHA([0-9a-fA-F]{40}):.*/\\\\1/p\" | head -1)"
+          },
+          {
+            "is_target": false,
+            "line": 1077,
+            "text": "\tif [[ \"$source_sha\" =~ ^[0-9a-fA-F]{40}$ ]]; then"
+          },
+          {
+            "is_target": false,
+            "line": 1078,
+            "text": "\t\tprintf '%s\\n' \"$source_sha\""
+          },
+          {
+            "is_target": false,
+            "line": 1079,
+            "text": "\t\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 1080,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 1081,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 1082,
+            "text": "\treturn 1"
+          },
+          {
+            "is_target": false,
+            "line": 1083,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 1084,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 1085,
+            "text": "_rf_extract_routed_review_payload() {"
+          },
+          {
+            "is_target": false,
+            "line": 1086,
+            "text": "\tlocal issue_body=\"$1\""
+          },
+          {
+            "is_target": false,
+            "line": 1087,
+            "text": "\tlocal source_pr=\"$2\""
+          },
+          {
+            "is_target": false,
+            "line": 1088,
+            "text": "\tlocal payload=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 1089,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 1090,
+            "text": "\t[[ \"$source_pr\" =~ ^[0-9]+$ ]] || return 1"
+          },
+          {
+            "is_target": false,
+            "line": 1091,
+            "text": "\tpayload=$(printf '%s\\n' \"$issue_body\" | awk -v source_pr=\"$source_pr\" '"
+          },
+          {
+            "is_target": false,
+            "line": 1092,
+            "text": "\t\tindex($0, \"feedback-route:start:review:PR\" source_pr \":\") { capture = 1; next }"
+          },
+          {
+            "is_target": false,
+            "line": 1093,
+            "text": "\t\tcapture && index($0, \"feedback-route:complete:review:PR\" source_pr \":\") { exit }"
+          },
+          {
+            "is_target": false,
+            "line": 1094,
+            "text": "\t\t!capture && index($0, \"Review Feedback routed from PR #\" source_pr) { capture = 1 }"
+          },
+          {
+            "is_target": false,
+            "line": 1095,
+            "text": "\t\tcapture { print }"
+          },
+          {
+            "is_target": false,
+            "line": 1096,
+            "text": "\t')"
+          },
+          {
+            "is_target": false,
+            "line": 1097,
+            "text": "\tif [[ -n \"$payload\" ]]; then"
+          },
+          {
+            "is_target": false,
+            "line": 1098,
+            "text": "\t\tprintf '%s\\n' \"$payload\""
+          },
+          {
+            "is_target": false,
+            "line": 1099,
+            "text": "\t\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 1100,
+            "text": "\tfi"
+          }
+        ],
+        "path": ".agents/scripts/pre-dispatch-validator-helper.sh",
+        "target_line": 1075,
+        "token": "column-1",
+        "window_end": 1100,
+        "window_lines": 51,
+        "window_start": 1050
+      }
+    },
+    {
+      "call_kind": "search",
+      "decision": "skipped",
+      "pattern": "^[0-9a-fA-F]{40}$",
+      "rank": 3,
+      "rationale": "The SHA capture is already limited to 40 hex characters. The result is compared as data with GitHub review commit IDs; this regex does not feed a separate security-sensitive transformation.",
+      "reason_code": "commit_identity_filter",
+      "regex_id": "d402abf21f1409bff29e772b5c6ef32c",
+      "shortlist_site": ".agents/scripts/pre-dispatch-validator-helper.sh:1077:column-4",
+      "site": ".agents/scripts/pre-dispatch-validator-helper.sh:1077:column-4",
+      "source_binding": {
+        "evidence_ref": "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/pre-dispatch-validator-helper.sh",
+        "path": ".agents/scripts/pre-dispatch-validator-helper.sh",
+        "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+        "repository_url": "https://github.com/marcusquinn/aidevops",
+        "sha256": "b68445d5eaf510e820831422c6e064ac58bbdc4496483ad562df30786e3723b5"
+      },
+      "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "window": {
+        "lines": [
+          {
+            "is_target": false,
+            "line": 1052,
+            "text": "\t\t--jq '.items[]?.number' 2>/dev/null"
+          },
+          {
+            "is_target": false,
+            "line": 1053,
+            "text": "\treturn $?"
+          },
+          {
+            "is_target": false,
+            "line": 1054,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 1055,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 1056,
+            "text": "_rf_extract_source_pr_number() {"
+          },
+          {
+            "is_target": false,
+            "line": 1057,
+            "text": "\tlocal issue_body=\"$1\""
+          },
+          {
+            "is_target": false,
+            "line": 1058,
+            "text": "\tlocal issue_title=\"$2\""
+          },
+          {
+            "is_target": false,
+            "line": 1059,
+            "text": "\tlocal source_pr=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 1060,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 1061,
+            "text": "\tsource_pr=$(printf '%s\\n%s\\n' \"$issue_body\" \"$issue_title\" | sed -En 's/.*source_pr=([0-9]+).*/\\1/p; s/.*fingerprint=source-pr-([0-9]+).*/\\1/p; s/.*\\*\\*Source PR\\*\\*:[[:space:]]*#?([0-9]+).*/\\1/p; s/.*Review followup:[[:space:]]*PR[[:space:]]*#?([0-9]+).*/\\1/p; s/.*feedback-route:(start|complete):review:PR([0-9]+):.*/\\2/p; s/.*Review Feedback routed from PR[[:space:]]*#?([0-9]+).*/\\1/p' | head -1)"
+          },
+          {
+            "is_target": false,
+            "line": 1062,
+            "text": "\tif [[ \"$source_pr\" =~ ^[0-9]+$ ]]; then"
+          },
+          {
+            "is_target": false,
+            "line": 1063,
+            "text": "\t\tprintf '%s\\n' \"$source_pr\""
+          },
+          {
+            "is_target": false,
+            "line": 1064,
+            "text": "\t\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 1065,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 1066,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 1067,
+            "text": "\treturn 1"
+          },
+          {
+            "is_target": false,
+            "line": 1068,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 1069,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 1070,
+            "text": "_rf_extract_routed_review_sha() {"
+          },
+          {
+            "is_target": false,
+            "line": 1071,
+            "text": "\tlocal issue_body=\"$1\""
+          },
+          {
+            "is_target": false,
+            "line": 1072,
+            "text": "\tlocal source_pr=\"$2\""
+          },
+          {
+            "is_target": false,
+            "line": 1073,
+            "text": "\tlocal source_sha=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 1074,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 1075,
+            "text": "\t[[ \"$source_pr\" =~ ^[0-9]+$ ]] || return 1"
+          },
+          {
+            "is_target": false,
+            "line": 1076,
+            "text": "\tsource_sha=$(printf '%s' \"$issue_body\" | sed -En \"s/.*feedback-route:start:review:PR${source_pr}:SHA([0-9a-fA-F]{40}):.*/\\\\1/p\" | head -1)"
+          },
+          {
+            "is_target": true,
+            "line": 1077,
+            "text": "\tif [[ \"$source_sha\" =~ ^[0-9a-fA-F]{40}$ ]]; then"
+          },
+          {
+            "is_target": false,
+            "line": 1078,
+            "text": "\t\tprintf '%s\\n' \"$source_sha\""
+          },
+          {
+            "is_target": false,
+            "line": 1079,
+            "text": "\t\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 1080,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 1081,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 1082,
+            "text": "\treturn 1"
+          },
+          {
+            "is_target": false,
+            "line": 1083,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 1084,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 1085,
+            "text": "_rf_extract_routed_review_payload() {"
+          },
+          {
+            "is_target": false,
+            "line": 1086,
+            "text": "\tlocal issue_body=\"$1\""
+          },
+          {
+            "is_target": false,
+            "line": 1087,
+            "text": "\tlocal source_pr=\"$2\""
+          },
+          {
+            "is_target": false,
+            "line": 1088,
+            "text": "\tlocal payload=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 1089,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 1090,
+            "text": "\t[[ \"$source_pr\" =~ ^[0-9]+$ ]] || return 1"
+          },
+          {
+            "is_target": false,
+            "line": 1091,
+            "text": "\tpayload=$(printf '%s\\n' \"$issue_body\" | awk -v source_pr=\"$source_pr\" '"
+          },
+          {
+            "is_target": false,
+            "line": 1092,
+            "text": "\t\tindex($0, \"feedback-route:start:review:PR\" source_pr \":\") { capture = 1; next }"
+          },
+          {
+            "is_target": false,
+            "line": 1093,
+            "text": "\t\tcapture && index($0, \"feedback-route:complete:review:PR\" source_pr \":\") { exit }"
+          },
+          {
+            "is_target": false,
+            "line": 1094,
+            "text": "\t\t!capture && index($0, \"Review Feedback routed from PR #\" source_pr) { capture = 1 }"
+          },
+          {
+            "is_target": false,
+            "line": 1095,
+            "text": "\t\tcapture { print }"
+          },
+          {
+            "is_target": false,
+            "line": 1096,
+            "text": "\t')"
+          },
+          {
+            "is_target": false,
+            "line": 1097,
+            "text": "\tif [[ -n \"$payload\" ]]; then"
+          },
+          {
+            "is_target": false,
+            "line": 1098,
+            "text": "\t\tprintf '%s\\n' \"$payload\""
+          },
+          {
+            "is_target": false,
+            "line": 1099,
+            "text": "\t\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 1100,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 1101,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 1102,
+            "text": "\treturn 1"
+          }
+        ],
+        "path": ".agents/scripts/pre-dispatch-validator-helper.sh",
+        "target_line": 1077,
+        "token": "column-4",
+        "window_end": 1102,
+        "window_lines": 51,
+        "window_start": 1052
+      }
+    },
+    {
+      "call_kind": "search",
+      "decision": "skipped",
+      "pattern": "aidevops:generator=review-followup|source:review-scanner|review-followup:PR|Unaddressed review bot suggestions",
+      "rank": 4,
+      "rationale": "This presence search classifies review-followup evidence and controls fail-closed handling when metadata lookup fails. It does not validate the untrusted marker payload or establish a standalone boundary guarantee.",
+      "reason_code": "presence_classifier",
+      "regex_id": "f0ac4ff9d62e08b7a7b2b7bcb7f65337",
+      "shortlist_site": ".agents/scripts/pre-dispatch-validator-helper.sh:1574:column-31",
+      "site": ".agents/scripts/pre-dispatch-validator-helper.sh:1574:column-31",
+      "source_binding": {
+        "evidence_ref": "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/pre-dispatch-validator-helper.sh",
+        "path": ".agents/scripts/pre-dispatch-validator-helper.sh",
+        "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+        "repository_url": "https://github.com/marcusquinn/aidevops",
+        "sha256": "b68445d5eaf510e820831422c6e064ac58bbdc4496483ad562df30786e3723b5"
+      },
+      "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "window": {
+        "lines": [
+          {
+            "is_target": false,
+            "line": 1549,
+            "text": "\t_RF_CONTEXT_SEARCH_AFTER=\"$routed_review_at\""
+          },
+          {
+            "is_target": false,
+            "line": 1550,
+            "text": "\t_RF_CONTEXT_SEARCH_CONTEXT=\"routed review window for closed unmerged source PR #${_RF_CONTEXT_SOURCE_PR} after ${routed_review_at}\""
+          },
+          {
+            "is_target": false,
+            "line": 1551,
+            "text": "\t_RF_CONTEXT_ISSUE_TEXT=\"$routed_payload\""
+          },
+          {
+            "is_target": false,
+            "line": 1552,
+            "text": "\t_RF_CONTEXT_EVALUATION_ISSUE_NUMBER=\"0\""
+          },
+          {
+            "is_target": false,
+            "line": 1553,
+            "text": "\t_RF_CONTEXT_STRICT_MODE=\"true\""
+          },
+          {
+            "is_target": false,
+            "line": 1554,
+            "text": "\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 1555,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 1556,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 1557,
+            "text": "_detect_review_feedback_supersession() {"
+          },
+          {
+            "is_target": false,
+            "line": 1558,
+            "text": "\tlocal issue_number=\"$1\""
+          },
+          {
+            "is_target": false,
+            "line": 1559,
+            "text": "\tlocal slug=\"$2\""
+          },
+          {
+            "is_target": false,
+            "line": 1560,
+            "text": "\tlocal issue_body=\"$3\""
+          },
+          {
+            "is_target": false,
+            "line": 1561,
+            "text": "\tlocal issue_api_path=\"$4\""
+          },
+          {
+            "is_target": false,
+            "line": 1562,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 1563,
+            "text": "\tif [[ \"${AIDEVOPS_SKIP_REVIEW_FEEDBACK_SUPERSESSION:-}\" == \"1\" ]]; then"
+          },
+          {
+            "is_target": false,
+            "line": 1564,
+            "text": "\t\t_log \"INFO\" \"AIDEVOPS_SKIP_REVIEW_FEEDBACK_SUPERSESSION=1 — skipping review-feedback supersession detector\""
+          },
+          {
+            "is_target": false,
+            "line": 1565,
+            "text": "\t\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 1566,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 1567,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 1568,
+            "text": "\tlocal issue_meta=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 1569,
+            "text": "\tlocal created_at=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 1570,
+            "text": "\tlocal issue_title=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 1571,
+            "text": "\tlocal labels=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 1572,
+            "text": "\tissue_meta=$(gh api \"$issue_api_path\" --jq '[.created_at // \"\", .title // \"\", ([.labels[]?.name] | join(\",\"))] | @tsv' 2>/dev/null) || {"
+          },
+          {
+            "is_target": false,
+            "line": 1573,
+            "text": "\t\tif _rf_has_routed_review_evidence \"$issue_body\" ||"
+          },
+          {
+            "is_target": true,
+            "line": 1574,
+            "text": "\t\t\tprintf '%s' \"$issue_body\" | grep -Eq 'aidevops:generator=review-followup|source:review-scanner|review-followup:PR|Unaddressed review bot suggestions'; then"
+          },
+          {
+            "is_target": false,
+            "line": 1575,
+            "text": "\t\t\t_log \"WARN\" \"#${issue_number}: review-followup metadata lookup failed — dispatch blocked for this cycle\""
+          },
+          {
+            "is_target": false,
+            "line": 1576,
+            "text": "\t\t\treturn 30"
+          },
+          {
+            "is_target": false,
+            "line": 1577,
+            "text": "\t\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 1578,
+            "text": "\t\t_log \"WARN\" \"#${issue_number}: failed to fetch issue metadata for review-feedback supersession check — dispatch proceeds\""
+          },
+          {
+            "is_target": false,
+            "line": 1579,
+            "text": "\t\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 1580,
+            "text": "\t}"
+          },
+          {
+            "is_target": false,
+            "line": 1581,
+            "text": "\tIFS=$'\\t' read -r created_at issue_title labels <<<\"$issue_meta\""
+          },
+          {
+            "is_target": false,
+            "line": 1582,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 1583,
+            "text": "\tif ! _rf_issue_in_supersession_scope \"$issue_body\" \"$labels\" \"$issue_title\"; then"
+          },
+          {
+            "is_target": false,
+            "line": 1584,
+            "text": "\t\t_log \"INFO\" \"#${issue_number}: not review-feedback/quality-debt — supersession detector skips\""
+          },
+          {
+            "is_target": false,
+            "line": 1585,
+            "text": "\t\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 1586,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 1587,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 1588,
+            "text": "\tlocal duplicate_rc=0"
+          },
+          {
+            "is_target": false,
+            "line": 1589,
+            "text": "\t_rf_canonicalize_review_followup_duplicates \"$issue_number\" \"$slug\" \"$issue_body\" \"$issue_title\" \"$labels\" || duplicate_rc=$?"
+          },
+          {
+            "is_target": false,
+            "line": 1590,
+            "text": "\tif [[ \"$duplicate_rc\" -eq 10 || \"$duplicate_rc\" -eq 30 ]]; then"
+          },
+          {
+            "is_target": false,
+            "line": 1591,
+            "text": "\t\treturn \"$duplicate_rc\""
+          },
+          {
+            "is_target": false,
+            "line": 1592,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 1593,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 1594,
+            "text": "\tif [[ -z \"$created_at\" || \"$created_at\" != *T* ]]; then"
+          },
+          {
+            "is_target": false,
+            "line": 1595,
+            "text": "\t\tif _rf_has_routed_review_evidence \"$issue_body\"; then"
+          },
+          {
+            "is_target": false,
+            "line": 1596,
+            "text": "\t\t\t_log \"WARN\" \"#${issue_number}: routed review metadata omitted created_at — dispatch blocked for this cycle\""
+          },
+          {
+            "is_target": false,
+            "line": 1597,
+            "text": "\t\t\treturn 30"
+          },
+          {
+            "is_target": false,
+            "line": 1598,
+            "text": "\t\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 1599,
+            "text": "\t\t_log \"WARN\" \"#${issue_number}: missing created_at metadata — review-feedback supersession check fails open\""
+          }
+        ],
+        "path": ".agents/scripts/pre-dispatch-validator-helper.sh",
+        "target_line": 1574,
+        "token": "column-31",
+        "window_end": 1599,
+        "window_lines": 51,
+        "window_start": 1549
+      }
+    },
+    {
+      "call_kind": "substitution",
+      "decision": "skipped",
+      "pattern": "cited_file=",
+      "rank": 5,
+      "rationale": "This substitution strips the fixed cited_file= key after the token capture. It does not constrain the path; the line-1878 token grammar and filesystem sink are covered by the first-wave contract.",
+      "reason_code": "prefix_strip_only",
+      "regex_id": "94007cad844a13064fdbd898542938e3",
+      "shortlist_site": ".agents/scripts/pre-dispatch-validator-helper.sh:1878:column-77",
+      "site": ".agents/scripts/pre-dispatch-validator-helper.sh:1878:column-77",
+      "source_binding": {
+        "evidence_ref": "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/pre-dispatch-validator-helper.sh",
+        "path": ".agents/scripts/pre-dispatch-validator-helper.sh",
+        "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+        "repository_url": "https://github.com/marcusquinn/aidevops",
+        "sha256": "b68445d5eaf510e820831422c6e064ac58bbdc4496483ad562df30786e3723b5"
+      },
+      "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "window": {
+        "lines": [
+          {
+            "is_target": false,
+            "line": 1853,
+            "text": "\tif [[ \"$pre_generator_rc\" -eq 10 ]]; then"
+          },
+          {
+            "is_target": false,
+            "line": 1854,
+            "text": "\t\treturn 10"
+          },
+          {
+            "is_target": false,
+            "line": 1855,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 1856,
+            "text": "\tif [[ \"$pre_generator_rc\" -eq 30 ]]; then"
+          },
+          {
+            "is_target": false,
+            "line": 1857,
+            "text": "\t\treturn 30"
+          },
+          {
+            "is_target": false,
+            "line": 1858,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 1859,
+            "text": "\tif [[ \"$pre_generator_rc\" -ne 0 ]]; then"
+          },
+          {
+            "is_target": false,
+            "line": 1860,
+            "text": "\t\t_log \"WARN\" \"#${issue_number}: pre-generator validator returned rc=${pre_generator_rc} — dispatch proceeds\""
+          },
+          {
+            "is_target": false,
+            "line": 1861,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 1862,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 1863,
+            "text": "\t# Extract generator marker (supports both simple and attributed forms):"
+          },
+          {
+            "is_target": false,
+            "line": 1864,
+            "text": "\t#   <!-- aidevops:generator=<name> -->"
+          },
+          {
+            "is_target": false,
+            "line": 1865,
+            "text": "\t#   <!-- aidevops:generator=<name> cited_file=<path> threshold=<N> -->"
+          },
+          {
+            "is_target": false,
+            "line": 1866,
+            "text": "\tlocal generator_line"
+          },
+          {
+            "is_target": false,
+            "line": 1867,
+            "text": "\tgenerator_line=$(printf '%s' \"$issue_body\" | grep -oE '<!-- aidevops:generator=[a-z0-9_-]+[^>]*-->' | head -1) || generator_line=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 1868,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 1869,
+            "text": "\tlocal generator"
+          },
+          {
+            "is_target": false,
+            "line": 1870,
+            "text": "\tgenerator=$(printf '%s' \"$generator_line\" | sed 's/<!-- aidevops:generator=//;s/ .*//' 2>/dev/null) || generator=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 1871,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 1872,
+            "text": "\tif [[ -z \"$generator\" ]]; then"
+          },
+          {
+            "is_target": false,
+            "line": 1873,
+            "text": "\t\t_log \"INFO\" \"#${issue_number}: no generator marker found — unregistered generator, dispatch proceeds\""
+          },
+          {
+            "is_target": false,
+            "line": 1874,
+            "text": "\t\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 1875,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 1876,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 1877,
+            "text": "\t# Extract optional attributes: cited_file, threshold, upstream_slug, detector, stall_hours"
+          },
+          {
+            "is_target": true,
+            "line": 1878,
+            "text": "\tCITED_FILE=$(printf '%s' \"$generator_line\" | grep -oE 'cited_file=[^ >]+' | sed 's/cited_file=//' 2>/dev/null) || CITED_FILE=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 1879,
+            "text": "\tCITED_THRESHOLD=$(printf '%s' \"$generator_line\" | grep -oE 'threshold=[0-9]+' | sed 's/threshold=//' 2>/dev/null) || CITED_THRESHOLD=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 1880,
+            "text": "\tUPSTREAM_SLUG=$(printf '%s' \"$generator_line\" | grep -oE 'upstream_slug=[^ >]+' | sed 's/upstream_slug=//' 2>/dev/null) || UPSTREAM_SLUG=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 1881,
+            "text": "\tDETECTOR_ID=$(printf '%s' \"$generator_line\" | grep -oE 'detector=[a-z0-9_-]+' | sed 's/detector=//' 2>/dev/null) || DETECTOR_ID=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 1882,
+            "text": "\tSTALL_WINDOW_HOURS=$(printf '%s' \"$generator_line\" | grep -oE 'stall_hours=[0-9]+' | sed 's/stall_hours=//' 2>/dev/null) || STALL_WINDOW_HOURS=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 1883,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 1884,
+            "text": "\t_log \"INFO\" \"#${issue_number}: generator=${generator} cited_file=${CITED_FILE:-<none>} threshold=${CITED_THRESHOLD:-<none>} detector=${DETECTOR_ID:-<none>}\""
+          },
+          {
+            "is_target": false,
+            "line": 1885,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 1886,
+            "text": "\t# Look up validator"
+          },
+          {
+            "is_target": false,
+            "line": 1887,
+            "text": "\t_register_validators"
+          },
+          {
+            "is_target": false,
+            "line": 1888,
+            "text": "\tlocal validator_fn=\"${_VALIDATOR_REGISTRY[$generator]:-}\""
+          },
+          {
+            "is_target": false,
+            "line": 1889,
+            "text": "\tif [[ -z \"$validator_fn\" ]]; then"
+          },
+          {
+            "is_target": false,
+            "line": 1890,
+            "text": "\t\t_log \"INFO\" \"#${issue_number}: generator '${generator}' has no registered validator — dispatch proceeds\""
+          },
+          {
+            "is_target": false,
+            "line": 1891,
+            "text": "\t\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 1892,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 1893,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 1894,
+            "text": "\t# Set up scratch dir with cleanup trap"
+          },
+          {
+            "is_target": false,
+            "line": 1895,
+            "text": "\tSCRATCH_DIR=$(mktemp -d 2>/dev/null) || {"
+          },
+          {
+            "is_target": false,
+            "line": 1896,
+            "text": "\t\t_log \"WARN\" \"Failed to create scratch dir — treating as validator error\""
+          },
+          {
+            "is_target": false,
+            "line": 1897,
+            "text": "\t\treturn 20"
+          },
+          {
+            "is_target": false,
+            "line": 1898,
+            "text": "\t}"
+          },
+          {
+            "is_target": false,
+            "line": 1899,
+            "text": "\t# shellcheck disable=SC2064"
+          },
+          {
+            "is_target": false,
+            "line": 1900,
+            "text": "\ttrap \"rm -rf '${SCRATCH_DIR}'\" EXIT"
+          },
+          {
+            "is_target": false,
+            "line": 1901,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 1902,
+            "text": "\t# Run validator (VALIDATOR_RATIONALE may be set by the validator for"
+          },
+          {
+            "is_target": false,
+            "line": 1903,
+            "text": "\t# specific evidence in the closure comment)"
+          }
+        ],
+        "path": ".agents/scripts/pre-dispatch-validator-helper.sh",
+        "target_line": 1878,
+        "token": "column-77",
+        "window_end": 1903,
+        "window_lines": 51,
+        "window_start": 1853
+      }
+    },
+    {
+      "call_kind": "search",
+      "decision": "adopted",
+      "pattern": "threshold=[0-9]+",
+      "rank": 6,
+      "rationale": "The value is extracted from untrusted issue-body text and compared with wc -l through Bash [[ -lt ]]. The pinned producer emits a decimal LARGE_FILE_LINE_THRESHOLD and the helper contract says the current line count is compared to that threshold. The regex accepts 08, which Bash arithmetic treats as invalid octal; exact-helper replay on a five-line fixture logs an arithmetic error, takes the “premise holds” return-0 path, and proceeds instead of returning 10 for 5 < decimal 8.",
+      "reason_code": "bash_decimal_threshold_semantics",
+      "regex_id": "74fe9f403cf62d875f8b4ef8537381d4",
+      "shortlist_site": ".agents/scripts/pre-dispatch-validator-helper.sh:1879:column-51",
+      "site": ".agents/scripts/pre-dispatch-validator-helper.sh:1879:column-51",
+      "source_binding": {
+        "evidence_ref": "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/pre-dispatch-validator-helper.sh",
+        "path": ".agents/scripts/pre-dispatch-validator-helper.sh",
+        "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+        "repository_url": "https://github.com/marcusquinn/aidevops",
+        "sha256": "b68445d5eaf510e820831422c6e064ac58bbdc4496483ad562df30786e3723b5"
+      },
+      "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "window": {
+        "lines": [
+          {
+            "is_target": false,
+            "line": 1854,
+            "text": "\t\treturn 10"
+          },
+          {
+            "is_target": false,
+            "line": 1855,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 1856,
+            "text": "\tif [[ \"$pre_generator_rc\" -eq 30 ]]; then"
+          },
+          {
+            "is_target": false,
+            "line": 1857,
+            "text": "\t\treturn 30"
+          },
+          {
+            "is_target": false,
+            "line": 1858,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 1859,
+            "text": "\tif [[ \"$pre_generator_rc\" -ne 0 ]]; then"
+          },
+          {
+            "is_target": false,
+            "line": 1860,
+            "text": "\t\t_log \"WARN\" \"#${issue_number}: pre-generator validator returned rc=${pre_generator_rc} — dispatch proceeds\""
+          },
+          {
+            "is_target": false,
+            "line": 1861,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 1862,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 1863,
+            "text": "\t# Extract generator marker (supports both simple and attributed forms):"
+          },
+          {
+            "is_target": false,
+            "line": 1864,
+            "text": "\t#   <!-- aidevops:generator=<name> -->"
+          },
+          {
+            "is_target": false,
+            "line": 1865,
+            "text": "\t#   <!-- aidevops:generator=<name> cited_file=<path> threshold=<N> -->"
+          },
+          {
+            "is_target": false,
+            "line": 1866,
+            "text": "\tlocal generator_line"
+          },
+          {
+            "is_target": false,
+            "line": 1867,
+            "text": "\tgenerator_line=$(printf '%s' \"$issue_body\" | grep -oE '<!-- aidevops:generator=[a-z0-9_-]+[^>]*-->' | head -1) || generator_line=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 1868,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 1869,
+            "text": "\tlocal generator"
+          },
+          {
+            "is_target": false,
+            "line": 1870,
+            "text": "\tgenerator=$(printf '%s' \"$generator_line\" | sed 's/<!-- aidevops:generator=//;s/ .*//' 2>/dev/null) || generator=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 1871,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 1872,
+            "text": "\tif [[ -z \"$generator\" ]]; then"
+          },
+          {
+            "is_target": false,
+            "line": 1873,
+            "text": "\t\t_log \"INFO\" \"#${issue_number}: no generator marker found — unregistered generator, dispatch proceeds\""
+          },
+          {
+            "is_target": false,
+            "line": 1874,
+            "text": "\t\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 1875,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 1876,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 1877,
+            "text": "\t# Extract optional attributes: cited_file, threshold, upstream_slug, detector, stall_hours"
+          },
+          {
+            "is_target": false,
+            "line": 1878,
+            "text": "\tCITED_FILE=$(printf '%s' \"$generator_line\" | grep -oE 'cited_file=[^ >]+' | sed 's/cited_file=//' 2>/dev/null) || CITED_FILE=\"\""
+          },
+          {
+            "is_target": true,
+            "line": 1879,
+            "text": "\tCITED_THRESHOLD=$(printf '%s' \"$generator_line\" | grep -oE 'threshold=[0-9]+' | sed 's/threshold=//' 2>/dev/null) || CITED_THRESHOLD=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 1880,
+            "text": "\tUPSTREAM_SLUG=$(printf '%s' \"$generator_line\" | grep -oE 'upstream_slug=[^ >]+' | sed 's/upstream_slug=//' 2>/dev/null) || UPSTREAM_SLUG=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 1881,
+            "text": "\tDETECTOR_ID=$(printf '%s' \"$generator_line\" | grep -oE 'detector=[a-z0-9_-]+' | sed 's/detector=//' 2>/dev/null) || DETECTOR_ID=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 1882,
+            "text": "\tSTALL_WINDOW_HOURS=$(printf '%s' \"$generator_line\" | grep -oE 'stall_hours=[0-9]+' | sed 's/stall_hours=//' 2>/dev/null) || STALL_WINDOW_HOURS=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 1883,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 1884,
+            "text": "\t_log \"INFO\" \"#${issue_number}: generator=${generator} cited_file=${CITED_FILE:-<none>} threshold=${CITED_THRESHOLD:-<none>} detector=${DETECTOR_ID:-<none>}\""
+          },
+          {
+            "is_target": false,
+            "line": 1885,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 1886,
+            "text": "\t# Look up validator"
+          },
+          {
+            "is_target": false,
+            "line": 1887,
+            "text": "\t_register_validators"
+          },
+          {
+            "is_target": false,
+            "line": 1888,
+            "text": "\tlocal validator_fn=\"${_VALIDATOR_REGISTRY[$generator]:-}\""
+          },
+          {
+            "is_target": false,
+            "line": 1889,
+            "text": "\tif [[ -z \"$validator_fn\" ]]; then"
+          },
+          {
+            "is_target": false,
+            "line": 1890,
+            "text": "\t\t_log \"INFO\" \"#${issue_number}: generator '${generator}' has no registered validator — dispatch proceeds\""
+          },
+          {
+            "is_target": false,
+            "line": 1891,
+            "text": "\t\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 1892,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 1893,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 1894,
+            "text": "\t# Set up scratch dir with cleanup trap"
+          },
+          {
+            "is_target": false,
+            "line": 1895,
+            "text": "\tSCRATCH_DIR=$(mktemp -d 2>/dev/null) || {"
+          },
+          {
+            "is_target": false,
+            "line": 1896,
+            "text": "\t\t_log \"WARN\" \"Failed to create scratch dir — treating as validator error\""
+          },
+          {
+            "is_target": false,
+            "line": 1897,
+            "text": "\t\treturn 20"
+          },
+          {
+            "is_target": false,
+            "line": 1898,
+            "text": "\t}"
+          },
+          {
+            "is_target": false,
+            "line": 1899,
+            "text": "\t# shellcheck disable=SC2064"
+          },
+          {
+            "is_target": false,
+            "line": 1900,
+            "text": "\ttrap \"rm -rf '${SCRATCH_DIR}'\" EXIT"
+          },
+          {
+            "is_target": false,
+            "line": 1901,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 1902,
+            "text": "\t# Run validator (VALIDATOR_RATIONALE may be set by the validator for"
+          },
+          {
+            "is_target": false,
+            "line": 1903,
+            "text": "\t# specific evidence in the closure comment)"
+          },
+          {
+            "is_target": false,
+            "line": 1904,
+            "text": "\tVALIDATOR_RATIONALE=\"\""
+          }
+        ],
+        "path": ".agents/scripts/pre-dispatch-validator-helper.sh",
+        "target_line": 1879,
+        "token": "column-51",
+        "window_end": 1904,
+        "window_lines": 51,
+        "window_start": 1854
+      }
+    },
+    {
+      "call_kind": "substitution",
+      "decision": "skipped",
+      "pattern": "threshold=",
+      "rank": 7,
+      "rationale": "This substitution removes the threshold= prefix and imposes no independent value constraint. The numeric token grammar and its Bash arithmetic consumer are the reviewed boundary.",
+      "reason_code": "prefix_strip_only",
+      "regex_id": "9bfa5841cb29143635d48f33ea102135",
+      "shortlist_site": ".agents/scripts/pre-dispatch-validator-helper.sh:1879:column-81",
+      "site": ".agents/scripts/pre-dispatch-validator-helper.sh:1879:column-81",
+      "source_binding": {
+        "evidence_ref": "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/pre-dispatch-validator-helper.sh",
+        "path": ".agents/scripts/pre-dispatch-validator-helper.sh",
+        "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+        "repository_url": "https://github.com/marcusquinn/aidevops",
+        "sha256": "b68445d5eaf510e820831422c6e064ac58bbdc4496483ad562df30786e3723b5"
+      },
+      "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "window": {
+        "lines": [
+          {
+            "is_target": false,
+            "line": 1854,
+            "text": "\t\treturn 10"
+          },
+          {
+            "is_target": false,
+            "line": 1855,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 1856,
+            "text": "\tif [[ \"$pre_generator_rc\" -eq 30 ]]; then"
+          },
+          {
+            "is_target": false,
+            "line": 1857,
+            "text": "\t\treturn 30"
+          },
+          {
+            "is_target": false,
+            "line": 1858,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 1859,
+            "text": "\tif [[ \"$pre_generator_rc\" -ne 0 ]]; then"
+          },
+          {
+            "is_target": false,
+            "line": 1860,
+            "text": "\t\t_log \"WARN\" \"#${issue_number}: pre-generator validator returned rc=${pre_generator_rc} — dispatch proceeds\""
+          },
+          {
+            "is_target": false,
+            "line": 1861,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 1862,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 1863,
+            "text": "\t# Extract generator marker (supports both simple and attributed forms):"
+          },
+          {
+            "is_target": false,
+            "line": 1864,
+            "text": "\t#   <!-- aidevops:generator=<name> -->"
+          },
+          {
+            "is_target": false,
+            "line": 1865,
+            "text": "\t#   <!-- aidevops:generator=<name> cited_file=<path> threshold=<N> -->"
+          },
+          {
+            "is_target": false,
+            "line": 1866,
+            "text": "\tlocal generator_line"
+          },
+          {
+            "is_target": false,
+            "line": 1867,
+            "text": "\tgenerator_line=$(printf '%s' \"$issue_body\" | grep -oE '<!-- aidevops:generator=[a-z0-9_-]+[^>]*-->' | head -1) || generator_line=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 1868,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 1869,
+            "text": "\tlocal generator"
+          },
+          {
+            "is_target": false,
+            "line": 1870,
+            "text": "\tgenerator=$(printf '%s' \"$generator_line\" | sed 's/<!-- aidevops:generator=//;s/ .*//' 2>/dev/null) || generator=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 1871,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 1872,
+            "text": "\tif [[ -z \"$generator\" ]]; then"
+          },
+          {
+            "is_target": false,
+            "line": 1873,
+            "text": "\t\t_log \"INFO\" \"#${issue_number}: no generator marker found — unregistered generator, dispatch proceeds\""
+          },
+          {
+            "is_target": false,
+            "line": 1874,
+            "text": "\t\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 1875,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 1876,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 1877,
+            "text": "\t# Extract optional attributes: cited_file, threshold, upstream_slug, detector, stall_hours"
+          },
+          {
+            "is_target": false,
+            "line": 1878,
+            "text": "\tCITED_FILE=$(printf '%s' \"$generator_line\" | grep -oE 'cited_file=[^ >]+' | sed 's/cited_file=//' 2>/dev/null) || CITED_FILE=\"\""
+          },
+          {
+            "is_target": true,
+            "line": 1879,
+            "text": "\tCITED_THRESHOLD=$(printf '%s' \"$generator_line\" | grep -oE 'threshold=[0-9]+' | sed 's/threshold=//' 2>/dev/null) || CITED_THRESHOLD=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 1880,
+            "text": "\tUPSTREAM_SLUG=$(printf '%s' \"$generator_line\" | grep -oE 'upstream_slug=[^ >]+' | sed 's/upstream_slug=//' 2>/dev/null) || UPSTREAM_SLUG=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 1881,
+            "text": "\tDETECTOR_ID=$(printf '%s' \"$generator_line\" | grep -oE 'detector=[a-z0-9_-]+' | sed 's/detector=//' 2>/dev/null) || DETECTOR_ID=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 1882,
+            "text": "\tSTALL_WINDOW_HOURS=$(printf '%s' \"$generator_line\" | grep -oE 'stall_hours=[0-9]+' | sed 's/stall_hours=//' 2>/dev/null) || STALL_WINDOW_HOURS=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 1883,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 1884,
+            "text": "\t_log \"INFO\" \"#${issue_number}: generator=${generator} cited_file=${CITED_FILE:-<none>} threshold=${CITED_THRESHOLD:-<none>} detector=${DETECTOR_ID:-<none>}\""
+          },
+          {
+            "is_target": false,
+            "line": 1885,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 1886,
+            "text": "\t# Look up validator"
+          },
+          {
+            "is_target": false,
+            "line": 1887,
+            "text": "\t_register_validators"
+          },
+          {
+            "is_target": false,
+            "line": 1888,
+            "text": "\tlocal validator_fn=\"${_VALIDATOR_REGISTRY[$generator]:-}\""
+          },
+          {
+            "is_target": false,
+            "line": 1889,
+            "text": "\tif [[ -z \"$validator_fn\" ]]; then"
+          },
+          {
+            "is_target": false,
+            "line": 1890,
+            "text": "\t\t_log \"INFO\" \"#${issue_number}: generator '${generator}' has no registered validator — dispatch proceeds\""
+          },
+          {
+            "is_target": false,
+            "line": 1891,
+            "text": "\t\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 1892,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 1893,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 1894,
+            "text": "\t# Set up scratch dir with cleanup trap"
+          },
+          {
+            "is_target": false,
+            "line": 1895,
+            "text": "\tSCRATCH_DIR=$(mktemp -d 2>/dev/null) || {"
+          },
+          {
+            "is_target": false,
+            "line": 1896,
+            "text": "\t\t_log \"WARN\" \"Failed to create scratch dir — treating as validator error\""
+          },
+          {
+            "is_target": false,
+            "line": 1897,
+            "text": "\t\treturn 20"
+          },
+          {
+            "is_target": false,
+            "line": 1898,
+            "text": "\t}"
+          },
+          {
+            "is_target": false,
+            "line": 1899,
+            "text": "\t# shellcheck disable=SC2064"
+          },
+          {
+            "is_target": false,
+            "line": 1900,
+            "text": "\ttrap \"rm -rf '${SCRATCH_DIR}'\" EXIT"
+          },
+          {
+            "is_target": false,
+            "line": 1901,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 1902,
+            "text": "\t# Run validator (VALIDATOR_RATIONALE may be set by the validator for"
+          },
+          {
+            "is_target": false,
+            "line": 1903,
+            "text": "\t# specific evidence in the closure comment)"
+          },
+          {
+            "is_target": false,
+            "line": 1904,
+            "text": "\tVALIDATOR_RATIONALE=\"\""
+          }
+        ],
+        "path": ".agents/scripts/pre-dispatch-validator-helper.sh",
+        "target_line": 1879,
+        "token": "column-81",
+        "window_end": 1904,
+        "window_lines": 51,
+        "window_start": 1854
+      }
+    },
+    {
+      "call_kind": "search",
+      "decision": "skipped",
+      "pattern": "stall_hours=[0-9]+",
+      "rank": 8,
+      "rationale": "The captured stall_hours value is checked again against the stricter whole-value pattern ^[1-9][0-9]*$ before arithmetic. Multiple matches or leading zeroes are rejected by that later guard.",
+      "reason_code": "downstream_numeric_guard",
+      "regex_id": "a90d86147cd1c07be88679df5aa0f152",
+      "shortlist_site": ".agents/scripts/pre-dispatch-validator-helper.sh:1882:column-54",
+      "site": ".agents/scripts/pre-dispatch-validator-helper.sh:1882:column-54",
+      "source_binding": {
+        "evidence_ref": "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/pre-dispatch-validator-helper.sh",
+        "path": ".agents/scripts/pre-dispatch-validator-helper.sh",
+        "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+        "repository_url": "https://github.com/marcusquinn/aidevops",
+        "sha256": "b68445d5eaf510e820831422c6e064ac58bbdc4496483ad562df30786e3723b5"
+      },
+      "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "window": {
+        "lines": [
+          {
+            "is_target": false,
+            "line": 1857,
+            "text": "\t\treturn 30"
+          },
+          {
+            "is_target": false,
+            "line": 1858,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 1859,
+            "text": "\tif [[ \"$pre_generator_rc\" -ne 0 ]]; then"
+          },
+          {
+            "is_target": false,
+            "line": 1860,
+            "text": "\t\t_log \"WARN\" \"#${issue_number}: pre-generator validator returned rc=${pre_generator_rc} — dispatch proceeds\""
+          },
+          {
+            "is_target": false,
+            "line": 1861,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 1862,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 1863,
+            "text": "\t# Extract generator marker (supports both simple and attributed forms):"
+          },
+          {
+            "is_target": false,
+            "line": 1864,
+            "text": "\t#   <!-- aidevops:generator=<name> -->"
+          },
+          {
+            "is_target": false,
+            "line": 1865,
+            "text": "\t#   <!-- aidevops:generator=<name> cited_file=<path> threshold=<N> -->"
+          },
+          {
+            "is_target": false,
+            "line": 1866,
+            "text": "\tlocal generator_line"
+          },
+          {
+            "is_target": false,
+            "line": 1867,
+            "text": "\tgenerator_line=$(printf '%s' \"$issue_body\" | grep -oE '<!-- aidevops:generator=[a-z0-9_-]+[^>]*-->' | head -1) || generator_line=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 1868,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 1869,
+            "text": "\tlocal generator"
+          },
+          {
+            "is_target": false,
+            "line": 1870,
+            "text": "\tgenerator=$(printf '%s' \"$generator_line\" | sed 's/<!-- aidevops:generator=//;s/ .*//' 2>/dev/null) || generator=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 1871,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 1872,
+            "text": "\tif [[ -z \"$generator\" ]]; then"
+          },
+          {
+            "is_target": false,
+            "line": 1873,
+            "text": "\t\t_log \"INFO\" \"#${issue_number}: no generator marker found — unregistered generator, dispatch proceeds\""
+          },
+          {
+            "is_target": false,
+            "line": 1874,
+            "text": "\t\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 1875,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 1876,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 1877,
+            "text": "\t# Extract optional attributes: cited_file, threshold, upstream_slug, detector, stall_hours"
+          },
+          {
+            "is_target": false,
+            "line": 1878,
+            "text": "\tCITED_FILE=$(printf '%s' \"$generator_line\" | grep -oE 'cited_file=[^ >]+' | sed 's/cited_file=//' 2>/dev/null) || CITED_FILE=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 1879,
+            "text": "\tCITED_THRESHOLD=$(printf '%s' \"$generator_line\" | grep -oE 'threshold=[0-9]+' | sed 's/threshold=//' 2>/dev/null) || CITED_THRESHOLD=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 1880,
+            "text": "\tUPSTREAM_SLUG=$(printf '%s' \"$generator_line\" | grep -oE 'upstream_slug=[^ >]+' | sed 's/upstream_slug=//' 2>/dev/null) || UPSTREAM_SLUG=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 1881,
+            "text": "\tDETECTOR_ID=$(printf '%s' \"$generator_line\" | grep -oE 'detector=[a-z0-9_-]+' | sed 's/detector=//' 2>/dev/null) || DETECTOR_ID=\"\""
+          },
+          {
+            "is_target": true,
+            "line": 1882,
+            "text": "\tSTALL_WINDOW_HOURS=$(printf '%s' \"$generator_line\" | grep -oE 'stall_hours=[0-9]+' | sed 's/stall_hours=//' 2>/dev/null) || STALL_WINDOW_HOURS=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 1883,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 1884,
+            "text": "\t_log \"INFO\" \"#${issue_number}: generator=${generator} cited_file=${CITED_FILE:-<none>} threshold=${CITED_THRESHOLD:-<none>} detector=${DETECTOR_ID:-<none>}\""
+          },
+          {
+            "is_target": false,
+            "line": 1885,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 1886,
+            "text": "\t# Look up validator"
+          },
+          {
+            "is_target": false,
+            "line": 1887,
+            "text": "\t_register_validators"
+          },
+          {
+            "is_target": false,
+            "line": 1888,
+            "text": "\tlocal validator_fn=\"${_VALIDATOR_REGISTRY[$generator]:-}\""
+          },
+          {
+            "is_target": false,
+            "line": 1889,
+            "text": "\tif [[ -z \"$validator_fn\" ]]; then"
+          },
+          {
+            "is_target": false,
+            "line": 1890,
+            "text": "\t\t_log \"INFO\" \"#${issue_number}: generator '${generator}' has no registered validator — dispatch proceeds\""
+          },
+          {
+            "is_target": false,
+            "line": 1891,
+            "text": "\t\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 1892,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 1893,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 1894,
+            "text": "\t# Set up scratch dir with cleanup trap"
+          },
+          {
+            "is_target": false,
+            "line": 1895,
+            "text": "\tSCRATCH_DIR=$(mktemp -d 2>/dev/null) || {"
+          },
+          {
+            "is_target": false,
+            "line": 1896,
+            "text": "\t\t_log \"WARN\" \"Failed to create scratch dir — treating as validator error\""
+          },
+          {
+            "is_target": false,
+            "line": 1897,
+            "text": "\t\treturn 20"
+          },
+          {
+            "is_target": false,
+            "line": 1898,
+            "text": "\t}"
+          },
+          {
+            "is_target": false,
+            "line": 1899,
+            "text": "\t# shellcheck disable=SC2064"
+          },
+          {
+            "is_target": false,
+            "line": 1900,
+            "text": "\ttrap \"rm -rf '${SCRATCH_DIR}'\" EXIT"
+          },
+          {
+            "is_target": false,
+            "line": 1901,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 1902,
+            "text": "\t# Run validator (VALIDATOR_RATIONALE may be set by the validator for"
+          },
+          {
+            "is_target": false,
+            "line": 1903,
+            "text": "\t# specific evidence in the closure comment)"
+          },
+          {
+            "is_target": false,
+            "line": 1904,
+            "text": "\tVALIDATOR_RATIONALE=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 1905,
+            "text": "\tlocal validator_rc=0"
+          },
+          {
+            "is_target": false,
+            "line": 1906,
+            "text": "\t\"$validator_fn\" \"$slug\" || validator_rc=$?"
+          },
+          {
+            "is_target": false,
+            "line": 1907,
+            "text": ""
+          }
+        ],
+        "path": ".agents/scripts/pre-dispatch-validator-helper.sh",
+        "target_line": 1882,
+        "token": "column-54",
+        "window_end": 1907,
+        "window_lines": 51,
+        "window_start": 1857
+      }
+    },
+    {
+      "call_kind": "search",
+      "decision": "skipped",
+      "pattern": "cited_file=[^ >]+",
+      "rank": 9,
+      "rationale": "This cited_file capture is used to form a quoted gh issue-search argument for duplicate detection, not a local path read. Shell argument quoting is present; no concrete search-language consequence or security impact was established in this review.",
+      "reason_code": "github_search_argument",
+      "regex_id": "e3c276b4b79b794ead2391c6e95852b4",
+      "shortlist_site": ".agents/scripts/pre-dispatch-validator-helper.sh:273:column-33",
+      "site": ".agents/scripts/pre-dispatch-validator-helper.sh:273:column-33",
+      "source_binding": {
+        "evidence_ref": "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/pre-dispatch-validator-helper.sh",
+        "path": ".agents/scripts/pre-dispatch-validator-helper.sh",
+        "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+        "repository_url": "https://github.com/marcusquinn/aidevops",
+        "sha256": "b68445d5eaf510e820831422c6e064ac58bbdc4496483ad562df30786e3723b5"
+      },
+      "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "window": {
+        "lines": [
+          {
+            "is_target": false,
+            "line": 248,
+            "text": "\t\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 249,
+            "text": "\t\tVALIDATOR_RATIONALE=\"Throughput resumed: ${recent_closures} function-complexity-debt issue(s) closed in the last ${stall_hours}h. The stall premise recovered before dispatch.\""
+          },
+          {
+            "is_target": false,
+            "line": 250,
+            "text": "\t\t_log \"INFO\" \"complexity-stall-sweep validator: ${recent_closures} recent closure(s) — premise falsified\""
+          },
+          {
+            "is_target": false,
+            "line": 251,
+            "text": "\t\treturn 10"
+          },
+          {
+            "is_target": false,
+            "line": 252,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 253,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 254,
+            "text": "\t_log \"INFO\" \"complexity-stall-sweep validator: zero recent closures — premise holds\""
+          },
+          {
+            "is_target": false,
+            "line": 255,
+            "text": "\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 256,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 257,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 258,
+            "text": "# ---------------------------------------------------------------------------"
+          },
+          {
+            "is_target": false,
+            "line": 259,
+            "text": "# Function-complexity-sweep duplicate detector."
+          },
+          {
+            "is_target": false,
+            "line": 260,
+            "text": "#"
+          },
+          {
+            "is_target": false,
+            "line": 261,
+            "text": "# The quality sweep emits one issue per cited file. Older sweep versions"
+          },
+          {
+            "is_target": false,
+            "line": 262,
+            "text": "# deduped by title using the full path even though the title only contained the"
+          },
+          {
+            "is_target": false,
+            "line": 263,
+            "text": "# basename, which allowed duplicate issues for the same cited_file marker. Close"
+          },
+          {
+            "is_target": false,
+            "line": 264,
+            "text": "# later duplicates before worker launch so two workers do not race the same file."
+          },
+          {
+            "is_target": false,
+            "line": 265,
+            "text": "# ---------------------------------------------------------------------------"
+          },
+          {
+            "is_target": false,
+            "line": 266,
+            "text": "_extract_function_complexity_sweep_cited_file() {"
+          },
+          {
+            "is_target": false,
+            "line": 267,
+            "text": "\tlocal issue_body=\"$1\""
+          },
+          {
+            "is_target": false,
+            "line": 268,
+            "text": "\tlocal generator_line=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 269,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 270,
+            "text": "\tgenerator_line=$(printf '%s' \"$issue_body\" | grep -oE '<!-- aidevops:generator=function-complexity-sweep[^>]*-->' | head -1) || generator_line=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 271,
+            "text": "\t[[ -n \"$generator_line\" ]] || return 1"
+          },
+          {
+            "is_target": false,
+            "line": 272,
+            "text": ""
+          },
+          {
+            "is_target": true,
+            "line": 273,
+            "text": "\tprintf '%s' \"$generator_line\" | grep -oE 'cited_file=[^ >]+' | sed 's/cited_file=//' || return 1"
+          },
+          {
+            "is_target": false,
+            "line": 274,
+            "text": "\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 275,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 276,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 277,
+            "text": "_function_complexity_sweep_duplicate_rows() {"
+          },
+          {
+            "is_target": false,
+            "line": 278,
+            "text": "\tlocal slug=\"$1\""
+          },
+          {
+            "is_target": false,
+            "line": 279,
+            "text": "\tlocal cited_file=\"$2\""
+          },
+          {
+            "is_target": false,
+            "line": 280,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 281,
+            "text": "\tgh issue list --repo \"$slug\" \\"
+          },
+          {
+            "is_target": false,
+            "line": 282,
+            "text": "\t\t--label \"function-complexity-debt\" --state open \\"
+          },
+          {
+            "is_target": false,
+            "line": 283,
+            "text": "\t\t--search \"\\\"cited_file=${cited_file}\\\" in:body\" \\"
+          },
+          {
+            "is_target": false,
+            "line": 284,
+            "text": "\t\t--json number,labels \\"
+          },
+          {
+            "is_target": false,
+            "line": 285,
+            "text": "\t\t--jq '.[] | [.number, ([.labels[].name] | join(\",\"))] | @tsv' 2>/dev/null"
+          },
+          {
+            "is_target": false,
+            "line": 286,
+            "text": "\treturn $?"
+          },
+          {
+            "is_target": false,
+            "line": 287,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 288,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 289,
+            "text": "_function_complexity_row_is_active() {"
+          },
+          {
+            "is_target": false,
+            "line": 290,
+            "text": "\tlocal labels=\"$1\""
+          },
+          {
+            "is_target": false,
+            "line": 291,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 292,
+            "text": "\tcase \",$labels,\" in"
+          },
+          {
+            "is_target": false,
+            "line": 293,
+            "text": "\t*,status:in-progress,* | *,status:in-review,* | *,status:claimed,*)"
+          },
+          {
+            "is_target": false,
+            "line": 294,
+            "text": "\t\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 295,
+            "text": "\t\t;;"
+          },
+          {
+            "is_target": false,
+            "line": 296,
+            "text": "\t*)"
+          },
+          {
+            "is_target": false,
+            "line": 297,
+            "text": "\t\treturn 1"
+          },
+          {
+            "is_target": false,
+            "line": 298,
+            "text": "\t\t;;"
+          }
+        ],
+        "path": ".agents/scripts/pre-dispatch-validator-helper.sh",
+        "target_line": 273,
+        "token": "column-33",
+        "window_end": 298,
+        "window_lines": 51,
+        "window_start": 248
+      }
+    },
+    {
+      "call_kind": "substitution",
+      "decision": "skipped",
+      "pattern": ":[0-9]*(-[0-9]*){0,1}$",
+      "rank": 10,
+      "rationale": "This substitution strips line-range suffixes from Markdown paths before comparing them with GitHub PR file names. The result is not used as a local filesystem path.",
+      "reason_code": "path_text_normalization",
+      "regex_id": "ea494519d1983cbfe8bd18ca5a9f453f",
+      "shortlist_site": ".agents/scripts/pre-dispatch-validator-helper.sh:929:column-230",
+      "site": ".agents/scripts/pre-dispatch-validator-helper.sh:929:column-230",
+      "source_binding": {
+        "evidence_ref": "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/pre-dispatch-validator-helper.sh",
+        "path": ".agents/scripts/pre-dispatch-validator-helper.sh",
+        "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+        "repository_url": "https://github.com/marcusquinn/aidevops",
+        "sha256": "b68445d5eaf510e820831422c6e064ac58bbdc4496483ad562df30786e3723b5"
+      },
+      "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "window": {
+        "lines": [
+          {
+            "is_target": false,
+            "line": 904,
+            "text": "# ---------------------------------------------------------------------------"
+          },
+          {
+            "is_target": false,
+            "line": 905,
+            "text": "# Review-feedback / quality-debt supersession detector (t3569, GH#23101)"
+          },
+          {
+            "is_target": false,
+            "line": 906,
+            "text": "# ---------------------------------------------------------------------------"
+          },
+          {
+            "is_target": false,
+            "line": 907,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 908,
+            "text": "_rf_extract_file_paths_from_text() {"
+          },
+          {
+            "is_target": false,
+            "line": 909,
+            "text": "\tlocal text=\"$1\""
+          },
+          {
+            "is_target": false,
+            "line": 910,
+            "text": "\tlocal path_text=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 911,
+            "text": "\tlocal paths=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 912,
+            "text": "\tlocal dir_paths=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 913,
+            "text": "\tlocal backtick_files=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 914,
+            "text": "\tlocal bare_files=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 915,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 916,
+            "text": "\t# Generated issue signatures contain a Markdown link whose visible label is"
+          },
+          {
+            "is_target": false,
+            "line": 917,
+            "text": "\t# `aidevops.sh`. Treating that footer as an implementation target makes every"
+          },
+          {
+            "is_target": false,
+            "line": 918,
+            "text": "\t# later release PR (which commonly touches aidevops.sh) look like a same-file"
+          },
+          {
+            "is_target": false,
+            "line": 919,
+            "text": "\t# supersession. URLs and signature metadata are evidence provenance, not files"
+          },
+          {
+            "is_target": false,
+            "line": 920,
+            "text": "\t# requested by the finding."
+          },
+          {
+            "is_target": false,
+            "line": 921,
+            "text": "\tpath_text=$(printf '%s\\n' \"$text\" | grep -vE '^<!--[[:space:]]*aidevops:sig|^\\[aidevops\\.sh\\]\\(https?://|https?://' || true)"
+          },
+          {
+            "is_target": false,
+            "line": 922,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 923,
+            "text": "\tdir_paths=$(printf '%s' \"$path_text\" | grep -oE '[a-zA-Z0-9._-]+/[a-zA-Z0-9._/-]+\\.[a-zA-Z]{1,10}' | sort -u || true)"
+          },
+          {
+            "is_target": false,
+            "line": 924,
+            "text": "\tif [[ -n \"$dir_paths\" ]]; then"
+          },
+          {
+            "is_target": false,
+            "line": 925,
+            "text": "\t\tpaths=\"${paths}${dir_paths}\"$'\\n'"
+          },
+          {
+            "is_target": false,
+            "line": 926,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 927,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 928,
+            "text": "\t# shellcheck disable=SC2016 # Literal backtick regex, not shell expansion."
+          },
+          {
+            "is_target": true,
+            "line": 929,
+            "text": "\tbacktick_files=$(printf '%s' \"$path_text\" | grep -oE '`[a-zA-Z0-9._/-]+\\.(sh|ts|js|py|md|json|yaml|yml|toml|go|rs|tsx|jsx|css|html|sql|rb|php|java|c|h|cpp|hpp|cs|dart|jl|kt|m|mm|r|scala|swift)(:[0-9]+(-[0-9]+)?)?`' | tr -d '`' | sed 's/:[0-9]*\\(-[0-9]*\\)\\{0,1\\}$//' | sort -u || true)"
+          },
+          {
+            "is_target": false,
+            "line": 930,
+            "text": "\tif [[ -n \"$backtick_files\" ]]; then"
+          },
+          {
+            "is_target": false,
+            "line": 931,
+            "text": "\t\tpaths=\"${paths}${backtick_files}\"$'\\n'"
+          },
+          {
+            "is_target": false,
+            "line": 932,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 933,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 934,
+            "text": "\tbare_files=$(printf '%s' \"$path_text\" | grep -oE '\\b[a-zA-Z0-9_-]+\\.(sh|ts|js|py|json|yaml|yml|toml|go|rs|tsx|jsx|css|html|sql|rb|php|java|c|h|cpp|hpp|cs|dart|jl|kt|m|mm|r|scala|swift)\\b' | sort -u || true)"
+          },
+          {
+            "is_target": false,
+            "line": 935,
+            "text": "\tif [[ -n \"$bare_files\" ]]; then"
+          },
+          {
+            "is_target": false,
+            "line": 936,
+            "text": "\t\tpaths=\"${paths}${bare_files}\"$'\\n'"
+          },
+          {
+            "is_target": false,
+            "line": 937,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 938,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 939,
+            "text": "\tprintf '%s' \"$paths\" | sort -u | grep -v '^$' | grep -vE '^v?[0-9]+\\.[0-9]+\\.[0-9]+$' || true"
+          },
+          {
+            "is_target": false,
+            "line": 940,
+            "text": "\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 941,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 942,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 943,
+            "text": "_rf_is_stopword() {"
+          },
+          {
+            "is_target": false,
+            "line": 944,
+            "text": "\tlocal word=\"$1\""
+          },
+          {
+            "is_target": false,
+            "line": 945,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 946,
+            "text": "\tcase \"$word\" in"
+          },
+          {
+            "is_target": false,
+            "line": 947,
+            "text": "\taidevops | automated | auto | body | cited | code | debt | dispatch | file | files | fix | fixed | fixing | from | generated | guidance | issue | label | labels | line | lines | merged | modify | path | paths | please | quality | review | should | source | status | task | that | the | then | there | this | updates | what | when | where | with | worker | workers)"
+          },
+          {
+            "is_target": false,
+            "line": 948,
+            "text": "\t\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 949,
+            "text": "\t\t;;"
+          },
+          {
+            "is_target": false,
+            "line": 950,
+            "text": "\tesac"
+          },
+          {
+            "is_target": false,
+            "line": 951,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 952,
+            "text": "\treturn 1"
+          },
+          {
+            "is_target": false,
+            "line": 953,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 954,
+            "text": ""
+          }
+        ],
+        "path": ".agents/scripts/pre-dispatch-validator-helper.sh",
+        "target_line": 929,
+        "token": "column-230",
+        "window_end": 954,
+        "window_lines": 51,
+        "window_start": 904
+      }
+    },
+    {
+      "call_kind": "search",
+      "decision": "skipped",
+      "pattern": "^$",
+      "rank": 11,
+      "rationale": "This exact empty-line search removes blank entries from extracted keyword data. It does not affect a security boundary.",
+      "reason_code": "empty_keyword_filter",
+      "regex_id": "e2c3b754808dea0062528936732ac125",
+      "shortlist_site": ".agents/scripts/pre-dispatch-validator-helper.sh:939:column-34",
+      "site": ".agents/scripts/pre-dispatch-validator-helper.sh:939:column-34",
+      "source_binding": {
+        "evidence_ref": "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/pre-dispatch-validator-helper.sh",
+        "path": ".agents/scripts/pre-dispatch-validator-helper.sh",
+        "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+        "repository_url": "https://github.com/marcusquinn/aidevops",
+        "sha256": "b68445d5eaf510e820831422c6e064ac58bbdc4496483ad562df30786e3723b5"
+      },
+      "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "window": {
+        "lines": [
+          {
+            "is_target": false,
+            "line": 914,
+            "text": "\tlocal bare_files=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 915,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 916,
+            "text": "\t# Generated issue signatures contain a Markdown link whose visible label is"
+          },
+          {
+            "is_target": false,
+            "line": 917,
+            "text": "\t# `aidevops.sh`. Treating that footer as an implementation target makes every"
+          },
+          {
+            "is_target": false,
+            "line": 918,
+            "text": "\t# later release PR (which commonly touches aidevops.sh) look like a same-file"
+          },
+          {
+            "is_target": false,
+            "line": 919,
+            "text": "\t# supersession. URLs and signature metadata are evidence provenance, not files"
+          },
+          {
+            "is_target": false,
+            "line": 920,
+            "text": "\t# requested by the finding."
+          },
+          {
+            "is_target": false,
+            "line": 921,
+            "text": "\tpath_text=$(printf '%s\\n' \"$text\" | grep -vE '^<!--[[:space:]]*aidevops:sig|^\\[aidevops\\.sh\\]\\(https?://|https?://' || true)"
+          },
+          {
+            "is_target": false,
+            "line": 922,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 923,
+            "text": "\tdir_paths=$(printf '%s' \"$path_text\" | grep -oE '[a-zA-Z0-9._-]+/[a-zA-Z0-9._/-]+\\.[a-zA-Z]{1,10}' | sort -u || true)"
+          },
+          {
+            "is_target": false,
+            "line": 924,
+            "text": "\tif [[ -n \"$dir_paths\" ]]; then"
+          },
+          {
+            "is_target": false,
+            "line": 925,
+            "text": "\t\tpaths=\"${paths}${dir_paths}\"$'\\n'"
+          },
+          {
+            "is_target": false,
+            "line": 926,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 927,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 928,
+            "text": "\t# shellcheck disable=SC2016 # Literal backtick regex, not shell expansion."
+          },
+          {
+            "is_target": false,
+            "line": 929,
+            "text": "\tbacktick_files=$(printf '%s' \"$path_text\" | grep -oE '`[a-zA-Z0-9._/-]+\\.(sh|ts|js|py|md|json|yaml|yml|toml|go|rs|tsx|jsx|css|html|sql|rb|php|java|c|h|cpp|hpp|cs|dart|jl|kt|m|mm|r|scala|swift)(:[0-9]+(-[0-9]+)?)?`' | tr -d '`' | sed 's/:[0-9]*\\(-[0-9]*\\)\\{0,1\\}$//' | sort -u || true)"
+          },
+          {
+            "is_target": false,
+            "line": 930,
+            "text": "\tif [[ -n \"$backtick_files\" ]]; then"
+          },
+          {
+            "is_target": false,
+            "line": 931,
+            "text": "\t\tpaths=\"${paths}${backtick_files}\"$'\\n'"
+          },
+          {
+            "is_target": false,
+            "line": 932,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 933,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 934,
+            "text": "\tbare_files=$(printf '%s' \"$path_text\" | grep -oE '\\b[a-zA-Z0-9_-]+\\.(sh|ts|js|py|json|yaml|yml|toml|go|rs|tsx|jsx|css|html|sql|rb|php|java|c|h|cpp|hpp|cs|dart|jl|kt|m|mm|r|scala|swift)\\b' | sort -u || true)"
+          },
+          {
+            "is_target": false,
+            "line": 935,
+            "text": "\tif [[ -n \"$bare_files\" ]]; then"
+          },
+          {
+            "is_target": false,
+            "line": 936,
+            "text": "\t\tpaths=\"${paths}${bare_files}\"$'\\n'"
+          },
+          {
+            "is_target": false,
+            "line": 937,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 938,
+            "text": ""
+          },
+          {
+            "is_target": true,
+            "line": 939,
+            "text": "\tprintf '%s' \"$paths\" | sort -u | grep -v '^$' | grep -vE '^v?[0-9]+\\.[0-9]+\\.[0-9]+$' || true"
+          },
+          {
+            "is_target": false,
+            "line": 940,
+            "text": "\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 941,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 942,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 943,
+            "text": "_rf_is_stopword() {"
+          },
+          {
+            "is_target": false,
+            "line": 944,
+            "text": "\tlocal word=\"$1\""
+          },
+          {
+            "is_target": false,
+            "line": 945,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 946,
+            "text": "\tcase \"$word\" in"
+          },
+          {
+            "is_target": false,
+            "line": 947,
+            "text": "\taidevops | automated | auto | body | cited | code | debt | dispatch | file | files | fix | fixed | fixing | from | generated | guidance | issue | label | labels | line | lines | merged | modify | path | paths | please | quality | review | should | source | status | task | that | the | then | there | this | updates | what | when | where | with | worker | workers)"
+          },
+          {
+            "is_target": false,
+            "line": 948,
+            "text": "\t\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 949,
+            "text": "\t\t;;"
+          },
+          {
+            "is_target": false,
+            "line": 950,
+            "text": "\tesac"
+          },
+          {
+            "is_target": false,
+            "line": 951,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 952,
+            "text": "\treturn 1"
+          },
+          {
+            "is_target": false,
+            "line": 953,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 954,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 955,
+            "text": "_rf_extract_keywords() {"
+          },
+          {
+            "is_target": false,
+            "line": 956,
+            "text": "\tlocal text=\"$1\""
+          },
+          {
+            "is_target": false,
+            "line": 957,
+            "text": "\tlocal keyword_text=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 958,
+            "text": "\tlocal words=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 959,
+            "text": "\tlocal word=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 960,
+            "text": "\tlocal count=0"
+          },
+          {
+            "is_target": false,
+            "line": 961,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 962,
+            "text": "\t# shellcheck disable=SC2016 # Literal backtick regex, not shell expansion."
+          },
+          {
+            "is_target": false,
+            "line": 963,
+            "text": "\tkeyword_text=$(printf '%s' \"$text\" | sed -E 's/`[A-Za-z0-9._\\/-]+\\.[A-Za-z0-9]{1,10}(:[0-9]+(-[0-9]+)?)?`/ /g; s#[A-Za-z0-9._-]+/[A-Za-z0-9._/-]+\\.[A-Za-z]{1,10}# #g')"
+          },
+          {
+            "is_target": false,
+            "line": 964,
+            "text": "\twords=$(printf '%s' \"$keyword_text\" | tr '[:upper:]' '[:lower:]' | tr -cs '[:alnum:]_' '\\n' | grep -E '^[a-z][a-z0-9_]{3,}$' | sort -u || true)"
+          }
+        ],
+        "path": ".agents/scripts/pre-dispatch-validator-helper.sh",
+        "target_line": 939,
+        "token": "column-34",
+        "window_end": 964,
+        "window_lines": 51,
+        "window_start": 914
+      }
+    },
+    {
+      "call_kind": "search",
+      "decision": "skipped",
+      "pattern": "^v?[0-9]+\\.[0-9]+\\.[0-9]+$",
+      "rank": 12,
+      "rationale": "The semver-shaped search excludes version strings from keyword scoring. This is heuristic ranking input rather than a security-sensitive transformation.",
+      "reason_code": "version_heuristic_filter",
+      "regex_id": "b00c45afb98f8671e9bbcc44683e8142",
+      "shortlist_site": ".agents/scripts/pre-dispatch-validator-helper.sh:939:column-49",
+      "site": ".agents/scripts/pre-dispatch-validator-helper.sh:939:column-49",
+      "source_binding": {
+        "evidence_ref": "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/pre-dispatch-validator-helper.sh",
+        "path": ".agents/scripts/pre-dispatch-validator-helper.sh",
+        "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+        "repository_url": "https://github.com/marcusquinn/aidevops",
+        "sha256": "b68445d5eaf510e820831422c6e064ac58bbdc4496483ad562df30786e3723b5"
+      },
+      "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "window": {
+        "lines": [
+          {
+            "is_target": false,
+            "line": 914,
+            "text": "\tlocal bare_files=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 915,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 916,
+            "text": "\t# Generated issue signatures contain a Markdown link whose visible label is"
+          },
+          {
+            "is_target": false,
+            "line": 917,
+            "text": "\t# `aidevops.sh`. Treating that footer as an implementation target makes every"
+          },
+          {
+            "is_target": false,
+            "line": 918,
+            "text": "\t# later release PR (which commonly touches aidevops.sh) look like a same-file"
+          },
+          {
+            "is_target": false,
+            "line": 919,
+            "text": "\t# supersession. URLs and signature metadata are evidence provenance, not files"
+          },
+          {
+            "is_target": false,
+            "line": 920,
+            "text": "\t# requested by the finding."
+          },
+          {
+            "is_target": false,
+            "line": 921,
+            "text": "\tpath_text=$(printf '%s\\n' \"$text\" | grep -vE '^<!--[[:space:]]*aidevops:sig|^\\[aidevops\\.sh\\]\\(https?://|https?://' || true)"
+          },
+          {
+            "is_target": false,
+            "line": 922,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 923,
+            "text": "\tdir_paths=$(printf '%s' \"$path_text\" | grep -oE '[a-zA-Z0-9._-]+/[a-zA-Z0-9._/-]+\\.[a-zA-Z]{1,10}' | sort -u || true)"
+          },
+          {
+            "is_target": false,
+            "line": 924,
+            "text": "\tif [[ -n \"$dir_paths\" ]]; then"
+          },
+          {
+            "is_target": false,
+            "line": 925,
+            "text": "\t\tpaths=\"${paths}${dir_paths}\"$'\\n'"
+          },
+          {
+            "is_target": false,
+            "line": 926,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 927,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 928,
+            "text": "\t# shellcheck disable=SC2016 # Literal backtick regex, not shell expansion."
+          },
+          {
+            "is_target": false,
+            "line": 929,
+            "text": "\tbacktick_files=$(printf '%s' \"$path_text\" | grep -oE '`[a-zA-Z0-9._/-]+\\.(sh|ts|js|py|md|json|yaml|yml|toml|go|rs|tsx|jsx|css|html|sql|rb|php|java|c|h|cpp|hpp|cs|dart|jl|kt|m|mm|r|scala|swift)(:[0-9]+(-[0-9]+)?)?`' | tr -d '`' | sed 's/:[0-9]*\\(-[0-9]*\\)\\{0,1\\}$//' | sort -u || true)"
+          },
+          {
+            "is_target": false,
+            "line": 930,
+            "text": "\tif [[ -n \"$backtick_files\" ]]; then"
+          },
+          {
+            "is_target": false,
+            "line": 931,
+            "text": "\t\tpaths=\"${paths}${backtick_files}\"$'\\n'"
+          },
+          {
+            "is_target": false,
+            "line": 932,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 933,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 934,
+            "text": "\tbare_files=$(printf '%s' \"$path_text\" | grep -oE '\\b[a-zA-Z0-9_-]+\\.(sh|ts|js|py|json|yaml|yml|toml|go|rs|tsx|jsx|css|html|sql|rb|php|java|c|h|cpp|hpp|cs|dart|jl|kt|m|mm|r|scala|swift)\\b' | sort -u || true)"
+          },
+          {
+            "is_target": false,
+            "line": 935,
+            "text": "\tif [[ -n \"$bare_files\" ]]; then"
+          },
+          {
+            "is_target": false,
+            "line": 936,
+            "text": "\t\tpaths=\"${paths}${bare_files}\"$'\\n'"
+          },
+          {
+            "is_target": false,
+            "line": 937,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 938,
+            "text": ""
+          },
+          {
+            "is_target": true,
+            "line": 939,
+            "text": "\tprintf '%s' \"$paths\" | sort -u | grep -v '^$' | grep -vE '^v?[0-9]+\\.[0-9]+\\.[0-9]+$' || true"
+          },
+          {
+            "is_target": false,
+            "line": 940,
+            "text": "\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 941,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 942,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 943,
+            "text": "_rf_is_stopword() {"
+          },
+          {
+            "is_target": false,
+            "line": 944,
+            "text": "\tlocal word=\"$1\""
+          },
+          {
+            "is_target": false,
+            "line": 945,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 946,
+            "text": "\tcase \"$word\" in"
+          },
+          {
+            "is_target": false,
+            "line": 947,
+            "text": "\taidevops | automated | auto | body | cited | code | debt | dispatch | file | files | fix | fixed | fixing | from | generated | guidance | issue | label | labels | line | lines | merged | modify | path | paths | please | quality | review | should | source | status | task | that | the | then | there | this | updates | what | when | where | with | worker | workers)"
+          },
+          {
+            "is_target": false,
+            "line": 948,
+            "text": "\t\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 949,
+            "text": "\t\t;;"
+          },
+          {
+            "is_target": false,
+            "line": 950,
+            "text": "\tesac"
+          },
+          {
+            "is_target": false,
+            "line": 951,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 952,
+            "text": "\treturn 1"
+          },
+          {
+            "is_target": false,
+            "line": 953,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 954,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 955,
+            "text": "_rf_extract_keywords() {"
+          },
+          {
+            "is_target": false,
+            "line": 956,
+            "text": "\tlocal text=\"$1\""
+          },
+          {
+            "is_target": false,
+            "line": 957,
+            "text": "\tlocal keyword_text=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 958,
+            "text": "\tlocal words=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 959,
+            "text": "\tlocal word=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 960,
+            "text": "\tlocal count=0"
+          },
+          {
+            "is_target": false,
+            "line": 961,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 962,
+            "text": "\t# shellcheck disable=SC2016 # Literal backtick regex, not shell expansion."
+          },
+          {
+            "is_target": false,
+            "line": 963,
+            "text": "\tkeyword_text=$(printf '%s' \"$text\" | sed -E 's/`[A-Za-z0-9._\\/-]+\\.[A-Za-z0-9]{1,10}(:[0-9]+(-[0-9]+)?)?`/ /g; s#[A-Za-z0-9._-]+/[A-Za-z0-9._/-]+\\.[A-Za-z]{1,10}# #g')"
+          },
+          {
+            "is_target": false,
+            "line": 964,
+            "text": "\twords=$(printf '%s' \"$keyword_text\" | tr '[:upper:]' '[:lower:]' | tr -cs '[:alnum:]_' '\\n' | grep -E '^[a-z][a-z0-9_]{3,}$' | sort -u || true)"
+          }
+        ],
+        "path": ".agents/scripts/pre-dispatch-validator-helper.sh",
+        "target_line": 939,
+        "token": "column-49",
+        "window_end": 964,
+        "window_lines": 51,
+        "window_start": 914
+      }
+    },
+    {
+      "call_kind": "substitution",
+      "decision": "skipped",
+      "pattern": "`[A-Za-z0-9._/-]+\\.[A-Za-z0-9]{1,10}(:[0-9]+(-[0-9]+)?)?`",
+      "rank": 13,
+      "rationale": "This substitution removes backtick-delimited file names from text before keyword extraction. The transformed text is used for similarity scoring, not an executable or authorization boundary.",
+      "reason_code": "path_keyword_removal",
+      "regex_id": "b1152cae139694597dc450a916ce4e4d",
+      "shortlist_site": ".agents/scripts/pre-dispatch-validator-helper.sh:963:column-38",
+      "site": ".agents/scripts/pre-dispatch-validator-helper.sh:963:column-38",
+      "source_binding": {
+        "evidence_ref": "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/pre-dispatch-validator-helper.sh",
+        "path": ".agents/scripts/pre-dispatch-validator-helper.sh",
+        "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+        "repository_url": "https://github.com/marcusquinn/aidevops",
+        "sha256": "b68445d5eaf510e820831422c6e064ac58bbdc4496483ad562df30786e3723b5"
+      },
+      "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "window": {
+        "lines": [
+          {
+            "is_target": false,
+            "line": 938,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 939,
+            "text": "\tprintf '%s' \"$paths\" | sort -u | grep -v '^$' | grep -vE '^v?[0-9]+\\.[0-9]+\\.[0-9]+$' || true"
+          },
+          {
+            "is_target": false,
+            "line": 940,
+            "text": "\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 941,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 942,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 943,
+            "text": "_rf_is_stopword() {"
+          },
+          {
+            "is_target": false,
+            "line": 944,
+            "text": "\tlocal word=\"$1\""
+          },
+          {
+            "is_target": false,
+            "line": 945,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 946,
+            "text": "\tcase \"$word\" in"
+          },
+          {
+            "is_target": false,
+            "line": 947,
+            "text": "\taidevops | automated | auto | body | cited | code | debt | dispatch | file | files | fix | fixed | fixing | from | generated | guidance | issue | label | labels | line | lines | merged | modify | path | paths | please | quality | review | should | source | status | task | that | the | then | there | this | updates | what | when | where | with | worker | workers)"
+          },
+          {
+            "is_target": false,
+            "line": 948,
+            "text": "\t\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 949,
+            "text": "\t\t;;"
+          },
+          {
+            "is_target": false,
+            "line": 950,
+            "text": "\tesac"
+          },
+          {
+            "is_target": false,
+            "line": 951,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 952,
+            "text": "\treturn 1"
+          },
+          {
+            "is_target": false,
+            "line": 953,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 954,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 955,
+            "text": "_rf_extract_keywords() {"
+          },
+          {
+            "is_target": false,
+            "line": 956,
+            "text": "\tlocal text=\"$1\""
+          },
+          {
+            "is_target": false,
+            "line": 957,
+            "text": "\tlocal keyword_text=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 958,
+            "text": "\tlocal words=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 959,
+            "text": "\tlocal word=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 960,
+            "text": "\tlocal count=0"
+          },
+          {
+            "is_target": false,
+            "line": 961,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 962,
+            "text": "\t# shellcheck disable=SC2016 # Literal backtick regex, not shell expansion."
+          },
+          {
+            "is_target": true,
+            "line": 963,
+            "text": "\tkeyword_text=$(printf '%s' \"$text\" | sed -E 's/`[A-Za-z0-9._\\/-]+\\.[A-Za-z0-9]{1,10}(:[0-9]+(-[0-9]+)?)?`/ /g; s#[A-Za-z0-9._-]+/[A-Za-z0-9._/-]+\\.[A-Za-z]{1,10}# #g')"
+          },
+          {
+            "is_target": false,
+            "line": 964,
+            "text": "\twords=$(printf '%s' \"$keyword_text\" | tr '[:upper:]' '[:lower:]' | tr -cs '[:alnum:]_' '\\n' | grep -E '^[a-z][a-z0-9_]{3,}$' | sort -u || true)"
+          },
+          {
+            "is_target": false,
+            "line": 965,
+            "text": "\twhile IFS= read -r word; do"
+          },
+          {
+            "is_target": false,
+            "line": 966,
+            "text": "\t\t[[ -z \"$word\" ]] && continue"
+          },
+          {
+            "is_target": false,
+            "line": 967,
+            "text": "\t\tif _rf_is_stopword \"$word\"; then"
+          },
+          {
+            "is_target": false,
+            "line": 968,
+            "text": "\t\t\tcontinue"
+          },
+          {
+            "is_target": false,
+            "line": 969,
+            "text": "\t\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 970,
+            "text": "\t\tprintf '%s\\n' \"$word\""
+          },
+          {
+            "is_target": false,
+            "line": 971,
+            "text": "\t\tcount=$((count + 1))"
+          },
+          {
+            "is_target": false,
+            "line": 972,
+            "text": "\t\tif [[ \"$count\" -ge 40 ]]; then"
+          },
+          {
+            "is_target": false,
+            "line": 973,
+            "text": "\t\t\tbreak"
+          },
+          {
+            "is_target": false,
+            "line": 974,
+            "text": "\t\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 975,
+            "text": "\tdone <<<\"$words\""
+          },
+          {
+            "is_target": false,
+            "line": 976,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 977,
+            "text": "\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 978,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 979,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 980,
+            "text": "_rf_has_routed_review_evidence() {"
+          },
+          {
+            "is_target": false,
+            "line": 981,
+            "text": "\tlocal issue_body=\"$1\""
+          },
+          {
+            "is_target": false,
+            "line": 982,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 983,
+            "text": "\tif printf '%s\\n' \"$issue_body\" | grep -Eq \\"
+          },
+          {
+            "is_target": false,
+            "line": 984,
+            "text": "\t\t'^[[:space:]]*<!--[[:space:]]feedback-route:(start|complete):review:PR[0-9]+:SHA[^[:space:]>]+[[:space:]]*-->[[:space:]]*$|^##[[:space:]]+Review Feedback routed from PR[[:space:]]+#[0-9]+([[:space:]].*)?$'; then"
+          },
+          {
+            "is_target": false,
+            "line": 985,
+            "text": "\t\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 986,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 987,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 988,
+            "text": "\treturn 1"
+          }
+        ],
+        "path": ".agents/scripts/pre-dispatch-validator-helper.sh",
+        "target_line": 963,
+        "token": "column-38",
+        "window_end": 988,
+        "window_lines": 51,
+        "window_start": 938
+      }
+    },
+    {
+      "call_kind": "search",
+      "decision": "skipped",
+      "pattern": "^[a-z][a-z0-9_]{3,}$",
+      "rank": 14,
+      "rationale": "The allowlisted keyword token is passed to grep -qwF as a fixed string for similarity scoring. It is not interpreted as a shell command, regex, or query expression.",
+      "reason_code": "literal_keyword_filter",
+      "regex_id": "762d2dee2f84a539ee37efd796a301c9",
+      "shortlist_site": ".agents/scripts/pre-dispatch-validator-helper.sh:964:column-95",
+      "site": ".agents/scripts/pre-dispatch-validator-helper.sh:964:column-95",
+      "source_binding": {
+        "evidence_ref": "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/pre-dispatch-validator-helper.sh",
+        "path": ".agents/scripts/pre-dispatch-validator-helper.sh",
+        "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+        "repository_url": "https://github.com/marcusquinn/aidevops",
+        "sha256": "b68445d5eaf510e820831422c6e064ac58bbdc4496483ad562df30786e3723b5"
+      },
+      "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "window": {
+        "lines": [
+          {
+            "is_target": false,
+            "line": 939,
+            "text": "\tprintf '%s' \"$paths\" | sort -u | grep -v '^$' | grep -vE '^v?[0-9]+\\.[0-9]+\\.[0-9]+$' || true"
+          },
+          {
+            "is_target": false,
+            "line": 940,
+            "text": "\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 941,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 942,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 943,
+            "text": "_rf_is_stopword() {"
+          },
+          {
+            "is_target": false,
+            "line": 944,
+            "text": "\tlocal word=\"$1\""
+          },
+          {
+            "is_target": false,
+            "line": 945,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 946,
+            "text": "\tcase \"$word\" in"
+          },
+          {
+            "is_target": false,
+            "line": 947,
+            "text": "\taidevops | automated | auto | body | cited | code | debt | dispatch | file | files | fix | fixed | fixing | from | generated | guidance | issue | label | labels | line | lines | merged | modify | path | paths | please | quality | review | should | source | status | task | that | the | then | there | this | updates | what | when | where | with | worker | workers)"
+          },
+          {
+            "is_target": false,
+            "line": 948,
+            "text": "\t\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 949,
+            "text": "\t\t;;"
+          },
+          {
+            "is_target": false,
+            "line": 950,
+            "text": "\tesac"
+          },
+          {
+            "is_target": false,
+            "line": 951,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 952,
+            "text": "\treturn 1"
+          },
+          {
+            "is_target": false,
+            "line": 953,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 954,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 955,
+            "text": "_rf_extract_keywords() {"
+          },
+          {
+            "is_target": false,
+            "line": 956,
+            "text": "\tlocal text=\"$1\""
+          },
+          {
+            "is_target": false,
+            "line": 957,
+            "text": "\tlocal keyword_text=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 958,
+            "text": "\tlocal words=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 959,
+            "text": "\tlocal word=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 960,
+            "text": "\tlocal count=0"
+          },
+          {
+            "is_target": false,
+            "line": 961,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 962,
+            "text": "\t# shellcheck disable=SC2016 # Literal backtick regex, not shell expansion."
+          },
+          {
+            "is_target": false,
+            "line": 963,
+            "text": "\tkeyword_text=$(printf '%s' \"$text\" | sed -E 's/`[A-Za-z0-9._\\/-]+\\.[A-Za-z0-9]{1,10}(:[0-9]+(-[0-9]+)?)?`/ /g; s#[A-Za-z0-9._-]+/[A-Za-z0-9._/-]+\\.[A-Za-z]{1,10}# #g')"
+          },
+          {
+            "is_target": true,
+            "line": 964,
+            "text": "\twords=$(printf '%s' \"$keyword_text\" | tr '[:upper:]' '[:lower:]' | tr -cs '[:alnum:]_' '\\n' | grep -E '^[a-z][a-z0-9_]{3,}$' | sort -u || true)"
+          },
+          {
+            "is_target": false,
+            "line": 965,
+            "text": "\twhile IFS= read -r word; do"
+          },
+          {
+            "is_target": false,
+            "line": 966,
+            "text": "\t\t[[ -z \"$word\" ]] && continue"
+          },
+          {
+            "is_target": false,
+            "line": 967,
+            "text": "\t\tif _rf_is_stopword \"$word\"; then"
+          },
+          {
+            "is_target": false,
+            "line": 968,
+            "text": "\t\t\tcontinue"
+          },
+          {
+            "is_target": false,
+            "line": 969,
+            "text": "\t\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 970,
+            "text": "\t\tprintf '%s\\n' \"$word\""
+          },
+          {
+            "is_target": false,
+            "line": 971,
+            "text": "\t\tcount=$((count + 1))"
+          },
+          {
+            "is_target": false,
+            "line": 972,
+            "text": "\t\tif [[ \"$count\" -ge 40 ]]; then"
+          },
+          {
+            "is_target": false,
+            "line": 973,
+            "text": "\t\t\tbreak"
+          },
+          {
+            "is_target": false,
+            "line": 974,
+            "text": "\t\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 975,
+            "text": "\tdone <<<\"$words\""
+          },
+          {
+            "is_target": false,
+            "line": 976,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 977,
+            "text": "\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 978,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 979,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 980,
+            "text": "_rf_has_routed_review_evidence() {"
+          },
+          {
+            "is_target": false,
+            "line": 981,
+            "text": "\tlocal issue_body=\"$1\""
+          },
+          {
+            "is_target": false,
+            "line": 982,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 983,
+            "text": "\tif printf '%s\\n' \"$issue_body\" | grep -Eq \\"
+          },
+          {
+            "is_target": false,
+            "line": 984,
+            "text": "\t\t'^[[:space:]]*<!--[[:space:]]feedback-route:(start|complete):review:PR[0-9]+:SHA[^[:space:]>]+[[:space:]]*-->[[:space:]]*$|^##[[:space:]]+Review Feedback routed from PR[[:space:]]+#[0-9]+([[:space:]].*)?$'; then"
+          },
+          {
+            "is_target": false,
+            "line": 985,
+            "text": "\t\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 986,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 987,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 988,
+            "text": "\treturn 1"
+          },
+          {
+            "is_target": false,
+            "line": 989,
+            "text": "}"
+          }
+        ],
+        "path": ".agents/scripts/pre-dispatch-validator-helper.sh",
+        "target_line": 964,
+        "token": "column-95",
+        "window_end": 989,
+        "window_lines": 51,
+        "window_start": 939
+      }
+    }
+  ],
+  "cohort_id": "2026-09-12-calibration-20-r2",
+  "repository_url": "https://github.com/marcusquinn/aidevops",
+  "review_source": {
+    "row_count": 14,
+    "sha256": "81ce5b4f030661bcba09d9e83f0796f4c4c27922994dd7b51ad7a62624186b9c"
+  },
+  "run_context_sha256": "068c5e5fbdcb31f6d505f84442ed7daa449532ee920d47f18af72cb41f90edec",
+  "schema_version": "1",
+  "shortlist_site_path_prefix": "",
+  "shortlist_source": {
+    "row_count": 14,
+    "sha256": "4c256c622a013b25b3dd27bef897cd3fd98c3a4f38da623f468c26786405a97a"
+  },
+  "source_files": [
+    {
+      "evidence_ref": "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/pre-dispatch-validator-helper.sh",
+      "path": ".agents/scripts/pre-dispatch-validator-helper.sh",
+      "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "repository_url": "https://github.com/marcusquinn/aidevops",
+      "sha256": "b68445d5eaf510e820831422c6e064ac58bbdc4496483ad562df30786e3723b5"
+    }
+  ],
+  "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1"
+}

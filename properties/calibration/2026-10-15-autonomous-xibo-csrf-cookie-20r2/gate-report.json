@@ -1,0 +1,86 @@
+{
+  "baseline_mutation_output": "a1b2c3d4a1b2c3d4a1b2c3d4a1b2c3d4a1b2c3d4",
+  "capture_body_property": "UNSAT: ASCII capture characters exclude semicolon",
+  "case_classes": {
+    "missing_empty_and_similar_name_controls": 3,
+    "seeded_valid_cookie_strings": 1000,
+    "tab_separator_control": 1,
+    "targeted": 7,
+    "token_first_middle_last": 3
+  },
+  "cases": 1007,
+  "component_sha256": "8377f717735d9efe5c0148e2691c3d36e91395b91ebaaa61045601d073128513",
+  "csrf_middleware_sha256": "f4ffd5e29e603ff48ce561d56e43953e996a99ae5b018895da9724ad9cfae826",
+  "external_network_requests": 0,
+  "gate_id": "xibo-csrf-cookie-capture-20r2",
+  "json_entrypoint_sha256": "2647084b98216a14c72e4c0189c6f29f3296ff7a7745475ebdc4a8d54ca4cedf",
+  "mutation_guard_id": "XC-xibo-csrf-cookie-mutated-capture-spills",
+  "mutation_input": "XSRF-TOKEN=a1b2c3d4a1b2c3d4a1b2c3d4a1b2c3d4a1b2c3d4; session=neighbor",
+  "mutation_property": "SAT + exact helper replay: widened capture includes following pair",
+  "node_version": "v26.11.1",
+  "proof_records": [
+    {
+      "backend": "seq",
+      "call_kind": "search",
+      "domain": "The exact pinned capture body [^;] admits no ASCII semicolon; the product gate separately replays complete JavaScript helper behavior",
+      "engine_versions": {
+        "python": "3.14.8",
+        "z3": "5.0.0"
+      },
+      "expect_unsat": true,
+      "family": "XC-xibo-csrf-cookie-capture",
+      "ground_truth": null,
+      "input_domain": "ascii",
+      "kind": "property",
+      "name": "XC-xibo-csrf-cookie-capture-isolation",
+      "not_proven": false,
+      "ok": true,
+      "product": true,
+      "result": "unsat",
+      "schema_version": "1",
+      "state": "stock",
+      "wall_ms": 0.3,
+      "witness": null
+    },
+    {
+      "backend": "seq",
+      "call_kind": "search",
+      "domain": "MUTATION GUARD: widening the exact pinned capture from [^;]* to .* must admit a semicolon and reproduce capture spill into the next cookie pair",
+      "engine_versions": {
+        "python": "3.14.8",
+        "z3": "5.0.0"
+      },
+      "expect_unsat": false,
+      "family": "XC-xibo-csrf-cookie-capture",
+      "ground_truth": "reproduced",
+      "input_domain": "ascii",
+      "kind": "mutation_guard",
+      "name": "XC-xibo-csrf-cookie-mutated-capture-spills",
+      "not_proven": false,
+      "ok": true,
+      "product": false,
+      "result": "sat",
+      "schema_version": "1",
+      "state": "stock",
+      "wall_ms": 0.2,
+      "witness": {
+        "captured_cookie_character": ";"
+      }
+    }
+  ],
+  "question_id": "XC-xibo-csrf-cookie-capture-isolation",
+  "repository": "https://github.com/xibosignage/xibo-cms",
+  "route_table_sha256": "c1e17860d451299266b03fa5566085325a2b9ab0d049c9fde56426224da77895",
+  "schema_version": "1",
+  "scope_note": "The gate executes the exact pinned helper in Node after removing only its TypeScript return-type annotation, verifies pinned caller/route/middleware source, and compares 1,007 valid-domain cookie strings with an independent split-pair reference parser. It does not launch Xibo's PHP application or a browser, formalize duplicate-cookie ordering, or establish a security vulnerability.",
+  "security_impact_confirmed": false,
+  "source_files": {
+    "frontend/src/pages/Administration/Applications/Authorize/AuthorizeApplication.tsx": "8377f717735d9efe5c0148e2691c3d36e91395b91ebaaa61045601d073128513",
+    "lib/Middleware/CsrfGuard.php": "f4ffd5e29e603ff48ce561d56e43953e996a99ae5b018895da9724ad9cfae826",
+    "lib/routes-react.php": "c1e17860d451299266b03fa5566085325a2b9ab0d049c9fde56426224da77895",
+    "web/json/index.php": "2647084b98216a14c72e4c0189c6f29f3296ff7a7745475ebdc4a8d54ca4cedf"
+  },
+  "source_files_verified": 4,
+  "source_pin": "978def55c8e68cab3a50a7ee4725039da753f0a1",
+  "weakened_mutation_output": "a1b2c3d4a1b2c3d4a1b2c3d4a1b2c3d4a1b2c3d4; session=neighbor"
+}

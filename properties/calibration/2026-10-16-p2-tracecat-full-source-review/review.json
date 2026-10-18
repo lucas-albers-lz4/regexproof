@@ -1,0 +1,2320 @@
+{
+  "author": "Codex P2 source-review pass",
+  "limitations": [
+    "Coverage is complete for the 115 Tracecat rows in frozen inventory v5, not a claim that every regex in all unselected repository files was extracted.",
+    "The second pass used the same model/agent as the first inventory triage. It is not independent third-party or human annotation.",
+    "Unresolved rows do not count as adopted contracts or product questions; they require a separate source-backed contract and replay.",
+    "The three adopted rows repeat previously adopted Tracecat contracts. This full review adds no unique product question, proof, gate, bug confirmation, or fix.",
+    "No new security finding or downstream impact is claimed by this review."
+  ],
+  "observed_at": "2026-10-16",
+  "reviewer": "Codex second source-review pass",
+  "reviews": [
+    {
+      "decision": "skip",
+      "pattern": "^act-([0-9a-fA-F]{32})$",
+      "product_question_asked": false,
+      "rationale": "This is a one-time database migration that extracts an action identifier from existing stored values. It is not an active runtime acceptance, sanitization, or authorization boundary.",
+      "reason_code": "historical_migration",
+      "regex_id": "d6af22659a465e2492130366e2e5dccb",
+      "review_refs": [
+        {
+          "line": 26,
+          "path": "alembic/versions/9079ae19374b_add_action_graph_fields.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "alembic/versions/9079ae19374b_add_action_graph_fields.py:26:28"
+    },
+    {
+      "decision": "skip",
+      "pattern": "[^\\w\\s-]",
+      "product_question_asked": false,
+      "rationale": "These substitutions run in a one-time database migration to normalize existing provider names. They do not govern live request acceptance or a security sink.",
+      "reason_code": "historical_migration",
+      "regex_id": "1e89772e848d63c7599740e33da5d438",
+      "review_refs": [
+        {
+          "line": 48,
+          "path": "alembic/versions/f4695a7728a8_custom_mcp_providers.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "alembic/versions/f4695a7728a8_custom_mcp_providers.py:48:11"
+    },
+    {
+      "decision": "skip",
+      "pattern": "[-\\s]+",
+      "product_question_asked": false,
+      "rationale": "These substitutions run in a one-time database migration to normalize existing provider names. They do not govern live request acceptance or a security sink.",
+      "reason_code": "historical_migration",
+      "regex_id": "38dcd6426f2d8f8517ce09dadb1bf50a",
+      "review_refs": [
+        {
+          "line": 49,
+          "path": "alembic/versions/f4695a7728a8_custom_mcp_providers.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "alembic/versions/f4695a7728a8_custom_mcp_providers.py:49:11"
+    },
+    {
+      "decision": "skip",
+      "pattern": "^\\s*API:.*\\(internal: (\\d+)\\)$",
+      "product_question_asked": false,
+      "rationale": "This row belongs to Tracecat’s benchmark/load-test package and parses benchmark metrics, cluster names, or benchmark output. It is development measurement tooling, not a product security boundary.",
+      "reason_code": "benchmark_and_loadtest_tooling",
+      "regex_id": "6ee0b5e02b650bbd683825b5746aa4ae",
+      "review_refs": [
+        {
+          "line": 3720,
+          "path": "packages/tracecat-benchmark/tests/test_tooling.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "packages/tracecat-benchmark/tests/test_tooling.py:3720:16"
+    },
+    {
+      "decision": "skip",
+      "pattern": "^(?P<name>[a-zA-Z_:][a-zA-Z0-9_:]*)(?:\\{(?P<labels>.*)\\})?\\s+(?P<value>[+-]?(?:\\d+(?:\\.\\d*)?|\\.\\d+)(?:[eE][+-]?\\d+)?|[+-]Inf|NaN)(?:\\s+\\d+)?$",
+      "product_question_asked": false,
+      "rationale": "This row belongs to Tracecat’s benchmark/load-test package and parses benchmark metrics, cluster names, or benchmark output. It is development measurement tooling, not a product security boundary.",
+      "reason_code": "benchmark_and_loadtest_tooling",
+      "regex_id": "058606107c010dedc3a5909c1dd0f7aa",
+      "review_refs": [
+        {
+          "line": 60,
+          "path": "packages/tracecat-benchmark/tracecat_benchmark/activity_metrics.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "packages/tracecat-benchmark/tracecat_benchmark/activity_metrics.py:60:30"
+    },
+    {
+      "decision": "skip",
+      "pattern": "(?P<name>[a-zA-Z_][a-zA-Z0-9_]*)=\"(?P<value>(?:\\\\.|[^\"\\\\])*)\"",
+      "product_question_asked": false,
+      "rationale": "This row belongs to Tracecat’s benchmark/load-test package and parses benchmark metrics, cluster names, or benchmark output. It is development measurement tooling, not a product security boundary.",
+      "reason_code": "benchmark_and_loadtest_tooling",
+      "regex_id": "f599fa21aa074eb55ec5bdfe9cb21e0d",
+      "review_refs": [
+        {
+          "line": 67,
+          "path": "packages/tracecat-benchmark/tracecat_benchmark/activity_metrics.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "packages/tracecat-benchmark/tracecat_benchmark/activity_metrics.py:67:29"
+    },
+    {
+      "decision": "skip",
+      "pattern": "^[A-Za-z_][A-Za-z0-9_]*$",
+      "product_question_asked": false,
+      "rationale": "This row belongs to Tracecat’s benchmark/load-test package and parses benchmark metrics, cluster names, or benchmark output. It is development measurement tooling, not a product security boundary.",
+      "reason_code": "benchmark_and_loadtest_tooling",
+      "regex_id": "cc3c1553e595354479110a07f3cb251b",
+      "review_refs": [
+        {
+          "line": 125,
+          "path": "packages/tracecat-benchmark/tracecat_benchmark/collector.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "packages/tracecat-benchmark/tracecat_benchmark/collector.py:125:23"
+    },
+    {
+      "decision": "skip",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]*$",
+      "product_question_asked": false,
+      "rationale": "This row belongs to Tracecat’s benchmark/load-test package and parses benchmark metrics, cluster names, or benchmark output. It is development measurement tooling, not a product security boundary.",
+      "reason_code": "benchmark_and_loadtest_tooling",
+      "regex_id": "85140811c563a5b7fc99770457b9bb9c",
+      "review_refs": [
+        {
+          "line": 126,
+          "path": "packages/tracecat-benchmark/tracecat_benchmark/collector.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "packages/tracecat-benchmark/tracecat_benchmark/collector.py:126:28"
+    },
+    {
+      "decision": "skip",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,63}$",
+      "product_question_asked": false,
+      "rationale": "This row belongs to Tracecat’s benchmark/load-test package and parses benchmark metrics, cluster names, or benchmark output. It is development measurement tooling, not a product security boundary.",
+      "reason_code": "benchmark_and_loadtest_tooling",
+      "regex_id": "a817235b174a5f579c3584bf9a8ae57e",
+      "review_refs": [
+        {
+          "line": 127,
+          "path": "packages/tracecat-benchmark/tracecat_benchmark/collector.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "packages/tracecat-benchmark/tracecat_benchmark/collector.py:127:20"
+    },
+    {
+      "decision": "skip",
+      "pattern": "^\\s*([0-9]+(?:\\.[0-9]+)?)\\s*([kKMGTPE]?i?B)\\s*$",
+      "product_question_asked": false,
+      "rationale": "This row belongs to Tracecat’s benchmark/load-test package and parses benchmark metrics, cluster names, or benchmark output. It is development measurement tooling, not a product security boundary.",
+      "reason_code": "benchmark_and_loadtest_tooling",
+      "regex_id": "ba443a78cec1922928eae15f9eed0830",
+      "review_refs": [
+        {
+          "line": 128,
+          "path": "packages/tracecat-benchmark/tracecat_benchmark/collector.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "packages/tracecat-benchmark/tracecat_benchmark/collector.py:128:17"
+    },
+    {
+      "decision": "skip",
+      "pattern": "remaining connection slots are reserved|too many clients already",
+      "product_question_asked": false,
+      "rationale": "This row belongs to Tracecat’s benchmark/load-test package and parses benchmark metrics, cluster names, or benchmark output. It is development measurement tooling, not a product security boundary.",
+      "reason_code": "benchmark_and_loadtest_tooling",
+      "regex_id": "572907f9cde0f54913656645a5b245b1",
+      "review_refs": [
+        {
+          "line": 179,
+          "path": "packages/tracecat-benchmark/tracecat_benchmark/collector.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "packages/tracecat-benchmark/tracecat_benchmark/collector.py:179:38"
+    },
+    {
+      "decision": "skip",
+      "pattern": "queuepool limit|connection pool.{0,80}(?:timeout|timed out)|pool timeout",
+      "product_question_asked": false,
+      "rationale": "This row belongs to Tracecat’s benchmark/load-test package and parses benchmark metrics, cluster names, or benchmark output. It is development measurement tooling, not a product security boundary.",
+      "reason_code": "benchmark_and_loadtest_tooling",
+      "regex_id": "0add24de3ce64b61df3be533699736a0",
+      "review_refs": [
+        {
+          "line": 183,
+          "path": "packages/tracecat-benchmark/tracecat_benchmark/collector.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "packages/tracecat-benchmark/tracecat_benchmark/collector.py:183:34"
+    },
+    {
+      "decision": "skip",
+      "pattern": "canceling statement due to statement timeout",
+      "product_question_asked": false,
+      "rationale": "This row belongs to Tracecat’s benchmark/load-test package and parses benchmark metrics, cluster names, or benchmark output. It is development measurement tooling, not a product security boundary.",
+      "reason_code": "benchmark_and_loadtest_tooling",
+      "regex_id": "4a96be9adc4957b86011eca2f49955b4",
+      "review_refs": [
+        {
+          "line": 188,
+          "path": "packages/tracecat-benchmark/tracecat_benchmark/collector.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "packages/tracecat-benchmark/tracecat_benchmark/collector.py:188:30"
+    },
+    {
+      "decision": "skip",
+      "pattern": "canceling statement due to lock timeout",
+      "product_question_asked": false,
+      "rationale": "This row belongs to Tracecat’s benchmark/load-test package and parses benchmark metrics, cluster names, or benchmark output. It is development measurement tooling, not a product security boundary.",
+      "reason_code": "benchmark_and_loadtest_tooling",
+      "regex_id": "067204f754c6c896fff914b33f883156",
+      "review_refs": [
+        {
+          "line": 192,
+          "path": "packages/tracecat-benchmark/tracecat_benchmark/collector.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "packages/tracecat-benchmark/tracecat_benchmark/collector.py:192:25"
+    },
+    {
+      "decision": "skip",
+      "pattern": "deadlock detected",
+      "product_question_asked": false,
+      "rationale": "This row belongs to Tracecat’s benchmark/load-test package and parses benchmark metrics, cluster names, or benchmark output. It is development measurement tooling, not a product security boundary.",
+      "reason_code": "benchmark_and_loadtest_tooling",
+      "regex_id": "6f378c5367497259b2a01c891c64a008",
+      "review_refs": [
+        {
+          "line": 196,
+          "path": "packages/tracecat-benchmark/tracecat_benchmark/collector.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "packages/tracecat-benchmark/tracecat_benchmark/collector.py:196:21"
+    },
+    {
+      "decision": "skip",
+      "pattern": "could not serialize access",
+      "product_question_asked": false,
+      "rationale": "This row belongs to Tracecat’s benchmark/load-test package and parses benchmark metrics, cluster names, or benchmark output. It is development measurement tooling, not a product security boundary.",
+      "reason_code": "benchmark_and_loadtest_tooling",
+      "regex_id": "946efff14d12bbbaa305f4a83472e790",
+      "review_refs": [
+        {
+          "line": 197,
+          "path": "packages/tracecat-benchmark/tracecat_benchmark/collector.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "packages/tracecat-benchmark/tracecat_benchmark/collector.py:197:34"
+    },
+    {
+      "decision": "skip",
+      "pattern": "connection refused",
+      "product_question_asked": false,
+      "rationale": "This row belongs to Tracecat’s benchmark/load-test package and parses benchmark metrics, cluster names, or benchmark output. It is development measurement tooling, not a product security boundary.",
+      "reason_code": "benchmark_and_loadtest_tooling",
+      "regex_id": "4fc0a0130ad09d68d64f85dd35807ac0",
+      "review_refs": [
+        {
+          "line": 200,
+          "path": "packages/tracecat-benchmark/tracecat_benchmark/collector.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "packages/tracecat-benchmark/tracecat_benchmark/collector.py:200:31"
+    },
+    {
+      "decision": "skip",
+      "pattern": "connectionreseterror|connection reset",
+      "product_question_asked": false,
+      "rationale": "This row belongs to Tracecat’s benchmark/load-test package and parses benchmark metrics, cluster names, or benchmark output. It is development measurement tooling, not a product security boundary.",
+      "reason_code": "benchmark_and_loadtest_tooling",
+      "regex_id": "c40b3481ab2a75d8435dc80cd129b3c5",
+      "review_refs": [
+        {
+          "line": 201,
+          "path": "packages/tracecat-benchmark/tracecat_benchmark/collector.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "packages/tracecat-benchmark/tracecat_benchmark/collector.py:201:29"
+    },
+    {
+      "decision": "skip",
+      "pattern": "timeouterror|timed out",
+      "product_question_asked": false,
+      "rationale": "This row belongs to Tracecat’s benchmark/load-test package and parses benchmark metrics, cluster names, or benchmark output. It is development measurement tooling, not a product security boundary.",
+      "reason_code": "benchmark_and_loadtest_tooling",
+      "regex_id": "f7c5d061965630ea4dc5c60f97110763",
+      "review_refs": [
+        {
+          "line": 204,
+          "path": "packages/tracecat-benchmark/tracecat_benchmark/collector.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "packages/tracecat-benchmark/tracecat_benchmark/collector.py:204:20"
+    },
+    {
+      "decision": "skip",
+      "pattern": "HTTP/\\d(?:\\.\\d)?[\" ]+5\\d\\d\\b|[\"']?status(?:_code)?[\"']?\\s*[:=]\\s*5\\d\\d\\b",
+      "product_question_asked": false,
+      "rationale": "This row belongs to Tracecat’s benchmark/load-test package and parses benchmark metrics, cluster names, or benchmark output. It is development measurement tooling, not a product security boundary.",
+      "reason_code": "benchmark_and_loadtest_tooling",
+      "regex_id": "810ac7862a687674ddfbbf2bf0c4098d",
+      "review_refs": [
+        {
+          "line": 205,
+          "path": "packages/tracecat-benchmark/tracecat_benchmark/collector.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "packages/tracecat-benchmark/tracecat_benchmark/collector.py:205:21"
+    },
+    {
+      "decision": "skip",
+      "pattern": "The system has (\\d+) ",
+      "product_question_asked": false,
+      "rationale": "This row belongs to Tracecat’s benchmark/load-test package and parses benchmark metrics, cluster names, or benchmark output. It is development measurement tooling, not a product security boundary.",
+      "reason_code": "benchmark_and_loadtest_tooling",
+      "regex_id": "4e52dd9b2d6675851c2bbb42d6cc1080",
+      "review_refs": [
+        {
+          "line": 661,
+          "path": "packages/tracecat-benchmark/tracecat_benchmark/collector.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "packages/tracecat-benchmark/tracecat_benchmark/collector.py:661:22"
+    },
+    {
+      "decision": "skip",
+      "pattern": "System-wide memory free percentage: (\\d+)%",
+      "product_question_asked": false,
+      "rationale": "This row belongs to Tracecat’s benchmark/load-test package and parses benchmark metrics, cluster names, or benchmark output. It is development measurement tooling, not a product security boundary.",
+      "reason_code": "benchmark_and_loadtest_tooling",
+      "regex_id": "83922dddac51ded5f915af09e672c92c",
+      "review_refs": [
+        {
+          "line": 662,
+          "path": "packages/tracecat-benchmark/tracecat_benchmark/collector.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "packages/tracecat-benchmark/tracecat_benchmark/collector.py:662:21"
+    },
+    {
+      "decision": "skip",
+      "pattern": "_\\d+$",
+      "product_question_asked": false,
+      "rationale": "This row belongs to Tracecat’s benchmark/load-test package and parses benchmark metrics, cluster names, or benchmark output. It is development measurement tooling, not a product security boundary.",
+      "reason_code": "benchmark_and_loadtest_tooling",
+      "regex_id": "2602c6209077268636ed1b7e77045e37",
+      "review_refs": [
+        {
+          "line": 696,
+          "path": "packages/tracecat-benchmark/tracecat_benchmark/collector.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "packages/tracecat-benchmark/tracecat_benchmark/collector.py:696:22"
+    },
+    {
+      "decision": "skip",
+      "pattern": "[a-f0-9]{64}",
+      "product_question_asked": false,
+      "rationale": "This row belongs to Tracecat’s benchmark/load-test package and parses benchmark metrics, cluster names, or benchmark output. It is development measurement tooling, not a product security boundary.",
+      "reason_code": "benchmark_and_loadtest_tooling",
+      "regex_id": "7c4bd427d939d2cbe4847d4dbbc2235a",
+      "review_refs": [
+        {
+          "line": 1651,
+          "path": "packages/tracecat-benchmark/tracecat_benchmark/collector.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "packages/tracecat-benchmark/tracecat_benchmark/collector.py:1651:19"
+    },
+    {
+      "decision": "skip",
+      "pattern": "^\\s*API:\\s+(\\S+)(?:\\s+\\(internal:.*\\))?\\s*$",
+      "product_question_asked": false,
+      "rationale": "This row belongs to Tracecat’s benchmark/load-test package and parses benchmark metrics, cluster names, or benchmark output. It is development measurement tooling, not a product security boundary.",
+      "reason_code": "benchmark_and_loadtest_tooling",
+      "regex_id": "4c163e3e6a882e961fe8d34d28d2f430",
+      "review_refs": [
+        {
+          "line": 1874,
+          "path": "packages/tracecat-benchmark/tracecat_benchmark/collector.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "packages/tracecat-benchmark/tracecat_benchmark/collector.py:1874:20"
+    },
+    {
+      "decision": "skip",
+      "pattern": "^\\s*(Worker metrics|Executor metrics|API DB pool metrics|Worker DB pool metrics|Executor DB pool metrics|PgDog metrics):\\s+(\\S+)\\s*$",
+      "product_question_asked": false,
+      "rationale": "This row belongs to Tracecat’s benchmark/load-test package and parses benchmark metrics, cluster names, or benchmark output. It is development measurement tooling, not a product security boundary.",
+      "reason_code": "benchmark_and_loadtest_tooling",
+      "regex_id": "2d48b8a3e60fd808559052a38095a404",
+      "review_refs": [
+        {
+          "line": 1878,
+          "path": "packages/tracecat-benchmark/tracecat_benchmark/collector.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "packages/tracecat-benchmark/tracecat_benchmark/collector.py:1878:24"
+    },
+    {
+      "decision": "skip",
+      "pattern": "^\\s*(PostgreSQL|Temporal):\\s+(\\S+):(\\d+)\\s*$",
+      "product_question_asked": false,
+      "rationale": "This row belongs to Tracecat’s benchmark/load-test package and parses benchmark metrics, cluster names, or benchmark output. It is development measurement tooling, not a product security boundary.",
+      "reason_code": "benchmark_and_loadtest_tooling",
+      "regex_id": "58292189c02ce2d23f61f28c5cd159a0",
+      "review_refs": [
+        {
+          "line": 1887,
+          "path": "packages/tracecat-benchmark/tracecat_benchmark/collector.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "packages/tracecat-benchmark/tracecat_benchmark/collector.py:1887:16"
+    },
+    {
+      "decision": "skip",
+      "pattern": "^TRACECAT__LOADTEST_[A-Z0-9_]+$",
+      "product_question_asked": false,
+      "rationale": "This row belongs to Tracecat’s benchmark/load-test package and parses benchmark metrics, cluster names, or benchmark output. It is development measurement tooling, not a product security boundary.",
+      "reason_code": "benchmark_and_loadtest_tooling",
+      "regex_id": "63b90a0a5e79e3fca4043e884b2ca0ed",
+      "review_refs": [
+        {
+          "line": 73,
+          "path": "packages/tracecat-benchmark/tracecat_benchmark/matrix.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "packages/tracecat-benchmark/tracecat_benchmark/matrix.py:73:30"
+    },
+    {
+      "decision": "skip",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,63}$",
+      "product_question_asked": false,
+      "rationale": "This row belongs to Tracecat’s benchmark/load-test package and parses benchmark metrics, cluster names, or benchmark output. It is development measurement tooling, not a product security boundary.",
+      "reason_code": "benchmark_and_loadtest_tooling",
+      "regex_id": "53555ffcabe5d067c3934c028152016a",
+      "review_refs": [
+        {
+          "line": 74,
+          "path": "packages/tracecat-benchmark/tracecat_benchmark/matrix.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "packages/tracecat-benchmark/tracecat_benchmark/matrix.py:74:20"
+    },
+    {
+      "decision": "skip",
+      "pattern": "^Auto-selected new cluster ([0-9]+)\\b",
+      "product_question_asked": false,
+      "rationale": "This row belongs to Tracecat’s benchmark/load-test package and parses benchmark metrics, cluster names, or benchmark output. It is development measurement tooling, not a product security boundary.",
+      "reason_code": "benchmark_and_loadtest_tooling",
+      "regex_id": "fe8d7f90ab0bd161cb5f5e5377bb260c",
+      "review_refs": [
+        {
+          "line": 75,
+          "path": "packages/tracecat-benchmark/tracecat_benchmark/matrix.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "packages/tracecat-benchmark/tracecat_benchmark/matrix.py:75:27"
+    },
+    {
+      "decision": "skip",
+      "pattern": "^\\s*(API|PostgreSQL|Temporal|Worker metrics|Executor metrics|API DB pool metrics|Worker DB pool metrics|Executor DB pool metrics|PgDog metrics):\\s+(\\S+)",
+      "product_question_asked": false,
+      "rationale": "This row belongs to Tracecat’s benchmark/load-test package and parses benchmark metrics, cluster names, or benchmark output. It is development measurement tooling, not a product security boundary.",
+      "reason_code": "benchmark_and_loadtest_tooling",
+      "regex_id": "b2ca698dae3b09d8ea6735634dfc7d0d",
+      "review_refs": [
+        {
+          "line": 927,
+          "path": "packages/tracecat-benchmark/tracecat_benchmark/matrix.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "packages/tracecat-benchmark/tracecat_benchmark/matrix.py:927:16"
+    },
+    {
+      "decision": "skip",
+      "pattern": "^[A-Za-z_][A-Za-z0-9_]*$",
+      "product_question_asked": false,
+      "rationale": "This row belongs to Tracecat’s benchmark/load-test package and parses benchmark metrics, cluster names, or benchmark output. It is development measurement tooling, not a product security boundary.",
+      "reason_code": "benchmark_and_loadtest_tooling",
+      "regex_id": "27329f415b31755bca99e2848b758892",
+      "review_refs": [
+        {
+          "line": 38,
+          "path": "packages/tracecat-benchmark/tracecat_benchmark/provision_monitor.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "packages/tracecat-benchmark/tracecat_benchmark/provision_monitor.py:38:23"
+    },
+    {
+      "decision": "skip",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,63}$",
+      "product_question_asked": false,
+      "rationale": "This row belongs to Tracecat’s benchmark/load-test package and parses benchmark metrics, cluster names, or benchmark output. It is development measurement tooling, not a product security boundary.",
+      "reason_code": "benchmark_and_loadtest_tooling",
+      "regex_id": "d0f19971ac75a7cee9d053f49a247735",
+      "review_refs": [
+        {
+          "line": 106,
+          "path": "packages/tracecat-benchmark/tracecat_benchmark/runner.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "packages/tracecat-benchmark/tracecat_benchmark/runner.py:106:20"
+    },
+    {
+      "decision": "skip",
+      "pattern": "sha256:[0-9a-f]{64}",
+      "product_question_asked": false,
+      "rationale": "This row belongs to Tracecat’s benchmark/load-test package and parses benchmark metrics, cluster names, or benchmark output. It is development measurement tooling, not a product security boundary.",
+      "reason_code": "benchmark_and_loadtest_tooling",
+      "regex_id": "62b1303a325feaed8b65e66138e02b4f",
+      "review_refs": [
+        {
+          "line": 45,
+          "path": "packages/tracecat-benchmark/tracecat_benchmark/viewer.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "packages/tracecat-benchmark/tracecat_benchmark/viewer.py:45:19"
+    },
+    {
+      "decision": "skip",
+      "pattern": "matrix-[0-9]{8}T[0-9]{6}Z-[0-9a-f]+",
+      "product_question_asked": false,
+      "rationale": "This row belongs to Tracecat’s benchmark/load-test package and parses benchmark metrics, cluster names, or benchmark output. It is development measurement tooling, not a product security boundary.",
+      "reason_code": "benchmark_and_loadtest_tooling",
+      "regex_id": "d671dae0f9f678ee14e1cf6bb81e8959",
+      "review_refs": [
+        {
+          "line": 46,
+          "path": "packages/tracecat-benchmark/tracecat_benchmark/viewer.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "packages/tracecat-benchmark/tracecat_benchmark/viewer.py:46:23"
+    },
+    {
+      "decision": "skip",
+      "pattern": "/api/runs/(?P<run_id>[^/]+)",
+      "product_question_asked": false,
+      "rationale": "This row belongs to Tracecat’s benchmark/load-test package and parses benchmark metrics, cluster names, or benchmark output. It is development measurement tooling, not a product security boundary.",
+      "reason_code": "benchmark_and_loadtest_tooling",
+      "regex_id": "21adcf20d27bab85e715e83155b6b2f6",
+      "review_refs": [
+        {
+          "line": 47,
+          "path": "packages/tracecat-benchmark/tracecat_benchmark/viewer.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "packages/tracecat-benchmark/tracecat_benchmark/viewer.py:47:26"
+    },
+    {
+      "decision": "skip",
+      "pattern": "/api/runs/(?P<run_id>[^/]+)/timeseries",
+      "product_question_asked": false,
+      "rationale": "This row belongs to Tracecat’s benchmark/load-test package and parses benchmark metrics, cluster names, or benchmark output. It is development measurement tooling, not a product security boundary.",
+      "reason_code": "benchmark_and_loadtest_tooling",
+      "regex_id": "bd8de37718829d5ce64666f2e7bbf967",
+      "review_refs": [
+        {
+          "line": 48,
+          "path": "packages/tracecat-benchmark/tracecat_benchmark/viewer.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "packages/tracecat-benchmark/tracecat_benchmark/viewer.py:48:30"
+    },
+    {
+      "decision": "skip",
+      "pattern": "/api/runs/(?P<run_id>[^/]+)/compose",
+      "product_question_asked": false,
+      "rationale": "This row belongs to Tracecat’s benchmark/load-test package and parses benchmark metrics, cluster names, or benchmark output. It is development measurement tooling, not a product security boundary.",
+      "reason_code": "benchmark_and_loadtest_tooling",
+      "regex_id": "46520b743670a848edef32d8ec860474",
+      "review_refs": [
+        {
+          "line": 49,
+          "path": "packages/tracecat-benchmark/tracecat_benchmark/viewer.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "packages/tracecat-benchmark/tracecat_benchmark/viewer.py:49:27"
+    },
+    {
+      "decision": "adopted",
+      "pattern": "[^A-Za-z0-9_.-]+",
+      "product_question_asked": true,
+      "rationale": "At the exact pinned source, _safe_path_segment sanitizes Artifact.type and Artifact.id before constructing artifact_dir, and sanitizes MountedArtifactContent.filename before writes beneath the per-turn host artifact root. The source-bound contract proves each helper result is a nonempty single relative component in the declared alphabet, including after trimming dot-only values. Exact-source replay and a source-weakened slash mutation ground-truth this narrow claim. The declared input trust is workspace configuration/artifact data; symlink ancestry, host_root provenance, races, collisions, attacker reachability, and current security impact are outside scope.",
+      "reason_code": "artifact_path_component_invariant",
+      "regex_id": "8522721f7d7838b411cd3538b15861ee",
+      "review_refs": [
+        {
+          "line": 31,
+          "path": "packages/tracecat-ee/tracecat_ee/agent/artifacts/mount_only_provider.py",
+          "why": "Exact pinned sanitizer regex declaration."
+        },
+        {
+          "line": 99,
+          "path": "packages/tracecat-ee/tracecat_ee/agent/artifacts/mount_only_provider.py",
+          "why": "Artifact type and ID are sanitized before artifact_dir composition."
+        },
+        {
+          "line": 110,
+          "path": "packages/tracecat-ee/tracecat_ee/agent/artifacts/mount_only_provider.py",
+          "why": "Projection write consumes the sanitized relative path."
+        },
+        {
+          "line": 120,
+          "path": "packages/tracecat-ee/tracecat_ee/agent/artifacts/mount_only_provider.py",
+          "why": "Hydrated content filename is sanitized before composing the relative path."
+        },
+        {
+          "line": 182,
+          "path": "packages/tracecat-ee/tracecat_ee/agent/artifacts/mount_only_provider.py",
+          "why": "Exact pinned helper implementation defining the contract."
+        },
+        {
+          "line": 124,
+          "path": "packages/tracecat-ee/tracecat_ee/agent/artifacts/hydrators.py",
+          "why": "Built-in case hydrator returns the fixed filename case.json."
+        },
+        {
+          "line": 183,
+          "path": "packages/tracecat-ee/tracecat_ee/agent/artifacts/hydrators.py",
+          "why": "Built-in table hydrator returns the fixed filename table.json."
+        },
+        {
+          "line": 233,
+          "path": "packages/tracecat-ee/tracecat_ee/agent/artifacts/hydrators.py",
+          "why": "Built-in agent hydrator returns the fixed filename agent.json."
+        }
+      ],
+      "site": "packages/tracecat-ee/tracecat_ee/agent/artifacts/mount_only_provider.py:31:24"
+    },
+    {
+      "decision": "skip",
+      "pattern": "^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$",
+      "product_question_asked": false,
+      "rationale": "The workflow action does send the completed message to SMTP, but the regex does not independently provide the header-injection guarantee. In an exact CPython 3.12.15 replay of the pinned SAFE_EMAIL_PATTERN and _build_email_message AST, sender CR/LF injection raises during EmailMessage header construction; recipient CR/LF injection raises at the exact address check before the builder returns; and a trailing LF admitted by Python '$' is normalized by EmailMessage to the original single-line address with no extra Bcc header. The pinned send_email_smtp call invokes the builder before constructing SMTP/SMTP_SSL, so builder failures cannot reach the network sink. This is a composed standard-library and call-order behavior, not a useful regex-only security contract. No header-injection finding or impact is claimed. See email-header-replay.json.",
+      "reason_code": "header_library_precedes_smtp_sink",
+      "regex_id": "843889f1b167c77c581faf65c991b8af",
+      "review_refs": [
+        {
+          "line": 18,
+          "path": "packages/tracecat-registry/tracecat_registry/core/email.py",
+          "why": "Exact pinned address regex declaration."
+        },
+        {
+          "line": 74,
+          "path": "packages/tracecat-registry/tracecat_registry/core/email.py",
+          "why": "Formatted sender is assigned through the real EmailMessage header implementation before regex checks."
+        },
+        {
+          "line": 75,
+          "path": "packages/tracecat-registry/tracecat_registry/core/email.py",
+          "why": "Recipient list is assigned to the real EmailMessage To header before regex checks."
+        },
+        {
+          "line": 79,
+          "path": "packages/tracecat-registry/tracecat_registry/core/email.py",
+          "why": "Exact sender check and Python match semantics."
+        },
+        {
+          "line": 81,
+          "path": "packages/tracecat-registry/tracecat_registry/core/email.py",
+          "why": "Exact recipient check that rejects embedded CR/LF before message construction completes."
+        },
+        {
+          "line": 198,
+          "path": "packages/tracecat-registry/tracecat_registry/core/email.py",
+          "why": "SMTP action invokes the message builder before opening a connection."
+        },
+        {
+          "line": 219,
+          "path": "packages/tracecat-registry/tracecat_registry/core/email.py",
+          "why": "Network sink occurs only after the builder returns."
+        }
+      ],
+      "site": "packages/tracecat-registry/tracecat_registry/core/email.py:18:21"
+    },
+    {
+      "decision": "skip",
+      "pattern": "^[a-z0-9][a-z0-9.-]*[a-z0-9]$",
+      "product_question_asked": false,
+      "rationale": "The bucket regex is only declared in this pinned file and has no call site in the selected repository tree. There is no active input-to-sink behavior to contract at this site.",
+      "reason_code": "unused_constant",
+      "regex_id": "4a4ed4cadf4aadee181fd919acc5b9b0",
+      "review_refs": [
+        {
+          "line": 29,
+          "path": "packages/tracecat-registry/tracecat_registry/integrations/amazon_s3.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "packages/tracecat-registry/tracecat_registry/integrations/amazon_s3.py:29:15"
+    },
+    {
+      "decision": "skip",
+      "pattern": "\\{.*\\}",
+      "product_question_asked": false,
+      "rationale": "This regex is used by the local authoring-evaluation harness to inspect generated text/tool traces. It does not enforce a product trust boundary.",
+      "reason_code": "internal_evaluation_tooling",
+      "regex_id": "c6db6214befdb202afb096a21750c7f5",
+      "review_refs": [
+        {
+          "line": 239,
+          "path": "scripts/evals/tracecat_authoring/run_local.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "scripts/evals/tracecat_authoring/run_local.py:239:16"
+    },
+    {
+      "decision": "skip",
+      "pattern": "\"(cmd|command)\"\\s*:",
+      "product_question_asked": false,
+      "rationale": "This regex is used by the local authoring-evaluation harness to inspect generated text/tool traces. It does not enforce a product trust boundary.",
+      "reason_code": "internal_evaluation_tooling",
+      "regex_id": "10b028c2b5f860c365ad343536678e0c",
+      "review_refs": [
+        {
+          "line": 1018,
+          "path": "scripts/evals/tracecat_authoring/run_local.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "scripts/evals/tracecat_authoring/run_local.py:1018:11"
+    },
+    {
+      "decision": "skip",
+      "pattern": "\"name\"\\s*:\\s*\"(Bash|Read|Grep|Glob|LS|exec_command)\"",
+      "product_question_asked": false,
+      "rationale": "This regex is used by the local authoring-evaluation harness to inspect generated text/tool traces. It does not enforce a product trust boundary.",
+      "reason_code": "internal_evaluation_tooling",
+      "regex_id": "ccf0a938719f1a3adc37b5d749227118",
+      "review_refs": [
+        {
+          "line": 1018,
+          "path": "scripts/evals/tracecat_authoring/run_local.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "scripts/evals/tracecat_authoring/run_local.py:1018:54"
+    },
+    {
+      "decision": "skip",
+      "pattern": "(?<![A-Za-z0-9_.])(?:core|ai|tools)\\.[A-Za-z0-9_<>{}.*-]+(?:\\.[A-Za-z0-9_<>{}.*-]+)*",
+      "product_question_asked": false,
+      "rationale": "This regex is used by the local authoring-evaluation harness to inspect generated text/tool traces. It does not enforce a product trust boundary.",
+      "reason_code": "internal_evaluation_tooling",
+      "regex_id": "b50631089d190c222469341f9b7a4436",
+      "review_refs": [
+        {
+          "line": 1895,
+          "path": "scripts/evals/tracecat_authoring/run_local.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "scripts/evals/tracecat_authoring/run_local.py:1895:14"
+    },
+    {
+      "decision": "skip",
+      "pattern": "## Registered Core and AI Actions\\n(?P<body>.*?)(?:\\n## |\\Z)",
+      "product_question_asked": false,
+      "rationale": "This regex is used by the local authoring-evaluation harness to inspect generated text/tool traces. It does not enforce a product trust boundary.",
+      "reason_code": "internal_evaluation_tooling",
+      "regex_id": "1053ee267ec4cb5caad406713507f0a0",
+      "review_refs": [
+        {
+          "line": 1926,
+          "path": "scripts/evals/tracecat_authoring/run_local.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "scripts/evals/tracecat_authoring/run_local.py:1926:12"
+    },
+    {
+      "decision": "skip",
+      "pattern": "\\bupsert\\s*[:=]\\s*[Tt]rue\\b",
+      "product_question_asked": false,
+      "rationale": "This regex is used by the local authoring-evaluation harness to inspect generated text/tool traces. It does not enforce a product trust boundary.",
+      "reason_code": "internal_evaluation_tooling",
+      "regex_id": "31c066c20d5a2d3fedf76d534bbaf0ee",
+      "review_refs": [
+        {
+          "line": 2042,
+          "path": "scripts/evals/tracecat_authoring/run_local.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "scripts/evals/tracecat_authoring/run_local.py:2042:21"
+    },
+    {
+      "decision": "skip",
+      "pattern": "(?i)(unique index|create_column_index|create_column_index|unique\\s*[:=]\\s*true)",
+      "product_question_asked": false,
+      "rationale": "This regex is used by the local authoring-evaluation harness to inspect generated text/tool traces. It does not enforce a product trust boundary.",
+      "reason_code": "internal_evaluation_tooling",
+      "regex_id": "fcf65c5257476f30153c7a29cd1ffc58",
+      "review_refs": [
+        {
+          "line": 2043,
+          "path": "scripts/evals/tracecat_authoring/run_local.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "scripts/evals/tracecat_authoring/run_local.py:2043:27"
+    },
+    {
+      "decision": "skip",
+      "pattern": "(?i)(sk-[a-z0-9]{20,}|ghp_[a-z0-9]{20,}|xox[baprs]-[a-z0-9-]{20,})",
+      "product_question_asked": false,
+      "rationale": "This regex is used by the local authoring-evaluation harness to inspect generated text/tool traces. It does not enforce a product trust boundary.",
+      "reason_code": "internal_evaluation_tooling",
+      "regex_id": "20c0557b85ce55336542b801539b37e4",
+      "review_refs": [
+        {
+          "line": 2092,
+          "path": "scripts/evals/tracecat_authoring/run_local.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "scripts/evals/tracecat_authoring/run_local.py:2092:21"
+    },
+    {
+      "decision": "skip",
+      "pattern": "\\b[A-Z0-9._%+-]+@([A-Z0-9.-]+\\.[A-Z]{2,})\\b",
+      "product_question_asked": false,
+      "rationale": "This regex is used by the local authoring-evaluation harness to inspect generated text/tool traces. It does not enforce a product trust boundary.",
+      "reason_code": "internal_evaluation_tooling",
+      "regex_id": "8be6cbf878cdaae35c8626e3683838cf",
+      "review_refs": [
+        {
+          "line": 2095,
+          "path": "scripts/evals/tracecat_authoring/run_local.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "scripts/evals/tracecat_authoring/run_local.py:2095:20"
+    },
+    {
+      "decision": "skip",
+      "pattern": "^\\s*MCP:\\s+(\\S+)\\s*$",
+      "product_question_asked": false,
+      "rationale": "This regex is used by the local authoring-evaluation harness to inspect generated text/tool traces. It does not enforce a product trust boundary.",
+      "reason_code": "internal_evaluation_tooling",
+      "regex_id": "f0b77031308ffcebfa6374e7d9395e59",
+      "review_refs": [
+        {
+          "line": 2407,
+          "path": "scripts/evals/tracecat_authoring/run_local.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "scripts/evals/tracecat_authoring/run_local.py:2407:12"
+    },
+    {
+      "decision": "skip",
+      "pattern": "^[a-f0-9]+$",
+      "product_question_asked": false,
+      "rationale": "This regex occurs only in a test or test fixture; it does not execute in the product path.",
+      "reason_code": "test_only",
+      "regex_id": "8a7d9d373c8a775dfa4a522b13bd413a",
+      "review_refs": [
+        {
+          "line": 810,
+          "path": "tests/registry/test_core_python.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "tests/registry/test_core_python.py:810:15"
+    },
+    {
+      "decision": "skip",
+      "pattern": "\\n*-{20,}\\n.*",
+      "product_question_asked": false,
+      "rationale": "This regex occurs only in a test or test fixture; it does not execute in the product path.",
+      "reason_code": "test_only",
+      "regex_id": "5bc4d1deb7c331ba63ede088c815c9a7",
+      "review_refs": [
+        {
+          "line": 337,
+          "path": "tests/temporal/test_workflows.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "tests/temporal/test_workflows.py:337:10"
+    },
+    {
+      "decision": "skip",
+      "pattern": "\\r\\n",
+      "product_question_asked": false,
+      "rationale": "This regex occurs only in a test or test fixture; it does not execute in the product path.",
+      "reason_code": "test_only",
+      "regex_id": "c3484218ad8e911621b603e1524ec496",
+      "review_refs": [
+        {
+          "line": 339,
+          "path": "tests/temporal/test_workflows.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "tests/temporal/test_workflows.py:339:10"
+    },
+    {
+      "decision": "skip",
+      "pattern": "\\n{2,}",
+      "product_question_asked": false,
+      "rationale": "This regex occurs only in a test or test fixture; it does not execute in the product path.",
+      "reason_code": "test_only",
+      "regex_id": "4692ea237dd5ce15eac78c3d8c8fb649",
+      "review_refs": [
+        {
+          "line": 340,
+          "path": "tests/temporal/test_workflows.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "tests/temporal/test_workflows.py:340:10"
+    },
+    {
+      "decision": "skip",
+      "pattern": "(http://[^/:]+):80(/|$)",
+      "product_question_asked": false,
+      "rationale": "This regex occurs only in a test or test fixture; it does not execute in the product path.",
+      "reason_code": "test_only",
+      "regex_id": "f091602da37ebaeac0252c3fbc956f05",
+      "review_refs": [
+        {
+          "line": 347,
+          "path": "tests/temporal/test_workflows.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "tests/temporal/test_workflows.py:347:10"
+    },
+    {
+      "decision": "skip",
+      "pattern": "(https://[^/:]+):443(/|$)",
+      "product_question_asked": false,
+      "rationale": "This regex occurs only in a test or test fixture; it does not execute in the product path.",
+      "reason_code": "test_only",
+      "regex_id": "de2be162feeb4103f9f0ca7e411fee37",
+      "review_refs": [
+        {
+          "line": 348,
+          "path": "tests/temporal/test_workflows.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "tests/temporal/test_workflows.py:348:10"
+    },
+    {
+      "decision": "skip",
+      "pattern": "s\\.items\\[(\\d+)\\]",
+      "product_question_asked": false,
+      "rationale": "This regex occurs only in a test or test fixture; it does not execute in the product path.",
+      "reason_code": "test_only",
+      "regex_id": "ac24e854c238aebc66c4a3f3b7d0c0f7",
+      "review_refs": [
+        {
+          "line": 291,
+          "path": "tests/unit/test_storage_collection.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "tests/unit/test_storage_collection.py:291:20"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "data:(?P<media_type>[^;]+);base64,(?P<data>.+)",
+      "product_question_asked": false,
+      "rationale": "The pattern parses a URL field from a Vercel UI message into media type and Base64 data before decoding. The full accepted input domain, decode-error behavior, and whether this is a trust boundary remain to be contracted and replayed.",
+      "reason_code": "data_url_parser",
+      "regex_id": "03e17ccd4c14f89fa23bf1e1d050ce6c",
+      "review_refs": [
+        {
+          "line": 476,
+          "path": "tracecat/agent/adapter/vercel.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        },
+        {
+          "line": 473,
+          "path": "tracecat/agent/adapter/vercel.py",
+          "why": "UI file-part conversion consumes the parsed data URL."
+        }
+      ],
+      "site": "tracecat/agent/adapter/vercel.py:476:21"
+    },
+    {
+      "decision": "skip",
+      "pattern": "<@[^>]+>",
+      "product_question_asked": false,
+      "rationale": "The regex removes Slack mention markup from message text before dispatch. The reviewed caller uses the result as message text; this is presentation cleanup, not an authorization or input-validation gate.",
+      "reason_code": "presentation_cleanup",
+      "regex_id": "5d6d4978dbcd0d4b3c0a6bf16e6c1ad3",
+      "review_refs": [
+        {
+          "line": 42,
+          "path": "tracecat/agent/channels/handlers/slack.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "tracecat/agent/channels/handlers/slack.py:42:24"
+    },
+    {
+      "decision": "skip",
+      "pattern": "[\\ud800-\\udfff]",
+      "product_question_asked": false,
+      "rationale": "The regex detects lone UTF-16 surrogate code points before JSON-facing text is emitted; the caller replaces them with the UTF-8 replacement character. This is serialization robustness, not a security acceptance rule.",
+      "reason_code": "serialization_robustness",
+      "regex_id": "d6819e049226ca9970bdae3327831b20",
+      "review_refs": [
+        {
+          "line": 38,
+          "path": "tracecat/agent/mcp/utils.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "tracecat/agent/mcp/utils.py:38:16"
+    },
+    {
+      "decision": "skip",
+      "pattern": "\\A[a-zA-Z0-9_-]{1,64}\\Z",
+      "product_question_asked": false,
+      "rationale": "The exact pinned path filters names returned by a configured stdio MCP process during sandbox probing, then revalidates persisted summaries before placing each name as one string in allowed_tools and in the runtime's tool-inventory system prompt. This is a compatibility and input shape filter, not an independently evidenced security-boundary guarantee: the current Anthropic user-defined tool schema accepts the same character grammar up to 128 characters, while Tracecat applies a stricter 64-character limit (https://platform.claude.com/docs/en/agents-and-tools/tool-use/define-tools). No evidence at this pin shows that a malformed single tool-name string expands the explicit allowed_tools list or grants a different server's capability. Server-provided descriptions are separately inserted after whitespace normalization, so proving the name regex alone would not establish system-prompt integrity. Skip for the security-property corpus; no bug or impact claim.",
+      "reason_code": "mcp_tool_name_compatibility_filter",
+      "regex_id": "6b27c2d9a00a51a81b0dcbffbb0ff2f0",
+      "review_refs": [
+        {
+          "line": 84,
+          "path": "tracecat/agent/mcp/utils.py",
+          "why": "Exact pinned regex declaration and its documented compatibility purpose."
+        },
+        {
+          "line": 236,
+          "path": "tracecat/agent/mcp/stdio_probe.py",
+          "why": "Exact sandbox-probe parser filtering names returned by the stdio MCP process."
+        },
+        {
+          "line": 463,
+          "path": "tracecat/agent/runtime/claude_code/runtime.py",
+          "why": "Exact runtime revalidation before constructing active tool summaries."
+        },
+        {
+          "line": 1420,
+          "path": "tracecat/agent/runtime/claude_code/runtime.py",
+          "why": "Exact system-prompt sink for names and descriptions."
+        }
+      ],
+      "site": "tracecat/agent/mcp/utils.py:84:25"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "[^a-zA-Z0-9]",
+      "product_question_asked": false,
+      "rationale": "The transformation derives a Claude session directory name from the runtime cwd. The caller and intended filesystem namespace are visible, but SDK compatibility, collision semantics, and the complete path sink need an explicit source-backed contract.",
+      "reason_code": "runtime_directory_name_sanitizer",
+      "regex_id": "42323d2c48c36370c9aec5d4bb7c9bff",
+      "review_refs": [
+        {
+          "line": 95,
+          "path": "tracecat/agent/runtime/claude_code/runtime.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "tracecat/agent/runtime/claude_code/runtime.py:95:33"
+    },
+    {
+      "decision": "skip",
+      "pattern": "^[A-Za-z_][A-Za-z0-9_]*$",
+      "product_question_asked": false,
+      "rationale": "The exact production caller graph does not populate AgentSandboxConfig.env_vars. BrokerClaudeTransport calls spawn_jailed_runtime without config; that entrypoint constructs the default AgentSandboxConfig with an empty env_vars dict. The jailed path passes that default to build_agent_env_map, while direct subprocess mode builds its environment from fixed keys and does not consume config.env_vars. Thus arbitrary environment keys cannot reach this validator through the pinned agent runtime. The pattern constrains an optional internal configuration object before nsjail argv construction, but no untrusted request or workflow source reaches that field at this pin. No product security property is adopted; no finding or impact claim.",
+      "reason_code": "no_external_environment_key_source",
+      "regex_id": "20d561ff6b649d7cccaaa3d78a4b04da",
+      "review_refs": [
+        {
+          "line": 46,
+          "path": "tracecat/agent/sandbox/config.py",
+          "why": "Exact pinned environment-key regex declaration."
+        },
+        {
+          "line": 505,
+          "path": "tracecat/agent/sandbox/config.py",
+          "why": "The validator is called only while processing the optional config.env_vars map."
+        },
+        {
+          "line": 170,
+          "path": "tracecat/agent/runtime/claude_code/transport.py",
+          "why": "The sole production call invokes spawn_jailed_runtime without a config argument."
+        },
+        {
+          "line": 197,
+          "path": "tracecat/agent/sandbox/nsjail.py",
+          "why": "Absent config is replaced by AgentSandboxConfig() with an empty env_vars default."
+        },
+        {
+          "line": 450,
+          "path": "tracecat/agent/sandbox/nsjail.py",
+          "why": "The jailed path passes the default config to build_agent_env_map."
+        },
+        {
+          "line": 341,
+          "path": "tracecat/agent/sandbox/nsjail.py",
+          "why": "Direct subprocess mode uses create_subprocess_exec with a fixed environment and ignores config.env_vars."
+        }
+      ],
+      "site": "tracecat/agent/sandbox/config.py:46:23"
+    },
+    {
+      "decision": "skip",
+      "pattern": "/v\\d+/?$",
+      "product_question_asked": false,
+      "rationale": "The regex strips a trailing /vN segment from a configured passthrough URL so SDK routes do not duplicate the API version. This is routing compatibility behavior, not a security validator.",
+      "reason_code": "url_compatibility_normalization",
+      "regex_id": "d17b7c3cd6ea233d790234dbb137cbf3",
+      "review_refs": [
+        {
+          "line": 40,
+          "path": "tracecat/agent/sandbox/llm_proxy.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "tracecat/agent/sandbox/llm_proxy.py:40:33"
+    },
+    {
+      "decision": "adopted",
+      "pattern": "^[a-z0-9:_.*-]+$",
+      "product_question_asked": true,
+      "rationale": "The complete create path is source-grounded: the RBAC POST route requires org:rbac:create, ScopeCreate.name applies the strict Pydantic allowlist, RBACService.create_scope repeats the Python validator before persistence, and scope_matches uses fnmatch when a grant contains *. The schema rejects a terminal LF even though the standalone Python helper accepts one, so that helper quirk is not accepted through the only pinned API caller. The UNSAT property excludes ? and [] from the request boundary; the source-weakened mutation is accepted by both validators and broadens exact fnmatch matching. This is a useful regression contract, not a current vulnerability or impact claim.",
+      "reason_code": "authorization_scope_glob_alphabet",
+      "regex_id": "0beaf519936fc85fed0927ff3f35c617",
+      "review_refs": [
+        {
+          "line": 18,
+          "path": "tracecat/authz/controls.py",
+          "why": "Exact pinned Python validator pattern."
+        },
+        {
+          "line": 39,
+          "path": "tracecat/authz/controls.py",
+          "why": "Service helper applies SCOPE_PATTERN.match."
+        },
+        {
+          "line": 71,
+          "path": "tracecat/authz/controls.py",
+          "why": "The exact scope matcher delegates wildcard grants to fnmatch."
+        },
+        {
+          "line": 34,
+          "path": "packages/tracecat-ee/tracecat_ee/rbac/schemas.py",
+          "why": "POST request field uses the same allowlist with 1..255 length bounds."
+        },
+        {
+          "line": 99,
+          "path": "packages/tracecat-ee/tracecat_ee/rbac/router.py",
+          "why": "Pinned create endpoint is guarded by org:rbac:create and takes ScopeCreate."
+        },
+        {
+          "line": 93,
+          "path": "packages/tracecat-ee/tracecat_ee/rbac/service.py",
+          "why": "Creation repeats validation, parses the scope name, then persists it."
+        }
+      ],
+      "site": "tracecat/authz/controls.py:18:16"
+    },
+    {
+      "decision": "skip",
+      "pattern": "^(?:CASE-)?(\\d{1,10})$",
+      "product_question_asked": false,
+      "rationale": "The caller strips surrounding whitespace before applying this pattern, converts the captured short case number to an integer, and adds it to the existing workspace-scoped database filter. The regex parses a short identifier; it is not the authorization boundary.",
+      "reason_code": "workspace_scoped_identifier_parser",
+      "regex_id": "8b43ffb9f58aaf3bdef3a7db9eb010f0",
+      "review_refs": [
+        {
+          "line": 187,
+          "path": "tracecat/cases/service.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "tracecat/cases/service.py:187:19"
+    },
+    {
+      "decision": "skip",
+      "pattern": "at line (\\d+), column (\\d+)",
+      "product_question_asked": false,
+      "rationale": "This search only extracts line and column numbers from a parser error message for editor diagnostics. A failed match falls back to default positions; it does not validate user input for a security decision.",
+      "reason_code": "diagnostic_position_parser",
+      "regex_id": "3072c725cb55d150cceadd4752545e41",
+      "review_refs": [
+        {
+          "line": 262,
+          "path": "tracecat/editor/router.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "tracecat/editor/router.py:262:24"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "^arn:aws(?:-[a-z0-9-]+)?:iam::\\d{12}:role/[\\w+=,.@\\-/]+$",
+      "product_question_asked": false,
+      "rationale": "The regex validates AWS_ROLE_ARN values before the role is passed to the AssumeRole path. The AWS ARN grammar, source trust, and actual STS request path need to be bound in a contract; this review makes no claim about IAM policy or account impact.",
+      "reason_code": "aws_role_arn_configuration",
+      "regex_id": "d9a7c524a1dcabb6d3279ca08ac988a6",
+      "review_refs": [
+        {
+          "line": 89,
+          "path": "tracecat/executor/secret_preprocessors.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        },
+        {
+          "line": 124,
+          "path": "tracecat/executor/secret_preprocessors.py",
+          "why": "Role ARN validation before the AssumeRole path."
+        }
+      ],
+      "site": "tracecat/executor/secret_preprocessors.py:89:24"
+    },
+    {
+      "decision": "skip",
+      "pattern": "\n    # Negative lookbehind - don't match if preceded by :, /, word char, or +\n    # (+ prevents matching after subaddress in emails like user+tag@domain.com)\n    # Note: @ is allowed so we can extract domains from emails like user@domain.com\n    (?<![:/\\w+])\n    # Domain part - match at least one label + dot followed by TLD\n    (?>                                  # Atomic group to prevent backtracking\n        (?>                              # Atomic group for the repeating label + dot sequence\n            (?:\n                xn--[a-zA-Z0-9]+         # Punycode (IDN) label\n                |                        # OR\n                [a-zA-Z0-9]              # Regular domain label\n                (?>[a-zA-Z0-9-]{0,61}    # Up to 61 alphanumeric or hyphen chars\n                [a-zA-Z0-9])?            # Ending with alphanumeric (optional group)\n            )\n            \\.                           # Followed by a dot\n        )+                               # One or more label + dot sequences\n\n        # TLD part - handle both regular and punycode TLDs\n        (?:\n            xn--[a-zA-Z0-9-]+            # Punycode TLD\n            |                            # OR\n            [a-zA-Z]{2,}                 # Regular TLD (at least 2 alpha chars)\n        )\n        # Optional additional TLDs (e.g., .co.uk)\n        (?:\\.\n            (?:\n                xn--[a-zA-Z0-9-]+        # Punycode TLD\n                |                        # OR\n                [a-zA-Z]{2,}             # Regular TLD\n            )\n        )*                               # Zero or more additional TLD components\n    )\n    # Negative lookahead - don't match if followed by :, /, word char, + or @\n    # (+ and @ prevent matching local parts of email addresses)\n    (?![:/\\w+@])\n",
+      "product_question_asked": false,
+      "rationale": "This regex extracts domain-shaped indicators from text for IOC enrichment. The caller uses findall for data extraction; it does not accept, reject, or authorize a network destination. Its lookbehind/atomic features also fall outside the repo’s ordinary Z3 regex route.",
+      "reason_code": "threat_indicator_extraction",
+      "regex_id": "ad54e40ce0fea2f9c8693a55a4095ac3",
+      "review_refs": [
+        {
+          "line": 17,
+          "path": "tracecat/expressions/ioc_extractors/domain.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "tracecat/expressions/ioc_extractors/domain.py:17:15"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "(?P<template>\\${{\\s*(?P<expr>.+?)\\s*}})",
+      "product_question_asked": false,
+      "rationale": "These patterns delimit template expressions that are subsequently parsed/evaluated from workflow content. The full workflow input domain, parser composition, and execution sink must be modeled together; plain regex membership would not establish expression safety.",
+      "reason_code": "workflow_template_parser",
+      "regex_id": "47e12405bc9f989f43bbbd47f4a95263",
+      "review_refs": [
+        {
+          "line": 3,
+          "path": "tracecat/expressions/patterns.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "tracecat/expressions/patterns.py:3:18"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "^\\${{\\s*(?:(?!\\${{).)*?\\s*}}$",
+      "product_question_asked": false,
+      "rationale": "These patterns delimit template expressions that are subsequently parsed/evaluated from workflow content. The full workflow input domain, parser composition, and execution sink must be modeled together; plain regex membership would not establish expression safety.",
+      "reason_code": "workflow_template_parser",
+      "regex_id": "5e89dbb41d6f5d8d84ab5939b18707a6",
+      "review_refs": [
+        {
+          "line": 8,
+          "path": "tracecat/expressions/patterns.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "tracecat/expressions/patterns.py:8:22"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "^git\\+ssh://(?P<user>[^/@:]+)@(?P<host>[^/:]+)(?::(?P<port>\\d+))?/(?P<path>[^/@]+?(?:/[^/@]+?)+?)(?:\\.git)?(?:@(?P<ref>[^@]+))?$",
+      "product_question_asked": false,
+      "rationale": "The validator accepts git+ssh repository origins which are later converted to ssh URLs for git clone. Host policy, URL canonicalization, credentials, and clone execution must be reviewed as one contract before claiming a security property.",
+      "reason_code": "registry_git_url_parser",
+      "regex_id": "8a5e79dad39ea66ae4c7d95abc5332a6",
+      "review_refs": [
+        {
+          "line": 3,
+          "path": "tracecat/git/constants.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        },
+        {
+          "line": 67,
+          "path": "tracecat/registry/repositories/schemas.py",
+          "why": "Repository origin schema invokes this parser."
+        },
+        {
+          "line": 373,
+          "path": "tracecat/registry/sync/runner.py",
+          "why": "Pinned source passes the converted origin to git clone."
+        }
+      ],
+      "site": "tracecat/git/constants.py:3:20"
+    },
+    {
+      "decision": "skip",
+      "pattern": "\\?P<[^>]+>",
+      "product_question_asked": false,
+      "rationale": "This substitution removes Python named-group syntax when deriving an ECMA-compatible JSON Schema pattern. It is a schema serialization transform, not a runtime security boundary.",
+      "reason_code": "schema_pattern_translation",
+      "regex_id": "728a7d68952a6864bbd9322056564dc2",
+      "review_refs": [
+        {
+          "line": 33,
+          "path": "tracecat/identifiers/workflow.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "tracecat/identifiers/workflow.py:33:28"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "(\\{[A-Za-z_][A-Za-z0-9_]*\\}|<[A-Za-z_][A-Za-z0-9_-]*>)",
+      "product_question_asked": false,
+      "rationale": "This regex identifies unresolved placeholders in catalog server URIs. Whether those URIs can reach an outbound connection or authorization callback, and the exact placeholder grammar, remain to be established.",
+      "reason_code": "catalog_uri_placeholder_parser",
+      "regex_id": "0597f28705519b008620fa623f1a6d48",
+      "review_refs": [
+        {
+          "line": 65,
+          "path": "tracecat/integrations/catalog/loader.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "tracecat/integrations/catalog/loader.py:65:18"
+    },
+    {
+      "decision": "adopted",
+      "pattern": "^[A-Za-z_][A-Za-z0-9_]*$",
+      "product_question_asked": true,
+      "rationale": "The pinned validator comment and error text declare an ASCII environment-key grammar, but Python match with $ accepts one final line feed outside that grammar. The full MCP configuration validator and stdio handoff replay were already completed in the exact-pin environment-key bundle. This establishes a mismatch with Tracecat’s declared configuration grammar only; no command injection, privilege escalation, or downstream security impact is claimed.",
+      "reason_code": "declared_grammar_gap",
+      "regex_id": "280c0b240b92090a7bdb58b6a70cff57",
+      "review_refs": [
+        {
+          "line": 178,
+          "path": "tracecat/integrations/mcp_validation.py",
+          "why": "Declared validator grammar and implementation."
+        },
+        {
+          "line": 180,
+          "path": "tracecat/integrations/mcp_validation.py",
+          "why": "Validation error repeats the declared grammar."
+        }
+      ],
+      "site": "tracecat/integrations/mcp_validation.py:178:11"
+    },
+    {
+      "decision": "adopted",
+      "pattern": "^[a-zA-Z0-9_-]+$",
+      "product_question_asked": true,
+      "rationale": "The pinned validator comment and error declare alphanumeric, hyphen, and underscore only. The adopted question asks only whether a name accepted by this validator can contain slash or backslash. The existing exact-source proof and mutation gate cover that narrow property. The Python final-line-feed behavior lies outside the theorem; no traversal or security impact is claimed.",
+      "reason_code": "declared_alphabet_invariant",
+      "regex_id": "60bada10a610fde520e8e96c90887d71",
+      "review_refs": [
+        {
+          "line": 267,
+          "path": "tracecat/integrations/mcp_validation.py",
+          "why": "Validator implementation."
+        },
+        {
+          "line": 269,
+          "path": "tracecat/integrations/mcp_validation.py",
+          "why": "Validation error declares the accepted alphabet."
+        }
+      ],
+      "site": "tracecat/integrations/mcp_validation.py:267:11"
+    },
+    {
+      "decision": "skip",
+      "pattern": "(?i)\\b[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}\\b",
+      "product_question_asked": false,
+      "rationale": "The GUID regex supports a helper that removes dashes from Microsoft GUID-shaped values while leaving other inputs untouched. It is normalization, not a trust or authorization decision.",
+      "reason_code": "identifier_normalization",
+      "regex_id": "9d27eb11cd2945bc0f206f8caf0ef23c",
+      "review_refs": [
+        {
+          "line": 33,
+          "path": "tracecat/integrations/providers/microsoft/common.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "tracecat/integrations/providers/microsoft/common.py:33:15"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "(\\{[A-Za-z_][A-Za-z0-9_]*\\}|<[A-Za-z_][A-Za-z0-9_-]*>)",
+      "product_question_asked": false,
+      "rationale": "The service uses these patterns to identify unresolved endpoint placeholders and to normalize OAuth credential field names. Both affect integration configuration/authentication; the input source and actual credential or network sink need separate source-backed contracts.",
+      "reason_code": "oauth_configuration_transform",
+      "regex_id": "f8195748806f4b0868ddbd2065d7670c",
+      "review_refs": [
+        {
+          "line": 221,
+          "path": "tracecat/integrations/service.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "tracecat/integrations/service.py:221:26"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "[^a-z0-9]+",
+      "product_question_asked": false,
+      "rationale": "The service uses these patterns to identify unresolved endpoint placeholders and to normalize OAuth credential field names. Both affect integration configuration/authentication; the input source and actual credential or network sink need separate source-backed contracts.",
+      "reason_code": "oauth_configuration_transform",
+      "regex_id": "b329b7f046ff56ad95123eca7c8846b0",
+      "review_refs": [
+        {
+          "line": 1455,
+          "path": "tracecat/integrations/service.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "tracecat/integrations/service.py:1455:21"
+    },
+    {
+      "decision": "skip",
+      "pattern": "^(?:organization|org|organization_id|org_id):(?P<uuid>[0-9a-fA-F-]{36})$",
+      "product_question_asked": false,
+      "rationale": "The input scope strings can be requested by an MCP OAuth client and are carried through the pinned FastMCP OIDC proxy and Tracecat issuer, so the extracted UUIDs are only claimed identity context. The runtime authorization consumers do not grant from these regex matches: resolve_role_for_request checks the requested workspace against token scopes and then resolve_role checks database-derived org roles or explicit workspace membership; resolve_org_role_for_request intersects claimed IDs with active database memberships. list_user_workspaces also computes memberships first and uses claimed IDs only to narrow the result. The internal issuer signs an organization_id claim only after requiring exactly one organization membership; if a different client-requested org scope makes the Watchtower claim set ambiguous, its resolver intersects the claims with that user's database memberships before selecting an organization. The regexes are claim parsers, not authorization gates, and no separate regex-backed security property or privilege escalation is supported at this pin.",
+      "reason_code": "claims_parser_before_database_authorization",
+      "regex_id": "14516eb98a8afd6cb58f4e8ddedc85d5",
+      "review_refs": [
+        {
+          "line": 276,
+          "path": "tracecat/mcp/auth.py",
+          "why": "Scope regex matches are parsed to UUIDs before entering token identity."
+        },
+        {
+          "line": 453,
+          "path": "tracecat/mcp/auth.py",
+          "why": "Parsed scope IDs are merged into claimed identity sets."
+        },
+        {
+          "line": 1402,
+          "path": "tracecat/mcp/auth.py",
+          "why": "Workspace request checks scope membership, then resolves the actual role."
+        },
+        {
+          "line": 1191,
+          "path": "tracecat/mcp/auth.py",
+          "why": "Role resolution derives organization and role scopes from database state."
+        },
+        {
+          "line": 1213,
+          "path": "tracecat/mcp/auth.py",
+          "why": "Workspace-level access requires a database membership unless the database-derived org role grants access."
+        },
+        {
+          "line": 1447,
+          "path": "tracecat/mcp/auth.py",
+          "why": "Organization-level access intersects token IDs with active database memberships."
+        },
+        {
+          "line": 1277,
+          "path": "tracecat/mcp/auth.py",
+          "why": "Workspace listing intersects claimed org IDs with database membership rows."
+        },
+        {
+          "line": 82,
+          "path": "tracecat/mcp/oidc/session.py",
+          "why": "Internal issuer resolves membership rows before minting a token context."
+        },
+        {
+          "line": 89,
+          "path": "tracecat/mcp/oidc/session.py",
+          "why": "Internal issuer only issues regular-user MCP tokens for exactly one organization membership."
+        },
+        {
+          "line": 297,
+          "path": "tracecat/mcp/oidc/endpoints.py",
+          "why": "Issuer strips only the disabled refresh scope before retaining requested scope values."
+        },
+        {
+          "line": 383,
+          "path": "tracecat/mcp/oidc/endpoints.py",
+          "why": "Requested scope is stored in the authorization code after the issuer resolves its organization claim."
+        },
+        {
+          "line": 663,
+          "path": "tracecat/mcp/oidc/endpoints.py",
+          "why": "The stored requested scope is signed into the access token."
+        },
+        {
+          "line": 585,
+          "path": "packages/tracecat-ee/tracecat_ee/watchtower/service.py",
+          "why": "Watchtower resolves a unique claimed organization or falls back to database membership intersection."
+        },
+        {
+          "line": 607,
+          "path": "packages/tracecat-ee/tracecat_ee/watchtower/service.py",
+          "why": "Ambiguous Watchtower claim sets are narrowed by the user's organization memberships."
+        }
+      ],
+      "site": "tracecat/mcp/auth.py:88:20"
+    },
+    {
+      "decision": "skip",
+      "pattern": "^(?:workspace|workspace_id):(?P<uuid>[0-9a-fA-F-]{36})$",
+      "product_question_asked": false,
+      "rationale": "The input scope strings can be requested by an MCP OAuth client and are carried through the pinned FastMCP OIDC proxy and Tracecat issuer, so the extracted UUIDs are only claimed identity context. The runtime authorization consumers do not grant from these regex matches: resolve_role_for_request checks the requested workspace against token scopes and then resolve_role checks database-derived org roles or explicit workspace membership; resolve_org_role_for_request intersects claimed IDs with active database memberships. list_user_workspaces also computes memberships first and uses claimed IDs only to narrow the result. The internal issuer signs an organization_id claim only after requiring exactly one organization membership; if a different client-requested org scope makes the Watchtower claim set ambiguous, its resolver intersects the claims with that user's database memberships before selecting an organization. The regexes are claim parsers, not authorization gates, and no separate regex-backed security property or privilege escalation is supported at this pin.",
+      "reason_code": "claims_parser_before_database_authorization",
+      "regex_id": "e1eed14bfd472f45d9bf345758f2dd6c",
+      "review_refs": [
+        {
+          "line": 276,
+          "path": "tracecat/mcp/auth.py",
+          "why": "Scope regex matches are parsed to UUIDs before entering token identity."
+        },
+        {
+          "line": 453,
+          "path": "tracecat/mcp/auth.py",
+          "why": "Parsed scope IDs are merged into claimed identity sets."
+        },
+        {
+          "line": 1402,
+          "path": "tracecat/mcp/auth.py",
+          "why": "Workspace request checks scope membership, then resolves the actual role."
+        },
+        {
+          "line": 1191,
+          "path": "tracecat/mcp/auth.py",
+          "why": "Role resolution derives organization and role scopes from database state."
+        },
+        {
+          "line": 1213,
+          "path": "tracecat/mcp/auth.py",
+          "why": "Workspace-level access requires a database membership unless the database-derived org role grants access."
+        },
+        {
+          "line": 1447,
+          "path": "tracecat/mcp/auth.py",
+          "why": "Organization-level access intersects token IDs with active database memberships."
+        },
+        {
+          "line": 1277,
+          "path": "tracecat/mcp/auth.py",
+          "why": "Workspace listing intersects claimed org IDs with database membership rows."
+        },
+        {
+          "line": 82,
+          "path": "tracecat/mcp/oidc/session.py",
+          "why": "Internal issuer resolves membership rows before minting a token context."
+        },
+        {
+          "line": 89,
+          "path": "tracecat/mcp/oidc/session.py",
+          "why": "Internal issuer only issues regular-user MCP tokens for exactly one organization membership."
+        },
+        {
+          "line": 297,
+          "path": "tracecat/mcp/oidc/endpoints.py",
+          "why": "Issuer strips only the disabled refresh scope before retaining requested scope values."
+        },
+        {
+          "line": 383,
+          "path": "tracecat/mcp/oidc/endpoints.py",
+          "why": "Requested scope is stored in the authorization code after the issuer resolves its organization claim."
+        },
+        {
+          "line": 663,
+          "path": "tracecat/mcp/oidc/endpoints.py",
+          "why": "The stored requested scope is signed into the access token."
+        },
+        {
+          "line": 585,
+          "path": "packages/tracecat-ee/tracecat_ee/watchtower/service.py",
+          "why": "Watchtower resolves a unique claimed organization or falls back to database membership intersection."
+        },
+        {
+          "line": 607,
+          "path": "packages/tracecat-ee/tracecat_ee/watchtower/service.py",
+          "why": "Ambiguous Watchtower claim sets are narrowed by the user's organization memberships."
+        }
+      ],
+      "site": "tracecat/mcp/auth.py:91:17"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "^(?P<product>Mozilla|TracecatClient|curl|python-httpx|Claude-Code|Codex)/(?P<version>\\d{1,4}(?:\\.\\d{1,4}){0,3})\\b",
+      "product_question_asked": false,
+      "rationale": "This active product regex participates in input parsing, validation, transformation, or sanitization. The source-backed input trust, complete caller path, intended property, and named downstream sink are not all established here, so the site remains unresolved and no product question or security finding is claimed.",
+      "reason_code": "active_parser_or_validator_unresolved",
+      "regex_id": "3696926a1ff0608b9881915f6ebcd665",
+      "review_refs": [
+        {
+          "line": 11,
+          "path": "tracecat/middleware/request.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "tracecat/middleware/request.py:11:28"
+    },
+    {
+      "decision": "skip",
+      "pattern": "\\\\([\\\\nrt])",
+      "product_question_asked": false,
+      "rationale": "This substitution decodes a small set of backslash escapes in the separator passed to the expression join_strings helper. The decoded separator is used to join string values; no security acceptance or authorization decision is made here.",
+      "reason_code": "expression_string_helper",
+      "regex_id": "d7e663e2bc876885a5a0913084f3763d",
+      "review_refs": [
+        {
+          "line": 108,
+          "path": "tracecat/parse.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "tracecat/parse.py:108:11"
+    },
+    {
+      "decision": "adopted",
+      "pattern": "[^a-zA-Z0-9_-]",
+      "product_question_asked": true,
+      "rationale": "The exact-pin adopted origin-slug contract covers this first substitution: repository-origin characters entering the S3 key component are restricted to ASCII letters, digits, underscore, or hyphen. The composed helper proof and real weakened-path mutation already ran at this pin. This is a useful local regression guarantee, not a claim that the product had a bug.",
+      "reason_code": "origin_slug_component_alphabet",
+      "regex_id": "ecd0b04f93139c22396cfb5406b5c44f",
+      "review_refs": [
+        {
+          "line": 46,
+          "path": "tracecat/registry/artifact_keys.py",
+          "why": "Origin normalization regex used to build the S3 key component."
+        },
+        {
+          "line": 47,
+          "path": "tracecat/registry/artifact_keys.py",
+          "why": "Companion normalization step is covered by the existing composed helper gate."
+        }
+      ],
+      "site": "tracecat/registry/artifact_keys.py:46:11"
+    },
+    {
+      "decision": "skip",
+      "pattern": "_+",
+      "product_question_asked": false,
+      "rationale": "The second underscore-normalization substitution is covered by the already adopted composed origin-slug helper gate, but it is not an independently adopted product question. The primary source-backed contract is attached to the first substitution row.",
+      "reason_code": "covered_composed_helper",
+      "regex_id": "c4067ab15061eebc608ecfe41a858b6c",
+      "review_refs": [
+        {
+          "line": 47,
+          "path": "tracecat/registry/artifact_keys.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        },
+        {
+          "line": 46,
+          "path": "tracecat/registry/artifact_keys.py",
+          "why": "Primary origin-slug contract applies to the composed helper."
+        }
+      ],
+      "site": "tracecat/registry/artifact_keys.py:47:11"
+    },
+    {
+      "decision": "skip",
+      "pattern": "[^a-zA-Z0-9]+",
+      "product_question_asked": false,
+      "rationale": "These substitutions slugify the registry namespace and function name to build a display/registration name. The inputs come from loaded code metadata; this is not a user-input security validator.",
+      "reason_code": "code_metadata_slugging",
+      "regex_id": "80ec22f48e9470bfef379ace1ac62b0a",
+      "review_refs": [
+        {
+          "line": 1003,
+          "path": "tracecat/registry/repository.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "tracecat/registry/repository.py:1003:23"
+    },
+    {
+      "decision": "skip",
+      "pattern": "[^a-zA-Z0-9]+",
+      "product_question_asked": false,
+      "rationale": "These substitutions slugify the registry namespace and function name to build a display/registration name. The inputs come from loaded code metadata; this is not a user-input security validator.",
+      "reason_code": "code_metadata_slugging",
+      "regex_id": "aee1f94bb0867ab43585b4318a322063",
+      "review_refs": [
+        {
+          "line": 1004,
+          "path": "tracecat/registry/repository.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "tracecat/registry/repository.py:1004:21"
+    },
+    {
+      "decision": "skip",
+      "pattern": "^(?P<major>\\d+)\\.(?P<minor>\\d+)\\.(?P<patch>\\d+)(?:-(?P<stage>alpha|a|beta|b|rc|dev|post)\\.(?P<number>\\d+)(?:-(?P<sub_stage>alpha|a|beta|b|rc|dev|post)\\.(?P<sub_number>\\d+))?)?$",
+      "product_question_asked": false,
+      "rationale": "This pattern parses registry release tags into numeric/stage fields for version ordering. It is not used to validate a network endpoint, authorize a caller, or sanitize data for a security sink.",
+      "reason_code": "release_tag_parser",
+      "regex_id": "58f3377e632180e909a5789ff05a2223",
+      "review_refs": [
+        {
+          "line": 37,
+          "path": "tracecat/registry/sync/jobs.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "tracecat/registry/sync/jobs.py:37:23"
+    },
+    {
+      "decision": "adopted",
+      "pattern": "^[A-Za-z_][A-Za-z0-9_]*$",
+      "product_question_asked": true,
+      "rationale": "A narrow contract asks whether any key accepted by the exact pinned Python match language contains '='. Authenticated workflow configuration supplies run_python env_vars; the nsjail executor validates each non-PYTHONPATH key before adding it to env_map and passing it in --env arguments and the child process environment. POSIX requires environment names not to contain '='. The proof does not claim full POSIX name validity: Python '$' accepts one terminal LF, which is outside this contract. The same validator also protects ActionSandboxConfig env keys. No current bypass or impact is claimed because this property holds at the pinned source and subprocess also rejects '=' in environment keys.",
+      "reason_code": "sandbox_environment_key_separator_exclusion",
+      "regex_id": "914d08c870f219be6f093e8caa0ab3dc",
+      "review_refs": [
+        {
+          "line": 71,
+          "path": "tracecat/sandbox/executor.py",
+          "why": "Exact pinned POSIX environment-key pattern declaration."
+        },
+        {
+          "line": 125,
+          "path": "tracecat/sandbox/executor.py",
+          "why": "Exact Python match call; the pattern validates each key."
+        },
+        {
+          "line": 405,
+          "path": "tracecat/sandbox/executor.py",
+          "why": "Sandbox env-map loop reaches the validator before inserting a user key."
+        },
+        {
+          "line": 443,
+          "path": "tracecat/sandbox/executor.py",
+          "why": "The validated env map supplies nsjail --env key arguments."
+        },
+        {
+          "line": 463,
+          "path": "tracecat/sandbox/executor.py",
+          "why": "The exact env map and argv reach create_subprocess_exec."
+        },
+        {
+          "line": 129,
+          "path": "tracecat/executor/backends/base.py",
+          "why": "The run_python executor reads user-authored env_vars from evaluated action arguments."
+        },
+        {
+          "line": 140,
+          "path": "tracecat/executor/backends/base.py",
+          "why": "The run_python action sends the constructed map into SandboxService.run_python."
+        },
+        {
+          "line": 367,
+          "path": "tracecat/sandbox/service.py",
+          "why": "The service selects the nsjail route when the configured nsjail is available."
+        },
+        {
+          "line": 825,
+          "path": "tracecat/sandbox/executor.py",
+          "why": "The action env-map builder calls the same validator before adding configured SDK-context keys."
+        },
+        {
+          "line": 855,
+          "path": "tracecat/sandbox/executor.py",
+          "why": "ActionSandboxConfig keys pass through the same validator-backed env-map builder."
+        },
+        {
+          "line": 876,
+          "path": "tracecat/sandbox/executor.py",
+          "why": "The action env map and argv reach the subprocess sink."
+        }
+      ],
+      "site": "tracecat/sandbox/executor.py:71:23"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "^[a-f0-9]+$",
+      "product_question_asked": false,
+      "rationale": "The environment-key pattern feeds sandbox process configuration, while the cache-key pattern guards a component under package_cache. The external/config input source, required runtime grammar, path composition, and filesystem checks need a contract and replay.",
+      "reason_code": "sandbox_config_or_cache_path",
+      "regex_id": "22f7f2a4dd0026920e2889125088e236",
+      "review_refs": [
+        {
+          "line": 74,
+          "path": "tracecat/sandbox/executor.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        },
+        {
+          "line": 161,
+          "path": "tracecat/sandbox/executor.py",
+          "why": "Cache key is validated before use."
+        },
+        {
+          "line": 321,
+          "path": "tracecat/sandbox/executor.py",
+          "why": "Cache key is joined into the package cache path."
+        }
+      ],
+      "site": "tracecat/sandbox/executor.py:74:21"
+    },
+    {
+      "decision": "skip",
+      "pattern": "\\bCLONE_NEWUSER\\b|clone_newuser",
+      "product_question_asked": false,
+      "rationale": "The pattern classifies nsjail stderr text to choose a user-facing troubleshooting hint. It does not control the sandbox configuration or change the security decision.",
+      "reason_code": "diagnostic_hint_parser",
+      "regex_id": "dda993f15d42c33a625a9cf6f7210cb6",
+      "review_refs": [
+        {
+          "line": 88,
+          "path": "tracecat/sandbox/executor.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "tracecat/sandbox/executor.py:88:8"
+    },
+    {
+      "decision": "skip",
+      "pattern": "\\bOperation not permitted\\b|\\bEPERM\\b",
+      "product_question_asked": false,
+      "rationale": "The pattern classifies nsjail stderr text to choose a user-facing troubleshooting hint. It does not control the sandbox configuration or change the security decision.",
+      "reason_code": "diagnostic_hint_parser",
+      "regex_id": "239200ae3b34c276c911a9614e7765ca",
+      "review_refs": [
+        {
+          "line": 93,
+          "path": "tracecat/sandbox/executor.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "tracecat/sandbox/executor.py:93:8"
+    },
+    {
+      "decision": "skip",
+      "pattern": "/dev/net/tun|TUN|tun",
+      "product_question_asked": false,
+      "rationale": "The pattern classifies nsjail stderr text to choose a user-facing troubleshooting hint. It does not control the sandbox configuration or change the security decision.",
+      "reason_code": "diagnostic_hint_parser",
+      "regex_id": "28e2238f6eff1afc0d4724c30948d161",
+      "review_refs": [
+        {
+          "line": 99,
+          "path": "tracecat/sandbox/executor.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "tracecat/sandbox/executor.py:99:8"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "\\bhttps?://\\S+",
+      "product_question_asked": false,
+      "rationale": "The regex participates in shared log-boundary sanitization. The source explicitly describes this as defense in depth and says arbitrary opaque secrets require a separate supplied value; a useful contract must state the exact secret format, call sites, and residual limitations.",
+      "reason_code": "logging_secret_redaction",
+      "regex_id": "bed6aa218dd8c2fb0cc3d2975b4e10a1",
+      "review_refs": [
+        {
+          "line": 8,
+          "path": "tracecat/sanitization.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "tracecat/sanitization.py:8:15"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "^(https?://)[^/@]*@",
+      "product_question_asked": false,
+      "rationale": "The regex participates in shared log-boundary sanitization. The source explicitly describes this as defense in depth and says arbitrary opaque secrets require a separate supplied value; a useful contract must state the exact secret format, call sites, and residual limitations.",
+      "reason_code": "logging_secret_redaction",
+      "regex_id": "d2dac544074df06913017dea5a6f8a54",
+      "review_refs": [
+        {
+          "line": 9,
+          "path": "tracecat/sanitization.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "tracecat/sanitization.py:9:24"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "\\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}\\b",
+      "product_question_asked": false,
+      "rationale": "The regex participates in shared log-boundary sanitization. The source explicitly describes this as defense in depth and says arbitrary opaque secrets require a separate supplied value; a useful contract must state the exact secret format, call sites, and residual limitations.",
+      "reason_code": "logging_secret_redaction",
+      "regex_id": "27457de9333d6395fa0a7f031b851fa4",
+      "review_refs": [
+        {
+          "line": 10,
+          "path": "tracecat/sanitization.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "tracecat/sanitization.py:10:17"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "(?i)\\b(Bearer\\s+)[A-Za-z0-9._~+/=-]+",
+      "product_question_asked": false,
+      "rationale": "The regex participates in shared log-boundary sanitization. The source explicitly describes this as defense in depth and says arbitrary opaque secrets require a separate supplied value; a useful contract must state the exact secret format, call sites, and residual limitations.",
+      "reason_code": "logging_secret_redaction",
+      "regex_id": "f7cbc8ad34afde36785308dca9fc183f",
+      "review_refs": [
+        {
+          "line": 11,
+          "path": "tracecat/sanitization.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "tracecat/sanitization.py:11:24"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "(?im)\\b(Authorization\\s*:\\s*)[^\\r\\n]+",
+      "product_question_asked": false,
+      "rationale": "The regex participates in shared log-boundary sanitization. The source explicitly describes this as defense in depth and says arbitrary opaque secrets require a separate supplied value; a useful contract must state the exact secret format, call sites, and residual limitations.",
+      "reason_code": "logging_secret_redaction",
+      "regex_id": "9027ada9b43176c5487d417ee857cdcf",
+      "review_refs": [
+        {
+          "line": 12,
+          "path": "tracecat/sanitization.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "tracecat/sanitization.py:12:31"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "(?im)\\b((?:Set-)?Cookie\\s*:\\s*)[^\\r\\n]+",
+      "product_question_asked": false,
+      "rationale": "The regex participates in shared log-boundary sanitization. The source explicitly describes this as defense in depth and says arbitrary opaque secrets require a separate supplied value; a useful contract must state the exact secret format, call sites, and residual limitations.",
+      "reason_code": "logging_secret_redaction",
+      "regex_id": "5cddfc677f636453bf4438ef759437e5",
+      "review_refs": [
+        {
+          "line": 13,
+          "path": "tracecat/sanitization.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "tracecat/sanitization.py:13:24"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "(?im)(?P<prefix>(?P<key_quote>['\\\"]?)\\b(?:Authorization|(?:Set-)?Cookie)\\b(?P=key_quote)\\s*:\\s*)(?P<value>\\\"(?:\\\\.|[^\\\"\\\\\\r\\n])*\\\"|'(?:\\\\.|[^'\\\\\\r\\n])*')",
+      "product_question_asked": false,
+      "rationale": "The regex participates in shared log-boundary sanitization. The source explicitly describes this as defense in depth and says arbitrary opaque secrets require a separate supplied value; a useful contract must state the exact secret format, call sites, and residual limitations.",
+      "reason_code": "logging_secret_redaction",
+      "regex_id": "0f0ad3de551fe6ea5ef5685e047a7751",
+      "review_refs": [
+        {
+          "line": 14,
+          "path": "tracecat/sanitization.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "tracecat/sanitization.py:14:35"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "-----BEGIN (?P<label>[A-Z0-9][A-Z0-9 ._/-]{0,63})-----.*?-----END (?P=label)-----",
+      "product_question_asked": false,
+      "rationale": "The regex participates in shared log-boundary sanitization. The source explicitly describes this as defense in depth and says arbitrary opaque secrets require a separate supplied value; a useful contract must state the exact secret format, call sites, and residual limitations.",
+      "reason_code": "logging_secret_redaction",
+      "regex_id": "ebabfa5a0f8f5ab8fb9c305880878e73",
+      "review_refs": [
+        {
+          "line": 19,
+          "path": "tracecat/sanitization.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "tracecat/sanitization.py:19:21"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "\\beyJ[A-Za-z0-9_-]+\\.[A-Za-z0-9_-]+\\.[A-Za-z0-9_-]+\\b",
+      "product_question_asked": false,
+      "rationale": "The regex participates in shared log-boundary sanitization. The source explicitly describes this as defense in depth and says arbitrary opaque secrets require a separate supplied value; a useful contract must state the exact secret format, call sites, and residual limitations.",
+      "reason_code": "logging_secret_redaction",
+      "regex_id": "488595c232cc70d8bfab101499411cc4",
+      "review_refs": [
+        {
+          "line": 25,
+          "path": "tracecat/sanitization.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "tracecat/sanitization.py:25:15"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "(?i)(?P<prefix>['\\\"]?\\b(?:api[ _-]?key|access[ _-]?token|refresh[ _-]?token|id[ _-]?token|oauth[ _-]?token|client[ _-]?secret|private[ _-]?key|secret[ _-]?key|token|password|passwd|secret)\\b['\\\"]?\\s*[:=]\\s*)(?:(?P<double_quoted>\"(?:\\\\.|[^\"\\\\\\r\\n])*\")|(?P<single_quoted>'(?:\\\\.|[^'\\\\\\r\\n])*')|(?P<unquoted>[^\\s,;}\\]\\\"']+))",
+      "product_question_asked": false,
+      "rationale": "The regex participates in shared log-boundary sanitization. The source explicitly describes this as defense in depth and says arbitrary opaque secrets require a separate supplied value; a useful contract must state the exact secret format, call sites, and residual limitations.",
+      "reason_code": "logging_secret_redaction",
+      "regex_id": "3c4b78ac385335b374c02adb0c6abdeb",
+      "review_refs": [
+        {
+          "line": 26,
+          "path": "tracecat/sanitization.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "tracecat/sanitization.py:26:27"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "[?#].*$",
+      "product_question_asked": false,
+      "rationale": "The regex participates in shared log-boundary sanitization. The source explicitly describes this as defense in depth and says arbitrary opaque secrets require a separate supplied value; a useful contract must state the exact secret format, call sites, and residual limitations.",
+      "reason_code": "logging_secret_redaction",
+      "regex_id": "16f787f5e952ce27a41ece37bfef0666",
+      "review_refs": [
+        {
+          "line": 51,
+          "path": "tracecat/sanitization.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "tracecat/sanitization.py:51:15"
+    },
+    {
+      "decision": "skip",
+      "pattern": "::[A-Za-z_][\\w\\. ]*(\\[\\])?\\s*$",
+      "product_question_asked": false,
+      "rationale": "This parser removes PostgreSQL type-cast suffixes from reflected column-default metadata for display/import. It does not construct or execute the SQL expression being parsed.",
+      "reason_code": "database_reflection_parser",
+      "regex_id": "e33105aab5c4cf79579436def52c01b5",
+      "review_refs": [
+        {
+          "line": 320,
+          "path": "tracecat/tables/common.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "tracecat/tables/common.py:320:26"
+    },
+    {
+      "decision": "adopted",
+      "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+      "product_question_asked": true,
+      "rationale": "The pattern is the shared Pydantic request-name validator for table and column creation. The authorized public create routes use TableCreate and TableColumnCreate; the internal table route reconstructs TableCreate and the internal column route uses TableColumnCreate. The exact service validates names again before dynamic DDL, and column DDL inserts names through quote_identifier. The request-level invariant that the double quote is excluded is useful as a defense-in-depth regression gate. Python `$` allows a final LF in the schema helper, but the service rejects it before DDL. No current SQL injection or security impact is claimed.",
+      "reason_code": "defense_in_depth_request_contract",
+      "regex_id": "c1d1d6d2adfccca3b9f7d5215dfb428e",
+      "review_refs": [
+        {
+          "line": 17,
+          "path": "tracecat/tables/schemas.py",
+          "why": "Exact pinned identifier regex declaration."
+        },
+        {
+          "line": 61,
+          "path": "tracecat/tables/schemas.py",
+          "why": "TableColumnCreate name validator calls the exact shared helper."
+        },
+        {
+          "line": 243,
+          "path": "tracecat/tables/schemas.py",
+          "why": "TableCreate name validator calls the exact shared helper."
+        },
+        {
+          "line": 109,
+          "path": "tracecat/tables/router.py",
+          "why": "Public create-table route requires table:create and accepts TableCreate."
+        },
+        {
+          "line": 240,
+          "path": "tracecat/tables/router.py",
+          "why": "Public create-column route requires table:create and accepts TableColumnCreate."
+        },
+        {
+          "line": 172,
+          "path": "tracecat/tables/internal_router.py",
+          "why": "Internal create-table request is reconstructed as TableCreate before service use."
+        },
+        {
+          "line": 261,
+          "path": "tracecat/tables/internal_router.py",
+          "why": "Internal create-column route requires table:create and accepts TableColumnCreate."
+        },
+        {
+          "line": 398,
+          "path": "tracecat/tables/service.py",
+          "why": "Table service applies validate_identifier(params.name) before creating a physical table."
+        },
+        {
+          "line": 540,
+          "path": "tracecat/tables/service.py",
+          "why": "Column service applies validate_identifier(params.name) before quote_identifier and DDL."
+        },
+        {
+          "line": 2389,
+          "path": "tracecat/tables/service.py",
+          "why": "Exact pinned quote_identifier wraps the identifier in double quotes."
+        },
+        {
+          "line": 2405,
+          "path": "tracecat/tables/service.py",
+          "why": "Exact pinned validate_identifier independently rejects non-alphanumeric/underscore characters before DDL."
+        }
+      ],
+      "site": "tracecat/tables/schemas.py:17:21",
+      "contract_path": "properties/calibration/2026-10-17-autonomous-tracecat-table-identifier/contract.json"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "(?i)\\b(bearer)\\s+[A-Za-z0-9._~+/=-]+",
+      "product_question_asked": false,
+      "rationale": "These patterns redact selected credentials from failure text before it is exposed. The full set of error sources and downstream API/log sinks must be linked to a narrow redaction contract; no general secret redaction guarantee is claimed.",
+      "reason_code": "workflow_error_secret_redaction",
+      "regex_id": "995bf9a9f9211ad4c1eb2377fff8a8c8",
+      "review_refs": [
+        {
+          "line": 80,
+          "path": "tracecat/workflow/executions/schemas.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "tracecat/workflow/executions/schemas.py:80:8"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "(?i)\\b(api[_-]?key|access[_-]?token|refresh[_-]?token|token|password|passwd|secret)=([^&\\s]+)",
+      "product_question_asked": false,
+      "rationale": "These patterns redact selected credentials from failure text before it is exposed. The full set of error sources and downstream API/log sinks must be linked to a narrow redaction contract; no general secret redaction guarantee is claimed.",
+      "reason_code": "workflow_error_secret_redaction",
+      "regex_id": "bccba31a41ded55cbfd6d20dbdcf4e17",
+      "review_refs": [
+        {
+          "line": 84,
+          "path": "tracecat/workflow/executions/schemas.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "tracecat/workflow/executions/schemas.py:84:8"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "(?i)(authorization:\\s*(?:basic|bearer)\\s+)[^\\s,;]+",
+      "product_question_asked": false,
+      "rationale": "These patterns redact selected credentials from failure text before it is exposed. The full set of error sources and downstream API/log sinks must be linked to a narrow redaction contract; no general secret redaction guarantee is claimed.",
+      "reason_code": "workflow_error_secret_redaction",
+      "regex_id": "a77eaca412155dd9836cacba1936ffde",
+      "review_refs": [
+        {
+          "line": 90,
+          "path": "tracecat/workflow/executions/schemas.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "tracecat/workflow/executions/schemas.py:90:8"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "(?i)(://[^/\\s:@]+:)([^@\\s/]+)@",
+      "product_question_asked": false,
+      "rationale": "These patterns redact selected credentials from failure text before it is exposed. The full set of error sources and downstream API/log sinks must be linked to a narrow redaction contract; no general secret redaction guarantee is claimed.",
+      "reason_code": "workflow_error_secret_redaction",
+      "regex_id": "8fdbef654060a97513557bf483df71c8",
+      "review_refs": [
+        {
+          "line": 94,
+          "path": "tracecat/workflow/executions/schemas.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        }
+      ],
+      "site": "tracecat/workflow/executions/schemas.py:94:8"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "[\\x00-\\x20\\x7f~^:?*\\[\\\\]",
+      "product_question_asked": false,
+      "rationale": "This regex is one part of a broader short-branch validator used before publish/sync operations. The Git reference specification and all non-regex checks must be modeled together before claiming complete Git ref safety.",
+      "reason_code": "git_branch_name_validator",
+      "regex_id": "b1ae5707150c8f025a4e2f80b0e5c1cb",
+      "review_refs": [
+        {
+          "line": 23,
+          "path": "tracecat/workflow/store/schemas.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        },
+        {
+          "line": 52,
+          "path": "tracecat/workflow/store/schemas.py",
+          "why": "Regex is part of the full Git branch validator."
+        },
+        {
+          "line": 54,
+          "path": "tracecat/workflow/store/service.py",
+          "why": "Validated branch used by publish operation."
+        }
+      ],
+      "site": "tracecat/workflow/store/schemas.py:23:28"
+    },
+    {
+      "decision": "adopted",
+      "pattern": "[^A-Za-z0-9_.-]+",
+      "product_question_asked": true,
+      "rationale": "For new unmapped workspace resources, the exact pinned _SourceIdAssigner calls unique_source_id or unique_environment_source_id; these use path_segment to normalize stored resource/environment names before repository-relative source paths are assembled. The source-bound contract covers only the returned component alphabet, fixed production fallbacks, length, and nonempty/dot-component behavior of the helper. Existing mappings, export-root enforcement, collision handling beyond the separate source-ID allocator, Git-provider semantics, attacker reachability, and security impact are outside scope.",
+      "reason_code": "workspace_sync_path_component_invariant",
+      "regex_id": "908cc91aa9c4183a917ea88f174723e9",
+      "review_refs": [
+        {
+          "line": 936,
+          "path": "tracecat/workspace_sync/adapters/base.py",
+          "why": "Exact pinned regex substitution and enclosing path_segment helper."
+        },
+        {
+          "line": 140,
+          "path": "tracecat/workspace_sync/adapters/base.py",
+          "why": "Unmapped single-name source IDs pass their stored name through unique_source_id."
+        },
+        {
+          "line": 150,
+          "path": "tracecat/workspace_sync/adapters/base.py",
+          "why": "Unmapped environment-scoped IDs pass environment and resource names through unique_environment_source_id."
+        },
+        {
+          "line": 834,
+          "path": "tracecat/workspace_sync/adapters/base.py",
+          "why": "DirectoryManifestAdapter consumes a source ID as one repository-relative directory component."
+        },
+        {
+          "line": 897,
+          "path": "tracecat/workspace_sync/adapters/base.py",
+          "why": "EnvironmentScopedManifestAdapter consumes the intentionally slash-separated environment/name source ID."
+        },
+        {
+          "line": 844,
+          "path": "tracecat/workspace_sync/service.py",
+          "why": "WorkspaceSyncService composes adapter source paths into the exported workspace tree."
+        }
+      ],
+      "site": "tracecat/workspace_sync/adapters/base.py:936:11"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "\\bVARS\\.([A-Za-z_][A-Za-z0-9_-]*)",
+      "product_question_asked": false,
+      "rationale": "The patterns extract VARS and SECRETS names from serialized workspace payloads to build dependency sets. The exact expression grammar, resource lookup behavior, and workspace authorization must be followed before adopting a property; this review does not claim a secret leak or access-control flaw.",
+      "reason_code": "workspace_sync_resource_reference_parser",
+      "regex_id": "3090840b65849fa39ab0d72cddfac330",
+      "review_refs": [
+        {
+          "line": 2122,
+          "path": "tracecat/workspace_sync/service.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        },
+        {
+          "line": 2339,
+          "path": "tracecat/workspace_sync/service.py",
+          "why": "Names extracted from serialized workspace payloads."
+        }
+      ],
+      "site": "tracecat/workspace_sync/service.py:2122:14"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "\\bSECRETS\\.([A-Za-z_][A-Za-z0-9_-]*)",
+      "product_question_asked": false,
+      "rationale": "The patterns extract VARS and SECRETS names from serialized workspace payloads to build dependency sets. The exact expression grammar, resource lookup behavior, and workspace authorization must be followed before adopting a property; this review does not claim a secret leak or access-control flaw.",
+      "reason_code": "workspace_sync_resource_reference_parser",
+      "regex_id": "0fdd2c38808c360572cbfd8b6e28ae3c",
+      "review_refs": [
+        {
+          "line": 2124,
+          "path": "tracecat/workspace_sync/service.py",
+          "why": "Exact pinned regex declaration/call site reviewed."
+        },
+        {
+          "line": 2348,
+          "path": "tracecat/workspace_sync/service.py",
+          "why": "Names extracted from serialized workspace payloads."
+        }
+      ],
+      "site": "tracecat/workspace_sync/service.py:2124:17"
+    }
+  ],
+  "same_model_or_agent": true,
+  "schema_version": "1",
+  "scope": {
+    "complete_repository_review": true,
+    "inventory_member_site_count": 115,
+    "pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+    "repo_id": "TracecatHQ/tracecat",
+    "reviewed_site_count": 115
+  },
+  "second_pass": true
+}

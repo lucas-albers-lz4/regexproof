@@ -1,0 +1,29 @@
+{
+  "actual_accepted_cases": 168,
+  "complete_config_validation_accepts": true,
+  "differential_case_classes": {
+    "exhaustive_strings_over_Aa_09_lf_equals_semicolon_nul": 819,
+    "explicit_boundary_and_protected_name_cases": 10,
+    "non_nul_ascii_single_characters": 127,
+    "seeded_mixed_ascii_strings": 512
+  },
+  "differential_cases": 1442,
+  "gate_id": "tracecat-mcp-env-key-declared-grammar",
+  "mismatches": 0,
+  "mutation_id": "TC-mcp-env-key-dollar-anchor-mutation",
+  "mutation_reintroducing_dollar_accepts": true,
+  "mutation_strict_anchor_rejects": true,
+  "posix_child_receives_environment_key": true,
+  "product_engine": "CPython re through the exact pinned validate_mcp_env_key and validate_mcp_command_config functions",
+  "property_id": "TC-mcp-env-key-accepts-terminal-lf",
+  "repository": "https://github.com/TracecatHQ/tracecat",
+  "schema_version": "1",
+  "scope": "The exact source validator accepts a terminal-LF key that is outside Tracecat's declared ASCII name grammar. This confirms a configuration-validation gap; it does not establish command injection, privilege escalation, or a security-impacting behavior in any launched MCP server.",
+  "source_file": "tracecat/integrations/mcp_validation.py",
+  "source_pattern": "^[A-Za-z_][A-Za-z0-9_]*$",
+  "source_pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+  "source_sha256": "41cf730ba1cb592cae684811bbb4d510961a0a441c156313a804b2593085f895",
+  "witness": "TRACE_TOKEN\n",
+  "witness_accepted_by_source": true,
+  "witness_matches_declared_name": false
+}

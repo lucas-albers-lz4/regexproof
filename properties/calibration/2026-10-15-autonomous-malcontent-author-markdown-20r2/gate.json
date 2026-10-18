@@ -1,0 +1,22 @@
+{
+  "schema_version": "1",
+  "gate_id": "malcontent-author-markdown-extra-link-v1",
+  "question_ids": [
+    "MC-malcontent-author-metadata-extra-markdown-link"
+  ],
+  "command": [
+    ".venv/bin/python",
+    "scripts/malcontent-author-markdown-regression-gate.py",
+    "--output",
+    "/home/lalbers/gitroot/regexproof/properties/calibration/2026-10-15-autonomous-malcontent-author-markdown-20r2/p6-gate-report.json"
+  ],
+  "timeout_seconds": 300,
+  "evidence": {
+    "product_engine_replay_question_ids": [
+      "MC-malcontent-author-metadata-extra-markdown-link"
+    ],
+    "differential_case_counts": {
+      "MC-malcontent-author-metadata-extra-markdown-link": 2034
+    }
+  }
+}

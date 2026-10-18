@@ -1,0 +1,80 @@
+{
+  "cohort_id": "off-cohort-mycelium-current-pin",
+  "decision": "rank 1 adopted for the narrow diagnostic-preservation contract; rank 4 skipped as a duplicate downstream symptom; no third-party communication or fix is recorded.",
+  "outcomes": {
+    "classification": "The drill can miss the bypass flag in its effective-command parser. Its separate updater guard blocks unattended/systemd bypass, and the drill still emits a missing-ref critical warning for this serialized argv shape.",
+    "confirmed_reachable_security_boundary_violations": 0,
+    "external_reports_confirmations_or_fixes": 0,
+    "reproduced_reachable_diagnostic_defects": 1
+  },
+  "pinned_controls": {
+    "control_file": "control/lib/nb_update_apply.sh",
+    "control_sha256": "392cbb9a3e95f4ce1367983769787f07ce3a682fd8b11253d4458eb45bc18447",
+    "guard": "_insecure_bypass_permitted returns refusal when INVOCATION_ID is set or stdin is not a TTY; verify_signed_ref enforces it before permitting --insecure-no-verify.",
+    "test_coverage": "The pinned conformance test exercises both a systemd invocation marker and non-TTY refusal.",
+    "test_file": "tests/conformance/node_update_artifact_root.sh",
+    "test_sha256": "8d08517150b0821e9fd8418c02f1761746f3975bfa42f833956def47730c1918"
+  },
+  "pinned_parser": {
+    "captured_exec_all": "/usr/bin/printf %s\\n --update --allowed-signers /etc/my",
+    "captured_repo_ref": "",
+    "exec_all_pipeline": "sed -n 's/.*argv\\[\\]=\\([^;]*\\);.*/\\1/p' | sed 's/[[:space:]]*$//' | grep -v '^$'",
+    "observations": {
+      "exec_all_contains_insecure_no_verify": false,
+      "raw_contains_insecure_no_verify": true,
+      "repo_ref_v1_preserved": false,
+      "security_flags_after_semicolon_omitted": [
+        "--insecure-no-verify",
+        "--repo-ref",
+        "v1"
+      ],
+      "security_flags_before_semicolon_preserved": [
+        "--allowed-signers"
+      ]
+    },
+    "repo_ref_pattern": "sed -n 's/.*--repo-ref[= ]\\{1,\\}\\([^ ]*\\).*/\\1/p'",
+    "source_file": "scripts/update_unit_drift_drill.sh",
+    "source_sha256": "4e28f0bd727ba842fed7840bdd163fbef32dc911f7c8e6bea409895ced4c6493"
+  },
+  "raw_output": "{ path=/usr/bin/printf ; argv[]=/usr/bin/printf %s\\n --update --allowed-signers /etc/my;celium/allowed_signers --insecure-no-verify --repo-ref v1 ; ignore_errors=no ; start_time=[Thu 2026-10-15 10:51:59 MDT] ; stop_time=[Thu 2026-10-15 10:51:59 MDT] ; pid=3350476 ; code=exited ; status=0 }",
+  "replay_command": {
+    "argv": [
+      "/usr/bin/printf",
+      "%s\\n",
+      "--update",
+      "--allowed-signers",
+      "/etc/my;celium/allowed_signers",
+      "--insecure-no-verify",
+      "--repo-ref",
+      "v1"
+    ],
+    "cleanup": {
+      "interpretation": "The transient unit was stopped and disappeared; reset-failed then reported that no loaded unit remained.",
+      "post_cleanup_load_state": "not-found",
+      "reset_failed_exit_code": 1,
+      "stop_exit_code": 0
+    },
+    "purpose": "Harmless transient unit to make systemd serialize an argv vector containing a literal semicolon before later security flags.",
+    "temporary_unit": "regexproof-execstart-replay-0ea967b689"
+  },
+  "repository_url": "https://github.com/mycelium0/mycelium",
+  "schema_version": "1",
+  "source_pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+  "source_scope": "off-cohort current gated:go pin; excluded from the frozen 20-r2 cohort",
+  "systemctl_show_argv": [
+    "systemctl",
+    "--user",
+    "show",
+    "regexproof-execstart-replay-0ea967b689",
+    "--property=ExecStart",
+    "--value"
+  ],
+  "systemd": {
+    "host_observation_date": "2026-10-15",
+    "manager_scope": "user-manager",
+    "official_execstart_doc": "https://github.com/systemd/systemd-stable/blob/v255.4/man/systemd.service.xml#L1175-L1177",
+    "official_source": "https://github.com/systemd/systemd-stable/blob/v255.4/src/systemctl/systemctl-show.c#L1267-L1299",
+    "serialization_basis": "systemctl-show joins info.argv with a literal space and prints argv[] without escaping semicolons in joined arguments.",
+    "version": "systemd 255 (255.4-1ubuntu8.18)"
+  }
+}

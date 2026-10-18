@@ -1,0 +1,22 @@
+{
+  "comment_posting_proven": false,
+  "exit_code": 10,
+  "fixture": "temporary regular file at parent of the mock clone, not outside the temporary replay root",
+  "fixture_line_count": 37,
+  "interpretation": "The exact pinned helper parsed the issue-body token ../oracle.txt, joined it under SCRATCH_DIR/repo, followed the parent component, and measured the isolated 37-line fixture with wc -l. The helper output reported that count. This is local path reachability evidence only; the helper fixture stubs gh and git, and no remote service or user data was accessed.",
+  "matched_log": true,
+  "output": "[pre-dispatch-validator] INFO: #321: no dispatch-path patterns found \u2014 self-hosting detector skips\n[pre-dispatch-validator] INFO: #321: not review-feedback/quality-debt \u2014 supersession detector skips\n[pre-dispatch-validator] INFO: #321: generator=large-file-simplification-gate cited_file=../oracle.txt threshold=1000 detector=<none>\n[pre-dispatch-validator] INFO: large-file-simplification-gate validator: re-measuring ../oracle.txt (threshold=1000)\n[pre-dispatch-validator] INFO: large-file-simplification-gate validator: ../oracle.txt is now 37 lines (threshold 1000) \u2014 premise falsified\n[pre-dispatch-validator] INFO: #321: premise falsified by validator \u2014 closing issue\n[pre-dispatch-validator] WARN: Failed to post rationale comment on #321\n[pre-dispatch-validator] INFO: Closed issue #321 in owner/repo as not planned (premise falsified)\n",
+  "outside_clone_file_read": true,
+  "producer_file": ".agents/scripts/pulse-dispatch-large-file-gate.sh",
+  "producer_sha256": "b7361a8d61bdc98bfc51909c059a8bbaaa05bf4d6664a86e61d3a4334ee9c4aa",
+  "product_engine": "Bash, GNU grep/sed, wc, and POSIX path resolution",
+  "public_disclosure_proven": false,
+  "remote_helper_invocation": false,
+  "schema_version": "1",
+  "source_file": ".agents/scripts/pre-dispatch-validator-helper.sh",
+  "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+  "source_sha256": "b68445d5eaf510e820831422c6e064ac58bbdc4496483ad562df30786e3723b5",
+  "test_file": ".agents/scripts/tests/test-pre-dispatch-validator-large-file.sh",
+  "test_sha256": "32d49c2421d9c05cb0069d8346d4e6fb2ff5be4041ee0f39297649e41575f5a7",
+  "witness": "../oracle.txt"
+}

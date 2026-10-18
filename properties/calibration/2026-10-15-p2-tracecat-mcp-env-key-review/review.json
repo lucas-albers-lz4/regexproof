@@ -1,0 +1,29 @@
+{
+  "author": "Codex P2 source-review pass",
+  "observed_at": "2026-10-15",
+  "reviewer": "Codex independent source-review pass",
+  "same_model_or_agent": true,
+  "second_pass": true,
+  "scope": {
+    "repo_id": "TracecatHQ/tracecat",
+    "pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+    "reviewed_site_count": 1,
+    "inventory_member_site_count": 115,
+    "complete_repository_review": false
+  },
+  "review": {
+    "regex_id": "280c0b240b92090a7bdb58b6a70cff57",
+    "source_site_id": "38f2dd505cae305014bec389107046a4ab888a4d98094eae528f6419811f8254",
+    "site": "tracecat/integrations/mcp_validation.py:178:11",
+    "pattern": "^[A-Za-z_][A-Za-z0-9_]*$",
+    "decision": "adopted",
+    "product_question_asked": true,
+    "rationale": "The validator comment and visible validation error declare an exact ASCII name language. MCP stdio integration creation calls this validation before persistence; later saved configuration is passed to StdioTransport. CPython `$` accepts a final-line-feed suffix outside the declared language, reproduced against the exact pinned validator. This is a configuration-validation gap only; security impact is not established.",
+    "limitations": [
+      "This is a one-site targeted source review, not a complete Tracecat review; the exact-pin inventory has 115 Tracecat rows.",
+      "The claim is limited to Tracecat's declared syntax, not universal POSIX conformance.",
+      "The proof domain is ASCII keys of length 1..64; Unicode keys and other configuration semantics are outside the theorem.",
+      "No command injection, privilege escalation, deployed-server behavior, or security impact is claimed."
+    ]
+  }
+}

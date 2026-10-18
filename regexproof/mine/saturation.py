@@ -38,9 +38,11 @@ two observations for that family in manifest order::
 floating-point values.  They must be non-negative; ``novel_sites`` cannot
 exceed ``sites``.  A repo must have at least one site so its novelty rate has
 a defined denominator. Product counts are derived only from unique
-``(site, question_id)`` records with human provenance, a non-synthesized
-product kind, and an explicit result. The product and target denominators are
-the cohort totals for these records; their thresholds are 50 and 100.
+``(site, question_id)`` records with adopted human provenance, a valid
+source-bound agent adoption, or a valid machine-pair contract. Synthesized
+rows and incomplete contracts are rejected. The report separates human,
+autonomous, and machine-pair totals. The product and target denominators are
+the cohort totals for these eligible records; their thresholds are 50 and 100.
 
 The compiler stop rule is deliberately exact: a family stops only when it has
 at least two repos, each of its trailing two per-repo novelty rates is
@@ -59,6 +61,7 @@ import re
 from typing import Any, Mapping
 
 from .cohort_manifest import CohortManifestError, validate_manifest as validate_frozen_manifest
+from regexproof.harness.contract import valid_product_contract
 
 SCHEMA_VERSION = "1"
 PRODUCT_DENOMINATOR_THRESHOLD = 50
@@ -89,7 +92,7 @@ ENVELOPE_FIELDS = {
     "observations",
 }
 COUNT_FIELDS = ("sites", "novel_sites")
-PROPERTY_FIELDS = frozenset(
+PROPERTY_REQUIRED_FIELDS = frozenset(
     {
         "site",
         "question_id",
@@ -102,6 +105,10 @@ PROPERTY_FIELDS = frozenset(
         "accepted",
     }
 )
+PROPERTY_OPTIONAL_FIELDS = frozenset({"contract"})
+HUMAN_PROVENANCE = frozenset({"human"})
+MACHINE_PAIR_PROVENANCE = frozenset({"version_diff", "cross_engine"})
+PRODUCT_PROVENANCE = HUMAN_PROVENANCE | MACHINE_PAIR_PROVENANCE | {"agent_derived"}
 
 
 class ManifestError(ValueError):
@@ -142,7 +149,7 @@ def _text(value: Any, name: str, context: str) -> str:
     return value
 
 
-def _validate_properties(raw: Any, context: str) -> dict[str, int]:
+def _validate_properties(raw: Any, context: str) -> dict[str, Any]:
     if not isinstance(raw, list):
         raise _fail(f"{context}.product_properties must be a list")
     seen: set[tuple[str, str]] = set()
@@ -152,13 +159,20 @@ def _validate_properties(raw: Any, context: str) -> dict[str, int]:
         "properties_ground_truthed": 0,
         "properties_filed": 0,
         "properties_accepted": 0,
+        "product_provenance": {
+            "human": 0,
+            "autonomous": 0,
+            "machine_pair": 0,
+        },
     }
     for index, item in enumerate(raw):
         item_context = f"{context}.product_properties[{index}]"
         prop = _mapping(item, item_context)
-        if set(prop) != PROPERTY_FIELDS:
-            missing = sorted(PROPERTY_FIELDS - set(prop))
-            extra = sorted(set(prop) - PROPERTY_FIELDS)
+        if not PROPERTY_REQUIRED_FIELDS <= set(prop) or set(prop) - (
+            PROPERTY_REQUIRED_FIELDS | PROPERTY_OPTIONAL_FIELDS
+        ):
+            missing = sorted(PROPERTY_REQUIRED_FIELDS - set(prop))
+            extra = sorted(set(prop) - PROPERTY_REQUIRED_FIELDS - PROPERTY_OPTIONAL_FIELDS)
             if missing:
                 raise _fail(
                     f"{item_context} is missing required field(s): {', '.join(missing)}"
@@ -175,8 +189,29 @@ def _validate_properties(raw: Any, context: str) -> dict[str, int]:
         kind = _text(prop["kind"], "kind", item_context)
         if kind not in PRODUCT_KINDS:
             raise _fail(f"{item_context}.kind {kind!r} is not a product kind")
-        if prop["provenance"] != "human":
-            raise _fail(f"{item_context}.provenance must be 'human'")
+        provenance = prop["provenance"]
+        if provenance not in PRODUCT_PROVENANCE:
+            raise _fail(
+                f"{item_context}.provenance must be one of {sorted(PRODUCT_PROVENANCE)}"
+            )
+        if provenance == "agent_derived" or provenance in MACHINE_PAIR_PROVENANCE:
+            contract = prop.get("contract")
+            if not valid_product_contract(contract) or contract.get("site") != site:
+                raise _fail(
+                    f"{item_context}.contract must be a complete adopted contract for site"
+                )
+            if contract.get("provenance") != provenance:
+                raise _fail(
+                    f"{item_context}.contract.provenance must match product provenance"
+                )
+        elif "contract" in prop:
+            contract = prop["contract"]
+            if not valid_product_contract(contract) or contract.get("site") != site:
+                raise _fail(f"{item_context}.contract must be a complete contract for site")
+            if contract.get("provenance") != provenance:
+                raise _fail(
+                    f"{item_context}.contract.provenance must match product provenance"
+                )
         if prop["synthesized"] is not False:
             raise _fail(f"{item_context}.synthesized must be false")
         result = prop["result"]
@@ -196,6 +231,12 @@ def _validate_properties(raw: Any, context: str) -> dict[str, int]:
         counts["properties_ground_truthed"] += prop["ground_truthed"]
         counts["properties_filed"] += prop["filed"]
         counts["properties_accepted"] += prop["accepted"]
+        series = (
+            "autonomous" if provenance == "agent_derived"
+            else "machine_pair" if provenance in MACHINE_PAIR_PROVENANCE
+            else "human"
+        )
+        counts["product_provenance"][series] += 1
     return counts
 
 
@@ -438,6 +479,10 @@ def build_report(manifest: Any) -> dict[str, Any]:
         field: sum(repo[field] for repo in repos)
         for field in (*COUNT_FIELDS, *product_fields)
     }
+    provenance_totals = {
+        key: sum(repo["product_provenance"][key] for repo in repos)
+        for key in ("human", "autonomous", "machine_pair")
+    }
     reject_buckets = sorted(
         {bucket for repo in repos for bucket in repo["new_reject_buckets"]}
     )
@@ -462,6 +507,7 @@ def build_report(manifest: Any) -> dict[str, Any]:
             "repo_count": len(repos),
             "dialect_family_count": len(families),
             **totals,
+            "product_provenance": provenance_totals,
             "new_reject_buckets": reject_buckets,
         },
         "product_denominator": product_denominator,

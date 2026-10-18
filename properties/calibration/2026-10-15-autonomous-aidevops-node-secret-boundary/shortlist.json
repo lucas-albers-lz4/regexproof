@@ -1,0 +1,20 @@
+{
+  "allocation_sha256": "2f9aa22851b9efad3e7063d5751f18cf36e39b15da72c1f14f9c79967081a651",
+  "bucket": "ecma-plugins",
+  "corpus": "aidevops",
+  "dropped": [],
+  "keep": [
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "pattern": "^(id_(rsa|dsa|ecdsa|ed25519)|\\.env(\\..*)?|credentials(\\.sh|\\.json|\\.ya?ml)?|service-account(\\.json)?|kubeconfig|config\\.json|op-vault-export.*|.*password.*|.*passwd.*|.*secret.*)$",
+      "regex_id": "6db7d4e94a6d0c8c24ed7e5b8a1f36b6",
+      "score": 1,
+      "site": ".agents/plugins/opencode-aidevops/quality-hooks-secret-read.mjs:7:27"
+    }
+  ],
+  "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+  "population_id": "aidevops-ecma-secret-read-p4-20261015-r1",
+  "ranking_basis": "Deterministic pre-outcome allocator; this allocated sample contains one candidate.",
+  "schema_version": "1"
+}

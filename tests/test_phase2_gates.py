@@ -7,6 +7,8 @@ AC coverage (issue #218):
   `^a$|^b$` (the documented conservative false-positive) FAIL registration.
 - D7 wrap-validity: `.*abc.*` passes; unparenthesized `.*a|b` and unwrapped
   `abc` FAIL.
+- Non-full-string call kinds keep syntax/escape checks without validator-only
+  anchor requirements.
 - Parser fixtures pass: escaped parens, non-capturing groups, anchor-looking
   chars in classes.
 - Registry: prop() carries the new fields with correct defaults; the CLI runs
@@ -114,6 +116,13 @@ def test_validate_registry_local():
             "search_wrapped": True,
             "kind": "property",
         },
+        "ok-substitution": {
+            "pattern": r"[^a-z]",
+            "pattern_flags": "",
+            "search_wrapped": False,
+            "kind": "property",
+            "call_kind": "substitution",
+        },
         "bad-partial": {
             "pattern": r"^abc",
             "pattern_flags": "",
@@ -128,17 +137,17 @@ def test_validate_registry_local():
         },
     }
     failures, checked = core.validate_registry(reg)
-    assert checked == 4
+    assert checked == 5
     assert len(failures) == 2
     assert any("bad-partial" in f for f in failures)
     assert any("bad-p" in f for f in failures)
 
 
 def test_validate_registry_real_registry_no_failures():
-    # Built-ins declare no source patterns yet → gate is a no-op (backward
-    # compatible: the golden suite is unaffected).
+    # The real registry includes source-backed patterns; substitution
+    # call-kind patterns are syntax-checked without validator-only anchors.
     failures, checked = core.validate_registry()
-    assert checked == 0
+    assert checked >= 1
     assert failures == []
 
 
@@ -162,8 +171,8 @@ def test_validate_registry_empty_pattern_validated():
     }
     failures, checked = core.validate_registry(reg)
     assert checked == 2
-    # empty-wrapped fails wrap-validity (no .* prefix/suffix); empty-plain fails
-    # anchored-definition (no ^/$) — neither bypasses the gates.
+    # empty-wrapped fails wrap-validity (no .* prefix/suffix); legacy
+    # full-string empty-plain fails anchored-definition (no ^/$).
     assert len(failures) == 2
     assert any("empty-wrapped" in f for f in failures)
     assert any("empty-plain" in f for f in failures)

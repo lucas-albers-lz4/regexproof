@@ -1,0 +1,204 @@
+{
+  "schema_version": "1",
+  "observed_at": "2026-10-15",
+  "author": "Codex (initial source review)",
+  "reviewer": "Codex (separate source re-read)",
+  "second_pass": true,
+  "same_model_or_agent": true,
+  "limitations": [
+    "This is a complete raw-site review only for chainguard-dev/malcontent at the frozen 20-r2 pin. It does not establish coverage for other cohort members or complete P2.",
+    "Unresolved entries are not adopted contracts, eligible product questions, or outcome rows.",
+    "The exact replay requires the pinned YARA-X Go binding and native YARA-X C API 1.19.0 through pkg-config. The local replay build used those exact versions; the C API build recipe and product output are recorded in the adjacent author-Markdown calibration."
+  ],
+  "reviews": [
+    {
+      "regex_id": "0d17b19deaa5d62d379b414589da20a8",
+      "site": "pkg/compile/compile.go:137:0",
+      "pattern": "(?sm)^\\s*rule\\s+(%s)\\s*(?::\\s*[^\\n{]+)?\\s*{.*?^\\s*}\\s*$",
+      "decision": "unresolved",
+      "reason_code": "rule_removal_reachability_and_detection_integrity",
+      "rationale": "The interpolated names are escaped with regexp.QuoteMeta and come from static badRules/rulesWithWarnings maps. removeRules transforms YARA source before Recursive compiles it, and a cross-rule match could affect detection coverage. The CLI's current source is embedded rules plus optional thirdparty.FS, while the exported config can receive other filesystems. The attacker trust class and a product-level detection-integrity guarantee are not established here; keep pending a contract and exact YARA-X replay.",
+      "review_refs": [
+        {"path": "pkg/compile/compile.go", "line": 141, "why": "rule-removal source and escaped interpolation"},
+        {"path": "pkg/compile/compile.go", "line": 183, "why": "YARA source transformation before compilation"},
+        {"path": "cmd/mal/mal.go", "line": 265, "why": "CLI rule filesystem selection"},
+        {"path": "pkg/malcontent/malcontent.go", "line": 77, "why": "public configurable RuleFS input"}
+      ]
+    },
+    {
+      "regex_id": "ff7cf15d11ff32da70335ed6e3bd08e1",
+      "site": "pkg/compile/compile.go:138:0",
+      "pattern": "\\n{3,}",
+      "decision": "skip",
+      "reason_code": "post_transform_whitespace_formatting",
+      "rationale": "This pattern collapses runs of three or more newlines after selected rule blocks have been removed. It changes formatting in the transformed YARA source and has no independently evidenced security-boundary guarantee at this call site.",
+      "review_refs": [
+        {"path": "pkg/compile/compile.go", "line": 179, "why": "post-removal replacement sequence"}
+      ]
+    },
+    {
+      "regex_id": "622ce0b911b25ef37aa4e71d1d1db722",
+      "site": "pkg/compile/fuzz_test.go:150:0",
+      "pattern": "\\d+\\.\\d+",
+      "decision": "skip",
+      "reason_code": "test_only",
+      "rationale": "The pattern is local to a fuzz test that guards test inputs before calling the compiler. It is not on a product input-to-security-boundary path.",
+      "review_refs": [
+        {"path": "pkg/compile/fuzz_test.go", "line": 145, "why": "fuzz-only input preparation"}
+      ]
+    },
+    {
+      "regex_id": "e0cc47f062f7fd014f7d027a59450652",
+      "site": "pkg/programkind/programkind.go:191:0",
+      "pattern": "\\d+\\.\\d+\\.\\d+$",
+      "decision": "skip",
+      "reason_code": "filename_extension_normalization",
+      "rationale": "GetExt removes a trailing version suffix before archive-extension lookup. The path comes from the scan target, but this pattern performs filename normalization rather than an input validation or sanitization guarantee; archive extraction has separate content and path controls. No regex-specific security property is established by the inspected caller.",
+      "review_refs": [
+        {"path": "pkg/programkind/programkind.go", "line": 194, "why": "archive classification caller"},
+        {"path": "pkg/programkind/programkind.go", "line": 207, "why": "extension normalization and lookup"}
+      ]
+    },
+    {
+      "regex_id": "9d12000b982a355666ca3a2c1ad95fe4",
+      "site": "pkg/render/markdown.go:23:0",
+      "pattern": " {2,}",
+      "decision": "skip",
+      "reason_code": "markdown_table_formatting",
+      "rationale": "The pattern collapses repeated spaces in already rendered Markdown table text. It is a presentation cleanup operation, not the renderer's Markdown escaping control.",
+      "review_refs": [
+        {"path": "pkg/render/markdown.go", "line": 321, "why": "post-render table formatting"}
+      ]
+    },
+    {
+      "regex_id": "89ae132c549b22a1822857b4aa639233",
+      "site": "pkg/render/markdown.go:24:0",
+      "pattern": "-{3,}",
+      "decision": "skip",
+      "reason_code": "markdown_table_formatting",
+      "rationale": "The pattern collapses repeated dashes in already rendered Markdown table text. It is a presentation cleanup operation, not the renderer's Markdown escaping control.",
+      "review_refs": [
+        {"path": "pkg/render/markdown.go", "line": 322, "why": "post-render table formatting"}
+      ]
+    },
+    {
+      "regex_id": "80e87979d88606d8305ad6aa14d24322",
+      "site": "pkg/render/terminal.go:266:0",
+      "pattern": "\\x1b\\[[0-9;]*[mG]",
+      "decision": "skip",
+      "reason_code": "display_width_calculation_only",
+      "rationale": "ansiLineLength removes matching codes only from a temporary string to calculate display width before truncation. The original content is still rendered, so this regex is not a terminal-output sanitizer.",
+      "review_refs": [
+        {"path": "pkg/render/terminal.go", "line": 264, "why": "display-width helper and copy-local removal"},
+        {"path": "pkg/render/terminal.go", "line": 412, "why": "terminal layout caller"},
+        {"path": "pkg/render/terminal_brief.go", "line": 65, "why": "brief terminal layout caller"}
+      ]
+    },
+    {
+      "regex_id": "459076d675cf0ad552e1ca1524838b13",
+      "site": "pkg/report/load.go:14:0",
+      "pattern": "^(/(?:var/folders|tmp|private/var/folders|private/tmp)/[^/]+/[^/]+/T/[^/]+)",
+      "decision": "unresolved",
+      "reason_code": "report_path_privacy_contract_needs_replay",
+      "rationale": "Diff --report reads user-selected JSON/YAML reports; this pattern extracts conventional temporary-root prefixes, and CleanReportPath/FormatReportKey remove them before the diff report is rendered. The comments and examples support a possible local-path privacy contract, but the exact product-output property and end-to-end replay remain unverified.",
+      "review_refs": [
+        {"path": "pkg/action/diff.go", "line": 267, "why": "user-selected report loading and temporary-root extraction"},
+        {"path": "pkg/report/load.go", "line": 41, "why": "temporary-root extraction"},
+        {"path": "pkg/report/load.go", "line": 56, "why": "path cleanup contract comments"},
+        {"path": "pkg/action/diff.go", "line": 484, "why": "report-path cleanup caller"},
+        {"path": "pkg/action/diff.go", "line": 586, "why": "formatted diff key caller"}
+      ]
+    },
+    {
+      "regex_id": "27f03171920a1ad7361856132869c5de",
+      "site": "pkg/report/override_test.go:15:0",
+      "pattern": "(?m)^\\s*(?:private\\s+)?rule\\s+(\\w+)",
+      "decision": "skip",
+      "reason_code": "test_only",
+      "rationale": "This pattern extracts rule names in a unit-test helper over embedded third-party rules. It is not used by the product implementation.",
+      "review_refs": [
+        {"path": "pkg/report/override_test.go", "line": 17, "why": "test helper scope"}
+      ]
+    },
+    {
+      "regex_id": "a7bcb9db692144d89bb2cb0dd86ec1ce",
+      "site": "pkg/report/report.go:117:0",
+      "pattern": "(.*?) \\((http.*)\\)",
+      "decision": "adopted",
+      "reason_code": "contract_adopted_product_replay",
+      "rationale": "The autonomous contract MC-malcontent-author-metadata-extra-markdown-link was adopted before its solver result and frozen in a one-question 20-r2 roster. The exact YARA-X-to-report.Generate-to-Markdown replay emitted a second attacker-chosen HTTPS link from valid rule metadata. This confirms the generated Markdown structure; downstream consumer impact and any upstream response remain pending.",
+      "question_id": "MC-malcontent-author-metadata-extra-markdown-link",
+      "product_question_asked": true,
+      "review_refs": [
+        {"path": "pkg/report/report.go", "line": 1014, "why": "YARA metadata parsing entry"},
+        {"path": "pkg/report/report.go", "line": 1031, "why": "author capture and URL parse"},
+        {"path": "pkg/render/markdown.go", "line": 39, "why": "documented Markdown-injection sanitizer"},
+        {"path": "pkg/render/markdown.go", "line": 246, "why": "author hyperlink construction"}
+      ]
+    },
+    {
+      "regex_id": "c513e62cf1a010053a7632bf3b1377fc",
+      "site": "pkg/report/report.go:118:0",
+      "pattern": "Detection patterns for the tool '(.*)' taken from the ThreatHunting-Keywords github project",
+      "decision": "adopted",
+      "reason_code": "contract_adopted_product_replay",
+      "rationale": "The source-bound contract MC-malcontent-description-metadata-extra-markdown-link was adopted before its solver result and frozen in a one-question roster. Exact YARA-X-to-report.Generate-to-Markdown replay emitted a raw attacker-controlled HTTPS link and an unescaped table delimiter from valid third-party description metadata. The output structure is reproduced; downstream consumer impact remains pending.",
+      "question_id": "MC-malcontent-description-metadata-extra-markdown-link",
+      "product_question_asked": true,
+      "review_refs": [
+        {"path": "pkg/report/report.go", "line": 584, "why": "description capture and interpolation"},
+        {"path": "pkg/report/report.go", "line": 1052, "why": "description metadata call site"},
+        {"path": "pkg/render/markdown.go", "line": 40, "why": "Markdown escaping helper and its documented purpose"},
+        {"path": "pkg/render/markdown.go", "line": 232, "why": "description is added to Markdown table data"},
+        {"path": "pkg/render/markdown.go", "line": 294, "why": "raw description becomes a table cell"},
+        {"path": "pkg/render/markdown.go", "line": 311, "why": "table data is passed to the renderer"}
+      ]
+    },
+    {
+      "regex_id": "111ec67332cff462c3332c95e2b34290",
+      "site": "pkg/report/report.go:119:0",
+      "pattern": "[a-z]{3}\\d{1,2}",
+      "decision": "skip",
+      "reason_code": "third_party_key_normalization",
+      "rationale": "dateRe is used to discard date-like tokens while generating third-party report keys. The observed behavior affects display naming and has no established security-boundary property in the inspected path.",
+      "review_refs": [
+        {"path": "pkg/report/report.go", "line": 137, "why": "third-party key generation"},
+        {"path": "pkg/report/report.go", "line": 166, "why": "date-token filtering"}
+      ]
+    },
+    {
+      "regex_id": "f8fdf5a2928475bd715cf2bba5c46c8e",
+      "site": "pkg/report/report.go:260:0",
+      "pattern": "^rule\\s+(\\w+)",
+      "decision": "skip",
+      "reason_code": "rule_source_indexing",
+      "rationale": "This parser extracts rule declarations from rule source to build report/source-location indexing. It does not validate an untrusted input or sanitize a value for a security sink; correctness questions about source association would need a separate product requirement.",
+      "review_refs": [
+        {"path": "pkg/report/report.go", "line": 257, "why": "rule declaration parser comment"},
+        {"path": "pkg/report/report.go", "line": 300, "why": "rule source indexing caller"}
+      ]
+    },
+    {
+      "regex_id": "6507953553b209359f64e2f09175881f",
+      "site": "tests/samples_test.go:513:0",
+      "pattern": " +",
+      "decision": "skip",
+      "reason_code": "test_only_output_normalization",
+      "rationale": "This test helper normalizes spaces in rendered sample output. It is not used by the product implementation.",
+      "review_refs": [
+        {"path": "tests/samples_test.go", "line": 511, "why": "sample-test helper scope"}
+      ]
+    },
+    {
+      "regex_id": "71e3076e60b2d07087993ff09083145e",
+      "site": "tests/samples_test.go:514:0",
+      "pattern": " -",
+      "decision": "skip",
+      "reason_code": "test_only_output_normalization",
+      "rationale": "This test helper normalizes a dash sequence in rendered sample output. It is not used by the product implementation.",
+      "review_refs": [
+        {"path": "tests/samples_test.go", "line": 511, "why": "sample-test helper scope"}
+      ]
+    }
+  ]
+}

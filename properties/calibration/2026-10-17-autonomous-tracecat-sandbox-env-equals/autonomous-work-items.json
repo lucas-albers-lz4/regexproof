@@ -1,0 +1,9 @@
+[
+  {
+    "question_ids": [
+      "TC-sandbox-env-key-excludes-equals"
+    ],
+    "reviewed": true,
+    "site": "TracecatHQ/tracecat@c84d52528a489821f355fc63976fbc7783ae0ad5:tracecat/sandbox/executor.py:71:re.compile"
+  }
+]

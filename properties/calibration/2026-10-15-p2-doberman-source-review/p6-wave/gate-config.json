@@ -1,0 +1,29 @@
+{
+  "command": [
+    "/home/linuxbrew/.linuxbrew/Cellar/python@3.14/3.14.8_2/bin/python3.14",
+    "scripts/doberman-codex-apply-patch-regression-gate.py",
+    "--source-root",
+    "/tmp/regexproof-pinned-sources/Doberman-Core-53ae43c5298a2426c6696147fdd75e2a4aef10e2",
+    "--roster",
+    "properties/calibration/2026-10-15-p2-doberman-source-review/p6-wave/roster.json",
+    "--output",
+    "properties/calibration/2026-10-15-p2-doberman-source-review/p6-wave/product-gate.json"
+  ],
+  "evidence": {
+    "differential_case_counts": {
+      "DB-codex-apply-patch-file-target-path": 385,
+      "DB-codex-apply-patch-move-target-path": 129
+    },
+    "product_engine_replay_question_ids": [
+      "DB-codex-apply-patch-file-target-path",
+      "DB-codex-apply-patch-move-target-path"
+    ]
+  },
+  "gate_id": "doberman-codex-apply-patch-target-extraction",
+  "question_ids": [
+    "DB-codex-apply-patch-file-target-path",
+    "DB-codex-apply-patch-move-target-path"
+  ],
+  "schema_version": "1",
+  "timeout_seconds": 300
+}

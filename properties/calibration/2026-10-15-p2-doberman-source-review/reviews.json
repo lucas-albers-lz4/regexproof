@@ -1,0 +1,2049 @@
+{
+  "author": "Codex source-review pass",
+  "limitations": [
+    "This is a complete raw-regex review for fu351/Doberman-Core at the frozen 20-r2 pin only; it does not close P2 for the 20-member cohort.",
+    "Most security-facing heuristic and detector languages remain unresolved where pinned documentation does not specify an independent accepted language; source regexes are not treated as proof of detection completeness.",
+    "Three exact Doberman sites already have frozen product questions and are not counted again. No Doberman runtime or external maintainer was contacted."
+  ],
+  "observed_at": "2026-10-15",
+  "reviewer": "Codex second source-review pass",
+  "reviews": [
+    {
+      "decision": "skip",
+      "pattern": "^[ \\t]{0,3}(?P<marker>`{3,}|~{3,})",
+      "product_question_asked": false,
+      "rationale": "This matcher parses Markdown heading, anchor, link, and inline-markup syntax for the repository documentation link checker. Its results select documentation references and diagnostics; the inspected caller does not authorize tool actions, validate untrusted product input, or serialize data across a trust boundary.",
+      "reason_code": "documentation_link_lint",
+      "regex_id": "75e6eec547e2f7f08b79010cb6e5ac22",
+      "review_refs": [
+        {
+          "line": 17,
+          "path": "scripts/check_markdown_links.py",
+          "why": "documentation link checker parser and result use"
+        }
+      ],
+      "site": "scripts/check_markdown_links.py:17:11"
+    },
+    {
+      "decision": "skip",
+      "pattern": "^[ \\t]{0,3}#{1,6}(?:[ \\t]+(?P<text>.*?)|)[ \\t]*$",
+      "product_question_asked": false,
+      "rationale": "This matcher parses Markdown heading, anchor, link, and inline-markup syntax for the repository documentation link checker. Its results select documentation references and diagnostics; the inspected caller does not authorize tool actions, validate untrusted product input, or serialize data across a trust boundary.",
+      "reason_code": "documentation_link_lint",
+      "regex_id": "eef7ef2b8081787c7e12da59ff78dcbb",
+      "review_refs": [
+        {
+          "line": 18,
+          "path": "scripts/check_markdown_links.py",
+          "why": "documentation link checker parser and result use"
+        }
+      ],
+      "site": "scripts/check_markdown_links.py:18:17"
+    },
+    {
+      "decision": "skip",
+      "pattern": "^[ \\t]{0,3}(?:=+|-+)[ \\t]*$",
+      "product_question_asked": false,
+      "rationale": "This matcher parses Markdown heading, anchor, link, and inline-markup syntax for the repository documentation link checker. Its results select documentation references and diagnostics; the inspected caller does not authorize tool actions, validate untrusted product input, or serialize data across a trust boundary.",
+      "reason_code": "documentation_link_lint",
+      "regex_id": "730cf9288142dd2b5e2eb6b3fd9fd48d",
+      "review_refs": [
+        {
+          "line": 19,
+          "path": "scripts/check_markdown_links.py",
+          "why": "documentation link checker parser and result use"
+        }
+      ],
+      "site": "scripts/check_markdown_links.py:19:20"
+    },
+    {
+      "decision": "skip",
+      "pattern": "<a\\b[^>]*\\b(?:name|id)\\s*=\\s*['\\\"]([^'\\\"]+)['\\\"]",
+      "product_question_asked": false,
+      "rationale": "This matcher parses Markdown heading, anchor, link, and inline-markup syntax for the repository documentation link checker. Its results select documentation references and diagnostics; the inspected caller does not authorize tool actions, validate untrusted product input, or serialize data across a trust boundary.",
+      "reason_code": "documentation_link_lint",
+      "regex_id": "30dddf88bbb47d9f92ea8d13b41b60eb",
+      "review_refs": [
+        {
+          "line": 20,
+          "path": "scripts/check_markdown_links.py",
+          "why": "documentation link checker parser and result use"
+        }
+      ],
+      "site": "scripts/check_markdown_links.py:20:17"
+    },
+    {
+      "decision": "skip",
+      "pattern": "(?<!!)\\[(?P<label>[^\\]\\n]*)\\]\\(\\s*(?P<destination><[^>\\n]*>|[^\\s)]+)",
+      "product_question_asked": false,
+      "rationale": "This matcher parses Markdown heading, anchor, link, and inline-markup syntax for the repository documentation link checker. Its results select documentation references and diagnostics; the inspected caller does not authorize tool actions, validate untrusted product input, or serialize data across a trust boundary.",
+      "reason_code": "documentation_link_lint",
+      "regex_id": "4d37226c6de7c9280d70314e517023fa",
+      "review_refs": [
+        {
+          "line": 21,
+          "path": "scripts/check_markdown_links.py",
+          "why": "documentation link checker parser and result use"
+        }
+      ],
+      "site": "scripts/check_markdown_links.py:21:17"
+    },
+    {
+      "decision": "skip",
+      "pattern": "^[ \\t]{0,3}\\[(?P<label>[^\\]\\n]+)\\]:[ \\t]*(?P<destination><[^>\\n]*>|[^\\s]+)",
+      "product_question_asked": false,
+      "rationale": "This matcher parses Markdown heading, anchor, link, and inline-markup syntax for the repository documentation link checker. Its results select documentation references and diagnostics; the inspected caller does not authorize tool actions, validate untrusted product input, or serialize data across a trust boundary.",
+      "reason_code": "documentation_link_lint",
+      "regex_id": "2c0fb000d2483ab625739659665a3a02",
+      "review_refs": [
+        {
+          "line": 22,
+          "path": "scripts/check_markdown_links.py",
+          "why": "documentation link checker parser and result use"
+        }
+      ],
+      "site": "scripts/check_markdown_links.py:22:26"
+    },
+    {
+      "decision": "skip",
+      "pattern": "(?<!!)\\[(?P<label>[^\\]\\n]+)\\]\\[(?P<reference>[^\\]\\n]*)\\]",
+      "product_question_asked": false,
+      "rationale": "This matcher parses Markdown heading, anchor, link, and inline-markup syntax for the repository documentation link checker. Its results select documentation references and diagnostics; the inspected caller does not authorize tool actions, validate untrusted product input, or serialize data across a trust boundary.",
+      "reason_code": "documentation_link_lint",
+      "regex_id": "794142ac8f9037ec544c2bc5c1cdb475",
+      "review_refs": [
+        {
+          "line": 25,
+          "path": "scripts/check_markdown_links.py",
+          "why": "documentation link checker parser and result use"
+        }
+      ],
+      "site": "scripts/check_markdown_links.py:25:20"
+    },
+    {
+      "decision": "skip",
+      "pattern": "\\s+",
+      "product_question_asked": false,
+      "rationale": "This matcher parses Markdown heading, anchor, link, and inline-markup syntax for the repository documentation link checker. Its results select documentation references and diagnostics; the inspected caller does not authorize tool actions, validate untrusted product input, or serialize data across a trust boundary.",
+      "reason_code": "documentation_link_lint",
+      "regex_id": "908783a1cf5354a0bc24777dee0fce7d",
+      "review_refs": [
+        {
+          "line": 155,
+          "path": "scripts/check_markdown_links.py",
+          "why": "documentation link checker parser and result use"
+        }
+      ],
+      "site": "scripts/check_markdown_links.py:155:11"
+    },
+    {
+      "decision": "skip",
+      "pattern": "<[^>\\n]+>",
+      "product_question_asked": false,
+      "rationale": "This matcher parses Markdown heading, anchor, link, and inline-markup syntax for the repository documentation link checker. Its results select documentation references and diagnostics; the inspected caller does not authorize tool actions, validate untrusted product input, or serialize data across a trust boundary.",
+      "reason_code": "documentation_link_lint",
+      "regex_id": "93f1e25fcfa5aa67e2412ff6e8df9683",
+      "review_refs": [
+        {
+          "line": 165,
+          "path": "scripts/check_markdown_links.py",
+          "why": "documentation link checker parser and result use"
+        }
+      ],
+      "site": "scripts/check_markdown_links.py:165:11"
+    },
+    {
+      "decision": "skip",
+      "pattern": "[ \\t]+#+[ \\t]*$",
+      "product_question_asked": false,
+      "rationale": "This matcher parses Markdown heading, anchor, link, and inline-markup syntax for the repository documentation link checker. Its results select documentation references and diagnostics; the inspected caller does not authorize tool actions, validate untrusted product input, or serialize data across a trust boundary.",
+      "reason_code": "documentation_link_lint",
+      "regex_id": "aab416c26d3d498ad5f1b6cff20ab9d0",
+      "review_refs": [
+        {
+          "line": 187,
+          "path": "scripts/check_markdown_links.py",
+          "why": "documentation link checker parser and result use"
+        }
+      ],
+      "site": "scripts/check_markdown_links.py:187:27"
+    },
+    {
+      "decision": "skip",
+      "pattern": "(\\d+\\.\\d+\\.\\d+)",
+      "product_question_asked": false,
+      "rationale": "The matcher extracts a semantic version from local CLI diagnostic text for a compatibility report. The captured value changes a displayed support/warning status and is not an input authorization, sanitizer, or tool-execution decision.",
+      "reason_code": "diagnostic_version_extraction",
+      "regex_id": "6a7cd34a7ef54e0f4419e663557ae44e",
+      "review_refs": [
+        {
+          "line": 123,
+          "path": "src/doberman/cli/doctor.py",
+          "why": "version diagnostic parsing and report use"
+        }
+      ],
+      "site": "src/doberman/cli/doctor.py:123:12"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "\\$\\((?P<paren>[^()]*)\\)|`(?P<backtick>[^`]*)`",
+      "product_question_asked": false,
+      "rationale": "This regex parses command structure or contributes to destructive-operation, dynamic-shell, protected-ref, or download-to-shell decisions on the pre-execution path. The repository promises a tool chokepoint, but does not specify a complete independent grammar for the exact shell fragment represented here. Keep this boundary candidate unresolved; do not count the heuristic as a general shell-safety proof.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "c48fbac29d7b7d7e8c26e79e58baf419",
+      "review_refs": [
+        {
+          "line": 79,
+          "path": "src/doberman/engine/rules/commands.py",
+          "why": "command parser or destructive-operation rule"
+        },
+        {
+          "line": 40,
+          "path": "README.md",
+          "why": "documented pre-execution action-gate guarantee"
+        }
+      ],
+      "site": "src/doberman/engine/rules/commands.py:79:16"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "^[A-Za-z_][A-Za-z0-9_]*=",
+      "product_question_asked": false,
+      "rationale": "This regex parses command structure or contributes to destructive-operation, dynamic-shell, protected-ref, or download-to-shell decisions on the pre-execution path. The repository promises a tool chokepoint, but does not specify a complete independent grammar for the exact shell fragment represented here. Keep this boundary candidate unresolved; do not count the heuristic as a general shell-safety proof.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "1fd73d84d781a53ee7bf8c6849a32b3f",
+      "review_refs": [
+        {
+          "line": 82,
+          "path": "src/doberman/engine/rules/commands.py",
+          "why": "command parser or destructive-operation rule"
+        },
+        {
+          "line": 40,
+          "path": "README.md",
+          "why": "documented pre-execution action-gate guarantee"
+        }
+      ],
+      "site": "src/doberman/engine/rules/commands.py:82:18"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "\\b(?:shutil\\.)?rmtree\\b|\\bos\\.(?:remove|unlink)\\b|\\brmSync\\b|\\bunlinkSync\\b|\\bfs\\.rm\\b|\\bRemove-Item\\b|\\brm\\s+-rf\\b|\\bunlink\\b",
+      "product_question_asked": false,
+      "rationale": "This regex parses command structure or contributes to destructive-operation, dynamic-shell, protected-ref, or download-to-shell decisions on the pre-execution path. The repository promises a tool chokepoint, but does not specify a complete independent grammar for the exact shell fragment represented here. Keep this boundary candidate unresolved; do not count the heuristic as a general shell-safety proof.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "a6cc7d27cf3753085e05e5094d5f338b",
+      "review_refs": [
+        {
+          "line": 100,
+          "path": "src/doberman/engine/rules/commands.py",
+          "why": "command parser or destructive-operation rule"
+        },
+        {
+          "line": 40,
+          "path": "README.md",
+          "why": "documented pre-execution action-gate guarantee"
+        }
+      ],
+      "site": "src/doberman/engine/rules/commands.py:100:30"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "\\$\\(|`|\\$(?:\\{|[A-Za-z_])",
+      "product_question_asked": false,
+      "rationale": "This regex parses command structure or contributes to destructive-operation, dynamic-shell, protected-ref, or download-to-shell decisions on the pre-execution path. The repository promises a tool chokepoint, but does not specify a complete independent grammar for the exact shell fragment represented here. Keep this boundary candidate unresolved; do not count the heuristic as a general shell-safety proof.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "c4cee5170855644e79ee945d6fba2cb3",
+      "review_refs": [
+        {
+          "line": 112,
+          "path": "src/doberman/engine/rules/commands.py",
+          "why": "command parser or destructive-operation rule"
+        },
+        {
+          "line": 40,
+          "path": "README.md",
+          "why": "documented pre-execution action-gate guarantee"
+        }
+      ],
+      "site": "src/doberman/engine/rules/commands.py:112:17"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "(?i)\\b(?:rm|remove-item|ri|rmdir|del|erase|rd|clear-content|clc|powershell(?:\\.exe)?|pwsh(?:\\.exe)?|cmd(?:\\.exe)?|format-volume|clear-disk|format)\\b",
+      "product_question_asked": false,
+      "rationale": "This regex parses command structure or contributes to destructive-operation, dynamic-shell, protected-ref, or download-to-shell decisions on the pre-execution path. The repository promises a tool chokepoint, but does not specify a complete independent grammar for the exact shell fragment represented here. Keep this boundary candidate unresolved; do not count the heuristic as a general shell-safety proof.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "514e6d43a571fcb72af20aaf69a2968e",
+      "review_refs": [
+        {
+          "line": 117,
+          "path": "src/doberman/engine/rules/commands.py",
+          "why": "command parser or destructive-operation rule"
+        },
+        {
+          "line": 40,
+          "path": "README.md",
+          "why": "documented pre-execution action-gate guarantee"
+        }
+      ],
+      "site": "src/doberman/engine/rules/commands.py:117:27"
+    },
+    {
+      "decision": "skip",
+      "pattern": "^[A-Za-z]:[/\\\\]?(\\*)?$",
+      "product_question_asked": false,
+      "rationale": "The exact source site already has a product question and SAT witness in the frozen cohort history; this source review does not ask a duplicate question. The existing question outcome and its triage disposition remain authoritative; the same regex site is not added as a new product question.",
+      "reason_code": "previously_asked_exact_site",
+      "regex_id": "791ec4524475105c8d00b4728f2cb28d",
+      "review_refs": [
+        {
+          "line": 266,
+          "path": "src/doberman/engine/rules/commands.py",
+          "why": "exact previously asked source site"
+        }
+      ],
+      "site": "src/doberman/engine/rules/commands.py:266:19"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "^(?:refs/(?:heads|tags)/|heads/)",
+      "product_question_asked": false,
+      "rationale": "This regex parses command structure or contributes to destructive-operation, dynamic-shell, protected-ref, or download-to-shell decisions on the pre-execution path. The repository promises a tool chokepoint, but does not specify a complete independent grammar for the exact shell fragment represented here. Keep this boundary candidate unresolved; do not count the heuristic as a general shell-safety proof.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "3b9033fa2934469072bb3deaaaa0c2e8",
+      "review_refs": [
+        {
+          "line": 424,
+          "path": "src/doberman/engine/rules/commands.py",
+          "why": "command parser or destructive-operation rule"
+        },
+        {
+          "line": 40,
+          "path": "README.md",
+          "why": "documented pre-execution action-gate guarantee"
+        }
+      ],
+      "site": "src/doberman/engine/rules/commands.py:424:14"
+    },
+    {
+      "decision": "skip",
+      "pattern": "^(?:mkfs(?:\\.\\w+)?|shred|wipefs|format-volume|clear-disk|format)$",
+      "product_question_asked": false,
+      "rationale": "The exact source site already has a product question and SAT witness in the frozen cohort history; this source review does not ask a duplicate question. The existing question outcome and its triage disposition remain authoritative; the same regex site is not added as a new product question.",
+      "reason_code": "previously_asked_exact_site",
+      "regex_id": "7fb9749ccbf780ec366cd79d65b83ffc",
+      "review_refs": [
+        {
+          "line": 434,
+          "path": "src/doberman/engine/rules/commands.py",
+          "why": "exact previously asked source site"
+        }
+      ],
+      "site": "src/doberman/engine/rules/commands.py:434:13"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": ":\\s*\\(\\s*\\)\\s*\\{.*\\|\\s*:",
+      "product_question_asked": false,
+      "rationale": "This regex parses command structure or contributes to destructive-operation, dynamic-shell, protected-ref, or download-to-shell decisions on the pre-execution path. The repository promises a tool chokepoint, but does not specify a complete independent grammar for the exact shell fragment represented here. Keep this boundary candidate unresolved; do not count the heuristic as a general shell-safety proof.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "e0337a8ebc2afda9df19f840c66c5d4f",
+      "review_refs": [
+        {
+          "line": 598,
+          "path": "src/doberman/engine/rules/commands.py",
+          "why": "command parser or destructive-operation rule"
+        },
+        {
+          "line": 40,
+          "path": "README.md",
+          "why": "documented pre-execution action-gate guarantee"
+        }
+      ],
+      "site": "src/doberman/engine/rules/commands.py:598:16"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "\\b(?:curl|wget)\\b",
+      "product_question_asked": false,
+      "rationale": "This regex parses command structure or contributes to destructive-operation, dynamic-shell, protected-ref, or download-to-shell decisions on the pre-execution path. The repository promises a tool chokepoint, but does not specify a complete independent grammar for the exact shell fragment represented here. Keep this boundary candidate unresolved; do not count the heuristic as a general shell-safety proof.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "6d51da6f8fac4833932fe6fb18720459",
+      "review_refs": [
+        {
+          "line": 818,
+          "path": "src/doberman/engine/rules/commands.py",
+          "why": "command parser or destructive-operation rule"
+        },
+        {
+          "line": 40,
+          "path": "README.md",
+          "why": "documented pre-execution action-gate guarantee"
+        }
+      ],
+      "site": "src/doberman/engine/rules/commands.py:818:16"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "\\|\\s*(?:sudo\\s+)?(?:bash|sh|zsh|dash|ksh)\\b",
+      "product_question_asked": false,
+      "rationale": "This regex parses command structure or contributes to destructive-operation, dynamic-shell, protected-ref, or download-to-shell decisions on the pre-execution path. The repository promises a tool chokepoint, but does not specify a complete independent grammar for the exact shell fragment represented here. Keep this boundary candidate unresolved; do not count the heuristic as a general shell-safety proof.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "fc9fe810a15e138018db1f67bc35bb33",
+      "review_refs": [
+        {
+          "line": 819,
+          "path": "src/doberman/engine/rules/commands.py",
+          "why": "command parser or destructive-operation rule"
+        },
+        {
+          "line": 40,
+          "path": "README.md",
+          "why": "documented pre-execution action-gate guarantee"
+        }
+      ],
+      "site": "src/doberman/engine/rules/commands.py:819:18"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "AKIA[0-9A-Z]{16}",
+      "product_question_asked": false,
+      "rationale": "This pattern participates in high-confidence credential detection, secret-store classification, entropy filtering, or candidate token extraction. The source names its intended role and provider examples, but a source-independent supported-token syntax or false-negative boundary for this exact pattern is not established. Keep it unresolved; the pattern alone does not prove a missed secret or a redaction failure.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "fb7a15b59325ef7222d6b0a89c30d136",
+      "review_refs": [
+        {
+          "line": 53,
+          "path": "src/doberman/engine/rules/secrets.py",
+          "why": "credential detector or secret-store classifier"
+        },
+        {
+          "line": 120,
+          "path": "docs/ADAPTER_GUIDE.md",
+          "why": "documented redaction boundary for normalized arguments"
+        }
+      ],
+      "site": "src/doberman/engine/rules/secrets.py:53:4"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "ASIA[0-9A-Z]{16}",
+      "product_question_asked": false,
+      "rationale": "This pattern participates in high-confidence credential detection, secret-store classification, entropy filtering, or candidate token extraction. The source names its intended role and provider examples, but a source-independent supported-token syntax or false-negative boundary for this exact pattern is not established. Keep it unresolved; the pattern alone does not prove a missed secret or a redaction failure.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "84f2ce5e8be7e8a19ad0df04c33f68fa",
+      "review_refs": [
+        {
+          "line": 54,
+          "path": "src/doberman/engine/rules/secrets.py",
+          "why": "credential detector or secret-store classifier"
+        },
+        {
+          "line": 120,
+          "path": "docs/ADAPTER_GUIDE.md",
+          "why": "documented redaction boundary for normalized arguments"
+        }
+      ],
+      "site": "src/doberman/engine/rules/secrets.py:54:4"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "sk-[A-Za-z0-9]{20,}",
+      "product_question_asked": false,
+      "rationale": "This pattern participates in high-confidence credential detection, secret-store classification, entropy filtering, or candidate token extraction. The source names its intended role and provider examples, but a source-independent supported-token syntax or false-negative boundary for this exact pattern is not established. Keep it unresolved; the pattern alone does not prove a missed secret or a redaction failure.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "683f774e1292a85438192dcd3ec4cde5",
+      "review_refs": [
+        {
+          "line": 55,
+          "path": "src/doberman/engine/rules/secrets.py",
+          "why": "credential detector or secret-store classifier"
+        },
+        {
+          "line": 120,
+          "path": "docs/ADAPTER_GUIDE.md",
+          "why": "documented redaction boundary for normalized arguments"
+        }
+      ],
+      "site": "src/doberman/engine/rules/secrets.py:55:4"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "sk-proj-[A-Za-z0-9_-]{20,}",
+      "product_question_asked": false,
+      "rationale": "This pattern participates in high-confidence credential detection, secret-store classification, entropy filtering, or candidate token extraction. The source names its intended role and provider examples, but a source-independent supported-token syntax or false-negative boundary for this exact pattern is not established. Keep it unresolved; the pattern alone does not prove a missed secret or a redaction failure.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "8ba4aa16bdf4ddc2b3bf1db6889d2a9b",
+      "review_refs": [
+        {
+          "line": 56,
+          "path": "src/doberman/engine/rules/secrets.py",
+          "why": "credential detector or secret-store classifier"
+        },
+        {
+          "line": 120,
+          "path": "docs/ADAPTER_GUIDE.md",
+          "why": "documented redaction boundary for normalized arguments"
+        }
+      ],
+      "site": "src/doberman/engine/rules/secrets.py:56:4"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "sk-ant-[A-Za-z0-9_-]{20,}",
+      "product_question_asked": false,
+      "rationale": "This pattern participates in high-confidence credential detection, secret-store classification, entropy filtering, or candidate token extraction. The source names its intended role and provider examples, but a source-independent supported-token syntax or false-negative boundary for this exact pattern is not established. Keep it unresolved; the pattern alone does not prove a missed secret or a redaction failure.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "9632b4976de7ecdaae9cb621c15f7a7d",
+      "review_refs": [
+        {
+          "line": 57,
+          "path": "src/doberman/engine/rules/secrets.py",
+          "why": "credential detector or secret-store classifier"
+        },
+        {
+          "line": 120,
+          "path": "docs/ADAPTER_GUIDE.md",
+          "why": "documented redaction boundary for normalized arguments"
+        }
+      ],
+      "site": "src/doberman/engine/rules/secrets.py:57:4"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "gh[pousr]_[A-Za-z0-9]{20,}",
+      "product_question_asked": false,
+      "rationale": "This pattern participates in high-confidence credential detection, secret-store classification, entropy filtering, or candidate token extraction. The source names its intended role and provider examples, but a source-independent supported-token syntax or false-negative boundary for this exact pattern is not established. Keep it unresolved; the pattern alone does not prove a missed secret or a redaction failure.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "f9aef8d6a575873897818a1058a64086",
+      "review_refs": [
+        {
+          "line": 58,
+          "path": "src/doberman/engine/rules/secrets.py",
+          "why": "credential detector or secret-store classifier"
+        },
+        {
+          "line": 120,
+          "path": "docs/ADAPTER_GUIDE.md",
+          "why": "documented redaction boundary for normalized arguments"
+        }
+      ],
+      "site": "src/doberman/engine/rules/secrets.py:58:4"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "github_pat_[A-Za-z0-9_]{22,}",
+      "product_question_asked": false,
+      "rationale": "This pattern participates in high-confidence credential detection, secret-store classification, entropy filtering, or candidate token extraction. The source names its intended role and provider examples, but a source-independent supported-token syntax or false-negative boundary for this exact pattern is not established. Keep it unresolved; the pattern alone does not prove a missed secret or a redaction failure.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "455c62d92eb0dd52ad256429ec933144",
+      "review_refs": [
+        {
+          "line": 59,
+          "path": "src/doberman/engine/rules/secrets.py",
+          "why": "credential detector or secret-store classifier"
+        },
+        {
+          "line": 120,
+          "path": "docs/ADAPTER_GUIDE.md",
+          "why": "documented redaction boundary for normalized arguments"
+        }
+      ],
+      "site": "src/doberman/engine/rules/secrets.py:59:4"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "glpat-[A-Za-z0-9_-]{20,}",
+      "product_question_asked": false,
+      "rationale": "This pattern participates in high-confidence credential detection, secret-store classification, entropy filtering, or candidate token extraction. The source names its intended role and provider examples, but a source-independent supported-token syntax or false-negative boundary for this exact pattern is not established. Keep it unresolved; the pattern alone does not prove a missed secret or a redaction failure.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "571e5d9e2a0fbb20c2c04e7a0e93c22d",
+      "review_refs": [
+        {
+          "line": 60,
+          "path": "src/doberman/engine/rules/secrets.py",
+          "why": "credential detector or secret-store classifier"
+        },
+        {
+          "line": 120,
+          "path": "docs/ADAPTER_GUIDE.md",
+          "why": "documented redaction boundary for normalized arguments"
+        }
+      ],
+      "site": "src/doberman/engine/rules/secrets.py:60:4"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "xox[baprs]-[A-Za-z0-9-]{10,}",
+      "product_question_asked": false,
+      "rationale": "This pattern participates in high-confidence credential detection, secret-store classification, entropy filtering, or candidate token extraction. The source names its intended role and provider examples, but a source-independent supported-token syntax or false-negative boundary for this exact pattern is not established. Keep it unresolved; the pattern alone does not prove a missed secret or a redaction failure.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "578825e43ca63ba95f3807e03b2e77b7",
+      "review_refs": [
+        {
+          "line": 61,
+          "path": "src/doberman/engine/rules/secrets.py",
+          "why": "credential detector or secret-store classifier"
+        },
+        {
+          "line": 120,
+          "path": "docs/ADAPTER_GUIDE.md",
+          "why": "documented redaction boundary for normalized arguments"
+        }
+      ],
+      "site": "src/doberman/engine/rules/secrets.py:61:4"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "https://hooks\\.slack\\.com/services/T[A-Z0-9]+/B[A-Z0-9]+/[A-Za-z0-9]{16,}",
+      "product_question_asked": false,
+      "rationale": "This pattern participates in high-confidence credential detection, secret-store classification, entropy filtering, or candidate token extraction. The source names its intended role and provider examples, but a source-independent supported-token syntax or false-negative boundary for this exact pattern is not established. Keep it unresolved; the pattern alone does not prove a missed secret or a redaction failure.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "29d590992c12a48c576ae5ba19961551",
+      "review_refs": [
+        {
+          "line": 63,
+          "path": "src/doberman/engine/rules/secrets.py",
+          "why": "credential detector or secret-store classifier"
+        },
+        {
+          "line": 120,
+          "path": "docs/ADAPTER_GUIDE.md",
+          "why": "documented redaction boundary for normalized arguments"
+        }
+      ],
+      "site": "src/doberman/engine/rules/secrets.py:63:4"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "AIza[0-9A-Za-z_\\-]{20,}",
+      "product_question_asked": false,
+      "rationale": "This pattern participates in high-confidence credential detection, secret-store classification, entropy filtering, or candidate token extraction. The source names its intended role and provider examples, but a source-independent supported-token syntax or false-negative boundary for this exact pattern is not established. Keep it unresolved; the pattern alone does not prove a missed secret or a redaction failure.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "15e7fcb264cc94bfbe35b262f2cc2d34",
+      "review_refs": [
+        {
+          "line": 64,
+          "path": "src/doberman/engine/rules/secrets.py",
+          "why": "credential detector or secret-store classifier"
+        },
+        {
+          "line": 120,
+          "path": "docs/ADAPTER_GUIDE.md",
+          "why": "documented redaction boundary for normalized arguments"
+        }
+      ],
+      "site": "src/doberman/engine/rules/secrets.py:64:4"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "(?:sk|rk)_(?:live|test)_[A-Za-z0-9]{20,}",
+      "product_question_asked": false,
+      "rationale": "This pattern participates in high-confidence credential detection, secret-store classification, entropy filtering, or candidate token extraction. The source names its intended role and provider examples, but a source-independent supported-token syntax or false-negative boundary for this exact pattern is not established. Keep it unresolved; the pattern alone does not prove a missed secret or a redaction failure.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "5022ec7340f8dbd460be41f579baf63a",
+      "review_refs": [
+        {
+          "line": 65,
+          "path": "src/doberman/engine/rules/secrets.py",
+          "why": "credential detector or secret-store classifier"
+        },
+        {
+          "line": 120,
+          "path": "docs/ADAPTER_GUIDE.md",
+          "why": "documented redaction boundary for normalized arguments"
+        }
+      ],
+      "site": "src/doberman/engine/rules/secrets.py:65:4"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "SG\\.[A-Za-z0-9_\\-]{16,}\\.[A-Za-z0-9_\\-]{16,}",
+      "product_question_asked": false,
+      "rationale": "This pattern participates in high-confidence credential detection, secret-store classification, entropy filtering, or candidate token extraction. The source names its intended role and provider examples, but a source-independent supported-token syntax or false-negative boundary for this exact pattern is not established. Keep it unresolved; the pattern alone does not prove a missed secret or a redaction failure.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "92da20e69605499f1e927aaaac3fbe98",
+      "review_refs": [
+        {
+          "line": 68,
+          "path": "src/doberman/engine/rules/secrets.py",
+          "why": "credential detector or secret-store classifier"
+        },
+        {
+          "line": 120,
+          "path": "docs/ADAPTER_GUIDE.md",
+          "why": "documented redaction boundary for normalized arguments"
+        }
+      ],
+      "site": "src/doberman/engine/rules/secrets.py:68:4"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "npm_[A-Za-z0-9]{36}",
+      "product_question_asked": false,
+      "rationale": "This pattern participates in high-confidence credential detection, secret-store classification, entropy filtering, or candidate token extraction. The source names its intended role and provider examples, but a source-independent supported-token syntax or false-negative boundary for this exact pattern is not established. Keep it unresolved; the pattern alone does not prove a missed secret or a redaction failure.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "16788ca00edf28430e4d1a8bf1ee1984",
+      "review_refs": [
+        {
+          "line": 69,
+          "path": "src/doberman/engine/rules/secrets.py",
+          "why": "credential detector or secret-store classifier"
+        },
+        {
+          "line": 120,
+          "path": "docs/ADAPTER_GUIDE.md",
+          "why": "documented redaction boundary for normalized arguments"
+        }
+      ],
+      "site": "src/doberman/engine/rules/secrets.py:69:4"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "pypi-AgEIcHlwaS5vcmc[A-Za-z0-9_-]{20,}",
+      "product_question_asked": false,
+      "rationale": "This pattern participates in high-confidence credential detection, secret-store classification, entropy filtering, or candidate token extraction. The source names its intended role and provider examples, but a source-independent supported-token syntax or false-negative boundary for this exact pattern is not established. Keep it unresolved; the pattern alone does not prove a missed secret or a redaction failure.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "b37fb472a71e38e53d14c6495d39579e",
+      "review_refs": [
+        {
+          "line": 70,
+          "path": "src/doberman/engine/rules/secrets.py",
+          "why": "credential detector or secret-store classifier"
+        },
+        {
+          "line": 120,
+          "path": "docs/ADAPTER_GUIDE.md",
+          "why": "documented redaction boundary for normalized arguments"
+        }
+      ],
+      "site": "src/doberman/engine/rules/secrets.py:70:4"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "eyJ[A-Za-z0-9_-]{8,}\\.eyJ[A-Za-z0-9_-]{8,}\\.[A-Za-z0-9_-]{8,}",
+      "product_question_asked": false,
+      "rationale": "This pattern participates in high-confidence credential detection, secret-store classification, entropy filtering, or candidate token extraction. The source names its intended role and provider examples, but a source-independent supported-token syntax or false-negative boundary for this exact pattern is not established. Keep it unresolved; the pattern alone does not prove a missed secret or a redaction failure.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "efc052621b5cedca68fdb9fa999783f8",
+      "review_refs": [
+        {
+          "line": 72,
+          "path": "src/doberman/engine/rules/secrets.py",
+          "why": "credential detector or secret-store classifier"
+        },
+        {
+          "line": 120,
+          "path": "docs/ADAPTER_GUIDE.md",
+          "why": "documented redaction boundary for normalized arguments"
+        }
+      ],
+      "site": "src/doberman/engine/rules/secrets.py:72:4"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "(?:postgres(?:ql)?|mysql|mongodb(?:\\+srv)?|redis|amqp)://[^\\s:/@]+:[^\\s@/]+@",
+      "product_question_asked": false,
+      "rationale": "This pattern participates in high-confidence credential detection, secret-store classification, entropy filtering, or candidate token extraction. The source names its intended role and provider examples, but a source-independent supported-token syntax or false-negative boundary for this exact pattern is not established. Keep it unresolved; the pattern alone does not prove a missed secret or a redaction failure.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "5daa6f7f054a9978b5869ab2096bdeb5",
+      "review_refs": [
+        {
+          "line": 74,
+          "path": "src/doberman/engine/rules/secrets.py",
+          "why": "credential detector or secret-store classifier"
+        },
+        {
+          "line": 120,
+          "path": "docs/ADAPTER_GUIDE.md",
+          "why": "documented redaction boundary for normalized arguments"
+        }
+      ],
+      "site": "src/doberman/engine/rules/secrets.py:74:4"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "-----BEGIN[ A-Z0-9]*PRIVATE KEY-----",
+      "product_question_asked": false,
+      "rationale": "This pattern participates in high-confidence credential detection, secret-store classification, entropy filtering, or candidate token extraction. The source names its intended role and provider examples, but a source-independent supported-token syntax or false-negative boundary for this exact pattern is not established. Keep it unresolved; the pattern alone does not prove a missed secret or a redaction failure.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "1b86b635b2ff5239df5905d8845c772c",
+      "review_refs": [
+        {
+          "line": 75,
+          "path": "src/doberman/engine/rules/secrets.py",
+          "why": "credential detector or secret-store classifier"
+        },
+        {
+          "line": 120,
+          "path": "docs/ADAPTER_GUIDE.md",
+          "why": "documented redaction boundary for normalized arguments"
+        }
+      ],
+      "site": "src/doberman/engine/rules/secrets.py:75:4"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "AccountKey=[A-Za-z0-9+/]{40,}={0,2}",
+      "product_question_asked": false,
+      "rationale": "This pattern participates in high-confidence credential detection, secret-store classification, entropy filtering, or candidate token extraction. The source names its intended role and provider examples, but a source-independent supported-token syntax or false-negative boundary for this exact pattern is not established. Keep it unresolved; the pattern alone does not prove a missed secret or a redaction failure.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "a8b0748aa52792345731c678a34b3528",
+      "review_refs": [
+        {
+          "line": 78,
+          "path": "src/doberman/engine/rules/secrets.py",
+          "why": "credential detector or secret-store classifier"
+        },
+        {
+          "line": 120,
+          "path": "docs/ADAPTER_GUIDE.md",
+          "why": "documented redaction boundary for normalized arguments"
+        }
+      ],
+      "site": "src/doberman/engine/rules/secrets.py:78:4"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "SharedAccessKey=[A-Za-z0-9+/]{40,}={0,2}",
+      "product_question_asked": false,
+      "rationale": "This pattern participates in high-confidence credential detection, secret-store classification, entropy filtering, or candidate token extraction. The source names its intended role and provider examples, but a source-independent supported-token syntax or false-negative boundary for this exact pattern is not established. Keep it unresolved; the pattern alone does not prove a missed secret or a redaction failure.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "a2ad450607d5bd0486339acb814245f5",
+      "review_refs": [
+        {
+          "line": 80,
+          "path": "src/doberman/engine/rules/secrets.py",
+          "why": "credential detector or secret-store classifier"
+        },
+        {
+          "line": 120,
+          "path": "docs/ADAPTER_GUIDE.md",
+          "why": "documented redaction boundary for normalized arguments"
+        }
+      ],
+      "site": "src/doberman/engine/rules/secrets.py:80:4"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "\"type\"\\s*:\\s*\"service_account\"",
+      "product_question_asked": false,
+      "rationale": "This pattern participates in high-confidence credential detection, secret-store classification, entropy filtering, or candidate token extraction. The source names its intended role and provider examples, but a source-independent supported-token syntax or false-negative boundary for this exact pattern is not established. Keep it unresolved; the pattern alone does not prove a missed secret or a redaction failure.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "6925383d13771a0ce0b6ca28f269612d",
+      "review_refs": [
+        {
+          "line": 83,
+          "path": "src/doberman/engine/rules/secrets.py",
+          "why": "credential detector or secret-store classifier"
+        },
+        {
+          "line": 120,
+          "path": "docs/ADAPTER_GUIDE.md",
+          "why": "documented redaction boundary for normalized arguments"
+        }
+      ],
+      "site": "src/doberman/engine/rules/secrets.py:83:4"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "(?im)^\\s*(?:export\\s+)?[A-Z0-9_]*(?:KEY|TOKEN|SECRET|PASS(?:WORD)?|CREDENTIAL|PRIVATE)[A-Z0-9_]*\\s*=\\s*['\\\"]?(?P<value>[^\\s'\\\"]{8,})",
+      "product_question_asked": false,
+      "rationale": "This pattern participates in high-confidence credential detection, secret-store classification, entropy filtering, or candidate token extraction. The source names its intended role and provider examples, but a source-independent supported-token syntax or false-negative boundary for this exact pattern is not established. Keep it unresolved; the pattern alone does not prove a missed secret or a redaction failure.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "3c13bd0757c39b415d79ebf8c6431620",
+      "review_refs": [
+        {
+          "line": 91,
+          "path": "src/doberman/engine/rules/secrets.py",
+          "why": "credential detector or secret-store classifier"
+        },
+        {
+          "line": 120,
+          "path": "docs/ADAPTER_GUIDE.md",
+          "why": "documented redaction boundary for normalized arguments"
+        }
+      ],
+      "site": "src/doberman/engine/rules/secrets.py:91:18"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "(?i)^(?:your[_\\-].*|.*[_\\-]here|change[_\\-]?me|placeholder.*|redacted.*|dummy.*|example[_\\-].*|sample[_\\-].*|test[_\\-]?(?:key|token|secret).*|<.*>|\\$\\{.*\\}|\\*{3,}|x{4,})$",
+      "product_question_asked": false,
+      "rationale": "This pattern participates in high-confidence credential detection, secret-store classification, entropy filtering, or candidate token extraction. The source names its intended role and provider examples, but a source-independent supported-token syntax or false-negative boundary for this exact pattern is not established. Keep it unresolved; the pattern alone does not prove a missed secret or a redaction failure.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "bec90e12c80fbe16966719a8caf31769",
+      "review_refs": [
+        {
+          "line": 102,
+          "path": "src/doberman/engine/rules/secrets.py",
+          "why": "credential detector or secret-store classifier"
+        },
+        {
+          "line": 120,
+          "path": "docs/ADAPTER_GUIDE.md",
+          "why": "documented redaction boundary for normalized arguments"
+        }
+      ],
+      "site": "src/doberman/engine/rules/secrets.py:102:21"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "[A-Za-z0-9+/_\\-]{24,}={0,2}",
+      "product_question_asked": false,
+      "rationale": "This pattern participates in high-confidence credential detection, secret-store classification, entropy filtering, or candidate token extraction. The source names its intended role and provider examples, but a source-independent supported-token syntax or false-negative boundary for this exact pattern is not established. Keep it unresolved; the pattern alone does not prove a missed secret or a redaction failure.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "8ab1e4b2be73597fd803fc3e3aefde59",
+      "review_refs": [
+        {
+          "line": 218,
+          "path": "src/doberman/engine/rules/secrets.py",
+          "why": "credential detector or secret-store classifier"
+        },
+        {
+          "line": 120,
+          "path": "docs/ADAPTER_GUIDE.md",
+          "why": "documented redaction boundary for normalized arguments"
+        }
+      ],
+      "site": "src/doberman/engine/rules/secrets.py:218:13"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "\\b[0-9a-fA-F]{40,}\\b",
+      "product_question_asked": false,
+      "rationale": "This pattern participates in high-confidence credential detection, secret-store classification, entropy filtering, or candidate token extraction. The source names its intended role and provider examples, but a source-independent supported-token syntax or false-negative boundary for this exact pattern is not established. Keep it unresolved; the pattern alone does not prove a missed secret or a redaction failure.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "5acded0d61d20cd4752fbc507cd50914",
+      "review_refs": [
+        {
+          "line": 220,
+          "path": "src/doberman/engine/rules/secrets.py",
+          "why": "credential detector or secret-store classifier"
+        },
+        {
+          "line": 120,
+          "path": "docs/ADAPTER_GUIDE.md",
+          "why": "documented redaction boundary for normalized arguments"
+        }
+      ],
+      "site": "src/doberman/engine/rules/secrets.py:220:13"
+    },
+    {
+      "decision": "skip",
+      "pattern": "(?ix)\n    (?:^|/)\\.env(?:\\.[\\w.-]+)?$       # .env, .env.local, .env.production\n    | (?:^|[./])env$                  # app.env / prod.env / .env (any .env file)\n    | \\.pem$                          # certificates / keys\n    | \\.key$                          # private keys\n    | (?:^|/)id_rsa[\\w.-]*$           # ssh private keys\n    | (?:^|/)id_ed25519[\\w.-]*$\n    | (?:^|/)\\.npmrc$                 # often carries auth tokens\n    | (?:^|/)credentials$             # aws/gcloud credentials files\n    ",
+      "product_question_asked": false,
+      "rationale": "The exact source site already has a product question and SAT witness in the frozen cohort history; this source review does not ask a duplicate question. The existing question outcome and its triage disposition remain authoritative; the same regex site is not added as a new product question.",
+      "reason_code": "previously_asked_exact_site",
+      "regex_id": "1da0edb358526b5f1d6ae780f0116744",
+      "review_refs": [
+        {
+          "line": 223,
+          "path": "src/doberman/engine/rules/secrets.py",
+          "why": "exact previously asked source site"
+        }
+      ],
+      "site": "src/doberman/engine/rules/secrets.py:223:15"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "^[A-Za-z0-9+/=_\\-]+$",
+      "product_question_asked": false,
+      "rationale": "This pattern participates in high-confidence credential detection, secret-store classification, entropy filtering, or candidate token extraction. The source names its intended role and provider examples, but a source-independent supported-token syntax or false-negative boundary for this exact pattern is not established. Keep it unresolved; the pattern alone does not prove a missed secret or a redaction failure.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "a7533fdd6901f3e5222c9efdc7bc04b0",
+      "review_refs": [
+        {
+          "line": 241,
+          "path": "src/doberman/engine/rules/secrets.py",
+          "why": "credential detector or secret-store classifier"
+        },
+        {
+          "line": 120,
+          "path": "docs/ADAPTER_GUIDE.md",
+          "why": "documented redaction boundary for normalized arguments"
+        }
+      ],
+      "site": "src/doberman/engine/rules/secrets.py:241:17"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "[0-9a-fA-F]{40,}",
+      "product_question_asked": false,
+      "rationale": "This pattern participates in high-confidence credential detection, secret-store classification, entropy filtering, or candidate token extraction. The source names its intended role and provider examples, but a source-independent supported-token syntax or false-negative boundary for this exact pattern is not established. Keep it unresolved; the pattern alone does not prove a missed secret or a redaction failure.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "721e01db6c77e61b92cc4e68d29b499d",
+      "review_refs": [
+        {
+          "line": 253,
+          "path": "src/doberman/engine/rules/secrets.py",
+          "why": "credential detector or secret-store classifier"
+        },
+        {
+          "line": 120,
+          "path": "docs/ADAPTER_GUIDE.md",
+          "why": "documented redaction boundary for normalized arguments"
+        }
+      ],
+      "site": "src/doberman/engine/rules/secrets.py:253:17"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "^(?:[A-Za-z]+|[0-9]+)$",
+      "product_question_asked": false,
+      "rationale": "This pattern participates in high-confidence credential detection, secret-store classification, entropy filtering, or candidate token extraction. The source names its intended role and provider examples, but a source-independent supported-token syntax or false-negative boundary for this exact pattern is not established. Keep it unresolved; the pattern alone does not prove a missed secret or a redaction failure.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "8498a8b94645d7e7e2d0653519802bc6",
+      "review_refs": [
+        {
+          "line": 273,
+          "path": "src/doberman/engine/rules/secrets.py",
+          "why": "credential detector or secret-store classifier"
+        },
+        {
+          "line": 120,
+          "path": "docs/ADAPTER_GUIDE.md",
+          "why": "documented redaction boundary for normalized arguments"
+        }
+      ],
+      "site": "src/doberman/engine/rules/secrets.py:273:16"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "[/_.\\-]",
+      "product_question_asked": false,
+      "rationale": "This pattern participates in high-confidence credential detection, secret-store classification, entropy filtering, or candidate token extraction. The source names its intended role and provider examples, but a source-independent supported-token syntax or false-negative boundary for this exact pattern is not established. Keep it unresolved; the pattern alone does not prove a missed secret or a redaction failure.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "77c37913347200156e717b7d36ee20ee",
+      "review_refs": [
+        {
+          "line": 274,
+          "path": "src/doberman/engine/rules/secrets.py",
+          "why": "credential detector or secret-store classifier"
+        },
+        {
+          "line": 120,
+          "path": "docs/ADAPTER_GUIDE.md",
+          "why": "documented redaction boundary for normalized arguments"
+        }
+      ],
+      "site": "src/doberman/engine/rules/secrets.py:274:17"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "(?i)^[a-z][a-z0-9+.\\-]*://",
+      "product_question_asked": false,
+      "rationale": "This pattern participates in high-confidence credential detection, secret-store classification, entropy filtering, or candidate token extraction. The source names its intended role and provider examples, but a source-independent supported-token syntax or false-negative boundary for this exact pattern is not established. Keep it unresolved; the pattern alone does not prove a missed secret or a redaction failure.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "60127e690f07118fc1d917b8582cc087",
+      "review_refs": [
+        {
+          "line": 319,
+          "path": "src/doberman/engine/rules/secrets.py",
+          "why": "credential detector or secret-store classifier"
+        },
+        {
+          "line": 120,
+          "path": "docs/ADAPTER_GUIDE.md",
+          "why": "documented redaction boundary for normalized arguments"
+        }
+      ],
+      "site": "src/doberman/engine/rules/secrets.py:319:7"
+    },
+    {
+      "decision": "adopted",
+      "pattern": "^\\s*\\*\\*\\* (?:Add|Update|Delete) File: (.+)$",
+      "product_question_asked": true,
+      "rationale": "The captured Codex 0.146.1 fixture documents Add File, Update File, and Delete File directive syntax. The adopted theorem is deliberately limited to a one-character printable-ASCII destination; the exact-source replay separately checks longer representative paths and multi-file target routing without claiming an unbounded path proof. At this pin, to_normalize_input surfaces extracted destinations as file_write targets for protected-path evaluation.",
+      "reason_code": "codex_apply_patch_target_path",
+      "regex_id": "f7797e4965e6dd79fda6a4e5f2438f67",
+      "review_refs": [
+        {
+          "line": 20,
+          "path": "tests/fixtures/codex/README.md",
+          "why": "captured Codex apply_patch directive formats"
+        },
+        {
+          "line": 106,
+          "path": "tests/unit/test_hosthook_codex.py",
+          "why": "exact-helper multi-directive extraction assertion"
+        },
+        {
+          "line": 100,
+          "path": "src/doberman/hosthooks/codex.py",
+          "why": "path extraction is mapped into the file_write target passed for protected-path evaluation"
+        }
+      ],
+      "site": "src/doberman/hosthooks/codex.py:69:23"
+    },
+    {
+      "decision": "adopted",
+      "pattern": "^\\s*\\*\\*\\* Move to: (.+)$",
+      "product_question_asked": true,
+      "rationale": "The captured Codex 0.146.1 fixture documents Move to directive syntax. The adopted theorem is deliberately limited to a one-character printable-ASCII destination; the exact-source replay separately checks longer representative paths and multi-file target routing without claiming an unbounded path proof. At this pin, to_normalize_input surfaces extracted destinations as file_write targets for protected-path evaluation.",
+      "reason_code": "codex_apply_patch_target_path",
+      "regex_id": "07feadd45ef45bfb08eb20a6c49cdb3e",
+      "review_refs": [
+        {
+          "line": 21,
+          "path": "tests/fixtures/codex/README.md",
+          "why": "captured Move to directive format"
+        },
+        {
+          "line": 106,
+          "path": "tests/unit/test_hosthook_codex.py",
+          "why": "exact-helper multi-directive extraction assertion"
+        },
+        {
+          "line": 100,
+          "path": "src/doberman/hosthooks/codex.py",
+          "why": "path extraction is mapped into the file_write target passed for protected-path evaluation"
+        }
+      ],
+      "site": "src/doberman/hosthooks/codex.py:70:23"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "[A-Za-z0-9+/=_\\-]{24,}",
+      "product_question_asked": false,
+      "rationale": "This regex finds high-entropy candidates in a free-text policy-change reason that is scrubbed before reaching the audit ledger. The helper has a broader fail-safe path, but the source does not define an independent token language establishing this regex as a complete secret detector. Keep the site unresolved; a regex-level candidate does not show that a secret reaches the ledger.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "e445fc32203e72e239949db913855d3f",
+      "review_refs": [
+        {
+          "line": 124,
+          "path": "src/doberman/policy/drift.py",
+          "why": "reason redaction helper and ledger sink"
+        },
+        {
+          "line": 220,
+          "path": "README.md",
+          "why": "documented already-redacted audit records"
+        }
+      ],
+      "site": "src/doberman/policy/drift.py:124:26"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "\n    (?:AKIA[0-9A-Z]{16})                              # AWS access key id\n    | (?:sk-[A-Za-z0-9_\\-]{16,})                      # api secret key prefix\n    | (?:gh[pousr]_[A-Za-z0-9]{20,})                  # github tokens\n    | (?:-----BEGIN[ A-Z]*PRIVATE\\ KEY-----)          # PEM private key\n    | (?:\\b[A-Za-z0-9+/_\\-]{40,}\\b)                   # long unbroken token\n    ",
+      "product_question_asked": false,
+      "rationale": "This regex contributes to argument redaction, command/egress classification, or destination parsing before an MCP action is evaluated and recorded. The pinned source documents redacted normalized arguments, but does not provide an independent syntax/coverage contract for this individual pattern. Keep it unresolved; no leak or egress bypass is established.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "a91cd83e9d16545655ca952e90466096",
+      "review_refs": [
+        {
+          "line": 40,
+          "path": "src/doberman/proxy/normalize.py",
+          "why": "proxy normalization/redaction or command-intent use"
+        },
+        {
+          "line": 120,
+          "path": "docs/ADAPTER_GUIDE.md",
+          "why": "documented redaction boundary for normalized arguments"
+        }
+      ],
+      "site": "src/doberman/proxy/normalize.py:40:17"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "(?:pass(?:word)?|secret|token|api[_-]?key|credential|auth|bearer|private[_-]?key)",
+      "product_question_asked": false,
+      "rationale": "This regex contributes to argument redaction, command/egress classification, or destination parsing before an MCP action is evaluated and recorded. The pinned source documents redacted normalized arguments, but does not provide an independent syntax/coverage contract for this individual pattern. Keep it unresolved; no leak or egress bypass is established.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "85d9d88e651a70ca48a0df468ca32ae1",
+      "review_refs": [
+        {
+          "line": 52,
+          "path": "src/doberman/proxy/normalize.py",
+          "why": "proxy normalization/redaction or command-intent use"
+        },
+        {
+          "line": 120,
+          "path": "docs/ADAPTER_GUIDE.md",
+          "why": "documented redaction boundary for normalized arguments"
+        }
+      ],
+      "site": "src/doberman/proxy/normalize.py:52:18"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "^(?P<name>[A-Za-z_][A-Za-z0-9_]*)=(?P<value>.*)$",
+      "product_question_asked": false,
+      "rationale": "This regex contributes to argument redaction, command/egress classification, or destination parsing before an MCP action is evaluated and recorded. The pinned source documents redacted normalized arguments, but does not provide an independent syntax/coverage contract for this individual pattern. Keep it unresolved; no leak or egress bypass is established.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "9fd29c541837ebdcdfceb1bd222755f2",
+      "review_refs": [
+        {
+          "line": 155,
+          "path": "src/doberman/proxy/normalize.py",
+          "why": "proxy normalization/redaction or command-intent use"
+        },
+        {
+          "line": 120,
+          "path": "docs/ADAPTER_GUIDE.md",
+          "why": "documented redaction boundary for normalized arguments"
+        }
+      ],
+      "site": "src/doberman/proxy/normalize.py:155:18"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "\\$\\(|`|\\$(?:\\{|[A-Za-z_])|[*]",
+      "product_question_asked": false,
+      "rationale": "This regex contributes to argument redaction, command/egress classification, or destination parsing before an MCP action is evaluated and recorded. The pinned source documents redacted normalized arguments, but does not provide an independent syntax/coverage contract for this individual pattern. Keep it unresolved; no leak or egress bypass is established.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "c019e7c45ace1d170649a57d99319960",
+      "review_refs": [
+        {
+          "line": 156,
+          "path": "src/doberman/proxy/normalize.py",
+          "why": "proxy normalization/redaction or command-intent use"
+        },
+        {
+          "line": 120,
+          "path": "docs/ADAPTER_GUIDE.md",
+          "why": "documented redaction boundary for normalized arguments"
+        }
+      ],
+      "site": "src/doberman/proxy/normalize.py:156:24"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "(?<![A-Za-z0-9_.-])(?:curl|wget|scp|sftp|rsync|netcat|ncat|nc|ssh|telnet|tftp|ftp|socat|git|pip3?|pipx|npm|pnpm|yarn|bun|cargo|gem|go|poetry|twine|uv)(?![A-Za-z0-9_.-])",
+      "product_question_asked": false,
+      "rationale": "This regex contributes to argument redaction, command/egress classification, or destination parsing before an MCP action is evaluated and recorded. The pinned source documents redacted normalized arguments, but does not provide an independent syntax/coverage contract for this individual pattern. Keep it unresolved; no leak or egress bypass is established.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "e32c42775094102f8aad72c37cf12e9f",
+      "review_refs": [
+        {
+          "line": 161,
+          "path": "src/doberman/proxy/normalize.py",
+          "why": "proxy normalization/redaction or command-intent use"
+        },
+        {
+          "line": 120,
+          "path": "docs/ADAPTER_GUIDE.md",
+          "why": "documented redaction boundary for normalized arguments"
+        }
+      ],
+      "site": "src/doberman/proxy/normalize.py:161:25"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "^(?:[^@/\\s]+@)?(?:\\[[^\\]]+\\]|[^:/\\s]+\\.[^:/\\s]+)(?::|/|$)",
+      "product_question_asked": false,
+      "rationale": "This regex contributes to argument redaction, command/egress classification, or destination parsing before an MCP action is evaluated and recorded. The pinned source documents redacted normalized arguments, but does not provide an independent syntax/coverage contract for this individual pattern. Keep it unresolved; no leak or egress bypass is established.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "ccb277a3e3021ee07f96ac1d2f424d42",
+      "review_refs": [
+        {
+          "line": 287,
+          "path": "src/doberman/proxy/normalize.py",
+          "why": "proxy normalization/redaction or command-intent use"
+        },
+        {
+          "line": 120,
+          "path": "docs/ADAPTER_GUIDE.md",
+          "why": "documented redaction boundary for normalized arguments"
+        }
+      ],
+      "site": "src/doberman/proxy/normalize.py:287:7"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "^\\d{1,3}(?:\\.\\d{1,3}){3}(?::|/|$)",
+      "product_question_asked": false,
+      "rationale": "This regex contributes to argument redaction, command/egress classification, or destination parsing before an MCP action is evaluated and recorded. The pinned source documents redacted normalized arguments, but does not provide an independent syntax/coverage contract for this individual pattern. Keep it unresolved; no leak or egress bypass is established.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "e237a27aea5a7ba2b69e75e0b20c5a3a",
+      "review_refs": [
+        {
+          "line": 289,
+          "path": "src/doberman/proxy/normalize.py",
+          "why": "proxy normalization/redaction or command-intent use"
+        },
+        {
+          "line": 120,
+          "path": "docs/ADAPTER_GUIDE.md",
+          "why": "documented redaction boundary for normalized arguments"
+        }
+      ],
+      "site": "src/doberman/proxy/normalize.py:289:16"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "(?i)delete|remove|drop|destroy|purge|erase|wipe|(?:^|[_\\-])rm(?:[_\\-]|$)",
+      "product_question_asked": false,
+      "rationale": "This regex maps tool metadata, descriptions, targets, or command text into action risk/capability features. Those features can affect a later decision, but the pinned product docs do not specify an independent word-to-capability language or complete intended match set for this exact heuristic. Keep it unresolved pending a property contract.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "b8f3ddf89e2dbac6a2343d32f75cd231",
+      "review_refs": [
+        {
+          "line": 61,
+          "path": "src/doberman/subjective/infer.py",
+          "why": "risk/capability inference use"
+        }
+      ],
+      "site": "src/doberman/subjective/infer.py:61:8"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "(?i)grant|chmod|chown|permission|authoriz|privilege|sudo",
+      "product_question_asked": false,
+      "rationale": "This regex maps tool metadata, descriptions, targets, or command text into action risk/capability features. Those features can affect a later decision, but the pinned product docs do not specify an independent word-to-capability language or complete intended match set for this exact heuristic. Keep it unresolved pending a property contract.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "7d8dbdc11874871c5a70e669f253d33c",
+      "review_refs": [
+        {
+          "line": 65,
+          "path": "src/doberman/subjective/infer.py",
+          "why": "risk/capability inference use"
+        }
+      ],
+      "site": "src/doberman/subjective/infer.py:65:8"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "(?i)exec|shell|spawn|invoke|launch|(?:^|[_\\-])(?:run|bash|sh)(?:[_\\-]|$)",
+      "product_question_asked": false,
+      "rationale": "This regex maps tool metadata, descriptions, targets, or command text into action risk/capability features. Those features can affect a later decision, but the pinned product docs do not specify an independent word-to-capability language or complete intended match set for this exact heuristic. Keep it unresolved pending a property contract.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "40d405be48f51e609a7231bd2cfb9b5c",
+      "review_refs": [
+        {
+          "line": 69,
+          "path": "src/doberman/subjective/infer.py",
+          "why": "risk/capability inference use"
+        }
+      ],
+      "site": "src/doberman/subjective/infer.py:69:8"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "(?i)send|mail|post|publish|upload|share|submit|broadcast|message|tweet",
+      "product_question_asked": false,
+      "rationale": "This regex maps tool metadata, descriptions, targets, or command text into action risk/capability features. Those features can affect a later decision, but the pinned product docs do not specify an independent word-to-capability language or complete intended match set for this exact heuristic. Keep it unresolved pending a property contract.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "e50dc79f6379eb545059180074b7ebab",
+      "review_refs": [
+        {
+          "line": 73,
+          "path": "src/doberman/subjective/infer.py",
+          "why": "risk/capability inference use"
+        }
+      ],
+      "site": "src/doberman/subjective/infer.py:73:8"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "(?i)config|setting|option|toggle|enable|disable",
+      "product_question_asked": false,
+      "rationale": "This regex maps tool metadata, descriptions, targets, or command text into action risk/capability features. Those features can affect a later decision, but the pinned product docs do not specify an independent word-to-capability language or complete intended match set for this exact heuristic. Keep it unresolved pending a property contract.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "3de0827705a52348cc39fd0602ddfb19",
+      "review_refs": [
+        {
+          "line": 77,
+          "path": "src/doberman/subjective/infer.py",
+          "why": "risk/capability inference use"
+        }
+      ],
+      "site": "src/doberman/subjective/infer.py:77:8"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "(?i)write|update|patch|edit|create|insert|append|rename|move|copy",
+      "product_question_asked": false,
+      "rationale": "This regex maps tool metadata, descriptions, targets, or command text into action risk/capability features. Those features can affect a later decision, but the pinned product docs do not specify an independent word-to-capability language or complete intended match set for this exact heuristic. Keep it unresolved pending a property contract.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "5bceec588bab80da55f4fd2f37270756",
+      "review_refs": [
+        {
+          "line": 81,
+          "path": "src/doberman/subjective/infer.py",
+          "why": "risk/capability inference use"
+        }
+      ],
+      "site": "src/doberman/subjective/infer.py:81:8"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "(?i)read|(?:^|[_\\-])(?:get|list|cat|stat|head)(?:[_\\-]|$)|fetch|view|search|query",
+      "product_question_asked": false,
+      "rationale": "This regex maps tool metadata, descriptions, targets, or command text into action risk/capability features. Those features can affect a later decision, but the pinned product docs do not specify an independent word-to-capability language or complete intended match set for this exact heuristic. Keep it unresolved pending a property contract.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "a3917624009343f7f712a6d1ed3127b7",
+      "review_refs": [
+        {
+          "line": 85,
+          "path": "src/doberman/subjective/infer.py",
+          "why": "risk/capability inference use"
+        }
+      ],
+      "site": "src/doberman/subjective/infer.py:85:8"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "(?i)secret|credential|password|private[ _-]?key|api[ _-]?key|(?:api|access|auth|bearer|oauth|session|refresh)[ _-]?token",
+      "product_question_asked": false,
+      "rationale": "This regex maps tool metadata, descriptions, targets, or command text into action risk/capability features. Those features can affect a later decision, but the pinned product docs do not specify an independent word-to-capability language or complete intended match set for this exact heuristic. Keep it unresolved pending a property contract.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "1356aa922ae280f6c2a2a7dfa8993ec8",
+      "review_refs": [
+        {
+          "line": 113,
+          "path": "src/doberman/subjective/infer.py",
+          "why": "risk/capability inference use"
+        }
+      ],
+      "site": "src/doberman/subjective/infer.py:113:25"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "(?x) ^(?:\\.{0,2}[/\\\\~]) | [/\\\\] | ^[\\w.\\-]+\\.\\w{1,8}$ ",
+      "product_question_asked": false,
+      "rationale": "This regex maps tool metadata, descriptions, targets, or command text into action risk/capability features. Those features can affect a later decision, but the pinned product docs do not specify an independent word-to-capability language or complete intended match set for this exact heuristic. Keep it unresolved pending a property contract.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "998831f9f015576e23523d2ac53a8cfa",
+      "review_refs": [
+        {
+          "line": 120,
+          "path": "src/doberman/subjective/infer.py",
+          "why": "risk/capability inference use"
+        }
+      ],
+      "site": "src/doberman/subjective/infer.py:120:13"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "(?x) ^\\w+:// | ^[\\w.\\-]+@[\\w.\\-]+$ | ^[\\w\\-]+(?:\\.[\\w\\-]+)+(?::\\d+)?(?:/|$) ",
+      "product_question_asked": false,
+      "rationale": "This regex maps tool metadata, descriptions, targets, or command text into action risk/capability features. Those features can affect a later decision, but the pinned product docs do not specify an independent word-to-capability language or complete intended match set for this exact heuristic. Keep it unresolved pending a property contract.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "41fe5577c327dddbeba24afbb38aa18c",
+      "review_refs": [
+        {
+          "line": 121,
+          "path": "src/doberman/subjective/infer.py",
+          "why": "risk/capability inference use"
+        }
+      ],
+      "site": "src/doberman/subjective/infer.py:121:16"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "[*\\[]",
+      "product_question_asked": false,
+      "rationale": "This regex maps tool metadata, descriptions, targets, or command text into action risk/capability features. Those features can affect a later decision, but the pinned product docs do not specify an independent word-to-capability language or complete intended match set for this exact heuristic. Keep it unresolved pending a property contract.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "cd6011ee2459056b128829a877b1f62e",
+      "review_refs": [
+        {
+          "line": 299,
+          "path": "src/doberman/subjective/infer.py",
+          "why": "risk/capability inference use"
+        }
+      ],
+      "site": "src/doberman/subjective/infer.py:299:14"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "(?i)(?:^|\\s)-[rf]+\\b|--recursive\\b|\\*\\*?",
+      "product_question_asked": false,
+      "rationale": "This regex maps tool metadata, descriptions, targets, or command text into action risk/capability features. Those features can affect a later decision, but the pinned product docs do not specify an independent word-to-capability language or complete intended match set for this exact heuristic. Keep it unresolved pending a property contract.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "2a9b6750fb4511335f91235fdd80bf85",
+      "review_refs": [
+        {
+          "line": 300,
+          "path": "src/doberman/subjective/infer.py",
+          "why": "risk/capability inference use"
+        }
+      ],
+      "site": "src/doberman/subjective/infer.py:300:19"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "(?i)\\brm\\b|\\bshred\\b|\\bmkfs\\b|\\bdd\\b\\s+if=|drop\\s+(?:table|database)|\\btruncate\\b|push\\b[^;&|\\n]{0,40}--force|--hard\\b(?!-)",
+      "product_question_asked": false,
+      "rationale": "This regex maps tool metadata, descriptions, targets, or command text into action risk/capability features. Those features can affect a later decision, but the pinned product docs do not specify an independent word-to-capability language or complete intended match set for this exact heuristic. Keep it unresolved pending a property contract.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "5e57081a6685659836a3f103962f7c22",
+      "review_refs": [
+        {
+          "line": 304,
+          "path": "src/doberman/subjective/infer.py",
+          "why": "risk/capability inference use"
+        }
+      ],
+      "site": "src/doberman/subjective/infer.py:304:22"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "\\b(you must|you should|you are required to|you will now|you need to|from now on,? you|the assistant (must|should|will)|the ai (must|should|will)|assistant:|system:|note (for|to) the (ai|assistant|model|llm)|ignore the user|do not tell the user|instead of (helping|the user))\\b",
+      "product_question_asked": false,
+      "rationale": "The regex is part of the documented Tier 1 prompt heuristic, which may request AUTH but is structurally unable to BLOCK. The source explains its intended signal class but provides no independent lexical completeness/precision contract for this individual pattern. Keep it unresolved rather than equating a heuristic word list with a security guarantee.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "2aefed4e9a536d5db33d7121299fa1ab",
+      "review_refs": [
+        {
+          "line": 52,
+          "path": "src/doberman/turngate/heuristics.py",
+          "why": "Tier 1 heuristic implementation"
+        },
+        {
+          "line": 158,
+          "path": "README.md",
+          "why": "documented AUTH-only heuristic tier"
+        }
+      ],
+      "site": "src/doberman/turngate/heuristics.py:52:18"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "\\b(pretend (to be|you are|that you are)|you are now (a|an)\\b|roleplay as|role-play as|from now on you are|act like you are|you are no longer)\\b",
+      "product_question_asked": false,
+      "rationale": "The regex is part of the documented Tier 1 prompt heuristic, which may request AUTH but is structurally unable to BLOCK. The source explains its intended signal class but provides no independent lexical completeness/precision contract for this individual pattern. Keep it unresolved rather than equating a heuristic word list with a security guarantee.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "fa0221ffe165007c41fa99944bf445ba",
+      "review_refs": [
+        {
+          "line": 60,
+          "path": "src/doberman/turngate/heuristics.py",
+          "why": "Tier 1 heuristic implementation"
+        },
+        {
+          "line": 158,
+          "path": "README.md",
+          "why": "documented AUTH-only heuristic tier"
+        }
+      ],
+      "site": "src/doberman/turngate/heuristics.py:60:20"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "\\b(don'?t tell|do not tell|without telling|keep (this|it) (secret|quiet|between us)|do (this|it) quietly|don'?t mention|do not mention|without (the user|anyone) knowing|behind (the user'?s|their) back|don'?t let the user|so the user (won'?t|doesn'?t) (know|notice))\\b",
+      "product_question_asked": false,
+      "rationale": "The regex is part of the documented Tier 1 prompt heuristic, which may request AUTH but is structurally unable to BLOCK. The source explains its intended signal class but provides no independent lexical completeness/precision contract for this individual pattern. Keep it unresolved rather than equating a heuristic word list with a security guarantee.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "82dbd85d4665a16b54b7790773e03fdb",
+      "review_refs": [
+        {
+          "line": 66,
+          "path": "src/doberman/turngate/heuristics.py",
+          "why": "Tier 1 heuristic implementation"
+        },
+        {
+          "line": 158,
+          "path": "README.md",
+          "why": "documented AUTH-only heuristic tier"
+        }
+      ],
+      "site": "src/doberman/turngate/heuristics.py:66:19"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "[A-Za-z0-9+/_-]{20,39}",
+      "product_question_asked": false,
+      "rationale": "The regex is part of the documented Tier 1 prompt heuristic, which may request AUTH but is structurally unable to BLOCK. The source explains its intended signal class but provides no independent lexical completeness/precision contract for this individual pattern. Keep it unresolved rather than equating a heuristic word list with a security guarantee.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "41e316bb20a0ac34afc675623248282b",
+      "review_refs": [
+        {
+          "line": 74,
+          "path": "src/doberman/turngate/heuristics.py",
+          "why": "Tier 1 heuristic implementation"
+        },
+        {
+          "line": 158,
+          "path": "README.md",
+          "why": "documented AUTH-only heuristic tier"
+        }
+      ],
+      "site": "src/doberman/turngate/heuristics.py:74:16"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "[\u200b\u200c\u200d\ufeff\u2060]",
+      "product_question_asked": false,
+      "rationale": "The regex is part of the documented Tier 1 prompt heuristic, which may request AUTH but is structurally unable to BLOCK. The source explains its intended signal class but provides no independent lexical completeness/precision contract for this individual pattern. Keep it unresolved rather than equating a heuristic word list with a security guarantee.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "2ee6f8d89e212f5203c71f527c74cacc",
+      "review_refs": [
+        {
+          "line": 76,
+          "path": "src/doberman/turngate/heuristics.py",
+          "why": "Tier 1 heuristic implementation"
+        },
+        {
+          "line": 158,
+          "path": "README.md",
+          "why": "documented AUTH-only heuristic tier"
+        }
+      ],
+      "site": "src/doberman/turngate/heuristics.py:76:14"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "(?:\\\\x[0-9a-fA-F]{2}){4,}",
+      "product_question_asked": false,
+      "rationale": "The regex is part of the documented Tier 1 prompt heuristic, which may request AUTH but is structurally unable to BLOCK. The source explains its intended signal class but provides no independent lexical completeness/precision contract for this individual pattern. Keep it unresolved rather than equating a heuristic word list with a security guarantee.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "942b8601ed28d76f39822aa55e93589a",
+      "review_refs": [
+        {
+          "line": 77,
+          "path": "src/doberman/turngate/heuristics.py",
+          "why": "Tier 1 heuristic implementation"
+        },
+        {
+          "line": 158,
+          "path": "README.md",
+          "why": "documented AUTH-only heuristic tier"
+        }
+      ],
+      "site": "src/doberman/turngate/heuristics.py:77:15"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "\\s+",
+      "product_question_asked": false,
+      "rationale": "This regex contributes to apparent-intent or normalized-feature classification used by the pre-inference gate. The source documents sensitive-intent categories and scan limits, but not an independent accepted language for this exact pattern or the false-negative conditions under which the gate abstains. Keep the security-facing classifier unresolved.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "1b9dd7caf4e2217fde18b606acf8c6e8",
+      "review_refs": [
+        {
+          "line": 26,
+          "path": "src/doberman/turngate/normalize.py",
+          "why": "turn normalization and feature classification"
+        },
+        {
+          "line": 159,
+          "path": "README.md",
+          "why": "documented sensitive-intent co-occurrence policy"
+        }
+      ],
+      "site": "src/doberman/turngate/normalize.py:26:6"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "[^a-z0-9 ]+",
+      "product_question_asked": false,
+      "rationale": "This regex contributes to apparent-intent or normalized-feature classification used by the pre-inference gate. The source documents sensitive-intent categories and scan limits, but not an independent accepted language for this exact pattern or the false-negative conditions under which the gate abstains. Keep the security-facing classifier unresolved.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "dca1d3151039401ff744e2ef82f21ada",
+      "review_refs": [
+        {
+          "line": 27,
+          "path": "src/doberman/turngate/normalize.py",
+          "why": "turn normalization and feature classification"
+        },
+        {
+          "line": 159,
+          "path": "README.md",
+          "why": "documented sensitive-intent co-occurrence policy"
+        }
+      ],
+      "site": "src/doberman/turngate/normalize.py:27:13"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "\\b(api[ _-]?key|secret|token|password|credential|\\.env|private key|ssh key|access key)\\b",
+      "product_question_asked": false,
+      "rationale": "This regex contributes to apparent-intent or normalized-feature classification used by the pre-inference gate. The source documents sensitive-intent categories and scan limits, but not an independent accepted language for this exact pattern or the false-negative conditions under which the gate abstains. Keep the security-facing classifier unresolved.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "b3c2431222722182607f49f87f310a6e",
+      "review_refs": [
+        {
+          "line": 29,
+          "path": "src/doberman/turngate/normalize.py",
+          "why": "turn normalization and feature classification"
+        },
+        {
+          "line": 159,
+          "path": "README.md",
+          "why": "documented sensitive-intent co-occurrence policy"
+        }
+      ],
+      "site": "src/doberman/turngate/normalize.py:29:14"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "\\b(rm -rf|delete|drop table|wipe|format|truncate|destroy|force[- ]push|shred)\\b",
+      "product_question_asked": false,
+      "rationale": "This regex contributes to apparent-intent or normalized-feature classification used by the pre-inference gate. The source documents sensitive-intent categories and scan limits, but not an independent accepted language for this exact pattern or the false-negative conditions under which the gate abstains. Keep the security-facing classifier unresolved.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "c32a194250f64eed882f124bcfefe6c2",
+      "review_refs": [
+        {
+          "line": 33,
+          "path": "src/doberman/turngate/normalize.py",
+          "why": "turn normalization and feature classification"
+        },
+        {
+          "line": 159,
+          "path": "README.md",
+          "why": "documented sensitive-intent co-occurrence policy"
+        }
+      ],
+      "site": "src/doberman/turngate/normalize.py:33:15"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "\\b(send|upload|post|exfiltrate|email|curl|webhook)\\b|https?://",
+      "product_question_asked": false,
+      "rationale": "This regex contributes to apparent-intent or normalized-feature classification used by the pre-inference gate. The source documents sensitive-intent categories and scan limits, but not an independent accepted language for this exact pattern or the false-negative conditions under which the gate abstains. Keep the security-facing classifier unresolved.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "fed39a49979c449e5741d37eaced3e64",
+      "review_refs": [
+        {
+          "line": 37,
+          "path": "src/doberman/turngate/normalize.py",
+          "why": "turn normalization and feature classification"
+        },
+        {
+          "line": 159,
+          "path": "README.md",
+          "why": "documented sensitive-intent co-occurrence policy"
+        }
+      ],
+      "site": "src/doberman/turngate/normalize.py:37:12"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "[A-Za-z0-9+/_-]{40,}|\\bxn--[a-z0-9-]+",
+      "product_question_asked": false,
+      "rationale": "This regex contributes to apparent-intent or normalized-feature classification used by the pre-inference gate. The source documents sensitive-intent categories and scan limits, but not an independent accepted language for this exact pattern or the false-negative conditions under which the gate abstains. Keep the security-facing classifier unresolved.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "57bcf088ccc8898f360426221fd6358f",
+      "review_refs": [
+        {
+          "line": 40,
+          "path": "src/doberman/turngate/normalize.py",
+          "why": "turn normalization and feature classification"
+        },
+        {
+          "line": 159,
+          "path": "README.md",
+          "why": "documented sensitive-intent co-occurrence policy"
+        }
+      ],
+      "site": "src/doberman/turngate/normalize.py:40:11"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "\\bxn--[a-z0-9-]+",
+      "product_question_asked": false,
+      "rationale": "The regex participates in a Tier 0 turn-signature decision that can stop a prompt before inference. The README documents the signature families and verdict boundary, but the pinned product materials do not define an independent phrase/encoding language for this exact pattern or a completeness requirement. Keep this security-facing candidate unresolved; do not infer a finding from lexical breadth or gaps.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "3fb53d48346c80768133cf4a60a24e28",
+      "review_refs": [
+        {
+          "line": 54,
+          "path": "src/doberman/turngate/signatures.py",
+          "why": "Tier 0 signature implementation"
+        },
+        {
+          "line": 157,
+          "path": "README.md",
+          "why": "documented turn-gate signature and verdict policy"
+        }
+      ],
+      "site": "src/doberman/turngate/signatures.py:54:12"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "\\b(ignore|disregard|forget|override|do not follow|don'?t follow)\\b[^.?!]{0,40}\\b(previous|prior|earlier|above|all|your|the|system)\\b[^.?!]{0,25}\\b(instruction|instructions|rule|rules|prompt|prompts|directive|directives)\\b",
+      "product_question_asked": false,
+      "rationale": "The regex participates in a Tier 0 turn-signature decision that can stop a prompt before inference. The README documents the signature families and verdict boundary, but the pinned product materials do not define an independent phrase/encoding language for this exact pattern or a completeness requirement. Keep this security-facing candidate unresolved; do not infer a finding from lexical breadth or gaps.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "3711454ec630c1f6ea2ae7897fef1257",
+      "review_refs": [
+        {
+          "line": 60,
+          "path": "src/doberman/turngate/signatures.py",
+          "why": "Tier 0 signature implementation"
+        },
+        {
+          "line": 157,
+          "path": "README.md",
+          "why": "documented turn-gate signature and verdict policy"
+        }
+      ],
+      "site": "src/doberman/turngate/signatures.py:60:4"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "\\b(previous|prior|earlier|your|the above)\\b[^.?!]{0,30}\\b(instruction|instructions|rule|rules)\\b[^.?!]{0,25}\\b(no longer apply|don'?t apply|do not apply|are void|are cancell?ed|are revoked)\\b",
+      "product_question_asked": false,
+      "rationale": "The regex participates in a Tier 0 turn-signature decision that can stop a prompt before inference. The README documents the signature families and verdict boundary, but the pinned product materials do not define an independent phrase/encoding language for this exact pattern or a completeness requirement. Keep this security-facing candidate unresolved; do not infer a finding from lexical breadth or gaps.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "a93fb4d4a634736493f1930e9f743e80",
+      "review_refs": [
+        {
+          "line": 66,
+          "path": "src/doberman/turngate/signatures.py",
+          "why": "Tier 0 signature implementation"
+        },
+        {
+          "line": 157,
+          "path": "README.md",
+          "why": "documented turn-gate signature and verdict policy"
+        }
+      ],
+      "site": "src/doberman/turngate/signatures.py:66:4"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "\\bi am (your |the )?(administrator|admin|developer|owner|creator|root|supervisor)\\b",
+      "product_question_asked": false,
+      "rationale": "The regex participates in a Tier 0 turn-signature decision that can stop a prompt before inference. The README documents the signature families and verdict boundary, but the pinned product materials do not define an independent phrase/encoding language for this exact pattern or a completeness requirement. Keep this security-facing candidate unresolved; do not infer a finding from lexical breadth or gaps.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "eca5b0b0e3f332310ae086b52525f495",
+      "review_refs": [
+        {
+          "line": 75,
+          "path": "src/doberman/turngate/signatures.py",
+          "why": "Tier 0 signature implementation"
+        },
+        {
+          "line": 157,
+          "path": "README.md",
+          "why": "documented turn-gate signature and verdict policy"
+        }
+      ],
+      "site": "src/doberman/turngate/signatures.py:75:4"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "\\b(this|the following|my)\\b[^.?!]{0,25}\\b(supersedes?|overrides?|replaces?)\\b[^.?!]{0,25}\\b(system prompt|instructions|rules|policy|guidelines)\\b",
+      "product_question_asked": false,
+      "rationale": "The regex participates in a Tier 0 turn-signature decision that can stop a prompt before inference. The README documents the signature families and verdict boundary, but the pinned product materials do not define an independent phrase/encoding language for this exact pattern or a completeness requirement. Keep this security-facing candidate unresolved; do not infer a finding from lexical breadth or gaps.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "faa235a866813e8dc6172c4a56aba3aa",
+      "review_refs": [
+        {
+          "line": 79,
+          "path": "src/doberman/turngate/signatures.py",
+          "why": "Tier 0 signature implementation"
+        },
+        {
+          "line": 157,
+          "path": "README.md",
+          "why": "documented turn-gate signature and verdict policy"
+        }
+      ],
+      "site": "src/doberman/turngate/signatures.py:79:4"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "\\belevated (permissions|privileges|access|rights)\\b",
+      "product_question_asked": false,
+      "rationale": "The regex participates in a Tier 0 turn-signature decision that can stop a prompt before inference. The README documents the signature families and verdict boundary, but the pinned product materials do not define an independent phrase/encoding language for this exact pattern or a completeness requirement. Keep this security-facing candidate unresolved; do not infer a finding from lexical breadth or gaps.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "e7909220ea307433834d9cd486001731",
+      "review_refs": [
+        {
+          "line": 84,
+          "path": "src/doberman/turngate/signatures.py",
+          "why": "Tier 0 signature implementation"
+        },
+        {
+          "line": 157,
+          "path": "README.md",
+          "why": "documented turn-gate signature and verdict policy"
+        }
+      ],
+      "site": "src/doberman/turngate/signatures.py:84:4"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "\\b(developer|debug|unrestricted|god|jailbreak|sudo|dan)[ -]?mode\\b",
+      "product_question_asked": false,
+      "rationale": "The regex participates in a Tier 0 turn-signature decision that can stop a prompt before inference. The README documents the signature families and verdict boundary, but the pinned product materials do not define an independent phrase/encoding language for this exact pattern or a completeness requirement. Keep this security-facing candidate unresolved; do not infer a finding from lexical breadth or gaps.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "cff3960d1d3ed333ab43ebf459a25f0d",
+      "review_refs": [
+        {
+          "line": 85,
+          "path": "src/doberman/turngate/signatures.py",
+          "why": "Tier 0 signature implementation"
+        },
+        {
+          "line": 157,
+          "path": "README.md",
+          "why": "documented turn-gate signature and verdict policy"
+        }
+      ],
+      "site": "src/doberman/turngate/signatures.py:85:4"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "\\bact as (an? )?(ai|assistant|model|chatbot)\\b[^.?!]{0,30}\\b(without|with no|free of|free from|ignoring)\\b[^.?!]{0,15}\\b(restrictions?|rules?|limits?|guidelines?|filters?|guardrails?)\\b",
+      "product_question_asked": false,
+      "rationale": "The regex participates in a Tier 0 turn-signature decision that can stop a prompt before inference. The README documents the signature families and verdict boundary, but the pinned product materials do not define an independent phrase/encoding language for this exact pattern or a completeness requirement. Keep this security-facing candidate unresolved; do not infer a finding from lexical breadth or gaps.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "d4ca7c02f510c3ecb9a0990647cea7ea",
+      "review_refs": [
+        {
+          "line": 88,
+          "path": "src/doberman/turngate/signatures.py",
+          "why": "Tier 0 signature implementation"
+        },
+        {
+          "line": 157,
+          "path": "README.md",
+          "why": "documented turn-gate signature and verdict policy"
+        }
+      ],
+      "site": "src/doberman/turngate/signatures.py:88:4"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "\\b(print|repeat|reveal|show|recite|output|display|tell me|give me)\\b[^.?!]{0,30}\\b(system prompt|your instructions|your rules|your prompt|initial instructions|the prompt above)\\b",
+      "product_question_asked": false,
+      "rationale": "The regex participates in a Tier 0 turn-signature decision that can stop a prompt before inference. The README documents the signature families and verdict boundary, but the pinned product materials do not define an independent phrase/encoding language for this exact pattern or a completeness requirement. Keep this security-facing candidate unresolved; do not infer a finding from lexical breadth or gaps.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "ad5eeb010bf34414ae7ba749184ae64e",
+      "review_refs": [
+        {
+          "line": 94,
+          "path": "src/doberman/turngate/signatures.py",
+          "why": "Tier 0 signature implementation"
+        },
+        {
+          "line": 157,
+          "path": "README.md",
+          "why": "documented turn-gate signature and verdict policy"
+        }
+      ],
+      "site": "src/doberman/turngate/signatures.py:94:4"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "\\b(disable|turn off|bypass|remove|ignore)\\b[^.?!]{0,20}\\b(safety|security|guard|guardrails?|filters?|restrictions?|content policy)\\b",
+      "product_question_asked": false,
+      "rationale": "The regex participates in a Tier 0 turn-signature decision that can stop a prompt before inference. The README documents the signature families and verdict boundary, but the pinned product materials do not define an independent phrase/encoding language for this exact pattern or a completeness requirement. Keep this security-facing candidate unresolved; do not infer a finding from lexical breadth or gaps.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "71774768bcdacce1a1436be686914c59",
+      "review_refs": [
+        {
+          "line": 100,
+          "path": "src/doberman/turngate/signatures.py",
+          "why": "Tier 0 signature implementation"
+        },
+        {
+          "line": 157,
+          "path": "README.md",
+          "why": "documented turn-gate signature and verdict policy"
+        }
+      ],
+      "site": "src/doberman/turngate/signatures.py:100:4"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "\\b(send|email|e-mail|post|upload|exfiltrate|print|show|reveal|give me|tell me|output|paste|share|leak|export|transmit|curl|fetch|dump)\\b[^.?!]{0,40}\\b(api[ _-]?key|api[ _-]?keys|secret|secret key|access key|token|tokens|password|passwd|credential|credentials|private key|ssh key|\\.env|env file|aws[ _-]?key)\\b",
+      "product_question_asked": false,
+      "rationale": "The regex participates in a Tier 0 turn-signature decision that can stop a prompt before inference. The README documents the signature families and verdict boundary, but the pinned product materials do not define an independent phrase/encoding language for this exact pattern or a completeness requirement. Keep this security-facing candidate unresolved; do not infer a finding from lexical breadth or gaps.",
+      "reason_code": "independent_regex_contract_missing",
+      "regex_id": "c21927f3fbb6ac5fec102059f3e40664",
+      "review_refs": [
+        {
+          "line": 108,
+          "path": "src/doberman/turngate/signatures.py",
+          "why": "Tier 0 signature implementation"
+        },
+        {
+          "line": 157,
+          "path": "README.md",
+          "why": "documented turn-gate signature and verdict policy"
+        }
+      ],
+      "site": "src/doberman/turngate/signatures.py:108:4"
+    },
+    {
+      "decision": "skip",
+      "pattern": "action id: ([0-9a-f]+)",
+      "product_question_asked": false,
+      "rationale": "This regex occurs in a test module and is used to create or assert test input/output. It is not executed as a product security boundary in the pinned application.",
+      "reason_code": "test_fixture_or_assertion",
+      "regex_id": "3eb34bdc370ea1ef8b8c41fb064c1128",
+      "review_refs": [
+        {
+          "line": 97,
+          "path": "tests/integration/test_interception_log.py",
+          "why": "test-only pattern use"
+        }
+      ],
+      "site": "tests/integration/test_interception_log.py:97:12"
+    },
+    {
+      "decision": "skip",
+      "pattern": "\\x1b\\[[0-?]*[ -/]*[@-~]",
+      "product_question_asked": false,
+      "rationale": "This regex occurs in a test module and is used to create or assert test input/output. It is not executed as a product security boundary in the pinned application.",
+      "reason_code": "test_fixture_or_assertion",
+      "regex_id": "2f33805885f2ec2200ccb16b57cf1bb5",
+      "review_refs": [
+        {
+          "line": 11,
+          "path": "tests/unit/test_cli_help.py",
+          "why": "test-only pattern use"
+        }
+      ],
+      "site": "tests/unit/test_cli_help.py:11:14"
+    },
+    {
+      "decision": "skip",
+      "pattern": "[^a-z0-9]",
+      "product_question_asked": false,
+      "rationale": "This regex occurs in a test module and is used to create or assert test input/output. It is not executed as a product security boundary in the pinned application.",
+      "reason_code": "test_fixture_or_assertion",
+      "regex_id": "8c218e4c05bdcb4e6dddcef5a7f346bf",
+      "review_refs": [
+        {
+          "line": 32,
+          "path": "tests/unit/test_reason_codes_documented.py",
+          "why": "test-only pattern use"
+        }
+      ],
+      "site": "tests/unit/test_reason_codes_documented.py:32:11"
+    },
+    {
+      "decision": "skip",
+      "pattern": "`([^`]+)`",
+      "product_question_asked": false,
+      "rationale": "This regex occurs in a test module and is used to create or assert test input/output. It is not executed as a product security boundary in the pinned application.",
+      "reason_code": "test_fixture_or_assertion",
+      "regex_id": "c09cdbc6b77b8cee1972f95e80a7e3ec",
+      "review_refs": [
+        {
+          "line": 69,
+          "path": "tests/unit/test_reason_codes_documented.py",
+          "why": "test-only pattern use"
+        }
+      ],
+      "site": "tests/unit/test_reason_codes_documented.py:69:16"
+    },
+    {
+      "decision": "skip",
+      "pattern": "\\x1b\\[[0-9;]*m",
+      "product_question_asked": false,
+      "rationale": "This regex occurs in a test module and is used to create or assert test input/output. It is not executed as a product security boundary in the pinned application.",
+      "reason_code": "test_fixture_or_assertion",
+      "regex_id": "81baef37b2724b205127db90e5c0a57e",
+      "review_refs": [
+        {
+          "line": 16,
+          "path": "tests/unit/test_render.py",
+          "why": "test-only pattern use"
+        }
+      ],
+      "site": "tests/unit/test_render.py:16:11"
+    }
+  ],
+  "same_model_or_agent": true,
+  "schema_version": "1",
+  "second_pass": true
+}

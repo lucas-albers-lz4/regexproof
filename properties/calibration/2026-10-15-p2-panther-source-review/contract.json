@@ -1,0 +1,35 @@
+{
+  "adoption": {
+    "approved_on": "2026-10-15",
+    "authority": "standing_user_delegation",
+    "contract_sha256": "7aadd1106a944e0bb91143ea7b6b8b93f5c741b41b2944175ae0543fd90a8318",
+    "evidence": [
+      "https://github.com/panther-labs/panther-analysis/blob/0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a/.scripts/claude_review.py",
+      "https://github.com/panther-labs/panther-analysis/blob/0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a/.scripts/claude_review.py#L20-L55",
+      "https://github.com/panther-labs/panther-analysis/blob/0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a/.scripts/claude_review.py#L79-L110",
+      "https://github.com/panther-labs/panther-analysis/blob/0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a/.scripts/claude_review.py#L224-L229",
+      "https://github.com/panther-labs/panther-analysis/blob/0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a/.scripts/pre-commit-wrapper.sh#L1-L12",
+      "https://github.com/panther-labs/panther-analysis/blob/0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a/Makefile#L93-L98",
+      "https://github.com/panther-labs/panther-analysis/blob/0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a/.claude/commands/pr-review.md#L1-L10"
+    ],
+    "policy_version": "autonomous-contracts-v1",
+    "rationale": "The pinned slash-command review policy says to exclude any changed file matching secrets, and the pre-commit wrapper runs claude_review.py before lint. The exact helper filters paths before reading staged contents and constructing the Claude prompt, but its secrets\\.json branch does not reject secrets.py. This adopts only the path-selection guarantee; it does not establish that any real file contained a secret or that a Claude service received data.",
+    "review": {
+      "author": "Codex source-review pass",
+      "reviewer": "Codex second source-review pass",
+      "same_model": true
+    },
+    "source_file": ".scripts/claude_review.py",
+    "source_pin": "0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a",
+    "source_sha256": "bb84d899da9cd10d82712610419f7802d84900541fd1e1c48a94223a12bc4024",
+    "source_url": "https://github.com/panther-labs/panther-analysis",
+    "status": "approved"
+  },
+  "declared_domain": "ASCII repository-relative paths using slash separators, with one of the reviewable suffixes .py, .yml, .yaml, or .sql, containing the literal lower-case substring secrets. The formal counterexample is the concrete path secrets.py; the product gate stages synthetic paths and inspects whether get_changed_files returns them and read_file_contents includes their sentinel bytes. No Claude process or external service is invoked.",
+  "guarantee": "Before staged contents are read into the pre-commit Claude review prompt, get_changed_files excludes every staged reviewable path containing the literal lower-case substring secrets.",
+  "input_source": "Repository-relative paths and file contents staged in the local Git index before the pre-commit review hook.",
+  "provenance": "agent_derived",
+  "schema_version": "1",
+  "site": "panther-labs/panther-analysis@0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a:.scripts/claude_review.py:21:EXCLUDE_PATTERNS",
+  "trust": "untrusted-input"
+}

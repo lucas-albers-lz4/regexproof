@@ -1,0 +1,147 @@
+{
+  "allocation_sha256": "34fbe5533e95b5bad02c4d717e86e18fc3245ea8ec3628177d8929f6e9e02e8b",
+  "bucket": "pre-dispatch-github-text",
+  "cohort_id": "2026-09-12-calibration-20-r2",
+  "keep": [
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": ".agents/scripts/pre-dispatch-validator-helper.sh",
+      "idiom_class": "novel_idiom",
+      "pattern": "^[0-9]+$",
+      "regex_id": "af0ba1f50d379230fc86548078bf4a8a",
+      "site": ".agents/scripts/pre-dispatch-validator-helper.sh:1090:column-1"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": ".agents/scripts/pre-dispatch-validator-helper.sh",
+      "idiom_class": "novel_idiom",
+      "pattern": "[a-zA-Z0-9._-]+/[a-zA-Z0-9._/-]+\\.[a-zA-Z]{1,10}",
+      "regex_id": "e9593074766632d346f45aa9cb633bec",
+      "site": ".agents/scripts/pre-dispatch-validator-helper.sh:923:column-40"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": ".agents/scripts/pre-dispatch-validator-helper.sh",
+      "idiom_class": "novel_idiom",
+      "pattern": "^## How",
+      "regex_id": "525e96bbf72055029fab053605149aa5",
+      "site": ".agents/scripts/pre-dispatch-validator-helper.sh:697:column-2"
+    },
+    {
+      "call_kind": "substitution",
+      "encodable": true,
+      "file": ".agents/scripts/pre-dispatch-validator-helper.sh",
+      "idiom_class": "novel_idiom",
+      "pattern": "upstream_slug=",
+      "regex_id": "6af2a3f509e937d7be33245f57205348",
+      "site": ".agents/scripts/pre-dispatch-validator-helper.sh:1880:column-83"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": ".agents/scripts/pre-dispatch-validator-helper.sh",
+      "idiom_class": "novel_idiom",
+      "pattern": "<!-- aidevops:generator=[a-z0-9_-]+[^>]*-->",
+      "regex_id": "db64461e5bb92a5cb80d630ec39f5dc8",
+      "site": ".agents/scripts/pre-dispatch-validator-helper.sh:1867:column-46"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": ".agents/scripts/pre-dispatch-validator-helper.sh",
+      "idiom_class": "novel_idiom",
+      "pattern": "<!-- (source:review-feedback|source:review-scanner|review-followup:PR)",
+      "regex_id": "31b17ebabf92848f62daf6d6537b289f",
+      "site": ".agents/scripts/pre-dispatch-validator-helper.sh:1011:column-32"
+    },
+    {
+      "call_kind": "substitution",
+      "encodable": true,
+      "file": ".agents/scripts/pre-dispatch-validator-helper.sh",
+      "idiom_class": "novel_idiom",
+      "pattern": "<!-- aidevops:generator=",
+      "regex_id": "94d9a516e2a09a44c92c317fe0a9eb01",
+      "site": ".agents/scripts/pre-dispatch-validator-helper.sh:1870:column-45"
+    },
+    {
+      "call_kind": "substitution",
+      "encodable": true,
+      "file": ".agents/scripts/pre-dispatch-validator-helper.sh",
+      "idiom_class": "novel_idiom",
+      "pattern": ".*source_pr=([0-9]+).*",
+      "regex_id": "2cb7fe4b8ae94f95466f51fc5d71248d",
+      "site": ".agents/scripts/pre-dispatch-validator-helper.sh:1061:column-62"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": ".agents/scripts/pre-dispatch-validator-helper.sh",
+      "idiom_class": "novel_idiom",
+      "pattern": "^## Files to modify",
+      "regex_id": "c49f33c1f04dedbdc785b9e695a6b36f",
+      "site": ".agents/scripts/pre-dispatch-validator-helper.sh:695:column-2"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": ".agents/scripts/pre-dispatch-validator-helper.sh",
+      "idiom_class": "novel_idiom",
+      "pattern": "`[a-zA-Z0-9._/-]+\\.(sh|ts|js|py|md|json|yaml|yml|toml|go|rs|tsx|jsx|css|html|sql|rb|php|java|c|h|cpp|hpp|cs|dart|jl|kt|m|mm|r|scala|swift)(:[0-9]+(-[0-9]+)?)?`",
+      "regex_id": "81e20aaa4f55eb7711a3b8c6f6486821",
+      "site": ".agents/scripts/pre-dispatch-validator-helper.sh:929:column-45"
+    },
+    {
+      "call_kind": "substitution",
+      "encodable": true,
+      "file": ".agents/scripts/pre-dispatch-validator-helper.sh",
+      "idiom_class": "novel_idiom",
+      "pattern": "detector=",
+      "regex_id": "85c3865259ef784453025ec1e31821d6",
+      "site": ".agents/scripts/pre-dispatch-validator-helper.sh:1881:column-81"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": ".agents/scripts/pre-dispatch-validator-helper.sh",
+      "idiom_class": "novel_idiom",
+      "pattern": "<!-- aidevops:generator=function-complexity-sweep[^>]*-->",
+      "regex_id": "13475b75b43afa483b65664c63d2408b",
+      "site": ".agents/scripts/pre-dispatch-validator-helper.sh:270:column-46"
+    },
+    {
+      "call_kind": "substitution",
+      "encodable": true,
+      "file": ".agents/scripts/pre-dispatch-validator-helper.sh",
+      "idiom_class": "novel_idiom",
+      "pattern": "cited_file=",
+      "regex_id": "e80f51671a27c074a2cf09aae52e1ff0",
+      "site": ".agents/scripts/pre-dispatch-validator-helper.sh:273:column-64"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": ".agents/scripts/pre-dispatch-validator-helper.sh",
+      "idiom_class": "novel_idiom",
+      "pattern": "upstream_slug=[^ >]+",
+      "regex_id": "10b3716ac246af2e46a1f99f1bf34285",
+      "site": ".agents/scripts/pre-dispatch-validator-helper.sh:1880:column-49"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": ".agents/scripts/pre-dispatch-validator-helper.sh",
+      "idiom_class": "novel_idiom",
+      "pattern": "cited_file=[^ >]+",
+      "regex_id": "e3808a54c7c38563e784f3406b4df852",
+      "site": ".agents/scripts/pre-dispatch-validator-helper.sh:1878:column-46"
+    }
+  ],
+  "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+  "population_id": "aidevops-predispatch-20r2-20261016-r1",
+  "ranking_basis": "Frozen pre-outcome allocator sample, original order; all 15 sites reviewed against the exact pin.",
+  "repository_url": "https://github.com/marcusquinn/aidevops",
+  "schema_version": "1"
+}

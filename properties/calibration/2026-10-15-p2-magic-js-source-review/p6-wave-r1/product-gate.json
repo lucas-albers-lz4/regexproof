@@ -1,0 +1,59 @@
+{
+  "contract_sha256s": {
+    "ME-oauth2-pkce-s256-base64url": "fc9955c606d0ee1258043ac8355015ede63a0e654a67c0ba71297a8294a45b37",
+    "ME-oauth2-webauthn-base64url": "07e4e311f4f676b3b6adbfbecf2e2ab45b309d297a4cd969e4bede39c93de750",
+    "ME-passkey-base64url": "1d09735ade9b5d438961b11c7a59793eb9ef56581aea77562968fd7a722e4a06",
+    "ME-provider-dpop-base64url": "40cd17120597b424cde7a660f858e9d77538da09bdf84b9fbcaeda825d9b98de",
+    "ME-provider-webauthn-base64url": "b6615df46cf810bfc7a8e83ba4352a373b1f72fdfbfd1f6aafdd21ca6d1c2245",
+    "ME-rn-bare-dpop-base64url": "569f0d7217b959757d3ee84744ecbff612356727663078e73da9e3652c503a70",
+    "ME-rn-bare-pkce-s256-base64url": "00224fc43e2c47dba1776258ebc618735a4ca049fabc1c5108c421013cbacd3c",
+    "ME-rn-expo-pkce-s256-base64url": "323a23991ab50e0978632e69b6e4afb5951cc0c1858b08d1c24dff0b2b02ffa0",
+    "ME-wallet-kit-base64url": "1ff71f9c38086d2fc023842782e618a6d2dcafcf5f98d0d0325451d322ad80be",
+    "ME-webauthn-base64url": "494cbc6e8061b3c44ea15d48af39a0a566308d3b493712ff30e511d6dd2ed107"
+  },
+  "differential_case_counts": {
+    "ME-oauth2-pkce-s256-base64url": 2049,
+    "ME-oauth2-webauthn-base64url": 67841,
+    "ME-passkey-base64url": 67841,
+    "ME-provider-dpop-base64url": 67841,
+    "ME-provider-webauthn-base64url": 67841,
+    "ME-rn-bare-dpop-base64url": 67841,
+    "ME-rn-bare-pkce-s256-base64url": 2049,
+    "ME-rn-expo-pkce-s256-base64url": 2049,
+    "ME-wallet-kit-base64url": 67841,
+    "ME-webauthn-base64url": 67841
+  },
+  "differential_cases": 481034,
+  "gate_id": "magic-js-base64url-output-image",
+  "mutation_guard_passed": true,
+  "mutation_guard_question_id": "ME-base64url-mutated-plus-leaks",
+  "mutation_witness": "bytes fb -> base64 +w== -> weakened output +w",
+  "node_version": "v26.11.1",
+  "product_engine_replay_question_ids": [
+    "ME-oauth2-pkce-s256-base64url",
+    "ME-rn-bare-pkce-s256-base64url",
+    "ME-rn-expo-pkce-s256-base64url",
+    "ME-oauth2-webauthn-base64url",
+    "ME-passkey-base64url",
+    "ME-wallet-kit-base64url",
+    "ME-webauthn-base64url",
+    "ME-provider-webauthn-base64url",
+    "ME-rn-bare-dpop-base64url",
+    "ME-provider-dpop-base64url"
+  ],
+  "question_ids": [
+    "ME-oauth2-pkce-s256-base64url",
+    "ME-rn-bare-pkce-s256-base64url",
+    "ME-rn-expo-pkce-s256-base64url",
+    "ME-oauth2-webauthn-base64url",
+    "ME-passkey-base64url",
+    "ME-wallet-kit-base64url",
+    "ME-webauthn-base64url",
+    "ME-provider-webauthn-base64url",
+    "ME-rn-bare-dpop-base64url",
+    "ME-provider-dpop-base64url"
+  ],
+  "repository": "https://github.com/magiclabs/magic-js",
+  "schema_version": "1",
+  "source_pin": "e9fb233763160316989863b4739c4656133d45b0"
+}

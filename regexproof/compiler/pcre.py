@@ -62,6 +62,7 @@ def compile_pcre(
     call_kind: str = "search",
     *,
     max_length: int = DEFAULT_MAX_LENGTH,
+    trailing_dollar_nl: bool = True,
 ) -> CompileResult:
     def flag_reject(fl: str) -> None:
         if "m" in fl:
@@ -91,7 +92,7 @@ def compile_pcre(
         default_max_length=DEFAULT_MAX_LENGTH,
         terminators=PCRE_TERMINATORS,
         space_chars=_PCRE_SPACE_CHARS,
-        trailing_dollar_nl=True,
+        trailing_dollar_nl=trailing_dollar_nl,
         allow_ascii_word_boundary=True,
         strip_fn=strip_language_transparent,
         local_reject_fn=_local_reject,

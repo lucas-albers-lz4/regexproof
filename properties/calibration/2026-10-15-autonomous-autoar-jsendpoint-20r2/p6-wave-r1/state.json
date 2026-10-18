@@ -1,0 +1,216 @@
+{
+  "attempts": [
+    {
+      "contract": {
+        "adoption": {
+          "approved_on": "2026-10-15",
+          "authority": "standing_user_delegation",
+          "contract_sha256": "08a1fa78ea3c703ce240028172737ad05419f1182d7a10bba041c0ddb9076820",
+          "evidence": [
+            "https://github.com/h0tak88r/AutoAR/blob/01cd447ad3b1acfed7e0680596c2c74458a4cf06/internal/scanner/jsendpoints/jsendpoints.go",
+            "https://github.com/h0tak88r/AutoAR/blob/01cd447ad3b1acfed7e0680596c2c74458a4cf06/README.md"
+          ],
+          "policy_version": "autonomous-contracts-v1",
+          "rationale": "The pinned jsendpoints parser extracts capture group 1 from remote JavaScript, then writes returned endpoints into text and dashboard results. The contract is limited to the delimiter exclusion explicitly enforced by the assignment pattern character class; endpoint validity, in-scope status, and extraction completeness remain outside the claim.",
+          "review": {
+            "author": "codex-contract-author",
+            "reviewer": "codex-independent-review-pass",
+            "same_model": true
+          },
+          "source_file": "internal/scanner/jsendpoints/jsendpoints.go",
+          "source_pin": "01cd447ad3b1acfed7e0680596c2c74458a4cf06",
+          "source_sha256": "e9c03be11f7aab2a4310ea4944de5620e500f2400b13e22a3e1ea5b16745c549",
+          "source_url": "https://github.com/h0tak88r/AutoAR",
+          "status": "approved"
+        },
+        "declared_domain": "One ASCII character from capture group 1 of the pinned Go RE2 assignment pattern; the full captured token is 4..200 characters. The property covers exclusion of ASCII double quote, apostrophe, backtick, space, tab, LF, form feed, and CR only. It does not claim endpoint validity, scope safety, or extraction completeness.",
+        "guarantee": "The captured URL-like value from a JavaScript url/href/endpoint assignment contains no quote, backtick, or Go RE2 whitespace delimiter before it is stored in the JavaScript endpoint results.",
+        "input_source": "Untrusted JavaScript response bodies downloaded from the domain scan's JS URL list and passed to extractEndpoints.",
+        "provenance": "agent_derived",
+        "schema_version": "1",
+        "site": "h0tak88r/AutoAR@01cd447ad3b1acfed7e0680596c2c74458a4cf06:internal/scanner/jsendpoints/jsendpoints.go:181:BASE_URL",
+        "trust": "untrusted-input"
+      },
+      "detail": null,
+      "domain": "Every one-character ASCII member of the pinned URL-assignment capture class excludes quote, backtick, and Go RE2 whitespace delimiters",
+      "gate": {
+        "consumer_adopted": false,
+        "differential_cases": 163,
+        "gate_id": "autoar-jsendpoint-capture-20r2",
+        "local_gate_command": ".venv/bin/python scripts/autoar-jsendpoint-capture-regression-gate.py --product-only --source-root /tmp/regexproof-pinned-sources/AutoAR-01cd447ad3b1acfed7e0680596c2c74458a4cf06 --output properties/calibration/2026-10-15-autonomous-autoar-jsendpoint-20r2/gate-report.json",
+        "local_gate_passed": true,
+        "mutation_guard_passed": true,
+        "product_engine_replayed": true,
+        "source_pin_verified": true
+      },
+      "kind": "property",
+      "pin": "01cd447ad3b1acfed7e0680596c2c74458a4cf06",
+      "question_id": "AA-autoar-jsendpoint-assignment-capture-delimiter",
+      "repo_id": "h0tak88r/AutoAR",
+      "site": "h0tak88r/AutoAR@01cd447ad3b1acfed7e0680596c2c74458a4cf06:internal/scanner/jsendpoints/jsendpoints.go:181:BASE_URL",
+      "status": "unsat",
+      "synthesized": false,
+      "url": "https://github.com/h0tak88r/AutoAR"
+    }
+  ],
+  "cohort_manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+  "contracts": [
+    {
+      "contract": {
+        "adoption": {
+          "approved_on": "2026-10-15",
+          "authority": "standing_user_delegation",
+          "contract_sha256": "08a1fa78ea3c703ce240028172737ad05419f1182d7a10bba041c0ddb9076820",
+          "evidence": [
+            "https://github.com/h0tak88r/AutoAR/blob/01cd447ad3b1acfed7e0680596c2c74458a4cf06/internal/scanner/jsendpoints/jsendpoints.go",
+            "https://github.com/h0tak88r/AutoAR/blob/01cd447ad3b1acfed7e0680596c2c74458a4cf06/README.md"
+          ],
+          "policy_version": "autonomous-contracts-v1",
+          "rationale": "The pinned jsendpoints parser extracts capture group 1 from remote JavaScript, then writes returned endpoints into text and dashboard results. The contract is limited to the delimiter exclusion explicitly enforced by the assignment pattern character class; endpoint validity, in-scope status, and extraction completeness remain outside the claim.",
+          "review": {
+            "author": "codex-contract-author",
+            "reviewer": "codex-independent-review-pass",
+            "same_model": true
+          },
+          "source_file": "internal/scanner/jsendpoints/jsendpoints.go",
+          "source_pin": "01cd447ad3b1acfed7e0680596c2c74458a4cf06",
+          "source_sha256": "e9c03be11f7aab2a4310ea4944de5620e500f2400b13e22a3e1ea5b16745c549",
+          "source_url": "https://github.com/h0tak88r/AutoAR",
+          "status": "approved"
+        },
+        "declared_domain": "One ASCII character from capture group 1 of the pinned Go RE2 assignment pattern; the full captured token is 4..200 characters. The property covers exclusion of ASCII double quote, apostrophe, backtick, space, tab, LF, form feed, and CR only. It does not claim endpoint validity, scope safety, or extraction completeness.",
+        "guarantee": "The captured URL-like value from a JavaScript url/href/endpoint assignment contains no quote, backtick, or Go RE2 whitespace delimiter before it is stored in the JavaScript endpoint results.",
+        "input_source": "Untrusted JavaScript response bodies downloaded from the domain scan's JS URL list and passed to extractEndpoints.",
+        "provenance": "agent_derived",
+        "schema_version": "1",
+        "site": "h0tak88r/AutoAR@01cd447ad3b1acfed7e0680596c2c74458a4cf06:internal/scanner/jsendpoints/jsendpoints.go:181:BASE_URL",
+        "trust": "untrusted-input"
+      },
+      "domain": "Every one-character ASCII member of the pinned URL-assignment capture class excludes quote, backtick, and Go RE2 whitespace delimiters",
+      "kind": "property",
+      "pin": "01cd447ad3b1acfed7e0680596c2c74458a4cf06",
+      "question_id": "AA-autoar-jsendpoint-assignment-capture-delimiter",
+      "repo_id": "h0tak88r/AutoAR",
+      "site": "h0tak88r/AutoAR@01cd447ad3b1acfed7e0680596c2c74458a4cf06:internal/scanner/jsendpoints/jsendpoints.go:181:BASE_URL",
+      "synthesized": false,
+      "url": "https://github.com/h0tak88r/AutoAR"
+    }
+  ],
+  "conversion_rows": [
+    {
+      "contract": {
+        "adoption": {
+          "approved_on": "2026-10-15",
+          "authority": "standing_user_delegation",
+          "contract_sha256": "08a1fa78ea3c703ce240028172737ad05419f1182d7a10bba041c0ddb9076820",
+          "evidence": [
+            "https://github.com/h0tak88r/AutoAR/blob/01cd447ad3b1acfed7e0680596c2c74458a4cf06/internal/scanner/jsendpoints/jsendpoints.go",
+            "https://github.com/h0tak88r/AutoAR/blob/01cd447ad3b1acfed7e0680596c2c74458a4cf06/README.md"
+          ],
+          "policy_version": "autonomous-contracts-v1",
+          "rationale": "The pinned jsendpoints parser extracts capture group 1 from remote JavaScript, then writes returned endpoints into text and dashboard results. The contract is limited to the delimiter exclusion explicitly enforced by the assignment pattern character class; endpoint validity, in-scope status, and extraction completeness remain outside the claim.",
+          "review": {
+            "author": "codex-contract-author",
+            "reviewer": "codex-independent-review-pass",
+            "same_model": true
+          },
+          "source_file": "internal/scanner/jsendpoints/jsendpoints.go",
+          "source_pin": "01cd447ad3b1acfed7e0680596c2c74458a4cf06",
+          "source_sha256": "e9c03be11f7aab2a4310ea4944de5620e500f2400b13e22a3e1ea5b16745c549",
+          "source_url": "https://github.com/h0tak88r/AutoAR",
+          "status": "approved"
+        },
+        "declared_domain": "One ASCII character from capture group 1 of the pinned Go RE2 assignment pattern; the full captured token is 4..200 characters. The property covers exclusion of ASCII double quote, apostrophe, backtick, space, tab, LF, form feed, and CR only. It does not claim endpoint validity, scope safety, or extraction completeness.",
+        "guarantee": "The captured URL-like value from a JavaScript url/href/endpoint assignment contains no quote, backtick, or Go RE2 whitespace delimiter before it is stored in the JavaScript endpoint results.",
+        "input_source": "Untrusted JavaScript response bodies downloaded from the domain scan's JS URL list and passed to extractEndpoints.",
+        "provenance": "agent_derived",
+        "schema_version": "1",
+        "site": "h0tak88r/AutoAR@01cd447ad3b1acfed7e0680596c2c74458a4cf06:internal/scanner/jsendpoints/jsendpoints.go:181:BASE_URL",
+        "trust": "untrusted-input"
+      },
+      "corpus": "AutoAR",
+      "disclosure": null,
+      "domain": "Every one-character ASCII member of the pinned URL-assignment capture class excludes quote, backtick, and Go RE2 whitespace delimiters",
+      "engine_versions": {
+        "python": "3.14.8",
+        "z3": "5.0.0"
+      },
+      "family": "AA-autoar-jsendpoints",
+      "ground_truth": null,
+      "ground_truth_status": null,
+      "idiom_bucket": "go-re-javascript-url-assignment-capture",
+      "kind": "property",
+      "name": "AA-autoar-jsendpoint-assignment-capture-delimiter",
+      "product_reportable": true,
+      "regex_id": "3a2d74e728a1bd121a1cee54377771ca",
+      "result": "unsat",
+      "schema_version": "1",
+      "shape": 1,
+      "site": "h0tak88r/AutoAR@01cd447ad3b1acfed7e0680596c2c74458a4cf06:internal/scanner/jsendpoints/jsendpoints.go:181:BASE_URL",
+      "synthesized": false,
+      "wave_id": "autoar-jsendpoint-capture-20r2-p6-r1",
+      "witness": null
+    }
+  ],
+  "corpus": "AutoAR",
+  "coverage_digest": "a0b64ab05f3c3e33d90f89593f0eec5441fbd389d3250d8d2003134ac9e273d7",
+  "execution_caps": {
+    "local_gate_timeout_seconds": 300,
+    "max_active_conversion_waves": 1,
+    "max_adopted_contracts_per_wave": 5,
+    "max_new_questions_per_run": 5,
+    "parallel_walk": false,
+    "solver_retries": 0,
+    "solver_timeout_ms": 30000
+  },
+  "gate_config": {
+    "command": [
+      ".venv/bin/python",
+      "scripts/autoar-jsendpoint-capture-regression-gate.py",
+      "--product-only",
+      "--source-root",
+      "/tmp/regexproof-pinned-sources/AutoAR-01cd447ad3b1acfed7e0680596c2c74458a4cf06",
+      "--output",
+      "properties/calibration/2026-10-15-autonomous-autoar-jsendpoint-20r2/gate-report.json"
+    ],
+    "evidence": {
+      "differential_case_counts": {
+        "AA-autoar-jsendpoint-assignment-capture-delimiter": 163
+      },
+      "product_engine_replay_question_ids": [
+        "AA-autoar-jsendpoint-assignment-capture-delimiter"
+      ]
+    },
+    "gate_id": "autoar-jsendpoint-capture-20r2",
+    "question_ids": [
+      "AA-autoar-jsendpoint-assignment-capture-delimiter"
+    ],
+    "schema_version": "1",
+    "timeout_seconds": 300
+  },
+  "idiom_bucket": "go-re-javascript-url-assignment-capture",
+  "runs": [
+    {
+      "active_question_id": null,
+      "finished_at": "2026-10-15T19:10:26+00:00",
+      "gate_failure": null,
+      "gate_passed": true,
+      "gate_wall_ms": 625.4,
+      "mutation_failures": [],
+      "mutation_wall_ms": 116.6,
+      "new_questions": 1,
+      "question_ids": [
+        "AA-autoar-jsendpoint-assignment-capture-delimiter"
+      ],
+      "reason": null,
+      "run_id": "2ab20024-0e9b-4364-827e-5677420e77c1",
+      "solver_wall_ms": 6.1,
+      "source_failures": {},
+      "source_wall_ms": 11.8,
+      "started_at": "2026-10-15T19:10:26+00:00",
+      "status": "complete"
+    }
+  ],
+  "schema_version": "1",
+  "wave_id": "autoar-jsendpoint-capture-20r2-p6-r1"
+}

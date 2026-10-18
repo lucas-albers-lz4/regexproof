@@ -1,0 +1,30 @@
+{
+  "command": [
+    "/home/lalbers/gitroot/regexproof/.venv/bin/python",
+    "/home/lalbers/gitroot/regexproof/scripts/aidevops-webhook-action-protocol-regression-gate.py",
+    "--source-root",
+    "/tmp/regexproof-pinned-sources/aidevops-8666b6c6c52472b5535aa295f2df593918152cb1",
+    "--output",
+    "/home/lalbers/gitroot/regexproof/properties/calibration/2026-10-16-p8-v22-audit/p6-shape6-r1/product-gate.json"
+  ],
+  "evidence": {
+    "differential_case_counts": {
+      "AE-aidevops-webhook-check-sha-token": 48,
+      "AE-aidevops-webhook-process-pr-number": 272,
+      "AE-aidevops-webhook-secret-env-identifier": 75
+    },
+    "product_engine_replay_question_ids": [
+      "AE-aidevops-webhook-secret-env-identifier",
+      "AE-aidevops-webhook-check-sha-token",
+      "AE-aidevops-webhook-process-pr-number"
+    ]
+  },
+  "gate_id": "aidevops-webhook-action-protocol-shape6-r1",
+  "question_ids": [
+    "AE-aidevops-webhook-secret-env-identifier",
+    "AE-aidevops-webhook-check-sha-token",
+    "AE-aidevops-webhook-process-pr-number"
+  ],
+  "schema_version": "1",
+  "timeout_seconds": 300
+}

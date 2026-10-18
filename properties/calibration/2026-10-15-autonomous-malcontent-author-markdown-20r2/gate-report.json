@@ -1,0 +1,119 @@
+{
+  "cohort": {
+    "cohort_id": "2026-09-12-calibration-20-r2",
+    "contract_sha256": "53e40f4edde4e27b36ea9aedb0ee0aa4473925c8737b0348a80c416e5398293f",
+    "manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+    "roster_sha256": "3492e3e1a0285c0a48566158db30c984a39b7ce899e71ad739f806a4caaf55aa"
+  },
+  "differential_fuzz": {
+    "command": "scripts/differential-fuzz.py --mirror-expr <search-language> --real-argv <pinned-Go-regexp-adapter>",
+    "inputs": 2034,
+    "mismatches": 0,
+    "seed": 20261015,
+    "stdout": "\n2034 inputs, 0 mismatches (seed=20261015)\n"
+  },
+  "downstream_disposition": {
+    "reason": "The exact product emitted a second attacker-chosen HTTPS Markdown link. No downstream Markdown viewer or consumer impact has been independently confirmed, and no report was sent.",
+    "status": "pending_product_triage"
+  },
+  "gate_id": "malcontent-author-markdown-extra-link-v1",
+  "interpretation": "Successful gate completion means the adopted counterexample and mutation guard reproduced. It does not mean the upstream report is safe or that a Markdown consumer was impacted.",
+  "limitations": [
+    "Input is one ASCII YARA author metadata value with a valid non-prefix reference URL; it is a concrete counterexample, not an all-metadata proof.",
+    "This gate reproduces link structure in Markdown output. It does not execute a browser renderer or establish whether a specific consumer permits or sanitizes the resulting link."
+  ],
+  "measurements": {
+    "consumer_adopted_gates": 0,
+    "differential_cases": 2034,
+    "external_reports_sent": 0,
+    "ground_truthed_witnesses": 1,
+    "local_runnable_gates": 1,
+    "maintainer_confirmations": 0,
+    "mutation_guard_passed": 1,
+    "product_questions_asked": 1,
+    "reachable_markdown_link_injection": 1,
+    "sat_candidates": 1,
+    "security_impact_confirmed": 0,
+    "third_party_fixes": 0
+  },
+  "observed_at": "2026-10-15T20:05:09+00:00",
+  "product_replay": {
+    "author": "Name",
+    "author_url": "https://example.invalid/)[click](https://attacker.invalid",
+    "checkout_root": "/tmp/regexproof-pinned-sources/malcontent-ea3e83e24676a1678a9522141da29b636c9451ab",
+    "go_version": "go version go1.27.2 linux/amd64",
+    "input_sha256": "483fc6c4793e4f65e37b917f0a8c07d58e04eb3d771da9231c4c149f35acd129",
+    "markdown": "## sample.bin [\ud83d\udd35 LOW]\n\n| RISK | KEY | DESCRIPTION | EVIDENCE |\n|:--|:--|:--|:--|\n| LOW | [default](https://github.com/chainguard-dev/malcontent/blob/main/rules/default#regexproof_author_metadata_replay) | [metadata replay](https://reference.invalid), by [Name](https://example.invalid/)[click](https://attacker.invalid) | [regexproof-replay-sentinel](https://github.com/search?q=regexproof-replay-sentinel&type=code) |\n\n",
+    "reference_url": "https://reference.invalid",
+    "renderer_source_file_sha256": "77b3123a08f5a3e73f1cbe303278067cb05b8e5ee14643726824d26bce8f4035",
+    "replay_source_sha256": "d95c1c4ce25c0c52d539fc717a5b7db9f02e69666b4a8b7a75816d0dc5cd06ef",
+    "repository_url": "https://github.com/chainguard-dev/malcontent",
+    "rule_name": "regexproof_author_metadata_replay",
+    "source_file_sha256": "bb3ab2bc50fb835f4add14d8c1f6b71140335313c016575bd55eef224fe690de",
+    "source_pin": "ea3e83e24676a1678a9522141da29b636c9451ab",
+    "yara_x_c_api_version": "1.19.0",
+    "yara_x_go_binding_version": "1.19.0"
+  },
+  "question_id": "MC-malcontent-author-metadata-extra-markdown-link",
+  "result_rows": [
+    {
+      "backend": "seq",
+      "call_kind": "search",
+      "domain": "The pinned authorWithURLRe search capture must not permit source metadata to close its Markdown link and add a second external link",
+      "engine_versions": {
+        "python": "3.14.8",
+        "z3": "5.0.0"
+      },
+      "expect_unsat": false,
+      "family": "MC-malcontent-author-markdown-link",
+      "ground_truth": "reproduced",
+      "input_domain": "ascii",
+      "kind": "counterexample_finder",
+      "name": "MC-malcontent-author-metadata-extra-markdown-link",
+      "not_proven": false,
+      "ok": true,
+      "product": true,
+      "result": "sat",
+      "schema_version": "1",
+      "state": "stock",
+      "wall_ms": 0.8,
+      "witness": {
+        "author_metadata": "Name (https://example.invalid/)[click](https://attacker.invalid)"
+      }
+    },
+    {
+      "backend": "seq",
+      "call_kind": "search",
+      "domain": "MUTATION GUARD: weakening an anchored URL capture that excludes close parentheses to the pinned http.* capture admits the Markdown-link witness",
+      "engine_versions": {
+        "python": "3.14.8",
+        "z3": "5.0.0"
+      },
+      "expect_unsat": false,
+      "family": "MC-malcontent-author-markdown-link",
+      "ground_truth": "reproduced",
+      "input_domain": "ascii",
+      "kind": "mutation_guard",
+      "name": "MC-malcontent-author-metadata-capture-mutation-guard",
+      "not_proven": false,
+      "ok": true,
+      "product": false,
+      "result": "sat",
+      "schema_version": "1",
+      "state": "stock",
+      "wall_ms": 0.6,
+      "witness": {
+        "author_metadata": "Name (https://example.invalid/)[click](https://attacker.invalid)"
+      }
+    }
+  ],
+  "schema_version": "1",
+  "source": {
+    "file": "pkg/report/report.go",
+    "pin": "ea3e83e24676a1678a9522141da29b636c9451ab",
+    "repository_url": "https://github.com/chainguard-dev/malcontent",
+    "sha256": "bb3ab2bc50fb835f4add14d8c1f6b71140335313c016575bd55eef224fe690de",
+    "source_ref": "https://github.com/chainguard-dev/malcontent/blob/ea3e83e24676a1678a9522141da29b636c9451ab/pkg/report/report.go"
+  },
+  "status": "reproduced"
+}

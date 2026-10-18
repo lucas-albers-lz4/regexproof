@@ -1,0 +1,53 @@
+{
+  "artifact_kind": "p2-extracted-source-sites",
+  "cohort_id": "2026-10-15-aidevops-node-secret-boundary-calibration",
+  "cohort_manifest_sha256": "036bc238e5c49b26e5cf50b7441c44812207696addd5ca5cf81030de3ba3ea58",
+  "extraction_scope": "registered Python AST, Babel ECMA, Go regexp, and POSIX shell extractors; dir-mode file selection with hidden source paths included; fixed Git, generated, virtualenv, coverage, and cache directories excluded; files over 2 MB and submodule contents reported as incomplete",
+  "extractor": "scripts/dogfood-singleton-analysis.py:extract_repo(include_hidden=True)",
+  "extractor_fingerprint_sha256": "da0cd537dc66fccdc2646d32aef3bca08e2fcb98d9f4231f93b2705292c6a06a",
+  "extractor_sources": {
+    "regexproof/batch/manifests.py": "bfb491ea5779f8f289c101477e9e078f3499fd5f4a0462b6eb81cf61c7541dbe",
+    "regexproof/extractors/go_regexp.py": "e2646847295ba768fa945ff163ce767977427927681efb5f532965095dce5087",
+    "regexproof/extractors/js_babel.py": "155ad5a0a838ebc1d03a2aa4fe4a580c8a11a6144db833a09e6ca51faeb2a8fa",
+    "regexproof/extractors/python_ast.py": "87677e00a0291aa6735c637be2467dbb4fae03f6610059713916ba3a0c076379",
+    "regexproof/extractors/record.py": "4ed83d72c6b1542669976d340754e692c55d20e8037edf2c06869addd4333866",
+    "regexproof/extractors/shell_posix.py": "b578661efc8d51d3cefd5cd48791a6b928b9146ff8ab155a934f049c252637a6",
+    "regexproof/regex_id.py": "2843b134bf58d1ce4005f4db16e8dffb77462a27c2d494056510699aeae21fd5",
+    "regexproof/schemas/__init__.py": "a899f3324f438fc2c12092f77bf06b555e81429d4066b8e5613fc927316f41fc",
+    "scripts/dogfood-singleton-analysis.py": "788c634e480c2a6e2da488e7e97508654de10a003d0bfd713159adf5c913c0d9"
+  },
+  "interpretation": "Raw extracted regex sites only. Every site is unreviewed, has no adopted contract, has no attempted question, and has no solver outcome. This is not a security-boundary candidate count or conversion yield.",
+  "manifest_digest": "b7fa1896fc98e53f92a015692c50b2be491bc4d339f5e259f628633ff16f2ba3",
+  "repositories": [
+    {
+      "commit_tree_oid": "b6352eebe587e8c0de039c84f9f6aa9143ef60de",
+      "dialect_family": "ecma",
+      "limitations": [],
+      "oversized_files": 0,
+      "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "repo_id": "marcusquinn/aidevops",
+      "scanned_files": 443,
+      "site_count": 1018,
+      "status": "complete",
+      "submodules_excluded": [],
+      "url": "https://github.com/marcusquinn/aidevops"
+    }
+  ],
+  "runtime": {
+    "platform": "linux",
+    "python_implementation": "CPython",
+    "python_version": "3.14.8"
+  },
+  "schema_version": "1",
+  "summary": {
+    "attempted_questions": 0,
+    "cohort_repositories": 1,
+    "complete_repositories": 1,
+    "contracted_sites": 0,
+    "incomplete_or_failed_repositories": 0,
+    "reviewed_sites": 0,
+    "solver_outcomes": 0,
+    "source_sites": 1018,
+    "source_sites_ndjson_sha256": "50ff05a4b9dcf9aa5bc5d743d54f9edf715ceee6edd3e896ee4a14d79bc0c150"
+  }
+}

@@ -1,0 +1,2260 @@
+{
+  "artifact_kind": "p2-targeted-exact-pin-site-review",
+  "cohort_id": "2026-09-12-calibration-20-r2",
+  "limitations": [
+    "This is a one-site targeted source review, not a complete Tracecat review; the exact-pin inventory has 115 Tracecat rows.",
+    "The claim is limited to Tracecat's declared syntax, not universal POSIX conformance.",
+    "The proof domain is ASCII keys of length 1..64; Unicode keys and other configuration semantics are outside the theorem.",
+    "No command injection, privilege escalation, deployed-server behavior, or security impact is claimed."
+  ],
+  "observed_at": "2026-10-15",
+  "repository": {
+    "pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+    "repo_id": "TracecatHQ/tracecat",
+    "url": "https://github.com/TracecatHQ/tracecat"
+  },
+  "review_decision": {
+    "decision": "adopted",
+    "limitations": [
+      "This is a one-site targeted source review, not a complete Tracecat review; the exact-pin inventory has 115 Tracecat rows.",
+      "The claim is limited to Tracecat's declared syntax, not universal POSIX conformance.",
+      "The proof domain is ASCII keys of length 1..64; Unicode keys and other configuration semantics are outside the theorem.",
+      "No command injection, privilege escalation, deployed-server behavior, or security impact is claimed."
+    ],
+    "pattern": "^[A-Za-z_][A-Za-z0-9_]*$",
+    "product_question_asked": true,
+    "rationale": "The validator comment and visible validation error declare an exact ASCII name language. MCP stdio integration creation calls this validation before persistence; later saved configuration is passed to StdioTransport. CPython `$` accepts a final-line-feed suffix outside the declared language, reproduced against the exact pinned validator. This is a configuration-validation gap only; security impact is not established.",
+    "regex_id": "280c0b240b92090a7bdb58b6a70cff57",
+    "site": "tracecat/integrations/mcp_validation.py:178:11",
+    "source_site_id": "38f2dd505cae305014bec389107046a4ab888a4d98094eae528f6419811f8254"
+  },
+  "review_sha256": "aceafc6ab7dfdd383c676c28114f24dd32c24deea490a6c5b3e3b368dd3e4273",
+  "reviewed_site": {
+    "call_kind": "match",
+    "cohort_id": "2026-09-12-calibration-20-r2",
+    "column": 11,
+    "commit_tree_oid": "b4af14482f3483605e41307d54f2b777b63bbd84",
+    "context_snippet": "re.match(r\"^[A-Za-z_][A-Za-z0-9_]*$\", key)",
+    "contract_status": "none",
+    "dialect": "py_re",
+    "dialect_family": "py_re",
+    "domain": "ascii",
+    "extractor": "py",
+    "flags": "",
+    "git_blob_oid": "cac9aef283eda150066ec272aa5118e8cd27aec0",
+    "git_mode": "100644",
+    "line": 178,
+    "manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+    "pattern": "^[A-Za-z_][A-Za-z0-9_]*$",
+    "pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+    "question_ids": [],
+    "regex_id": "280c0b240b92090a7bdb58b6a70cff57",
+    "repo_id": "TracecatHQ/tracecat",
+    "review_status": "unreviewed",
+    "site": "tracecat/integrations/mcp_validation.py:178:11",
+    "solver_outcome": null,
+    "source_file": "tracecat/integrations/mcp_validation.py",
+    "source_file_sha256": "41cf730ba1cb592cae684811bbb4d510961a0a441c156313a804b2593085f895",
+    "source_site_id": "38f2dd505cae305014bec389107046a4ab888a4d98094eae528f6419811f8254",
+    "source_symlink_target": null,
+    "url": "https://github.com/TracecatHQ/tracecat"
+  },
+  "schema_version": "1",
+  "source_files": [
+    {
+      "evidence_ref": "https://github.com/TracecatHQ/tracecat/blob/c84d52528a489821f355fc63976fbc7783ae0ad5/docs/automations/integrations/mcp-integrations.mdx",
+      "path": "docs/automations/integrations/mcp-integrations.mdx",
+      "pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+      "repository_url": "https://github.com/TracecatHQ/tracecat",
+      "sha256": "55293412912f0dc3d9ff5a99b83cca2c7f7de890042e15c0dd84d6330d940bba"
+    },
+    {
+      "evidence_ref": "https://github.com/TracecatHQ/tracecat/blob/c84d52528a489821f355fc63976fbc7783ae0ad5/docs/security/architecture.mdx",
+      "path": "docs/security/architecture.mdx",
+      "pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+      "repository_url": "https://github.com/TracecatHQ/tracecat",
+      "sha256": "1061a7eaabe021eeb2117c25a4278de0d2f61dadce93a5e554a4d55f89c73358"
+    },
+    {
+      "evidence_ref": "https://github.com/TracecatHQ/tracecat/blob/c84d52528a489821f355fc63976fbc7783ae0ad5/tracecat/agent/mcp/stdio_probe.py",
+      "path": "tracecat/agent/mcp/stdio_probe.py",
+      "pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+      "repository_url": "https://github.com/TracecatHQ/tracecat",
+      "sha256": "fd0232682b3c66cb19a4764ab54c8251f90147fdbe50e91f9d49c80cc15274d8"
+    },
+    {
+      "evidence_ref": "https://github.com/TracecatHQ/tracecat/blob/c84d52528a489821f355fc63976fbc7783ae0ad5/tracecat/integrations/mcp_validation.py",
+      "path": "tracecat/integrations/mcp_validation.py",
+      "pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+      "repository_url": "https://github.com/TracecatHQ/tracecat",
+      "sha256": "41cf730ba1cb592cae684811bbb4d510961a0a441c156313a804b2593085f895"
+    },
+    {
+      "evidence_ref": "https://github.com/TracecatHQ/tracecat/blob/c84d52528a489821f355fc63976fbc7783ae0ad5/tracecat/integrations/schemas.py",
+      "path": "tracecat/integrations/schemas.py",
+      "pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+      "repository_url": "https://github.com/TracecatHQ/tracecat",
+      "sha256": "7fd1ed987f9fbe7655a3b82a6868b441124535cf3f70764407fb1a9f5f688132"
+    },
+    {
+      "evidence_ref": "https://github.com/TracecatHQ/tracecat/blob/c84d52528a489821f355fc63976fbc7783ae0ad5/tracecat/integrations/service.py",
+      "path": "tracecat/integrations/service.py",
+      "pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+      "repository_url": "https://github.com/TracecatHQ/tracecat",
+      "sha256": "1acfce88833bced460bcead3ae92d90a4eda80cc0c6aa51ae52d31b603ea3448"
+    }
+  ],
+  "source_inventory": {
+    "inventory_path": "properties/calibration/2026-10-15-p2-source-inventory-v3/inventory.json",
+    "inventory_sha256": "b19edf778c99465ab1745b634583a418eb6c54f5d90b325533d577f6d17d3eae",
+    "member_site_count": 115,
+    "sites_path": "properties/calibration/2026-10-15-p2-source-inventory-v3/sites.ndjson",
+    "sites_sha256": "a4e1dfbbd84e2258089d1fd52694ff1e28f6c48cef1caa13fed306e82b1b212f"
+  },
+  "source_windows": [
+    {
+      "purpose": "exact source regex, intent comment, validator length and protected-key checks",
+      "window": {
+        "lines": [
+          {
+            "is_target": false,
+            "line": 153,
+            "text": "    for i, arg in enumerate(args):"
+          },
+          {
+            "is_target": false,
+            "line": 154,
+            "text": "        try:"
+          },
+          {
+            "is_target": false,
+            "line": 155,
+            "text": "            validate_mcp_arg(arg)"
+          },
+          {
+            "is_target": false,
+            "line": 156,
+            "text": "        except MCPValidationError as e:"
+          },
+          {
+            "is_target": false,
+            "line": 157,
+            "text": "            raise MCPValidationError(f\"Invalid argument at index {i}: {e}\") from e"
+          },
+          {
+            "is_target": false,
+            "line": 158,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 159,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 160,
+            "text": "def validate_mcp_env_key(key: str) -> None:"
+          },
+          {
+            "is_target": false,
+            "line": 161,
+            "text": "    \"\"\"Validate an environment variable key."
+          },
+          {
+            "is_target": false,
+            "line": 162,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 163,
+            "text": "    Args:"
+          },
+          {
+            "is_target": false,
+            "line": 164,
+            "text": "        key: The environment variable name"
+          },
+          {
+            "is_target": false,
+            "line": 165,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 166,
+            "text": "    Raises:"
+          },
+          {
+            "is_target": false,
+            "line": 167,
+            "text": "        MCPValidationError: If the key is invalid"
+          },
+          {
+            "is_target": false,
+            "line": 168,
+            "text": "    \"\"\""
+          },
+          {
+            "is_target": false,
+            "line": 169,
+            "text": "    if not isinstance(key, str):"
+          },
+          {
+            "is_target": false,
+            "line": 170,
+            "text": "        raise MCPValidationError(f\"Env key must be a string, got {type(key).__name__}\")"
+          },
+          {
+            "is_target": false,
+            "line": 171,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 172,
+            "text": "    if len(key) > MAX_ENV_KEY_LENGTH:"
+          },
+          {
+            "is_target": false,
+            "line": 173,
+            "text": "        raise MCPValidationError("
+          },
+          {
+            "is_target": false,
+            "line": 174,
+            "text": "            f\"Env key too long: {len(key)} > {MAX_ENV_KEY_LENGTH} characters\""
+          },
+          {
+            "is_target": false,
+            "line": 175,
+            "text": "        )"
+          },
+          {
+            "is_target": false,
+            "line": 176,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 177,
+            "text": "    # Must be valid POSIX env var name"
+          },
+          {
+            "is_target": true,
+            "line": 178,
+            "text": "    if not re.match(r\"^[A-Za-z_][A-Za-z0-9_]*$\", key):"
+          },
+          {
+            "is_target": false,
+            "line": 179,
+            "text": "        raise MCPValidationError("
+          },
+          {
+            "is_target": false,
+            "line": 180,
+            "text": "            f\"Invalid env var name '{key}': must match [A-Za-z_][A-Za-z0-9_]*\""
+          },
+          {
+            "is_target": false,
+            "line": 181,
+            "text": "        )"
+          },
+          {
+            "is_target": false,
+            "line": 182,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 183,
+            "text": "    # Cannot override protected variables"
+          },
+          {
+            "is_target": false,
+            "line": 184,
+            "text": "    if key in PROTECTED_ENV_VARS:"
+          },
+          {
+            "is_target": false,
+            "line": 185,
+            "text": "        raise MCPValidationError(f\"Cannot override protected env var: {key}\")"
+          },
+          {
+            "is_target": false,
+            "line": 186,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 187,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 188,
+            "text": "def validate_mcp_env_value(value: str) -> None:"
+          },
+          {
+            "is_target": false,
+            "line": 189,
+            "text": "    \"\"\"Validate an environment variable value."
+          },
+          {
+            "is_target": false,
+            "line": 190,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 191,
+            "text": "    Args:"
+          },
+          {
+            "is_target": false,
+            "line": 192,
+            "text": "        value: The environment variable value"
+          },
+          {
+            "is_target": false,
+            "line": 193,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 194,
+            "text": "    Raises:"
+          },
+          {
+            "is_target": false,
+            "line": 195,
+            "text": "        MCPValidationError: If the value is invalid"
+          },
+          {
+            "is_target": false,
+            "line": 196,
+            "text": "    \"\"\""
+          },
+          {
+            "is_target": false,
+            "line": 197,
+            "text": "    if not isinstance(value, str):"
+          },
+          {
+            "is_target": false,
+            "line": 198,
+            "text": "        raise MCPValidationError("
+          },
+          {
+            "is_target": false,
+            "line": 199,
+            "text": "            f\"Env value must be a string, got {type(value).__name__}\""
+          },
+          {
+            "is_target": false,
+            "line": 200,
+            "text": "        )"
+          },
+          {
+            "is_target": false,
+            "line": 201,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 202,
+            "text": "    if len(value) > MAX_ENV_VALUE_LENGTH:"
+          },
+          {
+            "is_target": false,
+            "line": 203,
+            "text": "        raise MCPValidationError("
+          }
+        ],
+        "path": "tracecat/integrations/mcp_validation.py",
+        "target_line": 178,
+        "token": "mcp_validation.py",
+        "window_end": 203,
+        "window_lines": 51,
+        "window_start": 153
+      }
+    },
+    {
+      "purpose": "shared config validator called before persisting stdio settings",
+      "window": {
+        "lines": [
+          {
+            "is_target": false,
+            "line": 239,
+            "text": "        \"\"\"Ensure OAuth endpoints use HTTPS before persistence or use.\"\"\""
+          },
+          {
+            "is_target": false,
+            "line": 240,
+            "text": "        if endpoint is None:"
+          },
+          {
+            "is_target": false,
+            "line": 241,
+            "text": "            return None"
+          },
+          {
+            "is_target": false,
+            "line": 242,
+            "text": "        parsed = urlparse(endpoint)"
+          },
+          {
+            "is_target": false,
+            "line": 243,
+            "text": "        if parsed.scheme.lower() != \"https\":"
+          },
+          {
+            "is_target": false,
+            "line": 244,
+            "text": "            raise InsecureOAuthEndpointError(f\"{field_name} must use HTTPS: {endpoint}\")"
+          },
+          {
+            "is_target": false,
+            "line": 245,
+            "text": "        if not parsed.netloc:"
+          },
+          {
+            "is_target": false,
+            "line": 246,
+            "text": "            raise InsecureOAuthEndpointError("
+          },
+          {
+            "is_target": false,
+            "line": 247,
+            "text": "                f\"{field_name} must include a hostname: {endpoint}\""
+          },
+          {
+            "is_target": false,
+            "line": 248,
+            "text": "            )"
+          },
+          {
+            "is_target": false,
+            "line": 249,
+            "text": "        return endpoint"
+          },
+          {
+            "is_target": false,
+            "line": 250,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 251,
+            "text": "    @staticmethod"
+          },
+          {
+            "is_target": false,
+            "line": 252,
+            "text": "    def _normalize_scopes(scopes: list[str] | None) -> list[str]:"
+          },
+          {
+            "is_target": false,
+            "line": 253,
+            "text": "        \"\"\"Normalize scopes by trimming whitespace and removing duplicates.\"\"\""
+          },
+          {
+            "is_target": false,
+            "line": 254,
+            "text": "        if not scopes:"
+          },
+          {
+            "is_target": false,
+            "line": 255,
+            "text": "            return []"
+          },
+          {
+            "is_target": false,
+            "line": 256,
+            "text": "        normalized: list[str] = []"
+          },
+          {
+            "is_target": false,
+            "line": 257,
+            "text": "        for scope in scopes:"
+          },
+          {
+            "is_target": false,
+            "line": 258,
+            "text": "            value = scope.strip()"
+          },
+          {
+            "is_target": false,
+            "line": 259,
+            "text": "            if value and value not in normalized:"
+          },
+          {
+            "is_target": false,
+            "line": 260,
+            "text": "                normalized.append(value)"
+          },
+          {
+            "is_target": false,
+            "line": 261,
+            "text": "        return normalized"
+          },
+          {
+            "is_target": false,
+            "line": 262,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 263,
+            "text": "    @staticmethod"
+          },
+          {
+            "is_target": true,
+            "line": 264,
+            "text": "    def validate_stdio_server_config("
+          },
+          {
+            "is_target": false,
+            "line": 265,
+            "text": "        *,"
+          },
+          {
+            "is_target": false,
+            "line": 266,
+            "text": "        command: str | None,"
+          },
+          {
+            "is_target": false,
+            "line": 267,
+            "text": "        args: list[str] | None = None,"
+          },
+          {
+            "is_target": false,
+            "line": 268,
+            "text": "        env: dict[str, str] | None = None,"
+          },
+          {
+            "is_target": false,
+            "line": 269,
+            "text": "    ) -> None:"
+          },
+          {
+            "is_target": false,
+            "line": 270,
+            "text": "        \"\"\"Validate stdio server command configuration before persistence.\"\"\""
+          },
+          {
+            "is_target": false,
+            "line": 271,
+            "text": "        normalized_command = command.strip() if command else \"\""
+          },
+          {
+            "is_target": false,
+            "line": 272,
+            "text": "        if not normalized_command:"
+          },
+          {
+            "is_target": false,
+            "line": 273,
+            "text": "            raise ValueError(\"stdio_command is required for stdio-type servers\")"
+          },
+          {
+            "is_target": false,
+            "line": 274,
+            "text": "        try:"
+          },
+          {
+            "is_target": false,
+            "line": 275,
+            "text": "            validate_mcp_command_config("
+          },
+          {
+            "is_target": false,
+            "line": 276,
+            "text": "                command=normalized_command,"
+          },
+          {
+            "is_target": false,
+            "line": 277,
+            "text": "                args=args,"
+          },
+          {
+            "is_target": false,
+            "line": 278,
+            "text": "                env=env,"
+          },
+          {
+            "is_target": false,
+            "line": 279,
+            "text": "            )"
+          },
+          {
+            "is_target": false,
+            "line": 280,
+            "text": "        except MCPValidationError as exc:"
+          },
+          {
+            "is_target": false,
+            "line": 281,
+            "text": "            raise ValueError(str(exc)) from exc"
+          },
+          {
+            "is_target": false,
+            "line": 282,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 283,
+            "text": "    @staticmethod"
+          },
+          {
+            "is_target": false,
+            "line": 284,
+            "text": "    def _normalize_stdio_command(command: str | None) -> str | None:"
+          },
+          {
+            "is_target": false,
+            "line": 285,
+            "text": "        \"\"\"Return the stored form of a stdio command for equality checks.\"\"\""
+          },
+          {
+            "is_target": false,
+            "line": 286,
+            "text": "        if command is None:"
+          },
+          {
+            "is_target": false,
+            "line": 287,
+            "text": "            return None"
+          },
+          {
+            "is_target": false,
+            "line": 288,
+            "text": "        stripped = command.strip()"
+          },
+          {
+            "is_target": false,
+            "line": 289,
+            "text": "        return stripped or None"
+          }
+        ],
+        "path": "tracecat/integrations/service.py",
+        "target_line": 264,
+        "token": "service.py",
+        "window_end": 289,
+        "window_lines": 51,
+        "window_start": 239
+      }
+    },
+    {
+      "purpose": "creation validates the stdio environment then encrypts and stores it",
+      "window": {
+        "lines": [
+          {
+            "is_target": false,
+            "line": 2855,
+            "text": "                if params.oauth_integration_id:"
+          },
+          {
+            "is_target": false,
+            "line": 2856,
+            "text": "                    oauth_integration = await self.session.get("
+          },
+          {
+            "is_target": false,
+            "line": 2857,
+            "text": "                        OAuthIntegration, params.oauth_integration_id"
+          },
+          {
+            "is_target": false,
+            "line": 2858,
+            "text": "                    )"
+          },
+          {
+            "is_target": false,
+            "line": 2859,
+            "text": "                    if ("
+          },
+          {
+            "is_target": false,
+            "line": 2860,
+            "text": "                        not oauth_integration"
+          },
+          {
+            "is_target": false,
+            "line": 2861,
+            "text": "                        or oauth_integration.workspace_id != self.workspace_id"
+          },
+          {
+            "is_target": false,
+            "line": 2862,
+            "text": "                    ):"
+          },
+          {
+            "is_target": false,
+            "line": 2863,
+            "text": "                        raise ValueError("
+          },
+          {
+            "is_target": false,
+            "line": 2864,
+            "text": "                            \"OAuth integration not found or does not belong to workspace\""
+          },
+          {
+            "is_target": false,
+            "line": 2865,
+            "text": "                        )"
+          },
+          {
+            "is_target": false,
+            "line": 2866,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 2867,
+            "text": "            server_uri = params.server_uri.strip()"
+          },
+          {
+            "is_target": false,
+            "line": 2868,
+            "text": "            auth_type = params.auth_type"
+          },
+          {
+            "is_target": false,
+            "line": 2869,
+            "text": "            oauth_integration_id = params.oauth_integration_id"
+          },
+          {
+            "is_target": false,
+            "line": 2870,
+            "text": "            if ("
+          },
+          {
+            "is_target": false,
+            "line": 2871,
+            "text": "                params.auth_type in {MCPAuthType.CUSTOM, MCPAuthType.OAUTH2}"
+          },
+          {
+            "is_target": false,
+            "line": 2872,
+            "text": "                and params.custom_credentials"
+          },
+          {
+            "is_target": false,
+            "line": 2873,
+            "text": "            ):"
+          },
+          {
+            "is_target": false,
+            "line": 2874,
+            "text": "                custom_credentials = params.custom_credentials.get_secret_value()"
+          },
+          {
+            "is_target": false,
+            "line": 2875,
+            "text": "                if custom_credentials:"
+          },
+          {
+            "is_target": false,
+            "line": 2876,
+            "text": "                    encrypted_custom_credentials = self._encrypt_token("
+          },
+          {
+            "is_target": false,
+            "line": 2877,
+            "text": "                        custom_credentials"
+          },
+          {
+            "is_target": false,
+            "line": 2878,
+            "text": "                    )"
+          },
+          {
+            "is_target": false,
+            "line": 2879,
+            "text": "        else:"
+          },
+          {
+            "is_target": true,
+            "line": 2880,
+            "text": "            self.validate_stdio_server_config("
+          },
+          {
+            "is_target": false,
+            "line": 2881,
+            "text": "                command=params.stdio_command,"
+          },
+          {
+            "is_target": false,
+            "line": 2882,
+            "text": "                args=params.stdio_args,"
+          },
+          {
+            "is_target": false,
+            "line": 2883,
+            "text": "                env=params.stdio_env,"
+          },
+          {
+            "is_target": false,
+            "line": 2884,
+            "text": "            )"
+          },
+          {
+            "is_target": false,
+            "line": 2885,
+            "text": "            stdio_command = params.stdio_command"
+          },
+          {
+            "is_target": false,
+            "line": 2886,
+            "text": "            stdio_args = params.stdio_args"
+          },
+          {
+            "is_target": false,
+            "line": 2887,
+            "text": "            if params.stdio_env:"
+          },
+          {
+            "is_target": false,
+            "line": 2888,
+            "text": "                encrypted_stdio_env = self._encrypt_token("
+          },
+          {
+            "is_target": false,
+            "line": 2889,
+            "text": "                    orjson.dumps(params.stdio_env).decode()"
+          },
+          {
+            "is_target": false,
+            "line": 2890,
+            "text": "                )"
+          },
+          {
+            "is_target": false,
+            "line": 2891,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 2892,
+            "text": "        mcp_integration = MCPIntegration("
+          },
+          {
+            "is_target": false,
+            "line": 2893,
+            "text": "            workspace_id=self.workspace_id,"
+          },
+          {
+            "is_target": false,
+            "line": 2894,
+            "text": "            name=params.name.strip(),"
+          },
+          {
+            "is_target": false,
+            "line": 2895,
+            "text": "            description=params.description.strip() if params.description else None,"
+          },
+          {
+            "is_target": false,
+            "line": 2896,
+            "text": "            slug=slug,"
+          },
+          {
+            "is_target": false,
+            "line": 2897,
+            "text": "            catalog_slug=catalog_row.slug if catalog_row else None,"
+          },
+          {
+            "is_target": false,
+            "line": 2898,
+            "text": "            server_uri=server_uri,"
+          },
+          {
+            "is_target": false,
+            "line": 2899,
+            "text": "            auth_type=auth_type,"
+          },
+          {
+            "is_target": false,
+            "line": 2900,
+            "text": "            oauth_integration_id=oauth_integration_id,"
+          },
+          {
+            "is_target": false,
+            "line": 2901,
+            "text": "            encrypted_headers=encrypted_custom_credentials,  # Reuse field for custom credentials"
+          },
+          {
+            "is_target": false,
+            "line": 2902,
+            "text": "            server_type=params.server_type,"
+          },
+          {
+            "is_target": false,
+            "line": 2903,
+            "text": "            stdio_command=stdio_command,"
+          },
+          {
+            "is_target": false,
+            "line": 2904,
+            "text": "            stdio_args=stdio_args,"
+          },
+          {
+            "is_target": false,
+            "line": 2905,
+            "text": "            encrypted_stdio_env=encrypted_stdio_env,"
+          }
+        ],
+        "path": "tracecat/integrations/service.py",
+        "target_line": 2880,
+        "token": "service.py",
+        "window_end": 2905,
+        "window_lines": 51,
+        "window_start": 2855
+      }
+    },
+    {
+      "purpose": "stored environment JSON is decoded back into a string-key dictionary",
+      "window": {
+        "lines": [
+          {
+            "is_target": false,
+            "line": 2149,
+            "text": "        \"\"\"Encrypt a client credential using the service's encryption key.\"\"\""
+          },
+          {
+            "is_target": false,
+            "line": 2150,
+            "text": "        return encrypt_value(credential.encode(\"utf-8\"), key=self._encryption_key)"
+          },
+          {
+            "is_target": false,
+            "line": 2151,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 2152,
+            "text": "    def decrypt_client_credential(self, encrypted_credential: bytes) -> str:"
+          },
+          {
+            "is_target": false,
+            "line": 2153,
+            "text": "        \"\"\"Decrypt a client credential using the service's encryption key.\"\"\""
+          },
+          {
+            "is_target": false,
+            "line": 2154,
+            "text": "        return decrypt_value(encrypted_credential, key=self._encryption_key).decode("
+          },
+          {
+            "is_target": false,
+            "line": 2155,
+            "text": "            \"utf-8\""
+          },
+          {
+            "is_target": false,
+            "line": 2156,
+            "text": "        )"
+          },
+          {
+            "is_target": false,
+            "line": 2157,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 2158,
+            "text": "    @require_scope(\"integration:read\")"
+          },
+          {
+            "is_target": false,
+            "line": 2159,
+            "text": "    def decrypt_stdio_env("
+          },
+          {
+            "is_target": false,
+            "line": 2160,
+            "text": "        self, mcp_integration: MCPIntegration"
+          },
+          {
+            "is_target": false,
+            "line": 2161,
+            "text": "    ) -> dict[str, str] | None:"
+          },
+          {
+            "is_target": false,
+            "line": 2162,
+            "text": "        \"\"\"Decrypt and return stdio_env for an MCP integration.\"\"\""
+          },
+          {
+            "is_target": false,
+            "line": 2163,
+            "text": "        if not mcp_integration.encrypted_stdio_env:"
+          },
+          {
+            "is_target": false,
+            "line": 2164,
+            "text": "            return None"
+          },
+          {
+            "is_target": false,
+            "line": 2165,
+            "text": "        if not is_set(mcp_integration.encrypted_stdio_env):"
+          },
+          {
+            "is_target": false,
+            "line": 2166,
+            "text": "            return None"
+          },
+          {
+            "is_target": false,
+            "line": 2167,
+            "text": "        decrypted = self._decrypt_token(mcp_integration.encrypted_stdio_env)"
+          },
+          {
+            "is_target": false,
+            "line": 2168,
+            "text": "        if not decrypted:"
+          },
+          {
+            "is_target": false,
+            "line": 2169,
+            "text": "            return None"
+          },
+          {
+            "is_target": false,
+            "line": 2170,
+            "text": "        loaded = orjson.loads(decrypted)"
+          },
+          {
+            "is_target": false,
+            "line": 2171,
+            "text": "        if not isinstance(loaded, dict):"
+          },
+          {
+            "is_target": false,
+            "line": 2172,
+            "text": "            return None"
+          },
+          {
+            "is_target": false,
+            "line": 2173,
+            "text": ""
+          },
+          {
+            "is_target": true,
+            "line": 2174,
+            "text": "        env: dict[str, str] = {}"
+          },
+          {
+            "is_target": false,
+            "line": 2175,
+            "text": "        for key, value in loaded.items():"
+          },
+          {
+            "is_target": false,
+            "line": 2176,
+            "text": "            if not isinstance(key, str) or not isinstance(value, str):"
+          },
+          {
+            "is_target": false,
+            "line": 2177,
+            "text": "                return None"
+          },
+          {
+            "is_target": false,
+            "line": 2178,
+            "text": "            env[key] = value"
+          },
+          {
+            "is_target": false,
+            "line": 2179,
+            "text": "        return env"
+          },
+          {
+            "is_target": false,
+            "line": 2180,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 2181,
+            "text": "    @require_scope(\"integration:create\", \"integration:update\", require_all=False)"
+          },
+          {
+            "is_target": false,
+            "line": 2182,
+            "text": "    async def store_provider_config("
+          },
+          {
+            "is_target": false,
+            "line": 2183,
+            "text": "        self,"
+          },
+          {
+            "is_target": false,
+            "line": 2184,
+            "text": "        *,"
+          },
+          {
+            "is_target": false,
+            "line": 2185,
+            "text": "        provider_key: ProviderKey,"
+          },
+          {
+            "is_target": false,
+            "line": 2186,
+            "text": "        client_id: str | None = None,"
+          },
+          {
+            "is_target": false,
+            "line": 2187,
+            "text": "        client_secret: SecretStr | None = None,"
+          },
+          {
+            "is_target": false,
+            "line": 2188,
+            "text": "        authorization_endpoint: str | None = None,"
+          },
+          {
+            "is_target": false,
+            "line": 2189,
+            "text": "        token_endpoint: str | None = None,"
+          },
+          {
+            "is_target": false,
+            "line": 2190,
+            "text": "        requested_scopes: list[str] | None = None,"
+          },
+          {
+            "is_target": false,
+            "line": 2191,
+            "text": "    ) -> OAuthIntegration:"
+          },
+          {
+            "is_target": false,
+            "line": 2192,
+            "text": "        \"\"\"Store or update provider configuration (client credentials) for a workspace.\"\"\""
+          },
+          {
+            "is_target": false,
+            "line": 2193,
+            "text": "        # Check if integration configuration already exists for this provider"
+          },
+          {
+            "is_target": false,
+            "line": 2194,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 2195,
+            "text": "        provider_impl = await self.resolve_provider_impl(provider_key=provider_key)"
+          },
+          {
+            "is_target": false,
+            "line": 2196,
+            "text": "        normalized_scopes = self._normalize_scopes(requested_scopes)"
+          },
+          {
+            "is_target": false,
+            "line": 2197,
+            "text": "        resolved_authorization, resolved_token = self._determine_endpoints("
+          },
+          {
+            "is_target": false,
+            "line": 2198,
+            "text": "            provider_impl,"
+          },
+          {
+            "is_target": false,
+            "line": 2199,
+            "text": "            configured_authorization=authorization_endpoint,"
+          }
+        ],
+        "path": "tracecat/integrations/service.py",
+        "target_line": 2174,
+        "token": "service.py",
+        "window_end": 2199,
+        "window_lines": 51,
+        "window_start": 2149
+      }
+    },
+    {
+      "purpose": "stdio integration request schema accepts an environment dictionary",
+      "window": {
+        "lines": [
+          {
+            "is_target": false,
+            "line": 446,
+            "text": "        if not value:"
+          },
+          {
+            "is_target": false,
+            "line": 447,
+            "text": "            raise ValueError(\"server_uri is required for http-type servers\")"
+          },
+          {
+            "is_target": false,
+            "line": 448,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 449,
+            "text": "        parsed = urlparse(value)"
+          },
+          {
+            "is_target": false,
+            "line": 450,
+            "text": "        if not parsed.netloc:"
+          },
+          {
+            "is_target": false,
+            "line": 451,
+            "text": "            raise ValueError(\"Server URI must include a hostname\")"
+          },
+          {
+            "is_target": false,
+            "line": 452,
+            "text": "        if parsed.scheme.lower() not in (\"http\", \"https\"):"
+          },
+          {
+            "is_target": false,
+            "line": 453,
+            "text": "            raise ValueError(\"Server URI must use HTTP or HTTPS\")"
+          },
+          {
+            "is_target": false,
+            "line": 454,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 455,
+            "text": "        return value"
+          },
+          {
+            "is_target": false,
+            "line": 456,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 457,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 458,
+            "text": "class MCPStdioIntegrationCreate(_MCPIntegrationCreateBase):"
+          },
+          {
+            "is_target": false,
+            "line": 459,
+            "text": "    \"\"\"Request model for creating a stdio MCP integration.\"\"\""
+          },
+          {
+            "is_target": false,
+            "line": 460,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 461,
+            "text": "    server_type: Literal[\"stdio\"] = Field(default=\"stdio\")"
+          },
+          {
+            "is_target": false,
+            "line": 462,
+            "text": "    stdio_command: str = Field("
+          },
+          {
+            "is_target": false,
+            "line": 463,
+            "text": "        ...,"
+          },
+          {
+            "is_target": false,
+            "line": 464,
+            "text": "        max_length=500,"
+          },
+          {
+            "is_target": false,
+            "line": 465,
+            "text": "        description=\"Stdio command to run for stdio-type servers (e.g., 'npx')\","
+          },
+          {
+            "is_target": false,
+            "line": 466,
+            "text": "    )"
+          },
+          {
+            "is_target": false,
+            "line": 467,
+            "text": "    stdio_args: list[str] | None = Field("
+          },
+          {
+            "is_target": false,
+            "line": 468,
+            "text": "        default=None,"
+          },
+          {
+            "is_target": false,
+            "line": 469,
+            "text": "        description=\"Arguments for the stdio command (e.g., ['@modelcontextprotocol/server-github'])\","
+          },
+          {
+            "is_target": false,
+            "line": 470,
+            "text": "    )"
+          },
+          {
+            "is_target": true,
+            "line": 471,
+            "text": "    stdio_env: dict[str, str] | None = Field("
+          },
+          {
+            "is_target": false,
+            "line": 472,
+            "text": "        default=None,"
+          },
+          {
+            "is_target": false,
+            "line": 473,
+            "text": "        description=\"Environment variables for stdio-type servers (can reference secrets)\","
+          },
+          {
+            "is_target": false,
+            "line": 474,
+            "text": "    )"
+          },
+          {
+            "is_target": false,
+            "line": 475,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 476,
+            "text": "    @field_validator(\"stdio_command\", mode=\"before\")"
+          },
+          {
+            "is_target": false,
+            "line": 477,
+            "text": "    @classmethod"
+          },
+          {
+            "is_target": false,
+            "line": 478,
+            "text": "    def _validate_stdio_command(cls, value: str | None) -> str:"
+          },
+          {
+            "is_target": false,
+            "line": 479,
+            "text": "        \"\"\"Validate and sanitize stdio command.\"\"\""
+          },
+          {
+            "is_target": false,
+            "line": 480,
+            "text": "        if value is None:"
+          },
+          {
+            "is_target": false,
+            "line": 481,
+            "text": "            raise ValueError(\"stdio_command is required for stdio-type servers\")"
+          },
+          {
+            "is_target": false,
+            "line": 482,
+            "text": "        if isinstance(value, str):"
+          },
+          {
+            "is_target": false,
+            "line": 483,
+            "text": "            value = value.strip()"
+          },
+          {
+            "is_target": false,
+            "line": 484,
+            "text": "        if not value:"
+          },
+          {
+            "is_target": false,
+            "line": 485,
+            "text": "            raise ValueError(\"stdio_command is required for stdio-type servers\")"
+          },
+          {
+            "is_target": false,
+            "line": 486,
+            "text": "        return value"
+          },
+          {
+            "is_target": false,
+            "line": 487,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 488,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 489,
+            "text": "def _discriminate_mcp_integration_create_server_type(value: Any) -> str:"
+          },
+          {
+            "is_target": false,
+            "line": 490,
+            "text": "    \"\"\"Infer MCP create server type, defaulting legacy payloads to HTTP.\"\"\""
+          },
+          {
+            "is_target": false,
+            "line": 491,
+            "text": "    if isinstance(value, MCPHttpIntegrationCreate):"
+          },
+          {
+            "is_target": false,
+            "line": 492,
+            "text": "        return \"http\""
+          },
+          {
+            "is_target": false,
+            "line": 493,
+            "text": "    if isinstance(value, MCPStdioIntegrationCreate):"
+          },
+          {
+            "is_target": false,
+            "line": 494,
+            "text": "        return \"stdio\""
+          },
+          {
+            "is_target": false,
+            "line": 495,
+            "text": "    if isinstance(value, dict):"
+          },
+          {
+            "is_target": false,
+            "line": 496,
+            "text": "        if \"server_type\" in value:"
+          }
+        ],
+        "path": "tracecat/integrations/schemas.py",
+        "target_line": 471,
+        "token": "schemas.py",
+        "window_end": 496,
+        "window_lines": 51,
+        "window_start": 446
+      }
+    },
+    {
+      "purpose": "resolved stdio environment is passed directly to StdioTransport",
+      "window": {
+        "lines": [
+          {
+            "is_target": false,
+            "line": 127,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 128,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 129,
+            "text": "def redact_sensitive_value(match: re.Match[str]) -> str:"
+          },
+          {
+            "is_target": false,
+            "line": 130,
+            "text": "    if match.group(\"double_quoted\") is not None:"
+          },
+          {
+            "is_target": false,
+            "line": 131,
+            "text": "        redacted = '\"[redacted]\"'"
+          },
+          {
+            "is_target": false,
+            "line": 132,
+            "text": "    elif match.group(\"single_quoted\") is not None:"
+          },
+          {
+            "is_target": false,
+            "line": 133,
+            "text": "        redacted = \"'[redacted]'\""
+          },
+          {
+            "is_target": false,
+            "line": 134,
+            "text": "    else:"
+          },
+          {
+            "is_target": false,
+            "line": 135,
+            "text": "        redacted = \"[redacted]\""
+          },
+          {
+            "is_target": false,
+            "line": 136,
+            "text": "    return f\"{match.group('prefix')}{redacted}\""
+          },
+          {
+            "is_target": false,
+            "line": 137,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 138,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 139,
+            "text": "def write_result(result: dict[str, Any]) -> None:"
+          },
+          {
+            "is_target": false,
+            "line": 140,
+            "text": "    Path(\"result.json\").write_text(json.dumps(result), encoding=\"utf-8\")"
+          },
+          {
+            "is_target": false,
+            "line": 141,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 142,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 143,
+            "text": "async def main() -> None:"
+          },
+          {
+            "is_target": false,
+            "line": 144,
+            "text": "    payload = json.loads(Path(\"input.json\").read_text(encoding=\"utf-8\"))"
+          },
+          {
+            "is_target": false,
+            "line": 145,
+            "text": "    command = payload[\"command\"]"
+          },
+          {
+            "is_target": false,
+            "line": 146,
+            "text": "    args = payload.get(\"args\") or []"
+          },
+          {
+            "is_target": false,
+            "line": 147,
+            "text": "    env = payload.get(\"env\") or {}"
+          },
+          {
+            "is_target": false,
+            "line": 148,
+            "text": "    timeout = int(payload[\"timeout\"])"
+          },
+          {
+            "is_target": false,
+            "line": 149,
+            "text": "    stderr_log = Path(\"mcp-server.stderr.log\")"
+          },
+          {
+            "is_target": false,
+            "line": 150,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 151,
+            "text": "    try:"
+          },
+          {
+            "is_target": true,
+            "line": 152,
+            "text": "        transport = StdioTransport("
+          },
+          {
+            "is_target": false,
+            "line": 153,
+            "text": "            command=command,"
+          },
+          {
+            "is_target": false,
+            "line": 154,
+            "text": "            args=args,"
+          },
+          {
+            "is_target": false,
+            "line": 155,
+            "text": "            env=env,"
+          },
+          {
+            "is_target": false,
+            "line": 156,
+            "text": "            cwd=\"/tmp\","
+          },
+          {
+            "is_target": false,
+            "line": 157,
+            "text": "            keep_alive=False,"
+          },
+          {
+            "is_target": false,
+            "line": 158,
+            "text": "            log_file=stderr_log,"
+          },
+          {
+            "is_target": false,
+            "line": 159,
+            "text": "        )"
+          },
+          {
+            "is_target": false,
+            "line": 160,
+            "text": "        async with asyncio.timeout(timeout):"
+          },
+          {
+            "is_target": false,
+            "line": 161,
+            "text": "            async with Client(transport) as client:"
+          },
+          {
+            "is_target": false,
+            "line": 162,
+            "text": "                tools = await client.list_tools()"
+          },
+          {
+            "is_target": false,
+            "line": 163,
+            "text": "        write_result("
+          },
+          {
+            "is_target": false,
+            "line": 164,
+            "text": "            {"
+          },
+          {
+            "is_target": false,
+            "line": 165,
+            "text": "                \"success\": True,"
+          },
+          {
+            "is_target": false,
+            "line": 166,
+            "text": "                \"output\": {"
+          },
+          {
+            "is_target": false,
+            "line": 167,
+            "text": "                    \"tools\": ["
+          },
+          {
+            "is_target": false,
+            "line": 168,
+            "text": "                        {"
+          },
+          {
+            "is_target": false,
+            "line": 169,
+            "text": "                            \"name\": tool.name,"
+          },
+          {
+            "is_target": false,
+            "line": 170,
+            "text": "                            \"description\": tool.description,"
+          },
+          {
+            "is_target": false,
+            "line": 171,
+            "text": "                        }"
+          },
+          {
+            "is_target": false,
+            "line": 172,
+            "text": "                        for tool in tools"
+          },
+          {
+            "is_target": false,
+            "line": 173,
+            "text": "                    ]"
+          },
+          {
+            "is_target": false,
+            "line": 174,
+            "text": "                },"
+          },
+          {
+            "is_target": false,
+            "line": 175,
+            "text": "                \"stdout\": \"\","
+          },
+          {
+            "is_target": false,
+            "line": 176,
+            "text": "                \"stderr\": \"\","
+          },
+          {
+            "is_target": false,
+            "line": 177,
+            "text": "                \"error\": None,"
+          }
+        ],
+        "path": "tracecat/agent/mcp/stdio_probe.py",
+        "target_line": 152,
+        "token": "stdio_probe.py",
+        "window_end": 177,
+        "window_lines": 51,
+        "window_start": 127
+      }
+    },
+    {
+      "purpose": "user documentation for stdio server commands and environment variables",
+      "window": {
+        "lines": [
+          {
+            "is_target": false,
+            "line": 35,
+            "text": "![Remote MCP authentication](/img/integrations/remote-mcp-auth-options.png)"
+          },
+          {
+            "is_target": false,
+            "line": 36,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 37,
+            "text": "### OAuth for remote MCP"
+          },
+          {
+            "is_target": false,
+            "line": 38,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 39,
+            "text": "For remote MCP with OAuth, link the MCP integration to an existing OAuth integration. Tracecat refreshes the token and sets the `Authorization` header automatically."
+          },
+          {
+            "is_target": false,
+            "line": 40,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 41,
+            "text": "For a custom remote MCP server, first create a custom OAuth provider in [OAuth](/automations/integrations/oauth-integrations), then attach it to the MCP integration."
+          },
+          {
+            "is_target": false,
+            "line": 42,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 43,
+            "text": "### Custom headers for remote MCP"
+          },
+          {
+            "is_target": false,
+            "line": 44,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 45,
+            "text": "`Custom` authentication stores request headers as JSON."
+          },
+          {
+            "is_target": false,
+            "line": 46,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 47,
+            "text": "```json"
+          },
+          {
+            "is_target": false,
+            "line": 48,
+            "text": "{"
+          },
+          {
+            "is_target": false,
+            "line": 49,
+            "text": "  \"Authorization\": \"Bearer token123\","
+          },
+          {
+            "is_target": false,
+            "line": 50,
+            "text": "  \"X-API-Key\": \"abc123\""
+          },
+          {
+            "is_target": false,
+            "line": 51,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 52,
+            "text": "```"
+          },
+          {
+            "is_target": false,
+            "line": 53,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 54,
+            "text": "<Info>"
+          },
+          {
+            "is_target": false,
+            "line": 55,
+            "text": "Remote MCP custom header JSON does not resolve `${{ SECRETS.* }}` or `${{ VARS.* }}`. Header values are sent as literal strings."
+          },
+          {
+            "is_target": false,
+            "line": 56,
+            "text": "</Info>"
+          },
+          {
+            "is_target": false,
+            "line": 57,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 58,
+            "text": "## Stdio MCP"
+          },
+          {
+            "is_target": false,
+            "line": 59,
+            "text": ""
+          },
+          {
+            "is_target": true,
+            "line": 60,
+            "text": "Use `stdio` MCP when Tracecat should launch a local command such as `npx`, `uvx`, or a custom binary."
+          },
+          {
+            "is_target": false,
+            "line": 61,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 62,
+            "text": "`stdio` environment variables support Tracecat expressions."
+          },
+          {
+            "is_target": false,
+            "line": 63,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 64,
+            "text": "```json"
+          },
+          {
+            "is_target": false,
+            "line": 65,
+            "text": "{"
+          },
+          {
+            "is_target": false,
+            "line": 66,
+            "text": "  \"GITHUB_TOKEN\": \"${{ SECRETS.github.TOKEN }}\","
+          },
+          {
+            "is_target": false,
+            "line": 67,
+            "text": "  \"GITHUB_HOST\": \"${{ VARS.github.host }}\""
+          },
+          {
+            "is_target": false,
+            "line": 68,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 69,
+            "text": "```"
+          },
+          {
+            "is_target": false,
+            "line": 70,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 71,
+            "text": "Tracecat resolves those expressions from the workflow default environment unless overridden in action control flow."
+          },
+          {
+            "is_target": false,
+            "line": 72,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 73,
+            "text": "## Secrets and variables in MCP configuration"
+          },
+          {
+            "is_target": false,
+            "line": 74,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 75,
+            "text": "Expression support differs by MCP integration type:"
+          },
+          {
+            "is_target": false,
+            "line": 76,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 77,
+            "text": "- `stdio` environment variables support `${{ SECRETS.* }}` and `${{ VARS.* }}`."
+          },
+          {
+            "is_target": false,
+            "line": 78,
+            "text": "- Remote MCP OAuth mode does not need secret expressions for the bearer token because Tracecat injects the OAuth token automatically."
+          },
+          {
+            "is_target": false,
+            "line": 79,
+            "text": "- Remote MCP custom header JSON does not currently resolve `${{ SECRETS.* }}` or `${{ VARS.* }}`."
+          },
+          {
+            "is_target": false,
+            "line": 80,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 81,
+            "text": "## Related pages"
+          },
+          {
+            "is_target": false,
+            "line": 82,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 83,
+            "text": "- See [AI agent](/agents/ai-agent) for `ai.agent` and `ai.preset_agent` inputs and examples."
+          },
+          {
+            "is_target": false,
+            "line": 84,
+            "text": "- See [OAuth](/automations/integrations/oauth-integrations) for custom OAuth providers and OAuth token expressions."
+          },
+          {
+            "is_target": false,
+            "line": 85,
+            "text": "- See [Secrets](/automations/core-concepts/secrets) for environment-scoped secret resolution."
+          }
+        ],
+        "path": "docs/automations/integrations/mcp-integrations.mdx",
+        "target_line": 60,
+        "token": "mcp-integrations.mdx",
+        "window_end": 85,
+        "window_lines": 51,
+        "window_start": 35
+      }
+    },
+    {
+      "purpose": "security documentation recommends environment variables for MCP credentials",
+      "window": {
+        "lines": [
+          {
+            "is_target": false,
+            "line": 236,
+            "text": "### Tenant isolation"
+          },
+          {
+            "is_target": false,
+            "line": 237,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 238,
+            "text": "Tenant scope is enforced in the application layer and again by PostgreSQL row-level security on tenant-owned tables. The second layer is the one that matters under failure: a missed application check does not by itself return another tenant's rows."
+          },
+          {
+            "is_target": false,
+            "line": 239,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 240,
+            "text": "### Credentials and sensitive settings"
+          },
+          {
+            "is_target": false,
+            "line": 241,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 242,
+            "text": "Tracecat presents stored credentials to external systems at execution time, so credential storage has to be reversible. Anything that never needs replaying is stored one-way instead."
+          },
+          {
+            "is_target": false,
+            "line": 243,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 244,
+            "text": "Reversible encryption uses Fernet, which is AES-128-CBC with an HMAC-SHA256 authentication tag, keyed by `TRACECAT__DB_ENCRYPTION_KEY`. Ciphertext is authenticated, so tampering fails to decrypt rather than yielding altered plaintext. It covers:"
+          },
+          {
+            "is_target": false,
+            "line": 245,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 246,
+            "text": "- Workspace, organization, and platform secrets."
+          },
+          {
+            "is_target": false,
+            "line": 247,
+            "text": "- OAuth and integration credentials, including access tokens, refresh tokens, and client secrets."
+          },
+          {
+            "is_target": false,
+            "line": 248,
+            "text": "- Remote MCP server headers and `stdio` MCP environment variables."
+          },
+          {
+            "is_target": false,
+            "line": 249,
+            "text": "- Custom LLM provider credentials and Slack agent-channel credentials."
+          },
+          {
+            "is_target": false,
+            "line": 250,
+            "text": "- Organization and platform settings marked sensitive, including the audit webhook URL, its headers, and its custom payload."
+          },
+          {
+            "is_target": false,
+            "line": 251,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 252,
+            "text": "API tokens are not encrypted, because Tracecat never needs to read one back:"
+          },
+          {
+            "is_target": false,
+            "line": 253,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 254,
+            "text": "- Service account API keys, MCP personal access tokens, and webhook API keys are stored as a salted BLAKE2b digest. Tracecat verifies a presented token in constant time and cannot recover the original."
+          },
+          {
+            "is_target": false,
+            "line": 255,
+            "text": "- The raw token is returned exactly once, at creation. Only a short preview prefix is kept so you can identify it later."
+          },
+          {
+            "is_target": false,
+            "line": 256,
+            "text": "- A lost token is replaced by rotation, never by retrieval."
+          },
+          {
+            "is_target": false,
+            "line": 257,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 258,
+            "text": "<Warning>"
+          },
+          {
+            "is_target": false,
+            "line": 259,
+            "text": "  **Credentials in MCP commands and URLs are stored in cleartext**"
+          },
+          {
+            "is_target": false,
+            "line": 260,
+            "text": ""
+          },
+          {
+            "is_target": true,
+            "line": 261,
+            "text": "  The `stdio` MCP command and its arguments, and the remote MCP server URI, are"
+          },
+          {
+            "is_target": false,
+            "line": 262,
+            "text": "  not encrypted. Put credentials in environment variables or headers, which are,"
+          },
+          {
+            "is_target": false,
+            "line": 263,
+            "text": "  rather than inline in an argument or a query string."
+          },
+          {
+            "is_target": false,
+            "line": 264,
+            "text": "</Warning>"
+          },
+          {
+            "is_target": false,
+            "line": 265,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 266,
+            "text": "### Workflow payloads and durable state"
+          },
+          {
+            "is_target": false,
+            "line": 267,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 268,
+            "text": "Temporal persists workflow and agent inputs and outputs for the life of an execution history, so payload protection is separate from database encryption."
+          },
+          {
+            "is_target": false,
+            "line": 269,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 270,
+            "text": "- Payloads are encrypted with AES-256-GCM by a Tracecat-side codec before Temporal stores anything, so Temporal only ever holds ciphertext."
+          },
+          {
+            "is_target": false,
+            "line": 271,
+            "text": "- Each workspace gets a distinct key, derived with HKDF-SHA256 from a versioned root secret using the workspace ID as derivation context. One workspace's key does not decrypt another's payloads."
+          },
+          {
+            "is_target": false,
+            "line": 272,
+            "text": "- The keyring is versioned. Rotation issues a new key ID, and existing histories stay readable under the ID they were written with."
+          },
+          {
+            "is_target": false,
+            "line": 273,
+            "text": "- Secret values are masked as `***` in action results, and masking runs before the result is persisted, so history holds the masked form."
+          },
+          {
+            "is_target": false,
+            "line": 274,
+            "text": "- Large triggers and action results move to object storage automatically. Workflow state keeps a scoped reference, which bounds how much data one run pushes through durable history."
+          },
+          {
+            "is_target": false,
+            "line": 275,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 276,
+            "text": "Two limits are worth knowing. Masking is literal substring replacement, so an encoded or otherwise transformed copy of a secret is not caught. Payload encryption is a deployment setting (`TEMPORAL__PAYLOAD_ENCRYPTION_ENABLED`) that is off by default \u2014 enable it wherever Temporal history can hold sensitive data."
+          },
+          {
+            "is_target": false,
+            "line": 277,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 278,
+            "text": "### Encryption keys"
+          },
+          {
+            "is_target": false,
+            "line": 279,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 280,
+            "text": "Tracecat generates no key material of its own. You provision two things and supply them to the deployment: `TRACECAT__DB_ENCRYPTION_KEY`, the Fernet key behind credential encryption, and the Temporal payload keyring behind workflow history encryption."
+          },
+          {
+            "is_target": false,
+            "line": 281,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 282,
+            "text": "Store both in the secret manager your platform already provides, and keep them out of application configuration and version control. On Kubernetes, the recommended production deployment, use a Kubernetes Secret synced from your own secret manager by External Secrets Operator rather than one created by hand."
+          },
+          {
+            "is_target": false,
+            "line": 283,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 284,
+            "text": "On AWS Fargate, use AWS Secrets Manager: ECS injects the core secrets into the container at task launch, and the task role fetches the keyring at runtime so it never appears in a task definition."
+          },
+          {
+            "is_target": false,
+            "line": 285,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 286,
+            "text": "On Docker Compose, treat the `.env` file as the sensitive artifact: restrict it to the service account that runs Tracecat and keep it out of version control. Move to Kubernetes for a managed secret store and the full sandbox boundary."
+          }
+        ],
+        "path": "docs/security/architecture.mdx",
+        "target_line": 261,
+        "token": "architecture.mdx",
+        "window_end": 286,
+        "window_lines": 51,
+        "window_start": 236
+      }
+    }
+  ]
+}

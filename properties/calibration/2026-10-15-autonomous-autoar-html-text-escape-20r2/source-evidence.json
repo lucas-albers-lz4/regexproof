@@ -1,0 +1,34 @@
+{
+  "schema_version": "1",
+  "repository": "https://github.com/h0tak88r/AutoAR",
+  "pin": "01cd447ad3b1acfed7e0680596c2c74458a4cf06",
+  "source_checkout": {
+    "path": "internal/api/ui/pages/html-escape.js",
+    "sha256": "8b3dd2cc810e7e5c0a88095ca04257a0755f0d22d2fa7d05f2e3479c1f70a900",
+    "observed_head": "01cd447ad3b1acfed7e0680596c2c74458a4cf06",
+    "clean": true
+  },
+  "callers": [
+    {
+      "path": "internal/api/ui/index.html",
+      "sha256": "8593ab3c95a35caaedc87cc84de8b3d42d212be41367921f29a94b3fac97237f",
+      "evidence": "Loads /ui/pages/html-escape.js before /ui/app.js."
+    },
+    {
+      "path": "internal/api/ui/app.js",
+      "sha256": "467b5813b01cf3df6047f378656b3add5cf050dfbf2c55b04fcc883e9e8496c0",
+      "evidence": "Global esc(s) delegates to HtmlEscapePage.esc."
+    },
+    {
+      "path": "internal/api/ui/pages/scan-detail.js",
+      "sha256": "e7b3fdc145d16245f3f62cca9791c6108b61afa7c767ff57fe9a2bec6b7bf06b",
+      "evidence": "Fetches stored results via /api/scans/{id}/results/file, flattens rows, calls renderRowForUnifiedTab, and inserts the returned rows into tbody.innerHTML."
+    },
+    {
+      "path": "internal/api/ui/pages/findings-rows.js",
+      "sha256": "3d969ba73629822201f2d5c07035fb3ee15cd0374db9c1679b63e817e8462bcd",
+      "evidence": "Documents the finding as a raw API object and passes display text through esc inside generated text nodes."
+    }
+  ],
+  "review_scope": "Text-node rendering through the shared findings-row path only. The proof and regression gate do not classify every use of esc, escAttr, or dynamic raw rendering in this repository."
+}

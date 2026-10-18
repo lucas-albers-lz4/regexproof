@@ -1,0 +1,202 @@
+{
+  "entries": [
+    {
+      "bucket": "scripts-bootstrap",
+      "cluster": "mycelium",
+      "contract_sha256": "e2cd96b8264cac527e48dc0b24f6e3f6fd169a98dd5508310e83e0ff6a9585be",
+      "contract_site": "mycelium0/mycelium@4b53dc7629ca3bc88bf5467db481ad2af7130711:scripts/verify-release.sh:60:SHA256SUMS preflight",
+      "dialect_family": "posix-shell",
+      "max_candidates": 5,
+      "product_engine": "Bash + grep -E (host runtime)",
+      "question_family": "mycelium-release-checksum-preflight",
+      "rationale": "Source docs identify empty/truncated checksum responses; the pinned verifier has a release-checksum preflight with a local proof, real-helper mutation replay, and differential evidence. The 4b53 pin is outside the frozen 20-r2 d4f pin and is registered only as a separate calibration slice.",
+      "registered_on": "2026-10-15",
+      "repository_url": "https://github.com/mycelium0/mycelium",
+      "review": {
+        "author": "codex-contract-author",
+        "reviewer": "codex-independent-review-pass",
+        "same_model": true
+      },
+      "source_files": [
+        {
+          "evidence_ref": "https://github.com/mycelium0/mycelium/blob/4b53dc7629ca3bc88bf5467db481ad2af7130711/scripts/verify-release.sh",
+          "path": "scripts/verify-release.sh",
+          "sha256": "df394a764f2ebd906ffbc9d6bafa58af896b39e895e503a271da3baf710e2b58"
+        }
+      ],
+      "source_pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+      "source_sites": [
+        "mycelium0/mycelium@4b53dc7629ca3bc88bf5467db481ad2af7130711:scripts/verify-release.sh:60:SHA256SUMS preflight"
+      ],
+      "trust_map": {
+        "untrusted-input": "Downloaded SHA256SUMS text is untrusted until the documented signature check succeeds; this contract covers checksum preflight only."
+      }
+    },
+    {
+      "bucket": "git-crlf-smuggling",
+      "cluster": "malcontent",
+      "contract_sha256": "064a75636c18a570a15e6a90a6ab199e32f1cefc75554bec9664e7f7bb11c676",
+      "contract_site": "chainguard-dev/malcontent@ea3e83e24676a1678a9522141da29b636c9451ab:rules/impact/exploit/cve-2025-48384.yara:22:path_embedded_cr",
+      "dialect_family": "yara",
+      "max_candidates": 1,
+      "product_engine": "YARA-X CLI 1.19.0",
+      "question_family": "git-crlf-branch",
+      "rationale": "New rule-level idiom in malcontent: a YARA rule detects the documented Git submodule trailing-CR vulnerability while guarding ordinary CRLF files with a bare-LF section marker. The representative component contract has an exact YARA-X 1.19.0 gate and a real product mutation that makes a uniform CRLF file false-positive.",
+      "registered_on": "2026-10-15",
+      "repository_url": "https://github.com/chainguard-dev/malcontent",
+      "review": {
+        "author": "codex-contract-author",
+        "reviewer": "codex-independent-review-pass",
+        "same_model": true
+      },
+      "source_files": [
+        {
+          "evidence_ref": "https://github.com/chainguard-dev/malcontent/blob/ea3e83e24676a1678a9522141da29b636c9451ab/rules/impact/exploit/cve-2025-48384.yara",
+          "path": "rules/impact/exploit/cve-2025-48384.yara",
+          "sha256": "b6d017494cd9ecc7a9843832229fa45789c7edc06ccba093c0381d151a2a2552"
+        }
+      ],
+      "source_pin": "ea3e83e24676a1678a9522141da29b636c9451ab",
+      "source_sites": [
+        "chainguard-dev/malcontent@ea3e83e24676a1678a9522141da29b636c9451ab:rules/impact/exploit/cve-2025-48384.yara:22:path_embedded_cr",
+        "chainguard-dev/malcontent@ea3e83e24676a1678a9522141da29b636c9451ab:rules/impact/exploit/cve-2025-48384.yara:23:url_embedded_cr",
+        "chainguard-dev/malcontent@ea3e83e24676a1678a9522141da29b636c9451ab:rules/impact/exploit/cve-2025-48384.yara:24:path_eof_cr",
+        "chainguard-dev/malcontent@ea3e83e24676a1678a9522141da29b636c9451ab:rules/impact/exploit/cve-2025-48384.yara:25:url_eof_cr",
+        "chainguard-dev/malcontent@ea3e83e24676a1678a9522141da29b636c9451ab:rules/impact/exploit/cve-2025-48384.yara:33:path_trailing_cr",
+        "chainguard-dev/malcontent@ea3e83e24676a1678a9522141da29b636c9451ab:rules/impact/exploit/cve-2025-48384.yara:34:url_trailing_cr",
+        "chainguard-dev/malcontent@ea3e83e24676a1678a9522141da29b636c9451ab:rules/impact/exploit/cve-2025-48384.yara:35:bare_lf"
+      ],
+      "trust_map": {
+        "untrusted-input": "Repository .gitmodules bytes are untrusted scan input; this rule match contributes to malcontent findings."
+      }
+    },
+    {
+      "bucket": "ecma-plugins",
+      "cluster": "aidevops",
+      "contract_sha256": "cdd60d57219cab105836bbe5ebf985d761018637ad81a4c190d970cad706bd8b",
+      "contract_site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/plugins/opencode-aidevops/quality-hooks-secret-read.mjs:8:28",
+      "dialect_family": "ecma",
+      "max_candidates": 2,
+      "product_engine": "Node.js ECMAScript RegExp (OpenCode plugin runtime)",
+      "question_family": "aidevops-node-secret-read-policy",
+      "rationale": "Exact-pin Node slice for the source-access helper that blocks model-controlled secret reads. The eligible pool contains only the three encodable ECMA predicates in this one guard (secret basename, private-key extension, and public-key exception); the other two path predicates were excluded because the pinned compiler reports per-alternative-anchor. The extension predicate is the adopted representative and is reserved, leaving two candidates; the review cap is set to two rather than implying a 15-site family.",
+      "registered_on": "2026-10-15",
+      "repository_url": "https://github.com/marcusquinn/aidevops",
+      "review": {
+        "author": "codex-contract-author",
+        "reviewer": "codex-independent-review-pass",
+        "same_model": true
+      },
+      "source_files": [
+        {
+          "evidence_ref": "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/plugins/opencode-aidevops/quality-hooks-secret-read.mjs",
+          "path": ".agents/plugins/opencode-aidevops/quality-hooks-secret-read.mjs",
+          "sha256": "668f7dc002b263d58def6003194fd83dfa91b82b2fdcb9a10b1427f1cb942cf0"
+        }
+      ],
+      "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "source_sites": [
+        "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/plugins/opencode-aidevops/quality-hooks-secret-read.mjs:8:28",
+        "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/plugins/opencode-aidevops/quality-hooks-secret-read.mjs:7:27",
+        "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/plugins/opencode-aidevops/quality-hooks-secret-read.mjs:9:22"
+      ],
+      "trust_map": {
+        "untrusted-input": "Model-controlled OpenCode Read, Glob, or NotebookRead path arguments evaluated by the pre-tool gate before reading."
+      }
+    },
+    {
+      "bucket": "navigation-param-control-calibration",
+      "cluster": "real-router",
+      "contract_sha256": "84c56ece08e32906b07467c8556c61a3edf0b558af40b701edefa00a035a57be",
+      "contract_site": "greydragon888/real-router@55aa7ef43a9c129beba90823cd8a4db10bb01211:packages/validation-plugin/src/validators/navigation.ts:69:column-25",
+      "dialect_family": "ecma",
+      "max_candidates": 1,
+      "product_engine": "Node.js v26.11.1 executing the pinned opt-in TypeScript validator with documented syntax-only adaptations",
+      "question_family": "RR-navigation-param-control-characters",
+      "rationale": "A singleton P6 lifecycle calibration for the source-backed C0/DEL navigation validator invariant. The registered population intentionally contains only the selected source site; it does not support stratum yield, ranking quality, or a 15/5 campaign claim.",
+      "registered_on": "2026-10-16",
+      "repository_url": "https://github.com/greydragon888/real-router",
+      "review": {
+        "author": "Codex-P2-source-review",
+        "reviewer": "Codex-independent-source-review-pass",
+        "same_model": true
+      },
+      "source_files": [
+        {
+          "evidence_ref": "https://github.com/greydragon888/real-router/blob/55aa7ef43a9c129beba90823cd8a4db10bb01211/packages/validation-plugin/src/validators/navigation.ts",
+          "path": "packages/validation-plugin/src/validators/navigation.ts",
+          "sha256": "619bbc25796534163c82de8f01dab1ab3fc38cd844a7a0742301dab0534173c6"
+        }
+      ],
+      "source_pin": "55aa7ef43a9c129beba90823cd8a4db10bb01211",
+      "source_sites": [
+        "greydragon888/real-router@55aa7ef43a9c129beba90823cd8a4db10bb01211:packages/validation-plugin/src/validators/navigation.ts:69:column-25"
+      ],
+      "trust_map": {
+        "config": "Application-supplied navigation parameter values; no remote attacker source is established."
+      }
+    },
+    {
+      "bucket": "pre-dispatch-github-text",
+      "cluster": "aidevops",
+      "contract_sha256": "b5aecf15e90b96cdd89cc034c4522e2ccb428dabdb0e994ce9491cab8f47a785",
+      "contract_site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pre-dispatch-validator-helper.sh:1881:column-47",
+      "dialect_family": "posix-shell",
+      "max_candidates": 15,
+      "product_engine": "Bash + GNU grep and sed (host runtime)",
+      "question_family": "aidevops-pre-dispatch-github-text",
+      "rationale": "New exact-pin POSIX-shell idiom: external GitHub issue or PR text is parsed into pre-dispatch validation and local decision inputs. The representative adopted contract is detector marker capture before a local .sh filename is embedded in bash -c. The source pool contains 30 exact P2 rows, 29 after excluding the representative, all compiler-encodable under v4 selector metadata; this is a distinct text-to-pre-dispatch-sink family from the completed shell-hook-guards wave.",
+      "registered_on": "2026-10-16",
+      "repository_url": "https://github.com/marcusquinn/aidevops",
+      "review": {
+        "author": "Codex-P7-source-review",
+        "reviewer": "Codex-independent-source-review-pass",
+        "same_model": true
+      },
+      "source_files": [
+        {
+          "evidence_ref": "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/pre-dispatch-validator-helper.sh",
+          "path": ".agents/scripts/pre-dispatch-validator-helper.sh",
+          "sha256": "b68445d5eaf510e820831422c6e064ac58bbdc4496483ad562df30786e3723b5"
+        }
+      ],
+      "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "source_sites": [
+        "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pre-dispatch-validator-helper.sh:1881:column-47",
+        "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pre-dispatch-validator-helper.sh:270:column-46",
+        "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pre-dispatch-validator-helper.sh:273:column-33",
+        "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pre-dispatch-validator-helper.sh:273:column-64",
+        "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pre-dispatch-validator-helper.sh:695:column-2",
+        "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pre-dispatch-validator-helper.sh:697:column-2",
+        "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pre-dispatch-validator-helper.sh:923:column-40",
+        "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pre-dispatch-validator-helper.sh:929:column-45",
+        "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pre-dispatch-validator-helper.sh:929:column-230",
+        "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pre-dispatch-validator-helper.sh:939:column-34",
+        "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pre-dispatch-validator-helper.sh:939:column-49",
+        "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pre-dispatch-validator-helper.sh:963:column-38",
+        "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pre-dispatch-validator-helper.sh:964:column-95",
+        "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pre-dispatch-validator-helper.sh:1011:column-32",
+        "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pre-dispatch-validator-helper.sh:1061:column-62",
+        "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pre-dispatch-validator-helper.sh:1062:column-4",
+        "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pre-dispatch-validator-helper.sh:1075:column-1",
+        "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pre-dispatch-validator-helper.sh:1077:column-4",
+        "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pre-dispatch-validator-helper.sh:1090:column-1",
+        "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pre-dispatch-validator-helper.sh:1574:column-31",
+        "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pre-dispatch-validator-helper.sh:1867:column-46",
+        "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pre-dispatch-validator-helper.sh:1870:column-45",
+        "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pre-dispatch-validator-helper.sh:1878:column-46",
+        "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pre-dispatch-validator-helper.sh:1878:column-77",
+        "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pre-dispatch-validator-helper.sh:1879:column-51",
+        "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pre-dispatch-validator-helper.sh:1879:column-81",
+        "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pre-dispatch-validator-helper.sh:1880:column-49",
+        "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pre-dispatch-validator-helper.sh:1880:column-83",
+        "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pre-dispatch-validator-helper.sh:1881:column-81",
+        "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pre-dispatch-validator-helper.sh:1882:column-54"
+      ],
+      "trust_map": {
+        "untrusted-input": "GitHub issue body and review-feedback text reaches the pre-dispatch parser; this bucket covers only source sites individually confirmed on that path."
+      }
+    }
+  ],
+  "schema_version": "1"
+}

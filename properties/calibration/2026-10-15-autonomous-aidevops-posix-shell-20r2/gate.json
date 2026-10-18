@@ -1,0 +1,32 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "scripts/ci-check-busybox-aidevops.py"
+  ],
+  "evidence": {
+    "differential_case_counts": {
+      "AI-aidevops-brief-tid-capture": 32,
+      "AI-aidevops-brief-tid-no-semicolon": 2,
+      "AI-aidevops-cred-ident-no-semicolon": 2,
+      "AI-aidevops-gh-issue-digit-capture": 32,
+      "AI-aidevops-scope-heading-no-semicolon": 2
+    },
+    "product_engine_replay_question_ids": [
+      "AI-aidevops-brief-tid-no-semicolon",
+      "AI-aidevops-cred-ident-no-semicolon",
+      "AI-aidevops-scope-heading-no-semicolon",
+      "AI-aidevops-brief-tid-capture",
+      "AI-aidevops-gh-issue-digit-capture"
+    ]
+  },
+  "gate_id": "aidevops-posix-shell-hook-guards-busybox",
+  "question_ids": [
+    "AI-aidevops-brief-tid-no-semicolon",
+    "AI-aidevops-cred-ident-no-semicolon",
+    "AI-aidevops-scope-heading-no-semicolon",
+    "AI-aidevops-brief-tid-capture",
+    "AI-aidevops-gh-issue-digit-capture"
+  ],
+  "schema_version": "1",
+  "timeout_seconds": 300
+}

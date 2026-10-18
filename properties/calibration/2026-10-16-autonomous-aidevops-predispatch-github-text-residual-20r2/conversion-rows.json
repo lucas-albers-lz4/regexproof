@@ -1,0 +1,59 @@
+[
+  {
+    "contract": {
+      "adoption": {
+        "approved_on": "2026-10-16",
+        "authority": "standing_user_delegation",
+        "contract_sha256": "890a7d2f893708842fb1f0b09200be4a4e310e780bd952049a8d2262332b1e0d",
+        "evidence": [
+          "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/pre-dispatch-validator-helper.sh",
+          "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/pulse-dispatch-large-file-gate.sh",
+          "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/tests/test-pre-dispatch-validator-large-file.sh",
+          "properties/calibration/2026-10-16-autonomous-aidevops-predispatch-github-text-residual-20r2/review-evidence.json",
+          "properties/calibration/2026-10-16-autonomous-aidevops-predispatch-github-text-residual-20r2/replay-threshold.json"
+        ],
+        "policy_version": "autonomous-contracts-v1",
+        "rationale": "The marker producer emits the configured large-file threshold as a decimal count and the helper uses the captured value to decide whether the measured file is below that threshold. The issue body is untrusted. At the exact pin, threshold=08 is accepted by the ERE, then Bash treats it as invalid octal in [[ -lt ]]; the comparison errors and the helper returns 0, allowing dispatch for a five-line file even though decimal eight is larger. The local replay also confirms threshold=8 follows the intended premise-falsified path. This adopts the narrow numeric-comparison contract and records local behavior only; it does not establish an external report or confirmed security impact.",
+        "review": {
+          "author": "Codex-P7-residual-source-review",
+          "reviewer": "Codex-independent-source-review-pass",
+          "same_model": true
+        },
+        "source_file": ".agents/scripts/pre-dispatch-validator-helper.sh",
+        "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+        "source_sha256": "b68445d5eaf510e820831422c6e064ac58bbdc4496483ad562df30786e3723b5",
+        "source_url": "https://github.com/marcusquinn/aidevops",
+        "status": "approved"
+      },
+      "declared_domain": "Exact Aidevops pin 8666b6c6c52472b5535aa295f2df593918152cb1; source call `grep -oE 'threshold=[0-9]+'` in the large-file marker parser; one marker and exactly one threshold attribute; ASCII value `08`; an in-clone regular fixture with five newline-terminated lines; Bash numeric comparison via `[[ line_count -lt CITED_THRESHOLD ]]`. The helper must use decimal semantics or fail closed. Ground truth uses local `gh` and `git` stubs and does not access GitHub or user data.",
+      "guarantee": "For a large-file-simplification-gate marker with one threshold attribute, the helper must either interpret the threshold as a valid decimal line count or reject it as invalid before deciding that the premise still holds. A malformed Bash arithmetic operand must not fall through the comparison and return 0. In particular, threshold=08 with a five-line file must not bypass the decimal threshold of eight by taking the validator-pass path.",
+      "input_source": "The issue body returned by `gh api repos/<slug>/issues/<number> --jq .body`. Public issue text is externally authored and treated as untrusted. The pinned large-file producer places its configured LARGE_FILE_LINE_THRESHOLD in this body as `threshold=${LARGE_FILE_LINE_THRESHOLD}`; the pre-dispatch helper extracts the value and compares it with `wc -l` through Bash `[[ -lt ]]`.",
+      "provenance": "agent_derived",
+      "schema_version": "1",
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pre-dispatch-validator-helper.sh:1879:column-51",
+      "trust": "untrusted-input"
+    },
+    "corpus": "aidevops",
+    "disclosure": null,
+    "domain": "The pinned threshold token grammar admits 08; exact-helper replay shows Bash treats it as invalid octal and lets a below-threshold file proceed",
+    "engine_versions": {
+      "python": "3.14.8",
+      "z3": "5.0.0"
+    },
+    "family": "AE-aidevops-predispatch-threshold-decimal",
+    "ground_truth": null,
+    "ground_truth_status": "reproduced",
+    "idiom_bucket": "pre-dispatch-github-text",
+    "kind": "counterexample_finder",
+    "name": "AE-aidevops-predispatch-threshold-leading-zero-fail-open",
+    "product_reportable": true,
+    "regex_id": "694e76d0e5b96321ee44ea2fc2e0ad86",
+    "result": "sat",
+    "schema_version": "1",
+    "shape": 3,
+    "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pre-dispatch-validator-helper.sh:1879:column-51",
+    "synthesized": false,
+    "wave_id": "aidevops_predispatch_threshold_residual_20r2",
+    "witness": null
+  }
+]

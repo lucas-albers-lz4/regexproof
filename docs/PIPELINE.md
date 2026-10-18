@@ -12,6 +12,11 @@ conversion have separate stop conditions.
 Current operating priorities and the weekly decision rule are summarized in
 [`THROUGHPUT-PLAN.md`](THROUGHPUT-PLAN.md).
 
+The current parent work plan is
+[`AUTONOMOUS-CORPUS-PLAN.md`](AUTONOMOUS-CORPUS-PLAN.md). Agents may adopt
+contracts under [`AUTONOMOUS-CONTRACTS.md`](AUTONOMOUS-CONTRACTS.md); its
+executable counting migration precedes unattended product measurement.
+
 The first calibration run uses the pinned-checkout procedure in
 [`CALIBRATION.md`](CALIBRATION.md). It is separate from the live score-v1
 allocator and never mutates the mine queue.
@@ -76,11 +81,32 @@ Staged drafts must not become contract material: `.gitignore` covers
 
 GT-confirmed conversion SATs without a curated row fail
 `scripts/check-disposition-coverage.py`. To list items that are GT-confirmed
-and not `wont_file`:
+with an actionable `private_first` or `approval_missing` status (terminal
+`filed`/`filed_plan`/`false_positive`/`wont_file` rows are excluded):
 
 ```bash
 python scripts/check-disposition-coverage.py --ready-to-file
 ```
+
+To record a human decision for an existing curated item, use
+`scripts/record-filing-decision.py --id CU-NNN --status filed|filed_plan|wont_file`
+with a reason and required dates. A new disposition can be created only from a
+unique generated GT-confirmed SAT, using `--site` + `--question-id`; supply a
+human-reviewed `--class`. For example:
+
+```bash
+python scripts/record-filing-decision.py \\
+  --site 'repo/path@PIN:file.sh:120:column-7' \\
+  --question-id 'stable-property-id' \\
+  --class third_party_security_tool \\
+  --status filed_plan --reason 'upstream report submitted for review' \\
+  --filed-at 2026-10-17
+```
+
+The command checks the generated artifacts for exactly one GT-confirmed SAT
+before appending a curated row. `private_first` is an internal disclosure
+posture, not proof that an external report was sent; human approval remains
+required for any external contact.
 
 ## Not this funnel: consumer adoption
 

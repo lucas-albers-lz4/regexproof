@@ -1,0 +1,17 @@
+{
+  "cohort_id": "2026-09-12-calibration-20-r2",
+  "cohort_manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+  "coverage_digest": "417ff01c3ffcc4a0003670c90d099a5574ad973f7f600d6326e2f5578cc2df28",
+  "identities": [
+    {
+      "contract_sha256": "b15b7d8309756877c16a3b4cec06b35419c9723b36df02aead475809612261aa",
+      "pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+      "provenance": "agent_derived",
+      "question_id": "TC-workspace-sync-path-segment-component-image",
+      "repo_id": "TracecatHQ/tracecat",
+      "site": "TracecatHQ/tracecat@c84d52528a489821f355fc63976fbc7783ae0ad5:tracecat/workspace_sync/adapters/base.py:936:re.sub",
+      "url": "https://github.com/TracecatHQ/tracecat"
+    }
+  ],
+  "schema_version": "2"
+}

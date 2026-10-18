@@ -1,0 +1,282 @@
+{
+  "attempts": [
+    {
+      "contract": {
+        "adoption": {
+          "approved_on": "2026-10-16",
+          "authority": "standing_user_delegation",
+          "contract_sha256": "84c56ece08e32906b07467c8556c61a3edf0b558af40b701edefa00a035a57be",
+          "evidence": [
+            "https://github.com/greydragon888/real-router/blob/55aa7ef43a9c129beba90823cd8a4db10bb01211/packages/validation-plugin/src/validators/navigation.ts",
+            "https://github.com/greydragon888/real-router/blob/55aa7ef43a9c129beba90823cd8a4db10bb01211/packages/validation-plugin/src/validationPlugin.ts",
+            "https://github.com/greydragon888/real-router/blob/55aa7ef43a9c129beba90823cd8a4db10bb01211/packages/validation-plugin/tests/functional/navigation.validation.test.ts",
+            "https://github.com/greydragon888/real-router/blob/55aa7ef43a9c129beba90823cd8a4db10bb01211/packages/validation-plugin/CHANGELOG.md",
+            "properties/calibration/2026-10-16-p2-real-router-navigation-source-review/review-evidence.json"
+          ],
+          "policy_version": "autonomous-contracts-v1",
+          "rationale": "Pinned implementation, opt-in plugin wiring, functional regression test, changelog, and frozen source windows independently support this narrow validator guarantee; trust remains application caller config and no remote security impact is claimed.",
+          "review": {
+            "author": "Codex-P2-source-review",
+            "reviewer": "Codex-independent-source-review-pass",
+            "same_model": true
+          },
+          "source_file": "packages/validation-plugin/src/validators/navigation.ts",
+          "source_pin": "55aa7ef43a9c129beba90823cd8a4db10bb01211",
+          "source_sha256": "619bbc25796534163c82de8f01dab1ab3fc38cd844a7a0742301dab0534173c6",
+          "source_url": "https://github.com/greydragon888/real-router",
+          "status": "approved"
+        },
+        "declared_domain": "Formal domain: one ASCII code unit drawn from U+0000..U+001F or U+007F, proving that every such code unit is matched by the pinned regex. Product replay domain: plain objects with one own enumerable key whose string value is drawn from all one- and two-code-unit ASCII strings plus seeded longer, Unicode, C1, and ordinary examples. The guarantee depends on search semantics and the pinned helper's explicit regex check; it does not cover validateStartArgs, route generation, non-string values, or remote reachability.",
+        "guarantee": "For every own enumerable string-valued navigation parameter, validateNavigateParams throws TypeError if the value contains any ASCII C0 control code unit (U+0000 through U+001F) or DEL (U+007F), as detected by the exact pinned CONTROL_CHARS_RE search before the params object is accepted.",
+        "input_source": "String values in the params object supplied by an application caller to the opt-in validation plugin's validateNavigateParams callback. This is caller-provided configuration/API input; this contract makes no claim that a remote attacker controls it.",
+        "provenance": "agent_derived",
+        "schema_version": "1",
+        "site": "greydragon888/real-router@55aa7ef43a9c129beba90823cd8a4db10bb01211:packages/validation-plugin/src/validators/navigation.ts:69:column-25",
+        "trust": "config"
+      },
+      "detail": null,
+      "domain": "Every one-code-unit ASCII C0 or DEL character is matched by the exact pinned search regex used for string navigation parameter values",
+      "gate": {
+        "consumer_adopted": false,
+        "differential_cases": 17014,
+        "gate_id": "rr-navigation-control-validator-exact-pin",
+        "local_gate_command": "/home/linuxbrew/.linuxbrew/Cellar/python@3.14/3.14.8_2/bin/python3.14 /home/lalbers/gitroot/regexproof/scripts/real-router-navigation-control-regression-gate.py --source-root /tmp/regexproof-pinned-sources/real-router-55aa7ef43a9c129beba90823cd8a4db10bb01211 --output /home/lalbers/gitroot/regexproof/properties/calibration/2026-10-16-p2-real-router-navigation-source-review/p6-wave/product-gate.json",
+        "local_gate_passed": true,
+        "mutation_guard_passed": true,
+        "product_engine_replayed": true,
+        "source_pin_verified": true
+      },
+      "kind": "property",
+      "pin": "55aa7ef43a9c129beba90823cd8a4db10bb01211",
+      "question_id": "RR-navigation-param-control-characters-rejected",
+      "repo_id": "greydragon888/real-router",
+      "site": "greydragon888/real-router@55aa7ef43a9c129beba90823cd8a4db10bb01211:packages/validation-plugin/src/validators/navigation.ts:69:column-25",
+      "status": "unsat",
+      "synthesized": false,
+      "url": "https://github.com/greydragon888/real-router"
+    }
+  ],
+  "cohort_manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+  "contracts": [
+    {
+      "contract": {
+        "adoption": {
+          "approved_on": "2026-10-16",
+          "authority": "standing_user_delegation",
+          "contract_sha256": "84c56ece08e32906b07467c8556c61a3edf0b558af40b701edefa00a035a57be",
+          "evidence": [
+            "https://github.com/greydragon888/real-router/blob/55aa7ef43a9c129beba90823cd8a4db10bb01211/packages/validation-plugin/src/validators/navigation.ts",
+            "https://github.com/greydragon888/real-router/blob/55aa7ef43a9c129beba90823cd8a4db10bb01211/packages/validation-plugin/src/validationPlugin.ts",
+            "https://github.com/greydragon888/real-router/blob/55aa7ef43a9c129beba90823cd8a4db10bb01211/packages/validation-plugin/tests/functional/navigation.validation.test.ts",
+            "https://github.com/greydragon888/real-router/blob/55aa7ef43a9c129beba90823cd8a4db10bb01211/packages/validation-plugin/CHANGELOG.md",
+            "properties/calibration/2026-10-16-p2-real-router-navigation-source-review/review-evidence.json"
+          ],
+          "policy_version": "autonomous-contracts-v1",
+          "rationale": "Pinned implementation, opt-in plugin wiring, functional regression test, changelog, and frozen source windows independently support this narrow validator guarantee; trust remains application caller config and no remote security impact is claimed.",
+          "review": {
+            "author": "Codex-P2-source-review",
+            "reviewer": "Codex-independent-source-review-pass",
+            "same_model": true
+          },
+          "source_file": "packages/validation-plugin/src/validators/navigation.ts",
+          "source_pin": "55aa7ef43a9c129beba90823cd8a4db10bb01211",
+          "source_sha256": "619bbc25796534163c82de8f01dab1ab3fc38cd844a7a0742301dab0534173c6",
+          "source_url": "https://github.com/greydragon888/real-router",
+          "status": "approved"
+        },
+        "declared_domain": "Formal domain: one ASCII code unit drawn from U+0000..U+001F or U+007F, proving that every such code unit is matched by the pinned regex. Product replay domain: plain objects with one own enumerable key whose string value is drawn from all one- and two-code-unit ASCII strings plus seeded longer, Unicode, C1, and ordinary examples. The guarantee depends on search semantics and the pinned helper's explicit regex check; it does not cover validateStartArgs, route generation, non-string values, or remote reachability.",
+        "guarantee": "For every own enumerable string-valued navigation parameter, validateNavigateParams throws TypeError if the value contains any ASCII C0 control code unit (U+0000 through U+001F) or DEL (U+007F), as detected by the exact pinned CONTROL_CHARS_RE search before the params object is accepted.",
+        "input_source": "String values in the params object supplied by an application caller to the opt-in validation plugin's validateNavigateParams callback. This is caller-provided configuration/API input; this contract makes no claim that a remote attacker controls it.",
+        "provenance": "agent_derived",
+        "schema_version": "1",
+        "site": "greydragon888/real-router@55aa7ef43a9c129beba90823cd8a4db10bb01211:packages/validation-plugin/src/validators/navigation.ts:69:column-25",
+        "trust": "config"
+      },
+      "domain": "Every one-code-unit ASCII C0 or DEL character is matched by the exact pinned search regex used for string navigation parameter values",
+      "kind": "property",
+      "pin": "55aa7ef43a9c129beba90823cd8a4db10bb01211",
+      "question_id": "RR-navigation-param-control-characters-rejected",
+      "repo_id": "greydragon888/real-router",
+      "site": "greydragon888/real-router@55aa7ef43a9c129beba90823cd8a4db10bb01211:packages/validation-plugin/src/validators/navigation.ts:69:column-25",
+      "synthesized": false,
+      "url": "https://github.com/greydragon888/real-router"
+    }
+  ],
+  "conversion_rows": [
+    {
+      "contract": {
+        "adoption": {
+          "approved_on": "2026-10-16",
+          "authority": "standing_user_delegation",
+          "contract_sha256": "84c56ece08e32906b07467c8556c61a3edf0b558af40b701edefa00a035a57be",
+          "evidence": [
+            "https://github.com/greydragon888/real-router/blob/55aa7ef43a9c129beba90823cd8a4db10bb01211/packages/validation-plugin/src/validators/navigation.ts",
+            "https://github.com/greydragon888/real-router/blob/55aa7ef43a9c129beba90823cd8a4db10bb01211/packages/validation-plugin/src/validationPlugin.ts",
+            "https://github.com/greydragon888/real-router/blob/55aa7ef43a9c129beba90823cd8a4db10bb01211/packages/validation-plugin/tests/functional/navigation.validation.test.ts",
+            "https://github.com/greydragon888/real-router/blob/55aa7ef43a9c129beba90823cd8a4db10bb01211/packages/validation-plugin/CHANGELOG.md",
+            "properties/calibration/2026-10-16-p2-real-router-navigation-source-review/review-evidence.json"
+          ],
+          "policy_version": "autonomous-contracts-v1",
+          "rationale": "Pinned implementation, opt-in plugin wiring, functional regression test, changelog, and frozen source windows independently support this narrow validator guarantee; trust remains application caller config and no remote security impact is claimed.",
+          "review": {
+            "author": "Codex-P2-source-review",
+            "reviewer": "Codex-independent-source-review-pass",
+            "same_model": true
+          },
+          "source_file": "packages/validation-plugin/src/validators/navigation.ts",
+          "source_pin": "55aa7ef43a9c129beba90823cd8a4db10bb01211",
+          "source_sha256": "619bbc25796534163c82de8f01dab1ab3fc38cd844a7a0742301dab0534173c6",
+          "source_url": "https://github.com/greydragon888/real-router",
+          "status": "approved"
+        },
+        "declared_domain": "Formal domain: one ASCII code unit drawn from U+0000..U+001F or U+007F, proving that every such code unit is matched by the pinned regex. Product replay domain: plain objects with one own enumerable key whose string value is drawn from all one- and two-code-unit ASCII strings plus seeded longer, Unicode, C1, and ordinary examples. The guarantee depends on search semantics and the pinned helper's explicit regex check; it does not cover validateStartArgs, route generation, non-string values, or remote reachability.",
+        "guarantee": "For every own enumerable string-valued navigation parameter, validateNavigateParams throws TypeError if the value contains any ASCII C0 control code unit (U+0000 through U+001F) or DEL (U+007F), as detected by the exact pinned CONTROL_CHARS_RE search before the params object is accepted.",
+        "input_source": "String values in the params object supplied by an application caller to the opt-in validation plugin's validateNavigateParams callback. This is caller-provided configuration/API input; this contract makes no claim that a remote attacker controls it.",
+        "provenance": "agent_derived",
+        "schema_version": "1",
+        "site": "greydragon888/real-router@55aa7ef43a9c129beba90823cd8a4db10bb01211:packages/validation-plugin/src/validators/navigation.ts:69:column-25",
+        "trust": "config"
+      },
+      "corpus": "real-router",
+      "disclosure": null,
+      "domain": "Every one-code-unit ASCII C0 or DEL character is matched by the exact pinned search regex used for string navigation parameter values",
+      "engine_versions": {
+        "python": "3.14.8",
+        "z3": "5.0.0"
+      },
+      "family": "RR-navigation-param-control-characters",
+      "ground_truth": null,
+      "ground_truth_status": null,
+      "idiom_bucket": "navigation-param-control-calibration",
+      "kind": "property",
+      "name": "RR-navigation-param-control-characters-rejected",
+      "product_reportable": true,
+      "regex_id": "e64096c8b59ba8d8b439919114a4f488",
+      "result": "unsat",
+      "schema_version": "1",
+      "shape": 1,
+      "site": "greydragon888/real-router@55aa7ef43a9c129beba90823cd8a4db10bb01211:packages/validation-plugin/src/validators/navigation.ts:69:column-25",
+      "synthesized": false,
+      "wave_id": "rr-nav-controls-p6-20261016",
+      "witness": null
+    }
+  ],
+  "corpus": "real-router",
+  "coverage_digest": "009ec87646db41ba33d09cd5447899931a93111b7edf5b341840b5a239b4703f",
+  "execution_caps": {
+    "local_gate_timeout_seconds": 300,
+    "max_active_conversion_waves": 1,
+    "max_adopted_contracts_per_wave": 5,
+    "max_new_questions_per_run": 5,
+    "parallel_walk": false,
+    "solver_retries": 0,
+    "solver_timeout_ms": 30000
+  },
+  "gate_config": {
+    "command": [
+      "/home/linuxbrew/.linuxbrew/Cellar/python@3.14/3.14.8_2/bin/python3.14",
+      "/home/lalbers/gitroot/regexproof/scripts/real-router-navigation-control-regression-gate.py",
+      "--source-root",
+      "/tmp/regexproof-pinned-sources/real-router-55aa7ef43a9c129beba90823cd8a4db10bb01211",
+      "--output",
+      "/home/lalbers/gitroot/regexproof/properties/calibration/2026-10-16-p2-real-router-navigation-source-review/p6-wave/product-gate.json"
+    ],
+    "evidence": {
+      "differential_case_counts": {
+        "RR-navigation-param-control-characters-rejected": 17014
+      },
+      "product_engine_replay_question_ids": [
+        "RR-navigation-param-control-characters-rejected"
+      ]
+    },
+    "gate_id": "rr-navigation-control-validator-exact-pin",
+    "question_ids": [
+      "RR-navigation-param-control-characters-rejected"
+    ],
+    "schema_version": "1",
+    "timeout_seconds": 300
+  },
+  "idiom_bucket": "navigation-param-control-calibration",
+  "runs": [
+    {
+      "active_question_id": null,
+      "finished_at": "2026-10-16T00:55:02+00:00",
+      "gate_failure": "mutation guard failed",
+      "gate_passed": false,
+      "gate_wall_ms": 0.0,
+      "mutation_failures": [
+        "RR-navigation-param-del-omission-mutation: mutation guard result='unsat'"
+      ],
+      "mutation_wall_ms": 1.8,
+      "new_questions": 1,
+      "question_ids": [
+        "RR-navigation-param-control-characters-rejected"
+      ],
+      "reason": "1 question(s) lack a passing covered local gate; mutation guard failed; mutation guard coverage or replay failed",
+      "run_id": "6eb98426-2ab7-4889-ab2a-5b934ea281d5",
+      "solver_wall_ms": 1.5,
+      "source_failures": {},
+      "source_wall_ms": 28.3,
+      "started_at": "2026-10-16T00:55:02+00:00",
+      "status": "needs_review"
+    },
+    {
+      "active_question_id": null,
+      "finished_at": "2026-10-16T00:55:24+00:00",
+      "gate_failure": "mutation guard failed",
+      "gate_passed": false,
+      "gate_wall_ms": 0.0,
+      "mutation_failures": [
+        "RR-navigation-param-del-omission-mutation: mutation guard result='sat'"
+      ],
+      "mutation_wall_ms": 1.9,
+      "new_questions": 0,
+      "question_ids": [],
+      "reason": "1 question(s) lack a passing covered local gate; mutation guard failed; mutation guard coverage or replay failed",
+      "run_id": "eeb278fc-005b-40e9-906d-85721a67d2e1",
+      "solver_wall_ms": 0.0,
+      "source_failures": {},
+      "source_wall_ms": 28.4,
+      "started_at": "2026-10-16T00:55:24+00:00",
+      "status": "needs_review"
+    },
+    {
+      "active_question_id": null,
+      "finished_at": "2026-10-16T00:55:45+00:00",
+      "gate_failure": "local gate exited 1: Traceback (most recent call last):\n  File \"/home/lalbers/gitroot/regexproof/scripts/real-router-navigation-control-regression-gate.py\", line 30, in <module>\n    from regexproof.harness.contract import valid_product_contract  # noqa: E402\n    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/lalbers/gitroot/regexproof/regexproof/harness/__init__.py\", line 9, in <module>\n    import regexproof.harness.properties\n  File \"/home/lalbers/gitroot/regexproof/regexproof/harness/properties.py\", line 28, in <module>\n    from regexproof.harness.core import (\n    ...<5 lines>...\n    )\n  File \"/home/lalbers/gitroot/regexproof/regexproof/harness/core.py\", line 26, in <module>\n    from regexproof.harness.contract import product_reportable\n  File \"/home/lalbers/gitroot/regexproof/regexproof/harness/contract.py\", line 12, in <module>\n    from jsonschema import Draft202012Validator\nModuleNotFoundError: No module named 'jsonschema'",
+      "gate_passed": false,
+      "gate_wall_ms": 86.1,
+      "mutation_failures": [],
+      "mutation_wall_ms": 224.2,
+      "new_questions": 0,
+      "question_ids": [],
+      "reason": "1 question(s) lack a passing covered local gate; local gate exited 1: Traceback (most recent call last):\n  File \"/home/lalbers/gitroot/regexproof/scripts/real-router-navigation-control-regression-gate.py\", line 30, in <module>\n    from regexproof.harness.contract import valid_product_contract  # noqa: E402\n    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/lalbers/gitroot/regexproof/regexproof/harness/__init__.py\", line 9, in <module>\n    import regexproof.harness.properties\n  File \"/home/lalbers/gitroot/regexproof/regexproof/harness/properties.py\", line 28, in <module>\n    from regexproof.harness.core import (\n    ...<5 lines>...\n    )\n  File \"/home/lalbers/gitroot/regexproof/regexproof/harness/core.py\", line 26, in <module>\n    from regexproof.harness.contract import product_reportable\n  File \"/home/lalbers/gitroot/regexproof/regexproof/harness/contract.py\", line 12, in <module>\n    from jsonschema import Draft202012Validator\nModuleNotFoundError: No module named 'jsonschema'",
+      "run_id": "c8910bbe-ed07-4bdd-a671-43642357b87a",
+      "solver_wall_ms": 0.0,
+      "source_failures": {},
+      "source_wall_ms": 30.9,
+      "started_at": "2026-10-16T00:55:45+00:00",
+      "status": "needs_review"
+    },
+    {
+      "active_question_id": null,
+      "finished_at": "2026-10-16T00:56:18+00:00",
+      "gate_failure": null,
+      "gate_passed": true,
+      "gate_wall_ms": 853.6,
+      "mutation_failures": [],
+      "mutation_wall_ms": 224.3,
+      "new_questions": 0,
+      "question_ids": [],
+      "reason": null,
+      "run_id": "6c3f6ee3-2054-4844-8732-32d27b851c42",
+      "solver_wall_ms": 0.0,
+      "source_failures": {},
+      "source_wall_ms": 28.6,
+      "started_at": "2026-10-16T00:56:18+00:00",
+      "status": "complete"
+    }
+  ],
+  "schema_version": "1",
+  "wave_id": "rr-nav-controls-p6-20261016"
+}

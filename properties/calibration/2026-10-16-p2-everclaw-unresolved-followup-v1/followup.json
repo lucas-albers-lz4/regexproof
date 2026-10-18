@@ -1,0 +1,68 @@
+{
+  "artifact_kind": "p2-everclaw-unresolved-gitlink-followup",
+  "limitations": [
+    "The pinned root commit has no .gitmodules file, so it contains no original URL mapping for these paths.",
+    "The checked public search endpoints can miss deleted, private, or unindexed repositories and commits.",
+    "This follow-up adds no verified child checkout, regex rows, review, contract, product question, or yield."
+  ],
+  "observed_at": "2026-10-16",
+  "root_gitlinks": [
+    {
+      "candidate_repository": "profbernardoj/everclaw-fork",
+      "candidate_repository_url": "https://github.com/profbernardoj/everclaw-fork",
+      "commit_oid": "603157608c740e365f705488a33bec7080843525",
+      "evidence": [
+        {
+          "method": "GitHub public repository commit endpoint",
+          "result": "HTTP 422; no commit returned for this SHA",
+          "url": "https://api.github.com/repos/profbernardoj/everclaw-fork/commits/603157608c740e365f705488a33bec7080843525"
+        },
+        {
+          "command": "git fetch --depth=1 https://github.com/profbernardoj/everclaw-fork.git 603157608c740e365f705488a33bec7080843525",
+          "method": "Git smart HTTP fetch by exact object ID",
+          "result": "upload-pack: not our ref"
+        },
+        {
+          "method": "GitHub public commit search",
+          "query": "603157608c740e365f705488a33bec7080843525",
+          "result": "0 results"
+        }
+      ],
+      "interpretation": "The candidate repository name is plausible from the root path and exists publicly, but the exact gitlink object is not available there. This does not prove that it was the original URL or a valid source for this pin.",
+      "path": "archive/misc/everclaw-fork",
+      "status": "unresolved"
+    },
+    {
+      "candidate_repository": null,
+      "commit_oid": "f161a75ab9ce3460e85ccbbf3042b0330972979a",
+      "evidence": [
+        {
+          "method": "GitHub public commit search",
+          "query": "f161a75ab9ce3460e85ccbbf3042b0330972979a",
+          "result": "0 results"
+        },
+        {
+          "candidates": [
+            "https://github.com/profbernardoj/everclaw.git",
+            "https://github.com/profbernardoj/morpheus-skill.git",
+            "https://github.com/profbernardoj/morpheus-agent.git",
+            "https://github.com/EverClaw/EverClaw.git"
+          ],
+          "method": "Candidate exact-object fetches",
+          "result": "Exact commit was not available from the checked public repositories"
+        },
+        {
+          "method": "Owner public repository inventory",
+          "owner": "profbernardoj",
+          "result": "No public everclaw-template repository was listed"
+        }
+      ],
+      "interpretation": "No exact source repository or original URL is established; do not infer one from the directory name.",
+      "path": "archive/misc/everclaw-template",
+      "status": "unresolved"
+    }
+  ],
+  "root_pin": "7ea3b445ee7d2ef8004d5ee77dab7544e1b8ef88",
+  "root_repository": "profbernardoj/everclaw-community-branches",
+  "schema_version": "1"
+}

@@ -18,9 +18,12 @@ Semantics (verified on GNU grep 3.11 + busybox 1.37, 2026-08-12):
   ``awk -F'ERE'`` field separators (spaced and glued) are extracted (ERE).
   NOTE (cumulative review finding #11): the ``len<2`` filter drops 1-char
   separators like ``-F ':'`` — a documented P1-frozen filter, not a bug.
-- ``[[ $x =~ PAT ]]`` extracts the UNQUOTED single-token RHS only (bash 3.2+:
-  a quoted RHS is a literal string match, not a regex).  The LHS may be
-  quoted (``[[ "$v" =~ ^[0-9]+$ ]]``).
+- ``[[ ... =~ PAT ... ]]`` extracts each unquoted single-token regex RHS,
+  including compound ``&&``/``||`` conditions and backslash-newline
+  continuations (bash 3.2+: a quoted RHS is a literal string match, not a
+  regex). The LHS may be quoted (``[[ "$v" =~ ^[0-9]+$ ]]``). Single-regex
+  conditions retain their frozen ``[[`` column; when one condition has
+  multiple regex operators, each record uses its operator column.
 - Matches inside comments (``#`` at line start / after whitespace or a shell
   separator) and quoted strings are NOT sites (context guard).
 - No VERBOSE handling: literal spaces are load-bearing.
@@ -53,10 +56,8 @@ _SHELL_CMD = re.compile(
     r"(?P<q>['\"])(?P<pat>.*?)(?P=q)"
     r"(?P<tail>(?:[ \t]+-[A-Za-z][A-Za-z0-9]*)*)"  # TRAILING flags (luna -r7 #1)
 )
-_SHELL_BASH = re.compile(
-    r"\[\[[ \t]+(?:\"[^\"]*\"|'[^']*'|[^ \t'\"]+)[ \t]+=~[ \t]+"
-    r"(?P<pat>[^ \t'\"]+)[ \t]*\]\]"
-)
+_SHELL_BASH_OPEN = re.compile(r"\[\[")
+_SHELL_BASH_REGEX_OP = re.compile(r"=~")
 _SHELL_AWK_F = re.compile(r"(?<![A-Za-z0-9_\-])awk[ \t]+-F(?P<q>['\"])(?P<pat>.*?)(?P=q)")
 
 def _sed_search(pat: str) -> str | None:
@@ -352,6 +353,68 @@ def _flag_letters(flags_src: str) -> str:
     return "".join(_FLAG_TOKEN.findall(flags_src or ""))
 
 
+def _bash_test_end(src: str, start: int) -> int | None:
+    """Return the closing offset of a ``[[ ... ]]`` test.
+
+    Bash allows a conditional expression to continue across a backslash-newline.
+    This small scanner finds the matching close on those logical lines while
+    ignoring closing brackets in comments and quoted strings. It intentionally
+    does not parse command substitutions or nested shell grammar.
+    """
+    cursor = start + 2
+    while cursor < len(src):
+        newline = src.find("\n", cursor)
+        close = src.find("]]", cursor)
+        while close >= 0 and (newline < 0 or close < newline):
+            # `]]` also occurs inside common ERE constructs, most notably
+            # `[[:space:]]`. Bash recognizes the conditional closer as its own
+            # token, so require shell-token boundaries rather than taking the
+            # first pair of adjacent brackets in the regex text.
+            before = src[close - 1] if close > 0 else ""
+            after_pos = close + 2
+            after = src[after_pos] if after_pos < len(src) else ""
+            before_boundary = not before or before in " \t\r\n;|&(){}"
+            after_boundary = not after or after in " \t\r\n;|&(){}"
+            if (before_boundary and after_boundary
+                    and not _in_comment_or_string(src, close)):
+                return close + 2
+            close = src.find("]]", close + 2)
+        if newline < 0 or newline == 0 or src[newline - 1] != "\\":
+            return None
+        cursor = newline + 1
+    return None
+
+
+def _bash_regex_rhs(src: str, start: int, end: int) -> tuple[str, int] | None:
+    """Extract one unquoted, whitespace-free Bash regex operand.
+
+    Bash 3.2+ treats a quoted RHS as a literal string, so quoted operands are
+    not regex sites. Escaped-space operands remain a documented limitation.
+    """
+    cursor = start
+    while cursor < end:
+        if src[cursor] in " \t":
+            cursor += 1
+            continue
+        if src.startswith("\\\n", cursor):
+            cursor += 2
+            while cursor < end and src[cursor] in " \t":
+                cursor += 1
+            continue
+        break
+    if cursor >= end or src[cursor] in "'\"\r\n":
+        return None
+    pattern_start = cursor
+    while cursor < end and src[cursor] not in " \t\r\n'\"":
+        cursor += 1
+    # A partially quoted token is still subject to shell quote removal and
+    # has Bash's quoted-RHS semantics; it is not the raw ERE spelling.
+    if cursor < end and src[cursor] in "'\"":
+        return None
+    pattern = src[pattern_start:cursor]
+    return (pattern, pattern_start) if pattern else None
+
+
 def _grep_mode(cmd: str, letters: str) -> str:
     """grep syntax selector: fixed (literal) > extended > basic (BRE)."""
     if cmd == "fgrep" or "F" in letters:
@@ -450,10 +513,45 @@ def extract_shell_posix(
         add(m.start(), m.group("pat"), "", {"syntax": "ere", "grep_mode": None},
             "search", src[m.start():m.end()])
 
-    for m in _SHELL_BASH.finditer(scan_src):
-        add(m.start(), m.group("pat"), "", {"syntax": "bash_ksh",
-                                            "grep_mode": None},
-            "search", src[m.start():m.end()])
+    bash_test_consumed_until = 0
+    for condition in _SHELL_BASH_OPEN.finditer(scan_src):
+        condition_start = condition.start()
+        if condition_start < bash_test_consumed_until:
+            continue
+        # `[[` is a shell keyword only at a token boundary. This rejects
+        # lookalike text inside an unquoted regex operand while retaining
+        # command tests after normal shell separators.
+        before = scan_src[condition_start - 1] if condition_start > 0 else ""
+        after_pos = condition_start + 2
+        after = scan_src[after_pos] if after_pos < len(scan_src) else ""
+        if (before and before not in " \t\r\n;|&(){}<>") or (
+                after and after not in " \t\r\n"):
+            continue
+        if _in_comment_or_string(src, condition_start):
+            continue
+        condition_end = _bash_test_end(scan_src, condition_start)
+        if condition_end is None:
+            continue
+        bash_test_consumed_until = condition_end
+        body_end = condition_end - 2
+        operators = [
+            op for op in _SHELL_BASH_REGEX_OP.finditer(
+                scan_src, condition_start + 2, body_end
+            )
+            if not _in_comment_or_string(src, op.start())
+        ]
+        for op in operators:
+            rhs = _bash_regex_rhs(scan_src, op.end(), body_end)
+            if rhs is None:
+                continue
+            pattern, _pattern_start = rhs
+            # Preserve the frozen [[-start column for the common single-regex
+            # form. Multiple regex comparisons in one [[ ]] need distinct
+            # columns, so anchor those records at each =~ operator.
+            site_pos = condition_start if len(operators) == 1 else op.start()
+            add(site_pos, pattern, "", {"syntax": "bash_ksh",
+                                         "grep_mode": None},
+                "search", src[condition_start:condition_end])
 
     hits.sort(key=lambda h: h[0])
     return [r for _, r in hits]

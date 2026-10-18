@@ -1,0 +1,230 @@
+{
+  "attempts": [
+    {
+      "contract": {
+        "adoption": {
+          "approved_on": "2026-10-15",
+          "authority": "standing_user_delegation",
+          "contract_sha256": "7aadd1106a944e0bb91143ea7b6b8b93f5c741b41b2944175ae0543fd90a8318",
+          "evidence": [
+            "https://github.com/panther-labs/panther-analysis/blob/0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a/.scripts/claude_review.py",
+            "https://github.com/panther-labs/panther-analysis/blob/0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a/.scripts/claude_review.py#L20-L55",
+            "https://github.com/panther-labs/panther-analysis/blob/0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a/.scripts/claude_review.py#L79-L110",
+            "https://github.com/panther-labs/panther-analysis/blob/0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a/.scripts/claude_review.py#L224-L229",
+            "https://github.com/panther-labs/panther-analysis/blob/0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a/.scripts/pre-commit-wrapper.sh#L1-L12",
+            "https://github.com/panther-labs/panther-analysis/blob/0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a/Makefile#L93-L98",
+            "https://github.com/panther-labs/panther-analysis/blob/0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a/.claude/commands/pr-review.md#L1-L10"
+          ],
+          "policy_version": "autonomous-contracts-v1",
+          "rationale": "The pinned slash-command review policy says to exclude any changed file matching secrets, and the pre-commit wrapper runs claude_review.py before lint. The exact helper filters paths before reading staged contents and constructing the Claude prompt, but its secrets\\.json branch does not reject secrets.py. This adopts only the path-selection guarantee; it does not establish that any real file contained a secret or that a Claude service received data.",
+          "review": {
+            "author": "Codex source-review pass",
+            "reviewer": "Codex second source-review pass",
+            "same_model": true
+          },
+          "source_file": ".scripts/claude_review.py",
+          "source_pin": "0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a",
+          "source_sha256": "bb84d899da9cd10d82712610419f7802d84900541fd1e1c48a94223a12bc4024",
+          "source_url": "https://github.com/panther-labs/panther-analysis",
+          "status": "approved"
+        },
+        "declared_domain": "ASCII repository-relative paths using slash separators, with one of the reviewable suffixes .py, .yml, .yaml, or .sql, containing the literal lower-case substring secrets. The formal counterexample is the concrete path secrets.py; the product gate stages synthetic paths and inspects whether get_changed_files returns them and read_file_contents includes their sentinel bytes. No Claude process or external service is invoked.",
+        "guarantee": "Before staged contents are read into the pre-commit Claude review prompt, get_changed_files excludes every staged reviewable path containing the literal lower-case substring secrets.",
+        "input_source": "Repository-relative paths and file contents staged in the local Git index before the pre-commit review hook.",
+        "provenance": "agent_derived",
+        "schema_version": "1",
+        "site": "panther-labs/panther-analysis@0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a:.scripts/claude_review.py:21:EXCLUDE_PATTERNS",
+        "trust": "untrusted-input"
+      },
+      "detail": null,
+      "domain": "Counterexample domain: the concrete staged path secrets.py, a reviewable ASCII Git path containing the literal lower-case substring secrets.",
+      "gate": {
+        "consumer_adopted": false,
+        "differential_cases": 9,
+        "gate_id": "panther-precommit-secret-path-review-filter",
+        "local_gate_command": ".venv/bin/python scripts/panther-secret-path-regression-gate.py --source-root /tmp/regexproof-pinned-sources/panther-analysis-0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a --output /home/lalbers/gitroot/regexproof/properties/calibration/2026-10-15-p2-panther-source-review/p6-wave-r1/product-replay-p6.json",
+        "local_gate_passed": true,
+        "mutation_guard_passed": true,
+        "product_engine_replayed": true,
+        "source_pin_verified": true
+      },
+      "kind": "counterexample_finder",
+      "pin": "0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a",
+      "question_id": "PA-panther-staged-secrets-file-excluded-from-review-prompt",
+      "repo_id": "panther-labs/panther-analysis",
+      "site": "panther-labs/panther-analysis@0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a:.scripts/claude_review.py:21:EXCLUDE_PATTERNS",
+      "status": "sat",
+      "synthesized": false,
+      "url": "https://github.com/panther-labs/panther-analysis"
+    }
+  ],
+  "cohort_manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+  "contracts": [
+    {
+      "contract": {
+        "adoption": {
+          "approved_on": "2026-10-15",
+          "authority": "standing_user_delegation",
+          "contract_sha256": "7aadd1106a944e0bb91143ea7b6b8b93f5c741b41b2944175ae0543fd90a8318",
+          "evidence": [
+            "https://github.com/panther-labs/panther-analysis/blob/0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a/.scripts/claude_review.py",
+            "https://github.com/panther-labs/panther-analysis/blob/0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a/.scripts/claude_review.py#L20-L55",
+            "https://github.com/panther-labs/panther-analysis/blob/0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a/.scripts/claude_review.py#L79-L110",
+            "https://github.com/panther-labs/panther-analysis/blob/0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a/.scripts/claude_review.py#L224-L229",
+            "https://github.com/panther-labs/panther-analysis/blob/0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a/.scripts/pre-commit-wrapper.sh#L1-L12",
+            "https://github.com/panther-labs/panther-analysis/blob/0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a/Makefile#L93-L98",
+            "https://github.com/panther-labs/panther-analysis/blob/0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a/.claude/commands/pr-review.md#L1-L10"
+          ],
+          "policy_version": "autonomous-contracts-v1",
+          "rationale": "The pinned slash-command review policy says to exclude any changed file matching secrets, and the pre-commit wrapper runs claude_review.py before lint. The exact helper filters paths before reading staged contents and constructing the Claude prompt, but its secrets\\.json branch does not reject secrets.py. This adopts only the path-selection guarantee; it does not establish that any real file contained a secret or that a Claude service received data.",
+          "review": {
+            "author": "Codex source-review pass",
+            "reviewer": "Codex second source-review pass",
+            "same_model": true
+          },
+          "source_file": ".scripts/claude_review.py",
+          "source_pin": "0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a",
+          "source_sha256": "bb84d899da9cd10d82712610419f7802d84900541fd1e1c48a94223a12bc4024",
+          "source_url": "https://github.com/panther-labs/panther-analysis",
+          "status": "approved"
+        },
+        "declared_domain": "ASCII repository-relative paths using slash separators, with one of the reviewable suffixes .py, .yml, .yaml, or .sql, containing the literal lower-case substring secrets. The formal counterexample is the concrete path secrets.py; the product gate stages synthetic paths and inspects whether get_changed_files returns them and read_file_contents includes their sentinel bytes. No Claude process or external service is invoked.",
+        "guarantee": "Before staged contents are read into the pre-commit Claude review prompt, get_changed_files excludes every staged reviewable path containing the literal lower-case substring secrets.",
+        "input_source": "Repository-relative paths and file contents staged in the local Git index before the pre-commit review hook.",
+        "provenance": "agent_derived",
+        "schema_version": "1",
+        "site": "panther-labs/panther-analysis@0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a:.scripts/claude_review.py:21:EXCLUDE_PATTERNS",
+        "trust": "untrusted-input"
+      },
+      "domain": "Counterexample domain: the concrete staged path secrets.py, a reviewable ASCII Git path containing the literal lower-case substring secrets.",
+      "kind": "counterexample_finder",
+      "pin": "0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a",
+      "question_id": "PA-panther-staged-secrets-file-excluded-from-review-prompt",
+      "repo_id": "panther-labs/panther-analysis",
+      "site": "panther-labs/panther-analysis@0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a:.scripts/claude_review.py:21:EXCLUDE_PATTERNS",
+      "synthesized": false,
+      "url": "https://github.com/panther-labs/panther-analysis"
+    }
+  ],
+  "conversion_rows": [
+    {
+      "contract": {
+        "adoption": {
+          "approved_on": "2026-10-15",
+          "authority": "standing_user_delegation",
+          "contract_sha256": "7aadd1106a944e0bb91143ea7b6b8b93f5c741b41b2944175ae0543fd90a8318",
+          "evidence": [
+            "https://github.com/panther-labs/panther-analysis/blob/0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a/.scripts/claude_review.py",
+            "https://github.com/panther-labs/panther-analysis/blob/0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a/.scripts/claude_review.py#L20-L55",
+            "https://github.com/panther-labs/panther-analysis/blob/0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a/.scripts/claude_review.py#L79-L110",
+            "https://github.com/panther-labs/panther-analysis/blob/0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a/.scripts/claude_review.py#L224-L229",
+            "https://github.com/panther-labs/panther-analysis/blob/0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a/.scripts/pre-commit-wrapper.sh#L1-L12",
+            "https://github.com/panther-labs/panther-analysis/blob/0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a/Makefile#L93-L98",
+            "https://github.com/panther-labs/panther-analysis/blob/0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a/.claude/commands/pr-review.md#L1-L10"
+          ],
+          "policy_version": "autonomous-contracts-v1",
+          "rationale": "The pinned slash-command review policy says to exclude any changed file matching secrets, and the pre-commit wrapper runs claude_review.py before lint. The exact helper filters paths before reading staged contents and constructing the Claude prompt, but its secrets\\.json branch does not reject secrets.py. This adopts only the path-selection guarantee; it does not establish that any real file contained a secret or that a Claude service received data.",
+          "review": {
+            "author": "Codex source-review pass",
+            "reviewer": "Codex second source-review pass",
+            "same_model": true
+          },
+          "source_file": ".scripts/claude_review.py",
+          "source_pin": "0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a",
+          "source_sha256": "bb84d899da9cd10d82712610419f7802d84900541fd1e1c48a94223a12bc4024",
+          "source_url": "https://github.com/panther-labs/panther-analysis",
+          "status": "approved"
+        },
+        "declared_domain": "ASCII repository-relative paths using slash separators, with one of the reviewable suffixes .py, .yml, .yaml, or .sql, containing the literal lower-case substring secrets. The formal counterexample is the concrete path secrets.py; the product gate stages synthetic paths and inspects whether get_changed_files returns them and read_file_contents includes their sentinel bytes. No Claude process or external service is invoked.",
+        "guarantee": "Before staged contents are read into the pre-commit Claude review prompt, get_changed_files excludes every staged reviewable path containing the literal lower-case substring secrets.",
+        "input_source": "Repository-relative paths and file contents staged in the local Git index before the pre-commit review hook.",
+        "provenance": "agent_derived",
+        "schema_version": "1",
+        "site": "panther-labs/panther-analysis@0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a:.scripts/claude_review.py:21:EXCLUDE_PATTERNS",
+        "trust": "untrusted-input"
+      },
+      "corpus": "p2_panther_source_review",
+      "disclosure": null,
+      "domain": "Counterexample domain: the concrete staged path secrets.py, a reviewable ASCII Git path containing the literal lower-case substring secrets.",
+      "engine_versions": {
+        "python": "3.14.8",
+        "z3": "5.0.0"
+      },
+      "family": "PA-panther-claude-review-secret-exclusion",
+      "ground_truth": null,
+      "ground_truth_status": "reproduced",
+      "idiom_bucket": "python-secret-path-review-filter",
+      "kind": "counterexample_finder",
+      "name": "PA-panther-staged-secrets-file-excluded-from-review-prompt",
+      "product_reportable": true,
+      "regex_id": "26be1e7eb70c8672eb5c060210409cdd",
+      "result": "sat",
+      "schema_version": "1",
+      "shape": 3,
+      "site": "panther-labs/panther-analysis@0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a:.scripts/claude_review.py:21:EXCLUDE_PATTERNS",
+      "synthesized": false,
+      "wave_id": "p2-panther-r1",
+      "witness": null
+    }
+  ],
+  "corpus": "p2_panther_source_review",
+  "coverage_digest": "6be794758dcb56560d8cfd6b0488669960a40c23f530a502d2d6934aecca101c",
+  "execution_caps": {
+    "local_gate_timeout_seconds": 300,
+    "max_active_conversion_waves": 1,
+    "max_adopted_contracts_per_wave": 5,
+    "max_new_questions_per_run": 5,
+    "parallel_walk": false,
+    "solver_retries": 0,
+    "solver_timeout_ms": 30000
+  },
+  "gate_config": {
+    "command": [
+      ".venv/bin/python",
+      "scripts/panther-secret-path-regression-gate.py",
+      "--source-root",
+      "/tmp/regexproof-pinned-sources/panther-analysis-0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a",
+      "--output",
+      "/home/lalbers/gitroot/regexproof/properties/calibration/2026-10-15-p2-panther-source-review/p6-wave-r1/product-replay-p6.json"
+    ],
+    "evidence": {
+      "differential_case_counts": {
+        "PA-panther-staged-secrets-file-excluded-from-review-prompt": 9
+      },
+      "product_engine_replay_question_ids": [
+        "PA-panther-staged-secrets-file-excluded-from-review-prompt"
+      ]
+    },
+    "gate_id": "panther-precommit-secret-path-review-filter",
+    "question_ids": [
+      "PA-panther-staged-secrets-file-excluded-from-review-prompt"
+    ],
+    "schema_version": "1",
+    "timeout_seconds": 300
+  },
+  "idiom_bucket": "python-secret-path-review-filter",
+  "runs": [
+    {
+      "active_question_id": null,
+      "finished_at": "2026-10-15T22:27:55+00:00",
+      "gate_failure": null,
+      "gate_passed": true,
+      "gate_wall_ms": 178.2,
+      "mutation_failures": [],
+      "mutation_wall_ms": 33.2,
+      "new_questions": 1,
+      "question_ids": [
+        "PA-panther-staged-secrets-file-excluded-from-review-prompt"
+      ],
+      "reason": "1 SAT candidate(s) require disposition",
+      "run_id": "244e3dfc-4bf8-498a-beca-6b8536e26539",
+      "solver_wall_ms": 0.2,
+      "source_failures": {},
+      "source_wall_ms": 13.7,
+      "started_at": "2026-10-15T22:27:55+00:00",
+      "status": "needs_review"
+    }
+  ],
+  "schema_version": "1",
+  "wave_id": "p2-panther-r1"
+}

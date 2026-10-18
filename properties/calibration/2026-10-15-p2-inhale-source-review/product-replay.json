@@ -1,0 +1,129 @@
+{
+  "case_count": 6,
+  "engines": {
+    "git": "git version 2.43.0",
+    "python": "3.14.8"
+  },
+  "failures": [],
+  "gate_id": "inhale-url-output-path-confinement",
+  "mutation": {
+    "baseline_under_output_root": true,
+    "ground_truth_reproduced": true,
+    "mutated_under_output_root": false,
+    "mutated_under_temporary_root": true,
+    "network_used": false,
+    "pattern": "https?://[^/]+/",
+    "synthetic_content_written": true,
+    "url": "https://downloads.example/../escape.bin"
+  },
+  "mutation_guard_id": "IH-inhale-weakened-url-strip-traversal-mutation",
+  "network_used": false,
+  "question_case_counts": {
+    "IH-inhale-directory-url-output-root-confinement": 3,
+    "IH-inhale-file-url-output-root-confinement": 3
+  },
+  "question_ids": [
+    "IH-inhale-file-url-output-root-confinement",
+    "IH-inhale-directory-url-output-root-confinement"
+  ],
+  "questions": {
+    "IH-inhale-directory-url-output-root-confinement": {
+      "candidate_reproduced": true,
+      "case_count": 3,
+      "cases": [
+        {
+          "expected_under_output_root": true,
+          "helper_resolved_path": "/tmp/regexproof-inhale-directory-root-py6g5xuo/output/downloads.example/sample.bin",
+          "helper_under_output_root": true,
+          "model_matches_pinned_helper": true,
+          "model_resolved_path": "/tmp/regexproof-inhale-directory-root-py6g5xuo/output/downloads.example/sample.bin",
+          "model_under_output_root": true,
+          "network_used": false,
+          "synthetic_content_written": true,
+          "under_temporary_root": true,
+          "url": "https://downloads.example/sample.bin"
+        },
+        {
+          "expected_under_output_root": true,
+          "helper_resolved_path": "/tmp/regexproof-inhale-directory-root-ka0ptag2/output/directory.bin",
+          "helper_under_output_root": true,
+          "model_matches_pinned_helper": true,
+          "model_resolved_path": "/tmp/regexproof-inhale-directory-root-ka0ptag2/output/directory.bin",
+          "model_under_output_root": true,
+          "network_used": false,
+          "synthetic_content_written": true,
+          "under_temporary_root": true,
+          "url": "https://downloads.example/../directory.bin"
+        },
+        {
+          "expected_under_output_root": false,
+          "helper_resolved_path": "/tmp/regexproof-inhale-directory-root-13zx7ogq/directory.bin",
+          "helper_under_output_root": false,
+          "model_matches_pinned_helper": true,
+          "model_resolved_path": "/tmp/regexproof-inhale-directory-root-13zx7ogq/directory.bin",
+          "model_under_output_root": false,
+          "network_used": false,
+          "synthetic_content_written": true,
+          "under_temporary_root": true,
+          "url": "https://downloads.example/../../directory.bin"
+        }
+      ],
+      "mode": "directory"
+    },
+    "IH-inhale-file-url-output-root-confinement": {
+      "candidate_reproduced": true,
+      "case_count": 3,
+      "cases": [
+        {
+          "expected_under_output_root": true,
+          "helper_resolved_path": "/tmp/regexproof-inhale-file-url-0wzrpn68/output/downloads.example/sample.bin",
+          "helper_under_output_root": true,
+          "model_matches_pinned_helper": true,
+          "model_resolved_path": "/tmp/regexproof-inhale-file-url-0wzrpn68/output/downloads.example/sample.bin",
+          "model_under_output_root": true,
+          "network_used": false,
+          "synthetic_content_written": true,
+          "under_temporary_root": true,
+          "url": "https://downloads.example/sample.bin"
+        },
+        {
+          "expected_under_output_root": true,
+          "helper_resolved_path": "/tmp/regexproof-inhale-file-url-kl0l5toq/output/escape.bin",
+          "helper_under_output_root": true,
+          "model_matches_pinned_helper": true,
+          "model_resolved_path": "/tmp/regexproof-inhale-file-url-kl0l5toq/output/escape.bin",
+          "model_under_output_root": true,
+          "network_used": false,
+          "synthetic_content_written": true,
+          "under_temporary_root": true,
+          "url": "https://downloads.example/../escape.bin"
+        },
+        {
+          "expected_under_output_root": false,
+          "helper_resolved_path": "/tmp/regexproof-inhale-file-url-83mifyst/escape.bin",
+          "helper_under_output_root": false,
+          "model_matches_pinned_helper": true,
+          "model_resolved_path": "/tmp/regexproof-inhale-file-url-83mifyst/escape.bin",
+          "model_under_output_root": false,
+          "network_used": false,
+          "synthetic_content_written": true,
+          "under_temporary_root": true,
+          "url": "https://downloads.example/../../escape.bin"
+        }
+      ],
+      "mode": "file"
+    }
+  },
+  "repository": "https://github.com/netspooky/inhale",
+  "result": "pass",
+  "schema_version": "1",
+  "source_checkout": "/tmp/regexproof-pinned-sources/inhale-889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8",
+  "source_file": "iModules/rDownload.py",
+  "source_pattern": "https?://",
+  "source_pin": "889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8",
+  "source_verification": {
+    "head": "889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8",
+    "source_file": "iModules/rDownload.py",
+    "source_sha256": "3350a9a3d1be11e44dfff3756f90b03f349cc0a59246959047fe4ed0633c6414"
+  }
+}

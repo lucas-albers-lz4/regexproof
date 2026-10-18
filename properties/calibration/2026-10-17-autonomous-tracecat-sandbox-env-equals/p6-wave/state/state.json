@@ -1,0 +1,225 @@
+{
+  "attempts": [
+    {
+      "contract": {
+        "adoption": {
+          "approved_on": "2026-10-17",
+          "authority": "standing_user_delegation",
+          "contract_sha256": "13c0f6ebd6e7ed7ae00da4360253d1657109443d8371e67e64bf7ef754915ca7",
+          "evidence": [
+            "https://github.com/TracecatHQ/tracecat/blob/c84d52528a489821f355fc63976fbc7783ae0ad5/tracecat/sandbox/executor.py",
+            "https://github.com/TracecatHQ/tracecat/blob/c84d52528a489821f355fc63976fbc7783ae0ad5/tracecat/executor/backends/base.py",
+            "https://github.com/TracecatHQ/tracecat/blob/c84d52528a489821f355fc63976fbc7783ae0ad5/tracecat/sandbox/service.py",
+            "https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap08.html",
+            "The exact nsjail env builders validate each key before adding it to the subprocess environment and --env argv; the standalone validator also admits one final LF because it uses Python match with $, so the contract covers only the no-equals separator property."
+          ],
+          "policy_version": "autonomous-contracts-v1",
+          "rationale": "This narrow source-backed property checks that the regex keeps the POSIX name/value delimiter out of environment-variable names before the nsjail subprocess handoff. It provides a regression gate for the sandbox configuration boundary without claiming that all accepted names are fully POSIX compliant, that the unsafe PID fallback is covered, or that a current security impact exists.",
+          "review": {
+            "author": "Codex P2 source-review pass",
+            "reviewer": "Codex exact-source and sink reviewer",
+            "same_model": true
+          },
+          "source_file": "tracecat/sandbox/executor.py",
+          "source_pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+          "source_sha256": "ddc89fbeeecffff54574283bf4bea064a0af0579fcbb4ba2f3fcd0d8e6b1d6e2",
+          "source_url": "https://github.com/TracecatHQ/tracecat",
+          "status": "approved"
+        },
+        "declared_domain": "All Python str environment-variable keys passed to the pinned NsjailExecutor._validate_env_key call sites, with no length bound. The exact Python match language includes ASCII identifiers and may also admit one final LF because of '$'. The guarantee is only that an admitted key contains no '='; it does not claim complete POSIX-name validity or behavior in the unsafe PID fallback.",
+        "guarantee": "Every key accepted by the exact pinned _ENV_VAR_KEY_PATTERN.match call contains no '='. This prevents a key from crossing the name/value separator in a POSIX name=value environment entry and keeps such a key out of the nsjail --env name arguments. No complete POSIX identifier, environment-value, sandbox-isolation, vulnerability, or deployed-impact claim is made.",
+        "input_source": "For core.script.run_python, user-authored workflow action args.env_vars are read from evaluated_args, merged with Tracecat SDK context, and passed to SandboxService.run_python. When nsjail is available, NsjailExecutor._build_env_map validates each non-PYTHONPATH key before inserting it into the child environment and constructing --env arguments. Registry-action SDK context keys also pass through _build_action_env_map and the same validator. Direct/unsafe PID fallback behavior is outside this contract.",
+        "provenance": "agent_derived",
+        "schema_version": "1",
+        "site": "TracecatHQ/tracecat@c84d52528a489821f355fc63976fbc7783ae0ad5:tracecat/sandbox/executor.py:71:re.compile",
+        "trust": "config"
+      },
+      "detail": null,
+      "domain": "The exact pinned environment-key alphabet excludes the POSIX name/value separator '=' at every position (no string length bound)",
+      "gate": {
+        "consumer_adopted": false,
+        "differential_cases": 4232,
+        "gate_id": "tracecat-sandbox-env-key-equals-exclusion",
+        "local_gate_command": "/home/lalbers/gitroot/regexproof/.venv/bin/python /home/lalbers/gitroot/regexproof/scripts/tracecat-sandbox-env-key-regression-gate.py --source-root /tmp/tracecat-p2-review-20261016 --output /home/lalbers/gitroot/regexproof/properties/calibration/2026-10-17-autonomous-tracecat-sandbox-env-equals/p6-wave/product-gate.json --skip-proof",
+        "local_gate_passed": true,
+        "mutation_guard_passed": true,
+        "product_engine_replayed": true,
+        "source_pin_verified": true
+      },
+      "kind": "property",
+      "pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+      "question_id": "TC-sandbox-env-key-excludes-equals",
+      "repo_id": "TracecatHQ/tracecat",
+      "site": "TracecatHQ/tracecat@c84d52528a489821f355fc63976fbc7783ae0ad5:tracecat/sandbox/executor.py:71:re.compile",
+      "status": "unsat",
+      "synthesized": false,
+      "url": "https://github.com/TracecatHQ/tracecat"
+    }
+  ],
+  "cohort_manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+  "contracts": [
+    {
+      "contract": {
+        "adoption": {
+          "approved_on": "2026-10-17",
+          "authority": "standing_user_delegation",
+          "contract_sha256": "13c0f6ebd6e7ed7ae00da4360253d1657109443d8371e67e64bf7ef754915ca7",
+          "evidence": [
+            "https://github.com/TracecatHQ/tracecat/blob/c84d52528a489821f355fc63976fbc7783ae0ad5/tracecat/sandbox/executor.py",
+            "https://github.com/TracecatHQ/tracecat/blob/c84d52528a489821f355fc63976fbc7783ae0ad5/tracecat/executor/backends/base.py",
+            "https://github.com/TracecatHQ/tracecat/blob/c84d52528a489821f355fc63976fbc7783ae0ad5/tracecat/sandbox/service.py",
+            "https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap08.html",
+            "The exact nsjail env builders validate each key before adding it to the subprocess environment and --env argv; the standalone validator also admits one final LF because it uses Python match with $, so the contract covers only the no-equals separator property."
+          ],
+          "policy_version": "autonomous-contracts-v1",
+          "rationale": "This narrow source-backed property checks that the regex keeps the POSIX name/value delimiter out of environment-variable names before the nsjail subprocess handoff. It provides a regression gate for the sandbox configuration boundary without claiming that all accepted names are fully POSIX compliant, that the unsafe PID fallback is covered, or that a current security impact exists.",
+          "review": {
+            "author": "Codex P2 source-review pass",
+            "reviewer": "Codex exact-source and sink reviewer",
+            "same_model": true
+          },
+          "source_file": "tracecat/sandbox/executor.py",
+          "source_pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+          "source_sha256": "ddc89fbeeecffff54574283bf4bea064a0af0579fcbb4ba2f3fcd0d8e6b1d6e2",
+          "source_url": "https://github.com/TracecatHQ/tracecat",
+          "status": "approved"
+        },
+        "declared_domain": "All Python str environment-variable keys passed to the pinned NsjailExecutor._validate_env_key call sites, with no length bound. The exact Python match language includes ASCII identifiers and may also admit one final LF because of '$'. The guarantee is only that an admitted key contains no '='; it does not claim complete POSIX-name validity or behavior in the unsafe PID fallback.",
+        "guarantee": "Every key accepted by the exact pinned _ENV_VAR_KEY_PATTERN.match call contains no '='. This prevents a key from crossing the name/value separator in a POSIX name=value environment entry and keeps such a key out of the nsjail --env name arguments. No complete POSIX identifier, environment-value, sandbox-isolation, vulnerability, or deployed-impact claim is made.",
+        "input_source": "For core.script.run_python, user-authored workflow action args.env_vars are read from evaluated_args, merged with Tracecat SDK context, and passed to SandboxService.run_python. When nsjail is available, NsjailExecutor._build_env_map validates each non-PYTHONPATH key before inserting it into the child environment and constructing --env arguments. Registry-action SDK context keys also pass through _build_action_env_map and the same validator. Direct/unsafe PID fallback behavior is outside this contract.",
+        "provenance": "agent_derived",
+        "schema_version": "1",
+        "site": "TracecatHQ/tracecat@c84d52528a489821f355fc63976fbc7783ae0ad5:tracecat/sandbox/executor.py:71:re.compile",
+        "trust": "config"
+      },
+      "domain": "The exact pinned environment-key alphabet excludes the POSIX name/value separator '=' at every position (no string length bound)",
+      "kind": "property",
+      "pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+      "question_id": "TC-sandbox-env-key-excludes-equals",
+      "repo_id": "TracecatHQ/tracecat",
+      "site": "TracecatHQ/tracecat@c84d52528a489821f355fc63976fbc7783ae0ad5:tracecat/sandbox/executor.py:71:re.compile",
+      "synthesized": false,
+      "url": "https://github.com/TracecatHQ/tracecat"
+    }
+  ],
+  "conversion_rows": [
+    {
+      "contract": {
+        "adoption": {
+          "approved_on": "2026-10-17",
+          "authority": "standing_user_delegation",
+          "contract_sha256": "13c0f6ebd6e7ed7ae00da4360253d1657109443d8371e67e64bf7ef754915ca7",
+          "evidence": [
+            "https://github.com/TracecatHQ/tracecat/blob/c84d52528a489821f355fc63976fbc7783ae0ad5/tracecat/sandbox/executor.py",
+            "https://github.com/TracecatHQ/tracecat/blob/c84d52528a489821f355fc63976fbc7783ae0ad5/tracecat/executor/backends/base.py",
+            "https://github.com/TracecatHQ/tracecat/blob/c84d52528a489821f355fc63976fbc7783ae0ad5/tracecat/sandbox/service.py",
+            "https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap08.html",
+            "The exact nsjail env builders validate each key before adding it to the subprocess environment and --env argv; the standalone validator also admits one final LF because it uses Python match with $, so the contract covers only the no-equals separator property."
+          ],
+          "policy_version": "autonomous-contracts-v1",
+          "rationale": "This narrow source-backed property checks that the regex keeps the POSIX name/value delimiter out of environment-variable names before the nsjail subprocess handoff. It provides a regression gate for the sandbox configuration boundary without claiming that all accepted names are fully POSIX compliant, that the unsafe PID fallback is covered, or that a current security impact exists.",
+          "review": {
+            "author": "Codex P2 source-review pass",
+            "reviewer": "Codex exact-source and sink reviewer",
+            "same_model": true
+          },
+          "source_file": "tracecat/sandbox/executor.py",
+          "source_pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+          "source_sha256": "ddc89fbeeecffff54574283bf4bea064a0af0579fcbb4ba2f3fcd0d8e6b1d6e2",
+          "source_url": "https://github.com/TracecatHQ/tracecat",
+          "status": "approved"
+        },
+        "declared_domain": "All Python str environment-variable keys passed to the pinned NsjailExecutor._validate_env_key call sites, with no length bound. The exact Python match language includes ASCII identifiers and may also admit one final LF because of '$'. The guarantee is only that an admitted key contains no '='; it does not claim complete POSIX-name validity or behavior in the unsafe PID fallback.",
+        "guarantee": "Every key accepted by the exact pinned _ENV_VAR_KEY_PATTERN.match call contains no '='. This prevents a key from crossing the name/value separator in a POSIX name=value environment entry and keeps such a key out of the nsjail --env name arguments. No complete POSIX identifier, environment-value, sandbox-isolation, vulnerability, or deployed-impact claim is made.",
+        "input_source": "For core.script.run_python, user-authored workflow action args.env_vars are read from evaluated_args, merged with Tracecat SDK context, and passed to SandboxService.run_python. When nsjail is available, NsjailExecutor._build_env_map validates each non-PYTHONPATH key before inserting it into the child environment and constructing --env arguments. Registry-action SDK context keys also pass through _build_action_env_map and the same validator. Direct/unsafe PID fallback behavior is outside this contract.",
+        "provenance": "agent_derived",
+        "schema_version": "1",
+        "site": "TracecatHQ/tracecat@c84d52528a489821f355fc63976fbc7783ae0ad5:tracecat/sandbox/executor.py:71:re.compile",
+        "trust": "config"
+      },
+      "corpus": "tracecat_sandbox_env_equals",
+      "disclosure": null,
+      "domain": "The exact pinned environment-key alphabet excludes the POSIX name/value separator '=' at every position (no string length bound)",
+      "engine_versions": {
+        "python": "3.14.8",
+        "z3": "5.0.0"
+      },
+      "family": "TC-tracecat-sandbox-env-key",
+      "ground_truth": null,
+      "ground_truth_status": null,
+      "idiom_bucket": "sandbox-environment-key-separator",
+      "kind": "property",
+      "name": "TC-sandbox-env-key-excludes-equals",
+      "product_reportable": true,
+      "regex_id": "76f423cc114a6b7d2bf7d42334647d58",
+      "result": "unsat",
+      "schema_version": "1",
+      "shape": 1,
+      "site": "TracecatHQ/tracecat@c84d52528a489821f355fc63976fbc7783ae0ad5:tracecat/sandbox/executor.py:71:re.compile",
+      "synthesized": false,
+      "wave_id": "tracecat-sandbox-env-equals-20261017",
+      "witness": null
+    }
+  ],
+  "corpus": "tracecat_sandbox_env_equals",
+  "coverage_digest": "5df806134d09948f374b1560db6c45a6a86fa2ab46cd3b17ed897d8a2bdad057",
+  "execution_caps": {
+    "local_gate_timeout_seconds": 300,
+    "max_active_conversion_waves": 1,
+    "max_adopted_contracts_per_wave": 5,
+    "max_new_questions_per_run": 5,
+    "parallel_walk": false,
+    "solver_retries": 0,
+    "solver_timeout_ms": 30000
+  },
+  "gate_config": {
+    "command": [
+      "/home/lalbers/gitroot/regexproof/.venv/bin/python",
+      "/home/lalbers/gitroot/regexproof/scripts/tracecat-sandbox-env-key-regression-gate.py",
+      "--source-root",
+      "/tmp/tracecat-p2-review-20261016",
+      "--output",
+      "/home/lalbers/gitroot/regexproof/properties/calibration/2026-10-17-autonomous-tracecat-sandbox-env-equals/p6-wave/product-gate.json",
+      "--skip-proof"
+    ],
+    "evidence": {
+      "differential_case_counts": {
+        "TC-sandbox-env-key-excludes-equals": 4232
+      },
+      "product_engine_replay_question_ids": [
+        "TC-sandbox-env-key-excludes-equals"
+      ]
+    },
+    "gate_id": "tracecat-sandbox-env-key-equals-exclusion",
+    "question_ids": [
+      "TC-sandbox-env-key-excludes-equals"
+    ],
+    "schema_version": "1",
+    "timeout_seconds": 300
+  },
+  "idiom_bucket": "sandbox-environment-key-separator",
+  "runs": [
+    {
+      "active_question_id": null,
+      "finished_at": "2026-10-17T16:21:05+00:00",
+      "gate_failure": null,
+      "gate_passed": true,
+      "gate_wall_ms": 1438.1,
+      "mutation_failures": [],
+      "mutation_wall_ms": 29.9,
+      "new_questions": 1,
+      "question_ids": [
+        "TC-sandbox-env-key-excludes-equals"
+      ],
+      "reason": null,
+      "run_id": "b29fa634-966e-42a7-9583-3fa95c2017bf",
+      "solver_wall_ms": 0.2,
+      "source_failures": {},
+      "source_wall_ms": 18.2,
+      "started_at": "2026-10-17T16:21:05+00:00",
+      "status": "complete"
+    }
+  ],
+  "schema_version": "1",
+  "wave_id": "tracecat-sandbox-env-equals-20261017"
+}

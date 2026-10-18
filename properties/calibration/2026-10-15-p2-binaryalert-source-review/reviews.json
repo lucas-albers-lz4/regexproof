@@ -1,0 +1,28 @@
+{
+  "schema_version": "1",
+  "author": "Codex source-review pass",
+  "reviewer": "Codex second source-review pass",
+  "second_pass": true,
+  "same_model_or_agent": true,
+  "observed_at": "2026-10-15",
+  "limitations": [
+    "This is a complete raw-regex review only for airbnb/binaryalert at the frozen 20-r2 pin; it does not establish coverage for the other cohort members or complete P2.",
+    "The reviewed regex extracts the package version from a checked-out source file while Sphinx builds documentation; it is not a product security boundary."
+  ],
+  "reviews": [
+    {
+      "regex_id": "dab50fd3846aa746937b8e9cad4a7606",
+      "site": "docs/source/conf.py:67:14",
+      "pattern": "^__version__ = ['\\\"]([^'\\\"]+)['\\\"]",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "documentation_build_metadata",
+      "rationale": "The Sphinx configuration opens the repository's own cli/__init__.py and searches its source text for the __version__ assignment, then assigns the captured package version to Sphinx's release and version fields. The file is build-time source metadata and the result controls documentation labels; no untrusted runtime input, authorization decision, sanitizer boundary, or security-sensitive sink is present. This is an internal documentation pattern, so it receives an evidence-backed skip rather than a product property.",
+      "review_refs": [
+        {"path": "docs/source/conf.py", "line": 67, "why": "searches a repository-relative version file during the Sphinx build"},
+        {"path": "docs/source/conf.py", "line": 68, "why": "assigns the capture to Sphinx release and version metadata"},
+        {"path": "cli/__init__.py", "line": 2, "why": "repository-owned literal __version__ assignment"}
+      ]
+    }
+  ]
+}

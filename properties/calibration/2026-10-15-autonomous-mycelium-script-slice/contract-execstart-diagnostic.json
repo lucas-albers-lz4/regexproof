@@ -1,0 +1,34 @@
+{
+  "adoption": {
+    "approved_on": "2026-10-15",
+    "authority": "standing_user_delegation",
+    "contract_sha256": "16113f8c1d77c200771d0e484fd20bc7efeb3288a21df31caf53da5c465bd586",
+    "evidence": [
+      "https://github.com/mycelium0/mycelium/blob/4b53dc7629ca3bc88bf5467db481ad2af7130711/scripts/update_unit_drift_drill.sh",
+      "https://github.com/mycelium0/mycelium/blob/4b53dc7629ca3bc88bf5467db481ad2af7130711/control/lib/nb_update_apply.sh",
+      "https://github.com/mycelium0/mycelium/blob/4b53dc7629ca3bc88bf5467db481ad2af7130711/tests/conformance/node_update_artifact_root.sh",
+      "https://github.com/systemd/systemd-stable/blob/v255.4/src/systemctl/systemctl-show.c",
+      "https://github.com/systemd/systemd-stable/blob/v255.4/man/systemd.service.xml",
+      "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/systemd-execstart-semicolon-replay.json"
+    ],
+    "policy_version": "autonomous-contracts-v1",
+    "rationale": "Systemd 255.4 source and a harmless live user-manager unit show that a literal semicolon in argv is serialized without escaping. The pinned drift drill capture stops at that semicolon and omits a later security flag. Adopt this narrow diagnostic-preservation guarantee under the standing autonomous policy. The pinned updater separately rejects --insecure-no-verify under systemd or non-TTY execution, so this does not claim a reachable authentication bypass.",
+    "review": {
+      "author": "codex-contract-author",
+      "reviewer": "codex-adversarial-self-review",
+      "same_model": true
+    },
+    "source_file": "scripts/update_unit_drift_drill.sh",
+    "source_pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+    "source_sha256": "4e28f0bd727ba842fed7840bdd163fbef32dc911f7c8e6bea409895ced4c6493",
+    "source_url": "https://github.com/mycelium0/mycelium",
+    "status": "approved"
+  },
+  "declared_domain": "systemd 255.4 systemctl-show output for a single ExecStart argv field, with no embedded NUL or newline in the serialized line, a literal semicolon inside an argv element before --insecure-no-verify, and the standard trailing \" ; ignore_errors=\" property separator. The scope is flag preservation by the pinned sed capture and downstream check; it says nothing about execution authorization.",
+  "guarantee": "For the pinned update-unit drift drill, when systemd 255.4 serializes one effective ExecStart whose argv contains --insecure-no-verify after a literal semicolon argument, the argv extraction must preserve the flag so the downstream provenance-bypass check can report it.",
+  "input_source": "The effective ExecStart argv serialized by systemctl show for an operator-configured systemd unit; the bytes are configuration-derived diagnostics and feed the drift drill security checks.",
+  "provenance": "agent_derived",
+  "schema_version": "1",
+  "site": "mycelium0/mycelium@4b53dc7629ca3bc88bf5467db481ad2af7130711:scripts/update_unit_drift_drill.sh:184:3",
+  "trust": "config"
+}

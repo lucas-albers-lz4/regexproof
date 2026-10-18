@@ -1,0 +1,44 @@
+[
+  {
+    "contract": {
+      "adoption": {
+        "approved_on": "2026-10-16",
+        "authority": "standing_user_delegation",
+        "contract_sha256": "9045868f6004efccb55e4e6cb0a14e5a7cc5fb805bd61442afa6c791454e7f8b",
+        "evidence": [
+          "https://github.com/TracecatHQ/tracecat/blob/c84d52528a489821f355fc63976fbc7783ae0ad5/tracecat/integrations/mcp_validation.py",
+          "https://github.com/TracecatHQ/tracecat/blob/c84d52528a489821f355fc63976fbc7783ae0ad5/tracecat/integrations/service.py",
+          "https://github.com/TracecatHQ/tracecat/blob/c84d52528a489821f355fc63976fbc7783ae0ad5/tracecat/agent/preset/service.py",
+          "properties/calibration/2026-10-16-p2-tracecat-server-name-review/evidence.json"
+        ],
+        "policy_version": "autonomous-contracts-v1",
+        "rationale": "The pinned validator comment and error text declare alphanumeric, hyphen, and underscore characters only. AgentPresetService passes the persisted workspace MCP integration slug through validate_mcp_command_config to this validator. The contract proves only exclusion of slash and backslash from values the exact function accepts; it does not claim security impact or validate slug generation.",
+        "review": {
+          "author": "Codex-P2-source-review",
+          "reviewer": "Codex-independent-source-review-pass",
+          "same_model": true
+        },
+        "source_file": "tracecat/integrations/mcp_validation.py",
+        "source_pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+        "source_sha256": "41cf730ba1cb592cae684811bbb4d510961a0a441c156313a804b2593085f895",
+        "source_url": "https://github.com/TracecatHQ/tracecat",
+        "status": "approved"
+      },
+      "declared_domain": "Any ASCII string of length 1 through 64 passed as the name argument to Tracecat's validate_mcp_server_name function. The source pattern accepts one or more characters from [A-Za-z0-9_-] and CPython's terminal-dollar behavior may additionally accept one final line feed; this theorem covers only exclusion of slash and backslash, not the full declared name language or slug-generation behavior.",
+      "guarantee": "Every string accepted by the pinned validate_mcp_server_name function excludes slash and backslash characters.",
+      "input_source": "Workspace MCP integration configuration supplies MCPIntegrationCreate.name. MCPIntegrationService normalizes it into the persisted MCPIntegration.slug; AgentPresetService later passes that stored slug as name to validate_mcp_command_config, which invokes validate_mcp_server_name.",
+      "provenance": "agent_derived",
+      "schema_version": "1",
+      "site": "TracecatHQ/tracecat@c84d52528a489821f355fc63976fbc7783ae0ad5:tracecat/integrations/mcp_validation.py:267:re.match",
+      "trust": "config"
+    },
+    "domain": "Any ASCII string of length 1 through 64 passed as the name argument to Tracecat's validate_mcp_server_name function. The source pattern accepts one or more characters from [A-Za-z0-9_-] and CPython's terminal-dollar behavior may additionally accept one final line feed; this theorem covers only exclusion of slash and backslash, not the full declared name language or slug-generation behavior.",
+    "kind": "property",
+    "pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+    "question_id": "TC-mcp-server-name-separators-excluded",
+    "repo_id": "TracecatHQ/tracecat",
+    "site": "TracecatHQ/tracecat@c84d52528a489821f355fc63976fbc7783ae0ad5:tracecat/integrations/mcp_validation.py:267:re.match",
+    "synthesized": false,
+    "url": "https://github.com/TracecatHQ/tracecat"
+  }
+]

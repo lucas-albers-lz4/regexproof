@@ -1,0 +1,33 @@
+{
+  "actual_accepted_cases_per_helper": [
+    4297,
+    4297,
+    4297
+  ],
+  "contract_sha256": "88afe47c2654316e4774fd1c6300e5da6161c4af5df7d34e542e90cbd940de23",
+  "differential_cases_per_helper": 17027,
+  "differential_comparisons": 51081,
+  "gate_id": "real-router-route-segment-allowed-ascii-alphabet",
+  "helper_count": 3,
+  "helpers": [
+    "startsWithSegment",
+    "endsWithSegment",
+    "includesSegment"
+  ],
+  "impact_scope": "This proves the documented segment-character invariant for these route utility helpers. The Real-Router admission decision was scale-based; this result does not classify the repository as a security tool or claim a security impact.",
+  "mismatches": 0,
+  "mutation_accepts_in_all_helpers": true,
+  "mutation_id": "RR-route-segment-slash-allowlist-mutation",
+  "mutation_witness": "/",
+  "product_engine": "v26.11.1 Node.js ECMAScript via the exact pinned TypeScript helper source (native type stripping)",
+  "property_id": "RR-route-segment-allowed-alphabet",
+  "repository": "https://github.com/greydragon888/real-router",
+  "schema_version": "1",
+  "source_files": {
+    "packages/route-utils/src/constants.ts": "ba3add9f6367eb2b031b7bf5869f6703a8d6290fcb064e4855e09a17ce6011db",
+    "packages/route-utils/src/segmentTesters.ts": "95d029dc8991b10818390ca195a625116668ffc9da23688944a4dd97d1c9d193"
+  },
+  "source_pattern": "^[\\w.-]+$",
+  "source_pin": "55aa7ef43a9c129beba90823cd8a4db10bb01211",
+  "source_row_regex_id": "bb84d7f740e031ca1c1fc94bd75826bf"
+}

@@ -105,7 +105,7 @@ def test_full_coverage_passes(tmp_path: Path):
     assert chk.run(gen_dir=gen, upstream_path=up) == 0
 
 
-def test_ready_to_file_lists_non_wont_file(tmp_path: Path, capsys):
+def test_ready_to_file_lists_only_actionable_dispositions(tmp_path: Path, capsys):
     gen = _gen_dir(
         tmp_path,
         _gt_row(),
@@ -113,15 +113,25 @@ def test_ready_to_file_lists_non_wont_file(tmp_path: Path, capsys):
             site="net/demo/other:1:x",
             question_id="other-q",
         ),
+        _gt_row(
+            site="net/demo/fp:1:x",
+            question_id="known-false-positive",
+        ),
     )
     up = _write_upstream(
         tmp_path / "conversion-upstream.jsonl",
-        _curated(),
+        _curated(status="private_first"),
         _curated(
             id="CU-902",
             site="net/demo/other:1:x",
             question_id="other-q",
             status="wont_file",
+        ),
+        _curated(
+            id="CU-903",
+            site="net/demo/fp:1:x",
+            question_id="known-false-positive",
+            status="false_positive",
         ),
     )
     assert chk.run(gen_dir=gen, upstream_path=up, ready_to_file=True) == 0
@@ -129,6 +139,7 @@ def test_ready_to_file_lists_non_wont_file(tmp_path: Path, capsys):
     assert "ready-to-file: 1" in out
     assert "CU-901" in out
     assert "CU-902" not in out
+    assert "CU-903" not in out
 
 
 def test_url_case_joins_but_repo_paths_stay_case_sensitive(

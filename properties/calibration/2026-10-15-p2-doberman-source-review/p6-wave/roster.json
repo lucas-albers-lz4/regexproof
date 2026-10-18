@@ -1,0 +1,26 @@
+{
+  "cohort_id": "2026-09-12-calibration-20-r2",
+  "cohort_manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+  "coverage_digest": "d1467cff6deeebd97fffafa7f9640701d1f71d1c63913d4c4593aa16920052fc",
+  "identities": [
+    {
+      "contract_sha256": "d8a26b05f10027b3eb8395d79b3c27a4a06a4f4e9fd006b6f78be9752022aafb",
+      "pin": "53ae43c5298a2426c6696147fdd75e2a4aef10e2",
+      "provenance": "agent_derived",
+      "question_id": "DB-codex-apply-patch-file-target-path",
+      "repo_id": "fu351/Doberman-Core",
+      "site": "fu351/Doberman-Core@53ae43c5298a2426c6696147fdd75e2a4aef10e2:src/doberman/hosthooks/codex.py:69:_APPLY_PATCH_FILE_RE",
+      "url": "https://github.com/fu351/Doberman-Core"
+    },
+    {
+      "contract_sha256": "9b4e12034ef2e5935a5aa8309d967f71b6c999daadb5093658eadf61cb61e740",
+      "pin": "53ae43c5298a2426c6696147fdd75e2a4aef10e2",
+      "provenance": "agent_derived",
+      "question_id": "DB-codex-apply-patch-move-target-path",
+      "repo_id": "fu351/Doberman-Core",
+      "site": "fu351/Doberman-Core@53ae43c5298a2426c6696147fdd75e2a4aef10e2:src/doberman/hosthooks/codex.py:70:_APPLY_PATCH_MOVE_RE",
+      "url": "https://github.com/fu351/Doberman-Core"
+    }
+  ],
+  "schema_version": "2"
+}

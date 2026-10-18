@@ -1,0 +1,33 @@
+{
+  "adoption": {
+    "approved_on": "2026-10-16",
+    "authority": "standing_user_delegation",
+    "contract_sha256": "d2ea2654e8f12284f6c8e27571db6f2c5f9aaefb8e6b0907bf9799fb3b032bd0",
+    "evidence": [
+      "https://github.com/TracecatHQ/tracecat/blob/c84d52528a489821f355fc63976fbc7783ae0ad5/tracecat/authz/controls.py",
+      "https://github.com/TracecatHQ/tracecat/blob/c84d52528a489821f355fc63976fbc7783ae0ad5/packages/tracecat-ee/tracecat_ee/rbac/schemas.py",
+      "https://github.com/TracecatHQ/tracecat/blob/c84d52528a489821f355fc63976fbc7783ae0ad5/packages/tracecat-ee/tracecat_ee/rbac/service.py",
+      "https://github.com/TracecatHQ/tracecat/blob/c84d52528a489821f355fc63976fbc7783ae0ad5/packages/tracecat-ee/tracecat_ee/rbac/router.py",
+      "The exact POST route requires org:rbac:create; ScopeCreate.name and RBACService.create_scope both enforce the lowercase ASCII allowlist before storing a scope; scope_matches passes wildcard grants to fnmatch."
+    ],
+    "policy_version": "autonomous-contracts-v1",
+    "rationale": "An exact source-bound alphabet contract is useful because custom scope names become grant patterns consumed by fnmatch, whose question-mark and bracket syntax would expand matching if those characters could cross the create boundary. The contract is limited to new names submitted through the pinned authorized API route and claims no current vulnerability or deployed security impact.",
+    "review": {
+      "author": "Codex P2 source-review pass",
+      "reviewer": "Codex contract and caller pass",
+      "same_model": true
+    },
+    "source_file": "tracecat/authz/controls.py",
+    "source_pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+    "source_sha256": "a63e61a139aeb35665b43f2a000095b42e8c6050778144f7c9f28af5c58ed32b",
+    "source_url": "https://github.com/TracecatHQ/tracecat",
+    "status": "approved"
+  },
+  "declared_domain": "A newly submitted JSON `name` string on the pinned POST /rbac/scopes route, with Unicode content and the exact schema bounds of 1 through 255 characters. The route requires org:rbac:create. Existing database scope names and direct internal calls that bypass ScopeCreate are outside the contract.",
+  "guarantee": "Every custom scope name admitted by the create-scope request schema and service validator uses only lowercase ASCII letters, digits, colon, underscore, dot, asterisk, and hyphen. In particular, question mark and square brackets cannot reach the fnmatch-based authorization matcher as custom-scope pattern syntax; asterisk is the only non-literal glob metacharacter admitted by this contract. This does not prove role assignment policy, least privilege, authorization correctness beyond this alphabet, or any deployed security impact.",
+  "input_source": "The name is submitted by an authenticated organization RBAC administrator to POST /rbac/scopes, whose route requires org:rbac:create. ScopeCreate validates the request field; RBACService.create_scope repeats validation, splits the stored name at its final colon, and persists the custom Scope. Assigned scope names are later evaluated by tracecat.authz.controls.scope_matches, which calls fnmatch for grants containing asterisk.",
+  "provenance": "agent_derived",
+  "schema_version": "1",
+  "site": "TracecatHQ/tracecat@c84d52528a489821f355fc63976fbc7783ae0ad5:tracecat/authz/controls.py:18:re.compile",
+  "trust": "config"
+}

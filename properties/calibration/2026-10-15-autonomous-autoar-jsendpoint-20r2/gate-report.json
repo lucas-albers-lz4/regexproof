@@ -1,0 +1,28 @@
+{
+  "case_classes": {
+    "capture_length_boundary": 5,
+    "forbidden_delimiter_mutations": 24,
+    "malformed_assignment": 3,
+    "seeded_safe_ascii_assignment": 128,
+    "unicode_product_samples": 3
+  },
+  "differential_cases": 163,
+  "expected_assignment_captures": 161,
+  "forbidden_delimiter_outputs": 0,
+  "gate_id": "autoar-jsendpoint-capture-20r2",
+  "go_version": "go1.25.7",
+  "mismatches": 0,
+  "mutation_id": "AA-autoar-jsendpoint-mutated-quote-capture",
+  "mutation_product_output": [
+    "service/v1/users\";"
+  ],
+  "mutation_witness": "\"",
+  "product_engine": "Go regexp (RE2)",
+  "property_id": "AA-autoar-jsendpoint-assignment-capture-delimiter",
+  "repository": "https://github.com/h0tak88r/AutoAR",
+  "schema_version": "1",
+  "scope": "URL-assignment capture delimiter exclusion and local extractor replay; not endpoint validity, scope safety, or extraction completeness",
+  "source_file": "internal/scanner/jsendpoints/jsendpoints.go",
+  "source_pin": "01cd447ad3b1acfed7e0680596c2c74458a4cf06",
+  "source_sha256": "e9c03be11f7aab2a4310ea4944de5620e500f2400b13e22a3e1ea5b16745c549"
+}

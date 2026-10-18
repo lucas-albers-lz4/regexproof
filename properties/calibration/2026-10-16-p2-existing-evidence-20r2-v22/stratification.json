@@ -1,0 +1,471 @@
+{
+  "artifact_kind": "p8-frozen-cohort-stratification",
+  "by_contract_provenance": {
+    "agent_derived": {
+      "contract_provenance": {
+        "agent_derived": 43
+      },
+      "differential_cases": 1748337,
+      "product_engine_replays": 43,
+      "questions": 43,
+      "sat_outcome_overlay": {
+        "reproduced_cross_origin_loopback_fetch_candidate": 1,
+        "reproduced_fail_open_workflow_validation_candidate": 1,
+        "reproduced_local_output_path_escape_candidate": 2,
+        "reproduced_local_path_escape_candidate": 1,
+        "reproduced_markdown_structure_injection_candidate": 2,
+        "reproduced_policy_mismatch_candidate": 2,
+        "reproduced_redaction_coverage_candidate": 1,
+        "reproduced_security_control_gap_candidate": 1,
+        "reproduced_success-reporting_candidate": 1
+      },
+      "statuses": {
+        "sat": 12,
+        "timeout": 1,
+        "unsat": 30
+      },
+      "unique_local_gate_count": 24,
+      "unique_local_gate_ids": [
+        "aidevops-posix-shell-hook-guards-busybox",
+        "aidevops-predispatch-cited-file-exact-pin-v1",
+        "aidevops-predispatch-threshold-exact-pin-v1",
+        "aidevops-webhook-action-protocol",
+        "anax-orgname-denylist-20r2",
+        "autoar-jsendpoint-capture-20r2",
+        "autoar-jsendpoint-scope-candidate-20r2",
+        "autoar-phase-key-component-20r2",
+        "doberman-codex-apply-patch-target-extraction",
+        "doberman-secret-path-regression-gate-v1",
+        "forge-cli-local-regression-suite-v1",
+        "inhale-url-output-path-confinement",
+        "json-editor-enum-html-text-escape",
+        "llm-honeypot-exact-pin-shell-boundaries",
+        "magic-js-base64url-output-image",
+        "malcontent-author-markdown-extra-link-v1",
+        "malcontent-description-markdown-extra-link-v1",
+        "mycelium-20r2-release-preflight",
+        "panther-precommit-secret-path-review-filter",
+        "real-router-route-segment-allowed-ascii-alphabet",
+        "rr-navigation-control-validator-exact-pin",
+        "tracecat-mcp-env-key-declared-grammar",
+        "tracecat-mcp-server-name-path-separator-exclusion",
+        "xibo-csrf-cookie-capture-20r2"
+      ]
+    },
+    "human": {
+      "contract_provenance": {
+        "human": 7
+      },
+      "differential_cases": 0,
+      "product_engine_replays": 2,
+      "questions": 7,
+      "sat_outcome_overlay": {
+        "false_positive_as_security_bypass": 2
+      },
+      "statuses": {
+        "sat": 2,
+        "unsat": 5
+      },
+      "unique_local_gate_count": 0,
+      "unique_local_gate_ids": []
+    }
+  },
+  "by_repository_and_dialect_family": [
+    {
+      "contract_provenance": {
+        "agent_derived": 1,
+        "human": 5
+      },
+      "dialect_family": "py_re",
+      "differential_cases": 5680,
+      "product_engine_replays": 1,
+      "questions": 6,
+      "repo_id": "Agenticstiger/forge-cli",
+      "sat_outcome_overlay": {},
+      "statuses": {
+        "unsat": 6
+      },
+      "unique_local_gate_count": 1,
+      "unique_local_gate_ids": [
+        "forge-cli-local-regression-suite-v1"
+      ]
+    },
+    {
+      "contract_provenance": {
+        "agent_derived": 2
+      },
+      "dialect_family": "posix-shell",
+      "differential_cases": 65545,
+      "product_engine_replays": 2,
+      "questions": 2,
+      "repo_id": "Leviticus-Triage/llm-honeypot-intelligence",
+      "sat_outcome_overlay": {
+        "reproduced_redaction_coverage_candidate": 1,
+        "reproduced_success-reporting_candidate": 1
+      },
+      "statuses": {
+        "sat": 2
+      },
+      "unique_local_gate_count": 1,
+      "unique_local_gate_ids": [
+        "llm-honeypot-exact-pin-shell-boundaries"
+      ]
+    },
+    {
+      "contract_provenance": {
+        "agent_derived": 2
+      },
+      "dialect_family": "py_re",
+      "differential_cases": 2156,
+      "product_engine_replays": 2,
+      "questions": 2,
+      "repo_id": "TracecatHQ/tracecat",
+      "sat_outcome_overlay": {
+        "reproduced_policy_mismatch_candidate": 1
+      },
+      "statuses": {
+        "sat": 1,
+        "unsat": 1
+      },
+      "unique_local_gate_count": 2,
+      "unique_local_gate_ids": [
+        "tracecat-mcp-env-key-declared-grammar",
+        "tracecat-mcp-server-name-path-separator-exclusion"
+      ]
+    },
+    {
+      "contract_provenance": {
+        "agent_derived": 2
+      },
+      "dialect_family": "go_re",
+      "differential_cases": 35243,
+      "product_engine_replays": 2,
+      "questions": 2,
+      "repo_id": "chainguard-dev/malcontent",
+      "sat_outcome_overlay": {
+        "reproduced_markdown_structure_injection_candidate": 2
+      },
+      "statuses": {
+        "sat": 2
+      },
+      "unique_local_gate_count": 2,
+      "unique_local_gate_ids": [
+        "malcontent-author-markdown-extra-link-v1",
+        "malcontent-description-markdown-extra-link-v1"
+      ]
+    },
+    {
+      "contract_provenance": {
+        "agent_derived": 3,
+        "human": 2
+      },
+      "dialect_family": "py_re",
+      "differential_cases": 514,
+      "product_engine_replays": 5,
+      "questions": 5,
+      "repo_id": "fu351/Doberman-Core",
+      "sat_outcome_overlay": {
+        "false_positive_as_security_bypass": 2,
+        "reproduced_security_control_gap_candidate": 1
+      },
+      "statuses": {
+        "sat": 3,
+        "unsat": 2
+      },
+      "unique_local_gate_count": 2,
+      "unique_local_gate_ids": [
+        "doberman-codex-apply-patch-target-extraction",
+        "doberman-secret-path-regression-gate-v1"
+      ]
+    },
+    {
+      "contract_provenance": {
+        "agent_derived": 2
+      },
+      "dialect_family": "ecma",
+      "differential_cases": 34041,
+      "product_engine_replays": 2,
+      "questions": 2,
+      "repo_id": "greydragon888/real-router",
+      "sat_outcome_overlay": {},
+      "statuses": {
+        "unsat": 2
+      },
+      "unique_local_gate_count": 2,
+      "unique_local_gate_ids": [
+        "real-router-route-segment-allowed-ascii-alphabet",
+        "rr-navigation-control-validator-exact-pin"
+      ]
+    },
+    {
+      "contract_provenance": {
+        "agent_derived": 3
+      },
+      "dialect_family": "go_re",
+      "differential_cases": 827,
+      "product_engine_replays": 3,
+      "questions": 3,
+      "repo_id": "h0tak88r/AutoAR",
+      "sat_outcome_overlay": {
+        "reproduced_cross_origin_loopback_fetch_candidate": 1
+      },
+      "statuses": {
+        "sat": 1,
+        "unsat": 2
+      },
+      "unique_local_gate_count": 3,
+      "unique_local_gate_ids": [
+        "autoar-jsendpoint-capture-20r2",
+        "autoar-jsendpoint-scope-candidate-20r2",
+        "autoar-phase-key-component-20r2"
+      ]
+    },
+    {
+      "contract_provenance": {
+        "agent_derived": 1
+      },
+      "dialect_family": "ecma",
+      "differential_cases": 1116985,
+      "product_engine_replays": 1,
+      "questions": 1,
+      "repo_id": "json-editor/json-editor",
+      "sat_outcome_overlay": {},
+      "statuses": {
+        "unsat": 1
+      },
+      "unique_local_gate_count": 1,
+      "unique_local_gate_ids": [
+        "json-editor-enum-html-text-escape"
+      ]
+    },
+    {
+      "contract_provenance": {
+        "agent_derived": 10
+      },
+      "dialect_family": "ecma",
+      "differential_cases": 481034,
+      "product_engine_replays": 10,
+      "questions": 10,
+      "repo_id": "magiclabs/magic-js",
+      "sat_outcome_overlay": {},
+      "statuses": {
+        "unsat": 10
+      },
+      "unique_local_gate_count": 1,
+      "unique_local_gate_ids": [
+        "magic-js-base64url-output-image"
+      ]
+    },
+    {
+      "contract_provenance": {
+        "agent_derived": 11
+      },
+      "dialect_family": "posix-shell",
+      "differential_cases": 789,
+      "product_engine_replays": 11,
+      "questions": 11,
+      "repo_id": "marcusquinn/aidevops",
+      "sat_outcome_overlay": {
+        "reproduced_fail_open_workflow_validation_candidate": 1,
+        "reproduced_local_path_escape_candidate": 1
+      },
+      "statuses": {
+        "sat": 2,
+        "timeout": 1,
+        "unsat": 8
+      },
+      "unique_local_gate_count": 4,
+      "unique_local_gate_ids": [
+        "aidevops-posix-shell-hook-guards-busybox",
+        "aidevops-predispatch-cited-file-exact-pin-v1",
+        "aidevops-predispatch-threshold-exact-pin-v1",
+        "aidevops-webhook-action-protocol"
+      ]
+    },
+    {
+      "contract_provenance": {
+        "agent_derived": 1
+      },
+      "dialect_family": "posix-shell",
+      "differential_cases": 3814,
+      "product_engine_replays": 1,
+      "questions": 1,
+      "repo_id": "mycelium0/mycelium",
+      "sat_outcome_overlay": {},
+      "statuses": {
+        "unsat": 1
+      },
+      "unique_local_gate_count": 1,
+      "unique_local_gate_ids": [
+        "mycelium-20r2-release-preflight"
+      ]
+    },
+    {
+      "contract_provenance": {
+        "agent_derived": 2
+      },
+      "dialect_family": "py_re",
+      "differential_cases": 6,
+      "product_engine_replays": 2,
+      "questions": 2,
+      "repo_id": "netspooky/inhale",
+      "sat_outcome_overlay": {
+        "reproduced_local_output_path_escape_candidate": 2
+      },
+      "statuses": {
+        "sat": 2
+      },
+      "unique_local_gate_count": 1,
+      "unique_local_gate_ids": [
+        "inhale-url-output-path-confinement"
+      ]
+    },
+    {
+      "contract_provenance": {
+        "agent_derived": 1
+      },
+      "dialect_family": "go_re",
+      "differential_cases": 687,
+      "product_engine_replays": 1,
+      "questions": 1,
+      "repo_id": "open-horizon/anax",
+      "sat_outcome_overlay": {},
+      "statuses": {
+        "unsat": 1
+      },
+      "unique_local_gate_count": 1,
+      "unique_local_gate_ids": [
+        "anax-orgname-denylist-20r2"
+      ]
+    },
+    {
+      "contract_provenance": {
+        "agent_derived": 1
+      },
+      "dialect_family": "py_re",
+      "differential_cases": 9,
+      "product_engine_replays": 1,
+      "questions": 1,
+      "repo_id": "panther-labs/panther-analysis",
+      "sat_outcome_overlay": {
+        "reproduced_policy_mismatch_candidate": 1
+      },
+      "statuses": {
+        "sat": 1
+      },
+      "unique_local_gate_count": 1,
+      "unique_local_gate_ids": [
+        "panther-precommit-secret-path-review-filter"
+      ]
+    },
+    {
+      "contract_provenance": {
+        "agent_derived": 1
+      },
+      "dialect_family": "ecma",
+      "differential_cases": 1007,
+      "product_engine_replays": 1,
+      "questions": 1,
+      "repo_id": "xibosignage/xibo-cms",
+      "sat_outcome_overlay": {},
+      "statuses": {
+        "unsat": 1
+      },
+      "unique_local_gate_count": 1,
+      "unique_local_gate_ids": [
+        "xibo-csrf-cookie-capture-20r2"
+      ]
+    }
+  ],
+  "cohort_id": "2026-09-12-calibration-20-r2",
+  "human_series_comparison": {
+    "comparison_permitted": false,
+    "current_v22_contract_provenance_counts": {
+      "agent_derived": 43,
+      "human": 7
+    },
+    "historical_baseline": {
+      "frozen_cohort_product_properties": 0,
+      "path": "properties/calibration/2026-10-13-autonomous-baseline.json",
+      "product_questions": 41,
+      "sha256": "33e5b9a8ee8c321342f1a27d17275e4e056de7eff7009c3947ebdf250b3c9640",
+      "source_revision": "53b9c3455cbde29a3d6695101fe215e21b5fa706"
+    },
+    "reason": "The Oct 13 baseline reports 41 product questions but zero product properties from the frozen 20-r2 cohort. It has no matched human-reviewed exact-pin denominator or comparable review-time/cost series. The v22 seven human-provenance contracts are selected legacy questions, while the 43 agent-derived contracts are not a randomized or matched comparison. Report these descriptive outcomes separately; do not infer relative efficacy or speed."
+  },
+  "inputs": {
+    "attempts_sha256": "0eeddb8ac07919f47c37664030e0fad13da7050469c781a614b9e14cda87da66",
+    "checkpoint": "properties/calibration/2026-10-16-p2-existing-evidence-20r2-v22/checkpoint.json",
+    "checkpoint_sha256": "ecbbf6ba284bea5454ca34cafd33470fdaa5dfc62db7034c4f0834b1cac0b249",
+    "product_roster_coverage_digest": "d1122ab16b7b4a8da6f26e794c5305d90d9b2a97880677055094996f2ec3d2f4",
+    "source_checkpoints_sha256": "68d18dbdb819b548bf19752067c36e62dcd89da61a8d818fd8dbe643f5d269a4",
+    "source_inventory_file_sha256": "ded55abeae141b76a4511b08c2c989db69f7b343985f99df42ae08c039722583",
+    "source_sites_file_sha256": "e2d6b921bc7f2910eab6ce6f6f63aa1e1832881a81823cd84ac70053e9e0af3a",
+    "triage_overlay": "properties/calibration/2026-10-16-p2-sat-impact-triage-v11/triage.json",
+    "triage_overlay_sha256": "1bb5df38c412ce012cca01184befc1530d38c7c884d514297fb0a74034f3fadd"
+  },
+  "limitations": [
+    "The 50 questions are retrospective and selected from compatible existing evidence; they are not a random population sample or 50 new source reviews.",
+    "Repository and dialect strata are small and correlated; they do not estimate prevalence outside this cohort.",
+    "A gate ID shared by multiple questions is counted once in each stratum where it appears; the overall unique gate count is deduplicated globally.",
+    "The v22 checkpoint preserves pending_product_triage snapshots; the linked v11 overlay adds later outcome review for all 14 SAT rows.",
+    "Cost, token usage, human review time, and consumer adoption remain unknown or zero as separately recorded; null resource values are not zero."
+  ],
+  "manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+  "observed_at": "2026-10-16",
+  "overall": {
+    "contract_provenance": {
+      "agent_derived": 43,
+      "human": 7
+    },
+    "differential_cases": 1748337,
+    "product_engine_replays": 45,
+    "questions": 50,
+    "sat_outcome_overlay": {
+      "false_positive_as_security_bypass": 2,
+      "reproduced_cross_origin_loopback_fetch_candidate": 1,
+      "reproduced_fail_open_workflow_validation_candidate": 1,
+      "reproduced_local_output_path_escape_candidate": 2,
+      "reproduced_local_path_escape_candidate": 1,
+      "reproduced_markdown_structure_injection_candidate": 2,
+      "reproduced_policy_mismatch_candidate": 2,
+      "reproduced_redaction_coverage_candidate": 1,
+      "reproduced_security_control_gap_candidate": 1,
+      "reproduced_success-reporting_candidate": 1
+    },
+    "statuses": {
+      "sat": 14,
+      "timeout": 1,
+      "unsat": 35
+    },
+    "unique_local_gate_count": 24,
+    "unique_local_gate_ids": [
+      "aidevops-posix-shell-hook-guards-busybox",
+      "aidevops-predispatch-cited-file-exact-pin-v1",
+      "aidevops-predispatch-threshold-exact-pin-v1",
+      "aidevops-webhook-action-protocol",
+      "anax-orgname-denylist-20r2",
+      "autoar-jsendpoint-capture-20r2",
+      "autoar-jsendpoint-scope-candidate-20r2",
+      "autoar-phase-key-component-20r2",
+      "doberman-codex-apply-patch-target-extraction",
+      "doberman-secret-path-regression-gate-v1",
+      "forge-cli-local-regression-suite-v1",
+      "inhale-url-output-path-confinement",
+      "json-editor-enum-html-text-escape",
+      "llm-honeypot-exact-pin-shell-boundaries",
+      "magic-js-base64url-output-image",
+      "malcontent-author-markdown-extra-link-v1",
+      "malcontent-description-markdown-extra-link-v1",
+      "mycelium-20r2-release-preflight",
+      "panther-precommit-secret-path-review-filter",
+      "real-router-route-segment-allowed-ascii-alphabet",
+      "rr-navigation-control-validator-exact-pin",
+      "tracecat-mcp-env-key-declared-grammar",
+      "tracecat-mcp-server-name-path-separator-exclusion",
+      "xibo-csrf-cookie-capture-20r2"
+    ]
+  },
+  "schema_version": "1",
+  "scope": "50 distinct exact-pin eligible product questions in the v22 retrospective checkpoint, joined to the declared-dialect v5 source inventory."
+}

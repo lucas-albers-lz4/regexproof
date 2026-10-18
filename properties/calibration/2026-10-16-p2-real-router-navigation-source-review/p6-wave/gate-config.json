@@ -1,0 +1,24 @@
+{
+  "command": [
+    "/home/linuxbrew/.linuxbrew/Cellar/python@3.14/3.14.8_2/bin/python3.14",
+    "/home/lalbers/gitroot/regexproof/scripts/real-router-navigation-control-regression-gate.py",
+    "--source-root",
+    "/tmp/regexproof-pinned-sources/real-router-55aa7ef43a9c129beba90823cd8a4db10bb01211",
+    "--output",
+    "/home/lalbers/gitroot/regexproof/properties/calibration/2026-10-16-p2-real-router-navigation-source-review/p6-wave/product-gate.json"
+  ],
+  "evidence": {
+    "differential_case_counts": {
+      "RR-navigation-param-control-characters-rejected": 17014
+    },
+    "product_engine_replay_question_ids": [
+      "RR-navigation-param-control-characters-rejected"
+    ]
+  },
+  "gate_id": "rr-navigation-control-validator-exact-pin",
+  "question_ids": [
+    "RR-navigation-param-control-characters-rejected"
+  ],
+  "schema_version": "1",
+  "timeout_seconds": 300
+}

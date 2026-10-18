@@ -1,0 +1,58 @@
+[
+  {
+    "contract": {
+      "adoption": {
+        "approved_on": "2026-10-15",
+        "authority": "standing_user_delegation",
+        "contract_sha256": "db5d22f87290865e215e0732278b9cf7ad9667271e1845e68a028064c79e2c56",
+        "evidence": [
+          "https://github.com/fu351/Doberman-Core/blob/53ae43c5298a2426c6696147fdd75e2a4aef10e2/src/doberman/engine/rules/secrets.py",
+          "https://github.com/fu351/Doberman-Core/blob/53ae43c5298a2426c6696147fdd75e2a4aef10e2/src/doberman/proxy/normalize.py",
+          "https://github.com/fu351/Doberman-Core/blob/53ae43c5298a2426c6696147fdd75e2a4aef10e2/src/doberman/engine/rules/paths.py",
+          "https://github.com/fu351/Doberman-Core/blob/53ae43c5298a2426c6696147fdd75e2a4aef10e2/src/doberman/canonical.py",
+          "https://github.com/fu351/Doberman-Core/blob/53ae43c5298a2426c6696147fdd75e2a4aef10e2/docs/SETUP.md",
+          "https://github.com/fu351/Doberman-Core/blob/53ae43c5298a2426c6696147fdd75e2a4aef10e2/docs/REASON_CODES.md"
+        ],
+        "policy_version": "autonomous-contracts-v1",
+        "rationale": "The source comment classifies .npmrc and credentials as secret stores; REASON_CODES.md says a recognized secret-file access requires AUTH. The setup guide supports Windows, normalize.py preserves the path target, and the path rule canonicalizes native paths to lowercase slash-separated relative form. Its default globs include .env, PEM/key files and SSH keys but omit .npmrc and credentials, so they do not cover this gap. The direct Python regex and SecretLeakageRule replay establish the current miss; native Windows execution and downstream impact remain explicitly pending.",
+        "review": {
+          "author": "codex-contract-author",
+          "reviewer": "codex-independent-review-pass",
+          "same_model": true
+        },
+        "source_file": "src/doberman/engine/rules/secrets.py",
+        "source_pin": "53ae43c5298a2426c6696147fdd75e2a4aef10e2",
+        "source_sha256": "a73b183b5ac0da101e1411384e12ffe7da9f48f59947ec76a447974e246179fa",
+        "source_url": "https://github.com/fu351/Doberman-Core",
+        "status": "approved"
+      },
+      "declared_domain": "ASCII drive-absolute Windows paths using any drive letter, beginning with <letter>:\\ and containing one or more non-empty directory components made from letters, digits, underscore, hyphen, period, or space, followed by the exact basename .npmrc or credentials; paths are under 256 characters and contain no secret-shaped payload that triggers argument redaction. Evaluate Python re.search with the pinned (?ix) source pattern.",
+      "guarantee": "The secret-store classifier recognizes native Windows paths whose final component is .npmrc or credentials, independent of path content.",
+      "input_source": "Untrusted agent file path supplied under the path key to an intercepted fs_read tool; proxy normalize preserves it as SecurityObject.target and SecretLeakageRule checks that target.",
+      "provenance": "agent_derived",
+      "schema_version": "1",
+      "site": "fu351/Doberman-Core@53ae43c5298a2426c6696147fdd75e2a4aef10e2:src/doberman/engine/rules/secrets.py:223:_SECRET_PATH",
+      "trust": "untrusted-input"
+    },
+    "detail": null,
+    "domain": "BUG DEMO: a Windows drive path to .npmrc or credentials is not recognized by the pinned secret-store search regex",
+    "gate": {
+      "consumer_adopted": false,
+      "differential_cases": 0,
+      "gate_id": "doberman-secret-path-regression-gate-v1",
+      "local_gate_command": "PYTHONPATH=/tmp/regexproof-doberman-deps python3 scripts/doberman-secret-path-regression-gate.py --source-root /tmp/regexproof-pinned-sources/Doberman-Core-53ae43c5298a2426c6696147fdd75e2a4aef10e2 --output properties/calibration/2026-10-15-autonomous-doberman-win-secret-path-20r2/gate-report.json",
+      "local_gate_passed": true,
+      "mutation_guard_passed": true,
+      "product_engine_replayed": true,
+      "source_pin_verified": true
+    },
+    "kind": "bug_demo",
+    "pin": "53ae43c5298a2426c6696147fdd75e2a4aef10e2",
+    "question_id": "PY-doberman-secret-store-windows-miss",
+    "repo_id": "fu351/Doberman-Core",
+    "site": "fu351/Doberman-Core@53ae43c5298a2426c6696147fdd75e2a4aef10e2:src/doberman/engine/rules/secrets.py:223:_SECRET_PATH",
+    "status": "sat",
+    "synthesized": false,
+    "url": "https://github.com/fu351/Doberman-Core"
+  }
+]

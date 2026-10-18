@@ -1,0 +1,10 @@
+[
+  {
+    "agent_elapsed_seconds": null,
+    "cost_usd": null,
+    "human_active_seconds": null,
+    "question_id": "TC-sandbox-env-key-excludes-equals",
+    "status": "planned",
+    "tokens": null
+  }
+]

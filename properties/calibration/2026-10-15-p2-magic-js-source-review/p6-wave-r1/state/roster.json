@@ -1,0 +1,53 @@
+{
+  "cohort_id": "2026-09-12-calibration-20-r2",
+  "cohort_manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+  "coverage_digest": "93df06fe861e3095f9623b4f874036cfccf51c8be8c153c0dc9482450c900078",
+  "identities": [
+    {
+      "contract_sha256": "fc9955c606d0ee1258043ac8355015ede63a0e654a67c0ba71297a8294a45b37",
+      "pin": "e9fb233763160316989863b4739c4656133d45b0",
+      "provenance": "agent_derived",
+      "question_id": "ME-oauth2-pkce-s256-base64url",
+      "repo_id": "magiclabs/magic-js",
+      "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-ext/oauth2/src/crypto.ts:22:column-53",
+      "url": "https://github.com/magiclabs/magic-js"
+    },
+    {
+      "contract_sha256": "07e4e311f4f676b3b6adbfbecf2e2ab45b309d297a4cd969e4bede39c93de750",
+      "pin": "e9fb233763160316989863b4739c4656133d45b0",
+      "provenance": "agent_derived",
+      "question_id": "ME-oauth2-webauthn-base64url",
+      "repo_id": "magiclabs/magic-js",
+      "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-ext/oauth2/src/utils/base64.ts:4:column-26",
+      "url": "https://github.com/magiclabs/magic-js"
+    },
+    {
+      "contract_sha256": "1d09735ade9b5d438961b11c7a59793eb9ef56581aea77562968fd7a722e4a06",
+      "pin": "e9fb233763160316989863b4739c4656133d45b0",
+      "provenance": "agent_derived",
+      "question_id": "ME-passkey-base64url",
+      "repo_id": "magiclabs/magic-js",
+      "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-ext/passkey/src/utils/base64.ts:11:column-26",
+      "url": "https://github.com/magiclabs/magic-js"
+    },
+    {
+      "contract_sha256": "00224fc43e2c47dba1776258ebc618735a4ca049fabc1c5108c421013cbacd3c",
+      "pin": "e9fb233763160316989863b4739c4656133d45b0",
+      "provenance": "agent_derived",
+      "question_id": "ME-rn-bare-pkce-s256-base64url",
+      "repo_id": "magiclabs/magic-js",
+      "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-ext/react-native-bare-oauth/src/crypto.ts:25:column-53",
+      "url": "https://github.com/magiclabs/magic-js"
+    },
+    {
+      "contract_sha256": "323a23991ab50e0978632e69b6e4afb5951cc0c1858b08d1c24dff0b2b02ffa0",
+      "pin": "e9fb233763160316989863b4739c4656133d45b0",
+      "provenance": "agent_derived",
+      "question_id": "ME-rn-expo-pkce-s256-base64url",
+      "repo_id": "magiclabs/magic-js",
+      "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-ext/react-native-expo-oauth/src/crypto.ts:25:column-53",
+      "url": "https://github.com/magiclabs/magic-js"
+    }
+  ],
+  "schema_version": "2"
+}

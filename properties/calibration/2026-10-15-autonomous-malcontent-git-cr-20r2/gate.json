@@ -1,0 +1,23 @@
+{
+  "schema_version": "1",
+  "gate_id": "malcontent-cve48384-crlf-20r2",
+  "question_ids": [
+    "MC-malcontent-cve48384-embedded-cr-excludes-lf"
+  ],
+  "command": [
+    ".venv/bin/python",
+    "scripts/malcontent-git-cve-regression-gate.py",
+    "--skip-property",
+    "--output",
+    "/home/lalbers/gitroot/regexproof/properties/calibration/2026-10-15-autonomous-malcontent-git-cr-20r2/p6-gate-report.json"
+  ],
+  "timeout_seconds": 300,
+  "evidence": {
+    "product_engine_replay_question_ids": [
+      "MC-malcontent-cve48384-embedded-cr-excludes-lf"
+    ],
+    "differential_case_counts": {
+      "MC-malcontent-cve48384-embedded-cr-excludes-lf": 139
+    }
+  }
+}

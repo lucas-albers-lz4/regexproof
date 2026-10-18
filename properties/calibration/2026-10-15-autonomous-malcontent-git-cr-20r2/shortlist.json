@@ -1,0 +1,66 @@
+{
+  "schema_version": "1",
+  "selection_scope": "All seven extracted YARA regex sites in the source-pinned git_submodule_carriage_return CVE-2025-48384 rule. This is a one-rule vertical slice, not a ranked top-15 sample of the malcontent corpus.",
+  "source_pin": "ea3e83e24676a1678a9522141da29b636c9451ab",
+  "source_file": "rules/impact/exploit/cve-2025-48384.yara",
+  "source_sha256": "b6d017494cd9ecc7a9843832229fa45789c7edc06ccba093c0381d151a2a2552",
+  "selection_basis": "The rule is explicitly tied to a documented Git security advisory. The complete regex surface of this rule is reviewed so related branches and composition guards remain visible.",
+  "sites": [
+    {
+      "line": 22,
+      "name": "path_embedded_cr",
+      "pattern": "[\\n\\x00][ \\t]*path[ \\t]*=[ \\t]*\"?[^\\r\\n]*\\r[^\\n]",
+      "flags": "i",
+      "disposition": "adopted-component-contract",
+      "reason": "The terminal [^\\n] class is an independently meaningful CRLF exclusion on an untrusted .gitmodules path value; the exact full-rule gate also checks composition and a real-engine mutation."
+    },
+    {
+      "line": 23,
+      "name": "url_embedded_cr",
+      "pattern": "[\\n\\x00][ \\t]*url[ \\t]*=[ \\t]*\"?[^\\r\\n]*\\r[^\\n]",
+      "flags": "i",
+      "disposition": "deferred-sibling",
+      "reason": "Same embedded-CR rule shape for the URL field; no separate question is counted in this one-rule slice."
+    },
+    {
+      "line": 24,
+      "name": "path_eof_cr",
+      "pattern": "[\\n\\x00][ \\t]*path[ \\t]*=[ \\t]*\"?[^\\r\\n]*\\r$",
+      "flags": "i",
+      "disposition": "unresolved-solver-route",
+      "reason": "The anchored search mirror returned unknown in the exploratory suffix query; no UNSAT or SAT product claim is counted."
+    },
+    {
+      "line": 25,
+      "name": "url_eof_cr",
+      "pattern": "[\\n\\x00][ \\t]*url[ \\t]*=[ \\t]*\"?[^\\r\\n]*\\r$",
+      "flags": "i",
+      "disposition": "unresolved-sibling",
+      "reason": "Sibling of the unresolved anchored path branch; exact YARA-X behavior is covered only by the full-rule fixtures."
+    },
+    {
+      "line": 33,
+      "name": "path_trailing_cr",
+      "pattern": "[\\n\\x00][ \\t]*path[ \\t]*=[ \\t]*\"?[^\\r\\n]*\\r\\n",
+      "flags": "i",
+      "disposition": "behavior-only-composition",
+      "reason": "This regex also matches an ordinary CRLF path line; the rule requires the separate $bare_lf guard. The full YARA-X gate checks that composition."
+    },
+    {
+      "line": 34,
+      "name": "url_trailing_cr",
+      "pattern": "[\\n\\x00][ \\t]*url[ \\t]*=[ \\t]*\"?[^\\r\\n]*\\r\\n",
+      "flags": "i",
+      "disposition": "behavior-only-sibling",
+      "reason": "Same condition composition as path_trailing_cr; no second property is counted."
+    },
+    {
+      "line": 35,
+      "name": "bare_lf",
+      "pattern": "\"\\]\\n",
+      "flags": "",
+      "disposition": "behavior-only-composition-guard",
+      "reason": "The source uses this marker to distinguish mixed terminators from uniform CRLF. The anchored/search composition was not proven by Z3, so the exact-engine gate is the evidence here."
+    }
+  ]
+}

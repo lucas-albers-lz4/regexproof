@@ -510,22 +510,23 @@ def load_upstream(path: Path | None = None) -> list[dict[str, Any]]:
 
 
 def counts_as_conversion_asked(rec: dict[str, Any]) -> bool:
-    """Conversion-wave rows count only when product_reportable + human.
+    """Count product-reportable rows with human or evidenced agent adoption.
 
-    Kind alone would count smoke (agent_derived / incomplete contract).
+    Kind alone would count smoke (unadopted agent_derived / incomplete contract).
     """
-    from regexproof.harness.contract import product_reportable
+    from regexproof.harness.contract import contract_is_adopted, product_reportable
 
     if rec.get("synthesized"):
         return False
     contract = rec.get("contract")
-    if not isinstance(contract, dict) or str(contract.get("provenance") or "") != "human":
+    if not contract_is_adopted(contract):
         return False
     return product_reportable(
         {
             "kind": rec.get("kind"),
             "domain": rec.get("domain"),
             "contract": contract,
+            "site": rec.get("site"),
         }
     )
 
@@ -542,6 +543,9 @@ _CONVERSION_FUNNEL_KEYS = (
     "properties_sat_distinct",
     "sat_ground_truthed",
     "sat_unique_sites",
+    "conversion_properties_human",
+    "conversion_properties_autonomous",
+    "conversion_properties_machine_pair",
 )
 
 
@@ -558,6 +562,9 @@ def classify_conversion_rows(rows: list[dict[str, Any]]) -> dict[str, int]:
             "properties_sat_distinct": 0,
             "sat_ground_truthed": 0,
             "sat_unique_sites": 0,
+            "conversion_properties_human": 0,
+            "conversion_properties_autonomous": 0,
+            "conversion_properties_machine_pair": 0,
         }
     )
     sat_sites: set[tuple[str, str, str]] = set()
@@ -569,6 +576,15 @@ def classify_conversion_rows(rows: list[dict[str, Any]]) -> dict[str, int]:
         qid = rec.get("question_id") or rec.get("name") or ""
         pair = (str(rec.get("site") or ""), str(qid))
         counts["properties_asked"] += 1
+        provenance = (rec.get("contract") or {}).get("provenance")
+        provenance_key = {
+            "human": "conversion_properties_human",
+            "agent_derived": "conversion_properties_autonomous",
+            "version_diff": "conversion_properties_machine_pair",
+            "cross_engine": "conversion_properties_machine_pair",
+        }.get(provenance)
+        if provenance_key is not None:
+            counts[provenance_key] += 1
         asked_pairs.add(pair)
         result = rec.get("result")
         if result in UNSAT_RESULTS:
@@ -1049,6 +1065,9 @@ def aggregate(
         "redos_rows": classified.get("redos_rows", 0),
         "other_rows": classified.get("other_rows", 0),
         "properties_asked": asked,
+        "conversion_properties_human": conv.get("conversion_properties_human", 0),
+        "conversion_properties_autonomous": conv.get("conversion_properties_autonomous", 0),
+        "conversion_properties_machine_pair": conv.get("conversion_properties_machine_pair", 0),
         "properties_asked_synthesized": classified.get("properties_asked_synthesized", 0),
         "properties_asked_distinct": classified.get("properties_asked_distinct", 0)
         + shape5_asked,
@@ -1245,6 +1264,17 @@ def render_md(data: dict[str, Any]) -> str:
         f"| existence proofs (`fixed_upstream` + `private_first`) | {n(f['existence_proofs'])} |",
         f"| filed false positives | {n(f['false_positives_filed'])} |",
         f"| third-party public accepted | {n(f['third_party_public'])} |",
+        "",
+        "## Product conversion provenance",
+        "",
+        "Counts cover only product-reportable rows in `*_conversion.ndjson`; "
+        "they are a separate attribution series alongside the overall scanner funnel.",
+        "",
+        "| adopted provenance | conversion rows |",
+        "|---|---|",
+        f"| human | {n(f.get('conversion_properties_human', 0))} |",
+        f"| autonomous (`agent_derived`) | {n(f.get('conversion_properties_autonomous', 0))} |",
+        f"| machine pair (`version_diff` / `cross_engine`) | {n(f.get('conversion_properties_machine_pair', 0))} |",
         "",
         "## Rates",
         "",

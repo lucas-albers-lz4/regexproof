@@ -1,0 +1,23 @@
+{
+  "command": [
+    "/home/lalbers/gitroot/regexproof/.venv/bin/python",
+    "scripts/aidevops-secret-read-basename-regression-gate.py",
+    "--product-only",
+    "--source-root",
+    "/tmp/regexproof-pinned-sources/aidevops-8666b6c6c52472b5535aa295f2df593918152cb1"
+  ],
+  "evidence": {
+    "differential_case_counts": {
+      "AE-aidevops-secret-read-basename-coverage": 74
+    },
+    "product_engine_replay_question_ids": [
+      "AE-aidevops-secret-read-basename-coverage"
+    ]
+  },
+  "gate_id": "aidevops-node-secret-read-basename",
+  "question_ids": [
+    "AE-aidevops-secret-read-basename-coverage"
+  ],
+  "schema_version": "1",
+  "timeout_seconds": 300
+}

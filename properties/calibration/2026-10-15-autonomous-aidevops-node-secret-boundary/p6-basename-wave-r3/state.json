@@ -1,0 +1,217 @@
+{
+  "attempts": [
+    {
+      "contract": {
+        "adoption": {
+          "approved_on": "2026-10-15",
+          "authority": "standing_user_delegation",
+          "contract_sha256": "07fc29b88285903f6d72cd9bd73eab74ed9e09120e3a00eea84fea3dcbcf0217",
+          "evidence": [
+            "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/plugins/opencode-aidevops/quality-hooks-secret-read.mjs",
+            "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/plugins/opencode-aidevops/quality-hooks.mjs",
+            "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/plugins/opencode-aidevops/source-access-approval.mjs"
+          ],
+          "policy_version": "autonomous-contracts-v1",
+          "rationale": "The frozen selected-site review traces model-controlled read paths through the exact pinned pre-tool caller and fallback gate. The contract is limited to 64 case variants of one declared basename; product replay checks the three supported read tools, and the contract excludes policy completeness and false-positive claims.",
+          "review": {
+            "author": "codex-contract-author",
+            "reviewer": "codex-independent-review-pass",
+            "same_model": true
+          },
+          "source_file": ".agents/plugins/opencode-aidevops/quality-hooks-secret-read.mjs",
+          "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+          "source_sha256": "668f7dc002b263d58def6003194fd83dfa91b82b2fdcb9a10b1427f1cb942cf0",
+          "source_url": "https://github.com/marcusquinn/aidevops",
+          "status": "approved"
+        },
+        "declared_domain": "Exhaustive finite set of the 64 ASCII upper/lower-case variants of the basename `secret`; the formal query checks membership in the source regex under search semantics. Product replay checks representative sensitive basenames and the earlier `.pub` exception across Read, Glob, and NotebookRead, checks a non-read tool, and verifies a real source mutation. Sampled path cases are not an unbounded theorem over all paths.",
+        "guarantee": "For the finite declared domain of 64 ASCII case variants of basename `secret`, the pinned SECRET_BASENAME_RE matches each value with search semantics. In the product helper these basenames produce the `secret-bearing basename` block reason for OpenCode Read, Glob, and NotebookRead tools before the read executes. This does not establish list completeness, false-positive rates, or the behavior of other path predicates.",
+        "input_source": "The path supplied in a model-controlled OpenCode Read, Glob, or NotebookRead call. The pinned pre-tool hook routes it through checkSecretReadWithApproval and the ordinary path falls back to checkSecretReadGate.",
+        "provenance": "agent_derived",
+        "schema_version": "1",
+        "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/plugins/opencode-aidevops/quality-hooks-secret-read.mjs:7:SECRET_BASENAME_RE",
+        "trust": "untrusted-input"
+      },
+      "detail": null,
+      "domain": "Every ASCII case variant of the declared secret basename matches the pinned pre-read basename rule",
+      "gate": {
+        "consumer_adopted": false,
+        "differential_cases": 220,
+        "gate_id": "aidevops-node-secret-read-basename",
+        "local_gate_command": "/home/lalbers/gitroot/regexproof/.venv/bin/python scripts/aidevops-secret-read-basename-regression-gate.py --product-only --source-root /tmp/regexproof-pinned-sources/aidevops-8666b6c6c52472b5535aa295f2df593918152cb1",
+        "local_gate_passed": true,
+        "mutation_guard_passed": true,
+        "product_engine_replayed": true,
+        "source_pin_verified": true
+      },
+      "kind": "property",
+      "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "question_id": "AE-aidevops-secret-read-basename-coverage",
+      "repo_id": "marcusquinn/aidevops",
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/plugins/opencode-aidevops/quality-hooks-secret-read.mjs:7:SECRET_BASENAME_RE",
+      "status": "unsat",
+      "synthesized": false,
+      "url": "https://github.com/marcusquinn/aidevops"
+    }
+  ],
+  "cohort_manifest_digest": "b7fa1896fc98e53f92a015692c50b2be491bc4d339f5e259f628633ff16f2ba3",
+  "contracts": [
+    {
+      "contract": {
+        "adoption": {
+          "approved_on": "2026-10-15",
+          "authority": "standing_user_delegation",
+          "contract_sha256": "07fc29b88285903f6d72cd9bd73eab74ed9e09120e3a00eea84fea3dcbcf0217",
+          "evidence": [
+            "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/plugins/opencode-aidevops/quality-hooks-secret-read.mjs",
+            "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/plugins/opencode-aidevops/quality-hooks.mjs",
+            "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/plugins/opencode-aidevops/source-access-approval.mjs"
+          ],
+          "policy_version": "autonomous-contracts-v1",
+          "rationale": "The frozen selected-site review traces model-controlled read paths through the exact pinned pre-tool caller and fallback gate. The contract is limited to 64 case variants of one declared basename; product replay checks the three supported read tools, and the contract excludes policy completeness and false-positive claims.",
+          "review": {
+            "author": "codex-contract-author",
+            "reviewer": "codex-independent-review-pass",
+            "same_model": true
+          },
+          "source_file": ".agents/plugins/opencode-aidevops/quality-hooks-secret-read.mjs",
+          "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+          "source_sha256": "668f7dc002b263d58def6003194fd83dfa91b82b2fdcb9a10b1427f1cb942cf0",
+          "source_url": "https://github.com/marcusquinn/aidevops",
+          "status": "approved"
+        },
+        "declared_domain": "Exhaustive finite set of the 64 ASCII upper/lower-case variants of the basename `secret`; the formal query checks membership in the source regex under search semantics. Product replay checks representative sensitive basenames and the earlier `.pub` exception across Read, Glob, and NotebookRead, checks a non-read tool, and verifies a real source mutation. Sampled path cases are not an unbounded theorem over all paths.",
+        "guarantee": "For the finite declared domain of 64 ASCII case variants of basename `secret`, the pinned SECRET_BASENAME_RE matches each value with search semantics. In the product helper these basenames produce the `secret-bearing basename` block reason for OpenCode Read, Glob, and NotebookRead tools before the read executes. This does not establish list completeness, false-positive rates, or the behavior of other path predicates.",
+        "input_source": "The path supplied in a model-controlled OpenCode Read, Glob, or NotebookRead call. The pinned pre-tool hook routes it through checkSecretReadWithApproval and the ordinary path falls back to checkSecretReadGate.",
+        "provenance": "agent_derived",
+        "schema_version": "1",
+        "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/plugins/opencode-aidevops/quality-hooks-secret-read.mjs:7:SECRET_BASENAME_RE",
+        "trust": "untrusted-input"
+      },
+      "domain": "Every ASCII case variant of the declared secret basename matches the pinned pre-read basename rule",
+      "kind": "property",
+      "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "question_id": "AE-aidevops-secret-read-basename-coverage",
+      "repo_id": "marcusquinn/aidevops",
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/plugins/opencode-aidevops/quality-hooks-secret-read.mjs:7:SECRET_BASENAME_RE",
+      "synthesized": false,
+      "url": "https://github.com/marcusquinn/aidevops"
+    }
+  ],
+  "conversion_rows": [
+    {
+      "contract": {
+        "adoption": {
+          "approved_on": "2026-10-15",
+          "authority": "standing_user_delegation",
+          "contract_sha256": "07fc29b88285903f6d72cd9bd73eab74ed9e09120e3a00eea84fea3dcbcf0217",
+          "evidence": [
+            "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/plugins/opencode-aidevops/quality-hooks-secret-read.mjs",
+            "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/plugins/opencode-aidevops/quality-hooks.mjs",
+            "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/plugins/opencode-aidevops/source-access-approval.mjs"
+          ],
+          "policy_version": "autonomous-contracts-v1",
+          "rationale": "The frozen selected-site review traces model-controlled read paths through the exact pinned pre-tool caller and fallback gate. The contract is limited to 64 case variants of one declared basename; product replay checks the three supported read tools, and the contract excludes policy completeness and false-positive claims.",
+          "review": {
+            "author": "codex-contract-author",
+            "reviewer": "codex-independent-review-pass",
+            "same_model": true
+          },
+          "source_file": ".agents/plugins/opencode-aidevops/quality-hooks-secret-read.mjs",
+          "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+          "source_sha256": "668f7dc002b263d58def6003194fd83dfa91b82b2fdcb9a10b1427f1cb942cf0",
+          "source_url": "https://github.com/marcusquinn/aidevops",
+          "status": "approved"
+        },
+        "declared_domain": "Exhaustive finite set of the 64 ASCII upper/lower-case variants of the basename `secret`; the formal query checks membership in the source regex under search semantics. Product replay checks representative sensitive basenames and the earlier `.pub` exception across Read, Glob, and NotebookRead, checks a non-read tool, and verifies a real source mutation. Sampled path cases are not an unbounded theorem over all paths.",
+        "guarantee": "For the finite declared domain of 64 ASCII case variants of basename `secret`, the pinned SECRET_BASENAME_RE matches each value with search semantics. In the product helper these basenames produce the `secret-bearing basename` block reason for OpenCode Read, Glob, and NotebookRead tools before the read executes. This does not establish list completeness, false-positive rates, or the behavior of other path predicates.",
+        "input_source": "The path supplied in a model-controlled OpenCode Read, Glob, or NotebookRead call. The pinned pre-tool hook routes it through checkSecretReadWithApproval and the ordinary path falls back to checkSecretReadGate.",
+        "provenance": "agent_derived",
+        "schema_version": "1",
+        "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/plugins/opencode-aidevops/quality-hooks-secret-read.mjs:7:SECRET_BASENAME_RE",
+        "trust": "untrusted-input"
+      },
+      "corpus": "aidevops",
+      "disclosure": null,
+      "domain": "Every ASCII case variant of the declared secret basename matches the pinned pre-read basename rule",
+      "engine_versions": {
+        "python": "3.14.8",
+        "z3": "5.0.0"
+      },
+      "family": "AE-aidevops-secret-read-basename",
+      "ground_truth": null,
+      "ground_truth_status": null,
+      "idiom_bucket": "ecma-plugins",
+      "kind": "property",
+      "name": "AE-aidevops-secret-read-basename-coverage",
+      "product_reportable": true,
+      "regex_id": "9a82f8830d7fbf63ba234037888ea61d",
+      "result": "unsat",
+      "schema_version": "1",
+      "shape": 2,
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/plugins/opencode-aidevops/quality-hooks-secret-read.mjs:7:SECRET_BASENAME_RE",
+      "synthesized": false,
+      "wave_id": "aidevops-secret-basename-20261015-r3",
+      "witness": null
+    }
+  ],
+  "corpus": "aidevops",
+  "coverage_digest": "f47c56edde804074532de2ec73300304ea14f6d37640d2769315d1d03307ac2c",
+  "execution_caps": {
+    "local_gate_timeout_seconds": 300,
+    "max_active_conversion_waves": 1,
+    "max_adopted_contracts_per_wave": 5,
+    "max_new_questions_per_run": 5,
+    "parallel_walk": false,
+    "solver_retries": 0,
+    "solver_timeout_ms": 30000
+  },
+  "gate_config": {
+    "command": [
+      "/home/lalbers/gitroot/regexproof/.venv/bin/python",
+      "scripts/aidevops-secret-read-basename-regression-gate.py",
+      "--product-only",
+      "--source-root",
+      "/tmp/regexproof-pinned-sources/aidevops-8666b6c6c52472b5535aa295f2df593918152cb1"
+    ],
+    "evidence": {
+      "differential_case_counts": {
+        "AE-aidevops-secret-read-basename-coverage": 220
+      },
+      "product_engine_replay_question_ids": [
+        "AE-aidevops-secret-read-basename-coverage"
+      ]
+    },
+    "gate_id": "aidevops-node-secret-read-basename",
+    "question_ids": [
+      "AE-aidevops-secret-read-basename-coverage"
+    ],
+    "schema_version": "1",
+    "timeout_seconds": 300
+  },
+  "idiom_bucket": "ecma-plugins",
+  "runs": [
+    {
+      "active_question_id": null,
+      "finished_at": "2026-10-15T18:38:04+00:00",
+      "gate_failure": null,
+      "gate_passed": true,
+      "gate_wall_ms": 422.5,
+      "mutation_failures": [],
+      "mutation_wall_ms": 53.3,
+      "new_questions": 1,
+      "question_ids": [
+        "AE-aidevops-secret-read-basename-coverage"
+      ],
+      "reason": null,
+      "run_id": "f879a5dd-6f45-41e8-b2f3-972d229dbb88",
+      "solver_wall_ms": 300.6,
+      "source_failures": {},
+      "source_wall_ms": 19.1,
+      "started_at": "2026-10-15T18:38:04+00:00",
+      "status": "complete"
+    }
+  ],
+  "schema_version": "1",
+  "wave_id": "aidevops-secret-basename-20261015-r3"
+}

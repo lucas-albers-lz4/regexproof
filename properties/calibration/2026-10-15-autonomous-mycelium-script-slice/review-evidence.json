@@ -1,0 +1,4308 @@
+{
+  "candidates": [
+    {
+      "call_kind": "substitution",
+      "decision": "unresolved",
+      "pattern": ".*argv\\[\\]=\\([^;]*\\);.*",
+      "rank": 1,
+      "rationale": "The captured argv text feeds provenance-bypass, signer/ref, and multi-ExecStart checks. A real pinned systemd ExecStart serialization is needed to establish whether the capture preserves every command and argument.",
+      "reason_code": "systemd_execstart_serialization",
+      "regex_id": "148896941c21d4a17551f044bd40fc88",
+      "shortlist_site": "batch/corpora/mycelium/rules/scripts/update_unit_drift_drill.sh:184:3",
+      "site": "scripts/update_unit_drift_drill.sh:184:3",
+      "source_binding": {
+        "evidence_ref": "https://github.com/mycelium0/mycelium/blob/4b53dc7629ca3bc88bf5467db481ad2af7130711/scripts/update_unit_drift_drill.sh",
+        "path": "scripts/update_unit_drift_drill.sh",
+        "pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+        "repository_url": "https://github.com/mycelium0/mycelium",
+        "sha256": "4e28f0bd727ba842fed7840bdd163fbef32dc911f7c8e6bea409895ced4c6493"
+      },
+      "source_pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+      "window": {
+        "lines": [
+          {
+            "is_target": false,
+            "line": 159,
+            "text": "\t\tprintf '              line — treat the unmasked original as sensitive before sharing it.\\n'"
+          },
+          {
+            "is_target": false,
+            "line": 160,
+            "text": "\t\tprintf '        --- template / +++ deployed ---\\n'"
+          },
+          {
+            "is_target": false,
+            "line": 161,
+            "text": "\t\tdiff -u <(directives \"$tpl\") <(directives \"$dep\") 2>/dev/null | tail -n +3 | redact | sed 's/^/        /'"
+          },
+          {
+            "is_target": false,
+            "line": 162,
+            "text": "\t\tprintf '        -> nothing reconciles this back. Reset with: cp %s %s\\n' \"$tpl\" \"$dep\""
+          },
+          {
+            "is_target": false,
+            "line": 163,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 164,
+            "text": "done"
+          },
+          {
+            "is_target": false,
+            "line": 165,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 166,
+            "text": "# --- the EFFECTIVE ExecStart ----------------------------------------------------------------------"
+          },
+          {
+            "is_target": false,
+            "line": 167,
+            "text": "# Per-node flags (the signer path, the ref pin) belong in a systemd DROP-IN, not in the unit file —"
+          },
+          {
+            "is_target": false,
+            "line": 168,
+            "text": "# hand-editing the unit is the exact drift this drill exists to catch, and a drop-in keeps the"
+          },
+          {
+            "is_target": false,
+            "line": 169,
+            "text": "# installed unit a pristine template copy that `systemctl revert` resets in one command."
+          },
+          {
+            "is_target": false,
+            "line": 170,
+            "text": "#"
+          },
+          {
+            "is_target": false,
+            "line": 171,
+            "text": "# So every check about WHAT WILL RUN must read the MERGED unit, not the file. Reading the file was"
+          },
+          {
+            "is_target": false,
+            "line": 172,
+            "text": "# wrong in both directions: it false-CRITs a correctly-armed node whose flags live in a drop-in, and —"
+          },
+          {
+            "is_target": false,
+            "line": 173,
+            "text": "# far worse — it is BLIND to a drop-in that adds --insecure-no-verify. A check that is permanently red"
+          },
+          {
+            "is_target": false,
+            "line": 174,
+            "text": "# on a correct node stops being read, and a check with a hole that big is not a check."
+          },
+          {
+            "is_target": false,
+            "line": 175,
+            "text": "# Falls back to the file's ExecStart if systemctl cannot report (unit absent / systemd not answering)."
+          },
+          {
+            "is_target": false,
+            "line": 176,
+            "text": "# EVERY ExecStart, not the first. `Type=oneshot` admits MULTIPLE ExecStart= lines and systemd runs them"
+          },
+          {
+            "is_target": false,
+            "line": 177,
+            "text": "# all, in order, as root. This read used `head -1`, so a drop-in that APPENDS a second command — after an"
+          },
+          {
+            "is_target": false,
+            "line": 178,
+            "text": "# earlier drop-in has already supplied the authenticated one, which is exactly the live posture here — was"
+          },
+          {
+            "is_target": false,
+            "line": 179,
+            "text": "# invisible to all three checks below, and the drill printed \"no provenance bypass\" and \"the effective"
+          },
+          {
+            "is_target": false,
+            "line": 180,
+            "text": "# command is authenticated\" while the second command ran unattended every 15 minutes. The injection test"
+          },
+          {
+            "is_target": false,
+            "line": 181,
+            "text": "# that accompanied the original fix only exercised a RESETTING drop-in (one that clears and replaces), so"
+          },
+          {
+            "is_target": false,
+            "line": 182,
+            "text": "# it never touched this shape (Audit-0009 C2)."
+          },
+          {
+            "is_target": false,
+            "line": 183,
+            "text": "exec_all=\"$(systemctl show \"$SVC_NAME\" -p ExecStart --value 2>/dev/null \\"
+          },
+          {
+            "is_target": true,
+            "line": 184,
+            "text": "\t| sed -n 's/.*argv\\[\\]=\\([^;]*\\);.*/\\1/p' | sed 's/[[:space:]]*$//' | grep -v '^$')\""
+          },
+          {
+            "is_target": false,
+            "line": 185,
+            "text": "[ -n \"$exec_all\" ] || exec_all=\"$(directives \"$UNIT_DIR/$SVC_NAME\" 2>/dev/null | grep -E '^ExecStart=' | sed 's/^ExecStart=//' || true)\""
+          },
+          {
+            "is_target": false,
+            "line": 186,
+            "text": "exec_n=\"$(printf '%s\\n' \"$exec_all\" | grep -c . || true)\""
+          },
+          {
+            "is_target": false,
+            "line": 187,
+            "text": "# The checks below reason over the CONCATENATION, so a flag in any command is seen. Count is reported"
+          },
+          {
+            "is_target": false,
+            "line": 188,
+            "text": "# separately: on this unit more than one ExecStart is itself the finding, whatever the commands say."
+          },
+          {
+            "is_target": false,
+            "line": 189,
+            "text": "exec_eff=\"$(printf '%s' \"$exec_all\" | tr '\\n' ' ')\""
+          },
+          {
+            "is_target": false,
+            "line": 190,
+            "text": "if [ \"${exec_n:-0}\" -gt 1 ]; then"
+          },
+          {
+            "is_target": false,
+            "line": 191,
+            "text": "\tcrit \"the unit has $exec_n ExecStart commands; systemd runs ALL of them as root, in order.\""
+          },
+          {
+            "is_target": false,
+            "line": 192,
+            "text": "\tcrit \"        On this unit that is never legitimate: the per-node flags belong in ONE resetting drop-in\""
+          },
+          {
+            "is_target": false,
+            "line": 193,
+            "text": "\tcrit \"        (\\`ExecStart=\\` to clear, then the single authenticated command). A second, APPENDED\""
+          },
+          {
+            "is_target": false,
+            "line": 194,
+            "text": "\tcrit \"        command is how a provenance bypass hides behind a correct-looking first one.\""
+          },
+          {
+            "is_target": false,
+            "line": 195,
+            "text": "\tprintf '%s\\n' \"$exec_all\" | redact | sed 's/^/          - /'"
+          },
+          {
+            "is_target": false,
+            "line": 196,
+            "text": "fi"
+          },
+          {
+            "is_target": false,
+            "line": 197,
+            "text": "dropins=\"$(systemctl show \"$SVC_NAME\" -p DropInPaths --value 2>/dev/null)\""
+          },
+          {
+            "is_target": false,
+            "line": 198,
+            "text": "if [ -n \"$dropins\" ]; then"
+          },
+          {
+            "is_target": false,
+            "line": 199,
+            "text": "\tsay \"  note  per-node flags come from drop-in(s): $dropins\""
+          },
+          {
+            "is_target": false,
+            "line": 200,
+            "text": "\tprintf '        (the unit FILE stays a pristine template copy; `systemctl revert %s` resets it)\\n' \"$SVC_NAME\""
+          },
+          {
+            "is_target": false,
+            "line": 201,
+            "text": "fi"
+          },
+          {
+            "is_target": false,
+            "line": 202,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 203,
+            "text": "# --- 2. the provenance bypass (over the EFFECTIVE command + both unit files) ------------------------"
+          },
+          {
+            "is_target": false,
+            "line": 204,
+            "text": "bypass=0"
+          },
+          {
+            "is_target": false,
+            "line": 205,
+            "text": "if printf '%s' \"$exec_eff\" | grep -q -- '--insecure-no-verify'; then"
+          },
+          {
+            "is_target": false,
+            "line": 206,
+            "text": "\tbypass=1"
+          },
+          {
+            "is_target": false,
+            "line": 207,
+            "text": "\tcrit \"the EFFECTIVE ExecStart carries --insecure-no-verify — verify_signed_ref returns BEFORE checking anything.\""
+          },
+          {
+            "is_target": false,
+            "line": 208,
+            "text": "\tcrit \"        Fetched code would be merged, installed and COMPILED as root unauthenticated.\""
+          },
+          {
+            "is_target": false,
+            "line": 209,
+            "text": "\t[ -n \"$dropins\" ] && crit \"        It is coming from a DROP-IN, which the unit file does not show: $dropins\""
+          }
+        ],
+        "path": "scripts/update_unit_drift_drill.sh",
+        "target_line": 184,
+        "token": "3",
+        "window_end": 209,
+        "window_lines": 51,
+        "window_start": 159
+      }
+    },
+    {
+      "call_kind": "substitution",
+      "decision": "skipped",
+      "pattern": ".*[:.]([0-9]+)$",
+      "rank": 2,
+      "rationale": "The sed capture extracts ports from local ss output for a liveness/status check. It does not enforce a trust boundary; expected port presence is checked separately with whole-line grep.",
+      "reason_code": "status_only_listener_probe",
+      "regex_id": "f2aef01c87f5ffd746de7b1e52bdb19c",
+      "shortlist_site": "batch/corpora/mycelium/rules/scripts/node-bootstrap.sh:1083:60",
+      "site": "scripts/node-bootstrap.sh:1083:60",
+      "source_binding": {
+        "evidence_ref": "https://github.com/mycelium0/mycelium/blob/4b53dc7629ca3bc88bf5467db481ad2af7130711/scripts/node-bootstrap.sh",
+        "path": "scripts/node-bootstrap.sh",
+        "pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+        "repository_url": "https://github.com/mycelium0/mycelium",
+        "sha256": "3f0c03d5db1e13665969d255583823cd0ea8f7cc618bb3539ac26fe94c907b27"
+      },
+      "source_pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+      "window": {
+        "lines": [
+          {
+            "is_target": false,
+            "line": 1058,
+            "text": "\t# vless-xhttp-tls rides the SEPARATE xray engine (not in $SINGBOX_CONFIG); a sing-box client cannot dial"
+          },
+          {
+            "is_target": false,
+            "line": 1059,
+            "text": "\t# xhttp, so its acceptance is L4-only without this: an openssl own-cert loopback handshake against the"
+          },
+          {
+            "is_target": false,
+            "line": 1060,
+            "text": "\t# xray xhttp-tls port (RP-0014 chunk A). Advisory, its OWN marker, never rolls back. No-op if xray absent."
+          },
+          {
+            "is_target": false,
+            "line": 1061,
+            "text": "\tmeasure_l7_probe_xhttp \"$STATE_DIR/l7_xhttp_postapply.json\" || warn \"post-apply L7 xhttp-tls liveness flagged a dead outer-TLS layer (marker: $STATE_DIR/l7_xhttp_postapply.json) — the xray xhttp-tls listener is bound but a real client would fail the TLS layer.\""
+          },
+          {
+            "is_target": false,
+            "line": 1062,
+            "text": "\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 1063,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 1064,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 1065,
+            "text": "# verify_listen_ports — assert every expected TCP/UDP port from the live config is actually bound."
+          },
+          {
+            "is_target": false,
+            "line": 1066,
+            "text": "# Returns 0 if all expected ports are listening (or if we cannot determine the set — best-effort,"
+          },
+          {
+            "is_target": false,
+            "line": 1067,
+            "text": "# never a false failure when the tooling is unavailable)."
+          },
+          {
+            "is_target": false,
+            "line": 1068,
+            "text": "verify_listen_ports() {"
+          },
+          {
+            "is_target": false,
+            "line": 1069,
+            "text": "\thave ss || { warn \"ss not available; cannot confirm bound ports (skipping port assertion).\"; return 0; }"
+          },
+          {
+            "is_target": false,
+            "line": 1070,
+            "text": "\thave jq || { warn \"jq not available; cannot read expected ports (skipping port assertion).\"; return 0; }"
+          },
+          {
+            "is_target": false,
+            "line": 1071,
+            "text": "\t[ -f \"$SINGBOX_CONFIG\" ] || return 0"
+          },
+          {
+            "is_target": false,
+            "line": 1072,
+            "text": "\tlocal want_tcp want_udp"
+          },
+          {
+            "is_target": false,
+            "line": 1073,
+            "text": "\twant_tcp=\"$(jq -r '"
+          },
+          {
+            "is_target": false,
+            "line": 1074,
+            "text": "\t\t[.inbounds[]? | select(.listen_port != null)"
+          },
+          {
+            "is_target": false,
+            "line": 1075,
+            "text": "\t\t | select(.type==\"vless\" or .type==\"trojan\" or .type==\"shadowtls\""
+          },
+          {
+            "is_target": false,
+            "line": 1076,
+            "text": "\t\t          or (.type==\"shadowsocks\" and (.listen|test(\"127\\\\.0\\\\.0\\\\.1\")|not)))"
+          },
+          {
+            "is_target": false,
+            "line": 1077,
+            "text": "\t\t | .listen_port] | unique | .[]' \"$SINGBOX_CONFIG\" 2>/dev/null)\""
+          },
+          {
+            "is_target": false,
+            "line": 1078,
+            "text": "\twant_udp=\"$(jq -r '"
+          },
+          {
+            "is_target": false,
+            "line": 1079,
+            "text": "\t\t[.inbounds[]? | select(.listen_port != null)"
+          },
+          {
+            "is_target": false,
+            "line": 1080,
+            "text": "\t\t | select(.type==\"hysteria2\" or .type==\"tuic\") | .listen_port] | unique | .[]' \\"
+          },
+          {
+            "is_target": false,
+            "line": 1081,
+            "text": "\t\t\"$SINGBOX_CONFIG\" 2>/dev/null)\""
+          },
+          {
+            "is_target": false,
+            "line": 1082,
+            "text": "\tlocal listening_tcp listening_udp p missing=0"
+          },
+          {
+            "is_target": true,
+            "line": 1083,
+            "text": "\tlistening_tcp=\"$(ss -tlnH 2>/dev/null | awk '{print $4}' | sed -E 's/.*[:.]([0-9]+)$/\\1/' | sort -u)\""
+          },
+          {
+            "is_target": false,
+            "line": 1084,
+            "text": "\tlistening_udp=\"$(ss -ulnH 2>/dev/null | awk '{print $4}' | sed -E 's/.*[:.]([0-9]+)$/\\1/' | sort -u)\""
+          },
+          {
+            "is_target": false,
+            "line": 1085,
+            "text": "\tfor p in $want_tcp; do"
+          },
+          {
+            "is_target": false,
+            "line": 1086,
+            "text": "\t\t[ -n \"$p\" ] || continue"
+          },
+          {
+            "is_target": false,
+            "line": 1087,
+            "text": "\t\tprintf '%s\\n' \"$listening_tcp\" | grep -qx \"$p\" || { warn \"expected TCP port $p is NOT bound.\"; missing=1; }"
+          },
+          {
+            "is_target": false,
+            "line": 1088,
+            "text": "\tdone"
+          },
+          {
+            "is_target": false,
+            "line": 1089,
+            "text": "\tfor p in $want_udp; do"
+          },
+          {
+            "is_target": false,
+            "line": 1090,
+            "text": "\t\t[ -n \"$p\" ] || continue"
+          },
+          {
+            "is_target": false,
+            "line": 1091,
+            "text": "\t\tprintf '%s\\n' \"$listening_udp\" | grep -qx \"$p\" || { warn \"expected UDP port $p is NOT bound.\"; missing=1; }"
+          },
+          {
+            "is_target": false,
+            "line": 1092,
+            "text": "\tdone"
+          },
+          {
+            "is_target": false,
+            "line": 1093,
+            "text": "\t[ \"$missing\" -eq 0 ] || return 1"
+          },
+          {
+            "is_target": false,
+            "line": 1094,
+            "text": "\tlog \"all expected listen ports are bound.\""
+          },
+          {
+            "is_target": false,
+            "line": 1095,
+            "text": "\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 1096,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 1097,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 1098,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 1099,
+            "text": "# ---------------------------------------------------------------------------"
+          },
+          {
+            "is_target": false,
+            "line": 1100,
+            "text": "# Dispatch."
+          },
+          {
+            "is_target": false,
+            "line": 1101,
+            "text": "# ---------------------------------------------------------------------------"
+          },
+          {
+            "is_target": false,
+            "line": 1102,
+            "text": "# MYC_NB_NO_DISPATCH=1 lets a test SOURCE this script to exercise the pure helpers (assert_two_hop_shape,"
+          },
+          {
+            "is_target": false,
+            "line": 1103,
+            "text": "# seed/merge_operator_overrides, bundle_served_age_seconds) WITHOUT running a root-requiring flow. It is"
+          },
+          {
+            "is_target": false,
+            "line": 1104,
+            "text": "# never set in production; the normal invocation leaves it unset and dispatches as before."
+          },
+          {
+            "is_target": false,
+            "line": 1105,
+            "text": "# ...but ONLY when this file is SOURCED, which is the only thing the seam was ever for. Executed with"
+          },
+          {
+            "is_target": false,
+            "line": 1106,
+            "text": "# the variable set, the guard skipped every flow, fell off the end of the script, and exited **0** —"
+          },
+          {
+            "is_target": false,
+            "line": 1107,
+            "text": "# measured. A converge that does nothing and reports success is the worst possible failure here: it is"
+          },
+          {
+            "is_target": false,
+            "line": 1108,
+            "text": "# indistinguishable from a converge that worked, and the variable is an ordinary exported string that a"
+          }
+        ],
+        "path": "scripts/node-bootstrap.sh",
+        "target_line": 1083,
+        "token": "60",
+        "window_end": 1108,
+        "window_lines": 51,
+        "window_start": 1058
+      }
+    },
+    {
+      "call_kind": "substitution",
+      "decision": "skipped",
+      "pattern": ".*[:.]([0-9]+)$",
+      "rank": 3,
+      "rationale": "The UDP variant has the same local ss-to-port status role as the TCP candidate; same sink and no independent boundary guarantee.",
+      "reason_code": "status_only_listener_probe",
+      "regex_id": "e61fc06da665bfb8c2eaaca06b5f3d3f",
+      "shortlist_site": "batch/corpora/mycelium/rules/scripts/node-bootstrap.sh:1084:60",
+      "site": "scripts/node-bootstrap.sh:1084:60",
+      "source_binding": {
+        "evidence_ref": "https://github.com/mycelium0/mycelium/blob/4b53dc7629ca3bc88bf5467db481ad2af7130711/scripts/node-bootstrap.sh",
+        "path": "scripts/node-bootstrap.sh",
+        "pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+        "repository_url": "https://github.com/mycelium0/mycelium",
+        "sha256": "3f0c03d5db1e13665969d255583823cd0ea8f7cc618bb3539ac26fe94c907b27"
+      },
+      "source_pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+      "window": {
+        "lines": [
+          {
+            "is_target": false,
+            "line": 1059,
+            "text": "\t# xhttp, so its acceptance is L4-only without this: an openssl own-cert loopback handshake against the"
+          },
+          {
+            "is_target": false,
+            "line": 1060,
+            "text": "\t# xray xhttp-tls port (RP-0014 chunk A). Advisory, its OWN marker, never rolls back. No-op if xray absent."
+          },
+          {
+            "is_target": false,
+            "line": 1061,
+            "text": "\tmeasure_l7_probe_xhttp \"$STATE_DIR/l7_xhttp_postapply.json\" || warn \"post-apply L7 xhttp-tls liveness flagged a dead outer-TLS layer (marker: $STATE_DIR/l7_xhttp_postapply.json) — the xray xhttp-tls listener is bound but a real client would fail the TLS layer.\""
+          },
+          {
+            "is_target": false,
+            "line": 1062,
+            "text": "\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 1063,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 1064,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 1065,
+            "text": "# verify_listen_ports — assert every expected TCP/UDP port from the live config is actually bound."
+          },
+          {
+            "is_target": false,
+            "line": 1066,
+            "text": "# Returns 0 if all expected ports are listening (or if we cannot determine the set — best-effort,"
+          },
+          {
+            "is_target": false,
+            "line": 1067,
+            "text": "# never a false failure when the tooling is unavailable)."
+          },
+          {
+            "is_target": false,
+            "line": 1068,
+            "text": "verify_listen_ports() {"
+          },
+          {
+            "is_target": false,
+            "line": 1069,
+            "text": "\thave ss || { warn \"ss not available; cannot confirm bound ports (skipping port assertion).\"; return 0; }"
+          },
+          {
+            "is_target": false,
+            "line": 1070,
+            "text": "\thave jq || { warn \"jq not available; cannot read expected ports (skipping port assertion).\"; return 0; }"
+          },
+          {
+            "is_target": false,
+            "line": 1071,
+            "text": "\t[ -f \"$SINGBOX_CONFIG\" ] || return 0"
+          },
+          {
+            "is_target": false,
+            "line": 1072,
+            "text": "\tlocal want_tcp want_udp"
+          },
+          {
+            "is_target": false,
+            "line": 1073,
+            "text": "\twant_tcp=\"$(jq -r '"
+          },
+          {
+            "is_target": false,
+            "line": 1074,
+            "text": "\t\t[.inbounds[]? | select(.listen_port != null)"
+          },
+          {
+            "is_target": false,
+            "line": 1075,
+            "text": "\t\t | select(.type==\"vless\" or .type==\"trojan\" or .type==\"shadowtls\""
+          },
+          {
+            "is_target": false,
+            "line": 1076,
+            "text": "\t\t          or (.type==\"shadowsocks\" and (.listen|test(\"127\\\\.0\\\\.0\\\\.1\")|not)))"
+          },
+          {
+            "is_target": false,
+            "line": 1077,
+            "text": "\t\t | .listen_port] | unique | .[]' \"$SINGBOX_CONFIG\" 2>/dev/null)\""
+          },
+          {
+            "is_target": false,
+            "line": 1078,
+            "text": "\twant_udp=\"$(jq -r '"
+          },
+          {
+            "is_target": false,
+            "line": 1079,
+            "text": "\t\t[.inbounds[]? | select(.listen_port != null)"
+          },
+          {
+            "is_target": false,
+            "line": 1080,
+            "text": "\t\t | select(.type==\"hysteria2\" or .type==\"tuic\") | .listen_port] | unique | .[]' \\"
+          },
+          {
+            "is_target": false,
+            "line": 1081,
+            "text": "\t\t\"$SINGBOX_CONFIG\" 2>/dev/null)\""
+          },
+          {
+            "is_target": false,
+            "line": 1082,
+            "text": "\tlocal listening_tcp listening_udp p missing=0"
+          },
+          {
+            "is_target": false,
+            "line": 1083,
+            "text": "\tlistening_tcp=\"$(ss -tlnH 2>/dev/null | awk '{print $4}' | sed -E 's/.*[:.]([0-9]+)$/\\1/' | sort -u)\""
+          },
+          {
+            "is_target": true,
+            "line": 1084,
+            "text": "\tlistening_udp=\"$(ss -ulnH 2>/dev/null | awk '{print $4}' | sed -E 's/.*[:.]([0-9]+)$/\\1/' | sort -u)\""
+          },
+          {
+            "is_target": false,
+            "line": 1085,
+            "text": "\tfor p in $want_tcp; do"
+          },
+          {
+            "is_target": false,
+            "line": 1086,
+            "text": "\t\t[ -n \"$p\" ] || continue"
+          },
+          {
+            "is_target": false,
+            "line": 1087,
+            "text": "\t\tprintf '%s\\n' \"$listening_tcp\" | grep -qx \"$p\" || { warn \"expected TCP port $p is NOT bound.\"; missing=1; }"
+          },
+          {
+            "is_target": false,
+            "line": 1088,
+            "text": "\tdone"
+          },
+          {
+            "is_target": false,
+            "line": 1089,
+            "text": "\tfor p in $want_udp; do"
+          },
+          {
+            "is_target": false,
+            "line": 1090,
+            "text": "\t\t[ -n \"$p\" ] || continue"
+          },
+          {
+            "is_target": false,
+            "line": 1091,
+            "text": "\t\tprintf '%s\\n' \"$listening_udp\" | grep -qx \"$p\" || { warn \"expected UDP port $p is NOT bound.\"; missing=1; }"
+          },
+          {
+            "is_target": false,
+            "line": 1092,
+            "text": "\tdone"
+          },
+          {
+            "is_target": false,
+            "line": 1093,
+            "text": "\t[ \"$missing\" -eq 0 ] || return 1"
+          },
+          {
+            "is_target": false,
+            "line": 1094,
+            "text": "\tlog \"all expected listen ports are bound.\""
+          },
+          {
+            "is_target": false,
+            "line": 1095,
+            "text": "\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 1096,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 1097,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 1098,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 1099,
+            "text": "# ---------------------------------------------------------------------------"
+          },
+          {
+            "is_target": false,
+            "line": 1100,
+            "text": "# Dispatch."
+          },
+          {
+            "is_target": false,
+            "line": 1101,
+            "text": "# ---------------------------------------------------------------------------"
+          },
+          {
+            "is_target": false,
+            "line": 1102,
+            "text": "# MYC_NB_NO_DISPATCH=1 lets a test SOURCE this script to exercise the pure helpers (assert_two_hop_shape,"
+          },
+          {
+            "is_target": false,
+            "line": 1103,
+            "text": "# seed/merge_operator_overrides, bundle_served_age_seconds) WITHOUT running a root-requiring flow. It is"
+          },
+          {
+            "is_target": false,
+            "line": 1104,
+            "text": "# never set in production; the normal invocation leaves it unset and dispatches as before."
+          },
+          {
+            "is_target": false,
+            "line": 1105,
+            "text": "# ...but ONLY when this file is SOURCED, which is the only thing the seam was ever for. Executed with"
+          },
+          {
+            "is_target": false,
+            "line": 1106,
+            "text": "# the variable set, the guard skipped every flow, fell off the end of the script, and exited **0** —"
+          },
+          {
+            "is_target": false,
+            "line": 1107,
+            "text": "# measured. A converge that does nothing and reports success is the worst possible failure here: it is"
+          },
+          {
+            "is_target": false,
+            "line": 1108,
+            "text": "# indistinguishable from a converge that worked, and the variable is an ordinary exported string that a"
+          },
+          {
+            "is_target": false,
+            "line": 1109,
+            "text": "# CI runner, a harness, or a shell that once ran the rotate gate can be carrying. It would have made a"
+          }
+        ],
+        "path": "scripts/node-bootstrap.sh",
+        "target_line": 1084,
+        "token": "60",
+        "window_end": 1109,
+        "window_lines": 51,
+        "window_start": 1059
+      }
+    },
+    {
+      "call_kind": "substitution",
+      "decision": "unresolved",
+      "pattern": ".*--repo-ref[= ]\\{1,\\}\\([^ ]*\\).*",
+      "rank": 4,
+      "rationale": "This capture extracts --repo-ref from the same merged ExecStart text used by rank 1. The result affects tag-versus-branch reporting, but systemd serialization and quoting have not been ground-truthed.",
+      "reason_code": "systemd_execstart_serialization",
+      "regex_id": "6a34d6601a5a58a39757c91e8be39776",
+      "shortlist_site": "batch/corpora/mycelium/rules/scripts/update_unit_drift_drill.sh:236:35",
+      "site": "scripts/update_unit_drift_drill.sh:236:35",
+      "source_binding": {
+        "evidence_ref": "https://github.com/mycelium0/mycelium/blob/4b53dc7629ca3bc88bf5467db481ad2af7130711/scripts/update_unit_drift_drill.sh",
+        "path": "scripts/update_unit_drift_drill.sh",
+        "pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+        "repository_url": "https://github.com/mycelium0/mycelium",
+        "sha256": "4e28f0bd727ba842fed7840bdd163fbef32dc911f7c8e6bea409895ced4c6493"
+      },
+      "source_pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+      "window": {
+        "lines": [
+          {
+            "is_target": false,
+            "line": 211,
+            "text": "for name in \"$SVC_NAME\" \"$TMR_NAME\"; do"
+          },
+          {
+            "is_target": false,
+            "line": 212,
+            "text": "\t[ -f \"$UNIT_DIR/$name\" ] || continue"
+          },
+          {
+            "is_target": false,
+            "line": 213,
+            "text": "\tif directives \"$UNIT_DIR/$name\" | grep -q -- '--insecure-no-verify'; then"
+          },
+          {
+            "is_target": false,
+            "line": 214,
+            "text": "\t\tbypass=1"
+          },
+          {
+            "is_target": false,
+            "line": 215,
+            "text": "\t\tcrit \"$name (unit file): carries --insecure-no-verify — the shipped template must never carry it.\""
+          },
+          {
+            "is_target": false,
+            "line": 216,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 217,
+            "text": "done"
+          },
+          {
+            "is_target": false,
+            "line": 218,
+            "text": "[ \"$bypass\" -eq 0 ] && ok \"no provenance bypass in the effective command or either unit file\""
+          },
+          {
+            "is_target": false,
+            "line": 219,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 220,
+            "text": "# --- 3. arming safety (over the EFFECTIVE command) --------------------------------------------------"
+          },
+          {
+            "is_target": false,
+            "line": 221,
+            "text": "# An armed timer is only as safe as the command it actually runs, so this reads the merged unit. The"
+          },
+          {
+            "is_target": false,
+            "line": 222,
+            "text": "# signature covers the pinned ref's TIP; `merge --ff-only` then ingests every intervening commit, so a"
+          },
+          {
+            "is_target": false,
+            "line": 223,
+            "text": "# signed pin is a real provenance gate but NOT a per-commit one. A MUTABLE pin (a branch) is an"
+          },
+          {
+            "is_target": false,
+            "line": 224,
+            "text": "# accepted posture on an operator-owned node and is reported, not failed — what fails is arming with"
+          },
+          {
+            "is_target": false,
+            "line": 225,
+            "text": "# no authentication at all."
+          },
+          {
+            "is_target": false,
+            "line": 226,
+            "text": "if [ \"$tmr_state\" = \"enabled\" ] || [ \"$tmr_active\" = \"active\" ]; then"
+          },
+          {
+            "is_target": false,
+            "line": 227,
+            "text": "\thas_signers=0; has_ref=0"
+          },
+          {
+            "is_target": false,
+            "line": 228,
+            "text": "\tprintf '%s' \"$exec_eff\" | grep -q -- '--allowed-signers' && has_signers=1"
+          },
+          {
+            "is_target": false,
+            "line": 229,
+            "text": "\tprintf '%s' \"$exec_eff\" | grep -q -- '--repo-ref'        && has_ref=1"
+          },
+          {
+            "is_target": false,
+            "line": 230,
+            "text": "\tif [ \"$has_signers\" -eq 1 ] && [ \"$has_ref\" -eq 1 ] && [ \"$bypass\" -eq 0 ]; then"
+          },
+          {
+            "is_target": false,
+            "line": 231,
+            "text": "\t\t# \"enabled/active\", NOT \"armed\" (Audit-0009 C1). These two signals cannot distinguish a timer that"
+          },
+          {
+            "is_target": false,
+            "line": 232,
+            "text": "\t\t# will fire from one that has settled into SubState=elapsed with Trigger=n/a — the dead state found"
+          },
+          {
+            "is_target": false,
+            "line": 233,
+            "text": "\t\t# on two nodes on 2026-07-28. Whether it will actually fire is check 6 below; what THIS branch"
+          },
+          {
+            "is_target": false,
+            "line": 234,
+            "text": "\t\t# establishes is that the command it would run is authenticated."
+          },
+          {
+            "is_target": false,
+            "line": 235,
+            "text": "\t\tok \"the timer is ENABLED/ACTIVE and the effective command is authenticated (--allowed-signers + --repo-ref, no bypass)\""
+          },
+          {
+            "is_target": true,
+            "line": 236,
+            "text": "\t\tref=\"$(printf '%s' \"$exec_eff\" | sed -n 's/.*--repo-ref[= ]\\{1,\\}\\([^ ]*\\).*/\\1/p')\""
+          },
+          {
+            "is_target": false,
+            "line": 237,
+            "text": "\t\tcase \"$ref\" in"
+          },
+          {
+            "is_target": false,
+            "line": 238,
+            "text": "\t\t\tv[0-9]*|*[0-9].[0-9]*)"
+          },
+          {
+            "is_target": false,
+            "line": 239,
+            "text": "\t\t\t\t# LOOK AT THE CHECKOUT, not at the shape of the flag. A tag-shaped --repo-ref proves the"
+          },
+          {
+            "is_target": false,
+            "line": 240,
+            "text": "\t\t\t\t# operator asked for an immutable pin; it does not prove the node took it. `merge --ff-only`"
+          },
+          {
+            "is_target": false,
+            "line": 241,
+            "text": "\t\t\t\t# is a NO-OP exiting 0 when the checkout is already at or ahead of the tag, which is exactly"
+          },
+          {
+            "is_target": false,
+            "line": 242,
+            "text": "\t\t\t\t# what happens when a node that has been tracking main is pinned to a freshly cut tag: HEAD"
+          },
+          {
+            "is_target": false,
+            "line": 243,
+            "text": "\t\t\t\t# stays on main's tip and never moves again, while the signature verifies, the converge runs"
+          },
+          {
+            "is_target": false,
+            "line": 244,
+            "text": "\t\t\t\t# and the unit reports success. This line used to print \"an immutable approval\" over precisely"
+          },
+          {
+            "is_target": false,
+            "line": 245,
+            "text": "\t\t\t\t# that state, replacing the one warning that would otherwise have appeared."
+          },
+          {
+            "is_target": false,
+            "line": 246,
+            "text": "\t\t\t\tpin_want=\"$(git -C \"$CHECKOUT\" rev-parse -q --verify \"refs/tags/${ref}^{commit}\" 2>/dev/null || true)\""
+          },
+          {
+            "is_target": false,
+            "line": 247,
+            "text": "\t\t\t\tpin_head=\"$(git -C \"$CHECKOUT\" rev-parse -q --verify HEAD 2>/dev/null || true)\""
+          },
+          {
+            "is_target": false,
+            "line": 248,
+            "text": "\t\t\t\tif [ -z \"$pin_want\" ]; then"
+          },
+          {
+            "is_target": false,
+            "line": 249,
+            "text": "\t\t\t\t\twarn \"  --repo-ref '$ref' is tag-shaped but no such tag exists in $CHECKOUT — the updater would fall back to treating it as a branch\""
+          },
+          {
+            "is_target": false,
+            "line": 250,
+            "text": "\t\t\t\telif [ \"$pin_want\" = \"$pin_head\" ]; then"
+          },
+          {
+            "is_target": false,
+            "line": 251,
+            "text": "\t\t\t\t\tsay \"  ok    pinned to '$ref' and the checkout IS at that tag (an immutable approval)\""
+          },
+          {
+            "is_target": false,
+            "line": 252,
+            "text": "\t\t\t\telse"
+          },
+          {
+            "is_target": false,
+            "line": 253,
+            "text": "\t\t\t\t\tcrit \"--repo-ref is '$ref' but the checkout is NOT at that tag.\""
+          },
+          {
+            "is_target": false,
+            "line": 254,
+            "text": "\t\t\t\t\tcrit \"        tag:  $pin_want\""
+          },
+          {
+            "is_target": false,
+            "line": 255,
+            "text": "\t\t\t\t\tcrit \"        HEAD: $pin_head\""
+          },
+          {
+            "is_target": false,
+            "line": 256,
+            "text": "\t\t\t\t\tcrit \"        'merge --ff-only' cannot move a checkout backwards, so if HEAD is at or past the\""
+          },
+          {
+            "is_target": false,
+            "line": 257,
+            "text": "\t\t\t\t\tcrit \"        tag it exits 0 having done nothing — on every tick, silently, while every other\""
+          },
+          {
+            "is_target": false,
+            "line": 258,
+            "text": "\t\t\t\t\tcrit \"        signal here reports success. Re-point deliberately:\""
+          },
+          {
+            "is_target": false,
+            "line": 259,
+            "text": "\t\t\t\t\tcrit \"          git -C $CHECKOUT checkout --detach refs/tags/$ref\""
+          },
+          {
+            "is_target": false,
+            "line": 260,
+            "text": "\t\t\t\tfi ;;"
+          },
+          {
+            "is_target": false,
+            "line": 261,
+            "text": "\t\t\t'')                    warn \"  --repo-ref present but its value could not be parsed\" ;;"
+          }
+        ],
+        "path": "scripts/update_unit_drift_drill.sh",
+        "target_line": 236,
+        "token": "35",
+        "window_end": 261,
+        "window_lines": 51,
+        "window_start": 211
+      }
+    },
+    {
+      "call_kind": "substitution",
+      "decision": "skipped",
+      "pattern": ".*version[[:space:]]*",
+      "rank": 5,
+      "rationale": "The sed expression strips a local sing-box version banner for operator display; it does not gate or transform untrusted input.",
+      "reason_code": "internal_version_display",
+      "regex_id": "7535d130b86cbb737c1cc319253765a0",
+      "shortlist_site": "batch/corpora/mycelium/rules/scripts/fungi:101:40",
+      "site": "scripts/fungi:101:40",
+      "source_binding": {
+        "evidence_ref": "https://github.com/mycelium0/mycelium/blob/4b53dc7629ca3bc88bf5467db481ad2af7130711/scripts/fungi",
+        "path": "scripts/fungi",
+        "pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+        "repository_url": "https://github.com/mycelium0/mycelium",
+        "sha256": "b922a88d84b3b67ec77061f0a51425c0d90f7b0b66d1853a7c9b51ebb52650aa"
+      },
+      "source_pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+      "window": {
+        "lines": [
+          {
+            "is_target": false,
+            "line": 76,
+            "text": "\t\tlocal lst"
+          },
+          {
+            "is_target": false,
+            "line": 77,
+            "text": "\t\tlst=\"$(ss -ltnH 2>/dev/null | awk '{print $4}' | grep -vE '127\\.0\\.0\\.1|\\[::1\\]' | sort -u || true)\""
+          },
+          {
+            "is_target": false,
+            "line": 78,
+            "text": "\t\tif [ -n \"$lst\" ]; then printf '%s\\n' \"$lst\" | sed 's/^/  /'; seen=1"
+          },
+          {
+            "is_target": false,
+            "line": 79,
+            "text": "\t\telse printf '  (none — no non-loopback TCP listener)\\n'; seen=1; fi"
+          },
+          {
+            "is_target": false,
+            "line": 80,
+            "text": "\telse"
+          },
+          {
+            "is_target": false,
+            "line": 81,
+            "text": "\t\tprintf '  (UNKNOWN: ss unavailable, so this host cannot be inspected)\\n'"
+          },
+          {
+            "is_target": false,
+            "line": 82,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 83,
+            "text": "\tprintf 'engine versions:\\n'"
+          },
+          {
+            "is_target": false,
+            "line": 84,
+            "text": "\tcommand -v sing-box >/dev/null 2>&1 && printf '  sing-box %s\\n' \"$(sing-box version 2>/dev/null | sed -n 's/.*version[[:space:]]*//p' | head -1)\""
+          },
+          {
+            "is_target": false,
+            "line": 85,
+            "text": "\tcommand -v xray >/dev/null 2>&1 && printf '  xray %s\\n' \"$(xray version 2>/dev/null | sed -n 's/^Xray[[:space:]]*//p' | awk '{print $1}' | head -1)\""
+          },
+          {
+            "is_target": false,
+            "line": 86,
+            "text": "\tcommand -v sing-box >/dev/null 2>&1 || command -v xray >/dev/null 2>&1 \\"
+          },
+          {
+            "is_target": false,
+            "line": 87,
+            "text": "\t\t|| printf '  (UNKNOWN: neither engine binary is on PATH from here)\\n'"
+          },
+          {
+            "is_target": false,
+            "line": 88,
+            "text": "\t# The arm sentinel, because \"is this node allowed to rotate itself\" is the one piece of posture an"
+          },
+          {
+            "is_target": false,
+            "line": 89,
+            "text": "\t# operator cannot infer from listeners or versions, and it is the difference between a node that"
+          },
+          {
+            "is_target": false,
+            "line": 90,
+            "text": "\t# adapts unattended and one that only plans."
+          },
+          {
+            "is_target": false,
+            "line": 91,
+            "text": "\t# ENGINE PIN DRIFT (Audit-0011 #20). install_singbox runs only inside flow_bootstrap, while"
+          },
+          {
+            "is_target": false,
+            "line": 92,
+            "text": "\t# install_xray also runs from converge_node_tail — so bumping the manifest for a CVE reaches the"
+          },
+          {
+            "is_target": false,
+            "line": 93,
+            "text": "\t# SECONDARY engine unattended and never reaches the PRIMARY one. Upgrading a data-plane binary on a"
+          },
+          {
+            "is_target": false,
+            "line": 94,
+            "text": "\t# timer is a posture change nobody has authorised, so this REPORTS the drift instead of acting on it,"
+          },
+          {
+            "is_target": false,
+            "line": 95,
+            "text": "\t# and RELEASING.md says plainly that engine pins need an attended deploy."
+          },
+          {
+            "is_target": false,
+            "line": 96,
+            "text": "\tprintf 'engine pin: '"
+          },
+          {
+            "is_target": false,
+            "line": 97,
+            "text": "\tlocal mfile pin cur"
+          },
+          {
+            "is_target": false,
+            "line": 98,
+            "text": "\tmfile=\"${MYC_ARTIFACT_ROOT:-/opt/mycelium}/control/engines.manifest.json\""
+          },
+          {
+            "is_target": false,
+            "line": 99,
+            "text": "\tif [ -r \"$mfile\" ] && command -v jq >/dev/null 2>&1 && command -v sing-box >/dev/null 2>&1; then"
+          },
+          {
+            "is_target": false,
+            "line": 100,
+            "text": "\t\tpin=\"$(jq -r '.. | .singbox? // empty | .version? // empty' \"$mfile\" 2>/dev/null | head -1)\""
+          },
+          {
+            "is_target": true,
+            "line": 101,
+            "text": "\t\tcur=\"$(sing-box version 2>/dev/null | sed -n 's/.*version[[:space:]]*//p' | head -1)\""
+          },
+          {
+            "is_target": false,
+            "line": 102,
+            "text": "\t\tif [ -z \"$pin\" ]; then printf '(UNKNOWN: no sing-box pin readable in the manifest)\\n'"
+          },
+          {
+            "is_target": false,
+            "line": 103,
+            "text": "\t\telif [ \"${pin#v}\" = \"${cur#v}\" ]; then printf 'sing-box matches the manifest (%s)\\n' \"$cur\""
+          },
+          {
+            "is_target": false,
+            "line": 104,
+            "text": "\t\telse printf 'DRIFT — installed sing-box %s, manifest pins %s. The primary engine is NOT upgraded by the unattended converge; re-run `fungi deploy` to pick it up.\\n' \"${cur:-unknown}\" \"$pin\"; fi"
+          },
+          {
+            "is_target": false,
+            "line": 105,
+            "text": "\telse"
+          },
+          {
+            "is_target": false,
+            "line": 106,
+            "text": "\t\tprintf '(UNKNOWN: manifest or engine not readable from here)\\n'"
+          },
+          {
+            "is_target": false,
+            "line": 107,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 108,
+            "text": "\tprintf 'unattended rotation: '"
+          },
+          {
+            "is_target": false,
+            "line": 109,
+            "text": "\tif [ -e \"${MYC_STATE_DIR:-/var/lib/mycelium}/rotate-live.enabled\" ]; then printf 'ARMED (the loop may promote)\\n'"
+          },
+          {
+            "is_target": false,
+            "line": 110,
+            "text": "\telif [ -d \"${MYC_STATE_DIR:-/var/lib/mycelium}\" ]; then printf 'not armed (plans only; arm with `fungi deploy --auto-rotate`)\\n'"
+          },
+          {
+            "is_target": false,
+            "line": 111,
+            "text": "\telse printf '(UNKNOWN: no node state directory here)\\n'; fi"
+          },
+          {
+            "is_target": false,
+            "line": 112,
+            "text": "\t# Non-zero when NOTHING could be observed: a status that always exits 0 cannot be used in a check."
+          },
+          {
+            "is_target": false,
+            "line": 113,
+            "text": "\t[ \"$seen\" -eq 1 ] || return 1"
+          },
+          {
+            "is_target": false,
+            "line": 114,
+            "text": "\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 115,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 116,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 117,
+            "text": "fungi_die() { printf 'fungi: error: %s\\n' \"$*\" >&2; exit 2; }"
+          },
+          {
+            "is_target": false,
+            "line": 118,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 119,
+            "text": "[ -x \"$NODE_BOOTSTRAP\" ] || { echo \"fungi: actuator not found: $NODE_BOOTSTRAP\" >&2; exit 2; }"
+          },
+          {
+            "is_target": false,
+            "line": 120,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 121,
+            "text": "case \"${1:-}\" in"
+          },
+          {
+            "is_target": false,
+            "line": 122,
+            "text": "\tdeploy) shift"
+          },
+          {
+            "is_target": false,
+            "line": 123,
+            "text": "\t\t# Deploy converges the node and then, by default, brings up DETECTION: the MEASURE plane + L7"
+          },
+          {
+            "is_target": false,
+            "line": 124,
+            "text": "\t\t# liveness probe, and the rotation loop that consumes them. It does NOT place the rotate-live"
+          },
+          {
+            "is_target": false,
+            "line": 125,
+            "text": "\t\t# sentinel. Without that sentinel the loop runs, plans, and reports — and refuses to promote"
+          },
+          {
+            "is_target": false,
+            "line": 126,
+            "text": "\t\t# anything (nb_rotate_apply.sh, the armed check before rotate_apply_live). Unattended PROMOTION is"
+          }
+        ],
+        "path": "scripts/fungi",
+        "target_line": 101,
+        "token": "40",
+        "window_end": 126,
+        "window_lines": 51,
+        "window_start": 76
+      }
+    },
+    {
+      "call_kind": "substitution",
+      "decision": "skipped",
+      "pattern": ".*version[[:space:]]*",
+      "rank": 6,
+      "rationale": "Same local sing-box version-banner expression at a second status call site; duplicate display behavior.",
+      "reason_code": "internal_version_display",
+      "regex_id": "0717d6d2e9bbe31b9a22b0bc28b57342",
+      "shortlist_site": "batch/corpora/mycelium/rules/scripts/fungi:84:99",
+      "site": "scripts/fungi:84:99",
+      "source_binding": {
+        "evidence_ref": "https://github.com/mycelium0/mycelium/blob/4b53dc7629ca3bc88bf5467db481ad2af7130711/scripts/fungi",
+        "path": "scripts/fungi",
+        "pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+        "repository_url": "https://github.com/mycelium0/mycelium",
+        "sha256": "b922a88d84b3b67ec77061f0a51425c0d90f7b0b66d1853a7c9b51ebb52650aa"
+      },
+      "source_pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+      "window": {
+        "lines": [
+          {
+            "is_target": false,
+            "line": 59,
+            "text": "\tprintf 'services:\\n'"
+          },
+          {
+            "is_target": false,
+            "line": 60,
+            "text": "\tif command -v systemctl >/dev/null 2>&1; then"
+          },
+          {
+            "is_target": false,
+            "line": 61,
+            "text": "\t\tfor svc in sing-box xray myceliumd; do"
+          },
+          {
+            "is_target": false,
+            "line": 62,
+            "text": "\t\t\tstate=\"$(systemctl is-active \"$svc\" 2>/dev/null || true)\""
+          },
+          {
+            "is_target": false,
+            "line": 63,
+            "text": "\t\t\t[ -n \"$state\" ] && [ \"$state\" != \"inactive\" ] || systemctl list-unit-files \"$svc.service\" >/dev/null 2>&1 || continue"
+          },
+          {
+            "is_target": false,
+            "line": 64,
+            "text": "\t\t\tprintf '  %-10s %s (NRestarts=%s)\\n' \"$svc\" \"${state:-unknown}\" \"$(systemctl show \"$svc\" -p NRestarts --value 2>/dev/null || echo '?')\""
+          },
+          {
+            "is_target": false,
+            "line": 65,
+            "text": "\t\tdone"
+          },
+          {
+            "is_target": false,
+            "line": 66,
+            "text": "\telse"
+          },
+          {
+            "is_target": false,
+            "line": 67,
+            "text": "\t\tprintf '  (systemctl unavailable)\\n'"
+          },
+          {
+            "is_target": false,
+            "line": 68,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 69,
+            "text": "\t# EVERY BRANCH REPORTS, including the one that cannot look (Audit-0011 #9). Without the `else` this"
+          },
+          {
+            "is_target": false,
+            "line": 70,
+            "text": "\t# printed the heading and nothing under it on a host with no `ss`, and returned 0 — indistinguishable"
+          },
+          {
+            "is_target": false,
+            "line": 71,
+            "text": "\t# from \"no public listeners\", which is the single most alarming thing this command can truthfully say."
+          },
+          {
+            "is_target": false,
+            "line": 72,
+            "text": "\t# A status verb that cannot tell \"none\" from \"I could not check\" is worse than no status verb."
+          },
+          {
+            "is_target": false,
+            "line": 73,
+            "text": "\tlocal seen=0"
+          },
+          {
+            "is_target": false,
+            "line": 74,
+            "text": "\tprintf 'public listeners:\\n'"
+          },
+          {
+            "is_target": false,
+            "line": 75,
+            "text": "\tif command -v ss >/dev/null 2>&1; then"
+          },
+          {
+            "is_target": false,
+            "line": 76,
+            "text": "\t\tlocal lst"
+          },
+          {
+            "is_target": false,
+            "line": 77,
+            "text": "\t\tlst=\"$(ss -ltnH 2>/dev/null | awk '{print $4}' | grep -vE '127\\.0\\.0\\.1|\\[::1\\]' | sort -u || true)\""
+          },
+          {
+            "is_target": false,
+            "line": 78,
+            "text": "\t\tif [ -n \"$lst\" ]; then printf '%s\\n' \"$lst\" | sed 's/^/  /'; seen=1"
+          },
+          {
+            "is_target": false,
+            "line": 79,
+            "text": "\t\telse printf '  (none — no non-loopback TCP listener)\\n'; seen=1; fi"
+          },
+          {
+            "is_target": false,
+            "line": 80,
+            "text": "\telse"
+          },
+          {
+            "is_target": false,
+            "line": 81,
+            "text": "\t\tprintf '  (UNKNOWN: ss unavailable, so this host cannot be inspected)\\n'"
+          },
+          {
+            "is_target": false,
+            "line": 82,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 83,
+            "text": "\tprintf 'engine versions:\\n'"
+          },
+          {
+            "is_target": true,
+            "line": 84,
+            "text": "\tcommand -v sing-box >/dev/null 2>&1 && printf '  sing-box %s\\n' \"$(sing-box version 2>/dev/null | sed -n 's/.*version[[:space:]]*//p' | head -1)\""
+          },
+          {
+            "is_target": false,
+            "line": 85,
+            "text": "\tcommand -v xray >/dev/null 2>&1 && printf '  xray %s\\n' \"$(xray version 2>/dev/null | sed -n 's/^Xray[[:space:]]*//p' | awk '{print $1}' | head -1)\""
+          },
+          {
+            "is_target": false,
+            "line": 86,
+            "text": "\tcommand -v sing-box >/dev/null 2>&1 || command -v xray >/dev/null 2>&1 \\"
+          },
+          {
+            "is_target": false,
+            "line": 87,
+            "text": "\t\t|| printf '  (UNKNOWN: neither engine binary is on PATH from here)\\n'"
+          },
+          {
+            "is_target": false,
+            "line": 88,
+            "text": "\t# The arm sentinel, because \"is this node allowed to rotate itself\" is the one piece of posture an"
+          },
+          {
+            "is_target": false,
+            "line": 89,
+            "text": "\t# operator cannot infer from listeners or versions, and it is the difference between a node that"
+          },
+          {
+            "is_target": false,
+            "line": 90,
+            "text": "\t# adapts unattended and one that only plans."
+          },
+          {
+            "is_target": false,
+            "line": 91,
+            "text": "\t# ENGINE PIN DRIFT (Audit-0011 #20). install_singbox runs only inside flow_bootstrap, while"
+          },
+          {
+            "is_target": false,
+            "line": 92,
+            "text": "\t# install_xray also runs from converge_node_tail — so bumping the manifest for a CVE reaches the"
+          },
+          {
+            "is_target": false,
+            "line": 93,
+            "text": "\t# SECONDARY engine unattended and never reaches the PRIMARY one. Upgrading a data-plane binary on a"
+          },
+          {
+            "is_target": false,
+            "line": 94,
+            "text": "\t# timer is a posture change nobody has authorised, so this REPORTS the drift instead of acting on it,"
+          },
+          {
+            "is_target": false,
+            "line": 95,
+            "text": "\t# and RELEASING.md says plainly that engine pins need an attended deploy."
+          },
+          {
+            "is_target": false,
+            "line": 96,
+            "text": "\tprintf 'engine pin: '"
+          },
+          {
+            "is_target": false,
+            "line": 97,
+            "text": "\tlocal mfile pin cur"
+          },
+          {
+            "is_target": false,
+            "line": 98,
+            "text": "\tmfile=\"${MYC_ARTIFACT_ROOT:-/opt/mycelium}/control/engines.manifest.json\""
+          },
+          {
+            "is_target": false,
+            "line": 99,
+            "text": "\tif [ -r \"$mfile\" ] && command -v jq >/dev/null 2>&1 && command -v sing-box >/dev/null 2>&1; then"
+          },
+          {
+            "is_target": false,
+            "line": 100,
+            "text": "\t\tpin=\"$(jq -r '.. | .singbox? // empty | .version? // empty' \"$mfile\" 2>/dev/null | head -1)\""
+          },
+          {
+            "is_target": false,
+            "line": 101,
+            "text": "\t\tcur=\"$(sing-box version 2>/dev/null | sed -n 's/.*version[[:space:]]*//p' | head -1)\""
+          },
+          {
+            "is_target": false,
+            "line": 102,
+            "text": "\t\tif [ -z \"$pin\" ]; then printf '(UNKNOWN: no sing-box pin readable in the manifest)\\n'"
+          },
+          {
+            "is_target": false,
+            "line": 103,
+            "text": "\t\telif [ \"${pin#v}\" = \"${cur#v}\" ]; then printf 'sing-box matches the manifest (%s)\\n' \"$cur\""
+          },
+          {
+            "is_target": false,
+            "line": 104,
+            "text": "\t\telse printf 'DRIFT — installed sing-box %s, manifest pins %s. The primary engine is NOT upgraded by the unattended converge; re-run `fungi deploy` to pick it up.\\n' \"${cur:-unknown}\" \"$pin\"; fi"
+          },
+          {
+            "is_target": false,
+            "line": 105,
+            "text": "\telse"
+          },
+          {
+            "is_target": false,
+            "line": 106,
+            "text": "\t\tprintf '(UNKNOWN: manifest or engine not readable from here)\\n'"
+          },
+          {
+            "is_target": false,
+            "line": 107,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 108,
+            "text": "\tprintf 'unattended rotation: '"
+          },
+          {
+            "is_target": false,
+            "line": 109,
+            "text": "\tif [ -e \"${MYC_STATE_DIR:-/var/lib/mycelium}/rotate-live.enabled\" ]; then printf 'ARMED (the loop may promote)\\n'"
+          }
+        ],
+        "path": "scripts/fungi",
+        "target_line": 84,
+        "token": "99",
+        "window_end": 109,
+        "window_lines": 51,
+        "window_start": 59
+      }
+    },
+    {
+      "call_kind": "substitution",
+      "decision": "skipped",
+      "pattern": "^Xray[[:space:]]*",
+      "rank": 7,
+      "rationale": "The local Xray version banner is displayed for status only; no security decision consumes the capture.",
+      "reason_code": "internal_version_display",
+      "regex_id": "f141465a40b05772f4f65177261c26cc",
+      "shortlist_site": "batch/corpora/mycelium/rules/scripts/fungi:85:87",
+      "site": "scripts/fungi:85:87",
+      "source_binding": {
+        "evidence_ref": "https://github.com/mycelium0/mycelium/blob/4b53dc7629ca3bc88bf5467db481ad2af7130711/scripts/fungi",
+        "path": "scripts/fungi",
+        "pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+        "repository_url": "https://github.com/mycelium0/mycelium",
+        "sha256": "b922a88d84b3b67ec77061f0a51425c0d90f7b0b66d1853a7c9b51ebb52650aa"
+      },
+      "source_pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+      "window": {
+        "lines": [
+          {
+            "is_target": false,
+            "line": 60,
+            "text": "\tif command -v systemctl >/dev/null 2>&1; then"
+          },
+          {
+            "is_target": false,
+            "line": 61,
+            "text": "\t\tfor svc in sing-box xray myceliumd; do"
+          },
+          {
+            "is_target": false,
+            "line": 62,
+            "text": "\t\t\tstate=\"$(systemctl is-active \"$svc\" 2>/dev/null || true)\""
+          },
+          {
+            "is_target": false,
+            "line": 63,
+            "text": "\t\t\t[ -n \"$state\" ] && [ \"$state\" != \"inactive\" ] || systemctl list-unit-files \"$svc.service\" >/dev/null 2>&1 || continue"
+          },
+          {
+            "is_target": false,
+            "line": 64,
+            "text": "\t\t\tprintf '  %-10s %s (NRestarts=%s)\\n' \"$svc\" \"${state:-unknown}\" \"$(systemctl show \"$svc\" -p NRestarts --value 2>/dev/null || echo '?')\""
+          },
+          {
+            "is_target": false,
+            "line": 65,
+            "text": "\t\tdone"
+          },
+          {
+            "is_target": false,
+            "line": 66,
+            "text": "\telse"
+          },
+          {
+            "is_target": false,
+            "line": 67,
+            "text": "\t\tprintf '  (systemctl unavailable)\\n'"
+          },
+          {
+            "is_target": false,
+            "line": 68,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 69,
+            "text": "\t# EVERY BRANCH REPORTS, including the one that cannot look (Audit-0011 #9). Without the `else` this"
+          },
+          {
+            "is_target": false,
+            "line": 70,
+            "text": "\t# printed the heading and nothing under it on a host with no `ss`, and returned 0 — indistinguishable"
+          },
+          {
+            "is_target": false,
+            "line": 71,
+            "text": "\t# from \"no public listeners\", which is the single most alarming thing this command can truthfully say."
+          },
+          {
+            "is_target": false,
+            "line": 72,
+            "text": "\t# A status verb that cannot tell \"none\" from \"I could not check\" is worse than no status verb."
+          },
+          {
+            "is_target": false,
+            "line": 73,
+            "text": "\tlocal seen=0"
+          },
+          {
+            "is_target": false,
+            "line": 74,
+            "text": "\tprintf 'public listeners:\\n'"
+          },
+          {
+            "is_target": false,
+            "line": 75,
+            "text": "\tif command -v ss >/dev/null 2>&1; then"
+          },
+          {
+            "is_target": false,
+            "line": 76,
+            "text": "\t\tlocal lst"
+          },
+          {
+            "is_target": false,
+            "line": 77,
+            "text": "\t\tlst=\"$(ss -ltnH 2>/dev/null | awk '{print $4}' | grep -vE '127\\.0\\.0\\.1|\\[::1\\]' | sort -u || true)\""
+          },
+          {
+            "is_target": false,
+            "line": 78,
+            "text": "\t\tif [ -n \"$lst\" ]; then printf '%s\\n' \"$lst\" | sed 's/^/  /'; seen=1"
+          },
+          {
+            "is_target": false,
+            "line": 79,
+            "text": "\t\telse printf '  (none — no non-loopback TCP listener)\\n'; seen=1; fi"
+          },
+          {
+            "is_target": false,
+            "line": 80,
+            "text": "\telse"
+          },
+          {
+            "is_target": false,
+            "line": 81,
+            "text": "\t\tprintf '  (UNKNOWN: ss unavailable, so this host cannot be inspected)\\n'"
+          },
+          {
+            "is_target": false,
+            "line": 82,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 83,
+            "text": "\tprintf 'engine versions:\\n'"
+          },
+          {
+            "is_target": false,
+            "line": 84,
+            "text": "\tcommand -v sing-box >/dev/null 2>&1 && printf '  sing-box %s\\n' \"$(sing-box version 2>/dev/null | sed -n 's/.*version[[:space:]]*//p' | head -1)\""
+          },
+          {
+            "is_target": true,
+            "line": 85,
+            "text": "\tcommand -v xray >/dev/null 2>&1 && printf '  xray %s\\n' \"$(xray version 2>/dev/null | sed -n 's/^Xray[[:space:]]*//p' | awk '{print $1}' | head -1)\""
+          },
+          {
+            "is_target": false,
+            "line": 86,
+            "text": "\tcommand -v sing-box >/dev/null 2>&1 || command -v xray >/dev/null 2>&1 \\"
+          },
+          {
+            "is_target": false,
+            "line": 87,
+            "text": "\t\t|| printf '  (UNKNOWN: neither engine binary is on PATH from here)\\n'"
+          },
+          {
+            "is_target": false,
+            "line": 88,
+            "text": "\t# The arm sentinel, because \"is this node allowed to rotate itself\" is the one piece of posture an"
+          },
+          {
+            "is_target": false,
+            "line": 89,
+            "text": "\t# operator cannot infer from listeners or versions, and it is the difference between a node that"
+          },
+          {
+            "is_target": false,
+            "line": 90,
+            "text": "\t# adapts unattended and one that only plans."
+          },
+          {
+            "is_target": false,
+            "line": 91,
+            "text": "\t# ENGINE PIN DRIFT (Audit-0011 #20). install_singbox runs only inside flow_bootstrap, while"
+          },
+          {
+            "is_target": false,
+            "line": 92,
+            "text": "\t# install_xray also runs from converge_node_tail — so bumping the manifest for a CVE reaches the"
+          },
+          {
+            "is_target": false,
+            "line": 93,
+            "text": "\t# SECONDARY engine unattended and never reaches the PRIMARY one. Upgrading a data-plane binary on a"
+          },
+          {
+            "is_target": false,
+            "line": 94,
+            "text": "\t# timer is a posture change nobody has authorised, so this REPORTS the drift instead of acting on it,"
+          },
+          {
+            "is_target": false,
+            "line": 95,
+            "text": "\t# and RELEASING.md says plainly that engine pins need an attended deploy."
+          },
+          {
+            "is_target": false,
+            "line": 96,
+            "text": "\tprintf 'engine pin: '"
+          },
+          {
+            "is_target": false,
+            "line": 97,
+            "text": "\tlocal mfile pin cur"
+          },
+          {
+            "is_target": false,
+            "line": 98,
+            "text": "\tmfile=\"${MYC_ARTIFACT_ROOT:-/opt/mycelium}/control/engines.manifest.json\""
+          },
+          {
+            "is_target": false,
+            "line": 99,
+            "text": "\tif [ -r \"$mfile\" ] && command -v jq >/dev/null 2>&1 && command -v sing-box >/dev/null 2>&1; then"
+          },
+          {
+            "is_target": false,
+            "line": 100,
+            "text": "\t\tpin=\"$(jq -r '.. | .singbox? // empty | .version? // empty' \"$mfile\" 2>/dev/null | head -1)\""
+          },
+          {
+            "is_target": false,
+            "line": 101,
+            "text": "\t\tcur=\"$(sing-box version 2>/dev/null | sed -n 's/.*version[[:space:]]*//p' | head -1)\""
+          },
+          {
+            "is_target": false,
+            "line": 102,
+            "text": "\t\tif [ -z \"$pin\" ]; then printf '(UNKNOWN: no sing-box pin readable in the manifest)\\n'"
+          },
+          {
+            "is_target": false,
+            "line": 103,
+            "text": "\t\telif [ \"${pin#v}\" = \"${cur#v}\" ]; then printf 'sing-box matches the manifest (%s)\\n' \"$cur\""
+          },
+          {
+            "is_target": false,
+            "line": 104,
+            "text": "\t\telse printf 'DRIFT — installed sing-box %s, manifest pins %s. The primary engine is NOT upgraded by the unattended converge; re-run `fungi deploy` to pick it up.\\n' \"${cur:-unknown}\" \"$pin\"; fi"
+          },
+          {
+            "is_target": false,
+            "line": 105,
+            "text": "\telse"
+          },
+          {
+            "is_target": false,
+            "line": 106,
+            "text": "\t\tprintf '(UNKNOWN: manifest or engine not readable from here)\\n'"
+          },
+          {
+            "is_target": false,
+            "line": 107,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 108,
+            "text": "\tprintf 'unattended rotation: '"
+          },
+          {
+            "is_target": false,
+            "line": 109,
+            "text": "\tif [ -e \"${MYC_STATE_DIR:-/var/lib/mycelium}/rotate-live.enabled\" ]; then printf 'ARMED (the loop may promote)\\n'"
+          },
+          {
+            "is_target": false,
+            "line": 110,
+            "text": "\telif [ -d \"${MYC_STATE_DIR:-/var/lib/mycelium}\" ]; then printf 'not armed (plans only; arm with `fungi deploy --auto-rotate`)\\n'"
+          }
+        ],
+        "path": "scripts/fungi",
+        "target_line": 85,
+        "token": "87",
+        "window_end": 110,
+        "window_lines": 51,
+        "window_start": 60
+      }
+    },
+    {
+      "call_kind": "search",
+      "decision": "skipped",
+      "pattern": "^[[:space:]]*#",
+      "rank": 8,
+      "rationale": "The expression excludes systemd comment lines before template/deployed configuration comparison. Comments are inactive systemd syntax; the regex does not enforce an attacker-input boundary.",
+      "reason_code": "config_comment_filter",
+      "regex_id": "645c26907591a263de2b28370d80b122",
+      "shortlist_site": "batch/corpora/mycelium/rules/scripts/update_unit_drift_drill.sh:120:15",
+      "site": "scripts/update_unit_drift_drill.sh:120:15",
+      "source_binding": {
+        "evidence_ref": "https://github.com/mycelium0/mycelium/blob/4b53dc7629ca3bc88bf5467db481ad2af7130711/scripts/update_unit_drift_drill.sh",
+        "path": "scripts/update_unit_drift_drill.sh",
+        "pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+        "repository_url": "https://github.com/mycelium0/mycelium",
+        "sha256": "4e28f0bd727ba842fed7840bdd163fbef32dc911f7c8e6bea409895ced4c6493"
+      },
+      "source_pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+      "window": {
+        "lines": [
+          {
+            "is_target": false,
+            "line": 95,
+            "text": "# redact — mask the node-identifying ADDRESS classes from everything this drill prints (Audit-0009 S1):"
+          },
+          {
+            "is_target": false,
+            "line": 96,
+            "text": "# the node's own hostname (word-anchored, and only at >=4 chars, exactly as internal/diag.RedactBundle"
+          },
+          {
+            "is_target": false,
+            "line": 97,
+            "text": "# does — a 3-char hostname is a common substring and masking it would corrupt the output), then IPv6,"
+          },
+          {
+            "is_target": false,
+            "line": 98,
+            "text": "# then IPv4, then FQDNs. Ordered like internal/diag's rules so the structural classes are scrubbed WHOLE"
+          },
+          {
+            "is_target": false,
+            "line": 99,
+            "text": "# rather than fragmented by a broader pass."
+          },
+          {
+            "is_target": false,
+            "line": 100,
+            "text": "#"
+          },
+          {
+            "is_target": false,
+            "line": 101,
+            "text": "# The dotted-name pass would also eat `mycelium-update.service`, `override.conf`, `node-bootstrap.sh` —"
+          },
+          {
+            "is_target": false,
+            "line": 102,
+            "text": "# the very vocabulary the diff exists to show — so file/unit extensions are protected behind a sentinel"
+          },
+          {
+            "is_target": false,
+            "line": 103,
+            "text": "# first and restored after. That is the whole compromise: mask what identifies the node, keep what"
+          },
+          {
+            "is_target": false,
+            "line": 104,
+            "text": "# identifies the defect. GNU sed assumed (this drill already requires systemd)."
+          },
+          {
+            "is_target": false,
+            "line": 105,
+            "text": "SELF_HOST=\"$(hostname 2>/dev/null || printf '')\""
+          },
+          {
+            "is_target": false,
+            "line": 106,
+            "text": "redact() {"
+          },
+          {
+            "is_target": false,
+            "line": 107,
+            "text": "\tlocal h=\"$SELF_HOST\""
+          },
+          {
+            "is_target": false,
+            "line": 108,
+            "text": "\tif [ \"${#h}\" -lt 4 ]; then h=\"\"; fi"
+          },
+          {
+            "is_target": false,
+            "line": 109,
+            "text": "\tsed -E \\"
+          },
+          {
+            "is_target": false,
+            "line": 110,
+            "text": "\t\t-e 's/\\.(service|timer|socket|target|mount|path|slice|conf|sh|json|pub|md|go|toml|yml|yaml|d)\\b/\\x01\\1/g' \\"
+          },
+          {
+            "is_target": false,
+            "line": 111,
+            "text": "\t\t${h:+-e \"s/\\\\b$(printf '%s' \"$h\" | sed -E 's/[][\\\\.^$*+?(){}|/]/\\\\\\\\&/g')\\\\b/[redacted-host]/gI\"} \\"
+          },
+          {
+            "is_target": false,
+            "line": 112,
+            "text": "\t\t-e 's/(^|[^0-9a-fA-F:.])(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:)*[0-9a-fA-F]{0,4}::([0-9a-fA-F]{1,4}:)*([0-9]{1,3}(\\.[0-9]{1,3}){3}|[0-9a-fA-F]{1,4})?)/\\1[redacted-ipv6]/g' \\"
+          },
+          {
+            "is_target": false,
+            "line": 113,
+            "text": "\t\t-e 's/\\b([0-9]{1,3}\\.){3}[0-9]{1,3}\\b/[redacted-ipv4]/g' \\"
+          },
+          {
+            "is_target": false,
+            "line": 114,
+            "text": "\t\t-e 's/\\b([a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\\.)+[a-zA-Z]{2,}\\b/[redacted-host]/g' \\"
+          },
+          {
+            "is_target": false,
+            "line": 115,
+            "text": "\t\t-e 's/\\x01/./g'"
+          },
+          {
+            "is_target": false,
+            "line": 116,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 117,
+            "text": "say() { printf '%s\\n' \"$1\" | redact; }"
+          },
+          {
+            "is_target": false,
+            "line": 118,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 119,
+            "text": "# directives only — the template headers necessarily NAME the forbidden flag in order to warn about it"
+          },
+          {
+            "is_target": true,
+            "line": 120,
+            "text": "directives() { grep -vE '^[[:space:]]*#' \"$1\" 2>/dev/null | sed 's/[[:space:]]*$//' | grep -vE '^$'; }"
+          },
+          {
+            "is_target": false,
+            "line": 121,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 122,
+            "text": "printf '== mycelium-update deployed-unit drift drill ==\\n'"
+          },
+          {
+            "is_target": false,
+            "line": 123,
+            "text": "say \"node:     ${SELF_HOST:-(unknown)}\""
+          },
+          {
+            "is_target": false,
+            "line": 124,
+            "text": "printf 'checkout: %s\\n\\n' \"$CHECKOUT\""
+          },
+          {
+            "is_target": false,
+            "line": 125,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 126,
+            "text": "svc_state=\"$(systemctl is-enabled \"$SVC_NAME\" 2>&1 || true)\""
+          },
+          {
+            "is_target": false,
+            "line": 127,
+            "text": "tmr_state=\"$(systemctl is-enabled \"$TMR_NAME\" 2>&1 || true)\""
+          },
+          {
+            "is_target": false,
+            "line": 128,
+            "text": "tmr_active=\"$(systemctl is-active \"$TMR_NAME\" 2>&1 || true)\""
+          },
+          {
+            "is_target": false,
+            "line": 129,
+            "text": "printf 'state:    service=%s  timer=%s (%s)\\n\\n' \"$svc_state\" \"$tmr_state\" \"$tmr_active\""
+          },
+          {
+            "is_target": false,
+            "line": 130,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 131,
+            "text": "# --- parked / absent postures are legitimate outcomes, not failures -------------------------------"
+          },
+          {
+            "is_target": false,
+            "line": 132,
+            "text": "if [ \"$svc_state\" = \"masked\" ] || [ \"$tmr_state\" = \"masked\" ]; then"
+          },
+          {
+            "is_target": false,
+            "line": 133,
+            "text": "\tok \"the unit is MASKED — it cannot be armed by \\`systemctl enable\\`, which fails closed.\""
+          },
+          {
+            "is_target": false,
+            "line": 134,
+            "text": "\tok \"  This is the correct parked posture until RP-0003 W1 (a signed tag to pin) exists.\""
+          },
+          {
+            "is_target": false,
+            "line": 135,
+            "text": "\tok \"  To arm later: systemctl unmask, re-cp the template, append --allowed-signers + --repo-ref, then enable.\""
+          },
+          {
+            "is_target": false,
+            "line": 136,
+            "text": "\tprintf '\\n-- Result --\\nPASS: parked (masked). Nothing can auto-pull on this node.\\n'"
+          },
+          {
+            "is_target": false,
+            "line": 137,
+            "text": "\texit 0"
+          },
+          {
+            "is_target": false,
+            "line": 138,
+            "text": "fi"
+          },
+          {
+            "is_target": false,
+            "line": 139,
+            "text": "if [ ! -f \"$UNIT_DIR/$SVC_NAME\" ] && [ ! -f \"$UNIT_DIR/$TMR_NAME\" ]; then"
+          },
+          {
+            "is_target": false,
+            "line": 140,
+            "text": "\tok \"no mycelium-update unit is installed on this node — nothing to drift.\""
+          },
+          {
+            "is_target": false,
+            "line": 141,
+            "text": "\tprintf '\\n-- Result --\\nPASS: not installed.\\n'"
+          },
+          {
+            "is_target": false,
+            "line": 142,
+            "text": "\texit 0"
+          },
+          {
+            "is_target": false,
+            "line": 143,
+            "text": "fi"
+          },
+          {
+            "is_target": false,
+            "line": 144,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 145,
+            "text": "# --- 1. deployed vs template ----------------------------------------------------------------------"
+          }
+        ],
+        "path": "scripts/update_unit_drift_drill.sh",
+        "target_line": 120,
+        "token": "15",
+        "window_end": 145,
+        "window_lines": 51,
+        "window_start": 95
+      }
+    },
+    {
+      "call_kind": "substitution",
+      "decision": "skipped",
+      "pattern": "[[:space:]]*$",
+      "rank": 9,
+      "rationale": "Trailing whitespace is trimmed before a configuration diff. This normalization does not determine whether a command or security flag reaches the effective unit.",
+      "reason_code": "config_normalization",
+      "regex_id": "d6716c975ea7ad327b150381a7b37a83",
+      "shortlist_site": "batch/corpora/mycelium/rules/scripts/update_unit_drift_drill.sh:120:60",
+      "site": "scripts/update_unit_drift_drill.sh:120:60",
+      "source_binding": {
+        "evidence_ref": "https://github.com/mycelium0/mycelium/blob/4b53dc7629ca3bc88bf5467db481ad2af7130711/scripts/update_unit_drift_drill.sh",
+        "path": "scripts/update_unit_drift_drill.sh",
+        "pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+        "repository_url": "https://github.com/mycelium0/mycelium",
+        "sha256": "4e28f0bd727ba842fed7840bdd163fbef32dc911f7c8e6bea409895ced4c6493"
+      },
+      "source_pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+      "window": {
+        "lines": [
+          {
+            "is_target": false,
+            "line": 95,
+            "text": "# redact — mask the node-identifying ADDRESS classes from everything this drill prints (Audit-0009 S1):"
+          },
+          {
+            "is_target": false,
+            "line": 96,
+            "text": "# the node's own hostname (word-anchored, and only at >=4 chars, exactly as internal/diag.RedactBundle"
+          },
+          {
+            "is_target": false,
+            "line": 97,
+            "text": "# does — a 3-char hostname is a common substring and masking it would corrupt the output), then IPv6,"
+          },
+          {
+            "is_target": false,
+            "line": 98,
+            "text": "# then IPv4, then FQDNs. Ordered like internal/diag's rules so the structural classes are scrubbed WHOLE"
+          },
+          {
+            "is_target": false,
+            "line": 99,
+            "text": "# rather than fragmented by a broader pass."
+          },
+          {
+            "is_target": false,
+            "line": 100,
+            "text": "#"
+          },
+          {
+            "is_target": false,
+            "line": 101,
+            "text": "# The dotted-name pass would also eat `mycelium-update.service`, `override.conf`, `node-bootstrap.sh` —"
+          },
+          {
+            "is_target": false,
+            "line": 102,
+            "text": "# the very vocabulary the diff exists to show — so file/unit extensions are protected behind a sentinel"
+          },
+          {
+            "is_target": false,
+            "line": 103,
+            "text": "# first and restored after. That is the whole compromise: mask what identifies the node, keep what"
+          },
+          {
+            "is_target": false,
+            "line": 104,
+            "text": "# identifies the defect. GNU sed assumed (this drill already requires systemd)."
+          },
+          {
+            "is_target": false,
+            "line": 105,
+            "text": "SELF_HOST=\"$(hostname 2>/dev/null || printf '')\""
+          },
+          {
+            "is_target": false,
+            "line": 106,
+            "text": "redact() {"
+          },
+          {
+            "is_target": false,
+            "line": 107,
+            "text": "\tlocal h=\"$SELF_HOST\""
+          },
+          {
+            "is_target": false,
+            "line": 108,
+            "text": "\tif [ \"${#h}\" -lt 4 ]; then h=\"\"; fi"
+          },
+          {
+            "is_target": false,
+            "line": 109,
+            "text": "\tsed -E \\"
+          },
+          {
+            "is_target": false,
+            "line": 110,
+            "text": "\t\t-e 's/\\.(service|timer|socket|target|mount|path|slice|conf|sh|json|pub|md|go|toml|yml|yaml|d)\\b/\\x01\\1/g' \\"
+          },
+          {
+            "is_target": false,
+            "line": 111,
+            "text": "\t\t${h:+-e \"s/\\\\b$(printf '%s' \"$h\" | sed -E 's/[][\\\\.^$*+?(){}|/]/\\\\\\\\&/g')\\\\b/[redacted-host]/gI\"} \\"
+          },
+          {
+            "is_target": false,
+            "line": 112,
+            "text": "\t\t-e 's/(^|[^0-9a-fA-F:.])(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:)*[0-9a-fA-F]{0,4}::([0-9a-fA-F]{1,4}:)*([0-9]{1,3}(\\.[0-9]{1,3}){3}|[0-9a-fA-F]{1,4})?)/\\1[redacted-ipv6]/g' \\"
+          },
+          {
+            "is_target": false,
+            "line": 113,
+            "text": "\t\t-e 's/\\b([0-9]{1,3}\\.){3}[0-9]{1,3}\\b/[redacted-ipv4]/g' \\"
+          },
+          {
+            "is_target": false,
+            "line": 114,
+            "text": "\t\t-e 's/\\b([a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\\.)+[a-zA-Z]{2,}\\b/[redacted-host]/g' \\"
+          },
+          {
+            "is_target": false,
+            "line": 115,
+            "text": "\t\t-e 's/\\x01/./g'"
+          },
+          {
+            "is_target": false,
+            "line": 116,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 117,
+            "text": "say() { printf '%s\\n' \"$1\" | redact; }"
+          },
+          {
+            "is_target": false,
+            "line": 118,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 119,
+            "text": "# directives only — the template headers necessarily NAME the forbidden flag in order to warn about it"
+          },
+          {
+            "is_target": true,
+            "line": 120,
+            "text": "directives() { grep -vE '^[[:space:]]*#' \"$1\" 2>/dev/null | sed 's/[[:space:]]*$//' | grep -vE '^$'; }"
+          },
+          {
+            "is_target": false,
+            "line": 121,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 122,
+            "text": "printf '== mycelium-update deployed-unit drift drill ==\\n'"
+          },
+          {
+            "is_target": false,
+            "line": 123,
+            "text": "say \"node:     ${SELF_HOST:-(unknown)}\""
+          },
+          {
+            "is_target": false,
+            "line": 124,
+            "text": "printf 'checkout: %s\\n\\n' \"$CHECKOUT\""
+          },
+          {
+            "is_target": false,
+            "line": 125,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 126,
+            "text": "svc_state=\"$(systemctl is-enabled \"$SVC_NAME\" 2>&1 || true)\""
+          },
+          {
+            "is_target": false,
+            "line": 127,
+            "text": "tmr_state=\"$(systemctl is-enabled \"$TMR_NAME\" 2>&1 || true)\""
+          },
+          {
+            "is_target": false,
+            "line": 128,
+            "text": "tmr_active=\"$(systemctl is-active \"$TMR_NAME\" 2>&1 || true)\""
+          },
+          {
+            "is_target": false,
+            "line": 129,
+            "text": "printf 'state:    service=%s  timer=%s (%s)\\n\\n' \"$svc_state\" \"$tmr_state\" \"$tmr_active\""
+          },
+          {
+            "is_target": false,
+            "line": 130,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 131,
+            "text": "# --- parked / absent postures are legitimate outcomes, not failures -------------------------------"
+          },
+          {
+            "is_target": false,
+            "line": 132,
+            "text": "if [ \"$svc_state\" = \"masked\" ] || [ \"$tmr_state\" = \"masked\" ]; then"
+          },
+          {
+            "is_target": false,
+            "line": 133,
+            "text": "\tok \"the unit is MASKED — it cannot be armed by \\`systemctl enable\\`, which fails closed.\""
+          },
+          {
+            "is_target": false,
+            "line": 134,
+            "text": "\tok \"  This is the correct parked posture until RP-0003 W1 (a signed tag to pin) exists.\""
+          },
+          {
+            "is_target": false,
+            "line": 135,
+            "text": "\tok \"  To arm later: systemctl unmask, re-cp the template, append --allowed-signers + --repo-ref, then enable.\""
+          },
+          {
+            "is_target": false,
+            "line": 136,
+            "text": "\tprintf '\\n-- Result --\\nPASS: parked (masked). Nothing can auto-pull on this node.\\n'"
+          },
+          {
+            "is_target": false,
+            "line": 137,
+            "text": "\texit 0"
+          },
+          {
+            "is_target": false,
+            "line": 138,
+            "text": "fi"
+          },
+          {
+            "is_target": false,
+            "line": 139,
+            "text": "if [ ! -f \"$UNIT_DIR/$SVC_NAME\" ] && [ ! -f \"$UNIT_DIR/$TMR_NAME\" ]; then"
+          },
+          {
+            "is_target": false,
+            "line": 140,
+            "text": "\tok \"no mycelium-update unit is installed on this node — nothing to drift.\""
+          },
+          {
+            "is_target": false,
+            "line": 141,
+            "text": "\tprintf '\\n-- Result --\\nPASS: not installed.\\n'"
+          },
+          {
+            "is_target": false,
+            "line": 142,
+            "text": "\texit 0"
+          },
+          {
+            "is_target": false,
+            "line": 143,
+            "text": "fi"
+          },
+          {
+            "is_target": false,
+            "line": 144,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 145,
+            "text": "# --- 1. deployed vs template ----------------------------------------------------------------------"
+          }
+        ],
+        "path": "scripts/update_unit_drift_drill.sh",
+        "target_line": 120,
+        "token": "60",
+        "window_end": 145,
+        "window_lines": 51,
+        "window_start": 95
+      }
+    },
+    {
+      "call_kind": "substitution",
+      "decision": "skipped",
+      "pattern": "[[:space:]]*$",
+      "rank": 10,
+      "rationale": "Trailing spaces are removed from the captured ExecStart display before concatenation and checks. The independently ranked argv extraction remains unresolved.",
+      "reason_code": "execstart_format_normalization",
+      "regex_id": "dab00b6e0a2731ef075d1547b03dc013",
+      "shortlist_site": "batch/corpora/mycelium/rules/scripts/update_unit_drift_drill.sh:184:45",
+      "site": "scripts/update_unit_drift_drill.sh:184:45",
+      "source_binding": {
+        "evidence_ref": "https://github.com/mycelium0/mycelium/blob/4b53dc7629ca3bc88bf5467db481ad2af7130711/scripts/update_unit_drift_drill.sh",
+        "path": "scripts/update_unit_drift_drill.sh",
+        "pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+        "repository_url": "https://github.com/mycelium0/mycelium",
+        "sha256": "4e28f0bd727ba842fed7840bdd163fbef32dc911f7c8e6bea409895ced4c6493"
+      },
+      "source_pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+      "window": {
+        "lines": [
+          {
+            "is_target": false,
+            "line": 159,
+            "text": "\t\tprintf '              line — treat the unmasked original as sensitive before sharing it.\\n'"
+          },
+          {
+            "is_target": false,
+            "line": 160,
+            "text": "\t\tprintf '        --- template / +++ deployed ---\\n'"
+          },
+          {
+            "is_target": false,
+            "line": 161,
+            "text": "\t\tdiff -u <(directives \"$tpl\") <(directives \"$dep\") 2>/dev/null | tail -n +3 | redact | sed 's/^/        /'"
+          },
+          {
+            "is_target": false,
+            "line": 162,
+            "text": "\t\tprintf '        -> nothing reconciles this back. Reset with: cp %s %s\\n' \"$tpl\" \"$dep\""
+          },
+          {
+            "is_target": false,
+            "line": 163,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 164,
+            "text": "done"
+          },
+          {
+            "is_target": false,
+            "line": 165,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 166,
+            "text": "# --- the EFFECTIVE ExecStart ----------------------------------------------------------------------"
+          },
+          {
+            "is_target": false,
+            "line": 167,
+            "text": "# Per-node flags (the signer path, the ref pin) belong in a systemd DROP-IN, not in the unit file —"
+          },
+          {
+            "is_target": false,
+            "line": 168,
+            "text": "# hand-editing the unit is the exact drift this drill exists to catch, and a drop-in keeps the"
+          },
+          {
+            "is_target": false,
+            "line": 169,
+            "text": "# installed unit a pristine template copy that `systemctl revert` resets in one command."
+          },
+          {
+            "is_target": false,
+            "line": 170,
+            "text": "#"
+          },
+          {
+            "is_target": false,
+            "line": 171,
+            "text": "# So every check about WHAT WILL RUN must read the MERGED unit, not the file. Reading the file was"
+          },
+          {
+            "is_target": false,
+            "line": 172,
+            "text": "# wrong in both directions: it false-CRITs a correctly-armed node whose flags live in a drop-in, and —"
+          },
+          {
+            "is_target": false,
+            "line": 173,
+            "text": "# far worse — it is BLIND to a drop-in that adds --insecure-no-verify. A check that is permanently red"
+          },
+          {
+            "is_target": false,
+            "line": 174,
+            "text": "# on a correct node stops being read, and a check with a hole that big is not a check."
+          },
+          {
+            "is_target": false,
+            "line": 175,
+            "text": "# Falls back to the file's ExecStart if systemctl cannot report (unit absent / systemd not answering)."
+          },
+          {
+            "is_target": false,
+            "line": 176,
+            "text": "# EVERY ExecStart, not the first. `Type=oneshot` admits MULTIPLE ExecStart= lines and systemd runs them"
+          },
+          {
+            "is_target": false,
+            "line": 177,
+            "text": "# all, in order, as root. This read used `head -1`, so a drop-in that APPENDS a second command — after an"
+          },
+          {
+            "is_target": false,
+            "line": 178,
+            "text": "# earlier drop-in has already supplied the authenticated one, which is exactly the live posture here — was"
+          },
+          {
+            "is_target": false,
+            "line": 179,
+            "text": "# invisible to all three checks below, and the drill printed \"no provenance bypass\" and \"the effective"
+          },
+          {
+            "is_target": false,
+            "line": 180,
+            "text": "# command is authenticated\" while the second command ran unattended every 15 minutes. The injection test"
+          },
+          {
+            "is_target": false,
+            "line": 181,
+            "text": "# that accompanied the original fix only exercised a RESETTING drop-in (one that clears and replaces), so"
+          },
+          {
+            "is_target": false,
+            "line": 182,
+            "text": "# it never touched this shape (Audit-0009 C2)."
+          },
+          {
+            "is_target": false,
+            "line": 183,
+            "text": "exec_all=\"$(systemctl show \"$SVC_NAME\" -p ExecStart --value 2>/dev/null \\"
+          },
+          {
+            "is_target": true,
+            "line": 184,
+            "text": "\t| sed -n 's/.*argv\\[\\]=\\([^;]*\\);.*/\\1/p' | sed 's/[[:space:]]*$//' | grep -v '^$')\""
+          },
+          {
+            "is_target": false,
+            "line": 185,
+            "text": "[ -n \"$exec_all\" ] || exec_all=\"$(directives \"$UNIT_DIR/$SVC_NAME\" 2>/dev/null | grep -E '^ExecStart=' | sed 's/^ExecStart=//' || true)\""
+          },
+          {
+            "is_target": false,
+            "line": 186,
+            "text": "exec_n=\"$(printf '%s\\n' \"$exec_all\" | grep -c . || true)\""
+          },
+          {
+            "is_target": false,
+            "line": 187,
+            "text": "# The checks below reason over the CONCATENATION, so a flag in any command is seen. Count is reported"
+          },
+          {
+            "is_target": false,
+            "line": 188,
+            "text": "# separately: on this unit more than one ExecStart is itself the finding, whatever the commands say."
+          },
+          {
+            "is_target": false,
+            "line": 189,
+            "text": "exec_eff=\"$(printf '%s' \"$exec_all\" | tr '\\n' ' ')\""
+          },
+          {
+            "is_target": false,
+            "line": 190,
+            "text": "if [ \"${exec_n:-0}\" -gt 1 ]; then"
+          },
+          {
+            "is_target": false,
+            "line": 191,
+            "text": "\tcrit \"the unit has $exec_n ExecStart commands; systemd runs ALL of them as root, in order.\""
+          },
+          {
+            "is_target": false,
+            "line": 192,
+            "text": "\tcrit \"        On this unit that is never legitimate: the per-node flags belong in ONE resetting drop-in\""
+          },
+          {
+            "is_target": false,
+            "line": 193,
+            "text": "\tcrit \"        (\\`ExecStart=\\` to clear, then the single authenticated command). A second, APPENDED\""
+          },
+          {
+            "is_target": false,
+            "line": 194,
+            "text": "\tcrit \"        command is how a provenance bypass hides behind a correct-looking first one.\""
+          },
+          {
+            "is_target": false,
+            "line": 195,
+            "text": "\tprintf '%s\\n' \"$exec_all\" | redact | sed 's/^/          - /'"
+          },
+          {
+            "is_target": false,
+            "line": 196,
+            "text": "fi"
+          },
+          {
+            "is_target": false,
+            "line": 197,
+            "text": "dropins=\"$(systemctl show \"$SVC_NAME\" -p DropInPaths --value 2>/dev/null)\""
+          },
+          {
+            "is_target": false,
+            "line": 198,
+            "text": "if [ -n \"$dropins\" ]; then"
+          },
+          {
+            "is_target": false,
+            "line": 199,
+            "text": "\tsay \"  note  per-node flags come from drop-in(s): $dropins\""
+          },
+          {
+            "is_target": false,
+            "line": 200,
+            "text": "\tprintf '        (the unit FILE stays a pristine template copy; `systemctl revert %s` resets it)\\n' \"$SVC_NAME\""
+          },
+          {
+            "is_target": false,
+            "line": 201,
+            "text": "fi"
+          },
+          {
+            "is_target": false,
+            "line": 202,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 203,
+            "text": "# --- 2. the provenance bypass (over the EFFECTIVE command + both unit files) ------------------------"
+          },
+          {
+            "is_target": false,
+            "line": 204,
+            "text": "bypass=0"
+          },
+          {
+            "is_target": false,
+            "line": 205,
+            "text": "if printf '%s' \"$exec_eff\" | grep -q -- '--insecure-no-verify'; then"
+          },
+          {
+            "is_target": false,
+            "line": 206,
+            "text": "\tbypass=1"
+          },
+          {
+            "is_target": false,
+            "line": 207,
+            "text": "\tcrit \"the EFFECTIVE ExecStart carries --insecure-no-verify — verify_signed_ref returns BEFORE checking anything.\""
+          },
+          {
+            "is_target": false,
+            "line": 208,
+            "text": "\tcrit \"        Fetched code would be merged, installed and COMPILED as root unauthenticated.\""
+          },
+          {
+            "is_target": false,
+            "line": 209,
+            "text": "\t[ -n \"$dropins\" ] && crit \"        It is coming from a DROP-IN, which the unit file does not show: $dropins\""
+          }
+        ],
+        "path": "scripts/update_unit_drift_drill.sh",
+        "target_line": 184,
+        "token": "45",
+        "window_end": 209,
+        "window_lines": 51,
+        "window_start": 159
+      }
+    },
+    {
+      "call_kind": "search",
+      "decision": "adopted",
+      "pattern": "^[0-9a-fA-F]{64}[[:space:]]+[*]?[^[:space:]]",
+      "rank": 11,
+      "rationale": "The exact pinned verifier requires a 64-hex SHA256 record before invoking the platform checksum command. Its comments and release docs identify empty/truncated or HTTP error bodies as input and the integrity result as the sink; the contract is deliberately limited to the preflight and does not claim authenticity.",
+      "reason_code": "downloaded_checksum_preflight",
+      "regex_id": "0d22d2b135243d0c3d21c7a247776783",
+      "shortlist_site": "batch/corpora/mycelium/rules/scripts/verify-release.sh:60:10",
+      "site": "scripts/verify-release.sh:60:10",
+      "source_binding": {
+        "evidence_ref": "https://github.com/mycelium0/mycelium/blob/4b53dc7629ca3bc88bf5467db481ad2af7130711/scripts/verify-release.sh",
+        "path": "scripts/verify-release.sh",
+        "pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+        "repository_url": "https://github.com/mycelium0/mycelium",
+        "sha256": "df394a764f2ebd906ffbc9d6bafa58af896b39e895e503a271da3baf710e2b58"
+      },
+      "source_pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+      "window": {
+        "lines": [
+          {
+            "is_target": false,
+            "line": 35,
+            "text": "\tesac"
+          },
+          {
+            "is_target": false,
+            "line": 36,
+            "text": "done"
+          },
+          {
+            "is_target": false,
+            "line": 37,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 38,
+            "text": "if command -v sha256sum >/dev/null 2>&1; then sumc() { sha256sum -c \"$@\"; }"
+          },
+          {
+            "is_target": false,
+            "line": 39,
+            "text": "else sumc() { shasum -a 256 -c \"$@\"; }; fi"
+          },
+          {
+            "is_target": false,
+            "line": 40,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 41,
+            "text": "fail() { echo \"verify-release: FAIL: $*\" >&2; exit 1; }"
+          },
+          {
+            "is_target": false,
+            "line": 42,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 43,
+            "text": "cd \"$DIR\" || fail \"cannot enter directory: $DIR\""
+          },
+          {
+            "is_target": false,
+            "line": 44,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 45,
+            "text": "# 1. integrity (always)"
+          },
+          {
+            "is_target": false,
+            "line": 46,
+            "text": "#"
+          },
+          {
+            "is_target": false,
+            "line": 47,
+            "text": "# COUNT THE LINES BEFORE TRUSTING THE CHECK. `-c` over a checksum file with no well-formed lines is not a"
+          },
+          {
+            "is_target": false,
+            "line": 48,
+            "text": "# failure to every implementation: Apple's /sbin/sha256sum exits 0 on an empty file and exits 0 with only a"
+          },
+          {
+            "is_target": false,
+            "line": 49,
+            "text": "# warning on a malformed one, and that warning is discarded by the redirect below. So on stock macOS an"
+          },
+          {
+            "is_target": false,
+            "line": 50,
+            "text": "# empty or truncated SHA256SUMS produced \"ok integrity: artifacts match SHA256SUMS\" and \"verify-release:"
+          },
+          {
+            "is_target": false,
+            "line": 51,
+            "text": "# OK\", exit 0 — a verifier whose entire contract is to fail closed, reporting success for a download it"
+          },
+          {
+            "is_target": false,
+            "line": 52,
+            "text": "# had not checked at all. GNU coreutils gets this right (\"no properly formatted checksum lines found\","
+          },
+          {
+            "is_target": false,
+            "line": 53,
+            "text": "# exit 1), which is why it survived: it is invisible on Linux and on CI."
+          },
+          {
+            "is_target": false,
+            "line": 54,
+            "text": "#"
+          },
+          {
+            "is_target": false,
+            "line": 55,
+            "text": "# No attacker is needed. `curl -f` rejects only HTTP >= 400, so a captive portal or a proxy answering 200"
+          },
+          {
+            "is_target": false,
+            "line": 56,
+            "text": "# with an HTML body is enough, and QUICKSTART recommends exactly this integrity-only mode while a"
+          },
+          {
+            "is_target": false,
+            "line": 57,
+            "text": "# signature is pending. Requiring at least one well-formed line makes the check independent of which"
+          },
+          {
+            "is_target": false,
+            "line": 58,
+            "text": "# implementation is installed, and the count is printed so a human can see WHAT was verified."
+          },
+          {
+            "is_target": false,
+            "line": 59,
+            "text": "[ -f SHA256SUMS ] || fail \"SHA256SUMS not found in $(pwd)\""
+          },
+          {
+            "is_target": true,
+            "line": 60,
+            "text": "sums_n=\"$(grep -cE '^[0-9a-fA-F]{64}[[:space:]]+[*]?[^[:space:]]' SHA256SUMS 2>/dev/null || true)\""
+          },
+          {
+            "is_target": false,
+            "line": 61,
+            "text": "case \"${sums_n:-0}\" in"
+          },
+          {
+            "is_target": false,
+            "line": 62,
+            "text": "\t0) fail \"SHA256SUMS contains no well-formed checksum lines — the download is empty, truncated, or is not a checksum file at all (a proxy or captive portal answering 200 with an HTML body looks exactly like this). Nothing was verified.\" ;;"
+          },
+          {
+            "is_target": false,
+            "line": 63,
+            "text": "esac"
+          },
+          {
+            "is_target": false,
+            "line": 64,
+            "text": "sumc SHA256SUMS >/dev/null 2>&1 || fail \"an artifact does NOT match SHA256SUMS (integrity)\""
+          },
+          {
+            "is_target": false,
+            "line": 65,
+            "text": "echo \"ok    integrity: $sums_n artifact(s) match SHA256SUMS\""
+          },
+          {
+            "is_target": false,
+            "line": 66,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 67,
+            "text": "# 2. authenticity (when an allowed-signers key is supplied)"
+          },
+          {
+            "is_target": false,
+            "line": 68,
+            "text": "if [ -n \"$ALLOWED\" ]; then"
+          },
+          {
+            "is_target": false,
+            "line": 69,
+            "text": "\t[ -f \"$ALLOWED\" ]       || fail \"--allowed-signers file not found: $ALLOWED\""
+          },
+          {
+            "is_target": false,
+            "line": 70,
+            "text": "\t[ -f SHA256SUMS.sig ]   || fail \"SHA256SUMS.sig not found — cannot verify authenticity\""
+          },
+          {
+            "is_target": false,
+            "line": 71,
+            "text": "\t[ -n \"$SIGNER\" ]        || fail \"--signer ID is required (must match the allowed_signers principal)\""
+          },
+          {
+            "is_target": false,
+            "line": 72,
+            "text": "\tcommand -v ssh-keygen >/dev/null 2>&1 || fail \"ssh-keygen is required to verify the signature\""
+          },
+          {
+            "is_target": false,
+            "line": 73,
+            "text": "\tssh-keygen -Y verify -f \"$ALLOWED\" -I \"$SIGNER\" -n file -s SHA256SUMS.sig < SHA256SUMS >/dev/null 2>&1 \\"
+          },
+          {
+            "is_target": false,
+            "line": 74,
+            "text": "\t\t|| fail \"SHA256SUMS signature did NOT verify against $ALLOWED (authenticity)\""
+          },
+          {
+            "is_target": false,
+            "line": 75,
+            "text": "\techo \"ok    authenticity: SHA256SUMS signed by '$SIGNER'\""
+          },
+          {
+            "is_target": false,
+            "line": 76,
+            "text": "else"
+          },
+          {
+            "is_target": false,
+            "line": 77,
+            "text": "\techo \"warn  no --allowed-signers supplied: INTEGRITY checked, AUTHENTICITY not verified.\""
+          },
+          {
+            "is_target": false,
+            "line": 78,
+            "text": "\techo \"warn  supply the maintainer key (see docs/RELEASING.md) to verify the signature.\""
+          },
+          {
+            "is_target": false,
+            "line": 79,
+            "text": "fi"
+          },
+          {
+            "is_target": false,
+            "line": 80,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 81,
+            "text": "# 3. tag signature (optional, inside a clone)"
+          },
+          {
+            "is_target": false,
+            "line": 82,
+            "text": "if [ -n \"$TAG\" ]; then"
+          },
+          {
+            "is_target": false,
+            "line": 83,
+            "text": "\tif [ -n \"$ALLOWED\" ] && command -v git >/dev/null 2>&1 && git rev-parse --git-dir >/dev/null 2>&1; then"
+          },
+          {
+            "is_target": false,
+            "line": 84,
+            "text": "\t\tgit -c gpg.ssh.allowedSignersFile=\"$ALLOWED\" -c gpg.format=ssh verify-tag \"$TAG\" >/dev/null 2>&1 \\"
+          },
+          {
+            "is_target": false,
+            "line": 85,
+            "text": "\t\t\t&& echo \"ok    git tag $TAG signature verifies\" \\"
+          }
+        ],
+        "path": "scripts/verify-release.sh",
+        "target_line": 60,
+        "token": "10",
+        "window_end": 85,
+        "window_lines": 51,
+        "window_start": 35
+      }
+    },
+    {
+      "call_kind": "search",
+      "decision": "skipped",
+      "pattern": "^# fungi — the one-command",
+      "rank": 12,
+      "rationale": "The awk/sed expression extracts a usage block from the script header for help output; this is documentation rendering, not a security boundary.",
+      "reason_code": "documentation_header_extraction",
+      "regex_id": "182c7edc3432798e986eb07b0f4e73a6",
+      "shortlist_site": "batch/corpora/mycelium/rules/scripts/fungi:42:1",
+      "site": "scripts/fungi:42:1",
+      "source_binding": {
+        "evidence_ref": "https://github.com/mycelium0/mycelium/blob/4b53dc7629ca3bc88bf5467db481ad2af7130711/scripts/fungi",
+        "path": "scripts/fungi",
+        "pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+        "repository_url": "https://github.com/mycelium0/mycelium",
+        "sha256": "b922a88d84b3b67ec77061f0a51425c0d90f7b0b66d1853a7c9b51ebb52650aa"
+      },
+      "source_pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+      "window": {
+        "lines": [
+          {
+            "is_target": false,
+            "line": 17,
+            "text": "#                         --auto-rotate = also let it PROMOTE unattended; --no-arm = serve only"
+          },
+          {
+            "is_target": false,
+            "line": 18,
+            "text": "#   fungi update [opts]   fetch + re-render + validate + rollback  (-> node-bootstrap.sh --update)"
+          },
+          {
+            "is_target": false,
+            "line": 19,
+            "text": "#   fungi apply  [opts]   apply the node descriptor to the node    (-> node-bootstrap.sh --node-apply)"
+          },
+          {
+            "is_target": false,
+            "line": 20,
+            "text": "#   fungi plan   [args]   preview the deploy (resolve pins, print)  (-> myceliumctl deploy-plan; read-only)"
+          },
+          {
+            "is_target": false,
+            "line": 21,
+            "text": "#   fungi transport <list|enable|disable> [P]  choose which transports this node serves   (-> myceliumctl transport)"
+          },
+          {
+            "is_target": false,
+            "line": 22,
+            "text": "#   fungi front <enable|disable|show> [opts]   turn a bring-your-own-domain CDN front on/off (-> myceliumctl front)"
+          },
+          {
+            "is_target": false,
+            "line": 23,
+            "text": "#   fungi reachable <on|off>                   set the node's public-entry posture         (-> myceliumctl reachable)"
+          },
+          {
+            "is_target": false,
+            "line": 24,
+            "text": "#   fungi diag <collect|redact>                PII-scrubbed bundle / scrub stdin  (-> myceliumctl diag)"
+          },
+          {
+            "is_target": false,
+            "line": 25,
+            "text": "#                         ALWAYS run this before attaching anything to a public issue."
+          },
+          {
+            "is_target": false,
+            "line": 26,
+            "text": "#   fungi status          read-only: what this node is running"
+          },
+          {
+            "is_target": false,
+            "line": 27,
+            "text": "#"
+          },
+          {
+            "is_target": false,
+            "line": 28,
+            "text": "# Exit: forwards the delegated command's exit; 2 = usage, 3 = the Go spine (plan/transport/front/reachable/diag) is unavailable."
+          },
+          {
+            "is_target": false,
+            "line": 29,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 30,
+            "text": "set -euo pipefail"
+          },
+          {
+            "is_target": false,
+            "line": 31,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 32,
+            "text": "src=\"${BASH_SOURCE[0]}\""
+          },
+          {
+            "is_target": false,
+            "line": 33,
+            "text": "while [ -h \"$src\" ]; do dir=\"$(cd -P \"$(dirname \"$src\")\" && pwd)\"; src=\"$(readlink \"$src\")\"; [ \"${src#/}\" = \"$src\" ] && src=\"$dir/$src\"; done"
+          },
+          {
+            "is_target": false,
+            "line": 34,
+            "text": "FUNGI_SELF=\"$(cd -P \"$(dirname \"$src\")\" && pwd)/$(basename \"$src\")\""
+          },
+          {
+            "is_target": false,
+            "line": 35,
+            "text": "REPO_ROOT=\"$(cd -P \"$(dirname \"$FUNGI_SELF\")/..\" && pwd)\""
+          },
+          {
+            "is_target": false,
+            "line": 36,
+            "text": "NODE_BOOTSTRAP=\"$REPO_ROOT/scripts/node-bootstrap.sh\""
+          },
+          {
+            "is_target": false,
+            "line": 37,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 38,
+            "text": "# usage — print the header block as help. DELIMITED, not line-numbered: this used to be `sed -n '7,24p'`,"
+          },
+          {
+            "is_target": false,
+            "line": 39,
+            "text": "# so adding one line to the header silently truncated the help text (and the very first edit after this"
+          },
+          {
+            "is_target": false,
+            "line": 40,
+            "text": "# comment was written did exactly that). Anchored on the two markers instead, which move with the content."
+          },
+          {
+            "is_target": false,
+            "line": 41,
+            "text": "usage() {"
+          },
+          {
+            "is_target": true,
+            "line": 42,
+            "text": "\tawk '/^# fungi — the one-command/{f=1} f&&/^# Exit:/{print; exit} f' \"$FUNGI_SELF\" \\"
+          },
+          {
+            "is_target": false,
+            "line": 43,
+            "text": "\t\t| sed 's/^# \\{0,1\\}//; s/^#$//'"
+          },
+          {
+            "is_target": false,
+            "line": 44,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 45,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 46,
+            "text": "# Resolve the Go spine binary that speaks `deploy-plan` (install_spine builds it at"
+          },
+          {
+            "is_target": false,
+            "line": 47,
+            "text": "# $TOOLING_DIR/bin/myceliumctl-go; a checkout build lands beside the repo). Fall back gracefully."
+          },
+          {
+            "is_target": false,
+            "line": 48,
+            "text": "resolve_myctl_go() {"
+          },
+          {
+            "is_target": false,
+            "line": 49,
+            "text": "\tlocal c"
+          },
+          {
+            "is_target": false,
+            "line": 50,
+            "text": "\tfor c in \"${TOOLING_DIR:-/usr/local/lib/mycelium}/bin/myceliumctl-go\" \"$REPO_ROOT/myceliumctl-go\"; do"
+          },
+          {
+            "is_target": false,
+            "line": 51,
+            "text": "\t\t[ -x \"$c\" ] && { printf '%s\\n' \"$c\"; return 0; }"
+          },
+          {
+            "is_target": false,
+            "line": 52,
+            "text": "\tdone"
+          },
+          {
+            "is_target": false,
+            "line": 53,
+            "text": "\treturn 1"
+          },
+          {
+            "is_target": false,
+            "line": 54,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 55,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 56,
+            "text": "# READ-ONLY status probe: report what the node is running; never start/stop/restart/mutate anything."
+          },
+          {
+            "is_target": false,
+            "line": 57,
+            "text": "fungi_status() {"
+          },
+          {
+            "is_target": false,
+            "line": 58,
+            "text": "\tlocal svc state"
+          },
+          {
+            "is_target": false,
+            "line": 59,
+            "text": "\tprintf 'services:\\n'"
+          },
+          {
+            "is_target": false,
+            "line": 60,
+            "text": "\tif command -v systemctl >/dev/null 2>&1; then"
+          },
+          {
+            "is_target": false,
+            "line": 61,
+            "text": "\t\tfor svc in sing-box xray myceliumd; do"
+          },
+          {
+            "is_target": false,
+            "line": 62,
+            "text": "\t\t\tstate=\"$(systemctl is-active \"$svc\" 2>/dev/null || true)\""
+          },
+          {
+            "is_target": false,
+            "line": 63,
+            "text": "\t\t\t[ -n \"$state\" ] && [ \"$state\" != \"inactive\" ] || systemctl list-unit-files \"$svc.service\" >/dev/null 2>&1 || continue"
+          },
+          {
+            "is_target": false,
+            "line": 64,
+            "text": "\t\t\tprintf '  %-10s %s (NRestarts=%s)\\n' \"$svc\" \"${state:-unknown}\" \"$(systemctl show \"$svc\" -p NRestarts --value 2>/dev/null || echo '?')\""
+          },
+          {
+            "is_target": false,
+            "line": 65,
+            "text": "\t\tdone"
+          },
+          {
+            "is_target": false,
+            "line": 66,
+            "text": "\telse"
+          },
+          {
+            "is_target": false,
+            "line": 67,
+            "text": "\t\tprintf '  (systemctl unavailable)\\n'"
+          }
+        ],
+        "path": "scripts/fungi",
+        "target_line": 42,
+        "token": "1",
+        "window_end": 67,
+        "window_lines": 51,
+        "window_start": 17
+      }
+    },
+    {
+      "call_kind": "search",
+      "decision": "skipped",
+      "pattern": "127\\.0\\.0\\.1|\\[::1\\]",
+      "rank": 13,
+      "rationale": "The expression filters loopback addresses from a read-only listener display. It does not configure listeners, authorize traffic, or control an enforcement decision.",
+      "reason_code": "read_only_status_presentation",
+      "regex_id": "ffb8742a5ea4e9a56d636c6ad8511128",
+      "shortlist_site": "batch/corpora/mycelium/rules/scripts/fungi:77:51",
+      "site": "scripts/fungi:77:51",
+      "source_binding": {
+        "evidence_ref": "https://github.com/mycelium0/mycelium/blob/4b53dc7629ca3bc88bf5467db481ad2af7130711/scripts/fungi",
+        "path": "scripts/fungi",
+        "pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+        "repository_url": "https://github.com/mycelium0/mycelium",
+        "sha256": "b922a88d84b3b67ec77061f0a51425c0d90f7b0b66d1853a7c9b51ebb52650aa"
+      },
+      "source_pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+      "window": {
+        "lines": [
+          {
+            "is_target": false,
+            "line": 52,
+            "text": "\tdone"
+          },
+          {
+            "is_target": false,
+            "line": 53,
+            "text": "\treturn 1"
+          },
+          {
+            "is_target": false,
+            "line": 54,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 55,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 56,
+            "text": "# READ-ONLY status probe: report what the node is running; never start/stop/restart/mutate anything."
+          },
+          {
+            "is_target": false,
+            "line": 57,
+            "text": "fungi_status() {"
+          },
+          {
+            "is_target": false,
+            "line": 58,
+            "text": "\tlocal svc state"
+          },
+          {
+            "is_target": false,
+            "line": 59,
+            "text": "\tprintf 'services:\\n'"
+          },
+          {
+            "is_target": false,
+            "line": 60,
+            "text": "\tif command -v systemctl >/dev/null 2>&1; then"
+          },
+          {
+            "is_target": false,
+            "line": 61,
+            "text": "\t\tfor svc in sing-box xray myceliumd; do"
+          },
+          {
+            "is_target": false,
+            "line": 62,
+            "text": "\t\t\tstate=\"$(systemctl is-active \"$svc\" 2>/dev/null || true)\""
+          },
+          {
+            "is_target": false,
+            "line": 63,
+            "text": "\t\t\t[ -n \"$state\" ] && [ \"$state\" != \"inactive\" ] || systemctl list-unit-files \"$svc.service\" >/dev/null 2>&1 || continue"
+          },
+          {
+            "is_target": false,
+            "line": 64,
+            "text": "\t\t\tprintf '  %-10s %s (NRestarts=%s)\\n' \"$svc\" \"${state:-unknown}\" \"$(systemctl show \"$svc\" -p NRestarts --value 2>/dev/null || echo '?')\""
+          },
+          {
+            "is_target": false,
+            "line": 65,
+            "text": "\t\tdone"
+          },
+          {
+            "is_target": false,
+            "line": 66,
+            "text": "\telse"
+          },
+          {
+            "is_target": false,
+            "line": 67,
+            "text": "\t\tprintf '  (systemctl unavailable)\\n'"
+          },
+          {
+            "is_target": false,
+            "line": 68,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 69,
+            "text": "\t# EVERY BRANCH REPORTS, including the one that cannot look (Audit-0011 #9). Without the `else` this"
+          },
+          {
+            "is_target": false,
+            "line": 70,
+            "text": "\t# printed the heading and nothing under it on a host with no `ss`, and returned 0 — indistinguishable"
+          },
+          {
+            "is_target": false,
+            "line": 71,
+            "text": "\t# from \"no public listeners\", which is the single most alarming thing this command can truthfully say."
+          },
+          {
+            "is_target": false,
+            "line": 72,
+            "text": "\t# A status verb that cannot tell \"none\" from \"I could not check\" is worse than no status verb."
+          },
+          {
+            "is_target": false,
+            "line": 73,
+            "text": "\tlocal seen=0"
+          },
+          {
+            "is_target": false,
+            "line": 74,
+            "text": "\tprintf 'public listeners:\\n'"
+          },
+          {
+            "is_target": false,
+            "line": 75,
+            "text": "\tif command -v ss >/dev/null 2>&1; then"
+          },
+          {
+            "is_target": false,
+            "line": 76,
+            "text": "\t\tlocal lst"
+          },
+          {
+            "is_target": true,
+            "line": 77,
+            "text": "\t\tlst=\"$(ss -ltnH 2>/dev/null | awk '{print $4}' | grep -vE '127\\.0\\.0\\.1|\\[::1\\]' | sort -u || true)\""
+          },
+          {
+            "is_target": false,
+            "line": 78,
+            "text": "\t\tif [ -n \"$lst\" ]; then printf '%s\\n' \"$lst\" | sed 's/^/  /'; seen=1"
+          },
+          {
+            "is_target": false,
+            "line": 79,
+            "text": "\t\telse printf '  (none — no non-loopback TCP listener)\\n'; seen=1; fi"
+          },
+          {
+            "is_target": false,
+            "line": 80,
+            "text": "\telse"
+          },
+          {
+            "is_target": false,
+            "line": 81,
+            "text": "\t\tprintf '  (UNKNOWN: ss unavailable, so this host cannot be inspected)\\n'"
+          },
+          {
+            "is_target": false,
+            "line": 82,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 83,
+            "text": "\tprintf 'engine versions:\\n'"
+          },
+          {
+            "is_target": false,
+            "line": 84,
+            "text": "\tcommand -v sing-box >/dev/null 2>&1 && printf '  sing-box %s\\n' \"$(sing-box version 2>/dev/null | sed -n 's/.*version[[:space:]]*//p' | head -1)\""
+          },
+          {
+            "is_target": false,
+            "line": 85,
+            "text": "\tcommand -v xray >/dev/null 2>&1 && printf '  xray %s\\n' \"$(xray version 2>/dev/null | sed -n 's/^Xray[[:space:]]*//p' | awk '{print $1}' | head -1)\""
+          },
+          {
+            "is_target": false,
+            "line": 86,
+            "text": "\tcommand -v sing-box >/dev/null 2>&1 || command -v xray >/dev/null 2>&1 \\"
+          },
+          {
+            "is_target": false,
+            "line": 87,
+            "text": "\t\t|| printf '  (UNKNOWN: neither engine binary is on PATH from here)\\n'"
+          },
+          {
+            "is_target": false,
+            "line": 88,
+            "text": "\t# The arm sentinel, because \"is this node allowed to rotate itself\" is the one piece of posture an"
+          },
+          {
+            "is_target": false,
+            "line": 89,
+            "text": "\t# operator cannot infer from listeners or versions, and it is the difference between a node that"
+          },
+          {
+            "is_target": false,
+            "line": 90,
+            "text": "\t# adapts unattended and one that only plans."
+          },
+          {
+            "is_target": false,
+            "line": 91,
+            "text": "\t# ENGINE PIN DRIFT (Audit-0011 #20). install_singbox runs only inside flow_bootstrap, while"
+          },
+          {
+            "is_target": false,
+            "line": 92,
+            "text": "\t# install_xray also runs from converge_node_tail — so bumping the manifest for a CVE reaches the"
+          },
+          {
+            "is_target": false,
+            "line": 93,
+            "text": "\t# SECONDARY engine unattended and never reaches the PRIMARY one. Upgrading a data-plane binary on a"
+          },
+          {
+            "is_target": false,
+            "line": 94,
+            "text": "\t# timer is a posture change nobody has authorised, so this REPORTS the drift instead of acting on it,"
+          },
+          {
+            "is_target": false,
+            "line": 95,
+            "text": "\t# and RELEASING.md says plainly that engine pins need an attended deploy."
+          },
+          {
+            "is_target": false,
+            "line": 96,
+            "text": "\tprintf 'engine pin: '"
+          },
+          {
+            "is_target": false,
+            "line": 97,
+            "text": "\tlocal mfile pin cur"
+          },
+          {
+            "is_target": false,
+            "line": 98,
+            "text": "\tmfile=\"${MYC_ARTIFACT_ROOT:-/opt/mycelium}/control/engines.manifest.json\""
+          },
+          {
+            "is_target": false,
+            "line": 99,
+            "text": "\tif [ -r \"$mfile\" ] && command -v jq >/dev/null 2>&1 && command -v sing-box >/dev/null 2>&1; then"
+          },
+          {
+            "is_target": false,
+            "line": 100,
+            "text": "\t\tpin=\"$(jq -r '.. | .singbox? // empty | .version? // empty' \"$mfile\" 2>/dev/null | head -1)\""
+          },
+          {
+            "is_target": false,
+            "line": 101,
+            "text": "\t\tcur=\"$(sing-box version 2>/dev/null | sed -n 's/.*version[[:space:]]*//p' | head -1)\""
+          },
+          {
+            "is_target": false,
+            "line": 102,
+            "text": "\t\tif [ -z \"$pin\" ]; then printf '(UNKNOWN: no sing-box pin readable in the manifest)\\n'"
+          }
+        ],
+        "path": "scripts/fungi",
+        "target_line": 77,
+        "token": "51",
+        "window_end": 102,
+        "window_lines": 51,
+        "window_start": 52
+      }
+    },
+    {
+      "call_kind": "search",
+      "decision": "skipped",
+      "pattern": "^$",
+      "rank": 14,
+      "rationale": "The expression removes empty lines from a read-only systemd configuration listing; no separate security guarantee depends on the regex.",
+      "reason_code": "empty_record_filter",
+      "regex_id": "d8d45304ef898304d066587397ec814e",
+      "shortlist_site": "batch/corpora/mycelium/rules/scripts/update_unit_drift_drill.sh:120:86",
+      "site": "scripts/update_unit_drift_drill.sh:120:86",
+      "source_binding": {
+        "evidence_ref": "https://github.com/mycelium0/mycelium/blob/4b53dc7629ca3bc88bf5467db481ad2af7130711/scripts/update_unit_drift_drill.sh",
+        "path": "scripts/update_unit_drift_drill.sh",
+        "pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+        "repository_url": "https://github.com/mycelium0/mycelium",
+        "sha256": "4e28f0bd727ba842fed7840bdd163fbef32dc911f7c8e6bea409895ced4c6493"
+      },
+      "source_pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+      "window": {
+        "lines": [
+          {
+            "is_target": false,
+            "line": 95,
+            "text": "# redact — mask the node-identifying ADDRESS classes from everything this drill prints (Audit-0009 S1):"
+          },
+          {
+            "is_target": false,
+            "line": 96,
+            "text": "# the node's own hostname (word-anchored, and only at >=4 chars, exactly as internal/diag.RedactBundle"
+          },
+          {
+            "is_target": false,
+            "line": 97,
+            "text": "# does — a 3-char hostname is a common substring and masking it would corrupt the output), then IPv6,"
+          },
+          {
+            "is_target": false,
+            "line": 98,
+            "text": "# then IPv4, then FQDNs. Ordered like internal/diag's rules so the structural classes are scrubbed WHOLE"
+          },
+          {
+            "is_target": false,
+            "line": 99,
+            "text": "# rather than fragmented by a broader pass."
+          },
+          {
+            "is_target": false,
+            "line": 100,
+            "text": "#"
+          },
+          {
+            "is_target": false,
+            "line": 101,
+            "text": "# The dotted-name pass would also eat `mycelium-update.service`, `override.conf`, `node-bootstrap.sh` —"
+          },
+          {
+            "is_target": false,
+            "line": 102,
+            "text": "# the very vocabulary the diff exists to show — so file/unit extensions are protected behind a sentinel"
+          },
+          {
+            "is_target": false,
+            "line": 103,
+            "text": "# first and restored after. That is the whole compromise: mask what identifies the node, keep what"
+          },
+          {
+            "is_target": false,
+            "line": 104,
+            "text": "# identifies the defect. GNU sed assumed (this drill already requires systemd)."
+          },
+          {
+            "is_target": false,
+            "line": 105,
+            "text": "SELF_HOST=\"$(hostname 2>/dev/null || printf '')\""
+          },
+          {
+            "is_target": false,
+            "line": 106,
+            "text": "redact() {"
+          },
+          {
+            "is_target": false,
+            "line": 107,
+            "text": "\tlocal h=\"$SELF_HOST\""
+          },
+          {
+            "is_target": false,
+            "line": 108,
+            "text": "\tif [ \"${#h}\" -lt 4 ]; then h=\"\"; fi"
+          },
+          {
+            "is_target": false,
+            "line": 109,
+            "text": "\tsed -E \\"
+          },
+          {
+            "is_target": false,
+            "line": 110,
+            "text": "\t\t-e 's/\\.(service|timer|socket|target|mount|path|slice|conf|sh|json|pub|md|go|toml|yml|yaml|d)\\b/\\x01\\1/g' \\"
+          },
+          {
+            "is_target": false,
+            "line": 111,
+            "text": "\t\t${h:+-e \"s/\\\\b$(printf '%s' \"$h\" | sed -E 's/[][\\\\.^$*+?(){}|/]/\\\\\\\\&/g')\\\\b/[redacted-host]/gI\"} \\"
+          },
+          {
+            "is_target": false,
+            "line": 112,
+            "text": "\t\t-e 's/(^|[^0-9a-fA-F:.])(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:)*[0-9a-fA-F]{0,4}::([0-9a-fA-F]{1,4}:)*([0-9]{1,3}(\\.[0-9]{1,3}){3}|[0-9a-fA-F]{1,4})?)/\\1[redacted-ipv6]/g' \\"
+          },
+          {
+            "is_target": false,
+            "line": 113,
+            "text": "\t\t-e 's/\\b([0-9]{1,3}\\.){3}[0-9]{1,3}\\b/[redacted-ipv4]/g' \\"
+          },
+          {
+            "is_target": false,
+            "line": 114,
+            "text": "\t\t-e 's/\\b([a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\\.)+[a-zA-Z]{2,}\\b/[redacted-host]/g' \\"
+          },
+          {
+            "is_target": false,
+            "line": 115,
+            "text": "\t\t-e 's/\\x01/./g'"
+          },
+          {
+            "is_target": false,
+            "line": 116,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 117,
+            "text": "say() { printf '%s\\n' \"$1\" | redact; }"
+          },
+          {
+            "is_target": false,
+            "line": 118,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 119,
+            "text": "# directives only — the template headers necessarily NAME the forbidden flag in order to warn about it"
+          },
+          {
+            "is_target": true,
+            "line": 120,
+            "text": "directives() { grep -vE '^[[:space:]]*#' \"$1\" 2>/dev/null | sed 's/[[:space:]]*$//' | grep -vE '^$'; }"
+          },
+          {
+            "is_target": false,
+            "line": 121,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 122,
+            "text": "printf '== mycelium-update deployed-unit drift drill ==\\n'"
+          },
+          {
+            "is_target": false,
+            "line": 123,
+            "text": "say \"node:     ${SELF_HOST:-(unknown)}\""
+          },
+          {
+            "is_target": false,
+            "line": 124,
+            "text": "printf 'checkout: %s\\n\\n' \"$CHECKOUT\""
+          },
+          {
+            "is_target": false,
+            "line": 125,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 126,
+            "text": "svc_state=\"$(systemctl is-enabled \"$SVC_NAME\" 2>&1 || true)\""
+          },
+          {
+            "is_target": false,
+            "line": 127,
+            "text": "tmr_state=\"$(systemctl is-enabled \"$TMR_NAME\" 2>&1 || true)\""
+          },
+          {
+            "is_target": false,
+            "line": 128,
+            "text": "tmr_active=\"$(systemctl is-active \"$TMR_NAME\" 2>&1 || true)\""
+          },
+          {
+            "is_target": false,
+            "line": 129,
+            "text": "printf 'state:    service=%s  timer=%s (%s)\\n\\n' \"$svc_state\" \"$tmr_state\" \"$tmr_active\""
+          },
+          {
+            "is_target": false,
+            "line": 130,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 131,
+            "text": "# --- parked / absent postures are legitimate outcomes, not failures -------------------------------"
+          },
+          {
+            "is_target": false,
+            "line": 132,
+            "text": "if [ \"$svc_state\" = \"masked\" ] || [ \"$tmr_state\" = \"masked\" ]; then"
+          },
+          {
+            "is_target": false,
+            "line": 133,
+            "text": "\tok \"the unit is MASKED — it cannot be armed by \\`systemctl enable\\`, which fails closed.\""
+          },
+          {
+            "is_target": false,
+            "line": 134,
+            "text": "\tok \"  This is the correct parked posture until RP-0003 W1 (a signed tag to pin) exists.\""
+          },
+          {
+            "is_target": false,
+            "line": 135,
+            "text": "\tok \"  To arm later: systemctl unmask, re-cp the template, append --allowed-signers + --repo-ref, then enable.\""
+          },
+          {
+            "is_target": false,
+            "line": 136,
+            "text": "\tprintf '\\n-- Result --\\nPASS: parked (masked). Nothing can auto-pull on this node.\\n'"
+          },
+          {
+            "is_target": false,
+            "line": 137,
+            "text": "\texit 0"
+          },
+          {
+            "is_target": false,
+            "line": 138,
+            "text": "fi"
+          },
+          {
+            "is_target": false,
+            "line": 139,
+            "text": "if [ ! -f \"$UNIT_DIR/$SVC_NAME\" ] && [ ! -f \"$UNIT_DIR/$TMR_NAME\" ]; then"
+          },
+          {
+            "is_target": false,
+            "line": 140,
+            "text": "\tok \"no mycelium-update unit is installed on this node — nothing to drift.\""
+          },
+          {
+            "is_target": false,
+            "line": 141,
+            "text": "\tprintf '\\n-- Result --\\nPASS: not installed.\\n'"
+          },
+          {
+            "is_target": false,
+            "line": 142,
+            "text": "\texit 0"
+          },
+          {
+            "is_target": false,
+            "line": 143,
+            "text": "fi"
+          },
+          {
+            "is_target": false,
+            "line": 144,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 145,
+            "text": "# --- 1. deployed vs template ----------------------------------------------------------------------"
+          }
+        ],
+        "path": "scripts/update_unit_drift_drill.sh",
+        "target_line": 120,
+        "token": "86",
+        "window_end": 145,
+        "window_lines": 51,
+        "window_start": 95
+      }
+    },
+    {
+      "call_kind": "search",
+      "decision": "skipped",
+      "pattern": "^$",
+      "rank": 15,
+      "rationale": "The expression removes empty records from a diagnostic ExecStart listing; no independent contract-backed security property is present.",
+      "reason_code": "empty_record_filter",
+      "regex_id": "2036b05dd504e0eb23c832ae4c1fbf08",
+      "shortlist_site": "batch/corpora/mycelium/rules/scripts/update_unit_drift_drill.sh:184:71",
+      "site": "scripts/update_unit_drift_drill.sh:184:71",
+      "source_binding": {
+        "evidence_ref": "https://github.com/mycelium0/mycelium/blob/4b53dc7629ca3bc88bf5467db481ad2af7130711/scripts/update_unit_drift_drill.sh",
+        "path": "scripts/update_unit_drift_drill.sh",
+        "pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+        "repository_url": "https://github.com/mycelium0/mycelium",
+        "sha256": "4e28f0bd727ba842fed7840bdd163fbef32dc911f7c8e6bea409895ced4c6493"
+      },
+      "source_pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+      "window": {
+        "lines": [
+          {
+            "is_target": false,
+            "line": 159,
+            "text": "\t\tprintf '              line — treat the unmasked original as sensitive before sharing it.\\n'"
+          },
+          {
+            "is_target": false,
+            "line": 160,
+            "text": "\t\tprintf '        --- template / +++ deployed ---\\n'"
+          },
+          {
+            "is_target": false,
+            "line": 161,
+            "text": "\t\tdiff -u <(directives \"$tpl\") <(directives \"$dep\") 2>/dev/null | tail -n +3 | redact | sed 's/^/        /'"
+          },
+          {
+            "is_target": false,
+            "line": 162,
+            "text": "\t\tprintf '        -> nothing reconciles this back. Reset with: cp %s %s\\n' \"$tpl\" \"$dep\""
+          },
+          {
+            "is_target": false,
+            "line": 163,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 164,
+            "text": "done"
+          },
+          {
+            "is_target": false,
+            "line": 165,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 166,
+            "text": "# --- the EFFECTIVE ExecStart ----------------------------------------------------------------------"
+          },
+          {
+            "is_target": false,
+            "line": 167,
+            "text": "# Per-node flags (the signer path, the ref pin) belong in a systemd DROP-IN, not in the unit file —"
+          },
+          {
+            "is_target": false,
+            "line": 168,
+            "text": "# hand-editing the unit is the exact drift this drill exists to catch, and a drop-in keeps the"
+          },
+          {
+            "is_target": false,
+            "line": 169,
+            "text": "# installed unit a pristine template copy that `systemctl revert` resets in one command."
+          },
+          {
+            "is_target": false,
+            "line": 170,
+            "text": "#"
+          },
+          {
+            "is_target": false,
+            "line": 171,
+            "text": "# So every check about WHAT WILL RUN must read the MERGED unit, not the file. Reading the file was"
+          },
+          {
+            "is_target": false,
+            "line": 172,
+            "text": "# wrong in both directions: it false-CRITs a correctly-armed node whose flags live in a drop-in, and —"
+          },
+          {
+            "is_target": false,
+            "line": 173,
+            "text": "# far worse — it is BLIND to a drop-in that adds --insecure-no-verify. A check that is permanently red"
+          },
+          {
+            "is_target": false,
+            "line": 174,
+            "text": "# on a correct node stops being read, and a check with a hole that big is not a check."
+          },
+          {
+            "is_target": false,
+            "line": 175,
+            "text": "# Falls back to the file's ExecStart if systemctl cannot report (unit absent / systemd not answering)."
+          },
+          {
+            "is_target": false,
+            "line": 176,
+            "text": "# EVERY ExecStart, not the first. `Type=oneshot` admits MULTIPLE ExecStart= lines and systemd runs them"
+          },
+          {
+            "is_target": false,
+            "line": 177,
+            "text": "# all, in order, as root. This read used `head -1`, so a drop-in that APPENDS a second command — after an"
+          },
+          {
+            "is_target": false,
+            "line": 178,
+            "text": "# earlier drop-in has already supplied the authenticated one, which is exactly the live posture here — was"
+          },
+          {
+            "is_target": false,
+            "line": 179,
+            "text": "# invisible to all three checks below, and the drill printed \"no provenance bypass\" and \"the effective"
+          },
+          {
+            "is_target": false,
+            "line": 180,
+            "text": "# command is authenticated\" while the second command ran unattended every 15 minutes. The injection test"
+          },
+          {
+            "is_target": false,
+            "line": 181,
+            "text": "# that accompanied the original fix only exercised a RESETTING drop-in (one that clears and replaces), so"
+          },
+          {
+            "is_target": false,
+            "line": 182,
+            "text": "# it never touched this shape (Audit-0009 C2)."
+          },
+          {
+            "is_target": false,
+            "line": 183,
+            "text": "exec_all=\"$(systemctl show \"$SVC_NAME\" -p ExecStart --value 2>/dev/null \\"
+          },
+          {
+            "is_target": true,
+            "line": 184,
+            "text": "\t| sed -n 's/.*argv\\[\\]=\\([^;]*\\);.*/\\1/p' | sed 's/[[:space:]]*$//' | grep -v '^$')\""
+          },
+          {
+            "is_target": false,
+            "line": 185,
+            "text": "[ -n \"$exec_all\" ] || exec_all=\"$(directives \"$UNIT_DIR/$SVC_NAME\" 2>/dev/null | grep -E '^ExecStart=' | sed 's/^ExecStart=//' || true)\""
+          },
+          {
+            "is_target": false,
+            "line": 186,
+            "text": "exec_n=\"$(printf '%s\\n' \"$exec_all\" | grep -c . || true)\""
+          },
+          {
+            "is_target": false,
+            "line": 187,
+            "text": "# The checks below reason over the CONCATENATION, so a flag in any command is seen. Count is reported"
+          },
+          {
+            "is_target": false,
+            "line": 188,
+            "text": "# separately: on this unit more than one ExecStart is itself the finding, whatever the commands say."
+          },
+          {
+            "is_target": false,
+            "line": 189,
+            "text": "exec_eff=\"$(printf '%s' \"$exec_all\" | tr '\\n' ' ')\""
+          },
+          {
+            "is_target": false,
+            "line": 190,
+            "text": "if [ \"${exec_n:-0}\" -gt 1 ]; then"
+          },
+          {
+            "is_target": false,
+            "line": 191,
+            "text": "\tcrit \"the unit has $exec_n ExecStart commands; systemd runs ALL of them as root, in order.\""
+          },
+          {
+            "is_target": false,
+            "line": 192,
+            "text": "\tcrit \"        On this unit that is never legitimate: the per-node flags belong in ONE resetting drop-in\""
+          },
+          {
+            "is_target": false,
+            "line": 193,
+            "text": "\tcrit \"        (\\`ExecStart=\\` to clear, then the single authenticated command). A second, APPENDED\""
+          },
+          {
+            "is_target": false,
+            "line": 194,
+            "text": "\tcrit \"        command is how a provenance bypass hides behind a correct-looking first one.\""
+          },
+          {
+            "is_target": false,
+            "line": 195,
+            "text": "\tprintf '%s\\n' \"$exec_all\" | redact | sed 's/^/          - /'"
+          },
+          {
+            "is_target": false,
+            "line": 196,
+            "text": "fi"
+          },
+          {
+            "is_target": false,
+            "line": 197,
+            "text": "dropins=\"$(systemctl show \"$SVC_NAME\" -p DropInPaths --value 2>/dev/null)\""
+          },
+          {
+            "is_target": false,
+            "line": 198,
+            "text": "if [ -n \"$dropins\" ]; then"
+          },
+          {
+            "is_target": false,
+            "line": 199,
+            "text": "\tsay \"  note  per-node flags come from drop-in(s): $dropins\""
+          },
+          {
+            "is_target": false,
+            "line": 200,
+            "text": "\tprintf '        (the unit FILE stays a pristine template copy; `systemctl revert %s` resets it)\\n' \"$SVC_NAME\""
+          },
+          {
+            "is_target": false,
+            "line": 201,
+            "text": "fi"
+          },
+          {
+            "is_target": false,
+            "line": 202,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 203,
+            "text": "# --- 2. the provenance bypass (over the EFFECTIVE command + both unit files) ------------------------"
+          },
+          {
+            "is_target": false,
+            "line": 204,
+            "text": "bypass=0"
+          },
+          {
+            "is_target": false,
+            "line": 205,
+            "text": "if printf '%s' \"$exec_eff\" | grep -q -- '--insecure-no-verify'; then"
+          },
+          {
+            "is_target": false,
+            "line": 206,
+            "text": "\tbypass=1"
+          },
+          {
+            "is_target": false,
+            "line": 207,
+            "text": "\tcrit \"the EFFECTIVE ExecStart carries --insecure-no-verify — verify_signed_ref returns BEFORE checking anything.\""
+          },
+          {
+            "is_target": false,
+            "line": 208,
+            "text": "\tcrit \"        Fetched code would be merged, installed and COMPILED as root unauthenticated.\""
+          },
+          {
+            "is_target": false,
+            "line": 209,
+            "text": "\t[ -n \"$dropins\" ] && crit \"        It is coming from a DROP-IN, which the unit file does not show: $dropins\""
+          }
+        ],
+        "path": "scripts/update_unit_drift_drill.sh",
+        "target_line": 184,
+        "token": "71",
+        "window_end": 209,
+        "window_lines": 51,
+        "window_start": 159
+      }
+    }
+  ],
+  "cohort_id": "off-cohort-mycelium-current-pin",
+  "repository_url": "https://github.com/mycelium0/mycelium",
+  "review_source": {
+    "row_count": 15,
+    "sha256": "1e6600ccd16fc25b8bbe932adfc6ed1fa6292c2e95b58d504865bd8d2145c76e"
+  },
+  "run_context_sha256": "1a61bbe0b6055a885290e27fac5dc9b41070811615e015bdcc3c108c0ce2cb02",
+  "schema_version": "1",
+  "shortlist_site_path_prefix": "batch/corpora/mycelium/rules",
+  "shortlist_source": {
+    "row_count": 15,
+    "sha256": "042d1fbec0498af9857d5f9799b07828a75be264e0aeacf1df4ba2cc83dc6597"
+  },
+  "source_files": [
+    {
+      "evidence_ref": "https://github.com/mycelium0/mycelium/blob/4b53dc7629ca3bc88bf5467db481ad2af7130711/scripts/fungi",
+      "path": "scripts/fungi",
+      "pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+      "repository_url": "https://github.com/mycelium0/mycelium",
+      "sha256": "b922a88d84b3b67ec77061f0a51425c0d90f7b0b66d1853a7c9b51ebb52650aa"
+    },
+    {
+      "evidence_ref": "https://github.com/mycelium0/mycelium/blob/4b53dc7629ca3bc88bf5467db481ad2af7130711/scripts/node-bootstrap.sh",
+      "path": "scripts/node-bootstrap.sh",
+      "pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+      "repository_url": "https://github.com/mycelium0/mycelium",
+      "sha256": "3f0c03d5db1e13665969d255583823cd0ea8f7cc618bb3539ac26fe94c907b27"
+    },
+    {
+      "evidence_ref": "https://github.com/mycelium0/mycelium/blob/4b53dc7629ca3bc88bf5467db481ad2af7130711/scripts/update_unit_drift_drill.sh",
+      "path": "scripts/update_unit_drift_drill.sh",
+      "pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+      "repository_url": "https://github.com/mycelium0/mycelium",
+      "sha256": "4e28f0bd727ba842fed7840bdd163fbef32dc911f7c8e6bea409895ced4c6493"
+    },
+    {
+      "evidence_ref": "https://github.com/mycelium0/mycelium/blob/4b53dc7629ca3bc88bf5467db481ad2af7130711/scripts/verify-release.sh",
+      "path": "scripts/verify-release.sh",
+      "pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+      "repository_url": "https://github.com/mycelium0/mycelium",
+      "sha256": "df394a764f2ebd906ffbc9d6bafa58af896b39e895e503a271da3baf710e2b58"
+    }
+  ],
+  "source_pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711"
+}

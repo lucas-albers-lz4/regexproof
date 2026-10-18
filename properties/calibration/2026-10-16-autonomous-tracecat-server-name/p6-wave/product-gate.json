@@ -1,0 +1,22 @@
+{
+  "actual_accepted_cases": 101,
+  "complete_config_rejects_slash": true,
+  "differential_cases": 714,
+  "family": "TC-tracecat-server-name",
+  "gate_id": "tracecat-mcp-server-name-path-separator-exclusion",
+  "guarantee": "accepted server-name strings contain neither slash nor backslash",
+  "impact_scope": "The gate checks a declared validator invariant only; it does not claim path traversal, authorization bypass, or security impact.",
+  "mismatches": 0,
+  "mutation_accepts_slash": true,
+  "mutation_id": "TC-mcp-server-name-slash-allowlist-mutation",
+  "product_engine": "CPython re through the exact pinned validate_mcp_server_name and validate_mcp_command_config functions",
+  "property_id": "TC-mcp-server-name-separators-excluded",
+  "repository": "https://github.com/TracecatHQ/tracecat",
+  "schema_version": "1",
+  "source_file": "tracecat/integrations/mcp_validation.py",
+  "source_pattern": "^[a-zA-Z0-9_-]+$",
+  "source_pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+  "source_rejects_backslash": true,
+  "source_rejects_slash": true,
+  "source_sha256": "41cf730ba1cb592cae684811bbb4d510961a0a441c156313a804b2593085f895"
+}

@@ -35,13 +35,27 @@ def _keyword_hit(hay: str, key: str) -> bool:
     return key.lower() in tokens
 
 
+def _is_unescaped_at(pattern: str, index: int) -> bool:
+    """Whether the character at index has an even run of preceding slashes."""
+    slashes = 0
+    cursor = index - 1
+    while cursor >= 0 and pattern[cursor] == "\\":
+        slashes += 1
+        cursor -= 1
+    return slashes % 2 == 0
+
+
 def detect_usage_mismatches(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
     """Anchored pattern used via search/test (or match when full-string implied)."""
     findings: list[dict[str, Any]] = []
     for rec in records:
         pattern = rec.get("pattern") or ""
         call_kind = rec.get("call_kind") or ""
-        anchored = pattern.startswith("^") or pattern.endswith("$")
+        leading_anchor = pattern.startswith("^")
+        trailing_anchor = pattern.endswith("$") and _is_unescaped_at(
+            pattern, len(pattern) - 1
+        )
+        anchored = leading_anchor or trailing_anchor
         if not anchored:
             continue
         if call_kind in ("search", "test"):
@@ -62,7 +76,7 @@ def detect_usage_mismatches(records: list[dict[str, Any]]) -> list[dict[str, Any
                     },
                 }
             )
-        elif call_kind == "match" and pattern.startswith("^") and pattern.endswith("$"):
+        elif call_kind == "match" and leading_anchor and trailing_anchor:
             findings.append(
                 {
                     "schema_version": "1",

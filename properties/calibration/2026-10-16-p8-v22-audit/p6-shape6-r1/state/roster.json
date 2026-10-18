@@ -1,0 +1,35 @@
+{
+  "cohort_id": "2026-09-12-calibration-20-r2",
+  "cohort_manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+  "coverage_digest": "e66bce291439ade91f4ee2b8cd98973980f91c5c4f7c3b40275c40fb58e1fb3e",
+  "identities": [
+    {
+      "contract_sha256": "b56719d864c1b7d96db6bc38cc6f229bfbb3910f6655ed5410633bc09b42777a",
+      "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "provenance": "agent_derived",
+      "question_id": "AE-aidevops-webhook-secret-env-identifier",
+      "repo_id": "marcusquinn/aidevops",
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pulse-merge-webhook-receiver.sh:167:1",
+      "url": "https://github.com/marcusquinn/aidevops"
+    },
+    {
+      "contract_sha256": "da66928f8df6ab7b4ccbd27c2e307dbd9a085e2562911e053010cb1231747ea0",
+      "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "provenance": "agent_derived",
+      "question_id": "AE-aidevops-webhook-check-sha-token",
+      "repo_id": "marcusquinn/aidevops",
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pulse-merge-webhook-receiver.sh:224:1",
+      "url": "https://github.com/marcusquinn/aidevops"
+    },
+    {
+      "contract_sha256": "b723accf2629d739af9497e5136139dbdaa3c9d3b38221ed7788c887979dec12",
+      "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "provenance": "agent_derived",
+      "question_id": "AE-aidevops-webhook-process-pr-number",
+      "repo_id": "marcusquinn/aidevops",
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pulse-merge-webhook-receiver.sh:302:6",
+      "url": "https://github.com/marcusquinn/aidevops"
+    }
+  ],
+  "schema_version": "2"
+}

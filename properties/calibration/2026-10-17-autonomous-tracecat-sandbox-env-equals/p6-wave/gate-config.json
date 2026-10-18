@@ -1,0 +1,25 @@
+{
+  "command": [
+    "/home/lalbers/gitroot/regexproof/.venv/bin/python",
+    "/home/lalbers/gitroot/regexproof/scripts/tracecat-sandbox-env-key-regression-gate.py",
+    "--source-root",
+    "/tmp/tracecat-p2-review-20261016",
+    "--output",
+    "/home/lalbers/gitroot/regexproof/properties/calibration/2026-10-17-autonomous-tracecat-sandbox-env-equals/p6-wave/product-gate.json",
+    "--skip-proof"
+  ],
+  "evidence": {
+    "differential_case_counts": {
+      "TC-sandbox-env-key-excludes-equals": 4232
+    },
+    "product_engine_replay_question_ids": [
+      "TC-sandbox-env-key-excludes-equals"
+    ]
+  },
+  "gate_id": "tracecat-sandbox-env-key-equals-exclusion",
+  "question_ids": [
+    "TC-sandbox-env-key-excludes-equals"
+  ],
+  "schema_version": "1",
+  "timeout_seconds": 300
+}

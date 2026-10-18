@@ -1,0 +1,19 @@
+[
+  {
+    "disposition": {
+      "approval_escape": null,
+      "approval_ref": null,
+      "backfilled": false,
+      "disposition_date": null,
+      "filed_at": null,
+      "reason_code": "local_path_traversal_line_count_reproduced_impact_unconfirmed",
+      "resolved_at": null,
+      "status": "pending_product_triage"
+    },
+    "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+    "question_id": "AE-aidevops-predispatch-cited-file-traversal-read",
+    "repo_id": "marcusquinn/aidevops",
+    "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pre-dispatch-validator-helper.sh:1878:column-46",
+    "url": "https://github.com/marcusquinn/aidevops"
+  }
+]

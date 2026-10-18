@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "repository": "profbernardoj/everclaw-community-branches",
+  "remote": "https://github.com/profbernardoj/everclaw-community-branches",
+  "root_commit": "7ea3b445ee7d2ef8004d5ee77dab7544e1b8ef88",
+  "gitmodules": {
+    "present_in_tree": false,
+    "check": "git cat-file -e HEAD:.gitmodules",
+    "result": "fatal: path '.gitmodules' does not exist in 'HEAD'"
+  },
+  "gitlinks": [
+    {
+      "path": "archive/misc/everclaw",
+      "commit": "1e2ba9c2baa8dd41a8459f8257ab2578470b0f77",
+      "repository_url": "https://github.com/profbernardoj/morpheus-agent",
+      "object_tree_oid": "9821d34ae066ce3acbf3f37b7fc35a769feba149",
+      "mapping_status": "exact_gitlink_commit_verified_via_github_api",
+      "mapping_evidence": "GitHub commit endpoint returned the gitlink SHA and tree 9821d34ae066ce3acbf3f37b7fc35a769feba149; exact commit URL is https://github.com/profbernardoj/morpheus-agent/commit/1e2ba9c2baa8dd41a8459f8257ab2578470b0f77"
+    },
+    {
+      "path": "archive/misc/everclaw-fork",
+      "commit": "603157608c740e365f705488a33bec7080843525",
+      "repository_url": null,
+      "mapping_status": "unresolved",
+      "lookup_note": "GitHub exact-commit search returned no public match; source URL remains unverified."
+    },
+    {
+      "path": "archive/misc/everclaw-template",
+      "commit": "f161a75ab9ce3460e85ccbbf3042b0330972979a",
+      "repository_url": null,
+      "mapping_status": "unresolved",
+      "lookup_note": "GitHub exact-commit search returned no public match; source URL remains unverified."
+    },
+    {
+      "path": "archive/misc/installopenclaw.xyz",
+      "commit": "798f7285dbd2b77be772326f53f9853b6730acb0",
+      "repository_url": "https://github.com/profbernardoj/installopenclaw.xyz",
+      "object_tree_oid": "391e600a30f5a0bd531e4322eec1916ffcbebd25",
+      "mapping_status": "exact_gitlink_commit_verified_via_github_api",
+      "mapping_evidence": "GitHub commit endpoint returned the gitlink SHA and tree 391e600a30f5a0bd531e4322eec1916ffcbebd25; exact commit URL is https://github.com/profbernardoj/installopenclaw.xyz/commit/798f7285dbd2b77be772326f53f9853b6730acb0"
+    },
+    {
+      "path": "skills/clawdstrike",
+      "commit": "e87e752589ad460c17d434ff56bcac4762a117c3",
+      "repository_url": "https://github.com/cantinaxyz/clawdstrike-skill",
+      "object_tree_oid": "fb8eea013ee2227269e51c6511b7211f80760246",
+      "mapping_status": "exact_gitlink_commit_verified_via_github_api",
+      "mapping_evidence": "GitHub commit endpoint returned the gitlink SHA and tree fb8eea013ee2227269e51c6511b7211f80760246; exact commit URL is https://github.com/cantinaxyz/clawdstrike-skill/commit/e87e752589ad460c17d434ff56bcac4762a117c3"
+    },
+    {
+      "path": "skills/everclaw",
+      "commit": "a6f294ee0ba5aab91d8b0f5b798dda160a8a0279",
+      "repository_url": "https://github.com/profbernardoj/morpheus-agent",
+      "unverified_lead": "Root SKILL.md instructs cloning profbernardoj/morpheus-skill into a user skills directory named everclaw; it does not identify this gitlink or confirm the child commit.",
+      "object_tree_oid": "3907e383a58cd32d9bcc8243e630cbc1c956a663",
+      "mapping_status": "exact_gitlink_commit_verified_via_github_api",
+      "mapping_evidence": "GitHub commit endpoint returned the gitlink SHA and tree 3907e383a58cd32d9bcc8243e630cbc1c956a663; exact commit URL is https://github.com/profbernardoj/morpheus-agent/commit/a6f294ee0ba5aab91d8b0f5b798dda160a8a0279"
+    }
+  ],
+  "inventory_effect": "Frozen v5 rows and counts are unchanged. An additive scan records 8361 raw rows from two incomplete child snapshots; two root Gitlinks and 30 nested Gitlink references remain unresolved or excluded. The rows are not reviewed sites, contracts, questions, or outcomes.",
+  "follow_up_date": "2026-10-16",
+  "root_tree_oid": "7c6b5fcd4298af6bb6f87d8902e3c310ec89dd1a"
+}

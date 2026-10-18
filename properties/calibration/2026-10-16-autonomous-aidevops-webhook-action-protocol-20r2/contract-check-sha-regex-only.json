@@ -1,0 +1,34 @@
+{
+  "adoption": {
+    "approved_on": "2026-10-16",
+    "authority": "standing_user_delegation",
+    "contract_sha256": "da66928f8df6ab7b4ccbd27c2e307dbd9a085e2562911e053010cb1231747ea0",
+    "evidence": [
+      "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/pulse-merge-webhook-receiver.sh",
+      "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/pulse-merge-webhook-server.py",
+      "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/configs/webhook-receiver.conf",
+      "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/reference/auto-merge.md",
+      "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/tests/test-pulse-merge-webhook-invalidation.py",
+      "properties/calibration/2026-10-16-autonomous-aidevops-webhook-action-protocol-20r2/review-memo.md"
+    ],
+    "policy_version": "autonomous-contracts-v1",
+    "rationale": "A fresh exact-pin source audit narrowed the guarantee to the exact regex-language theorem. The previous wording also described slug validation and cache-invalidator reachability, which the UNSAT query does not encode; those remain source-reviewed context and finite integrated-helper checks, not claims of this proof.",
+    "review": {
+      "author": "Codex-P7-webhook-source-review",
+      "reviewer": "Codex-P8-fresh-source-audit",
+      "same_model": true
+    },
+    "source_file": ".agents/scripts/pulse-merge-webhook-receiver.sh",
+    "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+    "source_sha256": "6d882dac90c3f9deb1a0007c9a4216d70f365a4a34ffacd145eb04cc8ae3a325",
+    "source_url": "https://github.com/marcusquinn/aidevops",
+    "status": "approved"
+  },
+  "declared_domain": "Exact Aidevops pin 8666b6c6c52472b5535aa295f2df593918152cb1; ASCII strings tested by the Bash `[[ $sha =~ ^[A-Fa-f0-9]{40}$ ]]` regex condition at receiver line 224; NUL is excluded by the local action-line protocol. The theorem is regex-language inclusion only and does not prove the adjacent slug check or downstream call path.",
+  "guarantee": "The receiver's ERE `^[A-Fa-f0-9]{40}$` at line 224 accepts only strings of exactly 40 ASCII hexadecimal characters. This contract covers the regex condition only; repository-slug validation, cache-invalidator reachability, and the complete helper control flow are separate checks and are not proved by this property.",
+  "input_source": "The check SHA associated with an authenticated GitHub webhook payload and serialized into the local action protocol by the pinned Python server. This proof concerns only the receiver's regex check on the token, not repository validation or whether the cache invalidator is called.",
+  "provenance": "agent_derived",
+  "schema_version": "1",
+  "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pulse-merge-webhook-receiver.sh:224:1",
+  "trust": "untrusted-input"
+}

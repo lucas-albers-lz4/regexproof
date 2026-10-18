@@ -1,16 +1,11 @@
 #!/usr/bin/env python3
 """Report product conversion from a strict frozen-cohort checkpoint.
 
-The input root object is exactly ``schema_version`` (``"2"``), ``cohort_id``,
-``manifest_digest``, embedded PR2 ``cohort``,
-``product_coverage_manifest``, and ``rows``. The product coverage manifest is
-an independently derived, cohort-bound digest of complete stable identities;
-omitted or partial rows fail closed. Rows retain schema version ``"1"`` and
-require a human contract and explicit
-ground-truth/disposition status. Rule-diff,
-synthesized, classification, mutation, and agent-derived rows are rejected
-from this product checkpoint.  The command is read-only and exits 2 for an
-invalid artifact.
+Schema v2 remains readable for its historical human-only coverage manifest.
+Schema v3 adds a contract-hash-bound adopted roster and one explicit attempt
+per frozen identity; unresolved outcomes stay in the denominator. Both
+versions reject synthesized, classification, mutation, and rule-diff rows.
+The command is read-only and exits 2 for an invalid artifact.
 """
 
 from __future__ import annotations

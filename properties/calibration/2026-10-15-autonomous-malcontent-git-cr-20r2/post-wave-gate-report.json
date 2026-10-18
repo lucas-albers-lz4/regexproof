@@ -1,0 +1,1185 @@
+{
+  "cases": [
+    {
+      "actual_match": false,
+      "bytes": 74,
+      "class": "ordinary-line-ending-matrix",
+      "expected_match": false,
+      "name": "case-matrix-000.gitmodules",
+      "sha256": "1fea5b6452c46d632c9c7becb3cecbf9a751d4bcca90133d3165a26abc9b5743"
+    },
+    {
+      "actual_match": true,
+      "bytes": 75,
+      "class": "ordinary-line-ending-matrix",
+      "expected_match": true,
+      "name": "case-matrix-001.gitmodules",
+      "sha256": "65ad2930f20dce06a4065c2ab74105455b55457d4831e75a6c601c7ee38e6189"
+    },
+    {
+      "actual_match": true,
+      "bytes": 75,
+      "class": "ordinary-line-ending-matrix",
+      "expected_match": true,
+      "name": "case-matrix-010.gitmodules",
+      "sha256": "5425f84b3d93db9a4ad165bd658316eb5cb5b7f3b5fbf340e8caefac95aa45fd"
+    },
+    {
+      "actual_match": true,
+      "bytes": 76,
+      "class": "ordinary-line-ending-matrix",
+      "expected_match": true,
+      "name": "case-matrix-011.gitmodules",
+      "sha256": "089109482a41406f1c91bc86ce7f28e15470a1020094dc1da69055c800858bbd"
+    },
+    {
+      "actual_match": false,
+      "bytes": 75,
+      "class": "ordinary-line-ending-matrix",
+      "expected_match": false,
+      "name": "case-matrix-100.gitmodules",
+      "sha256": "e770f6a2021cf939c09346cc45379e039345bd080bf152aa6213bc14bce638d3"
+    },
+    {
+      "actual_match": false,
+      "bytes": 76,
+      "class": "ordinary-line-ending-matrix",
+      "expected_match": false,
+      "name": "case-matrix-101.gitmodules",
+      "sha256": "2b99cc72bce60ece43fce7df8903deb28115187864525671c1fd9a141e5708cf"
+    },
+    {
+      "actual_match": false,
+      "bytes": 76,
+      "class": "ordinary-line-ending-matrix",
+      "expected_match": false,
+      "name": "case-matrix-110.gitmodules",
+      "sha256": "0ef7e37d82eccc403188dcd3e35f7c8b7afc53d1be0fa7f3a96927d4d56132a1"
+    },
+    {
+      "actual_match": false,
+      "bytes": 77,
+      "class": "ordinary-line-ending-matrix",
+      "expected_match": false,
+      "name": "case-matrix-111.gitmodules",
+      "sha256": "8bd922a209f5e11ec5967c38224ef3d82ed0562496256972731725fe5db32b95"
+    },
+    {
+      "actual_match": true,
+      "bytes": 76,
+      "class": "embedded-cr-path",
+      "expected_match": true,
+      "name": "case-embedded-path-cr.gitmodules",
+      "sha256": "355cefae3836d6b7c9036ddac7b294be792329804a14faeb5dad9853c9988674"
+    },
+    {
+      "actual_match": true,
+      "bytes": 76,
+      "class": "embedded-cr-url",
+      "expected_match": true,
+      "name": "case-embedded-url-cr.gitmodules",
+      "sha256": "6c8d7cdd60b11596922d0f3702cb3aeb00670c5bd85555269bcac5ed54fafa16"
+    },
+    {
+      "actual_match": true,
+      "bytes": 36,
+      "class": "eof-bare-cr",
+      "expected_match": true,
+      "name": "case-eof-bare-cr.gitmodules",
+      "sha256": "e85188738c1758dfa2d466405ed9172a5d3638b79f8ada4d0e913237ab8c8a08"
+    },
+    {
+      "actual_match": true,
+      "bytes": 86,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": true,
+      "name": "case-random-000.gitmodules",
+      "sha256": "fcb124d6afc76747e41940cc0873e5318c8090a96af0577c7e37ac7b5c6fd170"
+    },
+    {
+      "actual_match": false,
+      "bytes": 97,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-001.gitmodules",
+      "sha256": "fe5d8061654b04b3dc05961bcf1f3a9ec5a3e7bd8864d84df2772d84925f6205"
+    },
+    {
+      "actual_match": true,
+      "bytes": 90,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": true,
+      "name": "case-random-002.gitmodules",
+      "sha256": "5a47b8106e96959064731dd4e11b47e8611ef0eb161391f2ea5f605fc250a1f0"
+    },
+    {
+      "actual_match": false,
+      "bytes": 68,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-003.gitmodules",
+      "sha256": "459af81056dc85b81b8d52033bc126ae09c4317de622a64bc756d4827515e18e"
+    },
+    {
+      "actual_match": false,
+      "bytes": 81,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-004.gitmodules",
+      "sha256": "4b0e613fc5761f11c527b45100c468026d50bf46e90f44753999c0575d095f92"
+    },
+    {
+      "actual_match": false,
+      "bytes": 80,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-005.gitmodules",
+      "sha256": "be2415fe4b6581af20258eb974ed7531d64914862727e10018cc38ce5032530a"
+    },
+    {
+      "actual_match": true,
+      "bytes": 79,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": true,
+      "name": "case-random-006.gitmodules",
+      "sha256": "5a5d83786874c3b9a90caaaef19c775188e8101e92dece390a99534e380831c7"
+    },
+    {
+      "actual_match": false,
+      "bytes": 71,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-007.gitmodules",
+      "sha256": "326cca0b2568d230a0410792beab33ff3f65b188ee407438976e9bdd5c440ff3"
+    },
+    {
+      "actual_match": true,
+      "bytes": 79,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": true,
+      "name": "case-random-008.gitmodules",
+      "sha256": "acd8b9987ae86d60a55e59f4a92311c8021938f9efefc9f822bd60c5cdccbb2d"
+    },
+    {
+      "actual_match": true,
+      "bytes": 99,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": true,
+      "name": "case-random-009.gitmodules",
+      "sha256": "d9a541338f08d746fc371ab6b3d95c632b98a95fed7556c79908764741bc359f"
+    },
+    {
+      "actual_match": false,
+      "bytes": 78,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-010.gitmodules",
+      "sha256": "126a89a4eb4932fcb7ccd8fed7f215ae9084b6505b60a916d3f33af8f418011e"
+    },
+    {
+      "actual_match": true,
+      "bytes": 73,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": true,
+      "name": "case-random-011.gitmodules",
+      "sha256": "2b78766899db9be40acdd8a14422a83a6a33dea0c8b4e298fea71b35f2c2dc17"
+    },
+    {
+      "actual_match": false,
+      "bytes": 88,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-012.gitmodules",
+      "sha256": "675fd03a912ac53d1ac263422b88124769f789d63122ab64ebce9737acca9abc"
+    },
+    {
+      "actual_match": true,
+      "bytes": 79,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": true,
+      "name": "case-random-013.gitmodules",
+      "sha256": "b156c3040e1b48801edb868bb9af8dcd56253a297d0838d14015518bdc8e844d"
+    },
+    {
+      "actual_match": false,
+      "bytes": 93,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-014.gitmodules",
+      "sha256": "a468899b372a6e5c7831fdc47e43c590330f807178659374bd2db03fd941688c"
+    },
+    {
+      "actual_match": true,
+      "bytes": 80,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": true,
+      "name": "case-random-015.gitmodules",
+      "sha256": "cde5e28b4ce531685d1402279bb90e2d625fea09c810b680e1bf0e9ee9b8e486"
+    },
+    {
+      "actual_match": false,
+      "bytes": 81,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-016.gitmodules",
+      "sha256": "5535824afa7bf0f90ecd39e62c66ed8fdb96ab77b496f80d3a7d57203cfaff43"
+    },
+    {
+      "actual_match": false,
+      "bytes": 88,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-017.gitmodules",
+      "sha256": "eaab09b493911bfbb6cd8696311e2e4350d0c23308e7f2993d9047a692940218"
+    },
+    {
+      "actual_match": false,
+      "bytes": 87,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-018.gitmodules",
+      "sha256": "34b43be3913ee2e7a87d5466940e290c580ed77274283d0424cab6f50ef0ce4c"
+    },
+    {
+      "actual_match": false,
+      "bytes": 91,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-019.gitmodules",
+      "sha256": "2953554e8cc39ac32aec02dceb3ad73075173f752975857122669bb89a898528"
+    },
+    {
+      "actual_match": true,
+      "bytes": 86,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": true,
+      "name": "case-random-020.gitmodules",
+      "sha256": "2a37fd9aba39a0240ccd6328a63e4a138df790e1548442092966746411c1e317"
+    },
+    {
+      "actual_match": false,
+      "bytes": 91,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-021.gitmodules",
+      "sha256": "ec70e5da490bf560711ed8f1f59b31ca3b282240e901feba38aa464c3739f0db"
+    },
+    {
+      "actual_match": true,
+      "bytes": 83,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": true,
+      "name": "case-random-022.gitmodules",
+      "sha256": "fa464b8dca90361bdcc5a454227c8fb3b20a27aff0c3fc7a6a0103019f8f2794"
+    },
+    {
+      "actual_match": false,
+      "bytes": 89,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-023.gitmodules",
+      "sha256": "d391d76234180fc05056bf9f8a9fe777b66f4bc567ab2e585787551729d90da8"
+    },
+    {
+      "actual_match": false,
+      "bytes": 72,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-024.gitmodules",
+      "sha256": "ed18b88d75ea79379ec71203e58443b0fcb2341280aa38152ef6824dd453d85a"
+    },
+    {
+      "actual_match": true,
+      "bytes": 90,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": true,
+      "name": "case-random-025.gitmodules",
+      "sha256": "8212ab04d7fd9b1ffdd404f741f3fcfe13a47a362fdfbba8ebb71c6524348c4f"
+    },
+    {
+      "actual_match": false,
+      "bytes": 78,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-026.gitmodules",
+      "sha256": "4e4f55724ef6c2cbac0ad6fcc42b8e3d7db98a1edda145105b3ff90c23f5b9c7"
+    },
+    {
+      "actual_match": false,
+      "bytes": 86,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-027.gitmodules",
+      "sha256": "9f5ae09af23adf433331c5dc1a9791f5237ee14ed3940b719628b273edc80397"
+    },
+    {
+      "actual_match": true,
+      "bytes": 86,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": true,
+      "name": "case-random-028.gitmodules",
+      "sha256": "4b3a9a6369dab2b28092ffd00627981af9df0114d45cb21a2c396c4c608660e3"
+    },
+    {
+      "actual_match": false,
+      "bytes": 80,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-029.gitmodules",
+      "sha256": "afb02dca4558b4aa22bb7ae64cc574f57b458821ac96463a503f2a2672d0597c"
+    },
+    {
+      "actual_match": false,
+      "bytes": 82,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-030.gitmodules",
+      "sha256": "c253b8663b27659598ab557061f2d77c57377a67207450d7eae60062820588ca"
+    },
+    {
+      "actual_match": false,
+      "bytes": 88,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-031.gitmodules",
+      "sha256": "86113c3755a16cba2660a4b526204c807fd7c0a77ea33ad7aa926da67344f8e3"
+    },
+    {
+      "actual_match": true,
+      "bytes": 65,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": true,
+      "name": "case-random-032.gitmodules",
+      "sha256": "7587a9ff92a6426e4a20da698b35daa24019b9e16247cb6bd4e9bd065f784d16"
+    },
+    {
+      "actual_match": true,
+      "bytes": 78,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": true,
+      "name": "case-random-033.gitmodules",
+      "sha256": "b61f36a42fee866076204c0cfa6fba41701b11bcfd30b12b2b1e5a9869f9baa3"
+    },
+    {
+      "actual_match": false,
+      "bytes": 83,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-034.gitmodules",
+      "sha256": "ae145875ce6c29a51980f55c9af2f834f3675527d33faf6615fe66b1a14c99c3"
+    },
+    {
+      "actual_match": false,
+      "bytes": 96,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-035.gitmodules",
+      "sha256": "5b7cd6e9d08d243de4f092a04c2e49d96a580bd75e1a9d4601003c9e53a80ea0"
+    },
+    {
+      "actual_match": false,
+      "bytes": 86,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-036.gitmodules",
+      "sha256": "da2ef325bf043c65120fd0f38207fe2b3397241f5d04408bd8f41e5f573d89a1"
+    },
+    {
+      "actual_match": true,
+      "bytes": 73,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": true,
+      "name": "case-random-037.gitmodules",
+      "sha256": "b8763a3bff651237d221f78a8ccb0a808e7e82a55a74576956deca72eba28d9c"
+    },
+    {
+      "actual_match": false,
+      "bytes": 76,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-038.gitmodules",
+      "sha256": "502be08a3521eb8324546901f4290dfbdd76562eb94bae297dee3a5c57c5dd2d"
+    },
+    {
+      "actual_match": true,
+      "bytes": 89,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": true,
+      "name": "case-random-039.gitmodules",
+      "sha256": "a56dda2e0e8daf8c84ba4fc1d78204fa492498206edcf30ba616d93d33b80890"
+    },
+    {
+      "actual_match": false,
+      "bytes": 88,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-040.gitmodules",
+      "sha256": "4c1d39970fb67ebaeae6f86c4c191c733f2f9f9fce0319d26b69a618eef9cf4b"
+    },
+    {
+      "actual_match": false,
+      "bytes": 85,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-041.gitmodules",
+      "sha256": "e68e4441ac2914e8c9d0a06053f7d88f399af1bcf1984ba157afbe5c1c153798"
+    },
+    {
+      "actual_match": false,
+      "bytes": 81,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-042.gitmodules",
+      "sha256": "a02c5b934591ab86bea0dbb89ef1a120bf8f9f2226b4178ef043be47d87a7854"
+    },
+    {
+      "actual_match": true,
+      "bytes": 72,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": true,
+      "name": "case-random-043.gitmodules",
+      "sha256": "9b75c766e65341787930451b9d0ba2e6c489b772794a97397ca60163a954d76f"
+    },
+    {
+      "actual_match": false,
+      "bytes": 80,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-044.gitmodules",
+      "sha256": "b3dd074dd0bb702b385d095145e1acd27717fb46a22648ec0868f26620966519"
+    },
+    {
+      "actual_match": false,
+      "bytes": 69,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-045.gitmodules",
+      "sha256": "ddc1e69cf912f9d28323c59fb5a0dabca177ef820a5a0c39f0b15bb1b878acd6"
+    },
+    {
+      "actual_match": true,
+      "bytes": 97,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": true,
+      "name": "case-random-046.gitmodules",
+      "sha256": "4610294cd680ac54fc636c66eefec0e89c1707bf0f1cc65e47ec4f7ba8d2a34f"
+    },
+    {
+      "actual_match": false,
+      "bytes": 79,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-047.gitmodules",
+      "sha256": "ac8c6774b746379550695b1dc6fad374d4b0b465e4b01c79b5ff45ad0626c253"
+    },
+    {
+      "actual_match": true,
+      "bytes": 79,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": true,
+      "name": "case-random-048.gitmodules",
+      "sha256": "1136dd278d7f843341e2d44e3b1d075e8382c4eaf765c0a2c2dd14e650c0dddb"
+    },
+    {
+      "actual_match": false,
+      "bytes": 72,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-049.gitmodules",
+      "sha256": "5df3fa250411b4ad0a8c2c531072f5c7431836ba3ea007a161d05ffd8645cdff"
+    },
+    {
+      "actual_match": false,
+      "bytes": 86,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-050.gitmodules",
+      "sha256": "4ff24b7865d5cd2b5421aac4f93530124c8f8bff251c1fb844671402afcffdd0"
+    },
+    {
+      "actual_match": false,
+      "bytes": 74,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-051.gitmodules",
+      "sha256": "d7952fa9cc6ec4418520e6773f41e94de4a375bf74a55d584977b2cb7cc85638"
+    },
+    {
+      "actual_match": true,
+      "bytes": 81,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": true,
+      "name": "case-random-052.gitmodules",
+      "sha256": "381dc5db897ad899c02db952760e608d199951e8ed5bed4eb27edcb0f9927d33"
+    },
+    {
+      "actual_match": true,
+      "bytes": 75,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": true,
+      "name": "case-random-053.gitmodules",
+      "sha256": "e6b8ef9330007eacb3e17bd2f86949a3a1d6c07a688c58f18624221fd801e4d9"
+    },
+    {
+      "actual_match": false,
+      "bytes": 91,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-054.gitmodules",
+      "sha256": "24f1512e6372201db819abb351d4018271f31b2bfd1d5928cfeb21bdb58b1097"
+    },
+    {
+      "actual_match": true,
+      "bytes": 71,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": true,
+      "name": "case-random-055.gitmodules",
+      "sha256": "cd83cb726d4dafc3485351c0b1144fb426a9f5a6184ca72e8464041117d8dbda"
+    },
+    {
+      "actual_match": true,
+      "bytes": 96,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": true,
+      "name": "case-random-056.gitmodules",
+      "sha256": "5d46ac4741aa212ccfee625c1e55487b97a140fe71c988623615acbab91fb18b"
+    },
+    {
+      "actual_match": true,
+      "bytes": 73,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": true,
+      "name": "case-random-057.gitmodules",
+      "sha256": "c5121c832798f3746cc340b6ced447664fac67051ac45dc0ecb1431fe8f8c235"
+    },
+    {
+      "actual_match": false,
+      "bytes": 82,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-058.gitmodules",
+      "sha256": "2b5d1438ed91c0d9c9a5d11eaa21fe8ce78fa4d66372fc52e72e57b0bc4bc290"
+    },
+    {
+      "actual_match": true,
+      "bytes": 80,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": true,
+      "name": "case-random-059.gitmodules",
+      "sha256": "1f1157b4bda73d30dade503142b0f88450bad8f84b68bd38808aad347d8fc3bc"
+    },
+    {
+      "actual_match": false,
+      "bytes": 90,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-060.gitmodules",
+      "sha256": "26e9ade9310db5e5bf4422634a4517f5adcf09e889c6aa3e4235bf4cae8ed36c"
+    },
+    {
+      "actual_match": true,
+      "bytes": 78,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": true,
+      "name": "case-random-061.gitmodules",
+      "sha256": "fb529d1de745ce5f31a5112a1506e7a699c878cb64288c60374291d86ffd87f3"
+    },
+    {
+      "actual_match": true,
+      "bytes": 98,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": true,
+      "name": "case-random-062.gitmodules",
+      "sha256": "b0e1560b0afa1c3034d6d78fe8437bc406ffbd026f11fe101fa05b2334c67c8d"
+    },
+    {
+      "actual_match": true,
+      "bytes": 63,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": true,
+      "name": "case-random-063.gitmodules",
+      "sha256": "e3cd45ab771fcf8479edf6e93979784a602c704bf4781dd87a3104e70e0f1a21"
+    },
+    {
+      "actual_match": false,
+      "bytes": 74,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-064.gitmodules",
+      "sha256": "0c7bf7b2291f282b654674025a6df80d8077896e7f3a14048983ea318eb7bca2"
+    },
+    {
+      "actual_match": false,
+      "bytes": 88,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-065.gitmodules",
+      "sha256": "a722cdf88743ccfcbffba56136a7fee58b5d77f4eae7099e1ef232214f94da7c"
+    },
+    {
+      "actual_match": true,
+      "bytes": 83,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": true,
+      "name": "case-random-066.gitmodules",
+      "sha256": "13f65df47e3e94852ffe492044aa27cd593752aef7d74b3bc39fd70a9f2af9db"
+    },
+    {
+      "actual_match": false,
+      "bytes": 79,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-067.gitmodules",
+      "sha256": "05db7497beee9b089d14bc8ff95eadce77ec2efc3893c1329291e3bb0e14b241"
+    },
+    {
+      "actual_match": true,
+      "bytes": 81,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": true,
+      "name": "case-random-068.gitmodules",
+      "sha256": "d9760bcd4ee2e8d6a7e083163544cfd80756b77ad8abefadc5acdbac6f1e8f2a"
+    },
+    {
+      "actual_match": true,
+      "bytes": 83,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": true,
+      "name": "case-random-069.gitmodules",
+      "sha256": "91150a0717039cee72f8d34b4579bfd6f4a7e62b45f3ef53814c183eff40f1eb"
+    },
+    {
+      "actual_match": false,
+      "bytes": 93,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-070.gitmodules",
+      "sha256": "eadc8b6f6b5305ec3902439ca5a78e59cb0fcb3a9e28861fa43adfc175b78f67"
+    },
+    {
+      "actual_match": true,
+      "bytes": 82,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": true,
+      "name": "case-random-071.gitmodules",
+      "sha256": "7f58b42dede26ec68cb226085c532b614627a27c821f9537f1c96cad908c3a65"
+    },
+    {
+      "actual_match": false,
+      "bytes": 79,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-072.gitmodules",
+      "sha256": "adede0f824d1c41aa7d7c8f2c55e09bc4f61e0598adf27c6740177b93d9d672d"
+    },
+    {
+      "actual_match": false,
+      "bytes": 74,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-073.gitmodules",
+      "sha256": "78c93c038d2b1abd1c1b17f2dee10dbe4d36951f13ff84cca074d6a91ee807ba"
+    },
+    {
+      "actual_match": false,
+      "bytes": 64,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-074.gitmodules",
+      "sha256": "b80c10b79f159789ca518793003409bfab382ffcff93b07cf69dc570d50cf45b"
+    },
+    {
+      "actual_match": true,
+      "bytes": 69,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": true,
+      "name": "case-random-075.gitmodules",
+      "sha256": "e756f8e9c6002fc66d53b43abe8690205a0ad358af480572e2ee365797309b84"
+    },
+    {
+      "actual_match": false,
+      "bytes": 80,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-076.gitmodules",
+      "sha256": "53b7b79b236ec495757a2e5a4785dfce7eac779cf53eaed92eb105ebde840fab"
+    },
+    {
+      "actual_match": true,
+      "bytes": 66,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": true,
+      "name": "case-random-077.gitmodules",
+      "sha256": "91a3781910053ddf5ceeb0dcd10f3aabe67607fc25b9be1b7245e7c308aff994"
+    },
+    {
+      "actual_match": true,
+      "bytes": 79,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": true,
+      "name": "case-random-078.gitmodules",
+      "sha256": "ff6c7b890e353c8dc13d517a8e76b1faf7161b766413a8c0b99f1a484ce36ac5"
+    },
+    {
+      "actual_match": false,
+      "bytes": 82,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-079.gitmodules",
+      "sha256": "fce13ee5823de721583660c9ee76d289af84cc7a9f95f8f24107b76f844511a0"
+    },
+    {
+      "actual_match": true,
+      "bytes": 71,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": true,
+      "name": "case-random-080.gitmodules",
+      "sha256": "fc912dca6435e839389883a2814df6d34c276ab09c195af2206f1b17a3370be4"
+    },
+    {
+      "actual_match": true,
+      "bytes": 73,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": true,
+      "name": "case-random-081.gitmodules",
+      "sha256": "6a922c3d425dfaf198c8d861f7d91c8b1ef968977cc746fb8a2ef416f249ead4"
+    },
+    {
+      "actual_match": true,
+      "bytes": 89,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": true,
+      "name": "case-random-082.gitmodules",
+      "sha256": "d971c92e6a1e8200d61aae4db95130b780cc232349824c093c6a8dcfe0f02699"
+    },
+    {
+      "actual_match": true,
+      "bytes": 86,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": true,
+      "name": "case-random-083.gitmodules",
+      "sha256": "c709f6cecba4e187e8d3ecda65d888999e849460cd55b2c2ee7b26a7f5a65a8f"
+    },
+    {
+      "actual_match": false,
+      "bytes": 68,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-084.gitmodules",
+      "sha256": "7777cd5ccf282c23999cf17fb8b4b2451506a2ba05f11e14d789ccf4f3af6ef8"
+    },
+    {
+      "actual_match": false,
+      "bytes": 72,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-085.gitmodules",
+      "sha256": "31bbc0c2f248bae50b22e8ba38dc5fb45d0225882d4fe1bbd27bc6a1ba19175d"
+    },
+    {
+      "actual_match": false,
+      "bytes": 96,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-086.gitmodules",
+      "sha256": "40dc3357b3768bee039e127ef90bcd18d49bbd483b2634a8f55f851b982060cb"
+    },
+    {
+      "actual_match": false,
+      "bytes": 85,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-087.gitmodules",
+      "sha256": "3082c92a47f6d5e7007e47d6af52d324efc183cfee241a09f2a1d3100ba3abbc"
+    },
+    {
+      "actual_match": true,
+      "bytes": 95,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": true,
+      "name": "case-random-088.gitmodules",
+      "sha256": "923c24d841533413a732cf2045c429f048fb8645343180451c0791942db1dcdf"
+    },
+    {
+      "actual_match": false,
+      "bytes": 88,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-089.gitmodules",
+      "sha256": "52d59fe8cff5b3951585f7e3c9891e5fb074fad2e58adebe43f8669e6add146c"
+    },
+    {
+      "actual_match": false,
+      "bytes": 96,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-090.gitmodules",
+      "sha256": "874cce5847032197efbff4118ec4d2f84ee66103ae5b1a6db89441cc1961bdf3"
+    },
+    {
+      "actual_match": false,
+      "bytes": 69,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-091.gitmodules",
+      "sha256": "f00890040842ddbd024ee5aef53e51162ae4a7e8a7ab2b569d5abfcda7bb7392"
+    },
+    {
+      "actual_match": true,
+      "bytes": 101,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": true,
+      "name": "case-random-092.gitmodules",
+      "sha256": "f1a47263c095612009a01747d23f21ed23ca4e6d56c1a38a696409348dff0b12"
+    },
+    {
+      "actual_match": false,
+      "bytes": 85,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-093.gitmodules",
+      "sha256": "a06ae4f73e7f5389dd1c85f8522e545f93f968a0eaea43e047deeefc4e62943e"
+    },
+    {
+      "actual_match": false,
+      "bytes": 86,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-094.gitmodules",
+      "sha256": "ac0d396673e6331e26d71eb2cad7d3f456890e622718c32e9379eae94107c4c8"
+    },
+    {
+      "actual_match": false,
+      "bytes": 88,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-095.gitmodules",
+      "sha256": "781975c658f8c88f32b3c5f3ccf89ec88830226ecef732702287cea2ec92745b"
+    },
+    {
+      "actual_match": true,
+      "bytes": 74,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": true,
+      "name": "case-random-096.gitmodules",
+      "sha256": "0e772762625d4120570a5630e339f73947e35961dc830895f5b2b7d3ae62731a"
+    },
+    {
+      "actual_match": false,
+      "bytes": 77,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-097.gitmodules",
+      "sha256": "94d5f161ada4830b87d91593d377e3d13c46f17756ceb180c870a98e06231af9"
+    },
+    {
+      "actual_match": true,
+      "bytes": 76,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": true,
+      "name": "case-random-098.gitmodules",
+      "sha256": "6efad92defffa937927013b587fc99389a4764012095f5ee8a19a2627f9b3736"
+    },
+    {
+      "actual_match": false,
+      "bytes": 83,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-099.gitmodules",
+      "sha256": "cf3abbb9c88bf465a1417ccbd51ae7b93af19fe66f79702a425278b6a42e4dc4"
+    },
+    {
+      "actual_match": false,
+      "bytes": 96,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-100.gitmodules",
+      "sha256": "d7d39fbb7fdbeb90a489fc082221767e2a3165801300683cb7da5a3b480e6d03"
+    },
+    {
+      "actual_match": false,
+      "bytes": 77,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-101.gitmodules",
+      "sha256": "ea2fb5e6d6140876679296dfd98bc0c79f12fb26ed08d43a0f2d1729e08e070f"
+    },
+    {
+      "actual_match": true,
+      "bytes": 64,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": true,
+      "name": "case-random-102.gitmodules",
+      "sha256": "eab64e7ef4e293cdf1b02f13a1db4f41983c0f02e6a8c04b0892a1107042a913"
+    },
+    {
+      "actual_match": false,
+      "bytes": 99,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-103.gitmodules",
+      "sha256": "336adff6a8cc6c5e3406db0795490fa9fbade7f01c8edef2eda7045f6213b383"
+    },
+    {
+      "actual_match": false,
+      "bytes": 92,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-104.gitmodules",
+      "sha256": "eddf9d299ec34be6eb8670d56188fbce3fa6f6179824ea641a1b4b2d72871934"
+    },
+    {
+      "actual_match": false,
+      "bytes": 86,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-105.gitmodules",
+      "sha256": "f1c6513d53b3c96a02d9d354e163f0d8d679ee7dfef3f17b635ba6da1937b2ce"
+    },
+    {
+      "actual_match": false,
+      "bytes": 80,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-106.gitmodules",
+      "sha256": "c169dafff174556a583407e8eca505fc9cd7fdb38202d320e90fc688a87a824b"
+    },
+    {
+      "actual_match": true,
+      "bytes": 85,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": true,
+      "name": "case-random-107.gitmodules",
+      "sha256": "dc8c6e5d252c72a4435fa422cc0c07bbf4f7c771f88234a57e9166707e91c078"
+    },
+    {
+      "actual_match": false,
+      "bytes": 73,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-108.gitmodules",
+      "sha256": "e91f85a0d21fb504c6641a435975dd9c676437701ad63dad37aae666e411a424"
+    },
+    {
+      "actual_match": true,
+      "bytes": 96,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": true,
+      "name": "case-random-109.gitmodules",
+      "sha256": "300ff5217c347f8be27189b2a3ee93cf53baa999f3854ee53dd2d870eeea1d22"
+    },
+    {
+      "actual_match": false,
+      "bytes": 82,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-110.gitmodules",
+      "sha256": "736bac9a828f7d7868009a4967a9643fccabb9767ecd54618d25e52de20cea86"
+    },
+    {
+      "actual_match": true,
+      "bytes": 79,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": true,
+      "name": "case-random-111.gitmodules",
+      "sha256": "8a85eb9be70d04da6e285e9c51ceedd93c29e93719a82129b0ad3d118b24c067"
+    },
+    {
+      "actual_match": false,
+      "bytes": 81,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-112.gitmodules",
+      "sha256": "07746ab43f816d7678db1deaf8d46e2071b8a1f103ff53548fc494e08408364f"
+    },
+    {
+      "actual_match": false,
+      "bytes": 77,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-113.gitmodules",
+      "sha256": "2ee86bfb83d83910812c68246f7fa3f29475f9573bef3d55ef2e42d99c213cc8"
+    },
+    {
+      "actual_match": true,
+      "bytes": 93,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": true,
+      "name": "case-random-114.gitmodules",
+      "sha256": "2f8922a3a12f1516d56e5a4ef2b81f0fa3845a0b4a1cb22fd7aa309955a189c1"
+    },
+    {
+      "actual_match": true,
+      "bytes": 71,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": true,
+      "name": "case-random-115.gitmodules",
+      "sha256": "911cc8dd89b556037c52d3ee6e10f8ce373b153440179011ba95373929f03223"
+    },
+    {
+      "actual_match": false,
+      "bytes": 81,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-116.gitmodules",
+      "sha256": "6238d7a8cf265eacb0fa98a899dc2f3e857ac9f8cd2f1ef997d3aa974d7bbc62"
+    },
+    {
+      "actual_match": true,
+      "bytes": 90,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": true,
+      "name": "case-random-117.gitmodules",
+      "sha256": "c2d0441fb0ab87559592203339acc1d599ea10c8fd6db79976536c50f83a4cb1"
+    },
+    {
+      "actual_match": false,
+      "bytes": 94,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-118.gitmodules",
+      "sha256": "c2ca9b2d312a746f63e2670648cc96eec5c2a9ed7c51435bc82539ef95a7f038"
+    },
+    {
+      "actual_match": true,
+      "bytes": 92,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": true,
+      "name": "case-random-119.gitmodules",
+      "sha256": "05d742ab78b475688c220ccc29ae0144f3b4d8ca2474e6f8b0e543e0d640d119"
+    },
+    {
+      "actual_match": true,
+      "bytes": 85,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": true,
+      "name": "case-random-120.gitmodules",
+      "sha256": "27e972ae55eae3019a7bb17e43538894b98500d1665a5c55b26eeb784d3eb8f7"
+    },
+    {
+      "actual_match": false,
+      "bytes": 78,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-121.gitmodules",
+      "sha256": "3989a4a1db140b84eae9d6bab377002cf2c4c2d075b08b80158ddb06311425e8"
+    },
+    {
+      "actual_match": false,
+      "bytes": 107,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-122.gitmodules",
+      "sha256": "27de007f293b3677d15f80957a358932e62c937f2961a2ea787cf480f9d19042"
+    },
+    {
+      "actual_match": false,
+      "bytes": 79,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-123.gitmodules",
+      "sha256": "760afe80663d5d279706252a68dd664ef286bfc263c51de536e649099cb58c65"
+    },
+    {
+      "actual_match": false,
+      "bytes": 88,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-124.gitmodules",
+      "sha256": "949fddebdfa52ba5dd473c6538e1e43413dac04bbe0f7b522ed5b94956f160b1"
+    },
+    {
+      "actual_match": false,
+      "bytes": 80,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-125.gitmodules",
+      "sha256": "d9790a23e0be80a62744fd3d1cd8f32ad0115c71bf95bf7dee750ca1ca9f2ebb"
+    },
+    {
+      "actual_match": false,
+      "bytes": 74,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-126.gitmodules",
+      "sha256": "38fa3566e5aeb54f05add9e87d2c7e235df347d20d856417b507e4cebed22d7a"
+    },
+    {
+      "actual_match": false,
+      "bytes": 76,
+      "class": "seeded-ordinary-value-and-line-ending",
+      "expected_match": false,
+      "name": "case-random-127.gitmodules",
+      "sha256": "9373ac0a7eb3219344f9bd883cddc4e520e7caded6e64c0fe9c78e5567d1ad7c"
+    }
+  ],
+  "cohort_id": "2026-09-12-calibration-20-r2",
+  "cohort_manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+  "contract_sha256": "064a75636c18a570a15e6a90a6ab199e32f1cefc75554bec9664e7f7bb11c676",
+  "coverage_digest": "1f9182deca433234bb7ae6819c3266c34fdf672e592990d69ae1ecdb6e36c161",
+  "fixture_counts": {
+    "expected_matches": 58,
+    "expected_nonmatches": 81,
+    "mismatches": 0,
+    "ordinary_line_ending_matrix": 8,
+    "seeded_random_differential_cases": 128,
+    "source_derived_boundary_cases": 3,
+    "total": 139
+  },
+  "gate_id": "malcontent-cve48384-crlf-20r2",
+  "harness_rows": [
+    {
+      "backend": "seq",
+      "call_kind": "fullmatch",
+      "domain": "MUTATION GUARD: admitting LF after the required CR must make the exact pinned full rule flag an ordinary CRLF .gitmodules file",
+      "engine_versions": {
+        "python": "3.14.8",
+        "z3": "5.0.0"
+      },
+      "expect_unsat": false,
+      "family": "MC-malcontent-git-cve48384-crlf",
+      "ground_truth": "reproduced",
+      "input_domain": "ascii",
+      "kind": "mutation_guard",
+      "name": "MC-malcontent-cve48384-mutated-embedded-cr-allows-lf",
+      "not_proven": false,
+      "ok": true,
+      "product": false,
+      "result": "sat",
+      "schema_version": "1",
+      "state": "stock",
+      "wall_ms": 0.4,
+      "witness": {
+        "byte_after_carriage_return": "\n"
+      }
+    }
+  ],
+  "limitations": [
+    "The Z3 theorem covers the single terminal byte class, not the full YARA condition.",
+    "Full-rule results use synthetic ASCII .gitmodules fixtures derived from the pinned rule comments; no vulnerable Git command or actual exploit repository was executed.",
+    "The randomized matrix is a regression sample, not an exhaustive proof over all repository files.",
+    "No YARA wide-string behavior is claimed."
+  ],
+  "mutation": {
+    "ground_truth": "reproduced",
+    "harness_property_id": "MC-malcontent-cve48384-mutated-embedded-cr-allows-lf",
+    "product_effect": "the mutated full rule flags a uniform CRLF .gitmodules fixture",
+    "source_change": "replace the terminal [^\\n] in $path_embedded_cr with [\\r\\n]"
+  },
+  "product_engine": {
+    "actual_version": "yara-x-cli 1.19.0",
+    "binary_sha256": "dd5e5c07a0397ad922b597b8d6c35c22485ec9fe4bf26f064d242245042cdca2",
+    "name": "YARA-X CLI",
+    "version": "1.19.0"
+  },
+  "question_ids": [
+    "MC-malcontent-cve48384-embedded-cr-excludes-lf"
+  ],
+  "repo_id": "chainguard-dev/malcontent",
+  "repository_url": "https://github.com/chainguard-dev/malcontent",
+  "schema_version": "1",
+  "source_file": "rules/impact/exploit/cve-2025-48384.yara",
+  "source_pin": "ea3e83e24676a1678a9522141da29b636c9451ab",
+  "source_sha256": "b6d017494cd9ecc7a9843832229fa45789c7edc06ccba093c0381d151a2a2552",
+  "status": "passed"
+}

@@ -1,0 +1,1206 @@
+{
+  "artifact_kind": "p2-targeted-exact-pin-site-review",
+  "cohort_id": "2026-09-12-calibration-20-r2",
+  "limitations": [
+    "This is a targeted review of one of 115 Tracecat inventory rows, not a complete repository or package review.",
+    "The theorem concerns only absence of slash and backslash from values accepted by validate_mcp_server_name; it does not prove every stated name-format property.",
+    "The proof is an unbounded alphabet-disjointness result over the ASCII character class used by the pinned validator. Python $ may still accept a final line feed, which is outside this theorem.",
+    "No path traversal, authorization bypass, command injection, or deployed security impact is claimed; the checked value is an MCP integration slug passed to the stdio config validator."
+  ],
+  "observed_at": "2026-10-16",
+  "repository": {
+    "pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+    "repo_id": "TracecatHQ/tracecat",
+    "url": "https://github.com/TracecatHQ/tracecat"
+  },
+  "review_decision": {
+    "decision": "adopted",
+    "limitations": [
+      "This is a targeted review of one of 115 Tracecat inventory rows, not a complete repository or package review.",
+      "The theorem concerns only absence of slash and backslash from values accepted by validate_mcp_server_name; it does not prove every stated name-format property.",
+      "The proof is an unbounded alphabet-disjointness result over the ASCII character class used by the pinned validator. Python $ may still accept a final line feed, which is outside this theorem.",
+      "No path traversal, authorization bypass, command injection, or deployed security impact is claimed; the checked value is an MCP integration slug passed to the stdio config validator."
+    ],
+    "pattern": "^[a-zA-Z0-9_-]+$",
+    "product_question_asked": true,
+    "rationale": "The pinned validator comment and error text declare alphanumeric, hyphen, and underscore characters only. The same exact validator is called by validate_mcp_command_config when a name is supplied; AgentPresetService supplies the persisted MCPIntegration.slug, and MCPIntegrationService derives that slug from workspace configuration. Therefore every accepted name in this validator excludes slash and backslash. This contract proves only those two excluded characters, not the whole name grammar or slug generation behavior; no security impact is claimed.",
+    "regex_id": "60bada10a610fde520e8e96c90887d71",
+    "site": "tracecat/integrations/mcp_validation.py:267:11",
+    "source_site_id": "6054f97be853956788ff86afb5fd537445a87cd5b0828326b3e6e5554571856f"
+  },
+  "review_sha256": "d99be717aba4f89127bbe36ab5ad2aa33fb48b162ea4869af2db22e9bb8b0f69",
+  "reviewed_site": {
+    "call_kind": "match",
+    "cohort_id": "2026-09-12-calibration-20-r2",
+    "column": 11,
+    "commit_tree_oid": "b4af14482f3483605e41307d54f2b777b63bbd84",
+    "context_snippet": "re.match(r\"^[a-zA-Z0-9_-]+$\", name)",
+    "contract_status": "none",
+    "dialect": "py_re",
+    "dialect_family": "py_re",
+    "domain": "ascii",
+    "extractor": "py",
+    "flags": "",
+    "git_blob_oid": "cac9aef283eda150066ec272aa5118e8cd27aec0",
+    "git_mode": "100644",
+    "line": 267,
+    "manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+    "pattern": "^[a-zA-Z0-9_-]+$",
+    "pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+    "question_ids": [],
+    "regex_id": "60bada10a610fde520e8e96c90887d71",
+    "repo_id": "TracecatHQ/tracecat",
+    "review_status": "unreviewed",
+    "site": "tracecat/integrations/mcp_validation.py:267:11",
+    "solver_outcome": null,
+    "source_file": "tracecat/integrations/mcp_validation.py",
+    "source_file_sha256": "41cf730ba1cb592cae684811bbb4d510961a0a441c156313a804b2593085f895",
+    "source_site_id": "6054f97be853956788ff86afb5fd537445a87cd5b0828326b3e6e5554571856f",
+    "source_symlink_target": null,
+    "url": "https://github.com/TracecatHQ/tracecat"
+  },
+  "schema_version": "1",
+  "source_files": [
+    {
+      "evidence_ref": "https://github.com/TracecatHQ/tracecat/blob/c84d52528a489821f355fc63976fbc7783ae0ad5/tracecat/integrations/mcp_validation.py",
+      "path": "tracecat/integrations/mcp_validation.py",
+      "pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+      "repository_url": "https://github.com/TracecatHQ/tracecat",
+      "sha256": "41cf730ba1cb592cae684811bbb4d510961a0a441c156313a804b2593085f895"
+    },
+    {
+      "evidence_ref": "https://github.com/TracecatHQ/tracecat/blob/c84d52528a489821f355fc63976fbc7783ae0ad5/tracecat/integrations/schemas.py",
+      "path": "tracecat/integrations/schemas.py",
+      "pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+      "repository_url": "https://github.com/TracecatHQ/tracecat",
+      "sha256": "7fd1ed987f9fbe7655a3b82a6868b441124535cf3f70764407fb1a9f5f688132"
+    },
+    {
+      "evidence_ref": "https://github.com/TracecatHQ/tracecat/blob/c84d52528a489821f355fc63976fbc7783ae0ad5/tracecat/integrations/service.py",
+      "path": "tracecat/integrations/service.py",
+      "pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+      "repository_url": "https://github.com/TracecatHQ/tracecat",
+      "sha256": "1acfce88833bced460bcead3ae92d90a4eda80cc0c6aa51ae52d31b603ea3448"
+    },
+    {
+      "evidence_ref": "https://github.com/TracecatHQ/tracecat/blob/c84d52528a489821f355fc63976fbc7783ae0ad5/tracecat/agent/preset/service.py",
+      "path": "tracecat/agent/preset/service.py",
+      "pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+      "repository_url": "https://github.com/TracecatHQ/tracecat",
+      "sha256": "2ddc094ef80079f9fa072844419a12d8b78b9301e9f747f49638d7363bee1e94"
+    }
+  ],
+  "source_inventory": {
+    "inventory_path": "properties/calibration/2026-10-15-p2-source-inventory-v3/inventory.json",
+    "inventory_sha256": "b19edf778c99465ab1745b634583a418eb6c54f5d90b325533d577f6d17d3eae",
+    "member_site_count": 115,
+    "sites_path": "properties/calibration/2026-10-15-p2-source-inventory-v3/sites.ndjson",
+    "sites_sha256": "a4e1dfbbd84e2258089d1fd52694ff1e28f6c48cef1caa13fed306e82b1b212f"
+  },
+  "source_windows": [
+    {
+      "purpose": "validator function, declared character language, and configuration wrapper",
+      "site": "tracecat/integrations/mcp_validation.py:267:re.match",
+      "source_binding": {
+        "evidence_ref": "https://github.com/TracecatHQ/tracecat/blob/c84d52528a489821f355fc63976fbc7783ae0ad5/tracecat/integrations/mcp_validation.py",
+        "path": "tracecat/integrations/mcp_validation.py",
+        "pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+        "repository_url": "https://github.com/TracecatHQ/tracecat",
+        "sha256": "41cf730ba1cb592cae684811bbb4d510961a0a441c156313a804b2593085f895"
+      },
+      "window": {
+        "lines": [
+          {
+            "is_target": false,
+            "line": 242,
+            "text": "        except MCPValidationError as e:"
+          },
+          {
+            "is_target": false,
+            "line": 243,
+            "text": "            raise MCPValidationError(f\"Invalid env value for '{key}': {e}\") from e"
+          },
+          {
+            "is_target": false,
+            "line": 244,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 245,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 246,
+            "text": "def validate_mcp_server_name(name: str) -> None:"
+          },
+          {
+            "is_target": false,
+            "line": 247,
+            "text": "    \"\"\"Validate an MCP server name."
+          },
+          {
+            "is_target": false,
+            "line": 248,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 249,
+            "text": "    Args:"
+          },
+          {
+            "is_target": false,
+            "line": 250,
+            "text": "        name: The server name/identifier"
+          },
+          {
+            "is_target": false,
+            "line": 251,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 252,
+            "text": "    Raises:"
+          },
+          {
+            "is_target": false,
+            "line": 253,
+            "text": "        MCPValidationError: If the name is invalid"
+          },
+          {
+            "is_target": false,
+            "line": 254,
+            "text": "    \"\"\""
+          },
+          {
+            "is_target": false,
+            "line": 255,
+            "text": "    if not isinstance(name, str):"
+          },
+          {
+            "is_target": false,
+            "line": 256,
+            "text": "        raise MCPValidationError(f\"Name must be a string, got {type(name).__name__}\")"
+          },
+          {
+            "is_target": false,
+            "line": 257,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 258,
+            "text": "    if not name:"
+          },
+          {
+            "is_target": false,
+            "line": 259,
+            "text": "        raise MCPValidationError(\"Server name cannot be empty\")"
+          },
+          {
+            "is_target": false,
+            "line": 260,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 261,
+            "text": "    if len(name) > MAX_SERVER_NAME_LENGTH:"
+          },
+          {
+            "is_target": false,
+            "line": 262,
+            "text": "        raise MCPValidationError("
+          },
+          {
+            "is_target": false,
+            "line": 263,
+            "text": "            f\"Server name too long: {len(name)} > {MAX_SERVER_NAME_LENGTH} characters\""
+          },
+          {
+            "is_target": false,
+            "line": 264,
+            "text": "        )"
+          },
+          {
+            "is_target": false,
+            "line": 265,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 266,
+            "text": "    # Alphanumeric, hyphens, underscores only"
+          },
+          {
+            "is_target": true,
+            "line": 267,
+            "text": "    if not re.match(r\"^[a-zA-Z0-9_-]+$\", name):"
+          },
+          {
+            "is_target": false,
+            "line": 268,
+            "text": "        raise MCPValidationError("
+          },
+          {
+            "is_target": false,
+            "line": 269,
+            "text": "            f\"Invalid server name '{name}': must contain only alphanumeric, \""
+          },
+          {
+            "is_target": false,
+            "line": 270,
+            "text": "            \"hyphens, and underscores\""
+          },
+          {
+            "is_target": false,
+            "line": 271,
+            "text": "        )"
+          },
+          {
+            "is_target": false,
+            "line": 272,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 273,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 274,
+            "text": "def validate_mcp_command_config("
+          },
+          {
+            "is_target": false,
+            "line": 275,
+            "text": "    *,"
+          },
+          {
+            "is_target": false,
+            "line": 276,
+            "text": "    command: str,"
+          },
+          {
+            "is_target": false,
+            "line": 277,
+            "text": "    args: list[str] | None = None,"
+          },
+          {
+            "is_target": false,
+            "line": 278,
+            "text": "    env: dict[str, str] | None = None,"
+          },
+          {
+            "is_target": false,
+            "line": 279,
+            "text": "    name: str | None = None,"
+          },
+          {
+            "is_target": false,
+            "line": 280,
+            "text": ") -> None:"
+          },
+          {
+            "is_target": false,
+            "line": 281,
+            "text": "    \"\"\"Validate a complete MCP command configuration."
+          },
+          {
+            "is_target": false,
+            "line": 282,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 283,
+            "text": "    Args:"
+          },
+          {
+            "is_target": false,
+            "line": 284,
+            "text": "        command: The command to run"
+          },
+          {
+            "is_target": false,
+            "line": 285,
+            "text": "        args: Optional list of arguments"
+          },
+          {
+            "is_target": false,
+            "line": 286,
+            "text": "        env: Optional environment variables"
+          },
+          {
+            "is_target": false,
+            "line": 287,
+            "text": "        name: Optional server name"
+          },
+          {
+            "is_target": false,
+            "line": 288,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 289,
+            "text": "    Raises:"
+          },
+          {
+            "is_target": false,
+            "line": 290,
+            "text": "        MCPValidationError: If any part of the configuration is invalid"
+          },
+          {
+            "is_target": false,
+            "line": 291,
+            "text": "    \"\"\""
+          },
+          {
+            "is_target": false,
+            "line": 292,
+            "text": "    validate_mcp_command(command)"
+          }
+        ],
+        "path": "tracecat/integrations/mcp_validation.py",
+        "target_line": 267,
+        "token": "re.match",
+        "window_end": 292,
+        "window_lines": 51,
+        "window_start": 242
+      }
+    },
+    {
+      "purpose": "consumer resolution passes the stored integration slug to the validator",
+      "site": "tracecat/agent/preset/service.py:854:validate_mcp_command_config",
+      "source_binding": {
+        "evidence_ref": "https://github.com/TracecatHQ/tracecat/blob/c84d52528a489821f355fc63976fbc7783ae0ad5/tracecat/agent/preset/service.py",
+        "path": "tracecat/agent/preset/service.py",
+        "pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+        "repository_url": "https://github.com/TracecatHQ/tracecat",
+        "sha256": "2ddc094ef80079f9fa072844419a12d8b78b9301e9f747f49638d7363bee1e94"
+      },
+      "window": {
+        "lines": [
+          {
+            "is_target": false,
+            "line": 829,
+            "text": "                # Decrypt stdio_env if present"
+          },
+          {
+            "is_target": false,
+            "line": 830,
+            "text": "                stdio_env = integrations_service.decrypt_stdio_env(mcp_integration)"
+          },
+          {
+            "is_target": false,
+            "line": 831,
+            "text": "                if stdio_env:"
+          },
+          {
+            "is_target": false,
+            "line": 832,
+            "text": "                    try:"
+          },
+          {
+            "is_target": false,
+            "line": 833,
+            "text": "                        stdio_env = await self.resolve_stdio_env("
+          },
+          {
+            "is_target": false,
+            "line": 834,
+            "text": "                            stdio_env=stdio_env,"
+          },
+          {
+            "is_target": false,
+            "line": 835,
+            "text": "                            mcp_integration_id=mcp_integration.id,"
+          },
+          {
+            "is_target": false,
+            "line": 836,
+            "text": "                            mcp_integration_slug=mcp_integration.slug,"
+          },
+          {
+            "is_target": false,
+            "line": 837,
+            "text": "                        )"
+          },
+          {
+            "is_target": false,
+            "line": 838,
+            "text": "                    except Exception as e:"
+          },
+          {
+            "is_target": false,
+            "line": 839,
+            "text": "                        logger.warning("
+          },
+          {
+            "is_target": false,
+            "line": 840,
+            "text": "                            \"Stdio env resolution failed for MCP integration %r: %s\","
+          },
+          {
+            "is_target": false,
+            "line": 841,
+            "text": "                            mcp_integration.name,"
+          },
+          {
+            "is_target": false,
+            "line": 842,
+            "text": "                            str(e),"
+          },
+          {
+            "is_target": false,
+            "line": 843,
+            "text": "                            extra={"
+          },
+          {
+            "is_target": false,
+            "line": 844,
+            "text": "                                \"workspace_id\": str(self.workspace_id),"
+          },
+          {
+            "is_target": false,
+            "line": 845,
+            "text": "                                \"mcp_integration_id\": str(mcp_integration.id),"
+          },
+          {
+            "is_target": false,
+            "line": 846,
+            "text": "                                \"mcp_integration_slug\": mcp_integration.slug,"
+          },
+          {
+            "is_target": false,
+            "line": 847,
+            "text": "                                \"env_keys\": sorted(stdio_env.keys()),"
+          },
+          {
+            "is_target": false,
+            "line": 848,
+            "text": "                            },"
+          },
+          {
+            "is_target": false,
+            "line": 849,
+            "text": "                        )"
+          },
+          {
+            "is_target": false,
+            "line": 850,
+            "text": "                        continue"
+          },
+          {
+            "is_target": false,
+            "line": 851,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 852,
+            "text": "                # Re-validate command config at resolution time"
+          },
+          {
+            "is_target": false,
+            "line": 853,
+            "text": "                try:"
+          },
+          {
+            "is_target": true,
+            "line": 854,
+            "text": "                    validate_mcp_command_config("
+          },
+          {
+            "is_target": false,
+            "line": 855,
+            "text": "                        command=mcp_integration.stdio_command,"
+          },
+          {
+            "is_target": false,
+            "line": 856,
+            "text": "                        args=mcp_integration.stdio_args,"
+          },
+          {
+            "is_target": false,
+            "line": 857,
+            "text": "                        env=stdio_env,"
+          },
+          {
+            "is_target": false,
+            "line": 858,
+            "text": "                        name=mcp_integration.slug,"
+          },
+          {
+            "is_target": false,
+            "line": 859,
+            "text": "                    )"
+          },
+          {
+            "is_target": false,
+            "line": 860,
+            "text": "                except MCPValidationError as e:"
+          },
+          {
+            "is_target": false,
+            "line": 861,
+            "text": "                    logger.warning("
+          },
+          {
+            "is_target": false,
+            "line": 862,
+            "text": "                        \"Stdio-type MCP integration %r failed validation: %s\","
+          },
+          {
+            "is_target": false,
+            "line": 863,
+            "text": "                        mcp_integration.name,"
+          },
+          {
+            "is_target": false,
+            "line": 864,
+            "text": "                        str(e),"
+          },
+          {
+            "is_target": false,
+            "line": 865,
+            "text": "                        extra={"
+          },
+          {
+            "is_target": false,
+            "line": 866,
+            "text": "                            \"workspace_id\": str(self.workspace_id),"
+          },
+          {
+            "is_target": false,
+            "line": 867,
+            "text": "                            \"mcp_integration_id\": str(mcp_integration.id),"
+          },
+          {
+            "is_target": false,
+            "line": 868,
+            "text": "                        },"
+          },
+          {
+            "is_target": false,
+            "line": 869,
+            "text": "                    )"
+          },
+          {
+            "is_target": false,
+            "line": 870,
+            "text": "                    continue"
+          },
+          {
+            "is_target": false,
+            "line": 871,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 872,
+            "text": "                command_config: MCPServerConfig = {"
+          },
+          {
+            "is_target": false,
+            "line": 873,
+            "text": "                    \"type\": \"stdio\","
+          },
+          {
+            "is_target": false,
+            "line": 874,
+            "text": "                    \"name\": mcp_integration.slug,"
+          },
+          {
+            "is_target": false,
+            "line": 875,
+            "text": "                    \"command\": mcp_integration.stdio_command,"
+          },
+          {
+            "is_target": false,
+            "line": 876,
+            "text": "                    \"id\": str(mcp_integration.id),"
+          },
+          {
+            "is_target": false,
+            "line": 877,
+            "text": "                }"
+          },
+          {
+            "is_target": false,
+            "line": 878,
+            "text": "                if mcp_integration.stdio_args:"
+          },
+          {
+            "is_target": false,
+            "line": 879,
+            "text": "                    command_config[\"args\"] = mcp_integration.stdio_args"
+          }
+        ],
+        "path": "tracecat/agent/preset/service.py",
+        "target_line": 854,
+        "token": "validate_mcp_command_config",
+        "window_end": 879,
+        "window_lines": 51,
+        "window_start": 829
+      }
+    },
+    {
+      "purpose": "workspace integration name is normalized and stored as its slug",
+      "site": "tracecat/integrations/service.py:2534:slugify",
+      "source_binding": {
+        "evidence_ref": "https://github.com/TracecatHQ/tracecat/blob/c84d52528a489821f355fc63976fbc7783ae0ad5/tracecat/integrations/service.py",
+        "path": "tracecat/integrations/service.py",
+        "pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+        "repository_url": "https://github.com/TracecatHQ/tracecat",
+        "sha256": "1acfce88833bced460bcead3ae92d90a4eda80cc0c6aa51ae52d31b603ea3448"
+      },
+      "window": {
+        "lines": [
+          {
+            "is_target": false,
+            "line": 2509,
+            "text": "                )"
+          },
+          {
+            "is_target": false,
+            "line": 2510,
+            "text": "            ):"
+          },
+          {
+            "is_target": false,
+            "line": 2511,
+            "text": "                mcp_integration.catalog_slug = catalog_entry.slug"
+          },
+          {
+            "is_target": false,
+            "line": 2512,
+            "text": "                updated = True"
+          },
+          {
+            "is_target": false,
+            "line": 2513,
+            "text": "            if updated:"
+          },
+          {
+            "is_target": false,
+            "line": 2514,
+            "text": "                self.session.add(mcp_integration)"
+          },
+          {
+            "is_target": false,
+            "line": 2515,
+            "text": "                await self.session.commit()"
+          },
+          {
+            "is_target": false,
+            "line": 2516,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 2517,
+            "text": "                self.logger.info("
+          },
+          {
+            "is_target": false,
+            "line": 2518,
+            "text": "                    \"Updated MCP integration OAuth reference\","
+          },
+          {
+            "is_target": false,
+            "line": 2519,
+            "text": "                    mcp_integration_id=mcp_integration.id,"
+          },
+          {
+            "is_target": false,
+            "line": 2520,
+            "text": "                    oauth_integration_id=integration.id,"
+          },
+          {
+            "is_target": false,
+            "line": 2521,
+            "text": "                )"
+          },
+          {
+            "is_target": false,
+            "line": 2522,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 2523,
+            "text": "    async def _generate_mcp_integration_slug("
+          },
+          {
+            "is_target": false,
+            "line": 2524,
+            "text": "        self,"
+          },
+          {
+            "is_target": false,
+            "line": 2525,
+            "text": "        *,"
+          },
+          {
+            "is_target": false,
+            "line": 2526,
+            "text": "        name: str,"
+          },
+          {
+            "is_target": false,
+            "line": 2527,
+            "text": "        requested_slug: str | None = None,"
+          },
+          {
+            "is_target": false,
+            "line": 2528,
+            "text": "        requested_slug_separator: str = \"-\","
+          },
+          {
+            "is_target": false,
+            "line": 2529,
+            "text": "    ) -> str:"
+          },
+          {
+            "is_target": false,
+            "line": 2530,
+            "text": "        \"\"\"Generate a unique slug for an MCP integration.\"\"\""
+          },
+          {
+            "is_target": false,
+            "line": 2531,
+            "text": "        if requested_slug:"
+          },
+          {
+            "is_target": false,
+            "line": 2532,
+            "text": "            slug = ("
+          },
+          {
+            "is_target": false,
+            "line": 2533,
+            "text": "                slugify(requested_slug, separator=requested_slug_separator)"
+          },
+          {
+            "is_target": true,
+            "line": 2534,
+            "text": "                or uuid4().hex[:8]"
+          },
+          {
+            "is_target": false,
+            "line": 2535,
+            "text": "            )"
+          },
+          {
+            "is_target": false,
+            "line": 2536,
+            "text": "        else:"
+          },
+          {
+            "is_target": false,
+            "line": 2537,
+            "text": "            slug = slugify(name, separator=\"-\") or uuid4().hex[:8]"
+          },
+          {
+            "is_target": false,
+            "line": 2538,
+            "text": "            catalog_slugs = {"
+          },
+          {
+            "is_target": false,
+            "line": 2539,
+            "text": "                entry.slug"
+          },
+          {
+            "is_target": false,
+            "line": 2540,
+            "text": "                for entry in get_platform_mcp_catalog_entries(include_private=True)"
+          },
+          {
+            "is_target": false,
+            "line": 2541,
+            "text": "            }"
+          },
+          {
+            "is_target": false,
+            "line": 2542,
+            "text": "            if slug in catalog_slugs:"
+          },
+          {
+            "is_target": false,
+            "line": 2543,
+            "text": "                slug = f\"{slug}-custom\""
+          },
+          {
+            "is_target": false,
+            "line": 2544,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 2545,
+            "text": "        # Truncate to max length, leaving room for suffix if needed"
+          },
+          {
+            "is_target": false,
+            "line": 2546,
+            "text": "        max_base_length = MAX_SERVER_NAME_LENGTH - 4  # Reserve space for \"-999\""
+          },
+          {
+            "is_target": false,
+            "line": 2547,
+            "text": "        if len(slug) > max_base_length:"
+          },
+          {
+            "is_target": false,
+            "line": 2548,
+            "text": "            slug = slug[:max_base_length].rstrip(\"-\")"
+          },
+          {
+            "is_target": false,
+            "line": 2549,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 2550,
+            "text": "        candidate = slug"
+          },
+          {
+            "is_target": false,
+            "line": 2551,
+            "text": "        suffix = 1"
+          },
+          {
+            "is_target": false,
+            "line": 2552,
+            "text": "        while await self._mcp_integration_slug_taken(candidate):"
+          },
+          {
+            "is_target": false,
+            "line": 2553,
+            "text": "            candidate = f\"{slug}-{suffix}\""
+          },
+          {
+            "is_target": false,
+            "line": 2554,
+            "text": "            suffix += 1"
+          },
+          {
+            "is_target": false,
+            "line": 2555,
+            "text": "        return candidate"
+          },
+          {
+            "is_target": false,
+            "line": 2556,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 2557,
+            "text": "    async def _is_mcp_lifecycle_owned_oauth_integration("
+          },
+          {
+            "is_target": false,
+            "line": 2558,
+            "text": "        self, *, integration: OAuthIntegration"
+          },
+          {
+            "is_target": false,
+            "line": 2559,
+            "text": "    ) -> bool:"
+          }
+        ],
+        "path": "tracecat/integrations/service.py",
+        "target_line": 2534,
+        "token": "slugify",
+        "window_end": 2559,
+        "window_lines": 51,
+        "window_start": 2509
+      }
+    },
+    {
+      "purpose": "workspace MCP integration create request supplies the human-readable name",
+      "site": "tracecat/integrations/schemas.py:398:name",
+      "source_binding": {
+        "evidence_ref": "https://github.com/TracecatHQ/tracecat/blob/c84d52528a489821f355fc63976fbc7783ae0ad5/tracecat/integrations/schemas.py",
+        "path": "tracecat/integrations/schemas.py",
+        "pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+        "repository_url": "https://github.com/TracecatHQ/tracecat",
+        "sha256": "7fd1ed987f9fbe7655a3b82a6868b441124535cf3f70764407fb1a9f5f688132"
+      },
+      "window": {
+        "lines": [
+          {
+            "is_target": false,
+            "line": 373,
+            "text": "    outside ``url_keys`` are left untouched."
+          },
+          {
+            "is_target": false,
+            "line": 374,
+            "text": "    \"\"\""
+          },
+          {
+            "is_target": false,
+            "line": 375,
+            "text": "    for key in url_keys:"
+          },
+          {
+            "is_target": false,
+            "line": 376,
+            "text": "        if key not in values:"
+          },
+          {
+            "is_target": false,
+            "line": 377,
+            "text": "            continue"
+          },
+          {
+            "is_target": false,
+            "line": 378,
+            "text": "        value = values.get(key)"
+          },
+          {
+            "is_target": false,
+            "line": 379,
+            "text": "        if not isinstance(value, str):"
+          },
+          {
+            "is_target": false,
+            "line": 380,
+            "text": "            raise ValueError("
+          },
+          {
+            "is_target": false,
+            "line": 381,
+            "text": "                f\"{key!r} must be a URL starting with 'http://' or 'https://'\""
+          },
+          {
+            "is_target": false,
+            "line": 382,
+            "text": "            )"
+          },
+          {
+            "is_target": false,
+            "line": 383,
+            "text": "        stripped = value.strip()"
+          },
+          {
+            "is_target": false,
+            "line": 384,
+            "text": "        # Empty (not yet filled in) and templated values resolve to their real"
+          },
+          {
+            "is_target": false,
+            "line": 385,
+            "text": "        # value only at run time, so skip format validation here."
+          },
+          {
+            "is_target": false,
+            "line": 386,
+            "text": "        if not stripped or STANDALONE_TEMPLATE.match(stripped):"
+          },
+          {
+            "is_target": false,
+            "line": 387,
+            "text": "            continue"
+          },
+          {
+            "is_target": false,
+            "line": 388,
+            "text": "        parsed = urlparse(stripped)"
+          },
+          {
+            "is_target": false,
+            "line": 389,
+            "text": "        if parsed.scheme.lower() not in (\"http\", \"https\") or not parsed.netloc:"
+          },
+          {
+            "is_target": false,
+            "line": 390,
+            "text": "            raise ValueError("
+          },
+          {
+            "is_target": false,
+            "line": 391,
+            "text": "                f\"{key!r} must be a URL starting with 'http://' or 'https://'\""
+          },
+          {
+            "is_target": false,
+            "line": 392,
+            "text": "            )"
+          },
+          {
+            "is_target": false,
+            "line": 393,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 394,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 395,
+            "text": "class _MCPIntegrationCreateBase(BaseModel):"
+          },
+          {
+            "is_target": false,
+            "line": 396,
+            "text": "    \"\"\"Shared request fields for creating an MCP integration.\"\"\""
+          },
+          {
+            "is_target": false,
+            "line": 397,
+            "text": ""
+          },
+          {
+            "is_target": true,
+            "line": 398,
+            "text": "    name: str = Field("
+          },
+          {
+            "is_target": false,
+            "line": 399,
+            "text": "        ..., min_length=3, max_length=255, description=\"MCP integration name\""
+          },
+          {
+            "is_target": false,
+            "line": 400,
+            "text": "    )"
+          },
+          {
+            "is_target": false,
+            "line": 401,
+            "text": "    description: str | None = Field("
+          },
+          {
+            "is_target": false,
+            "line": 402,
+            "text": "        default=None, max_length=512, description=\"Optional description\""
+          },
+          {
+            "is_target": false,
+            "line": 403,
+            "text": "    )"
+          },
+          {
+            "is_target": false,
+            "line": 404,
+            "text": "    timeout: int | None = Field("
+          },
+          {
+            "is_target": false,
+            "line": 405,
+            "text": "        default=30,"
+          },
+          {
+            "is_target": false,
+            "line": 406,
+            "text": "        ge=1,"
+          },
+          {
+            "is_target": false,
+            "line": 407,
+            "text": "        le=300,"
+          },
+          {
+            "is_target": false,
+            "line": 408,
+            "text": "        description=\"Timeout in seconds\","
+          },
+          {
+            "is_target": false,
+            "line": 409,
+            "text": "    )"
+          },
+          {
+            "is_target": false,
+            "line": 410,
+            "text": "    catalog_slug: str | None = Field("
+          },
+          {
+            "is_target": false,
+            "line": 411,
+            "text": "        default=None,"
+          },
+          {
+            "is_target": false,
+            "line": 412,
+            "text": "        max_length=255,"
+          },
+          {
+            "is_target": false,
+            "line": 413,
+            "text": "        description=\"Platform MCP catalog slug this workspace config is created from\","
+          },
+          {
+            "is_target": false,
+            "line": 414,
+            "text": "    )"
+          },
+          {
+            "is_target": false,
+            "line": 415,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 416,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 417,
+            "text": "class MCPHttpIntegrationCreate(_MCPIntegrationCreateBase):"
+          },
+          {
+            "is_target": false,
+            "line": 418,
+            "text": "    \"\"\"Request model for creating an HTTP MCP integration.\"\"\""
+          },
+          {
+            "is_target": false,
+            "line": 419,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 420,
+            "text": "    server_type: Literal[\"http\"] = Field(default=\"http\")"
+          },
+          {
+            "is_target": false,
+            "line": 421,
+            "text": "    server_uri: str = Field("
+          },
+          {
+            "is_target": false,
+            "line": 422,
+            "text": "        ..., description=\"MCP server endpoint URL (required for http type)\""
+          },
+          {
+            "is_target": false,
+            "line": 423,
+            "text": "    )"
+          }
+        ],
+        "path": "tracecat/integrations/schemas.py",
+        "target_line": 398,
+        "token": "name",
+        "window_end": 423,
+        "window_lines": 51,
+        "window_start": 373
+      }
+    }
+  ]
+}

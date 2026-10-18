@@ -1,6 +1,9 @@
-"""Extract RE2/Go ``regexp.MustCompile("…")`` / ``Compile("…")`` string literals.
+"""Extract literal patterns passed to Go's ``regexp`` APIs.
 
-Used for trufflehog-style Go detector packages. Skips non-``.go`` files.
+This covers package-level ``MustCompile`` / ``Compile`` calls and the static
+pattern argument to ``Match``, ``MatchString``, and ``MatchReader``. Skips
+non-``.go`` files. Dynamic pattern expressions remain outside this extractor
+and need the separate classification described in ``docs/DYNAMIC.md``.
 Raw string literals (backticks) are preferred when present.
 """
 
@@ -16,6 +19,11 @@ _MUST = re.compile(
     r'regexp\.(?:MustCompile|Compile)\(\s*(?P<q>"|`)(?P<body>(?:\\.|(?!\1).)*)(?P=q)\s*\)',
     re.DOTALL,
 )
+_ONE_SHOT = re.compile(
+    r'regexp\.(?:Match|MatchString|MatchReader)\(\s*'
+    r'(?P<q>"|`)(?P<body>(?:\\.|(?!\1).)*)(?P=q)\s*,',
+    re.DOTALL,
+)
 
 
 def extract_go_regexp(
@@ -26,7 +34,11 @@ def extract_go_regexp(
     dialect: str = "re2",
 ) -> list[dict[str, Any]]:
     out: list[dict[str, Any]] = []
-    for m in _MUST.finditer(source):
+    matches = sorted(
+        [*_MUST.finditer(source), *_ONE_SHOT.finditer(source)],
+        key=lambda match: match.start(),
+    )
+    for m in matches:
         # Skip matches that sit on a // comment line (common for WIP patterns).
         line_start = source.rfind("\n", 0, m.start()) + 1
         line_prefix = source[line_start : m.start()]

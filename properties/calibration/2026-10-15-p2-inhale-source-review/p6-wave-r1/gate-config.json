@@ -1,0 +1,27 @@
+{
+  "command": [
+    "/home/lalbers/gitroot/regexproof/.venv/bin/python",
+    "scripts/inhale-output-path-regression-gate.py",
+    "--source-root",
+    "/tmp/regexproof-pinned-sources/inhale-889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8",
+    "--output",
+    "/home/lalbers/gitroot/regexproof/properties/calibration/2026-10-15-p2-inhale-source-review/p6-wave-r1/product-replay-p6.json"
+  ],
+  "evidence": {
+    "differential_case_counts": {
+      "IH-inhale-directory-url-output-root-confinement": 3,
+      "IH-inhale-file-url-output-root-confinement": 3
+    },
+    "product_engine_replay_question_ids": [
+      "IH-inhale-file-url-output-root-confinement",
+      "IH-inhale-directory-url-output-root-confinement"
+    ]
+  },
+  "gate_id": "inhale-url-output-path-confinement",
+  "question_ids": [
+    "IH-inhale-file-url-output-root-confinement",
+    "IH-inhale-directory-url-output-root-confinement"
+  ],
+  "schema_version": "1",
+  "timeout_seconds": 300
+}

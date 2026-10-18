@@ -1,0 +1,32 @@
+{
+  "adoption": {
+    "approved_on": "2026-10-15",
+    "authority": "standing_user_delegation",
+    "contract_sha256": "b3fd8a5fd9f203c22babfb9dabc8fcbc56a03cfcfc7e51e4692216632f40f09d",
+    "evidence": [
+      "https://github.com/xibosignage/xibo-cms/blob/978def55c8e68cab3a50a7ee4725039da753f0a1/frontend/src/pages/Administration/Applications/Authorize/AuthorizeApplication.tsx",
+      "https://github.com/xibosignage/xibo-cms/blob/978def55c8e68cab3a50a7ee4725039da753f0a1/lib/Middleware/CsrfGuard.php",
+      "https://github.com/xibosignage/xibo-cms/blob/978def55c8e68cab3a50a7ee4725039da753f0a1/lib/routes-react.php",
+      "https://github.com/xibosignage/xibo-cms/blob/978def55c8e68cab3a50a7ee4725039da753f0a1/web/json/index.php"
+    ],
+    "policy_version": "autonomous-contracts-v1",
+    "rationale": "The pinned SPA helper reads the non-HttpOnly XSRF-TOKEN cookie into the hidden csrfToken field of the native OAuth consent POST. The exact route is mounted in the JSON entrypoint with CsrfGuard; middleware falls back to the csrfToken form field and compares it to the session token with hash_equals. issueToken produces a 40-character lowercase-hex value using bin2hex(random_bytes(20)). The contract asks only that the capture body cannot absorb a cookie separator; the exact-source Node replay checks complete helper behavior and an exact capture-widening mutation.",
+    "review": {
+      "author": "codex-contract-author",
+      "reviewer": "codex-independent-review-pass",
+      "same_model": true
+    },
+    "source_file": "frontend/src/pages/Administration/Applications/Authorize/AuthorizeApplication.tsx",
+    "source_pin": "978def55c8e68cab3a50a7ee4725039da753f0a1",
+    "source_sha256": "8377f717735d9efe5c0148e2691c3d36e91395b91ebaaa61045601d073128513",
+    "source_url": "https://github.com/xibosignage/xibo-cms",
+    "status": "approved"
+  },
+  "declared_domain": "The formal proof covers every single ASCII character admitted by the exact capture body [^;], without a length bound. The exact-pin product replay covers server-issued 40-character lowercase-hex tokens in semicolon-separated document.cookie strings with exactly one XSRF-TOKEN pair, placed first, between neighboring cookies, and last; decodeURIComponent must leave these server-issued tokens unchanged. The replay mutates the exact pinned capture body to (.*) and checks that a following cookie pair is then included. The proof models the capture body only; it does not formalize JavaScript RegExp search or duplicate cookie-name ordering.",
+  "guarantee": "The captured value for the XSRF-TOKEN cookie cannot include a semicolon, so it cannot absorb a following cookie pair into the csrfToken submitted by the OAuth consent form.",
+  "input_source": "The browser document.cookie string read by getCsrfTokenFromCookie for the OAuth application consent form. The server creates the session token with bin2hex(random_bytes(20)), exposes it in the XSRF-TOKEN cookie, and the hidden csrfToken form field is checked by CsrfGuard against the session value with hash_equals.",
+  "provenance": "agent_derived",
+  "schema_version": "1",
+  "site": "xibosignage/xibo-cms@978def55c8e68cab3a50a7ee4725039da753f0a1:frontend/src/pages/Administration/Applications/Authorize/AuthorizeApplication.tsx:42:38",
+  "trust": "untrusted-input"
+}

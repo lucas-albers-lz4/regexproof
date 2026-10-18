@@ -1,0 +1,35 @@
+{
+  "adoption": {
+    "approved_on": "2026-10-15",
+    "authority": "standing_user_delegation",
+    "contract_sha256": "aac841ad61eca3ca7456f39a303a5a10e4ce4fca55def8fca9de57a227b3a347",
+    "evidence": [
+      "https://github.com/Leviticus-Triage/llm-honeypot-intelligence/blob/65624396e263074bb8cb2e049f9a9ec6215ea5c1/scripts/sync-to-github.sh",
+      "https://github.com/Leviticus-Triage/llm-honeypot-intelligence/blob/65624396e263074bb8cb2e049f9a9ec6215ea5c1/scripts/sync-to-github.sh#L26",
+      "https://github.com/Leviticus-Triage/llm-honeypot-intelligence/blob/65624396e263074bb8cb2e049f9a9ec6215ea5c1/scripts/sync-to-github.sh#L69-L76",
+      "https://github.com/Leviticus-Triage/llm-honeypot-intelligence/blob/65624396e263074bb8cb2e049f9a9ec6215ea5c1/scripts/sync-to-github.sh#L81-L110",
+      "https://github.com/Leviticus-Triage/llm-honeypot-intelligence/blob/65624396e263074bb8cb2e049f9a9ec6215ea5c1/scripts/sync-to-github.sh#L154-L189",
+      "https://github.com/Leviticus-Triage/llm-honeypot-intelligence/blob/65624396e263074bb8cb2e049f9a9ec6215ea5c1/docs/setup-guide.md#L174-L176",
+      "https://www.rfc-editor.org/rfc/rfc1918.html"
+    ],
+    "policy_version": "autonomous-contracts-v1",
+    "rationale": "The pinned source labels this helper as a private-IP sanitizer and applies it to generated rule and threat-intelligence files before the automated GitHub commit/push. RFC 1918 defines the three private IPv4 blocks; treating its stated guarantee as the contract exposes the uncovered 10/8 and 172.16/12 cases. This adopts the documented privacy boundary without asserting that a real secret was published.",
+    "review": {
+      "author": "Codex source-review pass",
+      "reviewer": "Codex second source-review pass",
+      "same_model": true
+    },
+    "source_file": "scripts/sync-to-github.sh",
+    "source_pin": "65624396e263074bb8cb2e049f9a9ec6215ea5c1",
+    "source_sha256": "b7cbcd83598d83848516d282de897706da5828df1f1ab6ebcb3f4d87bd203122",
+    "source_url": "https://github.com/Leviticus-Triage/llm-honeypot-intelligence",
+    "status": "approved"
+  },
+  "declared_domain": "ASCII text files with the suffixes selected by sanitize_dir, containing a canonical dotted-decimal IPv4 address in 10.0.0.0/8, 172.16.0.0/12, or 192.168.0.0/16; the broader contract is checked by an address-language counterexample query and exact pinned sed helper replay. POSIX shell text excludes NUL.",
+  "guarantee": "Every canonical RFC 1918 IPv4 address in an eligible generated artifact is replaced with [REDACTED] before the sync script commits or pushes it to the configured GitHub remote.",
+  "input_source": "Rules and threat-intelligence text copied from the ollama-rules-output and ollama-threat-output Docker volumes into the repository before automated synchronization.",
+  "provenance": "agent_derived",
+  "schema_version": "1",
+  "site": "Leviticus-Triage/llm-honeypot-intelligence@65624396e263074bb8cb2e049f9a9ec6215ea5c1:scripts/sync-to-github.sh:76:PRIVATE_IP_PATTERN",
+  "trust": "untrusted-input"
+}

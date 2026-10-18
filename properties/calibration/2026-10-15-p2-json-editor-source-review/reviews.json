@@ -1,0 +1,1591 @@
+{
+  "schema_version": "1",
+  "author": "Codex source-review pass",
+  "reviewer": "Codex second source-review pass",
+  "second_pass": true,
+  "same_model_or_agent": true,
+  "observed_at": "2026-10-15",
+  "limitations": [
+    "This is a complete raw-regex review only for json-editor/json-editor at the frozen 20-r2 pin; it does not establish coverage for the other 19 repositories or complete P2.",
+    "Three adopted questions concern the ordered HTML-escaping regex stages for string leaves in EnumEditor; the source-level proofs and product gate are tracked separately.",
+    "Base64Editor captures data-URI MIME text into an innerHTML sink. Its source behavior is recorded as unresolved because input trust and an independent safe-rendering requirement are not established by this repository."
+  ],
+  "reviews": [
+    {
+      "regex_id": "6872afe4d90269d625335270be7ed651",
+      "site": "config/webpack.common.js:27:14",
+      "pattern": "\\.js|\\.css.js$",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "non_security_ui_or_build_use",
+      "rationale": "This regex configures the repository build pipeline's test/exclude path selection. Its input is local build metadata and it does not enforce a product security boundary.",
+      "review_refs": [
+        {
+          "path": "config/webpack.common.js",
+          "line": 27,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "c65c9f22b6a502caae4f68edb879d7fd",
+      "site": "config/webpack.common.js:28:17",
+      "pattern": "node_modules",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "non_security_ui_or_build_use",
+      "rationale": "This regex configures the repository build pipeline's test/exclude path selection. Its input is local build metadata and it does not enforce a product security boundary.",
+      "review_refs": [
+        {
+          "path": "config/webpack.common.js",
+          "line": 28,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "1124bd9b327bdf3bbf03f0b35d694005",
+      "site": "config/webpack.common.js:45:14",
+      "pattern": "\\.css$",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "non_security_ui_or_build_use",
+      "rationale": "This regex configures the repository build pipeline's test/exclude path selection. Its input is local build metadata and it does not enforce a product security boundary.",
+      "review_refs": [
+        {
+          "path": "config/webpack.common.js",
+          "line": 45,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "87173f63b147c1581d96929269b1c10d",
+      "site": "config/webpack.common.js:46:17",
+      "pattern": "(node_modules)|(src\\/themes)|(src\\/editors)",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "non_security_ui_or_build_use",
+      "rationale": "This regex configures the repository build pipeline's test/exclude path selection. Its input is local build metadata and it does not enforce a product security boundary.",
+      "review_refs": [
+        {
+          "path": "config/webpack.common.js",
+          "line": 46,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "f8ae86d86a72c9d4b28d49cd0086d090",
+      "site": "docs/scripts/ajv-validator.js:120:26",
+      "pattern": "^P(?!$)((\\d+Y)?(\\d+M)?(\\d+D)?(T(?=\\d)(\\d+H)?(\\d+M)?(\\d+S)?)?|(\\d+W)?)$",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "documentation_or_test_fixture",
+      "rationale": "This site is part of the checked-in Ajv format-validator browser bundle loaded by docs/index.html for the documentation demo. It implements format checking for the demo schema; the repository does not make this regex a security authorization or sanitization boundary. Treat it as documentation dependency code, not a product security question.",
+      "review_refs": [
+        {
+          "path": "docs/scripts/ajv-validator.js",
+          "line": 120,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "4c7c004065d637b41c8f8e42803ccf97",
+      "site": "docs/scripts/ajv-validator.js:122:33",
+      "pattern": "^(?:[a-z][a-z0-9+\\-.]*:)?(?:\\/?\\/(?:(?:[a-z0-9\\-._~!$&'()*+,;=:]|%[0-9a-f]{2})*@)?(?:\\[(?:(?:(?:(?:[0-9a-f]{1,4}:){6}|::(?:[0-9a-f]{1,4}:){5}|(?:[0-9a-f]{1,4})?::(?:[0-9a-f]{1,4}:){4}|(?:(?:[0-9a-f]{1,4}:){0,1}[0-9a-f]{1,4})?::(?:[0-9a-f]{1,4}:){3}|(?:(?:[0-9a-f]{1,4}:){0,2}[0-9a-f]{1,4})?::(?:[0-9a-f]{1,4}:){2}|(?:(?:[0-9a-f]{1,4}:){0,3}[0-9a-f]{1,4})?::[0-9a-f]{1,4}:|(?:(?:[0-9a-f]{1,4}:){0,4}[0-9a-f]{1,4})?::)(?:[0-9a-f]{1,4}:[0-9a-f]{1,4}|(?:(?:25[0-5]|2[0-4]\\d|[01]?\\d\\d?)\\.){3}(?:25[0-5]|2[0-4]\\d|[01]?\\d\\d?))|(?:(?:[0-9a-f]{1,4}:){0,5}[0-9a-f]{1,4})?::[0-9a-f]{1,4}|(?:(?:[0-9a-f]{1,4}:){0,6}[0-9a-f]{1,4})?::)|[Vv][0-9a-f]+\\.[a-z0-9\\-._~!$&'()*+,;=:]+)\\]|(?:(?:25[0-5]|2[0-4]\\d|[01]?\\d\\d?)\\.){3}(?:25[0-5]|2[0-4]\\d|[01]?\\d\\d?)|(?:[a-z0-9\\-._~!$&'\"()*+,;=]|%[0-9a-f]{2})*)(?::\\d*)?(?:\\/(?:[a-z0-9\\-._~!$&'\"()*+,;=:@]|%[0-9a-f]{2})*)*|\\/(?:(?:[a-z0-9\\-._~!$&'\"()*+,;=:@]|%[0-9a-f]{2})+(?:\\/(?:[a-z0-9\\-._~!$&'\"()*+,;=:@]|%[0-9a-f]{2})*)*)?|(?:[a-z0-9\\-._~!$&'\"()*+,;=:@]|%[0-9a-f]{2})+(?:\\/(?:[a-z0-9\\-._~!$&'\"()*+,;=:@]|%[0-9a-f]{2})*)*)?(?:\\?(?:[a-z0-9\\-._~!$&'\"()*+,;=:@/?]|%[0-9a-f]{2})*)?(?:#(?:[a-z0-9\\-._~!$&'\"()*+,;=:@/?]|%[0-9a-f]{2})*)?$",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "documentation_or_test_fixture",
+      "rationale": "This site is part of the checked-in Ajv format-validator browser bundle loaded by docs/index.html for the documentation demo. It implements format checking for the demo schema; the repository does not make this regex a security authorization or sanitization boundary. Treat it as documentation dependency code, not a product security question.",
+      "review_refs": [
+        {
+          "path": "docs/scripts/ajv-validator.js",
+          "line": 122,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "3e4d95c8a052df294e3986eb7a74d96c",
+      "site": "docs/scripts/ajv-validator.js:124:32",
+      "pattern": "^(?:(?:[^\\x00-\\x20\"'<>%\\\\^`{|}]|%[0-9a-f]{2})|\\{[+#./;?&=,!@|]?(?:[a-z0-9_]|%[0-9a-f]{2})+(?::[1-9][0-9]{0,3}|\\*)?(?:,(?:[a-z0-9_]|%[0-9a-f]{2})+(?::[1-9][0-9]{0,3}|\\*)?)*\\})*$",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "documentation_or_test_fixture",
+      "rationale": "This site is part of the checked-in Ajv format-validator browser bundle loaded by docs/index.html for the documentation demo. It implements format checking for the demo schema; the repository does not make this regex a security authorization or sanitization boundary. Treat it as documentation dependency code, not a product security question.",
+      "review_refs": [
+        {
+          "path": "docs/scripts/ajv-validator.js",
+          "line": 124,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "15c177cc97ed244029e78ea6b192540b",
+      "site": "docs/scripts/ajv-validator.js:127:21",
+      "pattern": "^(?:https?|ftp):\\/\\/(?:\\S+(?::\\S*)?@)?(?:(?!(?:10|127)(?:\\.\\d{1,3}){3})(?!(?:169\\.254|192\\.168)(?:\\.\\d{1,3}){2})(?!172\\.(?:1[6-9]|2\\d|3[0-1])(?:\\.\\d{1,3}){2})(?:[1-9]\\d?|1\\d\\d|2[01]\\d|22[0-3])(?:\\.(?:1?\\d{1,2}|2[0-4]\\d|25[0-5])){2}(?:\\.(?:[1-9]\\d?|1\\d\\d|2[0-4]\\d|25[0-4]))|(?:(?:[a-z0-9\\u{00a1}-\\u{ffff}]+-)*[a-z0-9\\u{00a1}-\\u{ffff}]+)(?:\\.(?:[a-z0-9\\u{00a1}-\\u{ffff}]+-)*[a-z0-9\\u{00a1}-\\u{ffff}]+)*(?:\\.(?:[a-z\\u{00a1}-\\u{ffff}]{2,})))(?::\\d{2,5})?(?:\\/[^\\s]*)?$",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "documentation_or_test_fixture",
+      "rationale": "This site is part of the checked-in Ajv format-validator browser bundle loaded by docs/index.html for the documentation demo. It implements format checking for the demo schema; the repository does not make this regex a security authorization or sanitization boundary. Treat it as documentation dependency code, not a product security question.",
+      "review_refs": [
+        {
+          "path": "docs/scripts/ajv-validator.js",
+          "line": 127,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "e1265db934b1d71061426cbec76df78f",
+      "site": "docs/scripts/ajv-validator.js:128:23",
+      "pattern": "^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "documentation_or_test_fixture",
+      "rationale": "This site is part of the checked-in Ajv format-validator browser bundle loaded by docs/index.html for the documentation demo. It implements format checking for the demo schema; the repository does not make this regex a security authorization or sanitization boundary. Treat it as documentation dependency code, not a product security question.",
+      "review_refs": [
+        {
+          "path": "docs/scripts/ajv-validator.js",
+          "line": 128,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "8f245d5f043e49b1e176d9ad2dd1f249",
+      "site": "docs/scripts/ajv-validator.js:129:26",
+      "pattern": "^(?=.{1,253}\\.?$)[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\\.[a-z0-9](?:[-0-9a-z]{0,61}[0-9a-z])?)*\\.?$",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "documentation_or_test_fixture",
+      "rationale": "This site is part of the checked-in Ajv format-validator browser bundle loaded by docs/index.html for the documentation demo. It implements format checking for the demo schema; the repository does not make this regex a security authorization or sanitization boundary. Treat it as documentation dependency code, not a product security question.",
+      "review_refs": [
+        {
+          "path": "docs/scripts/ajv-validator.js",
+          "line": 129,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "fcda17444a747d5ec4b32d16dfffe19d",
+      "site": "docs/scripts/ajv-validator.js:131:22",
+      "pattern": "^(?:(?:25[0-5]|2[0-4]\\d|[01]?\\d\\d?)\\.){3}(?:25[0-5]|2[0-4]\\d|[01]?\\d\\d?)$",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "documentation_or_test_fixture",
+      "rationale": "This site is part of the checked-in Ajv format-validator browser bundle loaded by docs/index.html for the documentation demo. It implements format checking for the demo schema; the repository does not make this regex a security authorization or sanitization boundary. Treat it as documentation dependency code, not a product security question.",
+      "review_refs": [
+        {
+          "path": "docs/scripts/ajv-validator.js",
+          "line": 131,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "3b864a855ca2d7a0ff8612c5376ec907",
+      "site": "docs/scripts/ajv-validator.js:132:22",
+      "pattern": "^((([0-9a-f]{1,4}:){7}([0-9a-f]{1,4}|:))|(([0-9a-f]{1,4}:){6}(:[0-9a-f]{1,4}|((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3})|:))|(([0-9a-f]{1,4}:){5}(((:[0-9a-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3})|:))|(([0-9a-f]{1,4}:){4}(((:[0-9a-f]{1,4}){1,3})|((:[0-9a-f]{1,4})?:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}))|:))|(([0-9a-f]{1,4}:){3}(((:[0-9a-f]{1,4}){1,4})|((:[0-9a-f]{1,4}){0,2}:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}))|:))|(([0-9a-f]{1,4}:){2}(((:[0-9a-f]{1,4}){1,5})|((:[0-9a-f]{1,4}){0,3}:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}))|:))|(([0-9a-f]{1,4}:){1}(((:[0-9a-f]{1,4}){1,6})|((:[0-9a-f]{1,4}){0,4}:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}))|:))|(:(((:[0-9a-f]{1,4}){1,7})|((:[0-9a-f]{1,4}){0,5}:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}))|:)))$",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "documentation_or_test_fixture",
+      "rationale": "This site is part of the checked-in Ajv format-validator browser bundle loaded by docs/index.html for the documentation demo. It implements format checking for the demo schema; the repository does not make this regex a security authorization or sanitization boundary. Treat it as documentation dependency code, not a product security question.",
+      "review_refs": [
+        {
+          "path": "docs/scripts/ajv-validator.js",
+          "line": 132,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "d87cc5ac5c3b51ee01a24a211ee8c0b7",
+      "site": "docs/scripts/ajv-validator.js:135:22",
+      "pattern": "^(?:urn:uuid:)?[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "documentation_or_test_fixture",
+      "rationale": "This site is part of the checked-in Ajv format-validator browser bundle loaded by docs/index.html for the documentation demo. It implements format checking for the demo schema; the repository does not make this regex a security authorization or sanitization boundary. Treat it as documentation dependency code, not a product security question.",
+      "review_refs": [
+        {
+          "path": "docs/scripts/ajv-validator.js",
+          "line": 135,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "3cdb225256f14d565cc43419dc92c6fa",
+      "site": "docs/scripts/ajv-validator.js:138:32",
+      "pattern": "^(?:\\/(?:[^~/]|~0|~1)*)*$",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "documentation_or_test_fixture",
+      "rationale": "This site is part of the checked-in Ajv format-validator browser bundle loaded by docs/index.html for the documentation demo. It implements format checking for the demo schema; the repository does not make this regex a security authorization or sanitization boundary. Treat it as documentation dependency code, not a product security question.",
+      "review_refs": [
+        {
+          "path": "docs/scripts/ajv-validator.js",
+          "line": 138,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "6d7845767a87a9d03aa8409999fc4c7e",
+      "site": "docs/scripts/ajv-validator.js:139:45",
+      "pattern": "^#(?:\\/(?:[a-z0-9_\\-.!$&'()*+,;:=@]|%[0-9a-f]{2}|~0|~1)*)*$",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "documentation_or_test_fixture",
+      "rationale": "This site is part of the checked-in Ajv format-validator browser bundle loaded by docs/index.html for the documentation demo. It implements format checking for the demo schema; the repository does not make this regex a security authorization or sanitization boundary. Treat it as documentation dependency code, not a product security question.",
+      "review_refs": [
+        {
+          "path": "docs/scripts/ajv-validator.js",
+          "line": 139,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "ce6725bdb77bab51fc9ef3aee86bab84",
+      "site": "docs/scripts/ajv-validator.js:141:41",
+      "pattern": "^(?:0|[1-9][0-9]*)(?:#|(?:\\/(?:[^~/]|~0|~1)*)*)$",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "documentation_or_test_fixture",
+      "rationale": "This site is part of the checked-in Ajv format-validator browser bundle loaded by docs/index.html for the documentation demo. It implements format checking for the demo schema; the repository does not make this regex a security authorization or sanitization boundary. Treat it as documentation dependency code, not a product security question.",
+      "review_refs": [
+        {
+          "path": "docs/scripts/ajv-validator.js",
+          "line": 141,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "835ae565e43fc2025e2039ea2740b6c7",
+      "site": "docs/scripts/ajv-validator.js:160:29",
+      "pattern": "^\\d\\d\\d\\d-[0-1]\\d-[0-3]\\d$",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "documentation_or_test_fixture",
+      "rationale": "This site is part of the checked-in Ajv format-validator browser bundle loaded by docs/index.html for the documentation demo. It implements format checking for the demo schema; the repository does not make this regex a security authorization or sanitization boundary. Treat it as documentation dependency code, not a product security question.",
+      "review_refs": [
+        {
+          "path": "docs/scripts/ajv-validator.js",
+          "line": 160,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "e2f8057bb73810f6b2b050127719254c",
+      "site": "docs/scripts/ajv-validator.js:161:29",
+      "pattern": "^(?:[0-2]\\d:[0-5]\\d:[0-5]\\d|23:59:60)(?:\\.\\d+)?(?:z|[+-]\\d\\d(?::?\\d\\d)?)?$",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "documentation_or_test_fixture",
+      "rationale": "This site is part of the checked-in Ajv format-validator browser bundle loaded by docs/index.html for the documentation demo. It implements format checking for the demo schema; the repository does not make this regex a security authorization or sanitization boundary. Treat it as documentation dependency code, not a product security question.",
+      "review_refs": [
+        {
+          "path": "docs/scripts/ajv-validator.js",
+          "line": 161,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "e666c6b93607c9a8b10f9a71a7c76904",
+      "site": "docs/scripts/ajv-validator.js:162:36",
+      "pattern": "^\\d\\d\\d\\d-[0-1]\\d-[0-3]\\d[t\\s](?:[0-2]\\d:[0-5]\\d:[0-5]\\d|23:59:60)(?:\\.\\d+)?(?:z|[+-]\\d\\d(?::?\\d\\d)?)$",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "documentation_or_test_fixture",
+      "rationale": "This site is part of the checked-in Ajv format-validator browser bundle loaded by docs/index.html for the documentation demo. It implements format checking for the demo schema; the repository does not make this regex a security authorization or sanitization boundary. Treat it as documentation dependency code, not a product security question.",
+      "review_refs": [
+        {
+          "path": "docs/scripts/ajv-validator.js",
+          "line": 162,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "4e495b4c433ac8fd55ccb32b07831a94",
+      "site": "docs/scripts/ajv-validator.js:164:21",
+      "pattern": "^(?:[a-z][a-z0-9+\\-.]*:)(?:\\/?\\/)?[^\\s]*$",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "documentation_or_test_fixture",
+      "rationale": "This site is part of the checked-in Ajv format-validator browser bundle loaded by docs/index.html for the documentation demo. It implements format checking for the demo schema; the repository does not make this regex a security authorization or sanitization boundary. Treat it as documentation dependency code, not a product security question.",
+      "review_refs": [
+        {
+          "path": "docs/scripts/ajv-validator.js",
+          "line": 164,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "2749e1b27aad3d14ddbfb2ad0293a969",
+      "site": "docs/scripts/ajv-validator.js:165:33",
+      "pattern": "^(?:(?:[a-z][a-z0-9+\\-.]*:)?\\/?\\/)?(?:[^\\\\\\s#][^\\s#]*)?(?:#[^\\\\\\s]*)?$",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "documentation_or_test_fixture",
+      "rationale": "This site is part of the checked-in Ajv format-validator browser bundle loaded by docs/index.html for the documentation demo. It implements format checking for the demo schema; the repository does not make this regex a security authorization or sanitization boundary. Treat it as documentation dependency code, not a product security question.",
+      "review_refs": [
+        {
+          "path": "docs/scripts/ajv-validator.js",
+          "line": 165,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "2edcf5bcc3b3d98589b85f191870248a",
+      "site": "docs/scripts/ajv-validator.js:169:23",
+      "pattern": "^[a-z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)*$",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "documentation_or_test_fixture",
+      "rationale": "This site is part of the checked-in Ajv format-validator browser bundle loaded by docs/index.html for the documentation demo. It implements format checking for the demo schema; the repository does not make this regex a security authorization or sanitization boundary. Treat it as documentation dependency code, not a product security question.",
+      "review_refs": [
+        {
+          "path": "docs/scripts/ajv-validator.js",
+          "line": 169,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "15d1c8a9fe3449aeddd037ed1f2929a0",
+      "site": "docs/scripts/ajv-validator.js:176:25",
+      "pattern": "^(\\d\\d\\d\\d)-(\\d\\d)-(\\d\\d)$",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "documentation_or_test_fixture",
+      "rationale": "This site is part of the checked-in Ajv format-validator browser bundle loaded by docs/index.html for the documentation demo. It implements format checking for the demo schema; the repository does not make this regex a security authorization or sanitization boundary. Treat it as documentation dependency code, not a product security question.",
+      "review_refs": [
+        {
+          "path": "docs/scripts/ajv-validator.js",
+          "line": 176,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "75c40a01d6b3550c6e07ca771203f76b",
+      "site": "docs/scripts/ajv-validator.js:200:25",
+      "pattern": "^(\\d\\d):(\\d\\d):(\\d\\d)(\\.\\d+)?(z|[+-]\\d\\d(?::?\\d\\d)?)?$",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "documentation_or_test_fixture",
+      "rationale": "This site is part of the checked-in Ajv format-validator browser bundle loaded by docs/index.html for the documentation demo. It implements format checking for the demo schema; the repository does not make this regex a security authorization or sanitization boundary. Treat it as documentation dependency code, not a product security question.",
+      "review_refs": [
+        {
+          "path": "docs/scripts/ajv-validator.js",
+          "line": 200,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "fc6af58d55f3c18083401c04b799af08",
+      "site": "docs/scripts/ajv-validator.js:228:40",
+      "pattern": "t|\\s",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "documentation_or_test_fixture",
+      "rationale": "This site is part of the checked-in Ajv format-validator browser bundle loaded by docs/index.html for the documentation demo. It implements format checking for the demo schema; the repository does not make this regex a security authorization or sanitization boundary. Treat it as documentation dependency code, not a product security question.",
+      "review_refs": [
+        {
+          "path": "docs/scripts/ajv-validator.js",
+          "line": 228,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "4017d2d4d2d5ada4513d1168db777ec2",
+      "site": "docs/scripts/ajv-validator.js:244:37",
+      "pattern": "\\/|:",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "documentation_or_test_fixture",
+      "rationale": "This site is part of the checked-in Ajv format-validator browser bundle loaded by docs/index.html for the documentation demo. It implements format checking for the demo schema; the repository does not make this regex a security authorization or sanitization boundary. Treat it as documentation dependency code, not a product security question.",
+      "review_refs": [
+        {
+          "path": "docs/scripts/ajv-validator.js",
+          "line": 244,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "1d05b2381ab81078b84f0ee5ad68ad9f",
+      "site": "docs/scripts/ajv-validator.js:245:24",
+      "pattern": "^(?:[a-z][a-z0-9+\\-.]*:)(?:\\/?\\/(?:(?:[a-z0-9\\-._~!$&'()*+,;=:]|%[0-9a-f]{2})*@)?(?:\\[(?:(?:(?:(?:[0-9a-f]{1,4}:){6}|::(?:[0-9a-f]{1,4}:){5}|(?:[0-9a-f]{1,4})?::(?:[0-9a-f]{1,4}:){4}|(?:(?:[0-9a-f]{1,4}:){0,1}[0-9a-f]{1,4})?::(?:[0-9a-f]{1,4}:){3}|(?:(?:[0-9a-f]{1,4}:){0,2}[0-9a-f]{1,4})?::(?:[0-9a-f]{1,4}:){2}|(?:(?:[0-9a-f]{1,4}:){0,3}[0-9a-f]{1,4})?::[0-9a-f]{1,4}:|(?:(?:[0-9a-f]{1,4}:){0,4}[0-9a-f]{1,4})?::)(?:[0-9a-f]{1,4}:[0-9a-f]{1,4}|(?:(?:25[0-5]|2[0-4]\\d|[01]?\\d\\d?)\\.){3}(?:25[0-5]|2[0-4]\\d|[01]?\\d\\d?))|(?:(?:[0-9a-f]{1,4}:){0,5}[0-9a-f]{1,4})?::[0-9a-f]{1,4}|(?:(?:[0-9a-f]{1,4}:){0,6}[0-9a-f]{1,4})?::)|[Vv][0-9a-f]+\\.[a-z0-9\\-._~!$&'()*+,;=:]+)\\]|(?:(?:25[0-5]|2[0-4]\\d|[01]?\\d\\d?)\\.){3}(?:25[0-5]|2[0-4]\\d|[01]?\\d\\d?)|(?:[a-z0-9\\-._~!$&'()*+,;=]|%[0-9a-f]{2})*)(?::\\d*)?(?:\\/(?:[a-z0-9\\-._~!$&'()*+,;=:@]|%[0-9a-f]{2})*)*|\\/(?:(?:[a-z0-9\\-._~!$&'()*+,;=:@]|%[0-9a-f]{2})+(?:\\/(?:[a-z0-9\\-._~!$&'()*+,;=:@]|%[0-9a-f]{2})*)*)?|(?:[a-z0-9\\-._~!$&'()*+,;=:@]|%[0-9a-f]{2})+(?:\\/(?:[a-z0-9\\-._~!$&'()*+,;=:@]|%[0-9a-f]{2})*)*)(?:\\?(?:[a-z0-9\\-._~!$&'()*+,;=:@/?]|%[0-9a-f]{2})*)?(?:#(?:[a-z0-9\\-._~!$&'()*+,;=:@/?]|%[0-9a-f]{2})*)?$",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "documentation_or_test_fixture",
+      "rationale": "This site is part of the checked-in Ajv format-validator browser bundle loaded by docs/index.html for the documentation demo. It implements format checking for the demo schema; the repository does not make this regex a security authorization or sanitization boundary. Treat it as documentation dependency code, not a product security question.",
+      "review_refs": [
+        {
+          "path": "docs/scripts/ajv-validator.js",
+          "line": 245,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "70f73e8131e7702dc9683a3d53cc476e",
+      "site": "docs/scripts/ajv-validator.js:250:25",
+      "pattern": "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "documentation_or_test_fixture",
+      "rationale": "This site is part of the checked-in Ajv format-validator browser bundle loaded by docs/index.html for the documentation demo. It implements format checking for the demo schema; the repository does not make this regex a security authorization or sanitization boundary. Treat it as documentation dependency code, not a product security question.",
+      "review_refs": [
+        {
+          "path": "docs/scripts/ajv-validator.js",
+          "line": 250,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "16afb70f6109e16f9622c3af15bbc200",
+      "site": "docs/scripts/ajv-validator.js:267:29",
+      "pattern": "[^\\\\]\\\\Z",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "documentation_or_test_fixture",
+      "rationale": "This site is part of the checked-in Ajv format-validator browser bundle loaded by docs/index.html for the documentation demo. It implements format checking for the demo schema; the repository does not make this regex a security authorization or sanitization boundary. Treat it as documentation dependency code, not a product security question.",
+      "review_refs": [
+        {
+          "path": "docs/scripts/ajv-validator.js",
+          "line": 267,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "f452c3adca74ed51249fabcbf2be3006",
+      "site": "docs/scripts/ajv-validator.js:548:33",
+      "pattern": "^[a-z$_][a-z$_0-9]*$",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "documentation_or_test_fixture",
+      "rationale": "This site is part of the checked-in Ajv format-validator browser bundle loaded by docs/index.html for the documentation demo. It implements format checking for the demo schema; the repository does not make this regex a security authorization or sanitization boundary. Treat it as documentation dependency code, not a product security question.",
+      "review_refs": [
+        {
+          "path": "docs/scripts/ajv-validator.js",
+          "line": 548,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "18fff128a5691c46ee16c64c8b0b1125",
+      "site": "docs/scripts/ajv-validator.js:676:25",
+      "pattern": "\\u2028",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "documentation_or_test_fixture",
+      "rationale": "This site is part of the checked-in Ajv format-validator browser bundle loaded by docs/index.html for the documentation demo. It implements format checking for the demo schema; the repository does not make this regex a security authorization or sanitization boundary. Treat it as documentation dependency code, not a product security question.",
+      "review_refs": [
+        {
+          "path": "docs/scripts/ajv-validator.js",
+          "line": 676,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "747d04e86c4d535e8ab8880cfd5c6d43",
+      "site": "docs/scripts/ajv-validator.js:677:25",
+      "pattern": "\\u2029",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "documentation_or_test_fixture",
+      "rationale": "This site is part of the checked-in Ajv format-validator browser bundle loaded by docs/index.html for the documentation demo. It implements format checking for the demo schema; the repository does not make this regex a security authorization or sanitization boundary. Treat it as documentation dependency code, not a product security question.",
+      "review_refs": [
+        {
+          "path": "docs/scripts/ajv-validator.js",
+          "line": 677,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "810c0577024250b4362028a17842277c",
+      "site": "docs/scripts/ajv-validator.js:2101:40",
+      "pattern": "#\\/?$",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "documentation_or_test_fixture",
+      "rationale": "This site is part of the checked-in Ajv format-validator browser bundle loaded by docs/index.html for the documentation demo. It implements format checking for the demo schema; the repository does not make this regex a security authorization or sanitization boundary. Treat it as documentation dependency code, not a product security question.",
+      "review_refs": [
+        {
+          "path": "docs/scripts/ajv-validator.js",
+          "line": 2101,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "5375068a3ac6f4dc4a5e0a0294aaae70",
+      "site": "docs/scripts/ajv-validator.js:2111:27",
+      "pattern": "^[a-z_][-a-z0-9._]*$",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "documentation_or_test_fixture",
+      "rationale": "This site is part of the checked-in Ajv format-validator browser bundle loaded by docs/index.html for the documentation demo. It implements format checking for the demo schema; the repository does not make this regex a security authorization or sanitization boundary. Treat it as documentation dependency code, not a product security question.",
+      "review_refs": [
+        {
+          "path": "docs/scripts/ajv-validator.js",
+          "line": 2111,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "9d0f1efb782ef2f8c9801ec6a6ff636b",
+      "site": "docs/scripts/ajv-validator.js:2296:35",
+      "pattern": "~",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "documentation_or_test_fixture",
+      "rationale": "This site is part of the checked-in Ajv format-validator browser bundle loaded by docs/index.html for the documentation demo. It implements format checking for the demo schema; the repository does not make this regex a security authorization or sanitization boundary. Treat it as documentation dependency code, not a product security question.",
+      "review_refs": [
+        {
+          "path": "docs/scripts/ajv-validator.js",
+          "line": 2296,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "aa08051e1ba0cddbfb29fa88bf703e1f",
+      "site": "docs/scripts/ajv-validator.js:2296:55",
+      "pattern": "\\/",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "documentation_or_test_fixture",
+      "rationale": "This site is part of the checked-in Ajv format-validator browser bundle loaded by docs/index.html for the documentation demo. It implements format checking for the demo schema; the repository does not make this regex a security authorization or sanitization boundary. Treat it as documentation dependency code, not a product security question.",
+      "review_refs": [
+        {
+          "path": "docs/scripts/ajv-validator.js",
+          "line": 2296,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "02bacc2c655a99a4442baebfbdc5cc9d",
+      "site": "docs/scripts/ajv-validator.js:2300:35",
+      "pattern": "~1",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "documentation_or_test_fixture",
+      "rationale": "This site is part of the checked-in Ajv format-validator browser bundle loaded by docs/index.html for the documentation demo. It implements format checking for the demo schema; the repository does not make this regex a security authorization or sanitization boundary. Treat it as documentation dependency code, not a product security question.",
+      "review_refs": [
+        {
+          "path": "docs/scripts/ajv-validator.js",
+          "line": 2300,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "dbe39c65f384908bbdb142115c20cf84",
+      "site": "docs/scripts/ajv-validator.js:2300:55",
+      "pattern": "~0",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "documentation_or_test_fixture",
+      "rationale": "This site is part of the checked-in Ajv format-validator browser bundle loaded by docs/index.html for the documentation demo. It implements format checking for the demo schema; the repository does not make this regex a security authorization or sanitization boundary. Treat it as documentation dependency code, not a product security question.",
+      "review_refs": [
+        {
+          "path": "docs/scripts/ajv-validator.js",
+          "line": 2300,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "904a77265461a016908978c4b5413bd3",
+      "site": "docs/scripts/ajv-validator.js:3236:33",
+      "pattern": "^\\/(?:[^~]|~0|~1)*$",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "documentation_or_test_fixture",
+      "rationale": "This site is part of the checked-in Ajv format-validator browser bundle loaded by docs/index.html for the documentation demo. It implements format checking for the demo schema; the repository does not make this regex a security authorization or sanitization boundary. Treat it as documentation dependency code, not a product security question.",
+      "review_refs": [
+        {
+          "path": "docs/scripts/ajv-validator.js",
+          "line": 3236,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "a46d5e31b666b24258e459bdc71f40a7",
+      "site": "docs/scripts/ajv-validator.js:3237:42",
+      "pattern": "^([0-9]+)(#|\\/(?:[^~]|~0|~1)*)?$",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "documentation_or_test_fixture",
+      "rationale": "This site is part of the checked-in Ajv format-validator browser bundle loaded by docs/index.html for the documentation demo. It implements format checking for the demo schema; the repository does not make this regex a security authorization or sanitization boundary. Treat it as documentation dependency code, not a product security question.",
+      "review_refs": [
+        {
+          "path": "docs/scripts/ajv-validator.js",
+          "line": 3237,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "82e01bc22a6c40236a284e14f7c8a8c6",
+      "site": "docs/scripts/ajv-validator.js:4067:33",
+      "pattern": "^[a-z_$][a-z0-9_$:-]*$",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "documentation_or_test_fixture",
+      "rationale": "This site is part of the checked-in Ajv format-validator browser bundle loaded by docs/index.html for the documentation demo. It implements format checking for the demo schema; the repository does not make this regex a security authorization or sanitization boundary. Treat it as documentation dependency code, not a product security question.",
+      "review_refs": [
+        {
+          "path": "docs/scripts/ajv-validator.js",
+          "line": 4067,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "4e723a71b015362d1f0b7a2bc3ba4646",
+      "site": "docs/scripts/ajv-validator.js:7159:35",
+      "pattern": "~",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "documentation_or_test_fixture",
+      "rationale": "This site is part of the checked-in Ajv format-validator browser bundle loaded by docs/index.html for the documentation demo. It implements format checking for the demo schema; the repository does not make this regex a security authorization or sanitization boundary. Treat it as documentation dependency code, not a product security question.",
+      "review_refs": [
+        {
+          "path": "docs/scripts/ajv-validator.js",
+          "line": 7159,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "247c2517fa3af1915c712ffbd1ee424e",
+      "site": "docs/scripts/ajv-validator.js:7159:55",
+      "pattern": "\\/",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "documentation_or_test_fixture",
+      "rationale": "This site is part of the checked-in Ajv format-validator browser bundle loaded by docs/index.html for the documentation demo. It implements format checking for the demo schema; the repository does not make this regex a security authorization or sanitization boundary. Treat it as documentation dependency code, not a product security question.",
+      "review_refs": [
+        {
+          "path": "docs/scripts/ajv-validator.js",
+          "line": 7159,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "fe20c3b5fa5fad66757e746ba1d1be41",
+      "site": "docs/scripts/ajv-validator.js:7397:36",
+      "pattern": "^xn--",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "documentation_or_test_fixture",
+      "rationale": "This site is part of the checked-in Ajv format-validator browser bundle loaded by docs/index.html for the documentation demo. It implements format checking for the demo schema; the repository does not make this regex a security authorization or sanitization boundary. Treat it as documentation dependency code, not a product security question.",
+      "review_refs": [
+        {
+          "path": "docs/scripts/ajv-validator.js",
+          "line": 7397,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "acb25df9629365c8825c1d24d8490cf2",
+      "site": "docs/scripts/ajv-validator.js:7398:36",
+      "pattern": "[^\\0-\\x7E]",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "documentation_or_test_fixture",
+      "rationale": "This site is part of the checked-in Ajv format-validator browser bundle loaded by docs/index.html for the documentation demo. It implements format checking for the demo schema; the repository does not make this regex a security authorization or sanitization boundary. Treat it as documentation dependency code, not a product security question.",
+      "review_refs": [
+        {
+          "path": "docs/scripts/ajv-validator.js",
+          "line": 7398,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "b87e4095711e05e2cf7b410028f9e6c8",
+      "site": "docs/scripts/ajv-validator.js:7399:38",
+      "pattern": "[\\x2E\\u3002\\uFF0E\\uFF61]",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "documentation_or_test_fixture",
+      "rationale": "This site is part of the checked-in Ajv format-validator browser bundle loaded by docs/index.html for the documentation demo. It implements format checking for the demo schema; the repository does not make this regex a security authorization or sanitization boundary. Treat it as documentation dependency code, not a product security question.",
+      "review_refs": [
+        {
+          "path": "docs/scripts/ajv-validator.js",
+          "line": 7399,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "34aac364b6a7362c8ead2ed5f0ef06d2",
+      "site": "docs/scripts/ajv-validator.js:7967:39",
+      "pattern": "^0*(.*)",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "documentation_or_test_fixture",
+      "rationale": "This site is part of the checked-in Ajv format-validator browser bundle loaded by docs/index.html for the documentation demo. It implements format checking for the demo schema; the repository does not make this regex a security authorization or sanitization boundary. Treat it as documentation dependency code, not a product security question.",
+      "review_refs": [
+        {
+          "path": "docs/scripts/ajv-validator.js",
+          "line": 7967,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "146a852b24154b612e8b16a2c575e113",
+      "site": "docs/scripts/ajv-validator.js:8036:32",
+      "pattern": "^(?:([^:\\/?#]+):)?(?:\\/\\/((?:([^\\/?#@]*)@)?(\\[[^\\/?#\\]]+\\]|[^\\/?#:]*)(?:\\:(\\d*))?))?([^?#]*)(?:\\?([^#]*))?(?:#((?:.|\\n|\\r)*))?",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "documentation_or_test_fixture",
+      "rationale": "This site is part of the checked-in Ajv format-validator browser bundle loaded by docs/index.html for the documentation demo. It implements format checking for the demo schema; the repository does not make this regex a security authorization or sanitization boundary. Treat it as documentation dependency code, not a product security question.",
+      "review_refs": [
+        {
+          "path": "docs/scripts/ajv-validator.js",
+          "line": 8036,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "bef700dc9c7af9b9ede43110b8e8445b",
+      "site": "docs/scripts/ajv-validator.js:8037:53",
+      "pattern": "(){0}",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "documentation_or_test_fixture",
+      "rationale": "This site is part of the checked-in Ajv format-validator browser bundle loaded by docs/index.html for the documentation demo. It implements format checking for the demo schema; the repository does not make this regex a security authorization or sanitization boundary. Treat it as documentation dependency code, not a product security question.",
+      "review_refs": [
+        {
+          "path": "docs/scripts/ajv-validator.js",
+          "line": 8037,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "7d66aa8642c8df1f050e28539891a405",
+      "site": "docs/scripts/ajv-validator.js:8071:66",
+      "pattern": "\\/\\/(?:.|\\n)*\\:(?:\\/|\\?|\\#|$)",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "documentation_or_test_fixture",
+      "rationale": "This site is part of the checked-in Ajv format-validator browser bundle loaded by docs/index.html for the documentation demo. It implements format checking for the demo schema; the repository does not make this regex a security authorization or sanitization boundary. Treat it as documentation dependency code, not a product security question.",
+      "review_refs": [
+        {
+          "path": "docs/scripts/ajv-validator.js",
+          "line": 8071,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "80344f1c1e3b84f8ddc89a0bd19e30ff",
+      "site": "docs/scripts/ajv-validator.js:8141:27",
+      "pattern": "^\\.\\.?\\/",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "documentation_or_test_fixture",
+      "rationale": "This site is part of the checked-in Ajv format-validator browser bundle loaded by docs/index.html for the documentation demo. It implements format checking for the demo schema; the repository does not make this regex a security authorization or sanitization boundary. Treat it as documentation dependency code, not a product security question.",
+      "review_refs": [
+        {
+          "path": "docs/scripts/ajv-validator.js",
+          "line": 8141,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "28204d4db9dcb82c5d414885aa0ccfe0",
+      "site": "docs/scripts/ajv-validator.js:8142:27",
+      "pattern": "^\\/\\.(\\/|$)",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "documentation_or_test_fixture",
+      "rationale": "This site is part of the checked-in Ajv format-validator browser bundle loaded by docs/index.html for the documentation demo. It implements format checking for the demo schema; the repository does not make this regex a security authorization or sanitization boundary. Treat it as documentation dependency code, not a product security question.",
+      "review_refs": [
+        {
+          "path": "docs/scripts/ajv-validator.js",
+          "line": 8142,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "eee28dbbaa59c19edfe04f3b15d5f4d4",
+      "site": "docs/scripts/ajv-validator.js:8143:27",
+      "pattern": "^\\/\\.\\.(\\/|$)",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "documentation_or_test_fixture",
+      "rationale": "This site is part of the checked-in Ajv format-validator browser bundle loaded by docs/index.html for the documentation demo. It implements format checking for the demo schema; the repository does not make this regex a security authorization or sanitization boundary. Treat it as documentation dependency code, not a product security question.",
+      "review_refs": [
+        {
+          "path": "docs/scripts/ajv-validator.js",
+          "line": 8143,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "69fe053e0af0e10f9c66cec316d89e49",
+      "site": "docs/scripts/ajv-validator.js:8144:27",
+      "pattern": "^\\/?(?:.|\\n)*?(?=\\/|$)",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "documentation_or_test_fixture",
+      "rationale": "This site is part of the checked-in Ajv format-validator browser bundle loaded by docs/index.html for the documentation demo. It implements format checking for the demo schema; the repository does not make this regex a security authorization or sanitization boundary. Treat it as documentation dependency code, not a product security question.",
+      "review_refs": [
+        {
+          "path": "docs/scripts/ajv-validator.js",
+          "line": 8144,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "119267f74010a49a6cb06a5ec45d280f",
+      "site": "docs/scripts/ajv-validator.js:8217:42",
+      "pattern": "^\\/\\/",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "documentation_or_test_fixture",
+      "rationale": "This site is part of the checked-in Ajv format-validator browser bundle loaded by docs/index.html for the documentation demo. It implements format checking for the demo schema; the repository does not make this regex a security authorization or sanitization boundary. Treat it as documentation dependency code, not a product security question.",
+      "review_refs": [
+        {
+          "path": "docs/scripts/ajv-validator.js",
+          "line": 8217,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "e5b69fd033508647288b201085dc7553",
+      "site": "docs/scripts/ajv-validator.js:8529:32",
+      "pattern": "^([^\\:]+)\\:(.*)",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "documentation_or_test_fixture",
+      "rationale": "This site is part of the checked-in Ajv format-validator browser bundle loaded by docs/index.html for the documentation demo. It implements format checking for the demo schema; the repository does not make this regex a security authorization or sanitization boundary. Treat it as documentation dependency code, not a product security question.",
+      "review_refs": [
+        {
+          "path": "docs/scripts/ajv-validator.js",
+          "line": 8529,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "815bcb628e9f2390aba9a3737dff5287",
+      "site": "docs/scripts/ajv-validator.js:8568:27",
+      "pattern": "^[0-9A-Fa-f]{8}(?:\\-[0-9A-Fa-f]{4}){3}\\-[0-9A-Fa-f]{12}$",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "documentation_or_test_fixture",
+      "rationale": "This site is part of the checked-in Ajv format-validator browser bundle loaded by docs/index.html for the documentation demo. It implements format checking for the demo schema; the repository does not make this regex a security authorization or sanitization boundary. Treat it as documentation dependency code, not a product security question.",
+      "review_refs": [
+        {
+          "path": "docs/scripts/ajv-validator.js",
+          "line": 8568,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "37cb7bf2199f28d0b0ad0f847630152a",
+      "site": "src/editor.js:25:58",
+      "pattern": "\\.([^.]+)",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "non_security_ui_or_build_use",
+      "rationale": "This pattern supports editor formatting, generated identifiers, local presentation, or internal data conversion. Its inputs are schema/editor state or fixed implementation values; the exact source does not identify an authorization, trust-crossing, or output-sanitization guarantee for this site.",
+      "review_refs": [
+        {
+          "path": "src/editor.js",
+          "line": 25,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "24dea1c087140f0f8810bc720f8dfd91",
+      "site": "src/editor.js:755:22",
+      "pattern": "\\s+",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "non_security_ui_or_build_use",
+      "rationale": "This pattern supports editor formatting, generated identifiers, local presentation, or internal data conversion. Its inputs are schema/editor state or fixed implementation values; the exact source does not identify an authorization, trust-crossing, or output-sanitization guarantee for this site.",
+      "review_refs": [
+        {
+          "path": "src/editor.js",
+          "line": 755,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "4e36314c32c252059766583ba8277a4c",
+      "site": "src/editors/base64.js:120:32",
+      "pattern": "^data:([^;,]+)[;,]",
+      "decision": "unresolved",
+      "product_question_asked": false,
+      "reason_code": "unescaped_capture_reaches_html_sink",
+      "rationale": "The regex captures every character before the first semicolon or comma in a data URI. Base64Editor.refreshPreview interpolates that capture into preview.innerHTML, so markup-shaped capture text can alter the parsed DOM in an exact local helper model. The frozen source does not define whether initial editor values may come from an untrusted party or state a separate requirement for safe rendering of malformed MIME metadata. Keep the sink behavior unresolved; do not call it an adopted product contract or count a product question.",
+      "review_refs": [
+        {
+          "path": "src/editors/base64.js",
+          "line": 112,
+          "why": "refreshPreview extracts the data-URI MIME capture from the current editor value"
+        },
+        {
+          "path": "src/editors/base64.js",
+          "line": 127,
+          "why": "the captured MIME text is interpolated into preview.innerHTML without escaping"
+        },
+        {
+          "path": "src/editors/string.js",
+          "line": 31,
+          "why": "the generic editor setValue path accepts an application-provided value and sets the editor input"
+        }
+      ]
+    },
+    {
+      "regex_id": "21a271471f4c1c1fbc13a331e0f706da",
+      "site": "src/editors/enum.js:123:24",
+      "pattern": "&",
+      "decision": "adopted",
+      "product_question_asked": true,
+      "reason_code": "enum_string_html_text_escape",
+      "rationale": "This is the source anchor for one composite EnumEditor string-rendering question. The editor precomputes HTML for schema enum values and later assigns the cached value to display_area.innerHTML. The string branch applies ampersand, less-than, then greater-than replacements so string leaves are rendered as text. The single contract and gate cover this ordered three-regex chain; the adjacent stages are not counted as duplicate questions. Object keys and other value types are outside this claim. The input is application schema configuration, and the question does not claim untrusted schemas or downstream impact.",
+      "review_refs": [
+        {
+          "path": "src/editors/enum.js",
+          "line": 27,
+          "why": "the editor precomputes display HTML by passing each schema enum value to getHTML"
+        },
+        {
+          "path": "src/editors/enum.js",
+          "line": 71,
+          "why": "the selected cached enum rendering is assigned to the display area innerHTML sink"
+        },
+        {
+          "path": "src/editors/enum.js",
+          "line": 123,
+          "why": "the string branch applies the three character replacements before returning HTML"
+        }
+      ]
+    },
+    {
+      "regex_id": "a2fd73ac73c0c5455b10c3bd9366bbac",
+      "site": "src/editors/enum.js:123:47",
+      "pattern": "<",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "supporting_stage_same_composite_question",
+      "rationale": "This less-than/greater-than replacement is a supporting stage of the same ordered EnumEditor string-rendering chain anchored at the ampersand replacement on this line. The combined contract and gate cover the full three-step transformation once; creating a separate question for this stage would double-count the same output-image guarantee.",
+      "review_refs": [
+        {
+          "path": "src/editors/enum.js",
+          "line": 27,
+          "why": "the editor precomputes display HTML by passing each schema enum value to getHTML"
+        },
+        {
+          "path": "src/editors/enum.js",
+          "line": 71,
+          "why": "the selected cached enum rendering is assigned to the display area innerHTML sink"
+        },
+        {
+          "path": "src/editors/enum.js",
+          "line": 123,
+          "why": "the string branch applies the three character replacements before returning HTML"
+        }
+      ]
+    },
+    {
+      "regex_id": "d27aaebebb5072a0bfbb25d323cd21e2",
+      "site": "src/editors/enum.js:123:69",
+      "pattern": ">",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "supporting_stage_same_composite_question",
+      "rationale": "This less-than/greater-than replacement is a supporting stage of the same ordered EnumEditor string-rendering chain anchored at the ampersand replacement on this line. The combined contract and gate cover the full three-step transformation once; creating a separate question for this stage would double-count the same output-image guarantee.",
+      "review_refs": [
+        {
+          "path": "src/editors/enum.js",
+          "line": 27,
+          "why": "the editor precomputes display HTML by passing each schema enum value to getHTML"
+        },
+        {
+          "path": "src/editors/enum.js",
+          "line": 71,
+          "why": "the selected cached enum rendering is assigned to the display area innerHTML sink"
+        },
+        {
+          "path": "src/editors/enum.js",
+          "line": 123,
+          "why": "the string branch applies the three character replacements before returning HTML"
+        }
+      ]
+    },
+    {
+      "regex_id": "65840ef2c17df6979c0660e9aed419ff",
+      "site": "src/editors/multiselect.js:213:26",
+      "pattern": "[.*+?^${}()|[\\]\\\\]",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "non_security_ui_or_build_use",
+      "rationale": "The helper escapes a schema-derived editor path before constructing a regular expression used to associate validation messages with that editor. It prevents path metacharacters from changing UI error routing, but the repository does not state this as a security boundary or expose an independent security guarantee. No product security question is counted.",
+      "review_refs": [
+        {
+          "path": "src/editors/multiselect.js",
+          "line": 213,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "2b33118a961b14db7d7841d4bf1a5089",
+      "site": "src/editors/signature.js:10:43",
+      "pattern": "\\W",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "non_security_ui_or_build_use",
+      "rationale": "This pattern supports editor formatting, generated identifiers, local presentation, or internal data conversion. Its inputs are schema/editor state or fixed implementation values; the exact source does not identify an authorization, trust-crossing, or output-sanitization guarantee for this site.",
+      "review_refs": [
+        {
+          "path": "src/editors/signature.js",
+          "line": 10,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "1613baa60a2e4ae546bc5eccabd06d84",
+      "site": "src/editors/string.js:85:51",
+      "pattern": "(^(application|text)\\/(x-)?(script\\.)?)|(-source$)",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "non_security_ui_or_build_use",
+      "rationale": "This pattern supports editor formatting, generated identifiers, local presentation, or internal data conversion. Its inputs are schema/editor state or fixed implementation values; the exact source does not identify an authorization, trust-crossing, or output-sanitization guarantee for this site.",
+      "review_refs": [
+        {
+          "path": "src/editors/string.js",
+          "line": 85,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "84a4a3eb4d8379a7e0b85d4c54a64c14",
+      "site": "src/editors/string.js:276:45",
+      "pattern": "^regex:\\/(.*)\\/([gimsuy]*)$",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "non_security_ui_or_build_use",
+      "rationale": "This pattern parses an application-configured iMask string of the form regex:/.../flags before constructing a runtime RegExp. The configured pattern is dynamic and may have different provenance; it controls an editor mask, not a documented authorization or sanitization boundary. ReDoS and dynamic-pattern claims are outside this site-level product question.",
+      "review_refs": [
+        {
+          "path": "src/editors/string.js",
+          "line": 276,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "2c0fc3de7b1da191a1b07be27d07f9ba",
+      "site": "src/editors/upload.js:212:42",
+      "pattern": "^data:([^;,]+)[;,]",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "non_security_ui_or_build_use",
+      "rationale": "The regex extracts a MIME label from the Base64 data URI and stores it on the file object passed to the application-provided upload handler. This call site does not interpolate the capture into an HTML sink; downstream handling belongs to the consuming application and no product security guarantee is declared here.",
+      "review_refs": [
+        {
+          "path": "src/editors/upload.js",
+          "line": 212,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "a3ecd7b5f04f87e5d51d3c5c8c139b52",
+      "site": "src/editors/upload.js:322:68",
+      "pattern": "\\*",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "non_security_ui_or_build_use",
+      "rationale": "The wildcard replacement is used by the browser-side Upload editor to compare a selected File.type with application-configured mime_type values before invoking an application-provided upload handler. This is a UI selection/filter check; the source does not claim it replaces server-side file validation or authorization. No independent security property for the pattern is established here.",
+      "review_refs": [
+        {
+          "path": "src/editors/upload.js",
+          "line": 322,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "404129481e89b58141f31f5dee8775b2",
+      "site": "src/editors/uuid.js:46:12",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "non_security_ui_or_build_use",
+      "rationale": "This pattern supports editor formatting, generated identifiers, local presentation, or internal data conversion. Its inputs are schema/editor state or fixed implementation values; the exact source does not identify an authorization, trust-crossing, or output-sanitization guarantee for this site.",
+      "review_refs": [
+        {
+          "path": "src/editors/uuid.js",
+          "line": 46,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "6f6fe3622d96184f64ec7e5748f40a4d",
+      "site": "src/templates/default.js:3:35",
+      "pattern": "{{\\s*([a-zA-Z0-9\\-_ .]+)\\s*}}",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "non_security_ui_or_build_use",
+      "rationale": "This pattern supports editor formatting, generated identifiers, local presentation, or internal data conversion. Its inputs are schema/editor state or fixed implementation values; the exact source does not identify an authorization, trust-crossing, or output-sanitization guarantee for this site.",
+      "review_refs": [
+        {
+          "path": "src/templates/default.js",
+          "line": 3,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "6bf09f69393fee07ceac593912ce91d6",
+      "site": "src/templates/default.js:13:33",
+      "pattern": "[{}]+",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "non_security_ui_or_build_use",
+      "rationale": "This pattern supports editor formatting, generated identifiers, local presentation, or internal data conversion. Its inputs are schema/editor state or fixed implementation values; the exact source does not identify an authorization, trust-crossing, or output-sanitization guarantee for this site.",
+      "review_refs": [
+        {
+          "path": "src/templates/default.js",
+          "line": 13,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "40a2e0a02047a275dd1313da2491983f",
+      "site": "src/themes/bootstrap2.js:50:74",
+      "pattern": "control-group",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "non_security_ui_or_build_use",
+      "rationale": "This pattern supports editor formatting, generated identifiers, local presentation, or internal data conversion. Its inputs are schema/editor state or fixed implementation values; the exact source does not identify an authorization, trust-crossing, or output-sanitization guarantee for this site.",
+      "review_refs": [
+        {
+          "path": "src/themes/bootstrap2.js",
+          "line": 50,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "d417744b19d583c05cf1136c28c07313",
+      "site": "src/themes/bootstrap2.js:50:104",
+      "pattern": "[ ]{2,}",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "non_security_ui_or_build_use",
+      "rationale": "This pattern supports editor formatting, generated identifiers, local presentation, or internal data conversion. Its inputs are schema/editor state or fixed implementation values; the exact source does not identify an authorization, trust-crossing, or output-sanitization guarantee for this site.",
+      "review_refs": [
+        {
+          "path": "src/themes/bootstrap2.js",
+          "line": 50,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "dfae3ad994075cdc38e05f64e3db9df5",
+      "site": "src/themes/bootstrap2.js:51:70",
+      "pattern": "controls",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "non_security_ui_or_build_use",
+      "rationale": "This pattern supports editor formatting, generated identifiers, local presentation, or internal data conversion. Its inputs are schema/editor state or fixed implementation values; the exact source does not identify an authorization, trust-crossing, or output-sanitization guarantee for this site.",
+      "review_refs": [
+        {
+          "path": "src/themes/bootstrap2.js",
+          "line": 51,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "fd6f56b6f241467324ffdea0004ad7fa",
+      "site": "src/themes/bootstrap2.js:51:95",
+      "pattern": "[ ]{2,}",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "non_security_ui_or_build_use",
+      "rationale": "This pattern supports editor formatting, generated identifiers, local presentation, or internal data conversion. Its inputs are schema/editor state or fixed implementation values; the exact source does not identify an authorization, trust-crossing, or output-sanitization guarantee for this site.",
+      "review_refs": [
+        {
+          "path": "src/themes/bootstrap2.js",
+          "line": 51,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "9b2634d7ac7839993757bb800a52a727",
+      "site": "src/themes/materialize.js:417:58",
+      "pattern": "[xy]",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "non_security_ui_or_build_use",
+      "rationale": "This pattern supports editor formatting, generated identifiers, local presentation, or internal data conversion. Its inputs are schema/editor state or fixed implementation values; the exact source does not identify an authorization, trust-crossing, or output-sanitization guarantee for this site.",
+      "review_refs": [
+        {
+          "path": "src/themes/materialize.js",
+          "line": 417,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "f0c0bd3e2c270791cc69074022cc703e",
+      "site": "src/utilities.js:72:22",
+      "pattern": "^\\s*(-|\\+)?(\\d+|(\\d*(\\.\\d*)))([eE][+-]?\\d+)?\\s*$",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "non_security_ui_or_build_use",
+      "rationale": "This pattern supports editor formatting, generated identifiers, local presentation, or internal data conversion. Its inputs are schema/editor state or fixed implementation values; the exact source does not identify an authorization, trust-crossing, or output-sanitization guarantee for this site.",
+      "review_refs": [
+        {
+          "path": "src/utilities.js",
+          "line": 72,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "1669fee8341b056bcf08ca68b4443bd9",
+      "site": "src/utilities.js:81:23",
+      "pattern": "^\\s*(-|\\+)?(\\d+)\\s*$",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "non_security_ui_or_build_use",
+      "rationale": "This pattern supports editor formatting, generated identifiers, local presentation, or internal data conversion. Its inputs are schema/editor state or fixed implementation values; the exact source does not identify an authorization, trust-crossing, or output-sanitization guarantee for this site.",
+      "review_refs": [
+        {
+          "path": "src/utilities.js",
+          "line": 81,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "8ced3b69fb7707d497081e5ed9288964",
+      "site": "src/utilities.js:101:56",
+      "pattern": "[xy]",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "non_security_ui_or_build_use",
+      "rationale": "This pattern supports editor formatting, generated identifiers, local presentation, or internal data conversion. Its inputs are schema/editor state or fixed implementation values; the exact source does not identify an authorization, trust-crossing, or output-sanitization guarantee for this site.",
+      "review_refs": [
+        {
+          "path": "src/utilities.js",
+          "line": 101,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "973a07b4ce8cbba00cd1156c7e07b7ea",
+      "site": "src/validator.js:836:10",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "non_security_ui_or_build_use",
+      "rationale": "This pattern implements an editor-side JSON Schema format check and reports a validation message. The README presents editor validation as a customizable form feature and gives a separate custom-validator example for strict date syntax; the pinned source does not state an application security boundary or a stronger independent acceptance guarantee for this built-in pattern. It is treated as format UX, not a security property.",
+      "review_refs": [
+        {
+          "path": "src/validator.js",
+          "line": 836,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "7fb4b2f3afbbdac60be357cd15f5d274",
+      "site": "src/validator.js:921:12",
+      "pattern": "^(\\d{4}\\D\\d{2}\\D\\d{2})$",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "non_security_ui_or_build_use",
+      "rationale": "This pattern implements an editor-side JSON Schema format check and reports a validation message. The README presents editor validation as a customizable form feature and gives a separate custom-validator example for strict date syntax; the pinned source does not state an application security boundary or a stronger independent acceptance guarantee for this built-in pattern. It is treated as format UX, not a security property.",
+      "review_refs": [
+        {
+          "path": "src/validator.js",
+          "line": 921,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "282d2fd0776b52bf6defa0024be0c9f8",
+      "site": "src/validator.js:922:12",
+      "pattern": "^(\\d{2}:\\d{2}(?::\\d{2})?)$",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "non_security_ui_or_build_use",
+      "rationale": "This pattern implements an editor-side JSON Schema format check and reports a validation message. The README presents editor validation as a customizable form feature and gives a separate custom-validator example for strict date syntax; the pinned source does not state an application security boundary or a stronger independent acceptance guarantee for this built-in pattern. It is treated as format UX, not a security property.",
+      "review_refs": [
+        {
+          "path": "src/validator.js",
+          "line": 922,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "a6dacf39dcdd5ece6ef60f95c1c43d71",
+      "site": "src/validator.js:923:24",
+      "pattern": "^(\\d{4}\\D\\d{2}\\D\\d{2}[ T]\\d{2}:\\d{2}(?::\\d{2})?)$",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "non_security_ui_or_build_use",
+      "rationale": "This pattern implements an editor-side JSON Schema format check and reports a validation message. The README presents editor validation as a customizable form feature and gives a separate custom-validator example for strict date syntax; the pinned source does not state an application security boundary or a stronger independent acceptance guarantee for this built-in pattern. It is treated as format UX, not a security property.",
+      "review_refs": [
+        {
+          "path": "src/validator.js",
+          "line": 923,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "ba2b7c89327063f8d4d434136a80b4d5",
+      "site": "tests/codeceptjs/editors/colorpicker_test.js:27:14",
+      "pattern": "\\{\"colorpicker\":\"rgba\\(6\\d,19\\d,19\\d,0.5\\d*\\)\"\\}",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "documentation_or_test_fixture",
+      "rationale": "This regex occurs only in a test or issue fixture. It supplies expected values, mock response matching, or assertions; it does not process product input in a shipped implementation or enforce a runtime security boundary.",
+      "review_refs": [
+        {
+          "path": "tests/codeceptjs/editors/colorpicker_test.js",
+          "line": 27,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "2a678c4c2b92d815bfad28ed6b7fc7b9",
+      "site": "tests/codeceptjs/editors/uuid_test.js:11:22",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "documentation_or_test_fixture",
+      "rationale": "This regex occurs only in a test or issue fixture. It supplies expected values, mock response matching, or assertions; it does not process product input in a shipped implementation or enforce a runtime security boundary.",
+      "review_refs": [
+        {
+          "path": "tests/codeceptjs/editors/uuid_test.js",
+          "line": 11,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "42331dc166862f4322e3e43eefb5b7b1",
+      "site": "tests/codeceptjs/editors/uuid_test.js:18:22",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "documentation_or_test_fixture",
+      "rationale": "This regex occurs only in a test or issue fixture. It supplies expected values, mock response matching, or assertions; it does not process product input in a shipped implementation or enforce a runtime security boundary.",
+      "review_refs": [
+        {
+          "path": "tests/codeceptjs/editors/uuid_test.js",
+          "line": 18,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "e3aada86e9d10ad149ff200df1a22bfd",
+      "site": "tests/codeceptjs/editors/uuid_test.js:20:22",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "documentation_or_test_fixture",
+      "rationale": "This regex occurs only in a test or issue fixture. It supplies expected values, mock response matching, or assertions; it does not process product input in a shipped implementation or enforce a runtime security boundary.",
+      "review_refs": [
+        {
+          "path": "tests/codeceptjs/editors/uuid_test.js",
+          "line": 20,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "814169bafc5bdde0a112aaf6150a43b8",
+      "site": "tests/codeceptjs/editors/uuid_test.js:27:22",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "documentation_or_test_fixture",
+      "rationale": "This regex occurs only in a test or issue fixture. It supplies expected values, mock response matching, or assertions; it does not process product input in a shipped implementation or enforce a runtime security boundary.",
+      "review_refs": [
+        {
+          "path": "tests/codeceptjs/editors/uuid_test.js",
+          "line": 27,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "4abf7e42652a24692aa399e8ce4f75e4",
+      "site": "tests/codeceptjs/editors/uuid_test.js:29:22",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "documentation_or_test_fixture",
+      "rationale": "This regex occurs only in a test or issue fixture. It supplies expected values, mock response matching, or assertions; it does not process product input in a shipped implementation or enforce a runtime security boundary.",
+      "review_refs": [
+        {
+          "path": "tests/codeceptjs/editors/uuid_test.js",
+          "line": 29,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "c34db4ce97ac124b16543c8c925ac109",
+      "site": "tests/codeceptjs/editors/uuid_test.js:36:22",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "documentation_or_test_fixture",
+      "rationale": "This regex occurs only in a test or issue fixture. It supplies expected values, mock response matching, or assertions; it does not process product input in a shipped implementation or enforce a runtime security boundary.",
+      "review_refs": [
+        {
+          "path": "tests/codeceptjs/editors/uuid_test.js",
+          "line": 36,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "daa31f06dbe0ea6df43195dbfe8615ea",
+      "site": "tests/codeceptjs/editors/uuid_test.js:38:22",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "documentation_or_test_fixture",
+      "rationale": "This regex occurs only in a test or issue fixture. It supplies expected values, mock response matching, or assertions; it does not process product input in a shipped implementation or enforce a runtime security boundary.",
+      "review_refs": [
+        {
+          "path": "tests/codeceptjs/editors/uuid_test.js",
+          "line": 38,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "519f021c23e57832bb88842e5d02766e",
+      "site": "tests/codeceptjs/editors/uuid_test.js:45:22",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "documentation_or_test_fixture",
+      "rationale": "This regex occurs only in a test or issue fixture. It supplies expected values, mock response matching, or assertions; it does not process product input in a shipped implementation or enforce a runtime security boundary.",
+      "review_refs": [
+        {
+          "path": "tests/codeceptjs/editors/uuid_test.js",
+          "line": 45,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "863d88d49fbb0e8a5fea9b6aff3795cd",
+      "site": "tests/codeceptjs/editors/uuid_test.js:47:22",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "documentation_or_test_fixture",
+      "rationale": "This regex occurs only in a test or issue fixture. It supplies expected values, mock response matching, or assertions; it does not process product input in a shipped implementation or enforce a runtime security boundary.",
+      "review_refs": [
+        {
+          "path": "tests/codeceptjs/editors/uuid_test.js",
+          "line": 47,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "d29fa1976c9ee7cd68bc242d4ca0ab8e",
+      "site": "tests/codeceptjs/issues/issue-gh-1367_test.js:10:48",
+      "pattern": "base64",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "documentation_or_test_fixture",
+      "rationale": "This regex occurs only in a test or issue fixture. It supplies expected values, mock response matching, or assertions; it does not process product input in a shipped implementation or enforce a runtime security boundary.",
+      "review_refs": [
+        {
+          "path": "tests/codeceptjs/issues/issue-gh-1367_test.js",
+          "line": 10,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    },
+    {
+      "regex_id": "c5df0843b50316e179687659e6d8df84",
+      "site": "tests/unit/validator.spec.js:45:23",
+      "pattern": "(\\w+)\\.json",
+      "decision": "skip",
+      "product_question_asked": false,
+      "reason_code": "documentation_or_test_fixture",
+      "rationale": "This regex occurs only in a test or issue fixture. It supplies expected values, mock response matching, or assertions; it does not process product input in a shipped implementation or enforce a runtime security boundary.",
+      "review_refs": [
+        {
+          "path": "tests/unit/validator.spec.js",
+          "line": 45,
+          "why": "the regex site is used at this source location; surrounding exact-pin context is frozen in evidence.json"
+        }
+      ]
+    }
+  ]
+}

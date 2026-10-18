@@ -1,0 +1,4 @@
+{"at": "2026-10-15T18:32:14+00:00", "corpus": "aidevops", "event": "wave_opened", "generation": 0, "wave_id": "aidevops-node-secret-read-p4-20261015-r1"}
+{"at": "2026-10-15T18:32:40+00:00", "corpus": "aidevops", "event": "wave_aborted", "generation": 0, "reason": "queue site must use the repository-qualified contract identity", "wave_id": "aidevops-node-secret-read-p4-20261015-r1"}
+{"at": "2026-10-15T18:32:40+00:00", "corpus": "aidevops", "event": "wave_opened", "generation": 0, "wave_id": "aidevops-node-secret-read-p4-20261015-r2"}
+{"at": "2026-10-15T18:32:52+00:00", "corpus": "aidevops", "event": "wave_closed", "force": false, "generation": 1, "skip_reasons": {}, "wave_id": "aidevops-node-secret-read-p4-20261015-r2"}

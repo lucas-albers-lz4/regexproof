@@ -23,9 +23,16 @@ import json
 import pathlib
 import re
 import sys
+import hashlib
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
+from regexproof.mine.conversion_bucket_registry import (  # noqa: E402
+    BucketRegistryError,
+    REGISTRY_PATH as DEFAULT_BUCKET_REGISTRY_PATH,
+    load_registry,
+)
+from regexproof.mine.corpus_lock import wave_status  # noqa: E402
 
 PRODUCTIVE_SHARE = 0.7   # productive (used) buckets get 70% of reserved capacity
 NOVEL_SHARE = 0.2        # novel-idiom exploration
@@ -108,6 +115,103 @@ def go_clusters(gate_decisions_dir: pathlib.Path) -> list[str]:
     return sorted(clusters)
 
 
+def go_cluster_pins(gate_decisions_dir: pathlib.Path) -> dict[str, str | None]:
+    """Return each GO cluster's frozen source pin, marking conflicts unknown.
+
+    Registered idiom buckets are tied to one source revision. A newer gate
+    decision must not silently reuse an old registration whose source evidence
+    was checked against another revision.
+    """
+    pins: dict[str, str | None] = {}
+    if not gate_decisions_dir.is_dir():
+        return pins
+    for path in sorted(gate_decisions_dir.glob("*_gate_decision.json")):
+        try:
+            decision = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            continue
+        if not isinstance(decision, dict) or decision.get("decision") != "go":
+            continue
+        cluster = str(decision.get("corpus") or "").strip()
+        if not cluster:
+            continue
+        raw_pin = decision.get("corpus_pin") or decision.get("pin")
+        pin = raw_pin if isinstance(raw_pin, str) and re.fullmatch(r"[0-9a-f]{40}", raw_pin) else None
+        if cluster in pins and pins[cluster] != pin:
+            pins[cluster] = None
+        else:
+            pins[cluster] = pin
+    return pins
+
+
+def _load_cohort_manifest(path: pathlib.Path) -> dict:
+    """Load a source cohort as the allowlist for campaign-scoped scheduling."""
+    try:
+        raw_bytes = path.read_bytes()
+        value = json.loads(raw_bytes)
+    except (OSError, ValueError) as exc:
+        raise SystemExit(f"conversion-scheduler: cannot read cohort manifest {path}: {exc}") from exc
+    cohort_id = value.get("cohort_id") if isinstance(value, dict) else None
+    repos = value.get("repos") if isinstance(value, dict) else None
+    if not isinstance(cohort_id, str) or not cohort_id or not isinstance(repos, list):
+        raise SystemExit(f"conversion-scheduler: malformed cohort manifest {path}")
+    members: dict[tuple[str, str], dict] = {}
+    for item in repos:
+        if not isinstance(item, dict):
+            raise SystemExit(f"conversion-scheduler: malformed repository in cohort manifest {path}")
+        url = item.get("url")
+        pin = item.get("pin")
+        family = item.get("dialect_family")
+        if (
+            not isinstance(url, str) or not url.startswith("https://github.com/")
+            or not isinstance(pin, str) or not re.fullmatch(r"[0-9a-f]{40}", pin)
+            or not isinstance(family, str) or not family
+        ):
+            raise SystemExit(f"conversion-scheduler: invalid cohort member in {path}")
+        key = (url.rstrip("/").removesuffix(".git").lower(), pin)
+        prior = members.get(key)
+        if prior is not None and prior["dialect_family"] != family:
+            raise SystemExit(f"conversion-scheduler: conflicting cohort dialects for {url}@{pin}")
+        members[key] = {"dialect_family": family, "repo_id": item.get("repo_id")}
+    return {
+        "cohort_id": cohort_id,
+        "path": str(path),
+        "sha256": hashlib.sha256(raw_bytes).hexdigest(),
+        "members": members,
+    }
+
+
+def _go_pins_in_cohort(
+    gate_decisions_dir: pathlib.Path, cohort: dict
+) -> dict[str, str | None]:
+    """Return only GO names whose URL and pin are members of the frozen cohort."""
+    pins: dict[str, str | None] = {}
+    if not gate_decisions_dir.is_dir():
+        return pins
+    for path in sorted(gate_decisions_dir.glob("*_gate_decision.json")):
+        try:
+            decision = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            continue
+        if not isinstance(decision, dict) or decision.get("decision") != "go":
+            continue
+        url = decision.get("candidate_url")
+        pin = decision.get("corpus_pin") or (decision.get("probe") or {}).get("pin")
+        if not isinstance(url, str) or not isinstance(pin, str):
+            continue
+        key = (url.rstrip("/").removesuffix(".git").lower(), pin)
+        if key not in cohort["members"]:
+            continue
+        cluster = str(decision.get("corpus") or "").strip()
+        if not cluster:
+            continue
+        if cluster in pins and pins[cluster] != pin:
+            pins[cluster] = None
+        else:
+            pins[cluster] = pin
+    return pins
+
+
 def wont_file_classes(dispositions_path: pathlib.Path) -> dict[str, int]:
     """wont-file pattern classes from the REAL disposition source
     (docs/conversion-upstream.jsonl — status=wont_file rows), aggregated by
@@ -144,7 +248,9 @@ def _wont_file_agg(dispositions_path: pathlib.Path, *, key: str) -> dict[str, in
 
 def used_buckets_per_cluster(rows: list[dict]) -> dict[str, set[str]]:
     """(cluster -> set of idiom buckets that already have conversion rows).
-    Cluster = wave_id with a trailing ``_w<digits>`` generation stripped
+    Prefer the ledger's canonical corpus identity (including the aggregate
+    ledger's plural ``corpora`` field). Historical rows without one fall back
+    to wave_id/cluster with a trailing ``_w<digits>`` generation stripped
     (openwrt_packages_w2 -> openwrt_packages); an exact-suffix regex only —
     ``foo_west`` is never mangled (Luna r1 #5)."""
     gen_re = re.compile(r"_w[0-9]+$")
@@ -152,12 +258,24 @@ def used_buckets_per_cluster(rows: list[dict]) -> dict[str, set[str]]:
     for rec in rows:
         wave = str(rec.get("wave_id") or rec.get("cluster") or "").strip()
         bucket = str(rec.get("idiom_bucket") or "").strip()
-        if not wave:
+        raw_corpora = rec.get("corpora")
+        canonical_clusters = []
+        if isinstance(raw_corpora, list):
+            canonical_clusters.extend(
+                str(value).strip() for value in raw_corpora
+                if isinstance(value, str) and value.strip()
+            )
+        canonical_corpus = str(rec.get("corpus") or "").strip()
+        if canonical_corpus:
+            canonical_clusters.append(canonical_corpus)
+        canonical_clusters = sorted(set(canonical_clusters))
+        if not canonical_clusters and not wave:
             continue
-        cluster = gen_re.sub("", wave)
-        out.setdefault(cluster, set())
-        if bucket:
-            out[cluster].add(bucket)
+        clusters = canonical_clusters or [gen_re.sub("", wave)]
+        for cluster in clusters:
+            out.setdefault(cluster, set())
+            if bucket:
+                out[cluster].add(bucket)
     return out
 
 
@@ -203,6 +321,8 @@ def next_unused_bucket(
     cluster: str,
     used: set[str],
     queues_dir: pathlib.Path,
+    registered_entries: list[dict] | None = None,
+    design_tail_buckets: list[str] | None = None,
 ) -> tuple[str | None, str]:
     """(bucket, basis) for the cluster's next bucket. Registered progression
     buckets (committed ledger vocabulary) win first; STOPPED_CLUSTERS win
@@ -211,12 +331,23 @@ def next_unused_bucket(
     are NEVER emitted until they appear in the committed ledger — their
     basis is 'unregistered-next' (Luna r4). No wrap-around: progression
     exhausted with no tail -> none-available."""
-    for candidate in BUCKET_PROGRESSION.get(cluster, []):
+    progression = list(BUCKET_PROGRESSION.get(cluster, []))
+    if cluster not in STOPPED_CLUSTERS:
+        progression.extend(
+            entry["bucket"] for entry in (registered_entries or [])
+            if entry["cluster"] == cluster and entry["bucket"] not in progression
+        )
+    for candidate in progression:
         if candidate not in used and not _queue_has_pending(queues_dir, cluster, candidate):
             return candidate, "named-next-unused"
     if cluster in STOPPED_CLUSTERS:
         return None, "cluster-stopped"
-    if DESIGN_TAIL_BUCKETS.get(cluster):
+    tails = (
+        design_tail_buckets
+        if design_tail_buckets is not None
+        else DESIGN_TAIL_BUCKETS.get(cluster)
+    )
+    if tails:
         return None, "unregistered-next"
     return None, "none-available"
 
@@ -228,15 +359,103 @@ def build_schedule(
     gate_decisions_dir: pathlib.Path,
     dispositions_path: pathlib.Path,
     clusters: list[str] | None = None,
+    bucket_registry_path: pathlib.Path | None = None,
+    events_log_path: pathlib.Path | None = None,
+    cohort_manifest_path: pathlib.Path | None = None,
 ) -> dict:
     used = used_buckets_per_cluster(rows)
     wont = wont_file_classes(dispositions_path)
     wont_by_corpus = wont_file_corpora(dispositions_path)
-    clusters = clusters if clusters is not None else go_clusters(gate_decisions_dir)
+    cohort = _load_cohort_manifest(cohort_manifest_path) if cohort_manifest_path else None
+    if cohort is None:
+        clusters = clusters if clusters is not None else go_clusters(gate_decisions_dir)
+        current_pins = go_cluster_pins(gate_decisions_dir)
+    else:
+        current_pins = _go_pins_in_cohort(gate_decisions_dir, cohort)
+        cohort_clusters = set(current_pins)
+        clusters = (
+            sorted(cohort_clusters)
+            if clusters is None
+            else [cluster for cluster in clusters if cluster in cohort_clusters]
+        )
+    events_log = events_log_path or ROOT / "properties" / "generated" / "corpus_events.jsonl"
+    bucket_registry = load_registry(bucket_registry_path)
+    for entry in bucket_registry["entries"]:
+        if entry["bucket"] in BUCKET_PROGRESSION.get(entry["cluster"], []):
+            raise BucketRegistryError(
+                f"registered bucket {entry['bucket']!r} duplicates historical progression"
+            )
     selections: list[dict] = []
+    rejected_registrations: list[dict[str, str]] = []
     for cluster in clusters:
         used_set = used.get(cluster, set())
-        nxt, nxt_basis = next_unused_bucket(cluster, used_set, queues_dir)
+        registered_for_cluster = [
+            entry for entry in bucket_registry["entries"]
+            if entry["cluster"] == cluster
+        ]
+        if cohort is None:
+            registered_in_scope = registered_for_cluster
+        else:
+            registered_in_scope = []
+            for entry in registered_for_cluster:
+                member = cohort["members"].get(
+                    (entry["repository_url"].rstrip("/"), entry["source_pin"])
+                )
+                if member is None:
+                    rejected_registrations.append({
+                        "cluster": cluster,
+                        "bucket": entry["bucket"],
+                        "reason": "outside-frozen-cohort-pin",
+                    })
+                    continue
+                if entry.get("dialect_family") != member["dialect_family"]:
+                    rejected_registrations.append({
+                        "cluster": cluster,
+                        "bucket": entry["bucket"],
+                        "reason": "dialect-family-missing-or-mismatched",
+                    })
+                    continue
+                registered_in_scope.append(entry)
+        registered_for_pin = [
+            entry for entry in registered_in_scope
+            if current_pins.get(cluster) == entry["source_pin"]
+        ]
+        for entry in registered_in_scope:
+            if entry not in registered_for_pin:
+                rejected_registrations.append({
+                    "cluster": cluster,
+                    "bucket": entry["bucket"],
+                    "reason": "current-go-pin-missing-or-mismatched",
+                })
+        active_wave = wave_status(cluster, events_log) == "active"
+        if active_wave:
+            nxt, nxt_basis = None, "active-wave"
+        else:
+            if cohort is None:
+                design_tails = None
+            else:
+                design_tails = []
+                for tail in DESIGN_TAIL_BUCKETS.get(cluster, []):
+                    matching = [
+                        entry for entry in registered_for_cluster
+                        if entry["bucket"] == tail
+                    ]
+                    if not matching or any(entry in registered_for_pin for entry in matching):
+                        design_tails.append(tail)
+            nxt, nxt_basis = next_unused_bucket(
+                cluster, used_set, queues_dir, registered_for_pin,
+                design_tail_buckets=design_tails,
+            )
+        if (
+            nxt is None
+            and not active_wave
+            and registered_for_cluster
+            and registered_in_scope
+            and not registered_for_pin
+            and cluster not in STOPPED_CLUSTERS
+            and not DESIGN_TAIL_BUCKETS.get(cluster)
+        ):
+            nxt_basis = "registered-pin-mismatch"
         # #551 Phase E / Luna r1 #3 + r2 #1: wont-file pattern classes feed
         # selection via a DETERMINISTIC deny-list keyed on the target's
         # CORPUS (the row's corpus IS the bucket name — classes like
@@ -268,6 +487,19 @@ def build_schedule(
             "unbiased_slice_share": UNBIASED_SHARE,
         },
         "selections": selections,
+        "registered_bucket_count": len(bucket_registry["entries"]),
+        "cohort_scope": (
+            {
+                "cohort_id": cohort["cohort_id"],
+                "manifest_path": cohort["path"],
+                "manifest_sha256": cohort["sha256"],
+            }
+            if cohort is not None else None
+        ),
+        "registered_bucket_rejections": rejected_registrations,
+        "bucket_registry_digest": hashlib.sha256(
+            json.dumps(bucket_registry, sort_keys=True, separators=(",", ":")).encode()
+        ).hexdigest(),
         "wont_file_classes": wont,
         "cache_interplay_note": (
             "GO-cluster utilization accelerates #550 lease pressure — "
@@ -290,6 +522,11 @@ def main(argv: list[str] | None = None) -> int:
                     default=ROOT / "docs" / "conversion-upstream.jsonl",
                     help="wont-file disposition source")
     ap.add_argument("--queues-dir", type=pathlib.Path, default=DEFAULT_QUEUES_DIR)
+    ap.add_argument("--bucket-registry", type=pathlib.Path, default=DEFAULT_BUCKET_REGISTRY_PATH)
+    ap.add_argument(
+        "--cohort-manifest", type=pathlib.Path,
+        help="restrict GO clusters and registered idiom buckets to this exact cohort pin/dialect",
+    )
     ap.add_argument("--out", type=pathlib.Path,
                     default=ROOT / "properties" / "generated" / "conversion_schedule.json")
     ap.add_argument("--at", default="", help="ISO timestamp for determinism")
@@ -301,6 +538,8 @@ def main(argv: list[str] | None = None) -> int:
         queues_dir=args.queues_dir,
         gate_decisions_dir=args.gate_decisions,
         dispositions_path=args.dispositions,
+        bucket_registry_path=args.bucket_registry,
+        cohort_manifest_path=args.cohort_manifest,
     )
     sched["generated_at"] = args.at or sched["generated_at"]
     args.out.parent.mkdir(parents=True, exist_ok=True)
@@ -353,10 +592,12 @@ def _load_ledger_rows(ledger_path: pathlib.Path) -> list[dict]:
                     "no idiom_bucket — a consumed bucket would be silently "
                     "ignored (duplicate selection risk), refusing (fail closed)"
                 )
-            if not str(rec.get("wave_id") or rec.get("cluster") or "").strip():
+            if not str(
+                rec.get("corpus") or rec.get("cluster") or rec.get("wave_id") or ""
+            ).strip():
                 raise SystemExit(
                     f"conversion-scheduler: ledger {ledger_path} line {i} has "
-                    "neither wave_id nor cluster — the consumed bucket's "
+                    "no corpus, cluster, or wave_id — the consumed bucket's "
                     "cluster is unattributable (duplicate selection risk), "
                     "refusing (fail closed)"
                 )
@@ -391,14 +632,16 @@ def _load_ledger_rows(ledger_path: pathlib.Path) -> list[dict]:
                 "has no idiom_bucket — a consumed bucket would be silently "
                 "ignored (duplicate selection risk), refusing (fail closed)"
             )
-        if not str(rec.get("wave_id") or rec.get("cluster") or "").strip():
-            # Luna r4 #2: a row without CLUSTER identity is dropped by
-            # used_buckets_per_cluster (its `if not wave: continue`), so
+        if not str(
+            rec.get("corpus") or rec.get("cluster") or rec.get("wave_id") or ""
+        ).strip():
+            # Luna r4 #2: a row without a canonical or historical cluster
+            # identity is dropped by used_buckets_per_cluster, so
             # its consumed bucket would be silently ignored and re-selected.
             raise SystemExit(
                 f"conversion-scheduler: ledger {ledger_path} per_wave[{i}] "
-                "has neither wave_id nor cluster — the consumed bucket's "
-                "cluster is unattributable (duplicate selection risk), "
+                "has neither wave_id nor cluster/corpus identity — the consumed "
+                "bucket's cluster is unattributable (duplicate selection risk), "
                 "refusing (fail closed)"
             )
     return per_wave

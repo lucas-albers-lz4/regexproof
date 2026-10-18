@@ -67,3 +67,7 @@ def smith_decision_schema() -> dict:
 
 def property_contract_schema() -> dict:
     return load_schema("property_contract.schema.json")
+
+
+def conversion_candidate_population_schema() -> dict:
+    return load_schema("conversion_candidate_population.schema.json")

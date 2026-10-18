@@ -1,0 +1,17 @@
+{
+  "cohort_id": "2026-09-12-calibration-20-r2",
+  "cohort_manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+  "coverage_digest": "594dd09a8063e144bcef538ae552853c790335068b12b0a004c4d0fbedc9f3cf",
+  "identities": [
+    {
+      "contract_sha256": "0f141a8d77e3d423034438f5aaad9907e223d2c829f489ef6312022254d21d6b",
+      "pin": "01cd447ad3b1acfed7e0680596c2c74458a4cf06",
+      "provenance": "agent_derived",
+      "question_id": "AA-autoar-phase-log-module-component-safe",
+      "repo_id": "h0tak88r/AutoAR",
+      "site": "h0tak88r/AutoAR@01cd447ad3b1acfed7e0680596c2c74458a4cf06:internal/utils/phase_logs.go:206:MustCompile",
+      "url": "https://github.com/h0tak88r/AutoAR"
+    }
+  ],
+  "schema_version": "2"
+}

@@ -2,6 +2,14 @@
 
 Issue: [#623](https://github.com/lucas-albers-lz4/regexproof/issues/623)
 
+**Policy update 2026-10-13:** [autonomous contract adoption](AUTONOMOUS-CONTRACTS.md)
+allows evidenced agent adoption without a human approving every contract.
+[The parent plan](AUTONOMOUS-CORPUS-PLAN.md) measures useful proofs/gates and
+downstream bugs. The shipped saturation validator accepts evidenced autonomous
+contracts and reports provenance separately. PR4 v2 remains a historical
+human-only format; v3 uses a contract-hash-bound roster and complete attempt
+accounting. Do not relabel agent contracts as human.
+
 This measurement has two separate questions:
 
 1. Has a dialect family stopped contributing materially new compiler surface?
@@ -94,12 +102,15 @@ each event's repository URL and pin to it, and rejects a broken chain.
 
 The report fails closed on malformed counts, a missing or mismatched cohort
 digest, duplicate repository IDs or URL/pin attempts, observation order or
-metadata that differs from the frozen cohort, invalid pins, empty site denominators, duplicate product
-identities, non-human or synthesized product rows, non-finite JSON numbers,
-and impossible funnel orderings. Rates are emitted as deterministic decimal
-strings rather than binary floats. Product counts are derived from the
-validated property rows, so rule-diff pilots, classification rows, mutation
-guards, and agent-derived rows cannot inflate the denominator.
+metadata that differs from the frozen cohort, invalid pins, empty site
+denominators, duplicate product identities, synthesized rows, incomplete
+contracts, non-finite JSON numbers, and impossible funnel orderings. Rates
+are emitted as deterministic decimal strings rather than binary floats.
+Product counts are derived from validated property rows. Agent-derived rows
+need the shared source-bound adoption record; machine-pair rows need their
+contract evidence. Rule-diff pilots, classification rows, mutation guards,
+and unadopted drafts stay outside the denominator. The report separates
+human, autonomous, and machine-pair counts.
 
 Compiler saturation is true for a family only when both trailing repositories
 have a novelty rate strictly below `0.03` and neither introduces a new reject
@@ -130,9 +141,10 @@ Use a staged cohort:
 - use 50 as a hard ceiling, not an automatic quota.
 
 The compiler decision is per dialect family. The product decision is based on
-human contracts, ground truth, filing, and upstream disposition over a frozen
-cohort. Synthesized or agent-derived rows do not silently become product
-yield.
+evidenced contracts, useful regression gates, ground truth, filing, and upstream
+disposition over a frozen cohort. Synthesized questions and unadopted agent
+drafts do not become product yield. Autonomous adoption requires the validated
+review record and migrated executable eligibility policy.
 
 ## PR5: first calibration execution
 
@@ -152,10 +164,11 @@ productive under the strict trailing-two rule: ECMA 0.9259, Go 1.0000,
 POSIX-shell 0.9474, and Python `re` 0.9792. The rule therefore supports
 preparing a 30-repository increment; it does not establish product value.
 
-The same cohort's product denominator is **0**, and no PR4 checkpoint was
-supplied. Human product rows in the global conversion ledger are not a
-substitute for a frozen-cohort coverage manifest. For a complete 20-repository
-run, the close-out now sets `continue_to_20` false and resolves
+The original close-out records a product denominator of **0** and no PR4
+checkpoint. The Oct 13 retrospective Forge integration fixture adds six
+frozen identities, but it is not a prospective cohort wave or close-out.
+Global ledger rows are not a substitute for a frozen-cohort coverage manifest.
+For a complete 20-repository run, the close-out now sets `continue_to_20` false and resolves
 `continue_to_30` from the compiler stop result. The product denominator and
 PR4 checkpoint remain separate reasons to continue product work.
 
@@ -166,7 +179,9 @@ Next actions:
    families. Freeze its digest before checkout or observation work.
 2. In parallel, work a conversion wave on an admitted cluster and create the
    independent product coverage manifest for the cohort. Do not count the
-   global ledger or synthesized/agent-derived rows toward its denominator.
+   global ledger as a cohort manifest, synthesized smoke, or bare
+   `agent_derived` drafts toward its denominator. Fully adopted agent rows are
+   eligible and remain attributed to the autonomous series.
 3. Run the calibration only after all exact-pin checkouts are ready; publish
    the observation, failure, saturation, and close-out artifacts together.
 
@@ -184,20 +199,18 @@ generated ledger artifacts. Run it with:
 python scripts/conversion-checkpoint.py path/to/conversion-checkpoint.json
 ```
 
-The root object is exact: checkpoint `schema_version` (`"2"`), `cohort_id`,
-`manifest_digest`, the embedded PR2 `cohort`,
-`product_coverage_manifest`, and `rows`. The product coverage manifest has
-schema version `"1"`, binds its `cohort_id` and `cohort_manifest_digest` to
-the frozen cohort, and contains the complete product identity list plus a
-`coverage_digest` over its canonical content. It must be independently derived
-from the product inventory, not from the canonical rows being checked. Omitted
-or extra product identities fail closed before construction. The embedded
-cohort is validated and its digest is recomputed. Each row binds the exact `repo_id`/URL/lowercase
-40-character pin from that cohort. Its stable identity is `(cohort_id, repo
-URL, pin, site, question_id)`; duplicate keys, stale cohorts, unknown fields,
-non-finite JSON, and repositories outside the cohort fail closed.
-The report emits the product `coverage_digest`. Row and canonical contract
-schemas remain version `"1"` inside checkpoint schema `"2"`.
+The root object is exact and versioned. Historical schema `"2"` contains
+`cohort_id`, `manifest_digest`, the embedded PR2 `cohort`,
+`product_coverage_manifest`, and decided `rows`; it remains human-only and
+readable. Schema `"3"` adds a frozen contract roster and `attempts`, with one
+explicit status per roster identity so timeouts, encoding failures, skips,
+and not-attempted questions remain visible. Its schema-`"2"` coverage
+manifest binds each stable identity to a contract digest and provenance. The
+roster is frozen before outcomes are supplied. Both versions bind repository
+URL and exact lowercase 40-character pin to the frozen cohort; duplicate
+identities, stale digests, unknown fields, non-finite JSON, and repositories
+outside the cohort fail closed. Row and contract schemas remain version
+`"1"`.
 
 Rows use the normalized product result vocabulary `sat`/`unsat`. The
 `canonical_row_to_checkpoint()` adapter normalizes upstream `gap` rows to
@@ -205,11 +218,13 @@ Rows use the normalized product result vocabulary `sat`/`unsat`. The
 the complete canonical row under `canonical`. Product rows require kind
 `property`, `counterexample_finder`, or `bug_demo`, `synthesized: false`, and
 the canonical contract fields `schema_version`, `site`, `guarantee`,
-`input_source`, `trust`, `declared_domain`, and `provenance: "human"`.
-`trust` must be `untrusted-input`, `config`, or `internal`, and the row's
-`domain` must be explicit. Rule-diff, classification, mutation, synthesized,
-and agent-derived rows are not product yield and cannot inflate this
-denominator.
+`input_source`, `trust`, and `declared_domain`. Schema 2 accepts only human
+contracts. Schema 3 accepts adopted human and agent-derived contracts plus
+valid machine-pair contracts; an agent contract must carry the shared
+source-bound adoption record. `trust` must be `untrusted-input`, `config`, or
+`internal`, and the row's `domain` must be explicit. Rule-diff,
+classification, mutation, synthesized, and unadopted draft rows remain outside
+the product denominator.
 
 `ground_truth_status` is explicit; only `reproduced` and `PASS` advance a SAT
 row to ground-truthed. Disposition status is also explicit and follows
@@ -226,9 +241,10 @@ interpretations must remain separate in the close-out. `false_positive`,
 not accepted yield.
 
 The report emits deterministic counts and rates for asked → SAT →
-ground-truthed → filed/private-first → accepted, a disposition breakdown,
-observed sample sizes, explicit reached/sub-target flags for 50 and 100 human
-product-property targets, and separate `filing_interpretation` and
+ground-truthed → filed/private-first → accepted, separate provenance totals,
+v3 useful-gate outcomes, a disposition breakdown, observed sample sizes,
+explicit reached/sub-target flags for 50 and 100 eligible product-question
+targets, and separate `filing_interpretation` and
 `idiom_interpretation` fields. Its
 interval method is a stdlib-only, two-sided 95% Wilson score interval. The
 reported widths for targets 50 and 100 are the maximum width over every

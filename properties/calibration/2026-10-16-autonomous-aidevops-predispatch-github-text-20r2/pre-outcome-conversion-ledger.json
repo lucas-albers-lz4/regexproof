@@ -1,0 +1,717 @@
+{
+  "batch_shape5": {
+    "coreruleset_batch_shape5.json": {
+      "executed_rows": 3,
+      "properties_asked": 3,
+      "properties_sat": 2,
+      "properties_sat_gt": 2,
+      "properties_unsat": 0,
+      "sat_fullmatch_only": 1
+    },
+    "gitleaks_batch_shape5.json": {
+      "executed_rows": 0,
+      "properties_asked": 0,
+      "properties_sat": 0,
+      "properties_sat_gt": 0,
+      "properties_unsat": 0,
+      "sat_fullmatch_only": 0
+    }
+  },
+  "by_corpus": [
+    {
+      "corpus": "openwrt_packages",
+      "properties_asked": 14,
+      "properties_sat": 3,
+      "properties_unsat": 11,
+      "sat_ground_truthed": 3,
+      "sat_unique_sites": 3,
+      "scanner_rows": 139,
+      "security_tool": false
+    },
+    {
+      "corpus": "forge-cli",
+      "properties_asked": 6,
+      "properties_sat": 0,
+      "properties_unsat": 6,
+      "sat_ground_truthed": 0,
+      "sat_unique_sites": 0,
+      "scanner_rows": 84,
+      "security_tool": true
+    },
+    {
+      "corpus": "aidevops",
+      "properties_asked": 5,
+      "properties_sat": 0,
+      "properties_unsat": 5,
+      "sat_ground_truthed": 0,
+      "sat_unique_sites": 0,
+      "scanner_rows": 4839,
+      "security_tool": false
+    },
+    {
+      "corpus": "openwrt_luci",
+      "properties_asked": 4,
+      "properties_sat": 1,
+      "properties_unsat": 3,
+      "sat_ground_truthed": 1,
+      "sat_unique_sites": 1,
+      "scanner_rows": 410,
+      "security_tool": false
+    },
+    {
+      "corpus": "Doberman-Core",
+      "properties_asked": 3,
+      "properties_sat": 3,
+      "properties_unsat": 0,
+      "sat_ground_truthed": 3,
+      "sat_unique_sites": 3,
+      "scanner_rows": 11,
+      "security_tool": true
+    },
+    {
+      "corpus": "claude-code-plugins",
+      "properties_asked": 3,
+      "properties_sat": 0,
+      "properties_unsat": 3,
+      "sat_ground_truthed": 0,
+      "sat_unique_sites": 0,
+      "scanner_rows": 429,
+      "security_tool": false
+    },
+    {
+      "corpus": "coreruleset",
+      "properties_asked": 3,
+      "properties_sat": 2,
+      "properties_unsat": 0,
+      "sat_ground_truthed": 2,
+      "sat_unique_sites": 0,
+      "scanner_rows": 0,
+      "security_tool": true
+    },
+    {
+      "corpus": "mycelium",
+      "properties_asked": 3,
+      "properties_sat": 0,
+      "properties_unsat": 3,
+      "sat_ground_truthed": 0,
+      "sat_unique_sites": 0,
+      "scanner_rows": 269,
+      "security_tool": false
+    },
+    {
+      "corpus": "dogfood_shell",
+      "properties_asked": 2,
+      "properties_sat": 0,
+      "properties_unsat": 2,
+      "sat_ground_truthed": 0,
+      "sat_unique_sites": 0,
+      "scanner_rows": 0,
+      "security_tool": false
+    },
+    {
+      "corpus": "real-router",
+      "properties_asked": 1,
+      "properties_sat": 0,
+      "properties_unsat": 1,
+      "sat_ground_truthed": 0,
+      "sat_unique_sites": 0,
+      "scanner_rows": 246,
+      "security_tool": false
+    }
+  ],
+  "funnel": {
+    "accepted_upstream": 1,
+    "batch_shape5_asked": 3,
+    "batch_shape5_sat": 2,
+    "batch_summaries": 87,
+    "batch_summary_findings": 14659,
+    "batch_triage_rows": 53182,
+    "classification_rows": 13033,
+    "conversion_properties_autonomous": 3,
+    "conversion_properties_human": 38,
+    "conversion_properties_machine_pair": 0,
+    "disclosed_private_first": 1128,
+    "disclosed_public_ok": 0,
+    "existence_proofs": 5,
+    "false_positives_filed": 9,
+    "mutation_guards": 644,
+    "other_rows": 0,
+    "planned_stubs": 338,
+    "pr_dry_run_findings": 14659,
+    "pr_dry_run_private_first": 1268,
+    "pr_dry_runs": 87,
+    "properties_asked": 44,
+    "properties_asked_distinct": 44,
+    "properties_asked_synthesized": 644,
+    "properties_sat": 9,
+    "properties_sat_distinct": 9,
+    "properties_sat_synthesized": 28,
+    "properties_unsat": 34,
+    "redos_rows": 0,
+    "rule_diff_report_sat": 10,
+    "rule_diff_report_sat_gt": 10,
+    "sat_ground_truthed": 9,
+    "sat_unique_sites": 7,
+    "scanner_ndjson_files": 96,
+    "scanner_rows": 14659,
+    "scanner_rule_diff_sat": 0,
+    "sites_encodable": 96009,
+    "sites_extracted": 149191,
+    "third_party_public": 0,
+    "would_open_public_upstream": 0
+  },
+  "measure": "conversion_ledger",
+  "notes": [
+    "Heap's-law / singleton novelty saturates compiler coverage, not this ledger.",
+    "docs/verified-findings.jsonl VF-* rows are toolkit traps, not vulnerability counts.",
+    "Classification rows (usage/intent/triage kinds) are not security bugs.",
+    "Mutation guards prove harness sensitivity; they are not product findings.",
+    "SAT + ground-truth is a candidate finding; accepted_upstream is the last mile.",
+    "would_open_public_upstream must stay 0 without a human approval file (SECURITY.md).",
+    "batch_shape5 contracted version_diff/cross_engine rows count as properties_asked.",
+    "#554: per-wave hop rates join curated dispositions on (site, question_id);",
+    "filed = curated status filed/private_first/fixed_upstream (or filed_at set);",
+    "accepted = fixed_upstream. Starvation: backlog_weeks = demand_open /",
+    "admission_per_week, admission from GO gate-decision artifacts (not the",
+    "lagging candidate ledger). unknown_date rows are excluded from median",
+    "time-to-acceptance; time-to-acceptance is Kaplan-Meier or median of",
+    "closed rows only — never censored + closed mixed in a plain median."
+  ],
+  "per_wave": [
+    {
+      "accepted": 0,
+      "corpora": [
+        "aidevops"
+      ],
+      "filed": 0,
+      "idiom_bucket": "shell-hook-guards",
+      "properties_asked": 5,
+      "properties_sat": 0,
+      "sat_ground_truthed": 0,
+      "shape_counts": {
+        "1": 3,
+        "3": 2
+      },
+      "shape_mix": {
+        "shape_1": 0.6,
+        "shape_3": 0.4
+      },
+      "wave_id": "aidevops_w1"
+    },
+    {
+      "accepted": 0,
+      "corpora": [
+        "claude-code-plugins"
+      ],
+      "filed": 0,
+      "idiom_bucket": "plugin-hook-guards",
+      "properties_asked": 3,
+      "properties_sat": 0,
+      "sat_ground_truthed": 0,
+      "shape_counts": {
+        "1": 3
+      },
+      "shape_mix": {
+        "shape_1": 1.0
+      },
+      "wave_id": "claude-code-plugins_w1"
+    },
+    {
+      "accepted": 0,
+      "corpora": [
+        "Doberman-Core"
+      ],
+      "filed": 1,
+      "idiom_bucket": "windows-secret-store-path",
+      "properties_asked": 1,
+      "properties_sat": 1,
+      "sat_ground_truthed": 1,
+      "shape_counts": {},
+      "shape_mix": {},
+      "wave_id": "doberman_secret_path_20r2_r1"
+    },
+    {
+      "accepted": 0,
+      "corpora": [
+        "Doberman-Core"
+      ],
+      "filed": 0,
+      "idiom_bucket": "command-execution",
+      "properties_asked": 2,
+      "properties_sat": 2,
+      "sat_ground_truthed": 2,
+      "shape_counts": {
+        "2": 2
+      },
+      "shape_mix": {
+        "shape_2": 1.0
+      },
+      "wave_id": "doberman_w1"
+    },
+    {
+      "accepted": 0,
+      "corpora": [
+        "dogfood_shell"
+      ],
+      "filed": 0,
+      "idiom_bucket": "normalize-fixpoint",
+      "properties_asked": 2,
+      "properties_sat": 0,
+      "sat_ground_truthed": 0,
+      "shape_counts": {
+        "3": 2
+      },
+      "shape_mix": {
+        "shape_3": 1.0
+      },
+      "wave_id": "dogfood_shell_w1"
+    },
+    {
+      "accepted": 0,
+      "corpora": [
+        "forge-cli"
+      ],
+      "filed": 0,
+      "idiom_bucket": "secret-redaction",
+      "properties_asked": 1,
+      "properties_sat": 0,
+      "sat_ground_truthed": 0,
+      "shape_counts": {
+        "4": 1
+      },
+      "shape_mix": {
+        "shape_4": 1.0
+      },
+      "wave_id": "forge-cli_helper_image"
+    },
+    {
+      "accepted": 0,
+      "corpora": [
+        "forge-cli"
+      ],
+      "filed": 0,
+      "idiom_bucket": "secret-redaction",
+      "properties_asked": 5,
+      "properties_sat": 0,
+      "sat_ground_truthed": 0,
+      "shape_counts": {
+        "1": 3,
+        "2": 2
+      },
+      "shape_mix": {
+        "shape_1": 0.6,
+        "shape_2": 0.4
+      },
+      "wave_id": "forge-cli_w1"
+    },
+    {
+      "accepted": 0,
+      "corpora": [
+        "mycelium"
+      ],
+      "filed": 0,
+      "idiom_bucket": "control-failclosed",
+      "properties_asked": 3,
+      "properties_sat": 0,
+      "sat_ground_truthed": 0,
+      "shape_counts": {
+        "1": 3
+      },
+      "shape_mix": {
+        "shape_1": 1.0
+      },
+      "wave_id": "mycelium_w1"
+    },
+    {
+      "accepted": 0,
+      "corpora": [
+        "openwrt_luci"
+      ],
+      "filed": 0,
+      "idiom_bucket": "form-validator-alphabets",
+      "properties_asked": 4,
+      "properties_sat": 1,
+      "sat_ground_truthed": 1,
+      "shape_counts": {
+        "1": 3,
+        "3": 1
+      },
+      "shape_mix": {
+        "shape_1": 0.75,
+        "shape_3": 0.25
+      },
+      "wave_id": "openwrt_luci_w1"
+    },
+    {
+      "accepted": 0,
+      "corpora": [
+        "openwrt_packages"
+      ],
+      "filed": 0,
+      "idiom_bucket": "validator-charsets-and-captures",
+      "properties_asked": 5,
+      "properties_sat": 1,
+      "sat_ground_truthed": 1,
+      "shape_counts": {
+        "1": 3,
+        "3": 2
+      },
+      "shape_mix": {
+        "shape_1": 0.6,
+        "shape_3": 0.4
+      },
+      "wave_id": "openwrt_packages_w1"
+    },
+    {
+      "accepted": 0,
+      "corpora": [
+        "openwrt_packages"
+      ],
+      "filed": 0,
+      "idiom_bucket": "image-and-ddns-json",
+      "properties_asked": 5,
+      "properties_sat": 1,
+      "sat_ground_truthed": 1,
+      "shape_counts": {
+        "1": 2,
+        "3": 2,
+        "4": 1
+      },
+      "shape_mix": {
+        "shape_1": 0.4,
+        "shape_3": 0.4,
+        "shape_4": 0.2
+      },
+      "wave_id": "openwrt_packages_w2"
+    },
+    {
+      "accepted": 0,
+      "corpora": [
+        "openwrt_packages"
+      ],
+      "filed": 0,
+      "idiom_bucket": "ddns-query-and-escape-image",
+      "properties_asked": 4,
+      "properties_sat": 1,
+      "sat_ground_truthed": 1,
+      "shape_counts": {
+        "1": 1,
+        "3": 2,
+        "4": 1
+      },
+      "shape_mix": {
+        "shape_1": 0.25,
+        "shape_3": 0.5,
+        "shape_4": 0.25
+      },
+      "wave_id": "openwrt_packages_w3"
+    },
+    {
+      "accepted": 0,
+      "corpora": [
+        "real-router"
+      ],
+      "filed": 0,
+      "idiom_bucket": "navigation-param-control-calibration",
+      "properties_asked": 1,
+      "properties_sat": 0,
+      "sat_ground_truthed": 0,
+      "shape_counts": {
+        "1": 1
+      },
+      "shape_mix": {
+        "shape_1": 1.0
+      },
+      "wave_id": "rr-nav-controls-p6-20261016"
+    }
+  ],
+  "queue_health": {
+    "artifacts_present": true,
+    "claimed": 0,
+    "contracted": 1,
+    "emitted": 0,
+    "median_age_days": 0.0,
+    "note": "",
+    "skipped": 0
+  },
+  "rates": {
+    "accepted_per_extracted": 7e-06,
+    "accepted_per_gt": 0.111111,
+    "encodable_fraction": 0.643531,
+    "encodable_fraction_all_inventories": 0.641892,
+    "encodable_fraction_excluding_yara": 0.647587,
+    "encodable_fraction_yara": 0.637736,
+    "fullword_share_of_unencodable": 0.56891,
+    "gt_per_sat": 1.0,
+    "pipeline_accepted_per_extracted": 7e-06,
+    "pipeline_accepted_per_gt": 0.111111,
+    "property_asked_per_encodable": 0.000458,
+    "sat_per_property_asked": 0.204545,
+    "yara_share_of_unencodable": 0.584805
+  },
+  "rule_diff_reports": {
+    "crs_cross_engine_rule_diff_report.json": {
+      "mutation_guards": 0,
+      "rows": 8,
+      "rule_diff_sat": 5,
+      "rule_diff_sat_gt": 5,
+      "rule_diff_unsat": 3
+    },
+    "crs_rule_diff_report.json": {
+      "mutation_guards": 0,
+      "rows": 1,
+      "rule_diff_sat": 1,
+      "rule_diff_sat_gt": 1,
+      "rule_diff_unsat": 0
+    },
+    "gitleaks_rule_diff_report.json": {
+      "mutation_guards": 66,
+      "rows": 88,
+      "rule_diff_sat": 4,
+      "rule_diff_sat_gt": 4,
+      "rule_diff_unsat": 18
+    }
+  },
+  "schema_version": "1",
+  "security_tool_split": {
+    "properties_asked_in_tools": 12,
+    "properties_asked_not_tools": 32,
+    "properties_sat_in_tools": 5,
+    "properties_sat_not_tools": 4
+  },
+  "shape_mix_by_corpus": {
+    "Doberman-Core": {
+      "shape_2": 2
+    },
+    "aidevops": {
+      "shape_1": 3,
+      "shape_3": 2
+    },
+    "claude-code-plugins": {
+      "shape_1": 3
+    },
+    "dogfood_shell": {
+      "shape_3": 2
+    },
+    "forge-cli": {
+      "shape_1": 3,
+      "shape_2": 2,
+      "shape_4": 1
+    },
+    "mycelium": {
+      "shape_1": 3
+    },
+    "openwrt_luci": {
+      "shape_1": 3,
+      "shape_3": 1
+    },
+    "openwrt_packages": {
+      "shape_1": 6,
+      "shape_3": 6,
+      "shape_4": 2
+    },
+    "real-router": {
+      "shape_1": 1
+    }
+  },
+  "starvation": {
+    "admission_per_week": 2,
+    "admission_window_days": 7,
+    "admission_window_end": "2026-08-26",
+    "alert_backlog_increasing": false,
+    "backlog_weeks": 30.5,
+    "consecutive_increases": 0,
+    "demand_open_gated_go_no_closed_wave": 61,
+    "formula": "backlog_weeks = demand_open / admission_per_week",
+    "history": [
+      {
+        "admission_per_week": 2,
+        "backlog_weeks": 32.0,
+        "demand_open": 64,
+        "week_end": "2026-08-20"
+      },
+      {
+        "admission_per_week": 2,
+        "backlog_weeks": 32.0,
+        "demand_open": 64,
+        "week_end": "2026-08-26"
+      }
+    ],
+    "mine_queue_cap": 100,
+    "mine_queue_len": 100,
+    "mine_queue_pressure": 1.0
+  },
+  "upstream": {
+    "accepted_upstream": 1,
+    "existence_proofs": 5,
+    "false_positive": 9,
+    "filed_plan": 1,
+    "fixed_upstream": 1,
+    "language_membership": 19,
+    "out_of_scope_redos": 1,
+    "private_first": 4,
+    "rows": 20,
+    "third_party_public": 0,
+    "wont_file": 4
+  },
+  "upstream_rows": [
+    {
+      "corpus": "usrmanage",
+      "id": "CU-001",
+      "kind": "counterexample_finder",
+      "language_membership": true,
+      "status": "fixed_upstream"
+    },
+    {
+      "corpus": "fwlive",
+      "id": "CU-002",
+      "kind": "property",
+      "language_membership": true,
+      "status": "filed_plan"
+    },
+    {
+      "corpus": "happycow",
+      "id": "CU-003",
+      "kind": "usage_mismatch",
+      "language_membership": true,
+      "status": "false_positive"
+    },
+    {
+      "corpus": "happycow",
+      "id": "CU-004",
+      "kind": "redos",
+      "language_membership": false,
+      "status": "out_of_scope_redos"
+    },
+    {
+      "corpus": "coreruleset",
+      "id": "CU-005",
+      "kind": "rule_diff",
+      "language_membership": true,
+      "status": "false_positive"
+    },
+    {
+      "corpus": "gitleaks",
+      "id": "CU-006",
+      "kind": "rule_diff",
+      "language_membership": true,
+      "status": "false_positive"
+    },
+    {
+      "corpus": "gitleaks",
+      "id": "CU-007",
+      "kind": "rule_diff",
+      "language_membership": true,
+      "status": "false_positive"
+    },
+    {
+      "corpus": "gitleaks",
+      "id": "CU-008",
+      "kind": "rule_diff",
+      "language_membership": true,
+      "status": "false_positive"
+    },
+    {
+      "corpus": "gitleaks",
+      "id": "CU-009",
+      "kind": "rule_diff",
+      "language_membership": true,
+      "status": "false_positive"
+    },
+    {
+      "corpus": "coreruleset",
+      "id": "CU-010",
+      "kind": "rule_diff",
+      "language_membership": true,
+      "status": "false_positive"
+    },
+    {
+      "corpus": "openwrt_packages",
+      "id": "CU-011",
+      "kind": "counterexample_finder",
+      "language_membership": true,
+      "status": "wont_file"
+    },
+    {
+      "corpus": "openwrt_packages",
+      "id": "CU-012",
+      "kind": "counterexample_finder",
+      "language_membership": true,
+      "status": "wont_file"
+    },
+    {
+      "corpus": "openwrt_packages",
+      "id": "CU-013",
+      "kind": "counterexample_finder",
+      "language_membership": true,
+      "status": "wont_file"
+    },
+    {
+      "corpus": "openwrt_luci",
+      "id": "CU-014",
+      "kind": "counterexample_finder",
+      "language_membership": true,
+      "status": "wont_file"
+    },
+    {
+      "corpus": "Doberman-Core",
+      "id": "CU-015",
+      "kind": "counterexample_finder",
+      "language_membership": true,
+      "status": "false_positive"
+    },
+    {
+      "corpus": "Doberman-Core",
+      "id": "CU-016",
+      "kind": "counterexample_finder",
+      "language_membership": true,
+      "status": "false_positive"
+    },
+    {
+      "corpus": "Doberman-Core",
+      "id": "CU-017",
+      "kind": "bug_demo",
+      "language_membership": true,
+      "status": "private_first"
+    },
+    {
+      "corpus": "AutoAR",
+      "id": "CU-018",
+      "kind": "counterexample_finder",
+      "language_membership": true,
+      "status": "private_first"
+    },
+    {
+      "corpus": "malcontent",
+      "id": "CU-019",
+      "kind": "counterexample_finder",
+      "language_membership": true,
+      "status": "private_first"
+    },
+    {
+      "corpus": "malcontent",
+      "id": "CU-020",
+      "kind": "counterexample_finder",
+      "language_membership": true,
+      "status": "private_first"
+    }
+  ],
+  "yara_split": {
+    "encodable_fraction_all": 0.641892,
+    "encodable_fraction_excluding_yara": 0.647587,
+    "encodable_fraction_yara": 0.637736,
+    "fraction_all_encodable": 122801,
+    "fraction_all_n": 191311,
+    "fraction_excluding_yara_encodable": 52270,
+    "fraction_excluding_yara_n": 80715,
+    "fraction_yara_encodable": 70531,
+    "fraction_yara_n": 110596,
+    "fullword_boundary_all": 38976,
+    "fullword_boundary_yara": 38976,
+    "fullword_share_of_unencodable": 0.56891,
+    "fullword_share_of_yara_unencodable": 0.972819,
+    "unencodable_all": 68510,
+    "unencodable_yara": 40065,
+    "yara_share_of_unencodable": 0.584805
+  }
+}

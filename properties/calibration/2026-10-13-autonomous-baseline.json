@@ -1,0 +1,69 @@
+{
+  "schema_version": "1",
+  "baseline_id": "2026-10-13-autonomous-corpus-start",
+  "recorded_at": "2026-10-13",
+  "source_revision": "53b9c3455cbde29a3d6695101fe215e21b5fa706",
+  "local_base_revision": "cd0d906a878afca7966efbef44a417d249d38537",
+  "working_tree_at_start": {
+    "modified_or_untracked_paths": 55,
+    "included_in_baseline_artifacts": false,
+    "note": "The 55 in-progress paths were reviewed separately; generated counts below come from source_revision only."
+  },
+  "baseline_claims": {
+    "extracted_sites": 149212,
+    "encodable_sites": 96030,
+    "product_questions": 41,
+    "product_unsat": 32,
+    "product_sat": 8,
+    "sat_replayed": 8,
+    "accepted_upstream_fixes": 1,
+    "accepted_fix_scope": "own-code",
+    "public_third_party_acceptance": 0,
+    "mine_candidates": 1463,
+    "mine_mined": 610,
+    "mine_go": 64,
+    "mine_triage_trial": 41,
+    "mine_no_go": 748,
+    "frozen_calibration": "2026-09-12-calibration-20-r2",
+    "frozen_calibration_repositories": 20,
+    "frozen_calibration_processing_failures": 0,
+    "frozen_cohort_product_properties": 0,
+    "frozen_cohort_pr4_checkpoint": false,
+    "scheduled_clusters": 80,
+    "scheduled_selected_buckets": 0,
+    "conversion_queue_artifacts": 0,
+    "conversion_review_stopwatch_rows": 0,
+    "agent_run_cost_usd": null,
+    "human_conversion_minutes": null,
+    "third_party_report_transmissions": null,
+    "maintainer_confirmations": null,
+    "third_party_fixes": null
+  },
+  "artifact_sha256": {
+    "properties/generated/conversion-ledger.json": "e7f706a634e133cace34c4657f0b1ecaead856b64469ecc345a752f97e251a0e",
+    "properties/generated/conversion-ledger.md": "4b8ac633ca43720409aef2b8b5523b45d1aafb515cf9042494592c723ebc08a9",
+    "properties/generated/candidate-ledger.json": "5cfc86495d577bdcac3556fd0b048589ba136efcb26832b3351f3b8acc46eb0c",
+    "properties/generated/conversion_schedule.json": "df968cda4da9548bca41983cba77be65df8a5cb58cca7f79807905aeddcf2bb8",
+    "properties/calibration/2026-09-12-calibration-20-r2/closeout.md": "5cd5580134a57e7ee476471d1bb0b21c7a4e553221238ea8ea44d150ca32deb6",
+    "properties/calibration/2026-09-12-calibration-20-r2/manifest.json": "cfcfeaa19a37e8704adf84d8979e71a9887ced3a71030fc3572d96c1a8270a78"
+  },
+  "dependency_map": {
+    "reused_components": [
+      "probe and batch state machines",
+      "corpus lock and conversion queue",
+      "candidate ranker and admission gate",
+      "contract harness and conversion emitter",
+      "conversion ledger and PR4 checkpoint"
+    ],
+    "active_work_to_preserve": ["#448 clone timeout handling", "#551 conversion", "#571 ECMA route"],
+    "vertical_slice": "#648 forge-cli pinned renderer replay",
+    "issue_status_refresh": "not independently queried in this baseline; repository close-outs and artifacts are the evidence source"
+  },
+  "runtime_available_at_review": {
+    "python": "3.14.8",
+    "z3": "5.0.0",
+    "forge_cli_source_pin": "efcf8e4c0087def553a737dc1c4eebda5d8a90cd",
+    "forge_cli_source_replay": "available"
+  },
+  "next_runnable_child": "P1 autonomous contract eligibility, followed by P2 roster and the Forge helper-image slice"
+}

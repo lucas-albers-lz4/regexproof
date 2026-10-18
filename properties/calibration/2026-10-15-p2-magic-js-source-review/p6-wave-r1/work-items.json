@@ -1,0 +1,37 @@
+[
+  {
+    "question_ids": [
+      "ME-oauth2-pkce-s256-base64url"
+    ],
+    "reviewed": false,
+    "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-ext/oauth2/src/crypto.ts:22:column-53"
+  },
+  {
+    "question_ids": [
+      "ME-rn-bare-pkce-s256-base64url"
+    ],
+    "reviewed": false,
+    "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-ext/react-native-bare-oauth/src/crypto.ts:25:column-53"
+  },
+  {
+    "question_ids": [
+      "ME-rn-expo-pkce-s256-base64url"
+    ],
+    "reviewed": false,
+    "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-ext/react-native-expo-oauth/src/crypto.ts:25:column-53"
+  },
+  {
+    "question_ids": [
+      "ME-oauth2-webauthn-base64url"
+    ],
+    "reviewed": false,
+    "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-ext/oauth2/src/utils/base64.ts:4:column-26"
+  },
+  {
+    "question_ids": [
+      "ME-passkey-base64url"
+    ],
+    "reviewed": false,
+    "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-ext/passkey/src/utils/base64.ts:11:column-26"
+  }
+]

@@ -1,0 +1,32 @@
+{
+  "adoption": {
+    "approved_on": "2026-10-16",
+    "authority": "standing_user_delegation",
+    "contract_sha256": "b5aecf15e90b96cdd89cc034c4522e2ccb428dabdb0e994ce9491cab8f47a785",
+    "evidence": [
+      "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/pre-dispatch-validator-helper.sh",
+      "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/runtime-health-audit-helper.sh",
+      "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/tests/test-runtime-audit-detectors.sh",
+      "properties/calibration/2026-10-16-autonomous-aidevops-predispatch-github-text-20r2/review-evidence-representative.json"
+    ],
+    "policy_version": "autonomous-contracts-v1",
+    "rationale": "Pinned cmd_validate fetches the external issue body through gh api; the documented marker producer supplies detector=<id> from local detector rule files; the validator turns the captured component into a local .sh path and embeds it inside single quotes in bash -c. This adoption is limited to each ERE capture component excluding slash, dot, and single quote; it does not claim an allowlist, config path safety, detector correctness, exploitability, or impact. Locale range behavior is separately declared in the product-gate scope.",
+    "review": {
+      "author": "Codex-P7-source-review",
+      "reviewer": "Codex-independent-source-review-pass",
+      "same_model": true
+    },
+    "source_file": ".agents/scripts/pre-dispatch-validator-helper.sh",
+    "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+    "source_sha256": "b68445d5eaf510e820831422c6e064ac58bbdc4496483ad562df30786e3723b5",
+    "source_url": "https://github.com/marcusquinn/aidevops",
+    "status": "approved"
+  },
+  "declared_domain": "Exact source pin 8666b6c6c52472b5535aa295f2df593918152cb1; individual `grep -oE` matches under the recorded ERE syntax selector (shell_flags syntax=ere, grep_mode=extended), ASCII match characters, POSIX-shell `search` semantics. Formal proof domain is one captured code unit checked against the forbidden set `{'.','/','\\''}`; product replay must cover the issue-body extraction, zero/one/multiple attribute matches, and the quoted path interpolation under the recorded GNU grep/Bash runtime. The helper does not force LC_COLLATE; replay records the local locale and this contract does not assert behavior for locales with non-ASCII range-collation semantics.",
+  "guarantee": "For every individual match returned by the exact pinned POSIX-shell helper's `grep -oE 'detector=[a-z0-9_-]+'` over its issue-body-derived generator marker, the captured detector-name component contains no slash, dot, or single quote. When that component is appended to the local rules directory as `<component>.sh` and embedded in the existing single-quoted `bash -c` source path, the issue-controlled component cannot add a path separator or terminate that shell quote. Multiple matches may be joined by command substitution with LF; that separator also cannot terminate the quote. This does not claim an allowlist or validate the configured rules directory.",
+  "input_source": "The `body` returned by `gh api repos/<slug>/issues/<number> --jq '.body // \"\"'` in `cmd_validate`; the generator marker and its detector attribute can be present in externally authored GitHub issue text. The captured component then selects a local detector script in `_validator_runtime_audit`.",
+  "provenance": "agent_derived",
+  "schema_version": "1",
+  "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pre-dispatch-validator-helper.sh:1881:column-47",
+  "trust": "untrusted-input"
+}

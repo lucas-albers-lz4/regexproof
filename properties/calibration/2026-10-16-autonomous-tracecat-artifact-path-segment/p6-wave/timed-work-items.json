@@ -1,0 +1,9 @@
+[
+  {
+    "question_ids": [
+      "TC-artifact-path-segment-safe-image"
+    ],
+    "reviewed": false,
+    "site": "TracecatHQ/tracecat@c84d52528a489821f355fc63976fbc7783ae0ad5:packages/tracecat-ee/tracecat_ee/agent/artifacts/mount_only_provider.py:31:_SAFE_PATH_SEGMENT_RE"
+  }
+]

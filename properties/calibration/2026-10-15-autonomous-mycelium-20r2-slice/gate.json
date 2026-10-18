@@ -1,0 +1,22 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "scripts/mycelium-release-preflight-regression-gate.py",
+    "--source-pin",
+    "d4f01ba6202d50909d1977810d322259482e0b82"
+  ],
+  "evidence": {
+    "differential_case_counts": {
+      "MY-mycelium-20r2-release-preflight-requires-64-hex": 3814
+    },
+    "product_engine_replay_question_ids": [
+      "MY-mycelium-20r2-release-preflight-requires-64-hex"
+    ]
+  },
+  "gate_id": "mycelium-20r2-release-preflight",
+  "question_ids": [
+    "MY-mycelium-20r2-release-preflight-requires-64-hex"
+  ],
+  "schema_version": "1",
+  "timeout_seconds": 300
+}

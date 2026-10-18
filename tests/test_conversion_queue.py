@@ -18,6 +18,42 @@ from regexproof.mine import conversion_queue as cq
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 
 
+def _product_contract(site: str, *, provenance: str = "human"):
+    return {
+        "schema_version": "1",
+        "site": site,
+        "guarantee": "The admitted boundary rejects semicolons.",
+        "input_source": "untrusted request field",
+        "trust": "untrusted-input",
+        "declared_domain": "ASCII strings",
+        "provenance": provenance,
+    }
+
+
+def _agent_contract(site: str):
+    from regexproof.contract_adoption import contract_digest
+
+    contract = _product_contract(site, provenance="agent_derived")
+    pin = "a" * 40
+    url = "https://github.com/example/project"
+    contract["adoption"] = {
+        "policy_version": "autonomous-contracts-v1",
+        "status": "approved",
+        "authority": "standing_user_delegation",
+        "approved_on": "2026-10-13",
+        "rationale": "The pinned source and caller establish the stated boundary.",
+        "evidence": [f"{url}/blob/{pin}/src/validator.py"],
+        "source_url": url,
+        "source_pin": pin,
+        "source_file": "src/validator.py",
+        "source_sha256": "b" * 64,
+        "contract_sha256": "0" * 64,
+        "review": {"author": "agent-a", "reviewer": "agent-b", "same_model": True},
+    }
+    contract["adoption"]["contract_sha256"] = contract_digest(contract)
+    return contract
+
+
 def _ranked():
     return [
         {
@@ -142,10 +178,10 @@ def test_stub_never_contracts(tmp_path):
         corpus_status="gated:go",
         ledger_state={}, generation=0, root=tmp_path, lock_log=_open_wave(tmp_path),
     )
-    with pytest.raises(SystemExit, match="stub"):
+    with pytest.raises(SystemExit, match="incomplete or unadopted"):
         cq.contract(
             q["cluster"], site,
-            contract={"guarantee": "x", "input_source": "y"}, root=tmp_path,
+            contract={"site": site, "guarantee": "x", "input_source": "y"}, root=tmp_path,
         )
 
 
@@ -167,7 +203,7 @@ def test_contract_refused_after_wave_close(tmp_path):
     with pytest.raises(SystemExit, match="stale claim after close"):
         cq.contract(
             q["cluster"], site,
-            contract={"guarantee": "x", "input_source": "y"},
+            contract=_product_contract(site),
             root=tmp_path, lock_log=log,
         )
 
@@ -193,7 +229,7 @@ def test_contract_allowed_in_active_wave(tmp_path):
     )
     row = cq.contract(
         q["cluster"], site,
-        contract={"guarantee": "x", "input_source": "y"},
+        contract=_product_contract(site),
         root=tmp_path, lock_log=log,
     )
     assert row["status"] == "contracted"
@@ -221,7 +257,7 @@ def test_contract_refused_when_claim_wave_blank(tmp_path):
     with pytest.raises(SystemExit, match="without a wave_id"):
         cq.contract(
             q["cluster"], site,
-            contract={"guarantee": "x", "input_source": "y"},
+            contract=_product_contract(site),
             root=tmp_path, lock_log=log,
         )
 
@@ -242,11 +278,28 @@ def test_contract_after_human_adoption(tmp_path):
     )
     row = cq.contract(
         q["cluster"], site,
-        contract={"guarantee": "x", "input_source": "y", "declared_domain": "z"},
+        contract=_product_contract(site),
         root=tmp_path,
     )
     assert row["status"] == "contracted"
-    assert row["contract"]["guarantee"] == "x"
+    assert row["contract"]["guarantee"] == "The admitted boundary rejects semicolons."
+
+
+def test_agent_adopts_without_queue_human_provenance(tmp_path):
+    _, q = _queue(tmp_path)
+    site = q["candidate_sites"][0]["site"]
+    cq.claim(
+        q["cluster"], site,
+        corpus_status="gated:go",
+        ledger_state={}, generation=0, root=tmp_path, lock_log=_open_wave(tmp_path),
+    )
+    row = cq.contract(
+        q["cluster"], site,
+        contract=_agent_contract(site),
+        root=tmp_path,
+    )
+    assert row["status"] == "contracted"
+    assert row["provenance"] == "agent_derived"
 
 
 # --- skip vocabulary / close-out -------------------------------------------
@@ -374,7 +427,7 @@ def test_skip_refused_on_contracted_row(tmp_path):
     )
     cq.contract(
         q["cluster"], site,
-        contract={"guarantee": "x", "input_source": "y"}, root=tmp_path,
+        contract=_product_contract(site), root=tmp_path,
     )
     with pytest.raises(SystemExit, match="cannot be reverted"):
         cq.skip(q["cluster"], site, reason="unreachable", root=tmp_path)
@@ -405,7 +458,7 @@ def test_queue_health_joins_candidate_rows(tmp_path):
     )
     cq.contract(
         q["cluster"], site,
-        contract={"guarantee": "x", "input_source": "y"}, root=qdir,
+        contract=_product_contract(site), root=qdir,
     )
     spec = importlib.util.spec_from_file_location(
         "conversion_ledger", ROOT / "scripts" / "conversion-ledger.py"
@@ -448,7 +501,7 @@ def test_wave_closeout_requires_skip_reasons(tmp_path):
     )
     cq.contract(
         q["cluster"], site,
-        contract={"guarantee": "x", "input_source": "y"}, root=tmp_path,
+        contract=_product_contract(site), root=tmp_path,
     )
     # Without skips, the other top-15 rows are close-out blockers.
     q = cq.load_queue(q["cluster"], root=tmp_path)

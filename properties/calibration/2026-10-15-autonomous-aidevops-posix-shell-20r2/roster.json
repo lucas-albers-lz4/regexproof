@@ -1,0 +1,53 @@
+{
+  "cohort_id": "2026-09-12-calibration-20-r2",
+  "cohort_manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+  "coverage_digest": "d45208a4a83b70c89d4de135aa640de882f9a27d4514a565951f4d9b47f95341",
+  "identities": [
+    {
+      "contract_sha256": "0af6fb1556f832afec6a2d0f10f9cc1a21f3af32586ab15fdfc143cc60838967",
+      "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "provenance": "agent_derived",
+      "question_id": "AI-aidevops-brief-tid-capture",
+      "repo_id": "marcusquinn/aidevops",
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/hooks/brief-filename-guard.sh:105:t[0-9]+",
+      "url": "https://github.com/marcusquinn/aidevops"
+    },
+    {
+      "contract_sha256": "4374d2ea29f9ea6f729e9b2b0f5749338dc95544ab1c02f489d4d85ebb321d22",
+      "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "provenance": "agent_derived",
+      "question_id": "AI-aidevops-brief-tid-no-semicolon",
+      "repo_id": "marcusquinn/aidevops",
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/hooks/brief-filename-guard.sh:84:brief\\.md",
+      "url": "https://github.com/marcusquinn/aidevops"
+    },
+    {
+      "contract_sha256": "52591f32b47e65181ccbcf490d2a1fced28257ec96eb037dd7fbe61824058a37",
+      "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "provenance": "agent_derived",
+      "question_id": "AI-aidevops-cred-ident-no-semicolon",
+      "repo_id": "marcusquinn/aidevops",
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/hooks/credential-emission-pre-push.sh:103:remote_url",
+      "url": "https://github.com/marcusquinn/aidevops"
+    },
+    {
+      "contract_sha256": "b188de0e4219be565c2c68c84b024de9d3bc3588d5025a2629126729ea5ed345",
+      "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "provenance": "agent_derived",
+      "question_id": "AI-aidevops-scope-heading-no-semicolon",
+      "repo_id": "marcusquinn/aidevops",
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/hooks/scope-guard-pre-push.sh:137:Files",
+      "url": "https://github.com/marcusquinn/aidevops"
+    },
+    {
+      "contract_sha256": "c8d7d71b14f9d27e8fcbf3d7e1dda161c435bab47343fae27987da5652879436",
+      "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "provenance": "agent_derived",
+      "question_id": "AI-aidevops-gh-issue-digit-capture",
+      "repo_id": "marcusquinn/aidevops",
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/hooks/task-id-collision-guard.sh:378:#[0-9]+",
+      "url": "https://github.com/marcusquinn/aidevops"
+    }
+  ],
+  "schema_version": "2"
+}

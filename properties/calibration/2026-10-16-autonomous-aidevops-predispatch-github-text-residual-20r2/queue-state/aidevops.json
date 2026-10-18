@@ -1,0 +1,355 @@
+{
+  "candidate_sites": [
+    {
+      "cheap_signals": {
+        "regex_id": "da131ed2a545cd8f1bd1999bb0fbbba7",
+        "trust_guess": "untrusted-input"
+      },
+      "corpus": "aidevops",
+      "created_at": "2026-10-16T02:05:00Z",
+      "idiom_bucket": "pre-dispatch-github-text",
+      "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "provenance": "stub",
+      "rank": 1,
+      "reasons": [
+        {
+          "note": "The source PR extractor uses only decimal capture groups before this guard, and the resulting number is passed as a path component. This post-extraction check has no distinct regex guarantee beyond that parser.",
+          "reason": "out_of_scope"
+        }
+      ],
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pre-dispatch-validator-helper.sh:1062:column-4",
+      "status": "skipped_out_of_scope",
+      "suggested_shape": "shape-1",
+      "suggested_sink_question": "The source PR extractor uses only decimal capture groups before this guard, and the resulting number is passed as a path component. This post-extraction check has no distinct regex guarantee beyond that parser."
+    },
+    {
+      "cheap_signals": {
+        "regex_id": "47e5aebec9439ac88a112ac690214f25",
+        "trust_guess": "untrusted-input"
+      },
+      "corpus": "aidevops",
+      "created_at": "2026-10-16T02:05:00Z",
+      "idiom_bucket": "pre-dispatch-github-text",
+      "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "provenance": "stub",
+      "rank": 2,
+      "reasons": [
+        {
+          "note": "The source PR number is already returned from fixed decimal capture groups; this guard is defense in depth before interpolation into a sed expression, but the same input is constrained by its producer.",
+          "reason": "out_of_scope"
+        }
+      ],
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pre-dispatch-validator-helper.sh:1075:column-1",
+      "status": "skipped_out_of_scope",
+      "suggested_shape": "shape-1",
+      "suggested_sink_question": "The source PR number is already returned from fixed decimal capture groups; this guard is defense in depth before interpolation into a sed expression, but the same input is constrained by its producer."
+    },
+    {
+      "cheap_signals": {
+        "regex_id": "d402abf21f1409bff29e772b5c6ef32c",
+        "trust_guess": "untrusted-input"
+      },
+      "corpus": "aidevops",
+      "created_at": "2026-10-16T02:05:00Z",
+      "idiom_bucket": "pre-dispatch-github-text",
+      "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "provenance": "stub",
+      "rank": 3,
+      "reasons": [
+        {
+          "note": "The SHA capture is already limited to 40 hex characters. The result is compared as data with GitHub review commit IDs; this regex does not feed a separate security-sensitive transformation.",
+          "reason": "out_of_scope"
+        }
+      ],
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pre-dispatch-validator-helper.sh:1077:column-4",
+      "status": "skipped_out_of_scope",
+      "suggested_shape": "shape-1",
+      "suggested_sink_question": "The SHA capture is already limited to 40 hex characters. The result is compared as data with GitHub review commit IDs; this regex does not feed a separate security-sensitive transformation."
+    },
+    {
+      "cheap_signals": {
+        "regex_id": "f0ac4ff9d62e08b7a7b2b7bcb7f65337",
+        "trust_guess": "untrusted-input"
+      },
+      "corpus": "aidevops",
+      "created_at": "2026-10-16T02:05:00Z",
+      "idiom_bucket": "pre-dispatch-github-text",
+      "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "provenance": "stub",
+      "rank": 4,
+      "reasons": [
+        {
+          "note": "This presence search classifies review-followup evidence and controls fail-closed handling when metadata lookup fails. It does not validate the untrusted marker payload or establish a standalone boundary guarantee.",
+          "reason": "out_of_scope"
+        }
+      ],
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pre-dispatch-validator-helper.sh:1574:column-31",
+      "status": "skipped_out_of_scope",
+      "suggested_shape": "shape-1",
+      "suggested_sink_question": "This presence search classifies review-followup evidence and controls fail-closed handling when metadata lookup fails. It does not validate the untrusted marker payload or establish a standalone boundary guarantee."
+    },
+    {
+      "cheap_signals": {
+        "regex_id": "94007cad844a13064fdbd898542938e3",
+        "trust_guess": "untrusted-input"
+      },
+      "corpus": "aidevops",
+      "created_at": "2026-10-16T02:05:00Z",
+      "idiom_bucket": "pre-dispatch-github-text",
+      "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "provenance": "stub",
+      "rank": 5,
+      "reasons": [
+        {
+          "note": "This substitution strips the fixed cited_file= key after the token capture. It does not constrain the path; the line-1878 token grammar and filesystem sink are covered by the first-wave contract.",
+          "reason": "out_of_scope"
+        }
+      ],
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pre-dispatch-validator-helper.sh:1878:column-77",
+      "status": "skipped_out_of_scope",
+      "suggested_shape": "shape-1",
+      "suggested_sink_question": "This substitution strips the fixed cited_file= key after the token capture. It does not constrain the path; the line-1878 token grammar and filesystem sink are covered by the first-wave contract."
+    },
+    {
+      "cheap_signals": {
+        "regex_id": "74fe9f403cf62d875f8b4ef8537381d4",
+        "trust_guess": "untrusted-input"
+      },
+      "claimed_at": "2026-10-16T02:02:18+00:00",
+      "contract": {
+        "adoption": {
+          "approved_on": "2026-10-16",
+          "authority": "standing_user_delegation",
+          "contract_sha256": "890a7d2f893708842fb1f0b09200be4a4e310e780bd952049a8d2262332b1e0d",
+          "evidence": [
+            "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/pre-dispatch-validator-helper.sh",
+            "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/pulse-dispatch-large-file-gate.sh",
+            "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/tests/test-pre-dispatch-validator-large-file.sh",
+            "properties/calibration/2026-10-16-autonomous-aidevops-predispatch-github-text-residual-20r2/review-evidence.json",
+            "properties/calibration/2026-10-16-autonomous-aidevops-predispatch-github-text-residual-20r2/replay-threshold.json"
+          ],
+          "policy_version": "autonomous-contracts-v1",
+          "rationale": "The marker producer emits the configured large-file threshold as a decimal count and the helper uses the captured value to decide whether the measured file is below that threshold. The issue body is untrusted. At the exact pin, threshold=08 is accepted by the ERE, then Bash treats it as invalid octal in [[ -lt ]]; the comparison errors and the helper returns 0, allowing dispatch for a five-line file even though decimal eight is larger. The local replay also confirms threshold=8 follows the intended premise-falsified path. This adopts the narrow numeric-comparison contract and records local behavior only; it does not establish an external report or confirmed security impact.",
+          "review": {
+            "author": "Codex-P7-residual-source-review",
+            "reviewer": "Codex-independent-source-review-pass",
+            "same_model": true
+          },
+          "source_file": ".agents/scripts/pre-dispatch-validator-helper.sh",
+          "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+          "source_sha256": "b68445d5eaf510e820831422c6e064ac58bbdc4496483ad562df30786e3723b5",
+          "source_url": "https://github.com/marcusquinn/aidevops",
+          "status": "approved"
+        },
+        "declared_domain": "Exact Aidevops pin 8666b6c6c52472b5535aa295f2df593918152cb1; source call `grep -oE 'threshold=[0-9]+'` in the large-file marker parser; one marker and exactly one threshold attribute; ASCII value `08`; an in-clone regular fixture with five newline-terminated lines; Bash numeric comparison via `[[ line_count -lt CITED_THRESHOLD ]]`. The helper must use decimal semantics or fail closed. Ground truth uses local `gh` and `git` stubs and does not access GitHub or user data.",
+        "guarantee": "For a large-file-simplification-gate marker with one threshold attribute, the helper must either interpret the threshold as a valid decimal line count or reject it as invalid before deciding that the premise still holds. A malformed Bash arithmetic operand must not fall through the comparison and return 0. In particular, threshold=08 with a five-line file must not bypass the decimal threshold of eight by taking the validator-pass path.",
+        "input_source": "The issue body returned by `gh api repos/<slug>/issues/<number> --jq .body`. Public issue text is externally authored and treated as untrusted. The pinned large-file producer places its configured LARGE_FILE_LINE_THRESHOLD in this body as `threshold=${LARGE_FILE_LINE_THRESHOLD}`; the pre-dispatch helper extracts the value and compares it with `wc -l` through Bash `[[ -lt ]]`.",
+        "provenance": "agent_derived",
+        "schema_version": "1",
+        "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pre-dispatch-validator-helper.sh:1879:column-51",
+        "trust": "untrusted-input"
+      },
+      "corpus": "aidevops",
+      "created_at": "2026-10-16T02:05:00Z",
+      "idiom_bucket": "pre-dispatch-github-text",
+      "ledger_state_at_claim": {
+        "conversion_ledger_sha256": "99f1f49098d8748544edf88e081d6a4cf0b5e95383827b916e0aee559d764677",
+        "gate_decision_sha256": "02875563f71ec7459f3a97967a663da09d281478507cba82cfd49c75ce3fcb4c",
+        "n": 13,
+        "now_iso": "2026-10-16T02:02:18+00:00",
+        "repository_url": "https://github.com/marcusquinn/aidevops",
+        "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1"
+      },
+      "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "provenance": "agent_derived",
+      "rank": 6,
+      "reasons": [],
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pre-dispatch-validator-helper.sh:1879:column-51",
+      "status": "contracted",
+      "suggested_shape": "shape-3",
+      "suggested_sink_question": "The value is extracted from untrusted issue-body text and compared with wc -l through Bash [[ -lt ]]. The pinned producer emits a decimal LARGE_FILE_LINE_THRESHOLD and the helper contract says the current line count is compared to that threshold. The regex accepts 08, which Bash arithmetic treats as invalid octal; exact-helper replay on a five-line fixture logs an arithmetic error, takes the \u201cpremise holds\u201d return-0 path, and proceeds instead of returning 10 for 5 < decimal 8.",
+      "wave_generation_at_claim": 1,
+      "wave_id": "aidevops-predispatch-residual-20261016-r1"
+    },
+    {
+      "cheap_signals": {
+        "regex_id": "9bfa5841cb29143635d48f33ea102135",
+        "trust_guess": "untrusted-input"
+      },
+      "corpus": "aidevops",
+      "created_at": "2026-10-16T02:05:00Z",
+      "idiom_bucket": "pre-dispatch-github-text",
+      "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "provenance": "stub",
+      "rank": 7,
+      "reasons": [
+        {
+          "note": "This substitution removes the threshold= prefix and imposes no independent value constraint. The numeric token grammar and its Bash arithmetic consumer are the reviewed boundary.",
+          "reason": "out_of_scope"
+        }
+      ],
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pre-dispatch-validator-helper.sh:1879:column-81",
+      "status": "skipped_out_of_scope",
+      "suggested_shape": "shape-1",
+      "suggested_sink_question": "This substitution removes the threshold= prefix and imposes no independent value constraint. The numeric token grammar and its Bash arithmetic consumer are the reviewed boundary."
+    },
+    {
+      "cheap_signals": {
+        "regex_id": "a90d86147cd1c07be88679df5aa0f152",
+        "trust_guess": "untrusted-input"
+      },
+      "corpus": "aidevops",
+      "created_at": "2026-10-16T02:05:00Z",
+      "idiom_bucket": "pre-dispatch-github-text",
+      "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "provenance": "stub",
+      "rank": 8,
+      "reasons": [
+        {
+          "note": "The captured stall_hours value is checked again against the stricter whole-value pattern ^[1-9][0-9]*$ before arithmetic. Multiple matches or leading zeroes are rejected by that later guard.",
+          "reason": "out_of_scope"
+        }
+      ],
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pre-dispatch-validator-helper.sh:1882:column-54",
+      "status": "skipped_out_of_scope",
+      "suggested_shape": "shape-1",
+      "suggested_sink_question": "The captured stall_hours value is checked again against the stricter whole-value pattern ^[1-9][0-9]*$ before arithmetic. Multiple matches or leading zeroes are rejected by that later guard."
+    },
+    {
+      "cheap_signals": {
+        "regex_id": "e3c276b4b79b794ead2391c6e95852b4",
+        "trust_guess": "untrusted-input"
+      },
+      "corpus": "aidevops",
+      "created_at": "2026-10-16T02:05:00Z",
+      "idiom_bucket": "pre-dispatch-github-text",
+      "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "provenance": "stub",
+      "rank": 9,
+      "reasons": [
+        {
+          "note": "This cited_file capture is used to form a quoted gh issue-search argument for duplicate detection, not a local path read. Shell argument quoting is present; no concrete search-language consequence or security impact was established in this review.",
+          "reason": "out_of_scope"
+        }
+      ],
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pre-dispatch-validator-helper.sh:273:column-33",
+      "status": "skipped_out_of_scope",
+      "suggested_shape": "shape-1",
+      "suggested_sink_question": "This cited_file capture is used to form a quoted gh issue-search argument for duplicate detection, not a local path read. Shell argument quoting is present; no concrete search-language consequence or security impact was established in this review."
+    },
+    {
+      "cheap_signals": {
+        "regex_id": "ea494519d1983cbfe8bd18ca5a9f453f",
+        "trust_guess": "untrusted-input"
+      },
+      "corpus": "aidevops",
+      "created_at": "2026-10-16T02:05:00Z",
+      "idiom_bucket": "pre-dispatch-github-text",
+      "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "provenance": "stub",
+      "rank": 10,
+      "reasons": [
+        {
+          "note": "This substitution strips line-range suffixes from Markdown paths before comparing them with GitHub PR file names. The result is not used as a local filesystem path.",
+          "reason": "out_of_scope"
+        }
+      ],
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pre-dispatch-validator-helper.sh:929:column-230",
+      "status": "skipped_out_of_scope",
+      "suggested_shape": "shape-1",
+      "suggested_sink_question": "This substitution strips line-range suffixes from Markdown paths before comparing them with GitHub PR file names. The result is not used as a local filesystem path."
+    },
+    {
+      "cheap_signals": {
+        "regex_id": "e2c3b754808dea0062528936732ac125",
+        "trust_guess": "untrusted-input"
+      },
+      "corpus": "aidevops",
+      "created_at": "2026-10-16T02:05:00Z",
+      "idiom_bucket": "pre-dispatch-github-text",
+      "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "provenance": "stub",
+      "rank": 11,
+      "reasons": [
+        {
+          "note": "This exact empty-line search removes blank entries from extracted keyword data. It does not affect a security boundary.",
+          "reason": "out_of_scope"
+        }
+      ],
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pre-dispatch-validator-helper.sh:939:column-34",
+      "status": "skipped_out_of_scope",
+      "suggested_shape": "shape-1",
+      "suggested_sink_question": "This exact empty-line search removes blank entries from extracted keyword data. It does not affect a security boundary."
+    },
+    {
+      "cheap_signals": {
+        "regex_id": "b00c45afb98f8671e9bbcc44683e8142",
+        "trust_guess": "untrusted-input"
+      },
+      "corpus": "aidevops",
+      "created_at": "2026-10-16T02:05:00Z",
+      "idiom_bucket": "pre-dispatch-github-text",
+      "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "provenance": "stub",
+      "rank": 12,
+      "reasons": [
+        {
+          "note": "The semver-shaped search excludes version strings from keyword scoring. This is heuristic ranking input rather than a security-sensitive transformation.",
+          "reason": "out_of_scope"
+        }
+      ],
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pre-dispatch-validator-helper.sh:939:column-49",
+      "status": "skipped_out_of_scope",
+      "suggested_shape": "shape-1",
+      "suggested_sink_question": "The semver-shaped search excludes version strings from keyword scoring. This is heuristic ranking input rather than a security-sensitive transformation."
+    },
+    {
+      "cheap_signals": {
+        "regex_id": "b1152cae139694597dc450a916ce4e4d",
+        "trust_guess": "untrusted-input"
+      },
+      "corpus": "aidevops",
+      "created_at": "2026-10-16T02:05:00Z",
+      "idiom_bucket": "pre-dispatch-github-text",
+      "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "provenance": "stub",
+      "rank": 13,
+      "reasons": [
+        {
+          "note": "This substitution removes backtick-delimited file names from text before keyword extraction. The transformed text is used for similarity scoring, not an executable or authorization boundary.",
+          "reason": "out_of_scope"
+        }
+      ],
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pre-dispatch-validator-helper.sh:963:column-38",
+      "status": "skipped_out_of_scope",
+      "suggested_shape": "shape-1",
+      "suggested_sink_question": "This substitution removes backtick-delimited file names from text before keyword extraction. The transformed text is used for similarity scoring, not an executable or authorization boundary."
+    },
+    {
+      "cheap_signals": {
+        "regex_id": "762d2dee2f84a539ee37efd796a301c9",
+        "trust_guess": "untrusted-input"
+      },
+      "corpus": "aidevops",
+      "created_at": "2026-10-16T02:05:00Z",
+      "idiom_bucket": "pre-dispatch-github-text",
+      "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "provenance": "stub",
+      "rank": 14,
+      "reasons": [
+        {
+          "note": "The allowlisted keyword token is passed to grep -qwF as a fixed string for similarity scoring. It is not interpreted as a shell command, regex, or query expression.",
+          "reason": "out_of_scope"
+        }
+      ],
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pre-dispatch-validator-helper.sh:964:column-95",
+      "status": "skipped_out_of_scope",
+      "suggested_shape": "shape-1",
+      "suggested_sink_question": "The allowlisted keyword token is passed to grep -qwF as a fixed string for similarity scoring. It is not interpreted as a shell command, regex, or query expression."
+    }
+  ],
+  "cluster": "aidevops",
+  "schema_version": "1",
+  "wave_generation": 1,
+  "wave_id": "aidevops-predispatch-residual-20261016-r1"
+}

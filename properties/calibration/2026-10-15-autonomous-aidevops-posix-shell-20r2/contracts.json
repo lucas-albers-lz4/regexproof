@@ -1,0 +1,202 @@
+[
+  {
+    "contract": {
+      "adoption": {
+        "approved_on": "2026-10-15",
+        "authority": "standing_user_delegation",
+        "contract_sha256": "0af6fb1556f832afec6a2d0f10f9cc1a21f3af32586ab15fdfc143cc60838967",
+        "evidence": [
+          "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/hooks/brief-filename-guard.sh",
+          "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/README.md"
+        ],
+        "policy_version": "autonomous-contracts-v1",
+        "rationale": "The pinned hook extracts the task ID from a staged brief filename and uses it in the git-log claim lookup. This source-bound revision preserves the previously reviewed finite-domain capture guarantee and binds it to the frozen 20-r2 source.",
+        "review": {
+          "author": "codex-contract-author",
+          "reviewer": "codex-independent-review-pass",
+          "same_model": true
+        },
+        "source_file": ".agents/hooks/brief-filename-guard.sh",
+        "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+        "source_sha256": "03bcbd91198dbb746f39a7acd1ff98ec1295f95ed49254cd55bc108bf7f6c2f0",
+        "source_url": "https://github.com/marcusquinn/aidevops",
+        "status": "approved"
+      },
+      "declared_domain": "t[0-9]+ ASCII, len 2..16, hyphen-free, BusyBox grep -E (bash =~ as ERE)",
+      "guarantee": "hyphen-free brief task-id tokens are captured in full into git log --grep claim lookup",
+      "input_source": "agent-staged todo/tasks/tNNN-brief.md filename (pre-commit index)",
+      "provenance": "agent_derived",
+      "schema_version": "1",
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/hooks/brief-filename-guard.sh:105:t[0-9]+",
+      "trust": "untrusted-input"
+    },
+    "domain": "t[0-9]+ ASCII, len 2..16, hyphen-free, BusyBox grep -E (bash =~ as ERE)",
+    "kind": "property",
+    "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+    "question_id": "AI-aidevops-brief-tid-capture",
+    "repo_id": "marcusquinn/aidevops",
+    "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/hooks/brief-filename-guard.sh:105:t[0-9]+",
+    "synthesized": false,
+    "url": "https://github.com/marcusquinn/aidevops"
+  },
+  {
+    "contract": {
+      "adoption": {
+        "approved_on": "2026-10-15",
+        "authority": "standing_user_delegation",
+        "contract_sha256": "4374d2ea29f9ea6f729e9b2b0f5749338dc95544ab1c02f489d4d85ebb321d22",
+        "evidence": [
+          "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/hooks/brief-filename-guard.sh",
+          "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/README.md"
+        ],
+        "policy_version": "autonomous-contracts-v1",
+        "rationale": "The pinned hook filters newly staged brief filenames before its git-log claim lookup. This source-bound revision preserves the previously reviewed alphabet guarantee and binds it to the frozen 20-r2 source.",
+        "review": {
+          "author": "codex-contract-author",
+          "reviewer": "codex-independent-review-pass",
+          "same_model": true
+        },
+        "source_file": ".agents/hooks/brief-filename-guard.sh",
+        "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+        "source_sha256": "03bcbd91198dbb746f39a7acd1ff98ec1295f95ed49254cd55bc108bf7f6c2f0",
+        "source_url": "https://github.com/marcusquinn/aidevops",
+        "status": "approved"
+      },
+      "declared_domain": "brief task-id alphabet [t0-9], single char, ASCII",
+      "guarantee": "captured brief task-id alphabet contains no semicolon (token reaches git log --grep claim lookup)",
+      "input_source": "agent-staged todo/tasks/tNNN-brief.md filename (pre-commit index)",
+      "provenance": "agent_derived",
+      "schema_version": "1",
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/hooks/brief-filename-guard.sh:84:brief\\.md",
+      "trust": "untrusted-input"
+    },
+    "domain": "brief task-id alphabet [t0-9], single char, ASCII",
+    "kind": "property",
+    "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+    "question_id": "AI-aidevops-brief-tid-no-semicolon",
+    "repo_id": "marcusquinn/aidevops",
+    "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/hooks/brief-filename-guard.sh:84:brief\\.md",
+    "synthesized": false,
+    "url": "https://github.com/marcusquinn/aidevops"
+  },
+  {
+    "contract": {
+      "adoption": {
+        "approved_on": "2026-10-15",
+        "authority": "standing_user_delegation",
+        "contract_sha256": "52591f32b47e65181ccbcf490d2a1fced28257ec96eb037dd7fbe61824058a37",
+        "evidence": [
+          "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/hooks/credential-emission-pre-push.sh",
+          "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/README.md"
+        ],
+        "policy_version": "autonomous-contracts-v1",
+        "rationale": "The pinned pre-push hook uses these identifiers to detect unsanitized credential-bearing emits in added shell lines. This source-bound revision preserves the previously reviewed alphabet guarantee and binds it to the frozen 20-r2 source.",
+        "review": {
+          "author": "codex-contract-author",
+          "reviewer": "codex-independent-review-pass",
+          "same_model": true
+        },
+        "source_file": ".agents/hooks/credential-emission-pre-push.sh",
+        "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+        "source_sha256": "85d0191e0599b6e7c7d439c049b079e5f21c6a8934861259475846db9d6afca6",
+        "source_url": "https://github.com/marcusquinn/aidevops",
+        "status": "approved"
+      },
+      "declared_domain": "identifier alphabet [a-z_], single char, ASCII",
+      "guarantee": "credential-emission detector identifier alphabet contains no semicolon (matched $remote_url/$origin_url tokens flag unsanitized emits)",
+      "input_source": "added lines in .agents/scripts|hooks/*.sh diffs (pre-push)",
+      "provenance": "agent_derived",
+      "schema_version": "1",
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/hooks/credential-emission-pre-push.sh:103:remote_url",
+      "trust": "untrusted-input"
+    },
+    "domain": "identifier alphabet [a-z_], single char, ASCII",
+    "kind": "property",
+    "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+    "question_id": "AI-aidevops-cred-ident-no-semicolon",
+    "repo_id": "marcusquinn/aidevops",
+    "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/hooks/credential-emission-pre-push.sh:103:remote_url",
+    "synthesized": false,
+    "url": "https://github.com/marcusquinn/aidevops"
+  },
+  {
+    "contract": {
+      "adoption": {
+        "approved_on": "2026-10-15",
+        "authority": "standing_user_delegation",
+        "contract_sha256": "c8d7d71b14f9d27e8fcbf3d7e1dda161c435bab47343fae27987da5652879436",
+        "evidence": [
+          "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/hooks/task-id-collision-guard.sh",
+          "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/README.md"
+        ],
+        "policy_version": "autonomous-contracts-v1",
+        "rationale": "The pinned commit-footer parser extracts issue digits before the gh issue view lookup. This source-bound revision preserves the previously reviewed finite-domain capture guarantee and binds it to the frozen 20-r2 source.",
+        "review": {
+          "author": "codex-contract-author",
+          "reviewer": "codex-independent-review-pass",
+          "same_model": true
+        },
+        "source_file": ".agents/hooks/task-id-collision-guard.sh",
+        "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+        "source_sha256": "91abddb42b622d2cc1ed280c51d82dad8c78299bb9fb47717ea0a053006d3934",
+        "source_url": "https://github.com/marcusquinn/aidevops",
+        "status": "approved"
+      },
+      "declared_domain": "digits [0-9]{1,8}, ASCII, BusyBox grep -oE | tr -d '#'",
+      "guarantee": "digit-only issue numbers are captured in full into gh issue view",
+      "input_source": "commit-message Resolves/Closes/Fixes/Ref/For #NNN footers",
+      "provenance": "agent_derived",
+      "schema_version": "1",
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/hooks/task-id-collision-guard.sh:378:#[0-9]+",
+      "trust": "untrusted-input"
+    },
+    "domain": "digits [0-9]{1,8}, ASCII, BusyBox grep -oE | tr -d '#'",
+    "kind": "property",
+    "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+    "question_id": "AI-aidevops-gh-issue-digit-capture",
+    "repo_id": "marcusquinn/aidevops",
+    "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/hooks/task-id-collision-guard.sh:378:#[0-9]+",
+    "synthesized": false,
+    "url": "https://github.com/marcusquinn/aidevops"
+  },
+  {
+    "contract": {
+      "adoption": {
+        "approved_on": "2026-10-15",
+        "authority": "standing_user_delegation",
+        "contract_sha256": "b188de0e4219be565c2c68c84b024de9d3bc3588d5025a2629126729ea5ed345",
+        "evidence": [
+          "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/hooks/scope-guard-pre-push.sh",
+          "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/README.md"
+        ],
+        "policy_version": "autonomous-contracts-v1",
+        "rationale": "The pinned scope guard scans operator-authored brief lines for the Files Scope heading and fails closed when scope is absent. This source-bound revision preserves the previously reviewed heading alphabet guarantee and binds it to the frozen 20-r2 source.",
+        "review": {
+          "author": "codex-contract-author",
+          "reviewer": "codex-independent-review-pass",
+          "same_model": true
+        },
+        "source_file": ".agents/hooks/scope-guard-pre-push.sh",
+        "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+        "source_sha256": "9e0b9c250138acfa70d6c6392d869001df2b1cb5e2e149b05f2e75bdb8fdeec2",
+        "source_url": "https://github.com/marcusquinn/aidevops",
+        "status": "approved"
+      },
+      "declared_domain": "Files Scope heading alphabet [# \\tA-Za-z], single char, ASCII",
+      "guarantee": "Files Scope heading alphabet contains no semicolon (heading detect fail-closes the scope guard)",
+      "input_source": "operator-authored todo/tasks/tNNN-brief.md Files Scope heading",
+      "provenance": "agent_derived",
+      "schema_version": "1",
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/hooks/scope-guard-pre-push.sh:137:Files",
+      "trust": "config"
+    },
+    "domain": "Files Scope heading alphabet [# \\tA-Za-z], single char, ASCII",
+    "kind": "property",
+    "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+    "question_id": "AI-aidevops-scope-heading-no-semicolon",
+    "repo_id": "marcusquinn/aidevops",
+    "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/hooks/scope-guard-pre-push.sh:137:Files",
+    "synthesized": false,
+    "url": "https://github.com/marcusquinn/aidevops"
+  }
+]

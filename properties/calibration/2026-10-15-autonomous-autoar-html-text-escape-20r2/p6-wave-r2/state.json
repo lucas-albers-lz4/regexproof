@@ -1,0 +1,223 @@
+{
+  "attempts": [
+    {
+      "contract": {
+        "adoption": {
+          "approved_on": "2026-10-15",
+          "authority": "standing_user_delegation",
+          "contract_sha256": "2b0b67bb2e463f1c05ce5fb755598c7501dbd9825ef16833abb1e7e12183ae78",
+          "evidence": [
+            "https://github.com/h0tak88r/AutoAR/blob/01cd447ad3b1acfed7e0680596c2c74458a4cf06/internal/api/ui/pages/html-escape.js",
+            "https://github.com/h0tak88r/AutoAR/blob/01cd447ad3b1acfed7e0680596c2c74458a4cf06/internal/api/ui/index.html",
+            "https://github.com/h0tak88r/AutoAR/blob/01cd447ad3b1acfed7e0680596c2c74458a4cf06/internal/api/ui/app.js",
+            "https://github.com/h0tak88r/AutoAR/blob/01cd447ad3b1acfed7e0680596c2c74458a4cf06/internal/api/ui/pages/scan-detail.js",
+            "https://github.com/h0tak88r/AutoAR/blob/01cd447ad3b1acfed7e0680596c2c74458a4cf06/internal/api/ui/pages/findings-rows.js"
+          ],
+          "policy_version": "autonomous-contracts-v1",
+          "rationale": "Exact-pin caller review traces stored scan-result fields through the shared finding-row renderer into tbody.innerHTML. The contract is limited to text-node output of the source-pinned esc helper; its per-codepoint map and ordered global replacement composition are checked by Z3, an exact-source mutation replay, and a differential product gate.",
+          "review": {
+            "author": "codex-contract-author",
+            "reviewer": "codex-independent-review-pass",
+            "same_model": true
+          },
+          "source_file": "internal/api/ui/pages/html-escape.js",
+          "source_pin": "01cd447ad3b1acfed7e0680596c2c74458a4cf06",
+          "source_sha256": "8b3dd2cc810e7e5c0a88095ca04257a0755f0d22d2fa7d05f2e3479c1f70a900",
+          "source_url": "https://github.com/h0tak88r/AutoAR",
+          "status": "approved"
+        },
+        "declared_domain": "Exact AutoAR 20-r2 pin 01cd447ad3b1acfed7e0680596c2c74458a4cf06 and source html-escape.js SHA-256 8b3dd2cc810e7e5c0a88095ca04257a0755f0d22d2fa7d05f2e3479c1f70a900. The formal claim is per Unicode codepoint: the output token from the five exact, ordered global substitutions contains none of <, >, double quote, or apostrophe. The helper applies those single-character replacements across the complete input string; the exact-pin product gate compares the composed helper with an independent codepoint map over all valid BMP scalar values plus adversarial and seeded multi-codepoint strings. Input strings have no formal length bound. This is not a theorem about other AutoAR helpers or HTML contexts.",
+        "guarantee": "For untrusted scan-result text passed through HtmlEscapePage.esc before insertion into an HTML text node, the pinned ordered global substitutions map each Unicode codepoint to itself or a fixed entity token that contains none of the raw HTML delimiters <, >, \" or '; therefore their composed output cannot introduce HTML markup through those text-node values. This contract does not cover JavaScript, URL, CSS, or arbitrary attribute contexts.",
+        "input_source": "String fields from stored scan-result files returned by /api/scans/{id}/results/file, including target- and response-derived values, are flattened into finding rows and rendered through the shared esc helper before tbody.innerHTML receives the row markup.",
+        "provenance": "agent_derived",
+        "schema_version": "1",
+        "site": "h0tak88r/AutoAR@01cd447ad3b1acfed7e0680596c2c74458a4cf06:internal/api/ui/pages/html-escape.js:2:esc",
+        "trust": "untrusted-input"
+      },
+      "detail": null,
+      "domain": "One Unicode codepoint mapped by the pinned esc helper emits no raw HTML tag or quote delimiter; full-string replacement composition is separately checked against the product helper by the exact-pin regression gate",
+      "gate": {
+        "consumer_adopted": false,
+        "differential_cases": 68500,
+        "gate_id": "autoar-html-text-escape-20r2",
+        "local_gate_command": ".venv/bin/python scripts/autoar-html-text-escape-regression-gate.py --product-only --output properties/calibration/2026-10-15-autonomous-autoar-html-text-escape-20r2/p6-gate-report-r2.json",
+        "local_gate_passed": true,
+        "mutation_guard_passed": true,
+        "product_engine_replayed": true,
+        "source_pin_verified": true
+      },
+      "kind": "property",
+      "pin": "01cd447ad3b1acfed7e0680596c2c74458a4cf06",
+      "question_id": "AA-autoar-html-text-escape-codepoint-image",
+      "repo_id": "h0tak88r/AutoAR",
+      "site": "h0tak88r/AutoAR@01cd447ad3b1acfed7e0680596c2c74458a4cf06:internal/api/ui/pages/html-escape.js:2:esc",
+      "status": "unsat",
+      "synthesized": false,
+      "url": "https://github.com/h0tak88r/AutoAR"
+    }
+  ],
+  "cohort_manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+  "contracts": [
+    {
+      "contract": {
+        "adoption": {
+          "approved_on": "2026-10-15",
+          "authority": "standing_user_delegation",
+          "contract_sha256": "2b0b67bb2e463f1c05ce5fb755598c7501dbd9825ef16833abb1e7e12183ae78",
+          "evidence": [
+            "https://github.com/h0tak88r/AutoAR/blob/01cd447ad3b1acfed7e0680596c2c74458a4cf06/internal/api/ui/pages/html-escape.js",
+            "https://github.com/h0tak88r/AutoAR/blob/01cd447ad3b1acfed7e0680596c2c74458a4cf06/internal/api/ui/index.html",
+            "https://github.com/h0tak88r/AutoAR/blob/01cd447ad3b1acfed7e0680596c2c74458a4cf06/internal/api/ui/app.js",
+            "https://github.com/h0tak88r/AutoAR/blob/01cd447ad3b1acfed7e0680596c2c74458a4cf06/internal/api/ui/pages/scan-detail.js",
+            "https://github.com/h0tak88r/AutoAR/blob/01cd447ad3b1acfed7e0680596c2c74458a4cf06/internal/api/ui/pages/findings-rows.js"
+          ],
+          "policy_version": "autonomous-contracts-v1",
+          "rationale": "Exact-pin caller review traces stored scan-result fields through the shared finding-row renderer into tbody.innerHTML. The contract is limited to text-node output of the source-pinned esc helper; its per-codepoint map and ordered global replacement composition are checked by Z3, an exact-source mutation replay, and a differential product gate.",
+          "review": {
+            "author": "codex-contract-author",
+            "reviewer": "codex-independent-review-pass",
+            "same_model": true
+          },
+          "source_file": "internal/api/ui/pages/html-escape.js",
+          "source_pin": "01cd447ad3b1acfed7e0680596c2c74458a4cf06",
+          "source_sha256": "8b3dd2cc810e7e5c0a88095ca04257a0755f0d22d2fa7d05f2e3479c1f70a900",
+          "source_url": "https://github.com/h0tak88r/AutoAR",
+          "status": "approved"
+        },
+        "declared_domain": "Exact AutoAR 20-r2 pin 01cd447ad3b1acfed7e0680596c2c74458a4cf06 and source html-escape.js SHA-256 8b3dd2cc810e7e5c0a88095ca04257a0755f0d22d2fa7d05f2e3479c1f70a900. The formal claim is per Unicode codepoint: the output token from the five exact, ordered global substitutions contains none of <, >, double quote, or apostrophe. The helper applies those single-character replacements across the complete input string; the exact-pin product gate compares the composed helper with an independent codepoint map over all valid BMP scalar values plus adversarial and seeded multi-codepoint strings. Input strings have no formal length bound. This is not a theorem about other AutoAR helpers or HTML contexts.",
+        "guarantee": "For untrusted scan-result text passed through HtmlEscapePage.esc before insertion into an HTML text node, the pinned ordered global substitutions map each Unicode codepoint to itself or a fixed entity token that contains none of the raw HTML delimiters <, >, \" or '; therefore their composed output cannot introduce HTML markup through those text-node values. This contract does not cover JavaScript, URL, CSS, or arbitrary attribute contexts.",
+        "input_source": "String fields from stored scan-result files returned by /api/scans/{id}/results/file, including target- and response-derived values, are flattened into finding rows and rendered through the shared esc helper before tbody.innerHTML receives the row markup.",
+        "provenance": "agent_derived",
+        "schema_version": "1",
+        "site": "h0tak88r/AutoAR@01cd447ad3b1acfed7e0680596c2c74458a4cf06:internal/api/ui/pages/html-escape.js:2:esc",
+        "trust": "untrusted-input"
+      },
+      "domain": "One Unicode codepoint mapped by the pinned esc helper emits no raw HTML tag or quote delimiter; full-string replacement composition is separately checked against the product helper by the exact-pin regression gate",
+      "kind": "property",
+      "pin": "01cd447ad3b1acfed7e0680596c2c74458a4cf06",
+      "question_id": "AA-autoar-html-text-escape-codepoint-image",
+      "repo_id": "h0tak88r/AutoAR",
+      "site": "h0tak88r/AutoAR@01cd447ad3b1acfed7e0680596c2c74458a4cf06:internal/api/ui/pages/html-escape.js:2:esc",
+      "synthesized": false,
+      "url": "https://github.com/h0tak88r/AutoAR"
+    }
+  ],
+  "conversion_rows": [
+    {
+      "contract": {
+        "adoption": {
+          "approved_on": "2026-10-15",
+          "authority": "standing_user_delegation",
+          "contract_sha256": "2b0b67bb2e463f1c05ce5fb755598c7501dbd9825ef16833abb1e7e12183ae78",
+          "evidence": [
+            "https://github.com/h0tak88r/AutoAR/blob/01cd447ad3b1acfed7e0680596c2c74458a4cf06/internal/api/ui/pages/html-escape.js",
+            "https://github.com/h0tak88r/AutoAR/blob/01cd447ad3b1acfed7e0680596c2c74458a4cf06/internal/api/ui/index.html",
+            "https://github.com/h0tak88r/AutoAR/blob/01cd447ad3b1acfed7e0680596c2c74458a4cf06/internal/api/ui/app.js",
+            "https://github.com/h0tak88r/AutoAR/blob/01cd447ad3b1acfed7e0680596c2c74458a4cf06/internal/api/ui/pages/scan-detail.js",
+            "https://github.com/h0tak88r/AutoAR/blob/01cd447ad3b1acfed7e0680596c2c74458a4cf06/internal/api/ui/pages/findings-rows.js"
+          ],
+          "policy_version": "autonomous-contracts-v1",
+          "rationale": "Exact-pin caller review traces stored scan-result fields through the shared finding-row renderer into tbody.innerHTML. The contract is limited to text-node output of the source-pinned esc helper; its per-codepoint map and ordered global replacement composition are checked by Z3, an exact-source mutation replay, and a differential product gate.",
+          "review": {
+            "author": "codex-contract-author",
+            "reviewer": "codex-independent-review-pass",
+            "same_model": true
+          },
+          "source_file": "internal/api/ui/pages/html-escape.js",
+          "source_pin": "01cd447ad3b1acfed7e0680596c2c74458a4cf06",
+          "source_sha256": "8b3dd2cc810e7e5c0a88095ca04257a0755f0d22d2fa7d05f2e3479c1f70a900",
+          "source_url": "https://github.com/h0tak88r/AutoAR",
+          "status": "approved"
+        },
+        "declared_domain": "Exact AutoAR 20-r2 pin 01cd447ad3b1acfed7e0680596c2c74458a4cf06 and source html-escape.js SHA-256 8b3dd2cc810e7e5c0a88095ca04257a0755f0d22d2fa7d05f2e3479c1f70a900. The formal claim is per Unicode codepoint: the output token from the five exact, ordered global substitutions contains none of <, >, double quote, or apostrophe. The helper applies those single-character replacements across the complete input string; the exact-pin product gate compares the composed helper with an independent codepoint map over all valid BMP scalar values plus adversarial and seeded multi-codepoint strings. Input strings have no formal length bound. This is not a theorem about other AutoAR helpers or HTML contexts.",
+        "guarantee": "For untrusted scan-result text passed through HtmlEscapePage.esc before insertion into an HTML text node, the pinned ordered global substitutions map each Unicode codepoint to itself or a fixed entity token that contains none of the raw HTML delimiters <, >, \" or '; therefore their composed output cannot introduce HTML markup through those text-node values. This contract does not cover JavaScript, URL, CSS, or arbitrary attribute contexts.",
+        "input_source": "String fields from stored scan-result files returned by /api/scans/{id}/results/file, including target- and response-derived values, are flattened into finding rows and rendered through the shared esc helper before tbody.innerHTML receives the row markup.",
+        "provenance": "agent_derived",
+        "schema_version": "1",
+        "site": "h0tak88r/AutoAR@01cd447ad3b1acfed7e0680596c2c74458a4cf06:internal/api/ui/pages/html-escape.js:2:esc",
+        "trust": "untrusted-input"
+      },
+      "corpus": "AutoAR",
+      "disclosure": null,
+      "domain": "One Unicode codepoint mapped by the pinned esc helper emits no raw HTML tag or quote delimiter; full-string replacement composition is separately checked against the product helper by the exact-pin regression gate",
+      "engine_versions": {
+        "python": "3.14.8",
+        "z3": "5.0.0"
+      },
+      "family": "AA-autoar-html-text-escape",
+      "ground_truth": null,
+      "ground_truth_status": null,
+      "idiom_bucket": "html-text-escape-calibration",
+      "kind": "property",
+      "name": "AA-autoar-html-text-escape-codepoint-image",
+      "product_reportable": true,
+      "regex_id": "8d9517803ad99cc46d5e6e08df504cad",
+      "result": "unsat",
+      "schema_version": "1",
+      "shape": 4,
+      "site": "h0tak88r/AutoAR@01cd447ad3b1acfed7e0680596c2c74458a4cf06:internal/api/ui/pages/html-escape.js:2:esc",
+      "synthesized": false,
+      "wave_id": "autoar-html-text-escape-20r2-r2",
+      "witness": null
+    }
+  ],
+  "corpus": "AutoAR",
+  "coverage_digest": "b7be22578a71f35a33e4aad5543f69cc10f090b8d1f637de4df1c37e69c87748",
+  "execution_caps": {
+    "local_gate_timeout_seconds": 300,
+    "max_active_conversion_waves": 1,
+    "max_adopted_contracts_per_wave": 5,
+    "max_new_questions_per_run": 5,
+    "parallel_walk": false,
+    "solver_retries": 0,
+    "solver_timeout_ms": 30000
+  },
+  "gate_config": {
+    "command": [
+      ".venv/bin/python",
+      "scripts/autoar-html-text-escape-regression-gate.py",
+      "--product-only",
+      "--output",
+      "properties/calibration/2026-10-15-autonomous-autoar-html-text-escape-20r2/p6-gate-report-r2.json"
+    ],
+    "evidence": {
+      "differential_case_counts": {
+        "AA-autoar-html-text-escape-codepoint-image": 68500
+      },
+      "product_engine_replay_question_ids": [
+        "AA-autoar-html-text-escape-codepoint-image"
+      ]
+    },
+    "gate_id": "autoar-html-text-escape-20r2",
+    "question_ids": [
+      "AA-autoar-html-text-escape-codepoint-image"
+    ],
+    "schema_version": "1",
+    "timeout_seconds": 120
+  },
+  "idiom_bucket": "html-text-escape-calibration",
+  "runs": [
+    {
+      "active_question_id": null,
+      "finished_at": "2026-10-15T16:13:48+00:00",
+      "gate_failure": null,
+      "gate_passed": true,
+      "gate_wall_ms": 513.8,
+      "mutation_failures": [],
+      "mutation_wall_ms": 41.3,
+      "new_questions": 1,
+      "question_ids": [
+        "AA-autoar-html-text-escape-codepoint-image"
+      ],
+      "reason": null,
+      "run_id": "e82d7c64-db0c-4752-9d24-2d17f3ad9fe4",
+      "solver_wall_ms": 2.6,
+      "source_failures": {},
+      "source_wall_ms": 11.3,
+      "started_at": "2026-10-15T16:13:48+00:00",
+      "status": "complete"
+    }
+  ],
+  "schema_version": "1",
+  "wave_id": "autoar-html-text-escape-20r2-r2"
+}

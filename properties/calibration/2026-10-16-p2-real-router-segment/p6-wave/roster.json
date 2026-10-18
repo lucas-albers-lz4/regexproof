@@ -1,0 +1,17 @@
+{
+  "cohort_id": "2026-09-12-calibration-20-r2",
+  "cohort_manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+  "coverage_digest": "df0fa5abb033458b86db0f570cdfcc922c52c0d6597c271f31ad98f2c582c306",
+  "identities": [
+    {
+      "contract_sha256": "88afe47c2654316e4774fd1c6300e5da6161c4af5df7d34e542e90cbd940de23",
+      "pin": "55aa7ef43a9c129beba90823cd8a4db10bb01211",
+      "provenance": "agent_derived",
+      "question_id": "RR-route-segment-allowed-alphabet",
+      "repo_id": "greydragon888/real-router",
+      "site": "greydragon888/real-router@55aa7ef43a9c129beba90823cd8a4db10bb01211:packages/route-utils/src/constants.ts:13:column-36",
+      "url": "https://github.com/greydragon888/real-router"
+    }
+  ],
+  "schema_version": "2"
+}

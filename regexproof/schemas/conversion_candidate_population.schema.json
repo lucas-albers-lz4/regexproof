@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://regexproof.dev/schemas/conversion_candidate_population/v1",
+  "title": "FrozenConversionCandidatePopulation",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "population_id", "cluster", "repository_url",
+    "source_pin", "idiom_bucket", "product_engine", "frozen_at",
+    "inventory_sha256", "classification_sha256", "outcome_ledger_sha256",
+    "selection_seed_sha256", "question_history_sha256", "candidates"
+  ],
+  "properties": {
+    "schema_version": { "type": "string", "const": "1" },
+    "population_id": { "type": "string", "minLength": 1 },
+    "cluster": { "type": "string", "minLength": 1 },
+    "repository_url": {
+      "type": "string", "format": "uri",
+      "pattern": "^https://github\\.com/[^/\\s]+/[^/\\s]+$"
+    },
+    "source_pin": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+    "idiom_bucket": { "type": "string", "minLength": 1 },
+    "product_engine": { "type": "string", "minLength": 1 },
+    "frozen_at": { "type": "string", "format": "date-time" },
+    "inventory_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "classification_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "outcome_ledger_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "selection_seed_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "question_history_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "candidates": {
+      "type": "array", "minItems": 1,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": [
+          "regex_id", "site", "inventory_site", "source_file", "source_sha256", "idiom_bucket",
+          "pattern", "flags", "dialect", "call_kind", "trust_class", "encodable",
+          "idiom_key", "idiom_class", "classification_evidence", "prior_question_ids"
+        ],
+        "properties": {
+          "regex_id": { "type": "string", "pattern": "^[0-9a-f]{32}$" },
+          "site": { "type": "string", "minLength": 1 },
+          "inventory_site": { "type": "string", "minLength": 1 },
+          "source_file": {
+            "type": "string", "minLength": 1,
+            "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[^\\\\]+$"
+          },
+          "source_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+          "idiom_bucket": { "type": "string", "minLength": 1 },
+          "pattern": { "type": "string" },
+          "flags": { "type": "string" },
+          "dialect": { "type": "string", "minLength": 1 },
+          "call_kind": {
+            "type": "string",
+            "enum": ["fullmatch", "match", "search", "exec", "substitution"]
+          },
+        "shell_flags": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["syntax"],
+          "properties": {
+            "syntax": {"type": "string", "enum": ["bre", "ere", "bash_ksh"]},
+          "grep_mode": {"type": ["string", "null"], "enum": ["basic", "extended", null]}
+          }
+        },
+          "trust_class": { "type": "string", "enum": ["untrusted-input", "config"] },
+          "encodable": { "type": "boolean", "const": true },
+          "idiom_key": { "type": "string", "minLength": 1 },
+          "idiom_class": {
+            "type": "string", "enum": ["productive", "novel_idiom", "unclassified"]
+          },
+          "classification_evidence": { "type": "string", "minLength": 1 },
+          "prior_question_ids": { "type": "array", "maxItems": 0 }
+        }
+      }
+    }
+  }
+}

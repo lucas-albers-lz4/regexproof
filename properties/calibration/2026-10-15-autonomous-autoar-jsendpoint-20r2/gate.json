@@ -1,0 +1,25 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "scripts/autoar-jsendpoint-capture-regression-gate.py",
+    "--product-only",
+    "--source-root",
+    "/tmp/regexproof-pinned-sources/AutoAR-01cd447ad3b1acfed7e0680596c2c74458a4cf06",
+    "--output",
+    "properties/calibration/2026-10-15-autonomous-autoar-jsendpoint-20r2/gate-report.json"
+  ],
+  "evidence": {
+    "differential_case_counts": {
+      "AA-autoar-jsendpoint-assignment-capture-delimiter": 163
+    },
+    "product_engine_replay_question_ids": [
+      "AA-autoar-jsendpoint-assignment-capture-delimiter"
+    ]
+  },
+  "gate_id": "autoar-jsendpoint-capture-20r2",
+  "question_ids": [
+    "AA-autoar-jsendpoint-assignment-capture-delimiter"
+  ],
+  "schema_version": "1",
+  "timeout_seconds": 300
+}

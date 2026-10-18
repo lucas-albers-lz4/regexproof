@@ -233,6 +233,54 @@ def test_cli_approval_missing_wont_file_escape(tmp_path: Path):
     assert check.run(gen, curated) == 0
 
 
+def test_cli_creates_disposition_for_verified_new_gt_sat(tmp_path: Path):
+    generated = _gen_dir(tmp_path, _gt_row())
+    curated = _write_upstream(tmp_path / "upstream.jsonl")
+    r = subprocess.run(
+        _cli_args(
+            tmp_path, curated,
+            "--site", "net/demo/files/etc/init.d/demo:42:is_host",
+            "--question-id", "no-semicolon-in-hostname",
+            "--class", "third_party_security_tool",
+            "--generated-dir", str(generated),
+            "--status", "filed_plan", "--reason", "opened upstream plan",
+            "--filed-at", "2026-08-23",
+        ),
+        capture_output=True,
+        text=True,
+    )
+    assert r.returncode == 0, r.stderr
+    rows = [json.loads(line) for line in curated.read_text().splitlines() if line.strip()]
+    created = next(row for row in rows if row["id"] == "CU-006")
+    assert created["status"] == "filed_plan"
+    assert created["wave_id"] == "demo_w1"
+    assert created["idiom_bucket"] == "validator-charsets"
+    assert created["reason"] == "opened upstream plan"
+    assert check.run(generated, curated) == 0
+
+
+def test_cli_does_not_create_disposition_for_non_gt_or_unknown_sat(tmp_path: Path):
+    generated = _gen_dir(
+        tmp_path,
+        _gt_row(site="net/demo/files/etc/init.d/other:5:bad", question_id="q", result="unsat"),
+    )
+    curated = _write_upstream(tmp_path / "upstream.jsonl")
+    before = curated.read_bytes()
+    r = subprocess.run(
+        _cli_args(
+            tmp_path, curated, "--site", "net/demo/files/etc/init.d/other:5:bad",
+            "--question-id", "q", "--class", "third_party_security_tool",
+            "--generated-dir", str(generated),
+            "--status", "wont_file", "--reason", "not filing",
+        ),
+        capture_output=True,
+        text=True,
+    )
+    assert r.returncode != 0
+    assert "expected exactly one GT-confirmed SAT" in r.stderr
+    assert curated.read_bytes() == before
+
+
 def test_cli_rejects_unknown_id(tmp_path: Path):
     curated = _write_upstream(tmp_path / "upstream.jsonl", _curated())
     r = subprocess.run(

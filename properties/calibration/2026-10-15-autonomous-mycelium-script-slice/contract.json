@@ -1,0 +1,32 @@
+{
+  "adoption": {
+    "approved_on": "2026-10-15",
+    "authority": "standing_user_delegation",
+    "contract_sha256": "e2cd96b8264cac527e48dc0b24f6e3f6fd169a98dd5508310e83e0ff6a9585be",
+    "evidence": [
+      "https://github.com/mycelium0/mycelium/blob/4b53dc7629ca3bc88bf5467db481ad2af7130711/scripts/verify-release.sh",
+      "https://github.com/mycelium0/mycelium/blob/4b53dc7629ca3bc88bf5467db481ad2af7130711/README.md",
+      "https://github.com/mycelium0/mycelium/blob/4b53dc7629ca3bc88bf5467db481ad2af7130711/docs/RELEASING.md",
+      "The pinned script documents empty/truncated checksum responses and requires a nonempty well-formed SHA256 record before invoking the platform checksum utility; README and release docs distinguish integrity-only checking from authenticity."
+    ],
+    "policy_version": "autonomous-contracts-v1",
+    "rationale": "A malformed HTTP response or empty checksum file must not be accepted as an integrity result merely because an installed checksum utility ignores malformed/empty input. The source preflight is the shared fail-closed guard; this contract makes no authenticity claim.",
+    "review": {
+      "author": "codex-contract-author",
+      "reviewer": "codex-independent-review-pass",
+      "same_model": true
+    },
+    "source_file": "scripts/verify-release.sh",
+    "source_pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+    "source_sha256": "df394a764f2ebd906ffbc9d6bafa58af896b39e895e503a271da3baf710e2b58",
+    "source_url": "https://github.com/mycelium0/mycelium",
+    "status": "approved"
+  },
+  "declared_domain": "One ASCII LF-delimited checksum or error-response line, excluding NUL; the solver property covers every line of length 0..63, with no additional content assumptions. The product gate exercises the pinned verifier with an empty file, a longer checksum-free response, and a well-formed checksum record. The guarantee is only that no source-pattern match occurs without the required 64-hex prefix and delimiters; the solver does not prove authenticity or the external checksum utility's behavior.",
+  "guarantee": "When a downloaded SHA256SUMS file has no line beginning with exactly 64 ASCII hexadecimal digits followed by POSIX whitespace, an optional '*' marker, and a non-whitespace filename character, verify-release.sh fails before calling the platform checksum command and cannot print an integrity success result. This is a preflight guarantee only; it does not establish release authenticity.",
+  "input_source": "The SHA256SUMS text file supplied alongside a downloaded release artifact; until signature verification succeeds, its bytes are untrusted network input. The helper also documents integrity-only mode while the maintainer signing key is unavailable.",
+  "provenance": "agent_derived",
+  "schema_version": "1",
+  "site": "mycelium0/mycelium@4b53dc7629ca3bc88bf5467db481ad2af7130711:scripts/verify-release.sh:60:SHA256SUMS preflight",
+  "trust": "untrusted-input"
+}

@@ -1,0 +1,20 @@
+{
+  "schema_version": "1",
+  "gate_id": "real-router-route-segment-allowed-ascii-alphabet",
+  "command": [
+    "/home/lalbers/gitroot/regexproof/.venv/bin/python",
+    "/home/lalbers/gitroot/regexproof/scripts/real-router-segment-regression-gate.py",
+    "--source-root",
+    "/tmp/regexproof-pinned-sources/real-router-55aa7ef43a9c129beba90823cd8a4db10bb01211",
+    "--output",
+    "/home/lalbers/gitroot/regexproof/properties/calibration/2026-10-16-p2-real-router-segment/p6-wave/product-gate.json"
+  ],
+  "question_ids": ["RR-route-segment-allowed-alphabet"],
+  "timeout_seconds": 300,
+  "evidence": {
+    "differential_case_counts": {
+      "RR-route-segment-allowed-alphabet": 17027
+    },
+    "product_engine_replay_question_ids": ["RR-route-segment-allowed-alphabet"]
+  }
+}

@@ -1,95 +1,78 @@
-# 12-hour work plan: replay forge-cli sensitive environment redaction
+# Implementation plan: replay forge-cli sensitive environment redaction
 
-**Scope:** one sink, one pinned source, one contract proposal. Stop after 12
-hours; do not widen into another forge-cli sink or a new corpus cohort.
+**Effort:** 2–4 hours for one contributor familiar with the regexproof harness.
 
-**Parent:** the helper-image slice in [plan.md](plan.md), wave 1 in
-[`sweep/forge-cli-conversion/plan.md`](../forge-cli-conversion/plan.md), and
-the human-contract workflow in [`docs/CONTRACTS.md`](../../docs/CONTRACTS.md).
-Wave 1 explicitly left the real renderer image unverified.
+**Parent context:** follow-up to [the helper-image slice](plan.md), wave 1 in
+[`sweep/forge-cli-conversion/plan.md`](../forge-cli-conversion/plan.md), and the
+human-contract-first conversion work in regexproof#551. Wave 1's close-out says
+real helper-image replay remains unverified. This ticket takes one sink only.
 
-## Question and declared domain
+## Goal
 
-At forge-cli commit `efcf8e4c0087def553a737dc1c4eebda5d8a90cd`, does
-`fluid_build.build_runners.dbt.runner._render_command_for_log` replace
-documented sensitive `KEY=VALUE` arguments with `KEY=<redacted>`?
+At the pinned forge-cli revision
+`efcf8e4c0087def553a737dc1c4eebda5d8a90cd`, verify that
+`build_runners/base.py:54` `SENSITIVE_ENV_KEY_RE` actually causes
+`_render_command_for_log` to redact values for the documented sensitive
+environment-key forms. Check the helper's output image as well as regex
+membership; do not infer sink behavior from `SENSITIVE_ENV_KEY_RE` alone.
 
-The finite replay domain is:
+## Scope
 
-- each of the 5,680 ASCII letter-case assignments of the documented key
-  spellings: `password`, `passphrase`, `secret`, `token`, `credential`,
-  `auth`, `api[_-]?key`, and `private[_-]?key` (including empty separators);
-- each key after both `-e` and `--env`, with `CLEAR_SENTINEL` as the value;
-- the separately enumerated ordinary, near-miss, empty-value, delimiter,
-  repeated-entry, mixed-case, substring, and terminal-newline fixtures in
-  `tests/test_forge_cli_harness.py`.
-
-The guarantee is limited to these exact command fixtures. Do not generalize to
-arbitrary values, non-ASCII keys, unlisted keys, or every possible argv shape.
-Expected command strings are specified directly in the tests, independently
-of the regex mirror.
-
-## Work sequence and timebox
-
-1. **0–1 hour — establish the boundary and adoption.** Read the pinned call
-   path and `docs/TRAPS.md`; inspect only the selected changes from the dirty
-   worktree. Present the exact guarantee above for human adoption. If adoption
-   is unavailable, keep the solver property out of the registry and conversion
-   artifacts, and ship the pinned replay only as regression coverage.
-2. **1–3 hours — reuse the regex subclaim.** The existing wave-1 shape-2
-   property already checks documented policy-key inclusion in the source
-   pattern. Confirm that its source mirror agrees with the pinned pattern; do
-   not add a duplicate registered property. This inclusion is not a proof of
-   the renderer's output image. `unknown` is not proven and fails the gate.
-3. **3–5 hours — replay the real helper.** Fetch or materialize the exact
-   source pin, verify the loaded module path and clean checkout, and compare
-   exact output strings for the full finite domain. Do not substitute a local
-   implementation for the product helper.
-4. **5–7 hours — exercise sensitivity and parity.** Keep an API-key mutation
-   guard that returns its expected SAT sensitivity witness. A separate
-   ground-truth test must replay that witness through the pinned helper under
-   the weakened regex and show `CLEAR_SENTINEL` is exposed. Differentially
-   compare the mirror with CPython `re` and the helper on all listed cases.
-5. **7–8 hours — review concurrency and evidence handling.** Make checkout
-   caching safe for parallel test processes and serialize temporary regex
-   mutations. Ensure the close-out distinguishes the existing solver claim
-   from the real-helper regression evidence.
-6. **8–9 hours — gate artifact generation.** Without adoption, regenerate the
-   existing conversion artifacts without adding a helper-image row. If adopted,
-   add and emit a narrowly scoped contract only after the real replay tests,
-   mutation replay, and differential checks pass. Inspect row counts, shape,
-   domain, provenance, and engine versions.
-7. **9–10 hours — adversarial review.** Ask a read-only reviewer to challenge
-   source pinning, mirror semantics, value-domain wording, output claims,
-   mutation behavior, and ledger eligibility. Address concrete issues only.
-8. **10–12 hours — verify and close.** Run the targeted tests, full pytest,
-   Ruff, `git diff --check`, and
-   `python scripts/z3-verify.py --all --require-ground-truth
-   --require-domain --require-contract --fail-on-property-failure`. Review
-   the exact branch diff and CI result. Record the domain, separate solver
-   and product-test evidence, engine versions, limits, and refuted claims.
-
-## Acceptance gates
-
-- The proposed contract records site, trust, input, finite declared domain,
-  pin, and provenance. Only `human` provenance counts; without adoption, do
-  not register the property or publish a conversion row.
-- The solver query proves key-pattern inclusion only and is labeled shape 2.
-- Tests call the real renderer at the exact pin and compare full expected
-  command strings; sentinel absence is asserted for each sensitive fixture.
-- The exact SAT witness for the API-key mutation is replayed through the real
-  helper with the weakened policy, and the cleartext leak is asserted.
-- Mirror classification agrees with CPython `re` for the declared domain.
-- The full proof command treats timeout/unknown and missing contract/domain/
-  mutation coverage as hard failures.
-- The conversion ledger includes a product row only after every preceding
-  gate passes and a person adopts the guarantee. Without that adoption, replay
-  tests remain ordinary regression coverage and add zero conversion rows. No
-  upstream filing or public disclosure is part of this work.
+- Adopt one human contract in family `FC-forge-cli`, wave `forge-cli_helper_image`.
+- Cover the documented forms already listed in
+  `regexproof/harness/forge_cli.py` (`password`, `passphrase`, `secret`,
+  `token`, `credential`, `auth`, `api[_-]?key`, and `private[_-]?key`,
+  including case variants and empty separator forms).
+- Exercise the real `_render_command_for_log` at the pinned revision. Materialize
+  or otherwise obtain that exact source revision for replay; do not replace the
+  product helper with a locally reimplemented stand-in.
+- Define the expected redacted command independently of the regex mirror.
+- Add a mutation guard that weakens/removes sensitive-key recognition and
+  demonstrates a cleartext value witness.
+- Differential-check mirror classification and helper output against CPython
+  `re` over the documented keys plus delimiter, empty-value, repeated-key,
+  mixed-case, and terminal-newline cases. Exhaustive bounded key enumeration is
+  preferred where practical.
+- Add a `ground_truth` callback for SAT witnesses and run the family with
+  `--require-ground-truth`.
+- Emit a conversion row only after the contract, real replay, and mutation guard
+  all pass; then regenerate the conversion ledger and write a short close-out
+  recording domain, verdict, engine versions, and any refuted claims.
 
 ## Out of scope
 
-JAAS, Datamesh, URL, LLM endpoint, copilot-memory sinks, changes to forge-cli,
-new solver backends, general helper-image infrastructure, and the proposed
-30-repository cohort refresh. Candidate data for that cohort must first be
-refreshed and re-probed, as recorded in `docs/THROUGHPUT-PLAN.md`.
+- JAAS, Datamesh, URL, LLM endpoint, or copilot-memory sinks.
+- Changes to forge-cli itself or public disclosure of any finding.
+- A general regexproof helper-image framework or new solver backend.
+- Treating `PRODUCT = MATCH`, solver-only acceptance, or a non-reproducing
+  witness as a product result.
+
+## Acceptance criteria
+
+1. The contract names the configuration input, trust class, guarantee, declared
+   domain, source pin, and `FC-forge-cli` family.
+2. A test invokes the pinned product helper on real command inputs and confirms
+   the exact output image, including that the sensitive value is absent.
+3. The normal property is proven within its declared domain; `unknown`/timeout
+   fails the run.
+4. The mutation guard returns its expected SAT witness and shows the weakened
+   policy can expose the value.
+5. Differential checks find no disagreement between the mirror and CPython
+   `re` / helper for the stated cases.
+6. Any SAT witness is replayed by the ground-truth callback. No finding is
+   reported or entered in the ledger if replay fails.
+7. The family passes with `--require-contract --require-ground-truth` and the
+   applicable mutation-coverage gate. The close-out clearly separates proven
+   behavior from untested cases.
+
+## Likely touch points
+
+- `regexproof/harness/forge_cli.py`
+- `tests/test_forge_cli_harness.py`
+- `properties/generated/forge-cli_conversion.ndjson` (only if all gates pass)
+- `properties/generated/conversion-ledger.json` and its markdown report
+- `properties/generated/forge-cli_conversion_wave.md`
+
+Follow repository `AGENTS.md`: inspect `docs/TRAPS.md` before encoding, mirror
+search semantics accurately, ground-truth every witness, and treat timeout as
+not proven.

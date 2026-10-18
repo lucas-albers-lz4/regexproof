@@ -1,0 +1,105 @@
+{
+  "schema_version": "1",
+  "observed_at": "2026-10-15",
+  "cohort_id": "2026-09-12-calibration-20-r2",
+  "manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+  "source_checkpoint": {
+    "path": "properties/calibration/2026-10-15-p2-existing-evidence-20r2-v6/checkpoint.json",
+    "sha256": "9a59083ea53df3c5a82b11f9b03737f2559bed58c69a91671835d7dcad1643d0"
+  },
+  "disposition_source": {
+    "path": "docs/conversion-upstream.jsonl",
+    "sha256": "a6275be1fcbde0aa325001aea8af421202de6dd096f630ea06dfc73e66bb2ff8"
+  },
+  "method": "Read exact-pinned product helpers, call paths, existing gate and replay artifacts, and current curated dispositions. This triage does not run or claim a new product replay.",
+  "summary": {
+    "ground_truthed_sat_questions": 6,
+    "refuted_as_security_bypass": 2,
+    "potential_product_issues": 4,
+    "candidate_issue_groups": 3,
+    "confirmed_security_impacts": 0,
+    "external_reports_transmitted": 0,
+    "maintainer_confirmations": 0,
+    "third_party_fixes": 0,
+    "consumer_adopted_gates": 0
+  },
+  "groups": [
+    {
+      "group_id": "doberman-terminal-newline-denylist",
+      "question_ids": [
+        "PY-doberman-windows-root-token",
+        "PY-doberman-disk-wipe-token"
+      ],
+      "classification": "false_positive_as_security_bypass",
+      "disposition_ids": ["CU-015", "CU-016"],
+      "security_impact": "none_demonstrated",
+      "reason": "The Windows root helper strips surrounding whitespace before the regex. Both matching paths are deny-list checks whose true result contributes to BLOCK. The SATs establish Python regex membership, but no bypass or unsafe pass. The disk-wipe case may be overinclusive for an unusual quoted command token; no availability impact was measured.",
+      "refuted_claims": [
+        "A terminal LF reaches _WINDOWS_ROOT_RE unchanged after _is_root_or_home_target preprocessing.",
+        "A terminal-LF match of _DISK_WIPE lets a destructive command bypass classification."
+      ],
+      "evidence": [
+        "https://github.com/fu351/Doberman-Core/blob/53ae43c5298a2426c6696147fdd75e2a4aef10e2/src/doberman/engine/rules/commands.py#L266-L280",
+        "https://github.com/fu351/Doberman-Core/blob/53ae43c5298a2426c6696147fdd75e2a4aef10e2/src/doberman/engine/rules/commands.py#L434-L435",
+        "https://github.com/fu351/Doberman-Core/blob/53ae43c5298a2426c6696147fdd75e2a4aef10e2/src/doberman/engine/rules/commands.py#L536-L560",
+        "docs/conversion-upstream.jsonl#CU-015",
+        "docs/conversion-upstream.jsonl#CU-016"
+      ],
+      "external_outcome": "No report sent; prior private_first labels and dates are corrected and retained in the updated notes."
+    },
+    {
+      "group_id": "doberman-windows-secret-store-coverage",
+      "question_ids": ["PY-doberman-secret-store-windows-miss"],
+      "classification": "reproduced_security_control_gap_candidate",
+      "disposition_ids": ["CU-017"],
+      "security_impact": "plausible_not_confirmed",
+      "reason": "The existing exact-pin product gate reports PASS for Windows-shaped .npmrc/credentials targets and AUTH for slash-separated controls. The declared native Windows path was not executed on Windows, and the gate did not read a real secret or exercise a downstream model session.",
+      "evidence": [
+        "properties/calibration/2026-10-15-autonomous-doberman-win-secret-path-20r2/README.md",
+        "properties/calibration/2026-10-15-autonomous-doberman-win-secret-path-20r2/gate-report.json",
+        "https://github.com/fu351/Doberman-Core/blob/53ae43c5298a2426c6696147fdd75e2a4aef10e2/src/doberman/engine/rules/secrets.py#L223-L235",
+        "https://github.com/fu351/Doberman-Core/blob/53ae43c5298a2426c6696147fdd75e2a4aef10e2/docs/REASON_CODES.md#L18"
+      ],
+      "next_evidence": "Exact Windows runtime normalization and an end-to-end intercepted fs_read decision using a disposable path; never use real credentials.",
+      "external_outcome": "Private-first posture only; no report sent, maintainer confirmation, or fix."
+    },
+    {
+      "group_id": "autoar-cross-origin-loopback-js-fetch",
+      "question_ids": ["AA-autoar-jsendpoint-loopback-script-src-fetch"],
+      "disposition_ids": ["CU-018"],
+      "classification": "reproduced_cross_origin_loopback_fetch_candidate",
+      "security_impact": "plausible_not_confirmed",
+      "reason": "The exact pinned collector replay fetched a harmless JavaScript body from a second disposable 127.0.0.1 listener after receiving an absolute script URL from scanned-host HTML. It establishes a loopback request, not sensitive access, a production deployment path, or maintainer agreement that this violates intended scope.",
+      "evidence": [
+        "properties/calibration/2026-10-15-autonomous-autoar-jsendpoint-scope-escape-20r2/README.md",
+        "properties/calibration/2026-10-15-autonomous-autoar-jsendpoint-scope-escape-20r2/gate-report.json",
+        "https://github.com/h0tak88r/AutoAR/blob/01cd447ad3b1acfed7e0680596c2c74458a4cf06/internal/scanner/jsendpoints/jsendpoints.go#L21-L26",
+        "https://github.com/h0tak88r/AutoAR/blob/01cd447ad3b1acfed7e0680596c2c74458a4cf06/internal/scanner/jsendpoints/jsendpoints.go#L69-L94"
+      ],
+      "next_evidence": "Review documented target/scope expectations and impact on a representative operator deployment before proposing any external report.",
+      "external_outcome": "Private-first posture only; no report sent, maintainer confirmation, or fix."
+    },
+    {
+      "group_id": "malcontent-third-party-metadata-markdown-rendering",
+      "question_ids": [
+        "MC-malcontent-author-metadata-extra-markdown-link",
+        "MC-malcontent-description-metadata-extra-markdown-link"
+      ],
+      "disposition_ids": ["CU-019", "CU-020"],
+      "classification": "reproduced_markdown_structure_injection_candidate",
+      "security_impact": "not_confirmed",
+      "reason": "Two distinct third-party YARA metadata fields reach raw Markdown link/table output. The existing exact-pin replays produce an extra attacker-chosen link and, for the description path, a table delimiter. No browser, Markdown viewer, or downstream consumer was tested, so XSS or user impact is not established. Count these as two questions and one shared renderer issue family.",
+      "evidence": [
+        "properties/calibration/2026-10-15-autonomous-malcontent-author-markdown-20r2/README.md",
+        "properties/calibration/2026-10-15-autonomous-malcontent-author-markdown-20r2/product-replay.json",
+        "properties/calibration/2026-10-15-autonomous-malcontent-description-markdown-20r2/README.md",
+        "properties/calibration/2026-10-15-autonomous-malcontent-description-markdown-20r2/product-replay.json",
+        "https://github.com/chainguard-dev/malcontent/blob/ea3e83e24676a1678a9522141da29b636c9451ab/pkg/render/markdown.go#L39-L47",
+        "https://github.com/chainguard-dev/malcontent/blob/ea3e83e24676a1678a9522141da29b636c9451ab/pkg/render/markdown.go#L230-L258"
+      ],
+      "next_evidence": "Identify a supported Markdown consumer and establish whether it activates attacker-selected links or altered table structure.",
+      "external_outcome": "Private-first posture only; no report sent, maintainer confirmation, or fix."
+    }
+  ],
+  "interpretation": "The P2 SAT denominator remains six because all six solver/product replay questions occurred. Two no longer count as security-bug candidates after source-level product triage. Four remain plausible product issues grouped into three families. None has confirmed security impact or an external outcome. Private-first is a disclosure posture, not evidence of transmission."
+}

@@ -1,0 +1,903 @@
+{
+  "artifact_kind": "p2-exact-pin-source-review",
+  "cohort_id": "2026-09-12-calibration-20-r2",
+  "coverage": {
+    "adopted_contracts": 0,
+    "interpretation": "complete raw-site review for this member only; unresolved rows remain outside product-question denominators",
+    "product_questions_asked": 0,
+    "skip": 1,
+    "source_sites_reviewed": 1,
+    "source_sites_unreviewed_in_scope": 0,
+    "unresolved": 0
+  },
+  "limitations": [
+    "This is a complete raw-regex review only for airbnb/binaryalert at the frozen 20-r2 pin; it does not establish coverage for the other cohort members or complete P2.",
+    "The reviewed regex extracts the package version from a checked-out source file while Sphinx builds documentation; it is not a product security boundary."
+  ],
+  "manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+  "observed_at": "2026-10-15",
+  "repository": {
+    "dialect_family": "py_re",
+    "inventory_status": "complete",
+    "pin": "a9c0f06affc35e1f8e45bb77f835b92350c68a0b",
+    "repo_id": "airbnb/binaryalert",
+    "url": "https://github.com/airbnb/binaryalert"
+  },
+  "review_process": {
+    "author": "Codex source-review pass",
+    "review_source_sha256": "9decc588236d51175b5a9a865a6b7bcda6ad32c68f3dadb1f8cdd9735b54b808",
+    "reviewer": "Codex second source-review pass",
+    "same_model_or_agent": true,
+    "second_pass_recorded": true
+  },
+  "schema_version": "1",
+  "sites": [
+    {
+      "call_kind": "search",
+      "decision": "skip",
+      "dialect_family": "py_re",
+      "git_blob_oid": "9c1fcaa5e27b0fc8b645bc788da08706375158ed",
+      "pattern": "^__version__ = ['\\\"]([^'\\\"]+)['\\\"]",
+      "product_question_asked": false,
+      "rationale": "The Sphinx configuration opens the repository's own cli/__init__.py and searches its source text for the __version__ assignment, then assigns the captured package version to Sphinx's release and version fields. The file is build-time source metadata and the result controls documentation labels; no untrusted runtime input, authorization decision, sanitizer boundary, or security-sensitive sink is present. This is an internal documentation pattern, so it receives an evidence-backed skip rather than a product property.",
+      "reason_code": "documentation_build_metadata",
+      "regex_id": "dab50fd3846aa746937b8e9cad4a7606",
+      "site": "docs/source/conf.py:67:14",
+      "source_file": "docs/source/conf.py",
+      "source_file_sha256": "efbb8a5bcd90f4544b9968555ef0576f2038a34c845fd289dcbfa007c52743c8",
+      "source_site_id": "81fd96b1220108e3e4c6403c8de21d11ac0889365789c3e2cc4497cf2d1aec12",
+      "source_windows": [
+        {
+          "purpose": "regex_site",
+          "window": {
+            "lines": [
+              {
+                "is_target": false,
+                "line": 42,
+                "text": "# ones."
+              },
+              {
+                "is_target": false,
+                "line": 43,
+                "text": "extensions = []"
+              },
+              {
+                "is_target": false,
+                "line": 44,
+                "text": ""
+              },
+              {
+                "is_target": false,
+                "line": 45,
+                "text": "# Add any paths that contain templates here, relative to this directory."
+              },
+              {
+                "is_target": false,
+                "line": 46,
+                "text": "# templates_path = ['_templates']"
+              },
+              {
+                "is_target": false,
+                "line": 47,
+                "text": ""
+              },
+              {
+                "is_target": false,
+                "line": 48,
+                "text": "# The suffix(es) of source filenames."
+              },
+              {
+                "is_target": false,
+                "line": 49,
+                "text": "# You can specify multiple suffix as a list of string:"
+              },
+              {
+                "is_target": false,
+                "line": 50,
+                "text": "#"
+              },
+              {
+                "is_target": false,
+                "line": 51,
+                "text": "# source_suffix = ['.rst', '.md']"
+              },
+              {
+                "is_target": false,
+                "line": 52,
+                "text": "source_suffix = '.rst'"
+              },
+              {
+                "is_target": false,
+                "line": 53,
+                "text": ""
+              },
+              {
+                "is_target": false,
+                "line": 54,
+                "text": "# The master toctree document."
+              },
+              {
+                "is_target": false,
+                "line": 55,
+                "text": "master_doc = 'index'"
+              },
+              {
+                "is_target": false,
+                "line": 56,
+                "text": ""
+              },
+              {
+                "is_target": false,
+                "line": 57,
+                "text": "# General information about the project."
+              },
+              {
+                "is_target": false,
+                "line": 58,
+                "text": "project = 'BinaryAlert'"
+              },
+              {
+                "is_target": false,
+                "line": 59,
+                "text": "copyright = '2018, Airbnb'"
+              },
+              {
+                "is_target": false,
+                "line": 60,
+                "text": "author = 'Airbnb'"
+              },
+              {
+                "is_target": false,
+                "line": 61,
+                "text": ""
+              },
+              {
+                "is_target": false,
+                "line": 62,
+                "text": "# The version info for the project you're documenting, acts as replacement for"
+              },
+              {
+                "is_target": false,
+                "line": 63,
+                "text": "# |version| and |release|, also used in various other places throughout the"
+              },
+              {
+                "is_target": false,
+                "line": 64,
+                "text": "# built documents."
+              },
+              {
+                "is_target": false,
+                "line": 65,
+                "text": "#"
+              },
+              {
+                "is_target": false,
+                "line": 66,
+                "text": "with open('../../cli/__init__.py', 'r') as version_file:"
+              },
+              {
+                "is_target": true,
+                "line": 67,
+                "text": "    release = re.search("
+              },
+              {
+                "is_target": false,
+                "line": 68,
+                "text": "        r\"^__version__ = ['\\\"]([^'\\\"]+)['\\\"]\", version_file.read(), re.MULTILINE).group(1)"
+              },
+              {
+                "is_target": false,
+                "line": 69,
+                "text": "version = release"
+              },
+              {
+                "is_target": false,
+                "line": 70,
+                "text": ""
+              },
+              {
+                "is_target": false,
+                "line": 71,
+                "text": "# The language for content autogenerated by Sphinx. Refer to documentation"
+              },
+              {
+                "is_target": false,
+                "line": 72,
+                "text": "# for a list of supported languages."
+              },
+              {
+                "is_target": false,
+                "line": 73,
+                "text": "#"
+              },
+              {
+                "is_target": false,
+                "line": 74,
+                "text": "# This is also used if you do content translation via gettext catalogs."
+              },
+              {
+                "is_target": false,
+                "line": 75,
+                "text": "# Usually you set \"language\" from the command line for these cases."
+              },
+              {
+                "is_target": false,
+                "line": 76,
+                "text": "language = None"
+              },
+              {
+                "is_target": false,
+                "line": 77,
+                "text": ""
+              },
+              {
+                "is_target": false,
+                "line": 78,
+                "text": "# List of patterns, relative to source directory, that match files and"
+              },
+              {
+                "is_target": false,
+                "line": 79,
+                "text": "# directories to ignore when looking for source files."
+              },
+              {
+                "is_target": false,
+                "line": 80,
+                "text": "# This patterns also effect to html_static_path and html_extra_path"
+              },
+              {
+                "is_target": false,
+                "line": 81,
+                "text": "exclude_patterns = []"
+              },
+              {
+                "is_target": false,
+                "line": 82,
+                "text": ""
+              },
+              {
+                "is_target": false,
+                "line": 83,
+                "text": "# The name of the Pygments (syntax highlighting) style to use."
+              },
+              {
+                "is_target": false,
+                "line": 84,
+                "text": "pygments_style = 'sphinx'"
+              },
+              {
+                "is_target": false,
+                "line": 85,
+                "text": ""
+              },
+              {
+                "is_target": false,
+                "line": 86,
+                "text": "# If true, `todo` and `todoList` produce output, else they produce nothing."
+              },
+              {
+                "is_target": false,
+                "line": 87,
+                "text": "todo_include_todos = False"
+              },
+              {
+                "is_target": false,
+                "line": 88,
+                "text": ""
+              },
+              {
+                "is_target": false,
+                "line": 89,
+                "text": ""
+              },
+              {
+                "is_target": false,
+                "line": 90,
+                "text": "# -- Options for HTML output ----------------------------------------------"
+              },
+              {
+                "is_target": false,
+                "line": 91,
+                "text": ""
+              },
+              {
+                "is_target": false,
+                "line": 92,
+                "text": "# The theme to use for HTML and HTML Help pages.  See the documentation for"
+              }
+            ],
+            "path": "docs/source/conf.py",
+            "target_line": 67,
+            "token": "14",
+            "window_end": 92,
+            "window_lines": 51,
+            "window_start": 42
+          }
+        },
+        {
+          "purpose": "searches a repository-relative version file during the Sphinx build",
+          "window": {
+            "lines": [
+              {
+                "is_target": false,
+                "line": 42,
+                "text": "# ones."
+              },
+              {
+                "is_target": false,
+                "line": 43,
+                "text": "extensions = []"
+              },
+              {
+                "is_target": false,
+                "line": 44,
+                "text": ""
+              },
+              {
+                "is_target": false,
+                "line": 45,
+                "text": "# Add any paths that contain templates here, relative to this directory."
+              },
+              {
+                "is_target": false,
+                "line": 46,
+                "text": "# templates_path = ['_templates']"
+              },
+              {
+                "is_target": false,
+                "line": 47,
+                "text": ""
+              },
+              {
+                "is_target": false,
+                "line": 48,
+                "text": "# The suffix(es) of source filenames."
+              },
+              {
+                "is_target": false,
+                "line": 49,
+                "text": "# You can specify multiple suffix as a list of string:"
+              },
+              {
+                "is_target": false,
+                "line": 50,
+                "text": "#"
+              },
+              {
+                "is_target": false,
+                "line": 51,
+                "text": "# source_suffix = ['.rst', '.md']"
+              },
+              {
+                "is_target": false,
+                "line": 52,
+                "text": "source_suffix = '.rst'"
+              },
+              {
+                "is_target": false,
+                "line": 53,
+                "text": ""
+              },
+              {
+                "is_target": false,
+                "line": 54,
+                "text": "# The master toctree document."
+              },
+              {
+                "is_target": false,
+                "line": 55,
+                "text": "master_doc = 'index'"
+              },
+              {
+                "is_target": false,
+                "line": 56,
+                "text": ""
+              },
+              {
+                "is_target": false,
+                "line": 57,
+                "text": "# General information about the project."
+              },
+              {
+                "is_target": false,
+                "line": 58,
+                "text": "project = 'BinaryAlert'"
+              },
+              {
+                "is_target": false,
+                "line": 59,
+                "text": "copyright = '2018, Airbnb'"
+              },
+              {
+                "is_target": false,
+                "line": 60,
+                "text": "author = 'Airbnb'"
+              },
+              {
+                "is_target": false,
+                "line": 61,
+                "text": ""
+              },
+              {
+                "is_target": false,
+                "line": 62,
+                "text": "# The version info for the project you're documenting, acts as replacement for"
+              },
+              {
+                "is_target": false,
+                "line": 63,
+                "text": "# |version| and |release|, also used in various other places throughout the"
+              },
+              {
+                "is_target": false,
+                "line": 64,
+                "text": "# built documents."
+              },
+              {
+                "is_target": false,
+                "line": 65,
+                "text": "#"
+              },
+              {
+                "is_target": false,
+                "line": 66,
+                "text": "with open('../../cli/__init__.py', 'r') as version_file:"
+              },
+              {
+                "is_target": true,
+                "line": 67,
+                "text": "    release = re.search("
+              },
+              {
+                "is_target": false,
+                "line": 68,
+                "text": "        r\"^__version__ = ['\\\"]([^'\\\"]+)['\\\"]\", version_file.read(), re.MULTILINE).group(1)"
+              },
+              {
+                "is_target": false,
+                "line": 69,
+                "text": "version = release"
+              },
+              {
+                "is_target": false,
+                "line": 70,
+                "text": ""
+              },
+              {
+                "is_target": false,
+                "line": 71,
+                "text": "# The language for content autogenerated by Sphinx. Refer to documentation"
+              },
+              {
+                "is_target": false,
+                "line": 72,
+                "text": "# for a list of supported languages."
+              },
+              {
+                "is_target": false,
+                "line": 73,
+                "text": "#"
+              },
+              {
+                "is_target": false,
+                "line": 74,
+                "text": "# This is also used if you do content translation via gettext catalogs."
+              },
+              {
+                "is_target": false,
+                "line": 75,
+                "text": "# Usually you set \"language\" from the command line for these cases."
+              },
+              {
+                "is_target": false,
+                "line": 76,
+                "text": "language = None"
+              },
+              {
+                "is_target": false,
+                "line": 77,
+                "text": ""
+              },
+              {
+                "is_target": false,
+                "line": 78,
+                "text": "# List of patterns, relative to source directory, that match files and"
+              },
+              {
+                "is_target": false,
+                "line": 79,
+                "text": "# directories to ignore when looking for source files."
+              },
+              {
+                "is_target": false,
+                "line": 80,
+                "text": "# This patterns also effect to html_static_path and html_extra_path"
+              },
+              {
+                "is_target": false,
+                "line": 81,
+                "text": "exclude_patterns = []"
+              },
+              {
+                "is_target": false,
+                "line": 82,
+                "text": ""
+              },
+              {
+                "is_target": false,
+                "line": 83,
+                "text": "# The name of the Pygments (syntax highlighting) style to use."
+              },
+              {
+                "is_target": false,
+                "line": 84,
+                "text": "pygments_style = 'sphinx'"
+              },
+              {
+                "is_target": false,
+                "line": 85,
+                "text": ""
+              },
+              {
+                "is_target": false,
+                "line": 86,
+                "text": "# If true, `todo` and `todoList` produce output, else they produce nothing."
+              },
+              {
+                "is_target": false,
+                "line": 87,
+                "text": "todo_include_todos = False"
+              },
+              {
+                "is_target": false,
+                "line": 88,
+                "text": ""
+              },
+              {
+                "is_target": false,
+                "line": 89,
+                "text": ""
+              },
+              {
+                "is_target": false,
+                "line": 90,
+                "text": "# -- Options for HTML output ----------------------------------------------"
+              },
+              {
+                "is_target": false,
+                "line": 91,
+                "text": ""
+              },
+              {
+                "is_target": false,
+                "line": 92,
+                "text": "# The theme to use for HTML and HTML Help pages.  See the documentation for"
+              }
+            ],
+            "path": "docs/source/conf.py",
+            "target_line": 67,
+            "token": "conf.py",
+            "window_end": 92,
+            "window_lines": 51,
+            "window_start": 42
+          }
+        },
+        {
+          "purpose": "assigns the capture to Sphinx release and version metadata",
+          "window": {
+            "lines": [
+              {
+                "is_target": false,
+                "line": 43,
+                "text": "extensions = []"
+              },
+              {
+                "is_target": false,
+                "line": 44,
+                "text": ""
+              },
+              {
+                "is_target": false,
+                "line": 45,
+                "text": "# Add any paths that contain templates here, relative to this directory."
+              },
+              {
+                "is_target": false,
+                "line": 46,
+                "text": "# templates_path = ['_templates']"
+              },
+              {
+                "is_target": false,
+                "line": 47,
+                "text": ""
+              },
+              {
+                "is_target": false,
+                "line": 48,
+                "text": "# The suffix(es) of source filenames."
+              },
+              {
+                "is_target": false,
+                "line": 49,
+                "text": "# You can specify multiple suffix as a list of string:"
+              },
+              {
+                "is_target": false,
+                "line": 50,
+                "text": "#"
+              },
+              {
+                "is_target": false,
+                "line": 51,
+                "text": "# source_suffix = ['.rst', '.md']"
+              },
+              {
+                "is_target": false,
+                "line": 52,
+                "text": "source_suffix = '.rst'"
+              },
+              {
+                "is_target": false,
+                "line": 53,
+                "text": ""
+              },
+              {
+                "is_target": false,
+                "line": 54,
+                "text": "# The master toctree document."
+              },
+              {
+                "is_target": false,
+                "line": 55,
+                "text": "master_doc = 'index'"
+              },
+              {
+                "is_target": false,
+                "line": 56,
+                "text": ""
+              },
+              {
+                "is_target": false,
+                "line": 57,
+                "text": "# General information about the project."
+              },
+              {
+                "is_target": false,
+                "line": 58,
+                "text": "project = 'BinaryAlert'"
+              },
+              {
+                "is_target": false,
+                "line": 59,
+                "text": "copyright = '2018, Airbnb'"
+              },
+              {
+                "is_target": false,
+                "line": 60,
+                "text": "author = 'Airbnb'"
+              },
+              {
+                "is_target": false,
+                "line": 61,
+                "text": ""
+              },
+              {
+                "is_target": false,
+                "line": 62,
+                "text": "# The version info for the project you're documenting, acts as replacement for"
+              },
+              {
+                "is_target": false,
+                "line": 63,
+                "text": "# |version| and |release|, also used in various other places throughout the"
+              },
+              {
+                "is_target": false,
+                "line": 64,
+                "text": "# built documents."
+              },
+              {
+                "is_target": false,
+                "line": 65,
+                "text": "#"
+              },
+              {
+                "is_target": false,
+                "line": 66,
+                "text": "with open('../../cli/__init__.py', 'r') as version_file:"
+              },
+              {
+                "is_target": false,
+                "line": 67,
+                "text": "    release = re.search("
+              },
+              {
+                "is_target": true,
+                "line": 68,
+                "text": "        r\"^__version__ = ['\\\"]([^'\\\"]+)['\\\"]\", version_file.read(), re.MULTILINE).group(1)"
+              },
+              {
+                "is_target": false,
+                "line": 69,
+                "text": "version = release"
+              },
+              {
+                "is_target": false,
+                "line": 70,
+                "text": ""
+              },
+              {
+                "is_target": false,
+                "line": 71,
+                "text": "# The language for content autogenerated by Sphinx. Refer to documentation"
+              },
+              {
+                "is_target": false,
+                "line": 72,
+                "text": "# for a list of supported languages."
+              },
+              {
+                "is_target": false,
+                "line": 73,
+                "text": "#"
+              },
+              {
+                "is_target": false,
+                "line": 74,
+                "text": "# This is also used if you do content translation via gettext catalogs."
+              },
+              {
+                "is_target": false,
+                "line": 75,
+                "text": "# Usually you set \"language\" from the command line for these cases."
+              },
+              {
+                "is_target": false,
+                "line": 76,
+                "text": "language = None"
+              },
+              {
+                "is_target": false,
+                "line": 77,
+                "text": ""
+              },
+              {
+                "is_target": false,
+                "line": 78,
+                "text": "# List of patterns, relative to source directory, that match files and"
+              },
+              {
+                "is_target": false,
+                "line": 79,
+                "text": "# directories to ignore when looking for source files."
+              },
+              {
+                "is_target": false,
+                "line": 80,
+                "text": "# This patterns also effect to html_static_path and html_extra_path"
+              },
+              {
+                "is_target": false,
+                "line": 81,
+                "text": "exclude_patterns = []"
+              },
+              {
+                "is_target": false,
+                "line": 82,
+                "text": ""
+              },
+              {
+                "is_target": false,
+                "line": 83,
+                "text": "# The name of the Pygments (syntax highlighting) style to use."
+              },
+              {
+                "is_target": false,
+                "line": 84,
+                "text": "pygments_style = 'sphinx'"
+              },
+              {
+                "is_target": false,
+                "line": 85,
+                "text": ""
+              },
+              {
+                "is_target": false,
+                "line": 86,
+                "text": "# If true, `todo` and `todoList` produce output, else they produce nothing."
+              },
+              {
+                "is_target": false,
+                "line": 87,
+                "text": "todo_include_todos = False"
+              },
+              {
+                "is_target": false,
+                "line": 88,
+                "text": ""
+              },
+              {
+                "is_target": false,
+                "line": 89,
+                "text": ""
+              },
+              {
+                "is_target": false,
+                "line": 90,
+                "text": "# -- Options for HTML output ----------------------------------------------"
+              },
+              {
+                "is_target": false,
+                "line": 91,
+                "text": ""
+              },
+              {
+                "is_target": false,
+                "line": 92,
+                "text": "# The theme to use for HTML and HTML Help pages.  See the documentation for"
+              },
+              {
+                "is_target": false,
+                "line": 93,
+                "text": "# a list of builtin themes."
+              }
+            ],
+            "path": "docs/source/conf.py",
+            "target_line": 68,
+            "token": "conf.py",
+            "window_end": 93,
+            "window_lines": 51,
+            "window_start": 43
+          }
+        },
+        {
+          "purpose": "repository-owned literal __version__ assignment",
+          "window": {
+            "lines": [
+              {
+                "is_target": false,
+                "line": 1,
+                "text": "\"\"\"BinaryAlert release version\"\"\""
+              },
+              {
+                "is_target": true,
+                "line": 2,
+                "text": "__version__ = '1.2.0'"
+              }
+            ],
+            "path": "cli/__init__.py",
+            "target_line": 2,
+            "token": "__init__.py",
+            "window_end": 2,
+            "window_lines": 2,
+            "window_start": 1
+          }
+        }
+      ]
+    }
+  ],
+  "source_files": [
+    {
+      "evidence_ref": "https://github.com/airbnb/binaryalert/blob/a9c0f06affc35e1f8e45bb77f835b92350c68a0b/cli/__init__.py",
+      "path": "cli/__init__.py",
+      "pin": "a9c0f06affc35e1f8e45bb77f835b92350c68a0b",
+      "repository_url": "https://github.com/airbnb/binaryalert",
+      "sha256": "08c771897d341d1c33b2c40d57700f731aa83557e7c25e3a2b70431881d69d0d"
+    },
+    {
+      "evidence_ref": "https://github.com/airbnb/binaryalert/blob/a9c0f06affc35e1f8e45bb77f835b92350c68a0b/docs/source/conf.py",
+      "git_blob_oid": "9c1fcaa5e27b0fc8b645bc788da08706375158ed",
+      "path": "docs/source/conf.py",
+      "pin": "a9c0f06affc35e1f8e45bb77f835b92350c68a0b",
+      "repository_url": "https://github.com/airbnb/binaryalert",
+      "sha256": "efbb8a5bcd90f4544b9968555ef0576f2038a34c845fd289dcbfa007c52743c8"
+    }
+  ],
+  "source_inventory": {
+    "inventory_sha256": "1f5e955431a31e131da9eca3bc325e31c5123d141cc3244698e797e82df09b03",
+    "member_site_count": 1,
+    "sites_ndjson_sha256": "381c0ca4d80c8f050b5446f378f6d95bd9b54ec83c02a48e5072a10beaabc73c",
+    "source_site_count_total": 20784
+  }
+}

@@ -76,6 +76,26 @@ def test_selects_first_unused_progression_bucket(tmp_path):
     assert sel["selected_bucket"] == "image-and-ddns-json"  # first unused
 
 
+def test_canonical_corpus_prevents_repeat_for_p6_wave_id(tmp_path, monkeypatch):
+    """A P6-specific wave id must not hide its consumed bucket from the
+    scheduler when the conversion row carries the canonical source corpus."""
+    cs = _load_cs()
+    bucket = "navigation-param-control-calibration"
+    rows = [{
+        "wave_id": "rr-nav-controls-p6-20261016",
+        "corpora": ["real-router"],
+        "idiom_bucket": bucket,
+    }]
+    used = cs.used_buckets_per_cluster(rows)
+    assert used == {"real-router": {bucket}}
+
+    monkeypatch.setitem(cs.BUCKET_PROGRESSION, "real-router", [bucket, "next-slice"])
+    selected, basis = cs.next_unused_bucket(
+        "real-router", used["real-router"], tmp_path / "queues", []
+    )
+    assert (selected, basis) == ("next-slice", "named-next-unused")
+
+
 def test_progression_exhausted_no_wrap(tmp_path):
     """Luna r1 #1 + CodeRabbit #582 + r4 + stop close-out: when every
     registered progression bucket is used on a STOPPED cluster, DESIGN
@@ -509,6 +529,47 @@ def test_mycelium_used_bucket_defers_unregistered_scripts(tmp_path):
     assert sel["used_buckets"] == ["control-failclosed"]
     assert sel["selected_bucket"] is None
     assert sel["selection_basis"] == "unregistered-next"
+
+
+def test_active_wave_blocks_registered_next_bucket_with_reason(tmp_path):
+    cs = _load_cs()
+    gen = tmp_path / "generated"
+    _gate_decision(gen, "mycelium")
+    events = tmp_path / "corpus_events.jsonl"
+    events.write_text(json.dumps({
+        "event": "wave_opened", "corpus": "mycelium", "wave_id": "mycelium_w2",
+    }) + "\n", encoding="utf-8")
+    registration = {
+        "schema_version": "1",
+        "entries": [{
+            "cluster": "mycelium", "bucket": "scripts-bootstrap",
+            "repository_url": "https://github.com/example/mycelium",
+            "source_pin": "a" * 40, "product_engine": "Bash + grep",
+            "trust_map": {"untrusted-input": "release checksums"},
+            "source_sites": ["scripts/verify-release.sh:60:SHA256SUMS preflight"],
+            "question_family": "mycelium-release-integrity",
+            "max_candidates": 5, "registered_on": "2026-10-15",
+            "rationale": "Pinned release checksum preflight.",
+            "source_files": [{
+                "path": "scripts/verify-release.sh", "sha256": "b" * 64,
+                "evidence_ref": "https://github.com/example/mycelium/blob/" + "a" * 40 + "/scripts/verify-release.sh",
+            }],
+            "contract_site": "scripts/verify-release.sh:60:SHA256SUMS preflight",
+            "contract_sha256": "c" * 64,
+            "review": {"author": "a", "reviewer": "b", "same_model": True},
+        }],
+    }
+    registry = tmp_path / "bucket-registry.json"
+    registry.write_text(json.dumps(registration), encoding="utf-8")
+    sched = cs.build_schedule(
+        [_row("mycelium_w1", "control-failclosed")],
+        queues_dir=tmp_path / "queues", gate_decisions_dir=gen,
+        dispositions_path=tmp_path / "d.jsonl", bucket_registry_path=registry,
+        events_log_path=events,
+    )
+    sel = sched["selections"][0]
+    assert sel["selected_bucket"] is None
+    assert sel["selection_basis"] == "active-wave"
 
 
 def test_aidevops_named_next_is_shell_hook_guards(tmp_path):

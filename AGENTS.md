@@ -43,6 +43,16 @@ Shape-5 `rule_diff` still needs an independent spec or a
 `version_diff` / `cross_engine` pair with a `family_contract` — sibling-family
 pairing is not a contract.
 
+**Autonomous adoption policy (2026-10-13):** agents may adopt source-backed
+contracts without per-contract human approval. Follow
+[`docs/AUTONOMOUS-CONTRACTS.md`](docs/AUTONOMOUS-CONTRACTS.md), which supersedes
+older human-adoption requirements. Keep agent provenance truthful and require
+the evidenced adoption/review record. Harness, queue, conversion ledger,
+saturation, and v3 checkpoint gates now use the shared eligibility rule; v2
+checkpoints remain human-only. Do not relabel agent contracts as `human` to
+pass historical formats. Measure useful proofs/regression gates and
+downstream bug confirmation/fixes separately.
+
 Phase 0 search-semantics inventory of the ten SAT candidates that looked like
 third-party findings: none are public filings — see [`docs/why.md`](docs/why.md)
 for the live conversion narrative and the [`docs/conversion-upstream.jsonl`](docs/conversion-upstream.jsonl)
@@ -67,9 +77,12 @@ From `scripts/z3-property-template.py`, the canonical shapes:
 | 3. Counterexample finder | "is there a value where capture ≠ true value?" | string ops: `IndexOf`/`SubString` | SAT + witness = the bug repro — cheapest, most valuable |
 | 4. Per-token image | "escape output has no raw control chars" | one token per tiny solver query | monolithic image-regex TIMEOUTs — decompose |
 | 5. Rule diff (`rule_diff`) | "does R2 accept anything R1 misses?" | `InRe(s, R2) ∧ Not(InRe(s, R1))` (no regex Complement) | SAT = gap; UNSAT = no gap in bound; TIMEOUT ≠ pass |
+| 6. Contract language inclusion | "does the source regex admit anything outside an independently specified contract language?" | `InRe(s, source) ∧ Not(InRe(s, spec))` (no regex Complement; no length bound) | UNSAT = invariant holds over the full regular-language domain; SAT = counterexample; TIMEOUT ≠ pass |
 
 Shape-5 registry/`kind`/`family`/mutation-guard contract:
 [`docs/examples/shape5-rule_diff.md`](docs/examples/shape5-rule_diff.md).
+Shape 6 is a source-backed `kind=property` invariant against an independent
+contract language; its full-domain proof is not a bounded shape-5 rule diff.
 Dialect/`call_kind`/fold tables: [`docs/SEMANTICS.md`](docs/SEMANTICS.md).
 
 ### 3. Encode — read `docs/TRAPS.md` first
@@ -158,8 +171,8 @@ in the harness output so a reader knows exactly what was proven.
 
 ## Worked examples in this repo
 
-- `scripts/z3-property-template.py` — runnable shapes 1–5 (incl. complement-free
-  shape-5 `rule_diff`) PASS against a pinned z3-solver
+- `scripts/z3-property-template.py` — runnable shapes 1–6 (incl. complement-free
+  shape-5 `rule_diff` and unbounded shape-6 contract inclusion) against a pinned z3-solver
 - `docs/examples/shape5-rule_diff.md` — shape-5 `kind`/`family`/mutation guards
 - `scripts/rule-diff-pilot.py` — Phase 3 gitleaks encodable-subset shape-5 pilot
   (independent-spec R1, admitted_pairs≥20, timeout gate)
@@ -216,7 +229,7 @@ every finding against the surrounding code before filing, and report what you
 - Consumer adoption (one regex → a CI gate): [`docs/NEWGATE.md`](docs/NEWGATE.md)
   — `python -m regexproof.newgate FILE PATTERN` / `regexproof newgate …`; not a second corpus funnel
 - Cluster conversion (OpenWrt, OpenClaw, …): [`docs/CLUSTER-CONVERSION.md`](docs/CLUSTER-CONVERSION.md)
-  — rank 15 / write ≤5 human contracts **per idiom slice** (close-out is
+  — rank 15 / adopt ≤5 evidenced contracts **per idiom slice** (close-out is
   the deny-list; later waves reuse emit + product-engine checker). First
   application [`sweep/openwrt-conversion/plan.md`](sweep/openwrt-conversion/plan.md);
   packages waves 1–3 close-outs under `properties/generated/openwrt_packages_conversion_wave*.md`

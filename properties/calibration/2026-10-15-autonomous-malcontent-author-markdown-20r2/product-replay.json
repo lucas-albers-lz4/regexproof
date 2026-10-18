@@ -1,0 +1,38 @@
+{
+  "artifact_kind": "malcontent-author-markdown-product-replay",
+  "downstream_disposition": {
+    "reason": "The exact product emitted a second attacker-chosen HTTPS Markdown link. No downstream Markdown viewer or consumer impact has been independently confirmed, and no report was sent.",
+    "status": "pending_product_triage"
+  },
+  "gate_id": "malcontent-author-markdown-extra-link-v1",
+  "limitations": [
+    "Input is one ASCII YARA author metadata value with a valid non-prefix reference URL; it is a concrete counterexample, not an all-metadata proof.",
+    "This gate reproduces link structure in Markdown output. It does not execute a browser renderer or establish whether a specific consumer permits or sanitizes the resulting link."
+  ],
+  "product_replay": {
+    "author": "Name",
+    "author_url": "https://example.invalid/)[click](https://attacker.invalid",
+    "checkout_root": "/tmp/regexproof-pinned-sources/malcontent-ea3e83e24676a1678a9522141da29b636c9451ab",
+    "go_version": "go version go1.27.2 linux/amd64",
+    "input_sha256": "483fc6c4793e4f65e37b917f0a8c07d58e04eb3d771da9231c4c149f35acd129",
+    "markdown": "## sample.bin [\ud83d\udd35 LOW]\n\n| RISK | KEY | DESCRIPTION | EVIDENCE |\n|:--|:--|:--|:--|\n| LOW | [default](https://github.com/chainguard-dev/malcontent/blob/main/rules/default#regexproof_author_metadata_replay) | [metadata replay](https://reference.invalid), by [Name](https://example.invalid/)[click](https://attacker.invalid) | [regexproof-replay-sentinel](https://github.com/search?q=regexproof-replay-sentinel&type=code) |\n\n",
+    "reference_url": "https://reference.invalid",
+    "renderer_source_file_sha256": "77b3123a08f5a3e73f1cbe303278067cb05b8e5ee14643726824d26bce8f4035",
+    "replay_source_sha256": "d95c1c4ce25c0c52d539fc717a5b7db9f02e69666b4a8b7a75816d0dc5cd06ef",
+    "repository_url": "https://github.com/chainguard-dev/malcontent",
+    "rule_name": "regexproof_author_metadata_replay",
+    "source_file_sha256": "bb3ab2bc50fb835f4add14d8c1f6b71140335313c016575bd55eef224fe690de",
+    "source_pin": "ea3e83e24676a1678a9522141da29b636c9451ab",
+    "yara_x_c_api_version": "1.19.0",
+    "yara_x_go_binding_version": "1.19.0"
+  },
+  "schema_version": "1",
+  "source": {
+    "file": "pkg/report/report.go",
+    "pin": "ea3e83e24676a1678a9522141da29b636c9451ab",
+    "repository_url": "https://github.com/chainguard-dev/malcontent",
+    "sha256": "bb3ab2bc50fb835f4add14d8c1f6b71140335313c016575bd55eef224fe690de",
+    "source_ref": "https://github.com/chainguard-dev/malcontent/blob/ea3e83e24676a1678a9522141da29b636c9451ab/pkg/report/report.go"
+  },
+  "status": "reproduced"
+}

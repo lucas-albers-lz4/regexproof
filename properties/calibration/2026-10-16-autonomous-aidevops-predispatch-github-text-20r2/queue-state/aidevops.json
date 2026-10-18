@@ -1,0 +1,377 @@
+{
+  "candidate_sites": [
+    {
+      "cheap_signals": {
+        "regex_id": "af0ba1f50d379230fc86548078bf4a8a",
+        "trust_guess": "untrusted-input"
+      },
+      "corpus": "aidevops",
+      "created_at": "2026-10-16T01:31:40Z",
+      "idiom_bucket": "pre-dispatch-github-text",
+      "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "provenance": "stub",
+      "rank": 1,
+      "reasons": [
+        {
+          "note": "The source parses a numeric issue value before another exact numeric guard and passes it as data to awk; this site has no distinct regex-backed security guarantee or unsafe code-generation sink.",
+          "reason": "duplicate"
+        }
+      ],
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pre-dispatch-validator-helper.sh:1090:column-1",
+      "status": "skipped_duplicate",
+      "suggested_shape": "shape-1",
+      "suggested_sink_question": "The source parses a numeric issue value before another exact numeric guard and passes it as data to awk; this site has no distinct regex-backed security guarantee or unsafe code-generation sink."
+    },
+    {
+      "cheap_signals": {
+        "regex_id": "e9593074766632d346f45aa9cb633bec",
+        "trust_guess": "untrusted-input"
+      },
+      "corpus": "aidevops",
+      "created_at": "2026-10-16T01:31:40Z",
+      "idiom_bucket": "pre-dispatch-github-text",
+      "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "provenance": "stub",
+      "rank": 2,
+      "reasons": [
+        {
+          "note": "The matched path-like text is used to correlate issue text with GitHub pull-request file names. This site does not pass the match to a local file read or another security boundary.",
+          "reason": "out_of_scope"
+        }
+      ],
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pre-dispatch-validator-helper.sh:923:column-40",
+      "status": "skipped_out_of_scope",
+      "suggested_shape": "shape-1",
+      "suggested_sink_question": "The matched path-like text is used to correlate issue text with GitHub pull-request file names. This site does not pass the match to a local file read or another security boundary."
+    },
+    {
+      "cheap_signals": {
+        "regex_id": "525e96bbf72055029fab053605149aa5",
+        "trust_guess": "untrusted-input"
+      },
+      "corpus": "aidevops",
+      "created_at": "2026-10-16T01:31:40Z",
+      "idiom_bucket": "pre-dispatch-github-text",
+      "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "provenance": "stub",
+      "rank": 3,
+      "reasons": [
+        {
+          "note": "This fixed heading search selects an issue section. It does not enforce a trust boundary or feed a security-sensitive transformation.",
+          "reason": "out_of_scope"
+        }
+      ],
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pre-dispatch-validator-helper.sh:697:column-2",
+      "status": "skipped_out_of_scope",
+      "suggested_shape": "shape-1",
+      "suggested_sink_question": "This fixed heading search selects an issue section. It does not enforce a trust boundary or feed a security-sensitive transformation."
+    },
+    {
+      "cheap_signals": {
+        "regex_id": "6af2a3f509e937d7be33245f57205348",
+        "trust_guess": "untrusted-input"
+      },
+      "corpus": "aidevops",
+      "created_at": "2026-10-16T01:31:40Z",
+      "idiom_bucket": "pre-dispatch-github-text",
+      "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "provenance": "stub",
+      "rank": 4,
+      "reasons": [
+        {
+          "note": "The substitution strips an attribute prefix before the value is passed as a jq argument and used as local JSON data. No regex-backed security guarantee is established here.",
+          "reason": "out_of_scope"
+        }
+      ],
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pre-dispatch-validator-helper.sh:1880:column-83",
+      "status": "skipped_out_of_scope",
+      "suggested_shape": "shape-1",
+      "suggested_sink_question": "The substitution strips an attribute prefix before the value is passed as a jq argument and used as local JSON data. No regex-backed security guarantee is established here."
+    },
+    {
+      "cheap_signals": {
+        "regex_id": "db64461e5bb92a5cb80d630ec39f5dc8",
+        "trust_guess": "untrusted-input"
+      },
+      "corpus": "aidevops",
+      "created_at": "2026-10-16T01:31:40Z",
+      "idiom_bucket": "pre-dispatch-github-text",
+      "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "provenance": "stub",
+      "rank": 5,
+      "reasons": [
+        {
+          "note": "The broad marker capture only recognizes a generator marker. Unknown names are intentionally handled by separate routing policy; this capture does not enforce a complete trusted marker grammar.",
+          "reason": "out_of_scope"
+        }
+      ],
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pre-dispatch-validator-helper.sh:1867:column-46",
+      "status": "skipped_out_of_scope",
+      "suggested_shape": "shape-1",
+      "suggested_sink_question": "The broad marker capture only recognizes a generator marker. Unknown names are intentionally handled by separate routing policy; this capture does not enforce a complete trusted marker grammar."
+    },
+    {
+      "cheap_signals": {
+        "regex_id": "31b17ebabf92848f62daf6d6537b289f",
+        "trust_guess": "untrusted-input"
+      },
+      "corpus": "aidevops",
+      "created_at": "2026-10-16T01:31:40Z",
+      "idiom_bucket": "pre-dispatch-github-text",
+      "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "provenance": "stub",
+      "rank": 6,
+      "reasons": [
+        {
+          "note": "This marker search influences review-follow-up handling, but source review did not establish an independent security guarantee for this presence check.",
+          "reason": "out_of_scope"
+        }
+      ],
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pre-dispatch-validator-helper.sh:1011:column-32",
+      "status": "skipped_out_of_scope",
+      "suggested_shape": "shape-1",
+      "suggested_sink_question": "This marker search influences review-follow-up handling, but source review did not establish an independent security guarantee for this presence check."
+    },
+    {
+      "cheap_signals": {
+        "regex_id": "94d9a516e2a09a44c92c317fe0a9eb01",
+        "trust_guess": "untrusted-input"
+      },
+      "corpus": "aidevops",
+      "created_at": "2026-10-16T01:31:40Z",
+      "idiom_bucket": "pre-dispatch-github-text",
+      "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "provenance": "stub",
+      "rank": 7,
+      "reasons": [
+        {
+          "note": "This basic-regex substitution strips a constant marker prefix. Its value is handled by the downstream parser; the substitution has no independent boundary guarantee.",
+          "reason": "out_of_scope"
+        }
+      ],
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pre-dispatch-validator-helper.sh:1870:column-45",
+      "status": "skipped_out_of_scope",
+      "suggested_shape": "shape-1",
+      "suggested_sink_question": "This basic-regex substitution strips a constant marker prefix. Its value is handled by the downstream parser; the substitution has no independent boundary guarantee."
+    },
+    {
+      "cheap_signals": {
+        "regex_id": "2cb7fe4b8ae94f95466f51fc5d71248d",
+        "trust_guess": "untrusted-input"
+      },
+      "corpus": "aidevops",
+      "created_at": "2026-10-16T01:31:40Z",
+      "idiom_bucket": "pre-dispatch-github-text",
+      "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "provenance": "stub",
+      "rank": 8,
+      "reasons": [
+        {
+          "note": "The source extracts a PR number and then applies a Bash numeric guard before use. This capture alone is not a distinct security property.",
+          "reason": "out_of_scope"
+        }
+      ],
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pre-dispatch-validator-helper.sh:1061:column-62",
+      "status": "skipped_out_of_scope",
+      "suggested_shape": "shape-1",
+      "suggested_sink_question": "The source extracts a PR number and then applies a Bash numeric guard before use. This capture alone is not a distinct security property."
+    },
+    {
+      "cheap_signals": {
+        "regex_id": "c49f33c1f04dedbdc785b9e695a6b36f",
+        "trust_guess": "untrusted-input"
+      },
+      "corpus": "aidevops",
+      "created_at": "2026-10-16T01:31:40Z",
+      "idiom_bucket": "pre-dispatch-github-text",
+      "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "provenance": "stub",
+      "rank": 9,
+      "reasons": [
+        {
+          "note": "This fixed heading search selects an issue section. It does not enforce a trust boundary or feed a security-sensitive transformation.",
+          "reason": "out_of_scope"
+        }
+      ],
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pre-dispatch-validator-helper.sh:695:column-2",
+      "status": "skipped_out_of_scope",
+      "suggested_shape": "shape-1",
+      "suggested_sink_question": "This fixed heading search selects an issue section. It does not enforce a trust boundary or feed a security-sensitive transformation."
+    },
+    {
+      "cheap_signals": {
+        "regex_id": "81e20aaa4f55eb7711a3b8c6f6486821",
+        "trust_guess": "untrusted-input"
+      },
+      "corpus": "aidevops",
+      "created_at": "2026-10-16T01:31:40Z",
+      "idiom_bucket": "pre-dispatch-github-text",
+      "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "provenance": "stub",
+      "rank": 10,
+      "reasons": [
+        {
+          "note": "Backtick-delimited filename matches are used to compare issue text with GitHub PR file paths; source review found no local filesystem sink at this site.",
+          "reason": "out_of_scope"
+        }
+      ],
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pre-dispatch-validator-helper.sh:929:column-45",
+      "status": "skipped_out_of_scope",
+      "suggested_shape": "shape-1",
+      "suggested_sink_question": "Backtick-delimited filename matches are used to compare issue text with GitHub PR file paths; source review found no local filesystem sink at this site."
+    },
+    {
+      "cheap_signals": {
+        "regex_id": "85c3865259ef784453025ec1e31821d6",
+        "trust_guess": "untrusted-input"
+      },
+      "corpus": "aidevops",
+      "created_at": "2026-10-16T01:31:40Z",
+      "idiom_bucket": "pre-dispatch-github-text",
+      "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "provenance": "stub",
+      "rank": 11,
+      "reasons": [
+        {
+          "note": "This substitution only strips detector= from the same value covered by the already-adopted detector component contract at line 1881, column 47; no separate guarantee is needed.",
+          "reason": "duplicate"
+        }
+      ],
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pre-dispatch-validator-helper.sh:1881:column-81",
+      "status": "skipped_duplicate",
+      "suggested_shape": "shape-1",
+      "suggested_sink_question": "This substitution only strips detector= from the same value covered by the already-adopted detector component contract at line 1881, column 47; no separate guarantee is needed."
+    },
+    {
+      "cheap_signals": {
+        "regex_id": "13475b75b43afa483b65664c63d2408b",
+        "trust_guess": "untrusted-input"
+      },
+      "corpus": "aidevops",
+      "created_at": "2026-10-16T01:31:40Z",
+      "idiom_bucket": "pre-dispatch-github-text",
+      "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "provenance": "stub",
+      "rank": 12,
+      "reasons": [
+        {
+          "note": "This fixed marker check is used in supersession/heuristic logic. The local cited-file read sink is reached through a separate parser and is reviewed at rank 15.",
+          "reason": "out_of_scope"
+        }
+      ],
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pre-dispatch-validator-helper.sh:270:column-46",
+      "status": "skipped_out_of_scope",
+      "suggested_shape": "shape-1",
+      "suggested_sink_question": "This fixed marker check is used in supersession/heuristic logic. The local cited-file read sink is reached through a separate parser and is reviewed at rank 15."
+    },
+    {
+      "cheap_signals": {
+        "regex_id": "e80f51671a27c074a2cf09aae52e1ff0",
+        "trust_guess": "untrusted-input"
+      },
+      "corpus": "aidevops",
+      "created_at": "2026-10-16T01:31:40Z",
+      "idiom_bucket": "pre-dispatch-github-text",
+      "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "provenance": "stub",
+      "rank": 13,
+      "reasons": [
+        {
+          "note": "This substitution strips the literal cited_file= prefix. It does not constrain the path value; the actual token grammar and local-file sink are separately reviewed at rank 15.",
+          "reason": "out_of_scope"
+        }
+      ],
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pre-dispatch-validator-helper.sh:273:column-64",
+      "status": "skipped_out_of_scope",
+      "suggested_shape": "shape-1",
+      "suggested_sink_question": "This substitution strips the literal cited_file= prefix. It does not constrain the path value; the actual token grammar and local-file sink are separately reviewed at rank 15."
+    },
+    {
+      "cheap_signals": {
+        "regex_id": "10b3716ac246af2e46a1f99f1bf34285",
+        "trust_guess": "untrusted-input"
+      },
+      "corpus": "aidevops",
+      "created_at": "2026-10-16T01:31:40Z",
+      "idiom_bucket": "pre-dispatch-github-text",
+      "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "provenance": "stub",
+      "rank": 14,
+      "reasons": [
+        {
+          "note": "The captured upstream_slug is passed to jq as data and used in GitHub/local metadata handling; no distinct regex-backed security guarantee was established.",
+          "reason": "out_of_scope"
+        }
+      ],
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pre-dispatch-validator-helper.sh:1880:column-49",
+      "status": "skipped_out_of_scope",
+      "suggested_shape": "shape-1",
+      "suggested_sink_question": "The captured upstream_slug is passed to jq as data and used in GitHub/local metadata handling; no distinct regex-backed security guarantee was established."
+    },
+    {
+      "cheap_signals": {
+        "regex_id": "e3808a54c7c38563e784f3406b4df852",
+        "trust_guess": "untrusted-input"
+      },
+      "claimed_at": "2026-10-16T01:44:54+00:00",
+      "contract": {
+        "adoption": {
+          "approved_on": "2026-10-16",
+          "authority": "standing_user_delegation",
+          "contract_sha256": "6b1ec16f352121c1f897145d16bb64eeeb5630fd5acb5b870e919574318340f5",
+          "evidence": [
+            "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/pre-dispatch-validator-helper.sh",
+            "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/pulse-dispatch-large-file-gate.sh",
+            "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/tests/test-pre-dispatch-validator-large-file.sh",
+            "properties/calibration/2026-10-16-autonomous-aidevops-predispatch-github-text-20r2/review-evidence.json",
+            "properties/calibration/2026-10-16-autonomous-aidevops-predispatch-github-text-20r2/replay-cited-file.json"
+          ],
+          "policy_version": "autonomous-contracts-v1",
+          "rationale": "The pinned large-file producer constructs the marker from its repo-relative lf_path; the helper states it re-measures the path against fresh HEAD, and its existing exact-source tests use repository paths. The 15-site source review selects only the path token grammar. An isolated exact-helper replay confirms ../oracle.txt is accepted and the line-count operation reads a fixture outside the clone. This adopts clone containment as the intended property and records the counterexample; it does not claim public disclosure or confirmed impact.",
+          "review": {
+            "author": "Codex-P7-source-review",
+            "reviewer": "Codex-independent-source-review-pass",
+            "same_model": true
+          },
+          "source_file": ".agents/scripts/pre-dispatch-validator-helper.sh",
+          "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+          "source_sha256": "b68445d5eaf510e820831422c6e064ac58bbdc4496483ad562df30786e3723b5",
+          "source_url": "https://github.com/marcusquinn/aidevops",
+          "status": "approved"
+        },
+        "declared_domain": "Exact source pin 8666b6c6c52472b5535aa295f2df593918152cb1, call kind `search`, GNU grep `-oE` using source pattern `cited_file=[^ >]+`, POSIX-shell command substitution, and an ASCII, nonempty path token without NUL or LF. The expected path is interpreted relative to `${SCRATCH_DIR}/repo/` by the pinned helper on the host POSIX filesystem. The formal query asks whether the accepted token language contains the concrete relative witness `../oracle.txt` (13 characters); the product replay runs the exact helper with isolated `gh` and `git` stubs and a regular file outside the clone. This is a counterexample domain, not a proof that every path is confined or an assertion about publication or impact.",
+        "guarantee": "For an issue-body marker routed to `large-file-simplification-gate`, the `cited_file` value used by the validator must resolve to a regular file inside the fresh clone before the validator reads it. The marker producer supplies a repository-relative `lf_path`, and the helper documents this check as a fresh read against repository HEAD. The captured path must therefore not reach a file outside the clone. This contract asks only about the cited-file path used by the large-file line-count check; it does not claim file contents are disclosed, that the count is published, or that an external impact has occurred.",
+        "input_source": "The issue `body` fetched by `gh api repos/<slug>/issues/<number> --jq ' .body // \"\" '` in `cmd_validate`. Public GitHub issue text is externally authored and is untrusted input. When the parsed generator is `large-file-simplification-gate`, the captured value is appended to `${SCRATCH_DIR}/repo/` and passed to filesystem existence and line-count operations.",
+        "provenance": "agent_derived",
+        "schema_version": "1",
+        "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pre-dispatch-validator-helper.sh:1878:column-46",
+        "trust": "untrusted-input"
+      },
+      "corpus": "aidevops",
+      "created_at": "2026-10-16T01:31:40Z",
+      "idiom_bucket": "pre-dispatch-github-text",
+      "ledger_state_at_claim": {
+        "conversion_ledger_sha256": "99f1f49098d8748544edf88e081d6a4cf0b5e95383827b916e0aee559d764677",
+        "gate_decision_sha256": "a5b23ad513474fb69b235d938059e06c86f64ac9ba1a18bb314e89028c918063",
+        "n": 13,
+        "now_iso": "2026-10-16T01:44:54+00:00",
+        "repository_url": "https://github.com/marcusquinn/aidevops",
+        "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1"
+      },
+      "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "provenance": "agent_derived",
+      "rank": 15,
+      "reasons": [],
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pre-dispatch-validator-helper.sh:1878:column-46",
+      "status": "contracted",
+      "suggested_shape": "shape-3",
+      "suggested_sink_question": "The exact pin obtains issue body text through gh api. For the large-file validator, the captured cited_file is concatenated to the cloned repo path and read with wc -l without normalization or containment. The pinned producer creates cited_file from its repo-relative lf_path and the helper says it re-measures against HEAD. An exact-helper local replay with cited_file=../oracle.txt read a fixture outside the clone and logged its 37-line count. This adopts only the expected clone-containment property and the counterexample; public disclosure, deployment, and security impact are not established.",
+      "wave_generation_at_claim": 0,
+      "wave_id": "aidevops-predispatch-20r2-20261016-r1"
+    }
+  ],
+  "cluster": "aidevops",
+  "schema_version": "1",
+  "wave_generation": 0,
+  "wave_id": "aidevops-predispatch-20r2-20261016-r1"
+}

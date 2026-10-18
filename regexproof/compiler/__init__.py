@@ -54,6 +54,7 @@ def _compile_dialect(
     *,
     max_length: int,
     domain: str = "ascii",
+    shell_flags: dict | None = None,
 ) -> CompileResult:
     if dialect == "py_re":
         return compile_py_re(
@@ -90,6 +91,7 @@ def _compile_dialect(
             call_kind=call_kind,
             max_length=max_length,
             domain=domain,
+            syntax=(shell_flags or {}).get("syntax", "bre"),
         )
     if dialect == "yara":
         from regexproof.compiler.yara import compile_yara
@@ -143,7 +145,13 @@ def compile_pattern(
 
     def compile_bare(pat: str, fl: str, dia: str, ck: str) -> CompileResult:
         return _compile_dialect(
-            pat, fl, dia, ck, max_length=max_length, domain=domain
+            pat,
+            fl,
+            dia,
+            ck,
+            max_length=max_length,
+            domain=domain,
+            shell_flags=shell_flags,
         )
 
     try:
@@ -237,6 +245,7 @@ def compile_pattern(
                 call_kind,
                 max_length=max_length,
                 domain=domain,
+                shell_flags=shell_flags,
             )
         )
     except Unencodable as exc:

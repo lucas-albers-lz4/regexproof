@@ -1,0 +1,567 @@
+{
+  "author": "Codex (initial source review)",
+  "limitations": [
+    "Complete raw-site review for open-horizon/anax at the frozen 20-r2 pin using the updated Go literal-call extractor only; dynamic pattern construction remains outside this raw-pattern inventory.",
+    "Twelve sites remain unresolved and do not count as product questions. The adopted organization deny-list question covers only its declared character set and the OrgCreate/OrgDel call paths.",
+    "This member review does not resolve the frozen cohort's incomplete Everclaw submodule mapping or complete P2."
+  ],
+  "observed_at": "2026-10-15",
+  "reviewer": "Codex (separate source re-read)",
+  "reviews": [
+    {
+      "decision": "unresolved",
+      "pattern": "[\\r\\n]",
+      "rationale": "The middleware reads the parsed Origin header and rejects CR/LF before adding it to Access-Control-Allow-Origin. Whether a raw network request can deliver an embedded CR/LF to this handler depends on the pinned Go HTTP parser path; retain unresolved until an exact transport replay settles reachability.",
+      "reason_code": "http_origin_crlf_transport_reachability",
+      "regex_id": "5188beea9c5a3e870619d490f2252c88",
+      "review_refs": [
+        {
+          "line": 331,
+          "path": "agreementbot/api.go",
+          "why": "Origin header input and rejection"
+        },
+        {
+          "line": 342,
+          "path": "agreementbot/api.go",
+          "why": "response-header sink"
+        }
+      ],
+      "site": "agreementbot/api.go:325:0"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "[\\r\\n]",
+      "rationale": "The middleware reads the parsed Origin header and rejects CR/LF before adding it to Access-Control-Allow-Origin. Whether a raw network request can deliver an embedded CR/LF to this handler depends on the pinned Go HTTP parser path; retain unresolved until an exact transport replay settles reachability.",
+      "reason_code": "http_origin_crlf_transport_reachability",
+      "regex_id": "d64ef565e9b56278fe0581543a230652",
+      "review_refs": [
+        {
+          "line": 148,
+          "path": "api/api.go",
+          "why": "Origin header input and rejection"
+        },
+        {
+          "line": 159,
+          "path": "api/api.go",
+          "why": "response-header sink"
+        }
+      ],
+      "site": "api/api.go:139:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "(?s)/\\*.*?\\*/",
+      "rationale": "This pattern removes block-comment text from a locally selected CLI configuration file before JSON decoding. The inspected call establishes a parser preprocessing step but no independent security-boundary guarantee for the regex.",
+      "reason_code": "local_config_comment_stripping",
+      "regex_id": "a57b73987f86eabd24ad6e74769b1a51",
+      "review_refs": [
+        {
+          "line": 92,
+          "path": "cli/cliconfig/config.go",
+          "why": "configuration file read"
+        },
+        {
+          "line": 100,
+          "path": "cli/cliconfig/config.go",
+          "why": "JSON decode after comment removal"
+        }
+      ],
+      "site": "cli/cliconfig/config.go:97:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "^(\\s)*#(.*)*",
+      "rationale": "The expression identifies comment lines while scanning a local environment file. It controls parsing of operator-managed configuration and has no separately evidenced regex-specific security guarantee at this call site.",
+      "reason_code": "environment_file_comment_parser",
+      "regex_id": "a79d132ae2635fb548d90de70f098e50",
+      "review_refs": [
+        {
+          "line": 218,
+          "path": "cli/cliconfig/config.go",
+          "why": "line scanner"
+        },
+        {
+          "line": 225,
+          "path": "cli/cliconfig/config.go",
+          "why": "non-comment line parsing"
+        }
+      ],
+      "site": "cli/cliconfig/config.go:216:0"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "^a-[A-Za-z0-9]{6}-",
+      "rationale": "The pattern classifies a credential prefix as API-key mode, which changes later credential handling. The source comment documents one prefix family, but the accepted key grammar and mode-selection policy are not independently specified in this repository; do not count a proof until that contract is settled.",
+      "reason_code": "api_key_credential_mode_contract",
+      "regex_id": "b8ab3328a03af9d9898799c24174782e",
+      "review_refs": [
+        {
+          "line": 192,
+          "path": "cli/cliutils/cliutils.go",
+          "why": "credential-mode helper and opt-out"
+        },
+        {
+          "line": 200,
+          "path": "cli/cliutils/cliutils.go",
+          "why": "API-key mode state change"
+        }
+      ],
+      "site": "cli/cliutils/cliutils.go:197:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "\\s+digest:\\s+(\\S+)\\s+size:",
+      "rationale": "This captures a digest from local Docker pull output and otherwise falls back to retrieving the digest directly. It is an output parser; no attacker-controlled boundary guarantee is assigned to this regex.",
+      "reason_code": "docker_cli_digest_output_parser",
+      "regex_id": "54d1651d36325730f2867c6dcecf0287",
+      "review_refs": [
+        {
+          "line": 350,
+          "path": "cli/cliutils/cliutils.go",
+          "why": "Docker result input"
+        },
+        {
+          "line": 358,
+          "path": "cli/cliutils/cliutils.go",
+          "why": "fallback when capture is absent"
+        }
+      ],
+      "site": "cli/cliutils/cliutils.go:355:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "(?s)/\\*.*?\\*/",
+      "rationale": "This removes block comments from a file before the CLI environment-variable substitution path. The file parsing path is operator-selected configuration and the inspected call does not establish an independent regex security property.",
+      "reason_code": "local_config_comment_stripping",
+      "regex_id": "dd1858544c8f14fa7af188688bfc0af7",
+      "review_refs": [
+        {
+          "line": 475,
+          "path": "cli/cliutils/cliutils.go",
+          "why": "file read"
+        },
+        {
+          "line": 483,
+          "path": "cli/cliutils/cliutils.go",
+          "why": "substitution after comment removal"
+        }
+      ],
+      "site": "cli/cliutils/cliutils.go:480:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "edgenode$",
+      "rationale": "This rewrites a trailing endpoint label only when API-key mode is active. It is endpoint compatibility formatting, with no independently specified regex boundary guarantee.",
+      "reason_code": "configured_exchange_url_normalization",
+      "regex_id": "7526abd357925c982440cb81760ad90b",
+      "review_refs": [
+        {
+          "line": 1178,
+          "path": "cli/cliutils/cliutils.go",
+          "why": "trailing slash normalization"
+        },
+        {
+          "line": 1184,
+          "path": "cli/cliutils/cliutils.go",
+          "why": "formatted URL use"
+        }
+      ],
+      "site": "cli/cliutils/cliutils.go:1180:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "edgenode$",
+      "rationale": "This repeats the endpoint-label rewrite in another Exchange URL accessor. The transformation is compatibility formatting; this review does not infer a security contract from the pattern alone.",
+      "reason_code": "configured_exchange_url_normalization",
+      "regex_id": "0eec15d0a2916b8a682154a20d1df860",
+      "review_refs": [
+        {
+          "line": 1206,
+          "path": "cli/cliutils/cliutils.go",
+          "why": "trailing slash normalization"
+        },
+        {
+          "line": 1212,
+          "path": "cli/cliutils/cliutils.go",
+          "why": "formatted URL use"
+        }
+      ],
+      "site": "cli/cliutils/cliutils.go:1208:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "edgenode$",
+      "rationale": "This repeats the endpoint-label rewrite for the model-management service URL. The transformation is compatibility formatting; no distinct security-boundary property is established.",
+      "reason_code": "configured_exchange_url_normalization",
+      "regex_id": "a7df27e3c0f2bf56c3f2905e37634339",
+      "review_refs": [
+        {
+          "line": 1249,
+          "path": "cli/cliutils/cliutils.go",
+          "why": "trailing slash normalization"
+        },
+        {
+          "line": 1255,
+          "path": "cli/cliutils/cliutils.go",
+          "why": "formatted URL use"
+        }
+      ],
+      "site": "cli/cliutils/cliutils.go:1251:0"
+    },
+    {
+      "decision": "adopted",
+      "pattern": "[_,\\s\\?\\']",
+      "product_question_asked": true,
+      "question_id": "AN-anax-orgname-denylist-validation",
+      "rationale": "The source comment and unit cases define a deny-list predicate used by both organization creation and deletion. Both command paths terminate with CLI_INPUT_ERROR when it returns true, before their Exchange operation. The adopted guarantee is limited to flagging the listed underscore, comma, Go RE2 ASCII whitespace, question-mark, and apostrophe characters; it is not a complete organization-name allow-list or a claim that all other characters are safe in URL paths.",
+      "reason_code": "org_cli_denylist_validation",
+      "regex_id": "62852dc4df8cb2605fa2701ba0309fce",
+      "review_refs": [
+        {
+          "line": 13,
+          "path": "cli/cliutils/cliutils_test.go",
+          "why": "product-level deny-list examples"
+        },
+        {
+          "line": 74,
+          "path": "cli/exchange/org.go",
+          "why": "create path rejects before Exchange operations"
+        },
+        {
+          "line": 207,
+          "path": "cli/exchange/org.go",
+          "why": "delete path rejects before Exchange operations"
+        }
+      ],
+      "site": "cli/cliutils/cliutils.go:2277:0"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "^[A-Za-z0-9+.-]*?://",
+      "rationale": "This scheme-removal expression participates in a filename assembled from URL, org, and version fields. The later code sanitizes URL-derived delimiters but leaves the other formatted fields outside that expression; exact trust and path-containment requirements need a focused replay before a contract is adopted.",
+      "reason_code": "dependency_file_component_containment",
+      "regex_id": "16afd61a042ac19fcde1b73a39c0a715",
+      "review_refs": [
+        {
+          "line": 677,
+          "path": "cli/dev/dependency.go",
+          "why": "service-definition fields enter the filename"
+        },
+        {
+          "line": 680,
+          "path": "cli/dev/dependency.go",
+          "why": "filename reaches file creation"
+        }
+      ],
+      "site": "cli/dev/dependency.go:691:0"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "[$!*,;/?@&~=%]",
+      "rationale": "The replacement scrubs selected URL characters, including slash, before constructing a dependency filename. It does not by itself prove the whole filename is a safe path because org and version are formatted separately; keep the candidate unresolved pending trust, containment, and product-path evidence.",
+      "reason_code": "dependency_file_component_containment",
+      "regex_id": "bfa84cdc781791342d2fcf0c6b528e3f",
+      "review_refs": [
+        {
+          "line": 677,
+          "path": "cli/dev/dependency.go",
+          "why": "service-definition fields enter the filename"
+        },
+        {
+          "line": 680,
+          "path": "cli/dev/dependency.go",
+          "why": "filename reaches file creation"
+        },
+        {
+          "line": 123,
+          "path": "cli/dev/utils.go",
+          "why": "file creation implementation"
+        }
+      ],
+      "site": "cli/dev/dependency.go:693:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "^([^~=><]+)([~=><])(.*)$",
+      "rationale": "This parses operator-supplied event-selection strings into attribute/operator/value components. It is a query parser rather than a sanitizer, and no separate security guarantee is documented for this regex.",
+      "reason_code": "operator_event_selection_parser",
+      "regex_id": "874a3f1e0b32de910420e69a296d7577",
+      "review_refs": [
+        {
+          "line": 25,
+          "path": "cli/eventlog/eventlog.go",
+          "why": "selection parser contract"
+        },
+        {
+          "line": 32,
+          "path": "cli/eventlog/eventlog.go",
+          "why": "capture consumption"
+        }
+      ],
+      "site": "cli/eventlog/eventlog.go:28:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "(\\d{4})-(\\d{2})-(\\d{2})",
+      "rationale": "RFC3339 parsing is attempted first; the regex then extracts a date-only prefix and converts it to midnight UTC. This is a timestamp-format compatibility fallback, not an independently evidenced security-boundary regex.",
+      "reason_code": "timestamp_format_fallback",
+      "regex_id": "ef9a74eba3873d696b19d60a712afcbd",
+      "review_refs": [
+        {
+          "line": 536,
+          "path": "cli/sync_service/object.go",
+          "why": "timestamp input and RFC3339 parse"
+        },
+        {
+          "line": 543,
+          "path": "cli/sync_service/object.go",
+          "why": "date-only conversion"
+        }
+      ],
+      "site": "cli/sync_service/object.go:541:0"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "[^a-zA-Z0-9_.-]",
+      "rationale": "The helper comment specifies a container-name alphabet and the first regex performs the character substitution, but the final Docker-facing helper composes this with another regex and normalized service metadata. A whole-helper exact-pin product replay and separate review of all inputs are needed before counting the per-character image claim.",
+      "reason_code": "docker_container_name_image_contract",
+      "regex_id": "0e1eab4a7aa8ba73f8f317782ebac2db",
+      "review_refs": [
+        {
+          "line": 341,
+          "path": "cutil/cutil.go",
+          "why": "documented container-name grammar"
+        },
+        {
+          "line": 344,
+          "path": "cutil/cutil.go",
+          "why": "helper and first replacement"
+        },
+        {
+          "line": 670,
+          "path": "persistence/microservices.go",
+          "why": "persisted instance key caller"
+        }
+      ],
+      "site": "cutil/cutil.go:357:0"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "^[^a-zA-Z0-9]",
+      "rationale": "The helper comment specifies an alphanumeric first character, and this expression rewrites a disallowed prefix. The domain includes normalized service metadata and an instance identifier; keep the composition question unresolved until the exact helper and Docker sink are replayed.",
+      "reason_code": "docker_container_name_prefix_contract",
+      "regex_id": "7c206103c2a317d709ee4fd2079e2e00",
+      "review_refs": [
+        {
+          "line": 341,
+          "path": "cutil/cutil.go",
+          "why": "documented container-name grammar"
+        },
+        {
+          "line": 344,
+          "path": "cutil/cutil.go",
+          "why": "helper composition"
+        },
+        {
+          "line": 639,
+          "path": "cli/dev/utils.go",
+          "why": "new Docker-facing service instance key"
+        }
+      ],
+      "site": "cutil/cutil.go:361:0"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "^(\\S*)@(\\S+)$",
+      "rationale": "This is the digest extraction stage in the Docker image-reference parser. The parser feeds image pull and deployment paths; the repository examples do not define a complete accepted grammar, so no safety or completeness guarantee is adopted.",
+      "reason_code": "docker_image_reference_parser_contract",
+      "regex_id": "a59a131e97a319e181d5ce3676df9aa8",
+      "review_refs": [
+        {
+          "line": 375,
+          "path": "cutil/cutil.go",
+          "why": "documented image-reference syntax"
+        },
+        {
+          "line": 153,
+          "path": "cli/sync_service/sync_service.go",
+          "why": "parsed image reaches Docker pull"
+        }
+      ],
+      "site": "cutil/cutil.go:380:0"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "^([^/ ]*)(\\S*):([^:/ ]+)$",
+      "rationale": "This captures a possible tag and path from a Docker image reference used by pull and deployment paths. The helper comment lists examples, not a complete input grammar; preserve as unresolved pending a product-parser contract.",
+      "reason_code": "docker_image_reference_parser_contract",
+      "regex_id": "74911ada638108a36679ea990c650f12",
+      "review_refs": [
+        {
+          "line": 375,
+          "path": "cutil/cutil.go",
+          "why": "documented image-reference syntax"
+        },
+        {
+          "line": 153,
+          "path": "cli/sync_service/sync_service.go",
+          "why": "parsed image reaches Docker pull"
+        }
+      ],
+      "site": "cutil/cutil.go:381:0"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "^([^/ ]*)(\\S*)$",
+      "rationale": "This fallback captures an untagged Docker image path. The outputs feed Docker operations, but no complete accepted-language contract is documented at this call site.",
+      "reason_code": "docker_image_reference_parser_contract",
+      "regex_id": "b0b649467f33d201446fb77e73e19d3f",
+      "review_refs": [
+        {
+          "line": 375,
+          "path": "cutil/cutil.go",
+          "why": "documented image-reference syntax"
+        },
+        {
+          "line": 153,
+          "path": "cli/sync_service/sync_service.go",
+          "why": "parsed image reaches Docker pull"
+        }
+      ],
+      "site": "cutil/cutil.go:382:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "processor([ \t]*):",
+      "rationale": "The regex counts processor lines in a host-local CPU information file. This is a system-information parser over local operating-system data, not an untrusted-input boundary.",
+      "reason_code": "local_proc_cpu_info_parser",
+      "regex_id": "a4939e9f61d703da4b651723e4ef74a7",
+      "review_refs": [
+        {
+          "line": 635,
+          "path": "cutil/cutil.go",
+          "why": "local CPU information file scan"
+        },
+        {
+          "line": 639,
+          "path": "cutil/cutil.go",
+          "why": "processor line count"
+        }
+      ],
+      "site": "cutil/cutil.go:637:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "Serial([ \t]*):",
+      "rationale": "The regex detects a Serial field while reading a device-local system file. It parses platform inventory data and has no independent attacker-controlled boundary guarantee.",
+      "reason_code": "local_device_serial_parser",
+      "regex_id": "1ac9991938d5e903977603dcc6927c23",
+      "review_refs": [
+        {
+          "line": 672,
+          "path": "cutil/cutil.go",
+          "why": "local file read"
+        },
+        {
+          "line": 678,
+          "path": "cutil/cutil.go",
+          "why": "serial-field branch"
+        }
+      ],
+      "site": "cutil/cutil.go:675:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "MemTotal[ \\t]*:[ \\t]*([\\d]+)[ \\t]*(.*)$",
+      "rationale": "This parses the numeric MemTotal field from a host-local proc-style file. The input is local system information and the regex is not guarding an untrusted-data sink.",
+      "reason_code": "local_proc_meminfo_parser",
+      "regex_id": "75a30252e61523ef65857ce998b3fbb1",
+      "review_refs": [
+        {
+          "line": 715,
+          "path": "cutil/cutil.go",
+          "why": "local memory information scan"
+        },
+        {
+          "line": 723,
+          "path": "cutil/cutil.go",
+          "why": "numeric capture consumed"
+        }
+      ],
+      "site": "cutil/cutil.go:717:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "MemAvailable[ \\t]*:[ \\t]*([\\d]+)[ \\t]*(.*)$",
+      "rationale": "This parses MemAvailable from the same host-local memory file and updates a resource estimate. No security-boundary property is established for this regex.",
+      "reason_code": "local_proc_meminfo_parser",
+      "regex_id": "c506252ccdb844d21a52bbf0c6747e67",
+      "review_refs": [
+        {
+          "line": 715,
+          "path": "cutil/cutil.go",
+          "why": "local memory information scan"
+        },
+        {
+          "line": 724,
+          "path": "cutil/cutil.go",
+          "why": "available-memory capture consumed"
+        }
+      ],
+      "site": "cutil/cutil.go:718:0"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "^[A-Za-z0-9+.-]*?://",
+      "rationale": "This removes a URL scheme before forming Exchange service IDs and cache keys. The transformation is lossy and its collisions/normalization requirements depend on the product key contract; source callers show real use, but no independent specification settles whether distinct refs may alias.",
+      "reason_code": "exchange_service_cache_key_contract",
+      "regex_id": "191aa75dcad930cecfbcaefa61f344ba",
+      "review_refs": [
+        {
+          "line": 767,
+          "path": "cutil/cutil.go",
+          "why": "service ID composition"
+        },
+        {
+          "line": 296,
+          "path": "exchange/service.go",
+          "why": "cache lookup by normalized URL"
+        },
+        {
+          "line": 327,
+          "path": "exchange/service.go",
+          "why": "cache write by normalized URL"
+        }
+      ],
+      "site": "cutil/cutil.go:777:0"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "[$!*,;/?@&~=%]",
+      "rationale": "This replaces a fixed set of characters in normalized service IDs used in Exchange caches and persisted-secret matching. The transform is lossy; whether its output equivalence is safe depends on an external resource-ID contract not established by these callers.",
+      "reason_code": "exchange_service_cache_key_contract",
+      "regex_id": "537e42a44fe8f1e68045036657b56391",
+      "review_refs": [
+        {
+          "line": 783,
+          "path": "cutil/cutil.go",
+          "why": "fixed replacement operation"
+        },
+        {
+          "line": 296,
+          "path": "exchange/service.go",
+          "why": "cache lookup"
+        },
+        {
+          "line": 263,
+          "path": "persistence/secrets.go",
+          "why": "normalized secret-key comparison"
+        }
+      ],
+      "site": "cutil/cutil.go:784:0"
+    }
+  ],
+  "same_model_or_agent": true,
+  "schema_version": "1",
+  "second_pass": true
+}

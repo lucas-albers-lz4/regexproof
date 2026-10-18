@@ -1,0 +1,62 @@
+{
+  "cohort_id": "2026-09-12-calibration-20-r2",
+  "cohort_manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+  "coverage_digest": "6cad6f145fbae1f32b55083958a2b96b5af10476b14371bd7b41daec86a39940",
+  "identities": [
+    {
+      "contract_sha256": "ba9e12c17f7f6a06b6130089e59d91e3a3f50c62a1dcf6c204d87be2e6ffa2b3",
+      "pin": "efcf8e4c0087def553a737dc1c4eebda5d8a90cd",
+      "provenance": "agent_derived",
+      "question_id": "FC-forge-cli-sensitive-env-helper-redacts",
+      "repo_id": "Agenticstiger/forge-cli",
+      "site": "Agenticstiger/forge-cli@efcf8e4c0087def553a737dc1c4eebda5d8a90cd:fluid_build/build_runners/base.py:54:SENSITIVE_ENV_KEY_RE",
+      "url": "https://github.com/Agenticstiger/forge-cli"
+    },
+    {
+      "contract_sha256": "e95cbf07bae0da6a71803341d2c3e922111e50cd71669b2bfddc7f6cde2414c0",
+      "pin": "efcf8e4c0087def553a737dc1c4eebda5d8a90cd",
+      "provenance": "human",
+      "question_id": "FC-forge-cli-sensitive-env-key-covered",
+      "repo_id": "Agenticstiger/forge-cli",
+      "site": "Agenticstiger/forge-cli@efcf8e4c0087def553a737dc1c4eebda5d8a90cd:fluid_build/build_runners/base.py:54:SENSITIVE_ENV_KEY_RE",
+      "url": "https://github.com/Agenticstiger/forge-cli"
+    },
+    {
+      "contract_sha256": "53f5723430cf29a9afd03d12dee7c2a79b65ffe826648125f713c513204c717a",
+      "pin": "efcf8e4c0087def553a737dc1c4eebda5d8a90cd",
+      "provenance": "human",
+      "question_id": "FC-forge-cli-llm-userinfo-no-at",
+      "repo_id": "Agenticstiger/forge-cli",
+      "site": "Agenticstiger/forge-cli@efcf8e4c0087def553a737dc1c4eebda5d8a90cd:fluid_build/llm/providers.py:287:LlmConfig.redacted_endpoint",
+      "url": "https://github.com/Agenticstiger/forge-cli"
+    },
+    {
+      "contract_sha256": "f5c405d13a147a3fbfb080316477e1239f20a8369d9a947954633600e590f6e0",
+      "pin": "efcf8e4c0087def553a737dc1c4eebda5d8a90cd",
+      "provenance": "human",
+      "question_id": "FC-forge-cli-url-password-no-space",
+      "repo_id": "Agenticstiger/forge-cli",
+      "site": "Agenticstiger/forge-cli@efcf8e4c0087def553a737dc1c4eebda5d8a90cd:fluid_build/observability/secret_redactor.py:151:_URL_USERINFO_RE",
+      "url": "https://github.com/Agenticstiger/forge-cli"
+    },
+    {
+      "contract_sha256": "cc207c76c5d06241ecfc7768e8c4dec88ea725391cd4865bd28dc49cfeeb5561",
+      "pin": "efcf8e4c0087def553a737dc1c4eebda5d8a90cd",
+      "provenance": "human",
+      "question_id": "FC-forge-cli-jaas-escaped-quote-covered",
+      "repo_id": "Agenticstiger/forge-cli",
+      "site": "Agenticstiger/forge-cli@efcf8e4c0087def553a737dc1c4eebda5d8a90cd:fluid_build/observability/secret_redactor.py:218:_JAAS_CONFIG_RE",
+      "url": "https://github.com/Agenticstiger/forge-cli"
+    },
+    {
+      "contract_sha256": "bf9bf935466029118468ce361c4a9f36a6e5a4ca98f1b202b323f65340d3ae0c",
+      "pin": "efcf8e4c0087def553a737dc1c4eebda5d8a90cd",
+      "provenance": "human",
+      "question_id": "FC-forge-cli-dmm-value-no-semicolon",
+      "repo_id": "Agenticstiger/forge-cli",
+      "site": "Agenticstiger/forge-cli@efcf8e4c0087def553a737dc1c4eebda5d8a90cd:fluid_build/providers/datamesh_manager/datamesh_manager.py:88:_SECRET_ERROR_PATTERNS",
+      "url": "https://github.com/Agenticstiger/forge-cli"
+    }
+  ],
+  "schema_version": "2"
+}

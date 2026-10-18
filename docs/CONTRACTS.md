@@ -2,7 +2,7 @@
 
 A counted UNSAT or SAT is not a product result without a **contract**.
 
-How to pick *which* sites get a `human` contract, per distinct corpus
+How to pick *which* sites get an adopted contract, per distinct corpus
 cluster (cap 5 per idiom slice, rank 15, no taint engine):
 [`CLUSTER-CONVERSION.md`](CLUSTER-CONVERSION.md). First wave:
 [`sweep/openwrt-conversion/plan.md`](../sweep/openwrt-conversion/plan.md).
@@ -16,22 +16,30 @@ Required fields: `site`, `guarantee`, `input_source`, `trust`
 
 ## Provenance (#496)
 
+**Policy changed 2026-10-13:** agents may adopt contracts without a person
+approving each one. [AUTONOMOUS-CONTRACTS.md](AUTONOMOUS-CONTRACTS.md) defines
+the evidence/review requirement and overrides earlier human-only adoption
+instructions. The P1 eligibility migration is implemented across the harness,
+queue, conversion ledger, saturation manifest, and versioned checkpoint.
+
 | Value | Scale? | Meaning |
 |---|---|---|
-| `human` | no | A person named the guarantee. Required for the general case. |
+| `human` | requires actual human participation | A person actually named or adopted the guarantee. Preserve historical provenance. |
 | `version_diff` | yes | Same rule id, adjacent tags. Machine-derivable. |
 | `cross_engine` | yes | Same rule text, two engines, with `family_contract`. |
-| `agent_derived` | no | An agent invented the question. Treat as smoke unless a human adopts it. |
+| `agent_derived` | yes, with evidenced adoption | An agent proposed the question. A validated source-bound adoption record makes it eligible under the autonomous policy; a draft remains smoke. |
 
-Batch-scale generators may run only for `version_diff` and `cross_engine`.
+Unattended site-backed adoption follows the autonomous review policy.
+Pair generators remain restricted to `version_diff` and `cross_engine`.
 Sibling-family pairing is not a provenance (#469).
 
 ## Harness (#476)
 
 UNSAT without contract + declared domain is not reportable product
 (`product: false` on the harness NDJSON record). `--require-contract` makes
-that a hard failure. Mutation guards remain hygiene. Registry P1–P6 carry
-human contracts so their UNSAT stays countable.
+that a hard failure. Mutation guards remain hygiene. Existing provenance is
+preserved; an agent-derived contract counts only with its valid adoption
+record.
 
 ## Synthesis (#479)
 
@@ -46,8 +54,10 @@ on the extractor record. Do not invent a dataflow engine here.
 
 ## Shape 3 generator (#478)
 
-Deferred. No non-tautological search-shaped question exists without a human
-contract. Do not ship “does this miss a space?”.
+Untargeted generation remains deferred. A source-backed autonomous contract
+may ask a shape-3 capture question after independently establishing its
+guarantee, input path, and real replay route. Do not ship “does this miss a
+space?” as product evidence.
 
 ## Shape 5 in batch (#477)
 

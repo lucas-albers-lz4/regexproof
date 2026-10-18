@@ -1,0 +1,9 @@
+[
+  {
+    "site": "xibosignage/xibo-cms@978def55c8e68cab3a50a7ee4725039da753f0a1:frontend/src/pages/Administration/Applications/Authorize/AuthorizeApplication.tsx:42:38",
+    "reviewed": true,
+    "question_ids": [
+      "XC-xibo-csrf-cookie-capture-isolation"
+    ]
+  }
+]

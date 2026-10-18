@@ -21,10 +21,10 @@
     "search": 221
   },
   "engine_versions": {
-    "python": "3.13.5",
+    "python": "3.14.8",
     "z3": "5.0.0",
-    "node": "v22.23.1",
-    "go": "go version go1.24.4 linux/amd64"
+    "node": "v26.11.1",
+    "go": "go version go1.27.2 linux/amd64"
   },
   "shell_true_violations": [],
   "records": [

@@ -1,0 +1,9 @@
+[
+  {
+    "question_ids": [
+      "TC-workspace-sync-path-segment-component-image"
+    ],
+    "reviewed": false,
+    "site": "TracecatHQ/tracecat@c84d52528a489821f355fc63976fbc7783ae0ad5:tracecat/workspace_sync/adapters/base.py:936:re.sub"
+  }
+]

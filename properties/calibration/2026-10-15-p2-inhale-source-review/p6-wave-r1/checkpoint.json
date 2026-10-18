@@ -1,0 +1,555 @@
+{
+  "attempts": [
+    {
+      "contract": {
+        "adoption": {
+          "approved_on": "2026-10-15",
+          "authority": "standing_user_delegation",
+          "contract_sha256": "638cd5d8ac2bcbb72f33dc8090d6b87b9922ae3fd3200f61c215ea892149d6ce",
+          "evidence": [
+            "https://github.com/netspooky/inhale/blob/889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8/iModules/rDownload.py",
+            "https://github.com/netspooky/inhale/blob/889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8/README.md#L118-L130",
+            "https://github.com/netspooky/inhale/blob/889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8/inhale.py#L28-L30",
+            "https://github.com/netspooky/inhale/blob/889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8/iModules/rDownload.py#L106-L123"
+          ],
+          "policy_version": "autonomous-contracts-v1",
+          "rationale": "The pinned README explicitly describes -o OUTDIR as the directory where scraped files are stored, and the pinned CLI routes -u and each -l entry to getSingleFile. That helper applies re.sub(r\"https?://\", \"\", ...) to the caller URL and concatenates the remainder to fpath before creating directories and opening the file. A source-grounded replay with the documented traversal-shaped URL confirms that the current path resolves outside -o. This contract is the documented output-directory behavior for that concrete URL class; it records a reproduced candidate and does not claim an attack occurred in a deployment.",
+          "review": {
+            "author": "Codex source-review pass",
+            "reviewer": "Codex second source-review pass",
+            "same_model": true
+          },
+          "source_file": "iModules/rDownload.py",
+          "source_pin": "889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8",
+          "source_sha256": "3350a9a3d1be11e44dfff3756f90b03f349cc0a59246959047fe4ed0633c6414",
+          "source_url": "https://github.com/netspooky/inhale",
+          "status": "approved"
+        },
+        "declared_domain": "The concrete ASCII absolute URL https://downloads.example/../../escape.bin, supplied through the CLI's -u remote-file option or a line in the operator-provided -l URL list. The source strips the leading https:// with re.sub, concatenates the remaining URL text to the configured -o directory, and creates/writes the resulting local path. The counterexample is verified by replaying the exact pinned helper with synthetic response bytes inside a temporary directory; no network request is made.",
+        "guarantee": "For a URL supplied to the remote-file or URL-list mode, getSingleFile stores downloaded bytes beneath the configured -o output directory.",
+        "input_source": "An operator-supplied URL passed through -u or read from an operator-supplied -l URL list; getSingleFile derives a local output path from the URL and writes the HTTP response bytes there.",
+        "provenance": "agent_derived",
+        "schema_version": "1",
+        "site": "netspooky/inhale@889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8:iModules/rDownload.py:111:url",
+        "trust": "config"
+      },
+      "detail": null,
+      "domain": "The concrete printable-ASCII HTTPS URL witness; stripping the exact https?:// prefix leaves a URL-derived relative path containing /../../. Ground truth resolves the pinned getSingleFile destination against a temporary -o output directory.",
+      "gate": {
+        "consumer_adopted": false,
+        "differential_cases": 3,
+        "gate_id": "inhale-url-output-path-confinement",
+        "local_gate_command": "/home/lalbers/gitroot/regexproof/.venv/bin/python scripts/inhale-output-path-regression-gate.py --source-root /tmp/regexproof-pinned-sources/inhale-889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8 --output /home/lalbers/gitroot/regexproof/properties/calibration/2026-10-15-p2-inhale-source-review/p6-wave-r1/product-replay-p6.json",
+        "local_gate_passed": true,
+        "mutation_guard_passed": true,
+        "product_engine_replayed": true,
+        "source_pin_verified": true
+      },
+      "kind": "counterexample_finder",
+      "pin": "889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8",
+      "question_id": "IH-inhale-file-url-output-root-confinement",
+      "repo_id": "netspooky/inhale",
+      "site": "netspooky/inhale@889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8:iModules/rDownload.py:111:url",
+      "status": "sat",
+      "synthesized": false,
+      "url": "https://github.com/netspooky/inhale"
+    },
+    {
+      "contract": {
+        "adoption": {
+          "approved_on": "2026-10-15",
+          "authority": "standing_user_delegation",
+          "contract_sha256": "1c6a9e52deabba8c246092f93ee4c2e1333967ab7516f63da3006dfa6f2c1df2",
+          "evidence": [
+            "https://github.com/netspooky/inhale/blob/889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8/iModules/rDownload.py",
+            "https://github.com/netspooky/inhale/blob/889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8/README.md#L118-L130",
+            "https://github.com/netspooky/inhale/blob/889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8/inhale.py#L28-L30",
+            "https://github.com/netspooky/inhale/blob/889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8/iModules/rDownload.py#L128-L135",
+            "https://github.com/netspooky/inhale/blob/889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8/iModules/rDownload.py#L58-L84"
+          ],
+          "policy_version": "autonomous-contracts-v1",
+          "rationale": "The pinned README explicitly describes -o OUTDIR as the directory where scraped files are stored, and the pinned CLI routes -r to parseDir. That helper applies re.sub(r\"https?://\", \"\", ...) to the root URL and concatenates the remainder to fpath before creating the target and calling download_directory. A source-grounded replay with the documented traversal-shaped URL confirms that the current root path resolves outside -o. This contract is the documented output-directory behavior for that concrete URL class; it records a reproduced candidate and does not claim an attack occurred in a deployment.",
+          "review": {
+            "author": "Codex source-review pass",
+            "reviewer": "Codex second source-review pass",
+            "same_model": true
+          },
+          "source_file": "iModules/rDownload.py",
+          "source_pin": "889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8",
+          "source_sha256": "3350a9a3d1be11e44dfff3756f90b03f349cc0a59246959047fe4ed0633c6414",
+          "source_url": "https://github.com/netspooky/inhale",
+          "status": "approved"
+        },
+        "declared_domain": "The concrete ASCII absolute URL https://downloads.example/../../directory.bin, supplied to the CLI's -r remote-directory option. The source strips the leading https:// with re.sub, concatenates the remaining URL text to the configured -o directory, and creates that local target before crawling. The counterexample is verified by replaying the exact pinned helper with a synthetic binary response inside a temporary directory; no network request is made.",
+        "guarantee": "For a remote-directory URL supplied through -r, parseDir's root destination remains beneath the configured -o output directory.",
+        "input_source": "An operator-supplied remote-directory URL passed through -r; parseDir derives its local destination from the URL and the configured output directory before fetching it.",
+        "provenance": "agent_derived",
+        "schema_version": "1",
+        "site": "netspooky/inhale@889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8:iModules/rDownload.py:129:url",
+        "trust": "config"
+      },
+      "detail": null,
+      "domain": "The concrete printable-ASCII HTTPS URL witness; stripping the exact https?:// prefix leaves a URL-derived relative path containing /../../. Ground truth resolves the pinned parseDir destination against a temporary -o output directory.",
+      "gate": {
+        "consumer_adopted": false,
+        "differential_cases": 3,
+        "gate_id": "inhale-url-output-path-confinement",
+        "local_gate_command": "/home/lalbers/gitroot/regexproof/.venv/bin/python scripts/inhale-output-path-regression-gate.py --source-root /tmp/regexproof-pinned-sources/inhale-889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8 --output /home/lalbers/gitroot/regexproof/properties/calibration/2026-10-15-p2-inhale-source-review/p6-wave-r1/product-replay-p6.json",
+        "local_gate_passed": true,
+        "mutation_guard_passed": true,
+        "product_engine_replayed": true,
+        "source_pin_verified": true
+      },
+      "kind": "counterexample_finder",
+      "pin": "889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8",
+      "question_id": "IH-inhale-directory-url-output-root-confinement",
+      "repo_id": "netspooky/inhale",
+      "site": "netspooky/inhale@889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8:iModules/rDownload.py:129:url",
+      "status": "sat",
+      "synthesized": false,
+      "url": "https://github.com/netspooky/inhale"
+    }
+  ],
+  "cohort": {
+    "cohort_id": "2026-09-12-calibration-20-r2",
+    "manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+    "repos": [
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "ecma",
+        "pin": "b31ddabecf4ed3209d37a2f5b29956120cd8f9ce",
+        "repo_id": "json-editor/json-editor",
+        "score": 4902,
+        "sites": 1,
+        "url": "https://github.com/json-editor/json-editor"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "posix-shell",
+        "pin": "d4f01ba6202d50909d1977810d322259482e0b82",
+        "repo_id": "mycelium0/mycelium",
+        "score": 21,
+        "sites": 1,
+        "url": "https://github.com/mycelium0/mycelium"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "py_re",
+        "pin": "889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8",
+        "repo_id": "netspooky/inhale",
+        "score": 191,
+        "sites": 1,
+        "url": "https://github.com/netspooky/inhale"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "ecma",
+        "pin": "e9fb233763160316989863b4739c4656133d45b0",
+        "repo_id": "magiclabs/magic-js",
+        "score": 477,
+        "sites": 1,
+        "url": "https://github.com/magiclabs/magic-js"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "ecma",
+        "pin": "d4a39726cad8d8e27e4c0502d1843c3b4180ffbc",
+        "repo_id": "grcengineering/gigachad-grc",
+        "score": 154,
+        "sites": 1,
+        "url": "https://github.com/grcengineering/gigachad-grc"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "posix-shell",
+        "pin": "cea68022f477680f4bb502396c705fe14b3c412f",
+        "repo_id": "melodic-software/claude-code-plugins",
+        "score": 6,
+        "sites": 1,
+        "url": "https://github.com/melodic-software/claude-code-plugins"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "py_re",
+        "pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+        "repo_id": "TracecatHQ/tracecat",
+        "score": 60,
+        "sites": 144,
+        "url": "https://github.com/TracecatHQ/tracecat"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "py_re",
+        "pin": "efcf8e4c0087def553a737dc1c4eebda5d8a90cd",
+        "repo_id": "Agenticstiger/forge-cli",
+        "score": 45,
+        "sites": 447,
+        "url": "https://github.com/Agenticstiger/forge-cli"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "py_re",
+        "pin": "a9c0f06affc35e1f8e45bb77f835b92350c68a0b",
+        "repo_id": "airbnb/binaryalert",
+        "score": 45,
+        "sites": 8,
+        "url": "https://github.com/airbnb/binaryalert"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "ecma",
+        "pin": "978def55c8e68cab3a50a7ee4725039da753f0a1",
+        "repo_id": "xibosignage/xibo-cms",
+        "score": 61,
+        "sites": 1981,
+        "url": "https://github.com/xibosignage/xibo-cms"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "ecma",
+        "pin": "7ea3b445ee7d2ef8004d5ee77dab7544e1b8ef88",
+        "repo_id": "profbernardoj/everclaw-community-branches",
+        "score": 51,
+        "sites": 468,
+        "url": "https://github.com/profbernardoj/everclaw-community-branches"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "go_re",
+        "pin": "01cd447ad3b1acfed7e0680596c2c74458a4cf06",
+        "repo_id": "h0tak88r/AutoAR",
+        "score": 54,
+        "sites": 33,
+        "url": "https://github.com/h0tak88r/AutoAR"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "go_re",
+        "pin": "ea3e83e24676a1678a9522141da29b636c9451ab",
+        "repo_id": "chainguard-dev/malcontent",
+        "score": 52,
+        "sites": 15,
+        "url": "https://github.com/chainguard-dev/malcontent"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "go_re",
+        "pin": "2f3fa5a506d6565fa68858b7963450567ddda114",
+        "repo_id": "open-horizon/anax",
+        "score": 50,
+        "sites": 24,
+        "url": "https://github.com/open-horizon/anax"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "go_re",
+        "pin": "1cf40fcabd330a1fe4e8eb9493b15a99a392e17f",
+        "repo_id": "snyk/snyk-ls",
+        "score": 50,
+        "sites": 35,
+        "url": "https://github.com/snyk/snyk-ls"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "posix-shell",
+        "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+        "repo_id": "marcusquinn/aidevops",
+        "score": 55,
+        "sites": 11330,
+        "url": "https://github.com/marcusquinn/aidevops"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "posix-shell",
+        "pin": "65624396e263074bb8cb2e049f9a9ec6215ea5c1",
+        "repo_id": "Leviticus-Triage/llm-honeypot-intelligence",
+        "score": 34,
+        "sites": 16,
+        "url": "https://github.com/Leviticus-Triage/llm-honeypot-intelligence"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "py_re",
+        "pin": "0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a",
+        "repo_id": "panther-labs/panther-analysis",
+        "score": 56,
+        "sites": 57,
+        "url": "https://github.com/panther-labs/panther-analysis"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "py_re",
+        "pin": "53ae43c5298a2426c6696147fdd75e2a4aef10e2",
+        "repo_id": "fu351/Doberman-Core",
+        "score": 53,
+        "sites": 108,
+        "url": "https://github.com/fu351/Doberman-Core"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "ecma",
+        "pin": "55aa7ef43a9c129beba90823cd8a4db10bb01211",
+        "repo_id": "greydragon888/real-router",
+        "score": 48,
+        "sites": 2882,
+        "url": "https://github.com/greydragon888/real-router"
+      }
+    ],
+    "schema_version": "1"
+  },
+  "cohort_id": "2026-09-12-calibration-20-r2",
+  "manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+  "product_coverage_manifest": {
+    "cohort_id": "2026-09-12-calibration-20-r2",
+    "cohort_manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+    "coverage_digest": "a21613161220c52d1f3db7013c739431163c38b7fd6624f7970e678cbceef695",
+    "identities": [
+      {
+        "contract_sha256": "638cd5d8ac2bcbb72f33dc8090d6b87b9922ae3fd3200f61c215ea892149d6ce",
+        "pin": "889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8",
+        "provenance": "agent_derived",
+        "question_id": "IH-inhale-file-url-output-root-confinement",
+        "repo_id": "netspooky/inhale",
+        "site": "netspooky/inhale@889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8:iModules/rDownload.py:111:url",
+        "url": "https://github.com/netspooky/inhale"
+      },
+      {
+        "contract_sha256": "1c6a9e52deabba8c246092f93ee4c2e1333967ab7516f63da3006dfa6f2c1df2",
+        "pin": "889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8",
+        "provenance": "agent_derived",
+        "question_id": "IH-inhale-directory-url-output-root-confinement",
+        "repo_id": "netspooky/inhale",
+        "site": "netspooky/inhale@889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8:iModules/rDownload.py:129:url",
+        "url": "https://github.com/netspooky/inhale"
+      }
+    ],
+    "schema_version": "2"
+  },
+  "rows": [
+    {
+      "canonical": {
+        "contract": {
+          "adoption": {
+            "approved_on": "2026-10-15",
+            "authority": "standing_user_delegation",
+            "contract_sha256": "638cd5d8ac2bcbb72f33dc8090d6b87b9922ae3fd3200f61c215ea892149d6ce",
+            "evidence": [
+              "https://github.com/netspooky/inhale/blob/889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8/iModules/rDownload.py",
+              "https://github.com/netspooky/inhale/blob/889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8/README.md#L118-L130",
+              "https://github.com/netspooky/inhale/blob/889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8/inhale.py#L28-L30",
+              "https://github.com/netspooky/inhale/blob/889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8/iModules/rDownload.py#L106-L123"
+            ],
+            "policy_version": "autonomous-contracts-v1",
+            "rationale": "The pinned README explicitly describes -o OUTDIR as the directory where scraped files are stored, and the pinned CLI routes -u and each -l entry to getSingleFile. That helper applies re.sub(r\"https?://\", \"\", ...) to the caller URL and concatenates the remainder to fpath before creating directories and opening the file. A source-grounded replay with the documented traversal-shaped URL confirms that the current path resolves outside -o. This contract is the documented output-directory behavior for that concrete URL class; it records a reproduced candidate and does not claim an attack occurred in a deployment.",
+            "review": {
+              "author": "Codex source-review pass",
+              "reviewer": "Codex second source-review pass",
+              "same_model": true
+            },
+            "source_file": "iModules/rDownload.py",
+            "source_pin": "889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8",
+            "source_sha256": "3350a9a3d1be11e44dfff3756f90b03f349cc0a59246959047fe4ed0633c6414",
+            "source_url": "https://github.com/netspooky/inhale",
+            "status": "approved"
+          },
+          "declared_domain": "The concrete ASCII absolute URL https://downloads.example/../../escape.bin, supplied through the CLI's -u remote-file option or a line in the operator-provided -l URL list. The source strips the leading https:// with re.sub, concatenates the remaining URL text to the configured -o directory, and creates/writes the resulting local path. The counterexample is verified by replaying the exact pinned helper with synthetic response bytes inside a temporary directory; no network request is made.",
+          "guarantee": "For a URL supplied to the remote-file or URL-list mode, getSingleFile stores downloaded bytes beneath the configured -o output directory.",
+          "input_source": "An operator-supplied URL passed through -u or read from an operator-supplied -l URL list; getSingleFile derives a local output path from the URL and writes the HTTP response bytes there.",
+          "provenance": "agent_derived",
+          "schema_version": "1",
+          "site": "netspooky/inhale@889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8:iModules/rDownload.py:111:url",
+          "trust": "config"
+        },
+        "corpus": "p2_inhale_source_review",
+        "disclosure": null,
+        "domain": "The concrete printable-ASCII HTTPS URL witness; stripping the exact https?:// prefix leaves a URL-derived relative path containing /../../. Ground truth resolves the pinned getSingleFile destination against a temporary -o output directory.",
+        "engine_versions": {
+          "python": "3.14.8",
+          "z3": "5.0.0"
+        },
+        "family": "IH-inhale-output-path-confinement",
+        "ground_truth": null,
+        "ground_truth_status": "reproduced",
+        "idiom_bucket": "python-url-output-path-confinement",
+        "kind": "counterexample_finder",
+        "name": "IH-inhale-file-url-output-root-confinement",
+        "product_reportable": true,
+        "regex_id": "e98e896ce368a464c87e47bc861cd622",
+        "result": "sat",
+        "schema_version": "1",
+        "shape": 3,
+        "site": "netspooky/inhale@889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8:iModules/rDownload.py:111:url",
+        "synthesized": false,
+        "wave_id": "p2-inhale-r1",
+        "witness": null
+      },
+      "contract": {
+        "adoption": {
+          "approved_on": "2026-10-15",
+          "authority": "standing_user_delegation",
+          "contract_sha256": "638cd5d8ac2bcbb72f33dc8090d6b87b9922ae3fd3200f61c215ea892149d6ce",
+          "evidence": [
+            "https://github.com/netspooky/inhale/blob/889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8/iModules/rDownload.py",
+            "https://github.com/netspooky/inhale/blob/889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8/README.md#L118-L130",
+            "https://github.com/netspooky/inhale/blob/889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8/inhale.py#L28-L30",
+            "https://github.com/netspooky/inhale/blob/889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8/iModules/rDownload.py#L106-L123"
+          ],
+          "policy_version": "autonomous-contracts-v1",
+          "rationale": "The pinned README explicitly describes -o OUTDIR as the directory where scraped files are stored, and the pinned CLI routes -u and each -l entry to getSingleFile. That helper applies re.sub(r\"https?://\", \"\", ...) to the caller URL and concatenates the remainder to fpath before creating directories and opening the file. A source-grounded replay with the documented traversal-shaped URL confirms that the current path resolves outside -o. This contract is the documented output-directory behavior for that concrete URL class; it records a reproduced candidate and does not claim an attack occurred in a deployment.",
+          "review": {
+            "author": "Codex source-review pass",
+            "reviewer": "Codex second source-review pass",
+            "same_model": true
+          },
+          "source_file": "iModules/rDownload.py",
+          "source_pin": "889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8",
+          "source_sha256": "3350a9a3d1be11e44dfff3756f90b03f349cc0a59246959047fe4ed0633c6414",
+          "source_url": "https://github.com/netspooky/inhale",
+          "status": "approved"
+        },
+        "declared_domain": "The concrete ASCII absolute URL https://downloads.example/../../escape.bin, supplied through the CLI's -u remote-file option or a line in the operator-provided -l URL list. The source strips the leading https:// with re.sub, concatenates the remaining URL text to the configured -o directory, and creates/writes the resulting local path. The counterexample is verified by replaying the exact pinned helper with synthetic response bytes inside a temporary directory; no network request is made.",
+        "guarantee": "For a URL supplied to the remote-file or URL-list mode, getSingleFile stores downloaded bytes beneath the configured -o output directory.",
+        "input_source": "An operator-supplied URL passed through -u or read from an operator-supplied -l URL list; getSingleFile derives a local output path from the URL and writes the HTTP response bytes there.",
+        "provenance": "agent_derived",
+        "schema_version": "1",
+        "site": "netspooky/inhale@889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8:iModules/rDownload.py:111:url",
+        "trust": "config"
+      },
+      "disposition": {
+        "approval_escape": null,
+        "approval_ref": null,
+        "backfilled": false,
+        "disposition_date": null,
+        "filed_at": null,
+        "reason_code": "reachability_and_security_impact_unresolved",
+        "resolved_at": null,
+        "status": "pending_product_triage"
+      },
+      "domain": "The concrete printable-ASCII HTTPS URL witness; stripping the exact https?:// prefix leaves a URL-derived relative path containing /../../. Ground truth resolves the pinned getSingleFile destination against a temporary -o output directory.",
+      "ground_truth_status": "reproduced",
+      "kind": "counterexample_finder",
+      "pin": "889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8",
+      "question_id": "IH-inhale-file-url-output-root-confinement",
+      "repo_id": "netspooky/inhale",
+      "result": "sat",
+      "schema_version": "1",
+      "site": "netspooky/inhale@889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8:iModules/rDownload.py:111:url",
+      "synthesized": false,
+      "url": "https://github.com/netspooky/inhale"
+    },
+    {
+      "canonical": {
+        "contract": {
+          "adoption": {
+            "approved_on": "2026-10-15",
+            "authority": "standing_user_delegation",
+            "contract_sha256": "1c6a9e52deabba8c246092f93ee4c2e1333967ab7516f63da3006dfa6f2c1df2",
+            "evidence": [
+              "https://github.com/netspooky/inhale/blob/889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8/iModules/rDownload.py",
+              "https://github.com/netspooky/inhale/blob/889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8/README.md#L118-L130",
+              "https://github.com/netspooky/inhale/blob/889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8/inhale.py#L28-L30",
+              "https://github.com/netspooky/inhale/blob/889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8/iModules/rDownload.py#L128-L135",
+              "https://github.com/netspooky/inhale/blob/889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8/iModules/rDownload.py#L58-L84"
+            ],
+            "policy_version": "autonomous-contracts-v1",
+            "rationale": "The pinned README explicitly describes -o OUTDIR as the directory where scraped files are stored, and the pinned CLI routes -r to parseDir. That helper applies re.sub(r\"https?://\", \"\", ...) to the root URL and concatenates the remainder to fpath before creating the target and calling download_directory. A source-grounded replay with the documented traversal-shaped URL confirms that the current root path resolves outside -o. This contract is the documented output-directory behavior for that concrete URL class; it records a reproduced candidate and does not claim an attack occurred in a deployment.",
+            "review": {
+              "author": "Codex source-review pass",
+              "reviewer": "Codex second source-review pass",
+              "same_model": true
+            },
+            "source_file": "iModules/rDownload.py",
+            "source_pin": "889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8",
+            "source_sha256": "3350a9a3d1be11e44dfff3756f90b03f349cc0a59246959047fe4ed0633c6414",
+            "source_url": "https://github.com/netspooky/inhale",
+            "status": "approved"
+          },
+          "declared_domain": "The concrete ASCII absolute URL https://downloads.example/../../directory.bin, supplied to the CLI's -r remote-directory option. The source strips the leading https:// with re.sub, concatenates the remaining URL text to the configured -o directory, and creates that local target before crawling. The counterexample is verified by replaying the exact pinned helper with a synthetic binary response inside a temporary directory; no network request is made.",
+          "guarantee": "For a remote-directory URL supplied through -r, parseDir's root destination remains beneath the configured -o output directory.",
+          "input_source": "An operator-supplied remote-directory URL passed through -r; parseDir derives its local destination from the URL and the configured output directory before fetching it.",
+          "provenance": "agent_derived",
+          "schema_version": "1",
+          "site": "netspooky/inhale@889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8:iModules/rDownload.py:129:url",
+          "trust": "config"
+        },
+        "corpus": "p2_inhale_source_review",
+        "disclosure": null,
+        "domain": "The concrete printable-ASCII HTTPS URL witness; stripping the exact https?:// prefix leaves a URL-derived relative path containing /../../. Ground truth resolves the pinned parseDir destination against a temporary -o output directory.",
+        "engine_versions": {
+          "python": "3.14.8",
+          "z3": "5.0.0"
+        },
+        "family": "IH-inhale-output-path-confinement",
+        "ground_truth": null,
+        "ground_truth_status": "reproduced",
+        "idiom_bucket": "python-url-output-path-confinement",
+        "kind": "counterexample_finder",
+        "name": "IH-inhale-directory-url-output-root-confinement",
+        "product_reportable": true,
+        "regex_id": "f875de76dc2718b2b0f44bb2a7951ca0",
+        "result": "sat",
+        "schema_version": "1",
+        "shape": 3,
+        "site": "netspooky/inhale@889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8:iModules/rDownload.py:129:url",
+        "synthesized": false,
+        "wave_id": "p2-inhale-r1",
+        "witness": null
+      },
+      "contract": {
+        "adoption": {
+          "approved_on": "2026-10-15",
+          "authority": "standing_user_delegation",
+          "contract_sha256": "1c6a9e52deabba8c246092f93ee4c2e1333967ab7516f63da3006dfa6f2c1df2",
+          "evidence": [
+            "https://github.com/netspooky/inhale/blob/889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8/iModules/rDownload.py",
+            "https://github.com/netspooky/inhale/blob/889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8/README.md#L118-L130",
+            "https://github.com/netspooky/inhale/blob/889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8/inhale.py#L28-L30",
+            "https://github.com/netspooky/inhale/blob/889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8/iModules/rDownload.py#L128-L135",
+            "https://github.com/netspooky/inhale/blob/889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8/iModules/rDownload.py#L58-L84"
+          ],
+          "policy_version": "autonomous-contracts-v1",
+          "rationale": "The pinned README explicitly describes -o OUTDIR as the directory where scraped files are stored, and the pinned CLI routes -r to parseDir. That helper applies re.sub(r\"https?://\", \"\", ...) to the root URL and concatenates the remainder to fpath before creating the target and calling download_directory. A source-grounded replay with the documented traversal-shaped URL confirms that the current root path resolves outside -o. This contract is the documented output-directory behavior for that concrete URL class; it records a reproduced candidate and does not claim an attack occurred in a deployment.",
+          "review": {
+            "author": "Codex source-review pass",
+            "reviewer": "Codex second source-review pass",
+            "same_model": true
+          },
+          "source_file": "iModules/rDownload.py",
+          "source_pin": "889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8",
+          "source_sha256": "3350a9a3d1be11e44dfff3756f90b03f349cc0a59246959047fe4ed0633c6414",
+          "source_url": "https://github.com/netspooky/inhale",
+          "status": "approved"
+        },
+        "declared_domain": "The concrete ASCII absolute URL https://downloads.example/../../directory.bin, supplied to the CLI's -r remote-directory option. The source strips the leading https:// with re.sub, concatenates the remaining URL text to the configured -o directory, and creates that local target before crawling. The counterexample is verified by replaying the exact pinned helper with a synthetic binary response inside a temporary directory; no network request is made.",
+        "guarantee": "For a remote-directory URL supplied through -r, parseDir's root destination remains beneath the configured -o output directory.",
+        "input_source": "An operator-supplied remote-directory URL passed through -r; parseDir derives its local destination from the URL and the configured output directory before fetching it.",
+        "provenance": "agent_derived",
+        "schema_version": "1",
+        "site": "netspooky/inhale@889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8:iModules/rDownload.py:129:url",
+        "trust": "config"
+      },
+      "disposition": {
+        "approval_escape": null,
+        "approval_ref": null,
+        "backfilled": false,
+        "disposition_date": null,
+        "filed_at": null,
+        "reason_code": "reachability_and_security_impact_unresolved",
+        "resolved_at": null,
+        "status": "pending_product_triage"
+      },
+      "domain": "The concrete printable-ASCII HTTPS URL witness; stripping the exact https?:// prefix leaves a URL-derived relative path containing /../../. Ground truth resolves the pinned parseDir destination against a temporary -o output directory.",
+      "ground_truth_status": "reproduced",
+      "kind": "counterexample_finder",
+      "pin": "889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8",
+      "question_id": "IH-inhale-directory-url-output-root-confinement",
+      "repo_id": "netspooky/inhale",
+      "result": "sat",
+      "schema_version": "1",
+      "site": "netspooky/inhale@889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8:iModules/rDownload.py:129:url",
+      "synthesized": false,
+      "url": "https://github.com/netspooky/inhale"
+    }
+  ],
+  "schema_version": "3"
+}

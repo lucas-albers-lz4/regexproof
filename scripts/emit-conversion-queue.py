@@ -7,7 +7,8 @@ path: probes run before batch inventory and cannot honestly fill
 carry only cheap pre-probe signals and are validated against
 ``schemas/queue_stub.schema.json`` (``additionalProperties: false``,
 ``provenance=stub``) — queue-only by schema, never a contract, never an
-increment of ``properties_asked``.
+    increment of ``properties_asked``. The claimed-to-contracted transition
+    accepts human contracts or source-bound autonomous adoption records.
 
 Usage::
 
@@ -58,7 +59,7 @@ def validate_stub(row: dict) -> None:
         if banned in row:
             raise SystemExit(
                 f"stub emitter: stub carries contract field {banned!r} — "
-                "contract semantics are human-adoption only"
+                "contract semantics belong only in an adopted contract"
             )
 
 

@@ -1,0 +1,666 @@
+{
+  "command": "python3 scripts/conversion-scheduler.py --out /tmp/regexproof-conversion-schedule-p4.json --at 2026-10-15T16:00:00Z",
+  "inputs": {
+    "bucket_registry_sha256": "c3ffbee20426158375c87d9588397c29a3bd7aa2f13a702d94d0f58b39e56570",
+    "conversion_ledger_sha256": "ad715ef9b3e5be15ee88c5a790d1ebf35dfc47f5adb460a5409a94239c1deb24",
+    "conversion_queue": {
+      "directory": "properties/conversion_queue",
+      "directory_present": false,
+      "queue_artifact_count": 0
+    },
+    "corpus_event_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "gate_decisions": {
+      "decision_counts": {
+        "go": 83,
+        "no-go": 757,
+        "triage-trial": 45
+      },
+      "distinct_go_clusters_in_schedule": 80,
+      "file_count": 885,
+      "inventory_digest": "ae3c9ae61f32378a03cdb819201b944842836d033777a4644f536e0ef144a1bc",
+      "inventory_digest_algorithm": "sorted filename NUL lowercase_file_sha256 LF"
+    },
+    "scheduler_script_sha256": "94750ce4c4a5cfb3e9f58a0cffcf228c5983787f08ca73aa2ca3c1e898a7ff55",
+    "upstream_dispositions_sha256": "c276dd21e0fa2dc262cf036d0b545a06b3804d9e2e872403b899968a3490c6ec"
+  },
+  "interpretation": [
+    "The schedule selected two registered named-next buckets: Mycelium and Malcontent.",
+    "The 70/20/10 values are reported constants; no candidate-site population or stratum labels are present in the conversion queue (the directory is absent).",
+    "This dirty-worktree diagnostic does not establish allocation behavior on clean current main or candidate-level productive/novel/unbiased allocation."
+  ],
+  "observed_on": "2026-10-15",
+  "revision": {
+    "clean_current_main_baseline": "fbc7aa623227ca549f3ba35da699a1ff39f27ea4",
+    "head": "cd0d906a878afca7966efbef44a417d249d38537",
+    "working_tree_dirty": true
+  },
+  "scheduler_observation": {
+    "capacity_reservation": {
+      "novel_exploration_share": 0.2,
+      "productive_share": 0.7,
+      "unbiased_slice_share": 0.1
+    },
+    "cluster_rows": 80,
+    "full_schedule": {
+      "bucket_registry_digest": "c984d015b14611d604a59ce2a4f6c9efa3e8254ebf4186d42b3940026967a933",
+      "cache_interplay_note": "GO-cluster utilization accelerates #550 lease pressure \u2014 leased clone count + byte caps apply; there is NO immortal lease set. Each conversion wave must fit within the current cache budget and release leases on close-out.",
+      "capacity_reservation": {
+        "novel_exploration_share": 0.2,
+        "productive_share": 0.7,
+        "unbiased_slice_share": 0.1
+      },
+      "generated_at": "2026-10-15T16:00:00Z",
+      "registered_bucket_count": 2,
+      "registered_bucket_rejections": [],
+      "schema_version": "1",
+      "selections": [
+        {
+          "cluster": "AegisMind",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "AlienVaultLabs",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "Antivirus",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "AutoAR",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "BlueBox",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "DataCon2020",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "Hachi",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "Hazer",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "Inboxscanner",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "JARVIS",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "NetDefender",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "OctopusBeak",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "Open-Source-YARA-rules",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "PEpper",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "RustPython",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "SMAT",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "SentinelX",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "SveltyCMS-SveltyCMS",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "Yara-Rules",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "aidevops",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "unregistered-next",
+          "used_buckets": [
+            "shell-hook-guards"
+          ]
+        },
+        {
+          "cluster": "ajohnsonnow-vet-rate-org",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "bernstein",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "bike4mind",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "caia",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "cinder",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "claude-code-plugins",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "unregistered-next",
+          "used_buckets": [
+            "plugin-hook-guards"
+          ]
+        },
+        {
+          "cluster": "coreruleset",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "cpython",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "cpython-13",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "detect-secrets",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "dogfood_shell",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": [
+            "normalize-fixpoint"
+          ]
+        },
+        {
+          "cluster": "dompurify",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "exchange-api",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "freki",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "gadievron-raptor",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "gilectomy",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "gitleaks",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "globussoft-crm",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "hippo",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "ids_rules",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "java-html-sanitizer",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "jython3",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "kubilitics",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "lintendo-Axhub-Make",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "lw-yara",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "lyrie-ai",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "malcontent",
+          "mine_re_ranked": false,
+          "selected_bucket": "git-crlf-smuggling",
+          "selection_basis": "named-next-unused",
+          "used_buckets": []
+        },
+        {
+          "cluster": "malzoo",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "moonpython",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "mycelium",
+          "mine_re_ranked": false,
+          "selected_bucket": "scripts-bootstrap",
+          "selection_basis": "named-next-unused",
+          "used_buckets": [
+            "control-failclosed"
+          ]
+        },
+        {
+          "cluster": "nogil-3.12",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "noseyparker",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "openmed",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "openwrt_luci",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "cluster-stopped",
+          "used_buckets": [
+            "form-validator-alphabets"
+          ]
+        },
+        {
+          "cluster": "openwrt_packages",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "cluster-stopped",
+          "used_buckets": [
+            "ddns-query-and-escape-image",
+            "image-and-ddns-json",
+            "validator-charsets-and-captures"
+          ]
+        },
+        {
+          "cluster": "pass-culture-main",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "patrolaroid",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "pyparallel",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "python_3_8_2",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "pythowon",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "real-router",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "sec_check",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "semgrep_rules",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "shhgit",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "sonash-v0",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "spamassassin",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "stateset-icommerce",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "tarcoin",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "three-ui",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "trufflehog",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "typenix",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "typescript-go",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "validatorjs",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "ver",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "visulima-visulima",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "volatility3-mcp",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "whohk",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "xibo-cms",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "yara_rules",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        },
+        {
+          "cluster": "yarasigs",
+          "mine_re_ranked": false,
+          "selected_bucket": null,
+          "selection_basis": "none-available",
+          "used_buckets": []
+        }
+      ],
+      "wont_file_classes": {
+        "third_party": 4
+      }
+    },
+    "registered_bucket_count": 2,
+    "registered_bucket_rejections": [],
+    "schedule_sha256": "be5860ee787cc653d8cdd13208cb0f203dc0fb4e573c4b9dccbee568e186a70d",
+    "selected_rows": [
+      {
+        "cluster": "malcontent",
+        "mine_re_ranked": false,
+        "selected_bucket": "git-crlf-smuggling",
+        "selection_basis": "named-next-unused",
+        "used_buckets": []
+      },
+      {
+        "cluster": "mycelium",
+        "mine_re_ranked": false,
+        "selected_bucket": "scripts-bootstrap",
+        "selection_basis": "named-next-unused",
+        "used_buckets": [
+          "control-failclosed"
+        ]
+      }
+    ],
+    "selection_basis_counts": {
+      "cluster-stopped": 2,
+      "named-next-unused": 2,
+      "none-available": 74,
+      "unregistered-next": 2
+    },
+    "wont_file_class_count": 1
+  },
+  "schema_version": "1"
+}

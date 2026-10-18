@@ -1,0 +1,4792 @@
+{
+  "audit": {
+    "asked_site_count": 45,
+    "entry_count": 147,
+    "record_counts_by_kind": {
+      "attempt_checkpoint": 9,
+      "attempts": 9,
+      "autonomous_measurements": 7,
+      "contract_artifact": 21,
+      "conversion_ndjson": 47,
+      "frozen_roster": 14,
+      "queue_transition_replay": 17,
+      "review_decisions": 45,
+      "review_evidence": 30,
+      "runner_state": 3,
+      "shortlist": 37,
+      "upstream_dispositions": 16
+    },
+    "reserved_site_count": 109,
+    "scope": "recognized in-repository conversion, run measurement, contract, shortlist, runner, review, roster, queue, and disposition artifacts",
+    "source_count": 59,
+    "unbound_record_count": 7
+  },
+  "entries": [
+    {
+      "asked": false,
+      "cluster": null,
+      "evidence": [
+        {
+          "kind": "review_decisions",
+          "question_id": null,
+          "record": 4,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/review-v2.ndjson",
+          "status": null
+        },
+        {
+          "kind": "review_decisions",
+          "question_id": null,
+          "record": 4,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/review.ndjson",
+          "status": null
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "7535d130b86cbb737c1cc319253765a0"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": true,
+      "site": "scripts/fungi:101:40",
+      "source_pin": null,
+      "statuses": []
+    },
+    {
+      "asked": false,
+      "cluster": null,
+      "evidence": [
+        {
+          "kind": "review_decisions",
+          "question_id": null,
+          "record": 11,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/review-v2.ndjson",
+          "status": null
+        },
+        {
+          "kind": "review_decisions",
+          "question_id": null,
+          "record": 11,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/review.ndjson",
+          "status": null
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "182c7edc3432798e986eb07b0f4e73a6"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": true,
+      "site": "scripts/fungi:42:1",
+      "source_pin": null,
+      "statuses": []
+    },
+    {
+      "asked": false,
+      "cluster": null,
+      "evidence": [
+        {
+          "kind": "review_decisions",
+          "question_id": null,
+          "record": 12,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/review-v2.ndjson",
+          "status": null
+        },
+        {
+          "kind": "review_decisions",
+          "question_id": null,
+          "record": 12,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/review.ndjson",
+          "status": null
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "ffb8742a5ea4e9a56d636c6ad8511128"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": true,
+      "site": "scripts/fungi:77:51",
+      "source_pin": null,
+      "statuses": []
+    },
+    {
+      "asked": false,
+      "cluster": null,
+      "evidence": [
+        {
+          "kind": "review_decisions",
+          "question_id": null,
+          "record": 5,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/review-v2.ndjson",
+          "status": null
+        },
+        {
+          "kind": "review_decisions",
+          "question_id": null,
+          "record": 5,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/review.ndjson",
+          "status": null
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "0717d6d2e9bbe31b9a22b0bc28b57342"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": true,
+      "site": "scripts/fungi:84:99",
+      "source_pin": null,
+      "statuses": []
+    },
+    {
+      "asked": false,
+      "cluster": null,
+      "evidence": [
+        {
+          "kind": "review_decisions",
+          "question_id": null,
+          "record": 6,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/review-v2.ndjson",
+          "status": null
+        },
+        {
+          "kind": "review_decisions",
+          "question_id": null,
+          "record": 6,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/review.ndjson",
+          "status": null
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "f141465a40b05772f4f65177261c26cc"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": true,
+      "site": "scripts/fungi:85:87",
+      "source_pin": null,
+      "statuses": []
+    },
+    {
+      "asked": false,
+      "cluster": null,
+      "evidence": [
+        {
+          "kind": "review_decisions",
+          "question_id": null,
+          "record": 1,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/review-v2.ndjson",
+          "status": null
+        },
+        {
+          "kind": "review_decisions",
+          "question_id": null,
+          "record": 1,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/review.ndjson",
+          "status": null
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "f2aef01c87f5ffd746de7b1e52bdb19c"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": true,
+      "site": "scripts/node-bootstrap.sh:1083:60",
+      "source_pin": null,
+      "statuses": []
+    },
+    {
+      "asked": false,
+      "cluster": null,
+      "evidence": [
+        {
+          "kind": "review_decisions",
+          "question_id": null,
+          "record": 2,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/review-v2.ndjson",
+          "status": null
+        },
+        {
+          "kind": "review_decisions",
+          "question_id": null,
+          "record": 2,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/review.ndjson",
+          "status": null
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "e61fc06da665bfb8c2eaaca06b5f3d3f"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": true,
+      "site": "scripts/node-bootstrap.sh:1084:60",
+      "source_pin": null,
+      "statuses": []
+    },
+    {
+      "asked": false,
+      "cluster": null,
+      "evidence": [
+        {
+          "kind": "review_decisions",
+          "question_id": null,
+          "record": 7,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/review-v2.ndjson",
+          "status": null
+        },
+        {
+          "kind": "review_decisions",
+          "question_id": null,
+          "record": 7,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/review.ndjson",
+          "status": null
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "645c26907591a263de2b28370d80b122"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": true,
+      "site": "scripts/update_unit_drift_drill.sh:120:15",
+      "source_pin": null,
+      "statuses": []
+    },
+    {
+      "asked": false,
+      "cluster": null,
+      "evidence": [
+        {
+          "kind": "review_decisions",
+          "question_id": null,
+          "record": 8,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/review-v2.ndjson",
+          "status": null
+        },
+        {
+          "kind": "review_decisions",
+          "question_id": null,
+          "record": 8,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/review.ndjson",
+          "status": null
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "d6716c975ea7ad327b150381a7b37a83"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": true,
+      "site": "scripts/update_unit_drift_drill.sh:120:60",
+      "source_pin": null,
+      "statuses": []
+    },
+    {
+      "asked": false,
+      "cluster": null,
+      "evidence": [
+        {
+          "kind": "review_decisions",
+          "question_id": null,
+          "record": 13,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/review-v2.ndjson",
+          "status": null
+        },
+        {
+          "kind": "review_decisions",
+          "question_id": null,
+          "record": 13,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/review.ndjson",
+          "status": null
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "d8d45304ef898304d066587397ec814e"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": true,
+      "site": "scripts/update_unit_drift_drill.sh:120:86",
+      "source_pin": null,
+      "statuses": []
+    },
+    {
+      "asked": false,
+      "cluster": null,
+      "evidence": [
+        {
+          "kind": "review_decisions",
+          "question_id": null,
+          "record": 0,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/review-v2.ndjson",
+          "status": null
+        },
+        {
+          "kind": "review_decisions",
+          "question_id": null,
+          "record": 0,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/review.ndjson",
+          "status": null
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "148896941c21d4a17551f044bd40fc88"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": true,
+      "site": "scripts/update_unit_drift_drill.sh:184:3",
+      "source_pin": null,
+      "statuses": []
+    },
+    {
+      "asked": false,
+      "cluster": null,
+      "evidence": [
+        {
+          "kind": "review_decisions",
+          "question_id": null,
+          "record": 9,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/review-v2.ndjson",
+          "status": null
+        },
+        {
+          "kind": "review_decisions",
+          "question_id": null,
+          "record": 9,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/review.ndjson",
+          "status": null
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "dab00b6e0a2731ef075d1547b03dc013"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": true,
+      "site": "scripts/update_unit_drift_drill.sh:184:45",
+      "source_pin": null,
+      "statuses": []
+    },
+    {
+      "asked": false,
+      "cluster": null,
+      "evidence": [
+        {
+          "kind": "review_decisions",
+          "question_id": null,
+          "record": 14,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/review-v2.ndjson",
+          "status": null
+        },
+        {
+          "kind": "review_decisions",
+          "question_id": null,
+          "record": 14,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/review.ndjson",
+          "status": null
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "2036b05dd504e0eb23c832ae4c1fbf08"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": true,
+      "site": "scripts/update_unit_drift_drill.sh:184:71",
+      "source_pin": null,
+      "statuses": []
+    },
+    {
+      "asked": false,
+      "cluster": null,
+      "evidence": [
+        {
+          "kind": "review_decisions",
+          "question_id": null,
+          "record": 3,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/review-v2.ndjson",
+          "status": null
+        },
+        {
+          "kind": "review_decisions",
+          "question_id": null,
+          "record": 3,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/review.ndjson",
+          "status": null
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "6a34d6601a5a58a39757c91e8be39776"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": true,
+      "site": "scripts/update_unit_drift_drill.sh:236:35",
+      "source_pin": null,
+      "statuses": []
+    },
+    {
+      "asked": false,
+      "cluster": null,
+      "evidence": [
+        {
+          "kind": "review_decisions",
+          "question_id": null,
+          "record": 10,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/review-v2.ndjson",
+          "status": null
+        },
+        {
+          "kind": "review_decisions",
+          "question_id": null,
+          "record": 10,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/review.ndjson",
+          "status": null
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "0d22d2b135243d0c3d21c7a247776783"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": true,
+      "site": "scripts/verify-release.sh:60:10",
+      "source_pin": null,
+      "statuses": []
+    },
+    {
+      "asked": false,
+      "cluster": null,
+      "evidence": [
+        {
+          "kind": "review_decisions",
+          "question_id": null,
+          "record": 4,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-20r2-slice/review.ndjson",
+          "status": null
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "f0bc2b31d10f6904a12c27c85822b780"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": true,
+      "site": "scripts/fungi:101:40",
+      "source_pin": "d4f01ba6202d50909d1977810d322259482e0b82",
+      "statuses": []
+    },
+    {
+      "asked": false,
+      "cluster": null,
+      "evidence": [
+        {
+          "kind": "review_decisions",
+          "question_id": null,
+          "record": 11,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-20r2-slice/review.ndjson",
+          "status": null
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "06b7f2a0599a7f3a1ce27bcc0db3cc0a"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": true,
+      "site": "scripts/fungi:42:1",
+      "source_pin": "d4f01ba6202d50909d1977810d322259482e0b82",
+      "statuses": []
+    },
+    {
+      "asked": false,
+      "cluster": null,
+      "evidence": [
+        {
+          "kind": "review_decisions",
+          "question_id": null,
+          "record": 12,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-20r2-slice/review.ndjson",
+          "status": null
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "c99ceafbe07db2bc3f04fa8497cdff74"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": true,
+      "site": "scripts/fungi:77:51",
+      "source_pin": "d4f01ba6202d50909d1977810d322259482e0b82",
+      "statuses": []
+    },
+    {
+      "asked": false,
+      "cluster": null,
+      "evidence": [
+        {
+          "kind": "review_decisions",
+          "question_id": null,
+          "record": 5,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-20r2-slice/review.ndjson",
+          "status": null
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "05cb2a3d98e989f2bab789025fcf92ab"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": true,
+      "site": "scripts/fungi:84:99",
+      "source_pin": "d4f01ba6202d50909d1977810d322259482e0b82",
+      "statuses": []
+    },
+    {
+      "asked": false,
+      "cluster": null,
+      "evidence": [
+        {
+          "kind": "review_decisions",
+          "question_id": null,
+          "record": 6,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-20r2-slice/review.ndjson",
+          "status": null
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "db44731171ce032e5ae0a391861690df"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": true,
+      "site": "scripts/fungi:85:87",
+      "source_pin": "d4f01ba6202d50909d1977810d322259482e0b82",
+      "statuses": []
+    },
+    {
+      "asked": false,
+      "cluster": null,
+      "evidence": [
+        {
+          "kind": "review_decisions",
+          "question_id": null,
+          "record": 1,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-20r2-slice/review.ndjson",
+          "status": null
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "1854d02844f05013d064b80f6fc95cce"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": true,
+      "site": "scripts/node-bootstrap.sh:1083:60",
+      "source_pin": "d4f01ba6202d50909d1977810d322259482e0b82",
+      "statuses": []
+    },
+    {
+      "asked": false,
+      "cluster": null,
+      "evidence": [
+        {
+          "kind": "review_decisions",
+          "question_id": null,
+          "record": 2,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-20r2-slice/review.ndjson",
+          "status": null
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "70608d86458989187658b7e5dd0441e7"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": true,
+      "site": "scripts/node-bootstrap.sh:1084:60",
+      "source_pin": "d4f01ba6202d50909d1977810d322259482e0b82",
+      "statuses": []
+    },
+    {
+      "asked": false,
+      "cluster": null,
+      "evidence": [
+        {
+          "kind": "review_decisions",
+          "question_id": null,
+          "record": 7,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-20r2-slice/review.ndjson",
+          "status": null
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "0b7131afd0c941baac4b59d27a1ed51c"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": true,
+      "site": "scripts/update_unit_drift_drill.sh:120:15",
+      "source_pin": "d4f01ba6202d50909d1977810d322259482e0b82",
+      "statuses": []
+    },
+    {
+      "asked": false,
+      "cluster": null,
+      "evidence": [
+        {
+          "kind": "review_decisions",
+          "question_id": null,
+          "record": 8,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-20r2-slice/review.ndjson",
+          "status": null
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "31fb6661ca6f4d153c841d90008a2dcb"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": true,
+      "site": "scripts/update_unit_drift_drill.sh:120:60",
+      "source_pin": "d4f01ba6202d50909d1977810d322259482e0b82",
+      "statuses": []
+    },
+    {
+      "asked": false,
+      "cluster": null,
+      "evidence": [
+        {
+          "kind": "review_decisions",
+          "question_id": null,
+          "record": 13,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-20r2-slice/review.ndjson",
+          "status": null
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "0e6b0e557ee8e3e08bd3f629f2d84084"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": true,
+      "site": "scripts/update_unit_drift_drill.sh:120:86",
+      "source_pin": "d4f01ba6202d50909d1977810d322259482e0b82",
+      "statuses": []
+    },
+    {
+      "asked": false,
+      "cluster": null,
+      "evidence": [
+        {
+          "kind": "review_decisions",
+          "question_id": null,
+          "record": 0,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-20r2-slice/review.ndjson",
+          "status": null
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "4396c139b7f96c0a43c4c8b848dc1531"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": true,
+      "site": "scripts/update_unit_drift_drill.sh:184:3",
+      "source_pin": "d4f01ba6202d50909d1977810d322259482e0b82",
+      "statuses": []
+    },
+    {
+      "asked": false,
+      "cluster": null,
+      "evidence": [
+        {
+          "kind": "review_decisions",
+          "question_id": null,
+          "record": 9,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-20r2-slice/review.ndjson",
+          "status": null
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "340ac4c5878342828e987acf00cfec65"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": true,
+      "site": "scripts/update_unit_drift_drill.sh:184:45",
+      "source_pin": "d4f01ba6202d50909d1977810d322259482e0b82",
+      "statuses": []
+    },
+    {
+      "asked": false,
+      "cluster": null,
+      "evidence": [
+        {
+          "kind": "review_decisions",
+          "question_id": null,
+          "record": 14,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-20r2-slice/review.ndjson",
+          "status": null
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "019ce3e0b9d15a332bdcd6cccc537748"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": true,
+      "site": "scripts/update_unit_drift_drill.sh:184:71",
+      "source_pin": "d4f01ba6202d50909d1977810d322259482e0b82",
+      "statuses": []
+    },
+    {
+      "asked": false,
+      "cluster": null,
+      "evidence": [
+        {
+          "kind": "review_decisions",
+          "question_id": null,
+          "record": 3,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-20r2-slice/review.ndjson",
+          "status": null
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "423008bfee86e0459dd9a2f8085ff89d"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": true,
+      "site": "scripts/update_unit_drift_drill.sh:236:35",
+      "source_pin": "d4f01ba6202d50909d1977810d322259482e0b82",
+      "statuses": []
+    },
+    {
+      "asked": false,
+      "cluster": null,
+      "evidence": [
+        {
+          "kind": "review_decisions",
+          "question_id": null,
+          "record": 10,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-20r2-slice/review.ndjson",
+          "status": null
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "42e4541996b1350d941a7cabbd386d79"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": true,
+      "site": "scripts/verify-release.sh:60:10",
+      "source_pin": "d4f01ba6202d50909d1977810d322259482e0b82",
+      "statuses": []
+    },
+    {
+      "asked": false,
+      "cluster": null,
+      "evidence": [
+        {
+          "kind": "shortlist",
+          "question_id": "path_embedded_cr",
+          "record": 0,
+          "source": "properties/calibration/2026-10-15-autonomous-malcontent-git-cr-20r2/shortlist.json",
+          "status": "adopted-component-contract"
+        }
+      ],
+      "question_ids": [
+        "path_embedded_cr"
+      ],
+      "regex_ids": [],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": true,
+      "site": "rules/impact/exploit/cve-2025-48384.yara:22:path_embedded_cr",
+      "source_pin": "ea3e83e24676a1678a9522141da29b636c9451ab",
+      "statuses": [
+        "adopted-component-contract"
+      ]
+    },
+    {
+      "asked": false,
+      "cluster": null,
+      "evidence": [
+        {
+          "kind": "shortlist",
+          "question_id": "url_embedded_cr",
+          "record": 1,
+          "source": "properties/calibration/2026-10-15-autonomous-malcontent-git-cr-20r2/shortlist.json",
+          "status": "deferred-sibling"
+        }
+      ],
+      "question_ids": [
+        "url_embedded_cr"
+      ],
+      "regex_ids": [],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": true,
+      "site": "rules/impact/exploit/cve-2025-48384.yara:23:url_embedded_cr",
+      "source_pin": "ea3e83e24676a1678a9522141da29b636c9451ab",
+      "statuses": [
+        "deferred-sibling"
+      ]
+    },
+    {
+      "asked": false,
+      "cluster": null,
+      "evidence": [
+        {
+          "kind": "shortlist",
+          "question_id": "path_eof_cr",
+          "record": 2,
+          "source": "properties/calibration/2026-10-15-autonomous-malcontent-git-cr-20r2/shortlist.json",
+          "status": "unresolved-solver-route"
+        }
+      ],
+      "question_ids": [
+        "path_eof_cr"
+      ],
+      "regex_ids": [],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": true,
+      "site": "rules/impact/exploit/cve-2025-48384.yara:24:path_eof_cr",
+      "source_pin": "ea3e83e24676a1678a9522141da29b636c9451ab",
+      "statuses": [
+        "unresolved-solver-route"
+      ]
+    },
+    {
+      "asked": false,
+      "cluster": null,
+      "evidence": [
+        {
+          "kind": "shortlist",
+          "question_id": "url_eof_cr",
+          "record": 3,
+          "source": "properties/calibration/2026-10-15-autonomous-malcontent-git-cr-20r2/shortlist.json",
+          "status": "unresolved-sibling"
+        }
+      ],
+      "question_ids": [
+        "url_eof_cr"
+      ],
+      "regex_ids": [],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": true,
+      "site": "rules/impact/exploit/cve-2025-48384.yara:25:url_eof_cr",
+      "source_pin": "ea3e83e24676a1678a9522141da29b636c9451ab",
+      "statuses": [
+        "unresolved-sibling"
+      ]
+    },
+    {
+      "asked": false,
+      "cluster": null,
+      "evidence": [
+        {
+          "kind": "shortlist",
+          "question_id": "path_trailing_cr",
+          "record": 4,
+          "source": "properties/calibration/2026-10-15-autonomous-malcontent-git-cr-20r2/shortlist.json",
+          "status": "behavior-only-composition"
+        }
+      ],
+      "question_ids": [
+        "path_trailing_cr"
+      ],
+      "regex_ids": [],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": true,
+      "site": "rules/impact/exploit/cve-2025-48384.yara:33:path_trailing_cr",
+      "source_pin": "ea3e83e24676a1678a9522141da29b636c9451ab",
+      "statuses": [
+        "behavior-only-composition"
+      ]
+    },
+    {
+      "asked": false,
+      "cluster": null,
+      "evidence": [
+        {
+          "kind": "shortlist",
+          "question_id": "url_trailing_cr",
+          "record": 5,
+          "source": "properties/calibration/2026-10-15-autonomous-malcontent-git-cr-20r2/shortlist.json",
+          "status": "behavior-only-sibling"
+        }
+      ],
+      "question_ids": [
+        "url_trailing_cr"
+      ],
+      "regex_ids": [],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": true,
+      "site": "rules/impact/exploit/cve-2025-48384.yara:34:url_trailing_cr",
+      "source_pin": "ea3e83e24676a1678a9522141da29b636c9451ab",
+      "statuses": [
+        "behavior-only-sibling"
+      ]
+    },
+    {
+      "asked": false,
+      "cluster": null,
+      "evidence": [
+        {
+          "kind": "shortlist",
+          "question_id": "bare_lf",
+          "record": 6,
+          "source": "properties/calibration/2026-10-15-autonomous-malcontent-git-cr-20r2/shortlist.json",
+          "status": "behavior-only-composition-guard"
+        }
+      ],
+      "question_ids": [
+        "bare_lf"
+      ],
+      "regex_ids": [],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": true,
+      "site": "rules/impact/exploit/cve-2025-48384.yara:35:bare_lf",
+      "source_pin": "ea3e83e24676a1678a9522141da29b636c9451ab",
+      "statuses": [
+        "behavior-only-composition-guard"
+      ]
+    },
+    {
+      "asked": true,
+      "cluster": "Agenticstiger/forge-cli",
+      "evidence": [
+        {
+          "kind": "attempts",
+          "question_id": "FC-forge-cli-sensitive-env-key-covered",
+          "record": 4,
+          "source": "properties/calibration/2026-10-13-autonomous-forge-cli-integration/attempts.json",
+          "status": "unsat"
+        },
+        {
+          "kind": "attempts",
+          "question_id": "FC-forge-cli-sensitive-env-helper-redacts",
+          "record": 5,
+          "source": "properties/calibration/2026-10-13-autonomous-forge-cli-integration/attempts.json",
+          "status": "unsat"
+        },
+        {
+          "kind": "attempt_checkpoint",
+          "question_id": "FC-forge-cli-sensitive-env-key-covered",
+          "record": 4,
+          "source": "properties/calibration/2026-10-13-autonomous-forge-cli-integration/checkpoint.json",
+          "status": "unsat"
+        },
+        {
+          "kind": "attempt_checkpoint",
+          "question_id": "FC-forge-cli-sensitive-env-helper-redacts",
+          "record": 5,
+          "source": "properties/calibration/2026-10-13-autonomous-forge-cli-integration/checkpoint.json",
+          "status": "unsat"
+        },
+        {
+          "kind": "contract_artifact",
+          "question_id": "FC-forge-cli-sensitive-env-key-covered",
+          "record": 4,
+          "source": "properties/calibration/2026-10-13-autonomous-forge-cli-integration/contracts.json",
+          "status": null
+        },
+        {
+          "kind": "contract_artifact",
+          "question_id": "FC-forge-cli-sensitive-env-helper-redacts",
+          "record": 5,
+          "source": "properties/calibration/2026-10-13-autonomous-forge-cli-integration/contracts.json",
+          "status": null
+        },
+        {
+          "kind": "frozen_roster",
+          "question_id": "FC-forge-cli-sensitive-env-helper-redacts",
+          "record": 0,
+          "source": "properties/calibration/2026-10-13-autonomous-forge-cli-integration/roster.json",
+          "status": null
+        },
+        {
+          "kind": "frozen_roster",
+          "question_id": "FC-forge-cli-sensitive-env-key-covered",
+          "record": 1,
+          "source": "properties/calibration/2026-10-13-autonomous-forge-cli-integration/roster.json",
+          "status": null
+        }
+      ],
+      "question_ids": [
+        "FC-forge-cli-sensitive-env-helper-redacts",
+        "FC-forge-cli-sensitive-env-key-covered"
+      ],
+      "regex_ids": [],
+      "repo_id": "Agenticstiger/forge-cli",
+      "repository_url": "https://github.com/Agenticstiger/forge-cli",
+      "reserved": true,
+      "site": "fluid_build/build_runners/base.py:54:SENSITIVE_ENV_KEY_RE",
+      "source_pin": "efcf8e4c0087def553a737dc1c4eebda5d8a90cd",
+      "statuses": [
+        "unsat"
+      ]
+    },
+    {
+      "asked": true,
+      "cluster": "Agenticstiger/forge-cli",
+      "evidence": [
+        {
+          "kind": "attempts",
+          "question_id": "FC-forge-cli-llm-userinfo-no-at",
+          "record": 2,
+          "source": "properties/calibration/2026-10-13-autonomous-forge-cli-integration/attempts.json",
+          "status": "unsat"
+        },
+        {
+          "kind": "attempt_checkpoint",
+          "question_id": "FC-forge-cli-llm-userinfo-no-at",
+          "record": 2,
+          "source": "properties/calibration/2026-10-13-autonomous-forge-cli-integration/checkpoint.json",
+          "status": "unsat"
+        },
+        {
+          "kind": "contract_artifact",
+          "question_id": "FC-forge-cli-llm-userinfo-no-at",
+          "record": 2,
+          "source": "properties/calibration/2026-10-13-autonomous-forge-cli-integration/contracts.json",
+          "status": null
+        },
+        {
+          "kind": "frozen_roster",
+          "question_id": "FC-forge-cli-llm-userinfo-no-at",
+          "record": 2,
+          "source": "properties/calibration/2026-10-13-autonomous-forge-cli-integration/roster.json",
+          "status": null
+        }
+      ],
+      "question_ids": [
+        "FC-forge-cli-llm-userinfo-no-at"
+      ],
+      "regex_ids": [],
+      "repo_id": "Agenticstiger/forge-cli",
+      "repository_url": "https://github.com/Agenticstiger/forge-cli",
+      "reserved": true,
+      "site": "fluid_build/llm/providers.py:287:LlmConfig.redacted_endpoint",
+      "source_pin": "efcf8e4c0087def553a737dc1c4eebda5d8a90cd",
+      "statuses": [
+        "unsat"
+      ]
+    },
+    {
+      "asked": true,
+      "cluster": "Agenticstiger/forge-cli",
+      "evidence": [
+        {
+          "kind": "attempts",
+          "question_id": "FC-forge-cli-url-password-no-space",
+          "record": 0,
+          "source": "properties/calibration/2026-10-13-autonomous-forge-cli-integration/attempts.json",
+          "status": "unsat"
+        },
+        {
+          "kind": "attempt_checkpoint",
+          "question_id": "FC-forge-cli-url-password-no-space",
+          "record": 0,
+          "source": "properties/calibration/2026-10-13-autonomous-forge-cli-integration/checkpoint.json",
+          "status": "unsat"
+        },
+        {
+          "kind": "contract_artifact",
+          "question_id": "FC-forge-cli-url-password-no-space",
+          "record": 0,
+          "source": "properties/calibration/2026-10-13-autonomous-forge-cli-integration/contracts.json",
+          "status": null
+        },
+        {
+          "kind": "frozen_roster",
+          "question_id": "FC-forge-cli-url-password-no-space",
+          "record": 3,
+          "source": "properties/calibration/2026-10-13-autonomous-forge-cli-integration/roster.json",
+          "status": null
+        }
+      ],
+      "question_ids": [
+        "FC-forge-cli-url-password-no-space"
+      ],
+      "regex_ids": [],
+      "repo_id": "Agenticstiger/forge-cli",
+      "repository_url": "https://github.com/Agenticstiger/forge-cli",
+      "reserved": true,
+      "site": "fluid_build/observability/secret_redactor.py:151:_URL_USERINFO_RE",
+      "source_pin": "efcf8e4c0087def553a737dc1c4eebda5d8a90cd",
+      "statuses": [
+        "unsat"
+      ]
+    },
+    {
+      "asked": true,
+      "cluster": "Agenticstiger/forge-cli",
+      "evidence": [
+        {
+          "kind": "attempts",
+          "question_id": "FC-forge-cli-jaas-escaped-quote-covered",
+          "record": 3,
+          "source": "properties/calibration/2026-10-13-autonomous-forge-cli-integration/attempts.json",
+          "status": "unsat"
+        },
+        {
+          "kind": "attempt_checkpoint",
+          "question_id": "FC-forge-cli-jaas-escaped-quote-covered",
+          "record": 3,
+          "source": "properties/calibration/2026-10-13-autonomous-forge-cli-integration/checkpoint.json",
+          "status": "unsat"
+        },
+        {
+          "kind": "contract_artifact",
+          "question_id": "FC-forge-cli-jaas-escaped-quote-covered",
+          "record": 3,
+          "source": "properties/calibration/2026-10-13-autonomous-forge-cli-integration/contracts.json",
+          "status": null
+        },
+        {
+          "kind": "frozen_roster",
+          "question_id": "FC-forge-cli-jaas-escaped-quote-covered",
+          "record": 4,
+          "source": "properties/calibration/2026-10-13-autonomous-forge-cli-integration/roster.json",
+          "status": null
+        }
+      ],
+      "question_ids": [
+        "FC-forge-cli-jaas-escaped-quote-covered"
+      ],
+      "regex_ids": [],
+      "repo_id": "Agenticstiger/forge-cli",
+      "repository_url": "https://github.com/Agenticstiger/forge-cli",
+      "reserved": true,
+      "site": "fluid_build/observability/secret_redactor.py:218:_JAAS_CONFIG_RE",
+      "source_pin": "efcf8e4c0087def553a737dc1c4eebda5d8a90cd",
+      "statuses": [
+        "unsat"
+      ]
+    },
+    {
+      "asked": true,
+      "cluster": "Agenticstiger/forge-cli",
+      "evidence": [
+        {
+          "kind": "attempts",
+          "question_id": "FC-forge-cli-dmm-value-no-semicolon",
+          "record": 1,
+          "source": "properties/calibration/2026-10-13-autonomous-forge-cli-integration/attempts.json",
+          "status": "unsat"
+        },
+        {
+          "kind": "attempt_checkpoint",
+          "question_id": "FC-forge-cli-dmm-value-no-semicolon",
+          "record": 1,
+          "source": "properties/calibration/2026-10-13-autonomous-forge-cli-integration/checkpoint.json",
+          "status": "unsat"
+        },
+        {
+          "kind": "contract_artifact",
+          "question_id": "FC-forge-cli-dmm-value-no-semicolon",
+          "record": 1,
+          "source": "properties/calibration/2026-10-13-autonomous-forge-cli-integration/contracts.json",
+          "status": null
+        },
+        {
+          "kind": "frozen_roster",
+          "question_id": "FC-forge-cli-dmm-value-no-semicolon",
+          "record": 5,
+          "source": "properties/calibration/2026-10-13-autonomous-forge-cli-integration/roster.json",
+          "status": null
+        }
+      ],
+      "question_ids": [
+        "FC-forge-cli-dmm-value-no-semicolon"
+      ],
+      "regex_ids": [],
+      "repo_id": "Agenticstiger/forge-cli",
+      "repository_url": "https://github.com/Agenticstiger/forge-cli",
+      "reserved": true,
+      "site": "fluid_build/providers/datamesh_manager/datamesh_manager.py:88:_SECRET_ERROR_PATTERNS",
+      "source_pin": "efcf8e4c0087def553a737dc1c4eebda5d8a90cd",
+      "statuses": [
+        "unsat"
+      ]
+    },
+    {
+      "asked": true,
+      "cluster": "AutoAR",
+      "evidence": [
+        {
+          "kind": "conversion_ndjson",
+          "question_id": "AA-autoar-html-text-escape-codepoint-image",
+          "record": 0,
+          "source": "properties/calibration/2026-10-15-autonomous-autoar-html-text-escape-20r2/p6-wave-r2/conversion.ndjson",
+          "status": "unsat"
+        }
+      ],
+      "question_ids": [
+        "AA-autoar-html-text-escape-codepoint-image"
+      ],
+      "regex_ids": [
+        "8d9517803ad99cc46d5e6e08df504cad"
+      ],
+      "repo_id": "h0tak88r/AutoAR",
+      "repository_url": "https://github.com/h0tak88r/AutoAR",
+      "reserved": false,
+      "site": "internal/api/ui/pages/html-escape.js:2:esc",
+      "source_pin": "01cd447ad3b1acfed7e0680596c2c74458a4cf06",
+      "statuses": [
+        "unsat"
+      ]
+    },
+    {
+      "asked": true,
+      "cluster": "Doberman-Core",
+      "evidence": [
+        {
+          "kind": "upstream_dispositions",
+          "question_id": "PY-doberman-windows-root-token",
+          "record": 14,
+          "source": "docs/conversion-upstream.jsonl",
+          "status": "private_first"
+        },
+        {
+          "kind": "conversion_ndjson",
+          "question_id": "PY-doberman-windows-root-token",
+          "record": 1,
+          "source": "properties/generated/Doberman-Core_conversion.ndjson",
+          "status": "sat"
+        }
+      ],
+      "question_ids": [
+        "PY-doberman-windows-root-token"
+      ],
+      "regex_ids": [
+        "bbb1f6541ee7cce3e3634f49d3a10917"
+      ],
+      "repo_id": "fu351/Doberman-Core",
+      "repository_url": "https://github.com/fu351/Doberman-Core",
+      "reserved": false,
+      "site": "src/doberman/engine/rules/commands.py:266:_WINDOWS_ROOT_RE",
+      "source_pin": "53ae43c5298a2426c6696147fdd75e2a4aef10e2",
+      "statuses": [
+        "private_first",
+        "sat"
+      ]
+    },
+    {
+      "asked": true,
+      "cluster": "Doberman-Core",
+      "evidence": [
+        {
+          "kind": "upstream_dispositions",
+          "question_id": "PY-doberman-disk-wipe-token",
+          "record": 15,
+          "source": "docs/conversion-upstream.jsonl",
+          "status": "private_first"
+        },
+        {
+          "kind": "conversion_ndjson",
+          "question_id": "PY-doberman-disk-wipe-token",
+          "record": 0,
+          "source": "properties/generated/Doberman-Core_conversion.ndjson",
+          "status": "sat"
+        }
+      ],
+      "question_ids": [
+        "PY-doberman-disk-wipe-token"
+      ],
+      "regex_ids": [
+        "ccd1dadceabcddb5c2fac6133bc4cfe3"
+      ],
+      "repo_id": "fu351/Doberman-Core",
+      "repository_url": "https://github.com/fu351/Doberman-Core",
+      "reserved": false,
+      "site": "src/doberman/engine/rules/commands.py:434:_DISK_WIPE",
+      "source_pin": "53ae43c5298a2426c6696147fdd75e2a4aef10e2",
+      "statuses": [
+        "private_first",
+        "sat"
+      ]
+    },
+    {
+      "asked": false,
+      "cluster": "TracecatHQ/tracecat",
+      "evidence": [
+        {
+          "kind": "contract_artifact",
+          "question_id": null,
+          "record": 0,
+          "source": "properties/calibration/2026-10-14-autonomous-tracecat-origin-slug/contract.json",
+          "status": null
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [],
+      "repo_id": "TracecatHQ/tracecat",
+      "repository_url": "https://github.com/TracecatHQ/tracecat",
+      "reserved": true,
+      "site": "tracecat/registry/artifact_keys.py:46:_slugify_origin",
+      "source_pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+      "statuses": []
+    },
+    {
+      "asked": true,
+      "cluster": "aidevops",
+      "evidence": [
+        {
+          "kind": "conversion_ndjson",
+          "question_id": "AI-aidevops-brief-tid-capture",
+          "record": 0,
+          "source": "properties/generated/aidevops_conversion.ndjson",
+          "status": "unsat"
+        }
+      ],
+      "question_ids": [
+        "AI-aidevops-brief-tid-capture"
+      ],
+      "regex_ids": [
+        "63b40a9fede6a8538dd5e994a6890492"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": false,
+      "site": ".agents/hooks/brief-filename-guard.sh:105:tid",
+      "source_pin": null,
+      "statuses": [
+        "unsat"
+      ]
+    },
+    {
+      "asked": true,
+      "cluster": "aidevops",
+      "evidence": [
+        {
+          "kind": "conversion_ndjson",
+          "question_id": "AI-aidevops-brief-tid-no-semicolon",
+          "record": 1,
+          "source": "properties/generated/aidevops_conversion.ndjson",
+          "status": "unsat"
+        }
+      ],
+      "question_ids": [
+        "AI-aidevops-brief-tid-no-semicolon"
+      ],
+      "regex_ids": [
+        "078839d196eaee7b60b71123969f2bad"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": false,
+      "site": ".agents/hooks/brief-filename-guard.sh:84:brief-filename",
+      "source_pin": null,
+      "statuses": [
+        "unsat"
+      ]
+    },
+    {
+      "asked": true,
+      "cluster": "aidevops",
+      "evidence": [
+        {
+          "kind": "conversion_ndjson",
+          "question_id": "AI-aidevops-cred-ident-no-semicolon",
+          "record": 2,
+          "source": "properties/generated/aidevops_conversion.ndjson",
+          "status": "unsat"
+        }
+      ],
+      "question_ids": [
+        "AI-aidevops-cred-ident-no-semicolon"
+      ],
+      "regex_ids": [
+        "c9a7dd262f0359e90643594f9450fec8"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": false,
+      "site": ".agents/hooks/credential-emission-pre-push.sh:103:remote_url",
+      "source_pin": null,
+      "statuses": [
+        "unsat"
+      ]
+    },
+    {
+      "asked": true,
+      "cluster": "aidevops",
+      "evidence": [
+        {
+          "kind": "conversion_ndjson",
+          "question_id": "AI-aidevops-scope-heading-no-semicolon",
+          "record": 4,
+          "source": "properties/generated/aidevops_conversion.ndjson",
+          "status": "unsat"
+        }
+      ],
+      "question_ids": [
+        "AI-aidevops-scope-heading-no-semicolon"
+      ],
+      "regex_ids": [
+        "37e3adc33b74861a0749daa1af6a95df"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": false,
+      "site": ".agents/hooks/scope-guard-pre-push.sh:137:files-scope",
+      "source_pin": null,
+      "statuses": [
+        "unsat"
+      ]
+    },
+    {
+      "asked": true,
+      "cluster": "aidevops",
+      "evidence": [
+        {
+          "kind": "conversion_ndjson",
+          "question_id": "AI-aidevops-gh-issue-digit-capture",
+          "record": 3,
+          "source": "properties/generated/aidevops_conversion.ndjson",
+          "status": "unsat"
+        }
+      ],
+      "question_ids": [
+        "AI-aidevops-gh-issue-digit-capture"
+      ],
+      "regex_ids": [
+        "f2b2a83c63ae5b08964e337af1405687"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": false,
+      "site": ".agents/hooks/task-id-collision-guard.sh:378:issue",
+      "source_pin": null,
+      "statuses": [
+        "unsat"
+      ]
+    },
+    {
+      "asked": true,
+      "cluster": "chainguard-dev/malcontent",
+      "evidence": [
+        {
+          "kind": "contract_artifact",
+          "question_id": null,
+          "record": 0,
+          "source": "properties/calibration/2026-10-15-autonomous-malcontent-git-cr-20r2/contract.json",
+          "status": null
+        },
+        {
+          "kind": "contract_artifact",
+          "question_id": "MC-malcontent-cve48384-embedded-cr-excludes-lf",
+          "record": 0,
+          "source": "properties/calibration/2026-10-15-autonomous-malcontent-git-cr-20r2/contracts.json",
+          "status": null
+        },
+        {
+          "kind": "attempts",
+          "question_id": "MC-malcontent-cve48384-embedded-cr-excludes-lf",
+          "record": 0,
+          "source": "properties/calibration/2026-10-15-autonomous-malcontent-git-cr-20r2/p6-wave/attempts.json",
+          "status": "unsat"
+        },
+        {
+          "kind": "attempt_checkpoint",
+          "question_id": "MC-malcontent-cve48384-embedded-cr-excludes-lf",
+          "record": 0,
+          "source": "properties/calibration/2026-10-15-autonomous-malcontent-git-cr-20r2/p6-wave/checkpoint.json",
+          "status": "unsat"
+        },
+        {
+          "kind": "frozen_roster",
+          "question_id": "MC-malcontent-cve48384-embedded-cr-excludes-lf",
+          "record": 0,
+          "source": "properties/calibration/2026-10-15-autonomous-malcontent-git-cr-20r2/p6-wave/roster.json",
+          "status": null
+        },
+        {
+          "kind": "runner_state",
+          "question_id": "MC-malcontent-cve48384-embedded-cr-excludes-lf",
+          "record": 0,
+          "source": "properties/calibration/2026-10-15-autonomous-malcontent-git-cr-20r2/p6-wave/state.json",
+          "status": "unsat"
+        },
+        {
+          "kind": "frozen_roster",
+          "question_id": "MC-malcontent-cve48384-embedded-cr-excludes-lf",
+          "record": 0,
+          "source": "properties/calibration/2026-10-15-autonomous-malcontent-git-cr-20r2/roster.json",
+          "status": null
+        }
+      ],
+      "question_ids": [
+        "MC-malcontent-cve48384-embedded-cr-excludes-lf"
+      ],
+      "regex_ids": [],
+      "repo_id": "chainguard-dev/malcontent",
+      "repository_url": "https://github.com/chainguard-dev/malcontent",
+      "reserved": true,
+      "site": "rules/impact/exploit/cve-2025-48384.yara:22:path_embedded_cr",
+      "source_pin": "ea3e83e24676a1678a9522141da29b636c9451ab",
+      "statuses": [
+        "unsat"
+      ]
+    },
+    {
+      "asked": true,
+      "cluster": "claude-code-plugins",
+      "evidence": [
+        {
+          "kind": "conversion_ndjson",
+          "question_id": "AI-claude-plugins-git-clean-e-bundle-no-semicolon",
+          "record": 1,
+          "source": "properties/generated/claude-code-plugins_conversion.ndjson",
+          "status": "unsat"
+        }
+      ],
+      "question_ids": [
+        "AI-claude-plugins-git-clean-e-bundle-no-semicolon"
+      ],
+      "regex_ids": [
+        "6ac7a36f8f65faa2b840b23d5a8e818a"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": false,
+      "site": "plugins/guardrails/hooks/block-dangerous-git.sh:1055:clean-e",
+      "source_pin": null,
+      "statuses": [
+        "unsat"
+      ]
+    },
+    {
+      "asked": true,
+      "cluster": "claude-code-plugins",
+      "evidence": [
+        {
+          "kind": "conversion_ndjson",
+          "question_id": "AI-claude-plugins-cli-flag-no-semicolon",
+          "record": 0,
+          "source": "properties/generated/claude-code-plugins_conversion.ndjson",
+          "status": "unsat"
+        }
+      ],
+      "question_ids": [
+        "AI-claude-plugins-cli-flag-no-semicolon"
+      ],
+      "regex_ids": [
+        "a6b089bd04a6e790591b41f2272c1b3e"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": false,
+      "site": "plugins/guardrails/hooks/cli-flag-verify.sh:247:flag",
+      "source_pin": null,
+      "statuses": [
+        "unsat"
+      ]
+    },
+    {
+      "asked": true,
+      "cluster": "claude-code-plugins",
+      "evidence": [
+        {
+          "kind": "conversion_ndjson",
+          "question_id": "AI-claude-plugins-skill-ref-no-semicolon",
+          "record": 2,
+          "source": "properties/generated/claude-code-plugins_conversion.ndjson",
+          "status": "unsat"
+        }
+      ],
+      "question_ids": [
+        "AI-claude-plugins-skill-ref-no-semicolon"
+      ],
+      "regex_ids": [
+        "e86d9906f1c12748d58167c48d75223f"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": false,
+      "site": "plugins/guardrails/hooks/skill-reference-verify.sh:290:skill-ref",
+      "source_pin": null,
+      "statuses": [
+        "unsat"
+      ]
+    },
+    {
+      "asked": true,
+      "cluster": "dogfood_shell",
+      "evidence": [
+        {
+          "kind": "conversion_ndjson",
+          "question_id": "DF-dogfood-shell-normalize-fixpoint",
+          "record": 0,
+          "source": "properties/generated/dogfood_shell_conversion.ndjson",
+          "status": "unsat"
+        },
+        {
+          "kind": "conversion_ndjson",
+          "question_id": "DF-dogfood-shell-normalize-idempotent",
+          "record": 1,
+          "source": "properties/generated/dogfood_shell_conversion.ndjson",
+          "status": "unsat"
+        }
+      ],
+      "question_ids": [
+        "DF-dogfood-shell-normalize-fixpoint",
+        "DF-dogfood-shell-normalize-idempotent"
+      ],
+      "regex_ids": [
+        "b2d6dcb6303d6caa6dcf8edc9023850f",
+        "b9d0a0a5d19f385fdf03e45b261b6e59"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": false,
+      "site": "openwrt-feed/luci-app-fwlive/root/usr/libexec/rpcd/fwlive:97:normalize_log_prefix",
+      "source_pin": null,
+      "statuses": [
+        "unsat"
+      ]
+    },
+    {
+      "asked": true,
+      "cluster": "forge-cli",
+      "evidence": [
+        {
+          "kind": "conversion_ndjson",
+          "question_id": "FC-forge-cli-sensitive-env-helper-redacts",
+          "record": 3,
+          "source": "properties/calibration/2026-10-13-autonomous-forge-cli-integration/conversion.ndjson",
+          "status": "unsat"
+        },
+        {
+          "kind": "conversion_ndjson",
+          "question_id": "FC-forge-cli-sensitive-env-key-covered",
+          "record": 4,
+          "source": "properties/calibration/2026-10-13-autonomous-forge-cli-integration/conversion.ndjson",
+          "status": "unsat"
+        },
+        {
+          "kind": "conversion_ndjson",
+          "question_id": "FC-forge-cli-sensitive-env-helper-redacts",
+          "record": 3,
+          "source": "properties/generated/forge-cli_conversion.ndjson",
+          "status": "unsat"
+        },
+        {
+          "kind": "conversion_ndjson",
+          "question_id": "FC-forge-cli-sensitive-env-key-covered",
+          "record": 4,
+          "source": "properties/generated/forge-cli_conversion.ndjson",
+          "status": "unsat"
+        }
+      ],
+      "question_ids": [
+        "FC-forge-cli-sensitive-env-helper-redacts",
+        "FC-forge-cli-sensitive-env-key-covered"
+      ],
+      "regex_ids": [
+        "1a6326fb97b3875b5eeabd1a4f1e4405",
+        "f9e6a995e345f905038b778d06400590"
+      ],
+      "repo_id": "Agenticstiger/forge-cli",
+      "repository_url": "https://github.com/Agenticstiger/forge-cli",
+      "reserved": false,
+      "site": "fluid_build/build_runners/base.py:54:SENSITIVE_ENV_KEY_RE",
+      "source_pin": "efcf8e4c0087def553a737dc1c4eebda5d8a90cd",
+      "statuses": [
+        "unsat"
+      ]
+    },
+    {
+      "asked": true,
+      "cluster": "forge-cli",
+      "evidence": [
+        {
+          "kind": "conversion_ndjson",
+          "question_id": "FC-forge-cli-llm-userinfo-no-at",
+          "record": 2,
+          "source": "properties/calibration/2026-10-13-autonomous-forge-cli-integration/conversion.ndjson",
+          "status": "unsat"
+        },
+        {
+          "kind": "conversion_ndjson",
+          "question_id": "FC-forge-cli-llm-userinfo-no-at",
+          "record": 2,
+          "source": "properties/generated/forge-cli_conversion.ndjson",
+          "status": "unsat"
+        }
+      ],
+      "question_ids": [
+        "FC-forge-cli-llm-userinfo-no-at"
+      ],
+      "regex_ids": [
+        "9375361af396a44cb46966e00b646a56"
+      ],
+      "repo_id": "Agenticstiger/forge-cli",
+      "repository_url": "https://github.com/Agenticstiger/forge-cli",
+      "reserved": false,
+      "site": "fluid_build/llm/providers.py:287:LlmConfig.redacted_endpoint",
+      "source_pin": "efcf8e4c0087def553a737dc1c4eebda5d8a90cd",
+      "statuses": [
+        "unsat"
+      ]
+    },
+    {
+      "asked": true,
+      "cluster": "forge-cli",
+      "evidence": [
+        {
+          "kind": "conversion_ndjson",
+          "question_id": "FC-forge-cli-url-password-no-space",
+          "record": 5,
+          "source": "properties/calibration/2026-10-13-autonomous-forge-cli-integration/conversion.ndjson",
+          "status": "unsat"
+        },
+        {
+          "kind": "conversion_ndjson",
+          "question_id": "FC-forge-cli-url-password-no-space",
+          "record": 5,
+          "source": "properties/generated/forge-cli_conversion.ndjson",
+          "status": "unsat"
+        }
+      ],
+      "question_ids": [
+        "FC-forge-cli-url-password-no-space"
+      ],
+      "regex_ids": [
+        "8cd0a870750758bb1816541815689b7d"
+      ],
+      "repo_id": "Agenticstiger/forge-cli",
+      "repository_url": "https://github.com/Agenticstiger/forge-cli",
+      "reserved": false,
+      "site": "fluid_build/observability/secret_redactor.py:151:_URL_USERINFO_RE",
+      "source_pin": "efcf8e4c0087def553a737dc1c4eebda5d8a90cd",
+      "statuses": [
+        "unsat"
+      ]
+    },
+    {
+      "asked": true,
+      "cluster": "forge-cli",
+      "evidence": [
+        {
+          "kind": "conversion_ndjson",
+          "question_id": "FC-forge-cli-jaas-escaped-quote-covered",
+          "record": 1,
+          "source": "properties/calibration/2026-10-13-autonomous-forge-cli-integration/conversion.ndjson",
+          "status": "unsat"
+        },
+        {
+          "kind": "conversion_ndjson",
+          "question_id": "FC-forge-cli-jaas-escaped-quote-covered",
+          "record": 1,
+          "source": "properties/generated/forge-cli_conversion.ndjson",
+          "status": "unsat"
+        }
+      ],
+      "question_ids": [
+        "FC-forge-cli-jaas-escaped-quote-covered"
+      ],
+      "regex_ids": [
+        "32b6c58278fb1b6be8382cb66e0bfd7d"
+      ],
+      "repo_id": "Agenticstiger/forge-cli",
+      "repository_url": "https://github.com/Agenticstiger/forge-cli",
+      "reserved": false,
+      "site": "fluid_build/observability/secret_redactor.py:218:_JAAS_CONFIG_RE",
+      "source_pin": "efcf8e4c0087def553a737dc1c4eebda5d8a90cd",
+      "statuses": [
+        "unsat"
+      ]
+    },
+    {
+      "asked": true,
+      "cluster": "forge-cli",
+      "evidence": [
+        {
+          "kind": "conversion_ndjson",
+          "question_id": "FC-forge-cli-dmm-value-no-semicolon",
+          "record": 0,
+          "source": "properties/calibration/2026-10-13-autonomous-forge-cli-integration/conversion.ndjson",
+          "status": "unsat"
+        },
+        {
+          "kind": "conversion_ndjson",
+          "question_id": "FC-forge-cli-dmm-value-no-semicolon",
+          "record": 0,
+          "source": "properties/generated/forge-cli_conversion.ndjson",
+          "status": "unsat"
+        }
+      ],
+      "question_ids": [
+        "FC-forge-cli-dmm-value-no-semicolon"
+      ],
+      "regex_ids": [
+        "326a922d740967f422949687aaaeaeb8"
+      ],
+      "repo_id": "Agenticstiger/forge-cli",
+      "repository_url": "https://github.com/Agenticstiger/forge-cli",
+      "reserved": false,
+      "site": "fluid_build/providers/datamesh_manager/datamesh_manager.py:88:_SECRET_ERROR_PATTERNS",
+      "source_pin": "efcf8e4c0087def553a737dc1c4eebda5d8a90cd",
+      "statuses": [
+        "unsat"
+      ]
+    },
+    {
+      "asked": true,
+      "cluster": "h0tak88r/AutoAR",
+      "evidence": [
+        {
+          "kind": "contract_artifact",
+          "question_id": null,
+          "record": 0,
+          "source": "properties/calibration/2026-10-15-autonomous-autoar-html-text-escape-20r2/contract.json",
+          "status": null
+        },
+        {
+          "kind": "contract_artifact",
+          "question_id": "AA-autoar-html-text-escape-codepoint-image",
+          "record": 0,
+          "source": "properties/calibration/2026-10-15-autonomous-autoar-html-text-escape-20r2/contracts.json",
+          "status": null
+        },
+        {
+          "kind": "attempts",
+          "question_id": "AA-autoar-html-text-escape-codepoint-image",
+          "record": 0,
+          "source": "properties/calibration/2026-10-15-autonomous-autoar-html-text-escape-20r2/p6-wave-r2/attempts.json",
+          "status": "unsat"
+        },
+        {
+          "kind": "attempt_checkpoint",
+          "question_id": "AA-autoar-html-text-escape-codepoint-image",
+          "record": 0,
+          "source": "properties/calibration/2026-10-15-autonomous-autoar-html-text-escape-20r2/p6-wave-r2/checkpoint.json",
+          "status": "unsat"
+        },
+        {
+          "kind": "frozen_roster",
+          "question_id": "AA-autoar-html-text-escape-codepoint-image",
+          "record": 0,
+          "source": "properties/calibration/2026-10-15-autonomous-autoar-html-text-escape-20r2/p6-wave-r2/roster.json",
+          "status": null
+        },
+        {
+          "kind": "runner_state",
+          "question_id": "AA-autoar-html-text-escape-codepoint-image",
+          "record": 0,
+          "source": "properties/calibration/2026-10-15-autonomous-autoar-html-text-escape-20r2/p6-wave-r2/state.json",
+          "status": "unsat"
+        },
+        {
+          "kind": "attempts",
+          "question_id": "AA-autoar-html-text-escape-codepoint-image",
+          "record": 0,
+          "source": "properties/calibration/2026-10-15-autonomous-autoar-html-text-escape-20r2/p6-wave/attempts.json",
+          "status": "error"
+        },
+        {
+          "kind": "attempt_checkpoint",
+          "question_id": "AA-autoar-html-text-escape-codepoint-image",
+          "record": 0,
+          "source": "properties/calibration/2026-10-15-autonomous-autoar-html-text-escape-20r2/p6-wave/checkpoint.json",
+          "status": "error"
+        },
+        {
+          "kind": "frozen_roster",
+          "question_id": "AA-autoar-html-text-escape-codepoint-image",
+          "record": 0,
+          "source": "properties/calibration/2026-10-15-autonomous-autoar-html-text-escape-20r2/p6-wave/roster.json",
+          "status": null
+        },
+        {
+          "kind": "runner_state",
+          "question_id": "AA-autoar-html-text-escape-codepoint-image",
+          "record": 0,
+          "source": "properties/calibration/2026-10-15-autonomous-autoar-html-text-escape-20r2/p6-wave/state.json",
+          "status": "error"
+        },
+        {
+          "kind": "frozen_roster",
+          "question_id": "AA-autoar-html-text-escape-codepoint-image",
+          "record": 0,
+          "source": "properties/calibration/2026-10-15-autonomous-autoar-html-text-escape-20r2/roster.json",
+          "status": null
+        }
+      ],
+      "question_ids": [
+        "AA-autoar-html-text-escape-codepoint-image"
+      ],
+      "regex_ids": [],
+      "repo_id": "h0tak88r/AutoAR",
+      "repository_url": "https://github.com/h0tak88r/AutoAR",
+      "reserved": true,
+      "site": "internal/api/ui/pages/html-escape.js:2:esc",
+      "source_pin": "01cd447ad3b1acfed7e0680596c2c74458a4cf06",
+      "statuses": [
+        "error",
+        "unsat"
+      ]
+    },
+    {
+      "asked": true,
+      "cluster": "malcontent",
+      "evidence": [
+        {
+          "kind": "conversion_ndjson",
+          "question_id": "MC-malcontent-cve48384-embedded-cr-excludes-lf",
+          "record": 0,
+          "source": "properties/calibration/2026-10-15-autonomous-malcontent-git-cr-20r2/p6-wave/conversion.ndjson",
+          "status": "unsat"
+        }
+      ],
+      "question_ids": [
+        "MC-malcontent-cve48384-embedded-cr-excludes-lf"
+      ],
+      "regex_ids": [
+        "b6bed064405be631528536efad1fa470"
+      ],
+      "repo_id": "chainguard-dev/malcontent",
+      "repository_url": "https://github.com/chainguard-dev/malcontent",
+      "reserved": false,
+      "site": "rules/impact/exploit/cve-2025-48384.yara:22:path_embedded_cr",
+      "source_pin": "ea3e83e24676a1678a9522141da29b636c9451ab",
+      "statuses": [
+        "unsat"
+      ]
+    },
+    {
+      "asked": false,
+      "cluster": "marcusquinn/aidevops",
+      "evidence": [
+        {
+          "kind": "contract_artifact",
+          "question_id": null,
+          "record": 0,
+          "source": "properties/calibration/2026-10-15-autonomous-aidevops-node-secret-boundary/contract.json",
+          "status": null
+        },
+        {
+          "kind": "contract_artifact",
+          "question_id": "AE-aidevops-secret-read-extension-coverage",
+          "record": 0,
+          "source": "properties/calibration/2026-10-15-autonomous-aidevops-node-secret-boundary/contracts.json",
+          "status": null
+        },
+        {
+          "kind": "frozen_roster",
+          "question_id": "AE-aidevops-secret-read-extension-coverage",
+          "record": 0,
+          "source": "properties/calibration/2026-10-15-autonomous-aidevops-node-secret-boundary/roster.json",
+          "status": null
+        }
+      ],
+      "question_ids": [
+        "AE-aidevops-secret-read-extension-coverage"
+      ],
+      "regex_ids": [],
+      "repo_id": "marcusquinn/aidevops",
+      "repository_url": "https://github.com/marcusquinn/aidevops",
+      "reserved": true,
+      "site": ".agents/plugins/opencode-aidevops/quality-hooks-secret-read.mjs:8:28",
+      "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "statuses": []
+    },
+    {
+      "asked": false,
+      "cluster": "mycelium",
+      "evidence": [
+        {
+          "kind": "shortlist",
+          "question_id": null,
+          "record": 4,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/shortlist.json",
+          "status": "shortlisted"
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "7535d130b86cbb737c1cc319253765a0"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": true,
+      "site": "batch/corpora/mycelium/rules/scripts/fungi:101:40",
+      "source_pin": null,
+      "statuses": [
+        "shortlisted"
+      ]
+    },
+    {
+      "asked": false,
+      "cluster": "mycelium",
+      "evidence": [
+        {
+          "kind": "shortlist",
+          "question_id": null,
+          "record": 11,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/shortlist.json",
+          "status": "shortlisted"
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "182c7edc3432798e986eb07b0f4e73a6"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": true,
+      "site": "batch/corpora/mycelium/rules/scripts/fungi:42:1",
+      "source_pin": null,
+      "statuses": [
+        "shortlisted"
+      ]
+    },
+    {
+      "asked": false,
+      "cluster": "mycelium",
+      "evidence": [
+        {
+          "kind": "shortlist",
+          "question_id": null,
+          "record": 12,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/shortlist.json",
+          "status": "shortlisted"
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "ffb8742a5ea4e9a56d636c6ad8511128"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": true,
+      "site": "batch/corpora/mycelium/rules/scripts/fungi:77:51",
+      "source_pin": null,
+      "statuses": [
+        "shortlisted"
+      ]
+    },
+    {
+      "asked": false,
+      "cluster": "mycelium",
+      "evidence": [
+        {
+          "kind": "shortlist",
+          "question_id": null,
+          "record": 5,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/shortlist.json",
+          "status": "shortlisted"
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "0717d6d2e9bbe31b9a22b0bc28b57342"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": true,
+      "site": "batch/corpora/mycelium/rules/scripts/fungi:84:99",
+      "source_pin": null,
+      "statuses": [
+        "shortlisted"
+      ]
+    },
+    {
+      "asked": false,
+      "cluster": "mycelium",
+      "evidence": [
+        {
+          "kind": "shortlist",
+          "question_id": null,
+          "record": 6,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/shortlist.json",
+          "status": "shortlisted"
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "f141465a40b05772f4f65177261c26cc"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": true,
+      "site": "batch/corpora/mycelium/rules/scripts/fungi:85:87",
+      "source_pin": null,
+      "statuses": [
+        "shortlisted"
+      ]
+    },
+    {
+      "asked": false,
+      "cluster": "mycelium",
+      "evidence": [
+        {
+          "kind": "shortlist",
+          "question_id": null,
+          "record": 1,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/shortlist.json",
+          "status": "shortlisted"
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "f2aef01c87f5ffd746de7b1e52bdb19c"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": true,
+      "site": "batch/corpora/mycelium/rules/scripts/node-bootstrap.sh:1083:60",
+      "source_pin": null,
+      "statuses": [
+        "shortlisted"
+      ]
+    },
+    {
+      "asked": false,
+      "cluster": "mycelium",
+      "evidence": [
+        {
+          "kind": "shortlist",
+          "question_id": null,
+          "record": 2,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/shortlist.json",
+          "status": "shortlisted"
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "e61fc06da665bfb8c2eaaca06b5f3d3f"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": true,
+      "site": "batch/corpora/mycelium/rules/scripts/node-bootstrap.sh:1084:60",
+      "source_pin": null,
+      "statuses": [
+        "shortlisted"
+      ]
+    },
+    {
+      "asked": false,
+      "cluster": "mycelium",
+      "evidence": [
+        {
+          "kind": "shortlist",
+          "question_id": null,
+          "record": 7,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/shortlist.json",
+          "status": "shortlisted"
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "645c26907591a263de2b28370d80b122"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": true,
+      "site": "batch/corpora/mycelium/rules/scripts/update_unit_drift_drill.sh:120:15",
+      "source_pin": null,
+      "statuses": [
+        "shortlisted"
+      ]
+    },
+    {
+      "asked": false,
+      "cluster": "mycelium",
+      "evidence": [
+        {
+          "kind": "shortlist",
+          "question_id": null,
+          "record": 8,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/shortlist.json",
+          "status": "shortlisted"
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "d6716c975ea7ad327b150381a7b37a83"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": true,
+      "site": "batch/corpora/mycelium/rules/scripts/update_unit_drift_drill.sh:120:60",
+      "source_pin": null,
+      "statuses": [
+        "shortlisted"
+      ]
+    },
+    {
+      "asked": false,
+      "cluster": "mycelium",
+      "evidence": [
+        {
+          "kind": "shortlist",
+          "question_id": null,
+          "record": 13,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/shortlist.json",
+          "status": "shortlisted"
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "d8d45304ef898304d066587397ec814e"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": true,
+      "site": "batch/corpora/mycelium/rules/scripts/update_unit_drift_drill.sh:120:86",
+      "source_pin": null,
+      "statuses": [
+        "shortlisted"
+      ]
+    },
+    {
+      "asked": false,
+      "cluster": "mycelium",
+      "evidence": [
+        {
+          "kind": "shortlist",
+          "question_id": null,
+          "record": 0,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/shortlist.json",
+          "status": "shortlisted"
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "148896941c21d4a17551f044bd40fc88"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": true,
+      "site": "batch/corpora/mycelium/rules/scripts/update_unit_drift_drill.sh:184:3",
+      "source_pin": null,
+      "statuses": [
+        "shortlisted"
+      ]
+    },
+    {
+      "asked": false,
+      "cluster": "mycelium",
+      "evidence": [
+        {
+          "kind": "shortlist",
+          "question_id": null,
+          "record": 9,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/shortlist.json",
+          "status": "shortlisted"
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "dab00b6e0a2731ef075d1547b03dc013"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": true,
+      "site": "batch/corpora/mycelium/rules/scripts/update_unit_drift_drill.sh:184:45",
+      "source_pin": null,
+      "statuses": [
+        "shortlisted"
+      ]
+    },
+    {
+      "asked": false,
+      "cluster": "mycelium",
+      "evidence": [
+        {
+          "kind": "shortlist",
+          "question_id": null,
+          "record": 14,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/shortlist.json",
+          "status": "shortlisted"
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "2036b05dd504e0eb23c832ae4c1fbf08"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": true,
+      "site": "batch/corpora/mycelium/rules/scripts/update_unit_drift_drill.sh:184:71",
+      "source_pin": null,
+      "statuses": [
+        "shortlisted"
+      ]
+    },
+    {
+      "asked": false,
+      "cluster": "mycelium",
+      "evidence": [
+        {
+          "kind": "shortlist",
+          "question_id": null,
+          "record": 3,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/shortlist.json",
+          "status": "shortlisted"
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "6a34d6601a5a58a39757c91e8be39776"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": true,
+      "site": "batch/corpora/mycelium/rules/scripts/update_unit_drift_drill.sh:236:35",
+      "source_pin": null,
+      "statuses": [
+        "shortlisted"
+      ]
+    },
+    {
+      "asked": false,
+      "cluster": "mycelium",
+      "evidence": [
+        {
+          "kind": "shortlist",
+          "question_id": null,
+          "record": 10,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/shortlist.json",
+          "status": "shortlisted"
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "0d22d2b135243d0c3d21c7a247776783"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": true,
+      "site": "batch/corpora/mycelium/rules/scripts/verify-release.sh:60:10",
+      "source_pin": null,
+      "statuses": [
+        "shortlisted"
+      ]
+    },
+    {
+      "asked": true,
+      "cluster": "mycelium",
+      "evidence": [
+        {
+          "kind": "conversion_ndjson",
+          "question_id": "MY-mycelium-alpn-h2-line-no-semicolon",
+          "record": 0,
+          "source": "properties/generated/mycelium_conversion.ndjson",
+          "status": "unsat"
+        }
+      ],
+      "question_ids": [
+        "MY-mycelium-alpn-h2-line-no-semicolon"
+      ],
+      "regex_ids": [
+        "049b5d134bad12f724c974555c78ad09"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": false,
+      "site": "control/lib/nb_donor.sh:158:alpn-h2",
+      "source_pin": null,
+      "statuses": [
+        "unsat"
+      ]
+    },
+    {
+      "asked": true,
+      "cluster": "mycelium",
+      "evidence": [
+        {
+          "kind": "conversion_ndjson",
+          "question_id": "MY-mycelium-ssh-key-prefix-no-semicolon",
+          "record": 2,
+          "source": "properties/generated/mycelium_conversion.ndjson",
+          "status": "unsat"
+        }
+      ],
+      "question_ids": [
+        "MY-mycelium-ssh-key-prefix-no-semicolon"
+      ],
+      "regex_ids": [
+        "8e3f4a911756ccb90b31e16552f1fc61"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": false,
+      "site": "control/lib/nb_harden.sh:74:ssh-key",
+      "source_pin": null,
+      "statuses": [
+        "unsat"
+      ]
+    },
+    {
+      "asked": true,
+      "cluster": "mycelium",
+      "evidence": [
+        {
+          "kind": "conversion_ndjson",
+          "question_id": "MY-mycelium-awg-dialect-key-no-semicolon",
+          "record": 1,
+          "source": "properties/generated/mycelium_conversion.ndjson",
+          "status": "unsat"
+        }
+      ],
+      "question_ids": [
+        "MY-mycelium-awg-dialect-key-no-semicolon"
+      ],
+      "regex_ids": [
+        "a140370e9b91d4bc61205829ba4d62a8"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": false,
+      "site": "control/lib/nb_render_awg.sh:434:dialect",
+      "source_pin": null,
+      "statuses": [
+        "unsat"
+      ]
+    },
+    {
+      "asked": false,
+      "cluster": "mycelium",
+      "evidence": [
+        {
+          "kind": "shortlist",
+          "question_id": null,
+          "record": 4,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-20r2-slice/shortlist.json",
+          "status": "shortlisted"
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "f0bc2b31d10f6904a12c27c85822b780"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": true,
+      "site": "scripts/fungi:101:40",
+      "source_pin": "d4f01ba6202d50909d1977810d322259482e0b82",
+      "statuses": [
+        "shortlisted"
+      ]
+    },
+    {
+      "asked": false,
+      "cluster": "mycelium",
+      "evidence": [
+        {
+          "kind": "shortlist",
+          "question_id": null,
+          "record": 11,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-20r2-slice/shortlist.json",
+          "status": "shortlisted"
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "06b7f2a0599a7f3a1ce27bcc0db3cc0a"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": true,
+      "site": "scripts/fungi:42:1",
+      "source_pin": "d4f01ba6202d50909d1977810d322259482e0b82",
+      "statuses": [
+        "shortlisted"
+      ]
+    },
+    {
+      "asked": false,
+      "cluster": "mycelium",
+      "evidence": [
+        {
+          "kind": "shortlist",
+          "question_id": null,
+          "record": 12,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-20r2-slice/shortlist.json",
+          "status": "shortlisted"
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "c99ceafbe07db2bc3f04fa8497cdff74"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": true,
+      "site": "scripts/fungi:77:51",
+      "source_pin": "d4f01ba6202d50909d1977810d322259482e0b82",
+      "statuses": [
+        "shortlisted"
+      ]
+    },
+    {
+      "asked": false,
+      "cluster": "mycelium",
+      "evidence": [
+        {
+          "kind": "shortlist",
+          "question_id": null,
+          "record": 5,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-20r2-slice/shortlist.json",
+          "status": "shortlisted"
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "05cb2a3d98e989f2bab789025fcf92ab"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": true,
+      "site": "scripts/fungi:84:99",
+      "source_pin": "d4f01ba6202d50909d1977810d322259482e0b82",
+      "statuses": [
+        "shortlisted"
+      ]
+    },
+    {
+      "asked": false,
+      "cluster": "mycelium",
+      "evidence": [
+        {
+          "kind": "shortlist",
+          "question_id": null,
+          "record": 6,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-20r2-slice/shortlist.json",
+          "status": "shortlisted"
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "db44731171ce032e5ae0a391861690df"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": true,
+      "site": "scripts/fungi:85:87",
+      "source_pin": "d4f01ba6202d50909d1977810d322259482e0b82",
+      "statuses": [
+        "shortlisted"
+      ]
+    },
+    {
+      "asked": false,
+      "cluster": "mycelium",
+      "evidence": [
+        {
+          "kind": "shortlist",
+          "question_id": null,
+          "record": 1,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-20r2-slice/shortlist.json",
+          "status": "shortlisted"
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "1854d02844f05013d064b80f6fc95cce"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": true,
+      "site": "scripts/node-bootstrap.sh:1083:60",
+      "source_pin": "d4f01ba6202d50909d1977810d322259482e0b82",
+      "statuses": [
+        "shortlisted"
+      ]
+    },
+    {
+      "asked": false,
+      "cluster": "mycelium",
+      "evidence": [
+        {
+          "kind": "shortlist",
+          "question_id": null,
+          "record": 2,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-20r2-slice/shortlist.json",
+          "status": "shortlisted"
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "70608d86458989187658b7e5dd0441e7"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": true,
+      "site": "scripts/node-bootstrap.sh:1084:60",
+      "source_pin": "d4f01ba6202d50909d1977810d322259482e0b82",
+      "statuses": [
+        "shortlisted"
+      ]
+    },
+    {
+      "asked": false,
+      "cluster": "mycelium",
+      "evidence": [
+        {
+          "kind": "shortlist",
+          "question_id": null,
+          "record": 7,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-20r2-slice/shortlist.json",
+          "status": "shortlisted"
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "0b7131afd0c941baac4b59d27a1ed51c"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": true,
+      "site": "scripts/update_unit_drift_drill.sh:120:15",
+      "source_pin": "d4f01ba6202d50909d1977810d322259482e0b82",
+      "statuses": [
+        "shortlisted"
+      ]
+    },
+    {
+      "asked": false,
+      "cluster": "mycelium",
+      "evidence": [
+        {
+          "kind": "shortlist",
+          "question_id": null,
+          "record": 8,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-20r2-slice/shortlist.json",
+          "status": "shortlisted"
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "31fb6661ca6f4d153c841d90008a2dcb"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": true,
+      "site": "scripts/update_unit_drift_drill.sh:120:60",
+      "source_pin": "d4f01ba6202d50909d1977810d322259482e0b82",
+      "statuses": [
+        "shortlisted"
+      ]
+    },
+    {
+      "asked": false,
+      "cluster": "mycelium",
+      "evidence": [
+        {
+          "kind": "shortlist",
+          "question_id": null,
+          "record": 13,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-20r2-slice/shortlist.json",
+          "status": "shortlisted"
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "0e6b0e557ee8e3e08bd3f629f2d84084"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": true,
+      "site": "scripts/update_unit_drift_drill.sh:120:86",
+      "source_pin": "d4f01ba6202d50909d1977810d322259482e0b82",
+      "statuses": [
+        "shortlisted"
+      ]
+    },
+    {
+      "asked": false,
+      "cluster": "mycelium",
+      "evidence": [
+        {
+          "kind": "shortlist",
+          "question_id": null,
+          "record": 0,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-20r2-slice/shortlist.json",
+          "status": "shortlisted"
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "4396c139b7f96c0a43c4c8b848dc1531"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": true,
+      "site": "scripts/update_unit_drift_drill.sh:184:3",
+      "source_pin": "d4f01ba6202d50909d1977810d322259482e0b82",
+      "statuses": [
+        "shortlisted"
+      ]
+    },
+    {
+      "asked": false,
+      "cluster": "mycelium",
+      "evidence": [
+        {
+          "kind": "shortlist",
+          "question_id": null,
+          "record": 9,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-20r2-slice/shortlist.json",
+          "status": "shortlisted"
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "340ac4c5878342828e987acf00cfec65"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": true,
+      "site": "scripts/update_unit_drift_drill.sh:184:45",
+      "source_pin": "d4f01ba6202d50909d1977810d322259482e0b82",
+      "statuses": [
+        "shortlisted"
+      ]
+    },
+    {
+      "asked": false,
+      "cluster": "mycelium",
+      "evidence": [
+        {
+          "kind": "shortlist",
+          "question_id": null,
+          "record": 14,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-20r2-slice/shortlist.json",
+          "status": "shortlisted"
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "019ce3e0b9d15a332bdcd6cccc537748"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": true,
+      "site": "scripts/update_unit_drift_drill.sh:184:71",
+      "source_pin": "d4f01ba6202d50909d1977810d322259482e0b82",
+      "statuses": [
+        "shortlisted"
+      ]
+    },
+    {
+      "asked": false,
+      "cluster": "mycelium",
+      "evidence": [
+        {
+          "kind": "shortlist",
+          "question_id": null,
+          "record": 3,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-20r2-slice/shortlist.json",
+          "status": "shortlisted"
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "423008bfee86e0459dd9a2f8085ff89d"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": true,
+      "site": "scripts/update_unit_drift_drill.sh:236:35",
+      "source_pin": "d4f01ba6202d50909d1977810d322259482e0b82",
+      "statuses": [
+        "shortlisted"
+      ]
+    },
+    {
+      "asked": false,
+      "cluster": "mycelium",
+      "evidence": [
+        {
+          "kind": "shortlist",
+          "question_id": null,
+          "record": 10,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-20r2-slice/shortlist.json",
+          "status": "shortlisted"
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "42e4541996b1350d941a7cabbd386d79"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": true,
+      "site": "scripts/verify-release.sh:60:10",
+      "source_pin": "d4f01ba6202d50909d1977810d322259482e0b82",
+      "statuses": [
+        "shortlisted"
+      ]
+    },
+    {
+      "asked": false,
+      "cluster": "mycelium",
+      "evidence": [
+        {
+          "kind": "queue_transition_replay",
+          "question_id": null,
+          "record": 7,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/queue-transition-replay.json",
+          "status": "skipped_out_of_scope"
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [],
+      "repo_id": "mycelium0/mycelium",
+      "repository_url": "https://github.com/mycelium0/mycelium",
+      "reserved": true,
+      "site": "scripts/fungi:101:40",
+      "source_pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+      "statuses": [
+        "skipped_out_of_scope"
+      ]
+    },
+    {
+      "asked": false,
+      "cluster": "mycelium",
+      "evidence": [
+        {
+          "kind": "queue_transition_replay",
+          "question_id": null,
+          "record": 13,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/queue-transition-replay.json",
+          "status": "skipped_out_of_scope"
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [],
+      "repo_id": "mycelium0/mycelium",
+      "repository_url": "https://github.com/mycelium0/mycelium",
+      "reserved": true,
+      "site": "scripts/fungi:42:1",
+      "source_pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+      "statuses": [
+        "skipped_out_of_scope"
+      ]
+    },
+    {
+      "asked": false,
+      "cluster": "mycelium",
+      "evidence": [
+        {
+          "kind": "queue_transition_replay",
+          "question_id": null,
+          "record": 14,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/queue-transition-replay.json",
+          "status": "skipped_out_of_scope"
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [],
+      "repo_id": "mycelium0/mycelium",
+      "repository_url": "https://github.com/mycelium0/mycelium",
+      "reserved": true,
+      "site": "scripts/fungi:77:51",
+      "source_pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+      "statuses": [
+        "skipped_out_of_scope"
+      ]
+    },
+    {
+      "asked": false,
+      "cluster": "mycelium",
+      "evidence": [
+        {
+          "kind": "queue_transition_replay",
+          "question_id": null,
+          "record": 8,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/queue-transition-replay.json",
+          "status": "skipped_out_of_scope"
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [],
+      "repo_id": "mycelium0/mycelium",
+      "repository_url": "https://github.com/mycelium0/mycelium",
+      "reserved": true,
+      "site": "scripts/fungi:84:99",
+      "source_pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+      "statuses": [
+        "skipped_out_of_scope"
+      ]
+    },
+    {
+      "asked": false,
+      "cluster": "mycelium",
+      "evidence": [
+        {
+          "kind": "queue_transition_replay",
+          "question_id": null,
+          "record": 9,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/queue-transition-replay.json",
+          "status": "skipped_out_of_scope"
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [],
+      "repo_id": "mycelium0/mycelium",
+      "repository_url": "https://github.com/mycelium0/mycelium",
+      "reserved": true,
+      "site": "scripts/fungi:85:87",
+      "source_pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+      "statuses": [
+        "skipped_out_of_scope"
+      ]
+    },
+    {
+      "asked": false,
+      "cluster": "mycelium",
+      "evidence": [
+        {
+          "kind": "queue_transition_replay",
+          "question_id": null,
+          "record": 4,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/queue-transition-replay.json",
+          "status": "skipped_out_of_scope"
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [],
+      "repo_id": "mycelium0/mycelium",
+      "repository_url": "https://github.com/mycelium0/mycelium",
+      "reserved": true,
+      "site": "scripts/node-bootstrap.sh:1083:60",
+      "source_pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+      "statuses": [
+        "skipped_out_of_scope"
+      ]
+    },
+    {
+      "asked": false,
+      "cluster": "mycelium",
+      "evidence": [
+        {
+          "kind": "queue_transition_replay",
+          "question_id": null,
+          "record": 5,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/queue-transition-replay.json",
+          "status": "skipped_out_of_scope"
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [],
+      "repo_id": "mycelium0/mycelium",
+      "repository_url": "https://github.com/mycelium0/mycelium",
+      "reserved": true,
+      "site": "scripts/node-bootstrap.sh:1084:60",
+      "source_pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+      "statuses": [
+        "skipped_out_of_scope"
+      ]
+    },
+    {
+      "asked": false,
+      "cluster": "mycelium",
+      "evidence": [
+        {
+          "kind": "queue_transition_replay",
+          "question_id": null,
+          "record": 10,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/queue-transition-replay.json",
+          "status": "skipped_out_of_scope"
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [],
+      "repo_id": "mycelium0/mycelium",
+      "repository_url": "https://github.com/mycelium0/mycelium",
+      "reserved": true,
+      "site": "scripts/update_unit_drift_drill.sh:120:15",
+      "source_pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+      "statuses": [
+        "skipped_out_of_scope"
+      ]
+    },
+    {
+      "asked": false,
+      "cluster": "mycelium",
+      "evidence": [
+        {
+          "kind": "queue_transition_replay",
+          "question_id": null,
+          "record": 11,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/queue-transition-replay.json",
+          "status": "skipped_out_of_scope"
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [],
+      "repo_id": "mycelium0/mycelium",
+      "repository_url": "https://github.com/mycelium0/mycelium",
+      "reserved": true,
+      "site": "scripts/update_unit_drift_drill.sh:120:60",
+      "source_pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+      "statuses": [
+        "skipped_out_of_scope"
+      ]
+    },
+    {
+      "asked": false,
+      "cluster": "mycelium",
+      "evidence": [
+        {
+          "kind": "queue_transition_replay",
+          "question_id": null,
+          "record": 15,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/queue-transition-replay.json",
+          "status": "skipped_out_of_scope"
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [],
+      "repo_id": "mycelium0/mycelium",
+      "repository_url": "https://github.com/mycelium0/mycelium",
+      "reserved": true,
+      "site": "scripts/update_unit_drift_drill.sh:120:86",
+      "source_pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+      "statuses": [
+        "skipped_out_of_scope"
+      ]
+    },
+    {
+      "asked": false,
+      "cluster": "mycelium",
+      "evidence": [
+        {
+          "kind": "queue_transition_replay",
+          "question_id": null,
+          "record": 0,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/queue-transition-replay.json",
+          "status": "claimed"
+        },
+        {
+          "kind": "queue_transition_replay",
+          "question_id": null,
+          "record": 1,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/queue-transition-replay.json",
+          "status": "contracted"
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [],
+      "repo_id": "mycelium0/mycelium",
+      "repository_url": "https://github.com/mycelium0/mycelium",
+      "reserved": true,
+      "site": "scripts/update_unit_drift_drill.sh:184:3",
+      "source_pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+      "statuses": [
+        "claimed",
+        "contracted"
+      ]
+    },
+    {
+      "asked": false,
+      "cluster": "mycelium",
+      "evidence": [
+        {
+          "kind": "queue_transition_replay",
+          "question_id": null,
+          "record": 12,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/queue-transition-replay.json",
+          "status": "skipped_out_of_scope"
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [],
+      "repo_id": "mycelium0/mycelium",
+      "repository_url": "https://github.com/mycelium0/mycelium",
+      "reserved": true,
+      "site": "scripts/update_unit_drift_drill.sh:184:45",
+      "source_pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+      "statuses": [
+        "skipped_out_of_scope"
+      ]
+    },
+    {
+      "asked": false,
+      "cluster": "mycelium",
+      "evidence": [
+        {
+          "kind": "queue_transition_replay",
+          "question_id": null,
+          "record": 16,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/queue-transition-replay.json",
+          "status": "skipped_out_of_scope"
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [],
+      "repo_id": "mycelium0/mycelium",
+      "repository_url": "https://github.com/mycelium0/mycelium",
+      "reserved": true,
+      "site": "scripts/update_unit_drift_drill.sh:184:71",
+      "source_pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+      "statuses": [
+        "skipped_out_of_scope"
+      ]
+    },
+    {
+      "asked": false,
+      "cluster": "mycelium",
+      "evidence": [
+        {
+          "kind": "queue_transition_replay",
+          "question_id": null,
+          "record": 6,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/queue-transition-replay.json",
+          "status": "skipped_duplicate"
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [],
+      "repo_id": "mycelium0/mycelium",
+      "repository_url": "https://github.com/mycelium0/mycelium",
+      "reserved": true,
+      "site": "scripts/update_unit_drift_drill.sh:236:35",
+      "source_pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+      "statuses": [
+        "skipped_duplicate"
+      ]
+    },
+    {
+      "asked": false,
+      "cluster": "mycelium",
+      "evidence": [
+        {
+          "kind": "queue_transition_replay",
+          "question_id": null,
+          "record": 2,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/queue-transition-replay.json",
+          "status": "claimed"
+        },
+        {
+          "kind": "queue_transition_replay",
+          "question_id": null,
+          "record": 3,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/queue-transition-replay.json",
+          "status": "contracted"
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [],
+      "repo_id": "mycelium0/mycelium",
+      "repository_url": "https://github.com/mycelium0/mycelium",
+      "reserved": true,
+      "site": "scripts/verify-release.sh:60:SHA256SUMS preflight",
+      "source_pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+      "statuses": [
+        "claimed",
+        "contracted"
+      ]
+    },
+    {
+      "asked": false,
+      "cluster": "mycelium0/mycelium",
+      "evidence": [
+        {
+          "kind": "review_evidence",
+          "question_id": null,
+          "record": 4,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/review-evidence-v2.json",
+          "status": null
+        },
+        {
+          "kind": "review_evidence",
+          "question_id": null,
+          "record": 4,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/review-evidence.json",
+          "status": null
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "7535d130b86cbb737c1cc319253765a0"
+      ],
+      "repo_id": "mycelium0/mycelium",
+      "repository_url": "https://github.com/mycelium0/mycelium",
+      "reserved": true,
+      "site": "scripts/fungi:101:40",
+      "source_pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+      "statuses": []
+    },
+    {
+      "asked": false,
+      "cluster": "mycelium0/mycelium",
+      "evidence": [
+        {
+          "kind": "review_evidence",
+          "question_id": null,
+          "record": 11,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/review-evidence-v2.json",
+          "status": null
+        },
+        {
+          "kind": "review_evidence",
+          "question_id": null,
+          "record": 11,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/review-evidence.json",
+          "status": null
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "182c7edc3432798e986eb07b0f4e73a6"
+      ],
+      "repo_id": "mycelium0/mycelium",
+      "repository_url": "https://github.com/mycelium0/mycelium",
+      "reserved": true,
+      "site": "scripts/fungi:42:1",
+      "source_pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+      "statuses": []
+    },
+    {
+      "asked": false,
+      "cluster": "mycelium0/mycelium",
+      "evidence": [
+        {
+          "kind": "review_evidence",
+          "question_id": null,
+          "record": 12,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/review-evidence-v2.json",
+          "status": null
+        },
+        {
+          "kind": "review_evidence",
+          "question_id": null,
+          "record": 12,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/review-evidence.json",
+          "status": null
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "ffb8742a5ea4e9a56d636c6ad8511128"
+      ],
+      "repo_id": "mycelium0/mycelium",
+      "repository_url": "https://github.com/mycelium0/mycelium",
+      "reserved": true,
+      "site": "scripts/fungi:77:51",
+      "source_pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+      "statuses": []
+    },
+    {
+      "asked": false,
+      "cluster": "mycelium0/mycelium",
+      "evidence": [
+        {
+          "kind": "review_evidence",
+          "question_id": null,
+          "record": 5,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/review-evidence-v2.json",
+          "status": null
+        },
+        {
+          "kind": "review_evidence",
+          "question_id": null,
+          "record": 5,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/review-evidence.json",
+          "status": null
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "0717d6d2e9bbe31b9a22b0bc28b57342"
+      ],
+      "repo_id": "mycelium0/mycelium",
+      "repository_url": "https://github.com/mycelium0/mycelium",
+      "reserved": true,
+      "site": "scripts/fungi:84:99",
+      "source_pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+      "statuses": []
+    },
+    {
+      "asked": false,
+      "cluster": "mycelium0/mycelium",
+      "evidence": [
+        {
+          "kind": "review_evidence",
+          "question_id": null,
+          "record": 6,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/review-evidence-v2.json",
+          "status": null
+        },
+        {
+          "kind": "review_evidence",
+          "question_id": null,
+          "record": 6,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/review-evidence.json",
+          "status": null
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "f141465a40b05772f4f65177261c26cc"
+      ],
+      "repo_id": "mycelium0/mycelium",
+      "repository_url": "https://github.com/mycelium0/mycelium",
+      "reserved": true,
+      "site": "scripts/fungi:85:87",
+      "source_pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+      "statuses": []
+    },
+    {
+      "asked": false,
+      "cluster": "mycelium0/mycelium",
+      "evidence": [
+        {
+          "kind": "review_evidence",
+          "question_id": null,
+          "record": 1,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/review-evidence-v2.json",
+          "status": null
+        },
+        {
+          "kind": "review_evidence",
+          "question_id": null,
+          "record": 1,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/review-evidence.json",
+          "status": null
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "f2aef01c87f5ffd746de7b1e52bdb19c"
+      ],
+      "repo_id": "mycelium0/mycelium",
+      "repository_url": "https://github.com/mycelium0/mycelium",
+      "reserved": true,
+      "site": "scripts/node-bootstrap.sh:1083:60",
+      "source_pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+      "statuses": []
+    },
+    {
+      "asked": false,
+      "cluster": "mycelium0/mycelium",
+      "evidence": [
+        {
+          "kind": "review_evidence",
+          "question_id": null,
+          "record": 2,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/review-evidence-v2.json",
+          "status": null
+        },
+        {
+          "kind": "review_evidence",
+          "question_id": null,
+          "record": 2,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/review-evidence.json",
+          "status": null
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "e61fc06da665bfb8c2eaaca06b5f3d3f"
+      ],
+      "repo_id": "mycelium0/mycelium",
+      "repository_url": "https://github.com/mycelium0/mycelium",
+      "reserved": true,
+      "site": "scripts/node-bootstrap.sh:1084:60",
+      "source_pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+      "statuses": []
+    },
+    {
+      "asked": false,
+      "cluster": "mycelium0/mycelium",
+      "evidence": [
+        {
+          "kind": "review_evidence",
+          "question_id": null,
+          "record": 7,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/review-evidence-v2.json",
+          "status": null
+        },
+        {
+          "kind": "review_evidence",
+          "question_id": null,
+          "record": 7,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/review-evidence.json",
+          "status": null
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "645c26907591a263de2b28370d80b122"
+      ],
+      "repo_id": "mycelium0/mycelium",
+      "repository_url": "https://github.com/mycelium0/mycelium",
+      "reserved": true,
+      "site": "scripts/update_unit_drift_drill.sh:120:15",
+      "source_pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+      "statuses": []
+    },
+    {
+      "asked": false,
+      "cluster": "mycelium0/mycelium",
+      "evidence": [
+        {
+          "kind": "review_evidence",
+          "question_id": null,
+          "record": 8,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/review-evidence-v2.json",
+          "status": null
+        },
+        {
+          "kind": "review_evidence",
+          "question_id": null,
+          "record": 8,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/review-evidence.json",
+          "status": null
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "d6716c975ea7ad327b150381a7b37a83"
+      ],
+      "repo_id": "mycelium0/mycelium",
+      "repository_url": "https://github.com/mycelium0/mycelium",
+      "reserved": true,
+      "site": "scripts/update_unit_drift_drill.sh:120:60",
+      "source_pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+      "statuses": []
+    },
+    {
+      "asked": false,
+      "cluster": "mycelium0/mycelium",
+      "evidence": [
+        {
+          "kind": "review_evidence",
+          "question_id": null,
+          "record": 13,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/review-evidence-v2.json",
+          "status": null
+        },
+        {
+          "kind": "review_evidence",
+          "question_id": null,
+          "record": 13,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/review-evidence.json",
+          "status": null
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "d8d45304ef898304d066587397ec814e"
+      ],
+      "repo_id": "mycelium0/mycelium",
+      "repository_url": "https://github.com/mycelium0/mycelium",
+      "reserved": true,
+      "site": "scripts/update_unit_drift_drill.sh:120:86",
+      "source_pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+      "statuses": []
+    },
+    {
+      "asked": false,
+      "cluster": "mycelium0/mycelium",
+      "evidence": [
+        {
+          "kind": "contract_artifact",
+          "question_id": null,
+          "record": 0,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/contract-execstart-diagnostic.json",
+          "status": null
+        },
+        {
+          "kind": "review_evidence",
+          "question_id": null,
+          "record": 0,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/review-evidence-v2.json",
+          "status": null
+        },
+        {
+          "kind": "review_evidence",
+          "question_id": null,
+          "record": 0,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/review-evidence.json",
+          "status": null
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "148896941c21d4a17551f044bd40fc88"
+      ],
+      "repo_id": "mycelium0/mycelium",
+      "repository_url": "https://github.com/mycelium0/mycelium",
+      "reserved": true,
+      "site": "scripts/update_unit_drift_drill.sh:184:3",
+      "source_pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+      "statuses": []
+    },
+    {
+      "asked": false,
+      "cluster": "mycelium0/mycelium",
+      "evidence": [
+        {
+          "kind": "review_evidence",
+          "question_id": null,
+          "record": 9,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/review-evidence-v2.json",
+          "status": null
+        },
+        {
+          "kind": "review_evidence",
+          "question_id": null,
+          "record": 9,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/review-evidence.json",
+          "status": null
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "dab00b6e0a2731ef075d1547b03dc013"
+      ],
+      "repo_id": "mycelium0/mycelium",
+      "repository_url": "https://github.com/mycelium0/mycelium",
+      "reserved": true,
+      "site": "scripts/update_unit_drift_drill.sh:184:45",
+      "source_pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+      "statuses": []
+    },
+    {
+      "asked": false,
+      "cluster": "mycelium0/mycelium",
+      "evidence": [
+        {
+          "kind": "review_evidence",
+          "question_id": null,
+          "record": 14,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/review-evidence-v2.json",
+          "status": null
+        },
+        {
+          "kind": "review_evidence",
+          "question_id": null,
+          "record": 14,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/review-evidence.json",
+          "status": null
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "2036b05dd504e0eb23c832ae4c1fbf08"
+      ],
+      "repo_id": "mycelium0/mycelium",
+      "repository_url": "https://github.com/mycelium0/mycelium",
+      "reserved": true,
+      "site": "scripts/update_unit_drift_drill.sh:184:71",
+      "source_pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+      "statuses": []
+    },
+    {
+      "asked": false,
+      "cluster": "mycelium0/mycelium",
+      "evidence": [
+        {
+          "kind": "review_evidence",
+          "question_id": null,
+          "record": 3,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/review-evidence-v2.json",
+          "status": null
+        },
+        {
+          "kind": "review_evidence",
+          "question_id": null,
+          "record": 3,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/review-evidence.json",
+          "status": null
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "6a34d6601a5a58a39757c91e8be39776"
+      ],
+      "repo_id": "mycelium0/mycelium",
+      "repository_url": "https://github.com/mycelium0/mycelium",
+      "reserved": true,
+      "site": "scripts/update_unit_drift_drill.sh:236:35",
+      "source_pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+      "statuses": []
+    },
+    {
+      "asked": false,
+      "cluster": "mycelium0/mycelium",
+      "evidence": [
+        {
+          "kind": "review_evidence",
+          "question_id": null,
+          "record": 10,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/review-evidence-v2.json",
+          "status": null
+        },
+        {
+          "kind": "review_evidence",
+          "question_id": null,
+          "record": 10,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/review-evidence.json",
+          "status": null
+        }
+      ],
+      "question_ids": [],
+      "regex_ids": [
+        "0d22d2b135243d0c3d21c7a247776783"
+      ],
+      "repo_id": "mycelium0/mycelium",
+      "repository_url": "https://github.com/mycelium0/mycelium",
+      "reserved": true,
+      "site": "scripts/verify-release.sh:60:10",
+      "source_pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+      "statuses": []
+    },
+    {
+      "asked": false,
+      "cluster": "mycelium0/mycelium",
+      "evidence": [
+        {
+          "kind": "contract_artifact",
+          "question_id": null,
+          "record": 0,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/contract.json",
+          "status": null
+        },
+        {
+          "kind": "contract_artifact",
+          "question_id": "MY-mycelium-release-preflight-requires-64-hex",
+          "record": 0,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/contracts.json",
+          "status": null
+        }
+      ],
+      "question_ids": [
+        "MY-mycelium-release-preflight-requires-64-hex"
+      ],
+      "regex_ids": [],
+      "repo_id": "mycelium0/mycelium",
+      "repository_url": "https://github.com/mycelium0/mycelium",
+      "reserved": true,
+      "site": "scripts/verify-release.sh:60:SHA256SUMS preflight",
+      "source_pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+      "statuses": []
+    },
+    {
+      "asked": false,
+      "cluster": "mycelium0/mycelium",
+      "evidence": [
+        {
+          "kind": "contract_artifact",
+          "question_id": null,
+          "record": 0,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-20r2-slice/contract-revision-1.json",
+          "status": null
+        },
+        {
+          "kind": "contract_artifact",
+          "question_id": null,
+          "record": 0,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-20r2-slice/contract-v1.json",
+          "status": null
+        },
+        {
+          "kind": "contract_artifact",
+          "question_id": "MY-mycelium-20r2-release-preflight-requires-64-hex",
+          "record": 0,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-20r2-slice/contracts-v1.json",
+          "status": null
+        },
+        {
+          "kind": "frozen_roster",
+          "question_id": "MY-mycelium-20r2-release-preflight-requires-64-hex",
+          "record": 0,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-20r2-slice/roster.json",
+          "status": null
+        }
+      ],
+      "question_ids": [
+        "MY-mycelium-20r2-release-preflight-requires-64-hex"
+      ],
+      "regex_ids": [],
+      "repo_id": "mycelium0/mycelium",
+      "repository_url": "https://github.com/mycelium0/mycelium",
+      "reserved": true,
+      "site": "scripts/verify-release.sh:60:SHA256SUMS preflight",
+      "source_pin": "d4f01ba6202d50909d1977810d322259482e0b82",
+      "statuses": []
+    },
+    {
+      "asked": false,
+      "cluster": "mycelium0/mycelium",
+      "evidence": [
+        {
+          "kind": "contract_artifact",
+          "question_id": null,
+          "record": 0,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-20r2-slice/contract-revision-1.json",
+          "status": null
+        },
+        {
+          "kind": "contract_artifact",
+          "question_id": null,
+          "record": 0,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-20r2-slice/contract.json",
+          "status": null
+        },
+        {
+          "kind": "contract_artifact",
+          "question_id": "MY-mycelium-20r2-release-preflight-requires-64-hex",
+          "record": 0,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-20r2-slice/contracts.json",
+          "status": null
+        },
+        {
+          "kind": "frozen_roster",
+          "question_id": "MY-mycelium-20r2-release-preflight-requires-64-hex",
+          "record": 0,
+          "source": "properties/calibration/2026-10-15-autonomous-mycelium-20r2-slice/roster-v2.json",
+          "status": null
+        }
+      ],
+      "question_ids": [
+        "MY-mycelium-20r2-release-preflight-requires-64-hex"
+      ],
+      "regex_ids": [],
+      "repo_id": "mycelium0/mycelium",
+      "repository_url": "https://github.com/mycelium0/mycelium",
+      "reserved": true,
+      "site": "scripts/verify-release.sh:60:sums_n",
+      "source_pin": "d4f01ba6202d50909d1977810d322259482e0b82",
+      "statuses": []
+    },
+    {
+      "asked": true,
+      "cluster": "openwrt_luci",
+      "evidence": [
+        {
+          "kind": "conversion_ndjson",
+          "question_id": "OW-luci-adblock-tcpdump-filter-no-semicolon",
+          "record": 0,
+          "source": "properties/generated/openwrt_luci_conversion.ndjson",
+          "status": "unsat"
+        }
+      ],
+      "question_ids": [
+        "OW-luci-adblock-tcpdump-filter-no-semicolon"
+      ],
+      "regex_ids": [
+        "4109ee7d2c9f149fe5397a925ce21db9"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": false,
+      "site": "applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:870:adb_repfilter",
+      "source_pin": null,
+      "statuses": [
+        "unsat"
+      ]
+    },
+    {
+      "asked": true,
+      "cluster": "openwrt_luci",
+      "evidence": [
+        {
+          "kind": "conversion_ndjson",
+          "question_id": "OW-luci-dockerman-publish-host-capture",
+          "record": 1,
+          "source": "properties/generated/openwrt_luci_conversion.ndjson",
+          "status": "unsat"
+        }
+      ],
+      "question_ids": [
+        "OW-luci-dockerman-publish-host-capture"
+      ],
+      "regex_ids": [
+        "bef0c2e4caebe0fd471750dfb4972ce7"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": false,
+      "site": "applications/luci-app-dockerman/htdocs/luci-static/resources/view/dockerman/container_new.js:836:PortBindings",
+      "source_pin": null,
+      "statuses": [
+        "unsat"
+      ]
+    },
+    {
+      "asked": true,
+      "cluster": "openwrt_luci",
+      "evidence": [
+        {
+          "kind": "conversion_ndjson",
+          "question_id": "OW-luci-firewall-mark-no-semicolon",
+          "record": 2,
+          "source": "properties/generated/openwrt_luci_conversion.ndjson",
+          "status": "unsat"
+        }
+      ],
+      "question_ids": [
+        "OW-luci-firewall-mark-no-semicolon"
+      ],
+      "regex_ids": [
+        "88e684eea51b0ffb0d683f302aad3213"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": false,
+      "site": "applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:335:mark",
+      "source_pin": null,
+      "statuses": [
+        "unsat"
+      ]
+    },
+    {
+      "asked": true,
+      "cluster": "openwrt_luci",
+      "evidence": [
+        {
+          "kind": "upstream_dispositions",
+          "question_id": "OW-luci-netdevname-semicolon-admitted",
+          "record": 13,
+          "source": "docs/conversion-upstream.jsonl",
+          "status": "wont_file"
+        },
+        {
+          "kind": "conversion_ndjson",
+          "question_id": "OW-luci-netdevname-semicolon-admitted",
+          "record": 3,
+          "source": "properties/generated/openwrt_luci_conversion.ndjson",
+          "status": "sat"
+        }
+      ],
+      "question_ids": [
+        "OW-luci-netdevname-semicolon-admitted"
+      ],
+      "regex_ids": [
+        "876920b9e2888ed6b50e5bf253835501"
+      ],
+      "repo_id": "openwrt/luci",
+      "repository_url": null,
+      "reserved": false,
+      "site": "modules/luci-base/htdocs/luci-static/resources/validation.js:1006:netdevname",
+      "source_pin": null,
+      "statuses": [
+        "sat",
+        "wont_file"
+      ]
+    },
+    {
+      "asked": true,
+      "cluster": "openwrt_packages",
+      "evidence": [
+        {
+          "kind": "conversion_ndjson",
+          "question_id": "OW-packages-banip-expiry-no-semicolon",
+          "record": 1,
+          "source": "properties/generated/openwrt_packages_conversion.ndjson",
+          "status": "unsat"
+        }
+      ],
+      "question_ids": [
+        "OW-packages-banip-expiry-no-semicolon"
+      ],
+      "regex_ids": [
+        "49a5b4cf07666fb51fb83e51735fb00b"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": false,
+      "site": "net/banip/files/banip-functions.sh:2643:ban_nftexpiry",
+      "source_pin": null,
+      "statuses": [
+        "unsat"
+      ]
+    },
+    {
+      "asked": true,
+      "cluster": "openwrt_packages",
+      "evidence": [
+        {
+          "kind": "conversion_ndjson",
+          "question_id": "OW-packages-expand-ipv6-nibble-capture",
+          "record": 4,
+          "source": "properties/generated/openwrt_packages_conversion.ndjson",
+          "status": "unsat"
+        }
+      ],
+      "question_ids": [
+        "OW-packages-expand-ipv6-nibble-capture"
+      ],
+      "regex_ids": [
+        "041fe353829d5c4526588a21a49e4a9e"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": false,
+      "site": "net/ddns-scripts/files/usr/lib/ddns/dynamic_dns_functions.sh:1181:expand_ipv6",
+      "source_pin": null,
+      "statuses": [
+        "unsat"
+      ]
+    },
+    {
+      "asked": true,
+      "cluster": "openwrt_packages",
+      "evidence": [
+        {
+          "kind": "conversion_ndjson",
+          "question_id": "OW-packages-ipv4-regex-no-semicolon",
+          "record": 8,
+          "source": "properties/generated/openwrt_packages_conversion.ndjson",
+          "status": "unsat"
+        }
+      ],
+      "question_ids": [
+        "OW-packages-ipv4-regex-no-semicolon"
+      ],
+      "regex_ids": [
+        "d456b297d025a1a5dcb6e97a86af36d5"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": false,
+      "site": "net/ddns-scripts/files/usr/lib/ddns/dynamic_dns_functions.sh:69:IPV4_REGEX",
+      "source_pin": null,
+      "statuses": [
+        "unsat"
+      ]
+    },
+    {
+      "asked": true,
+      "cluster": "openwrt_packages",
+      "evidence": [
+        {
+          "kind": "upstream_dispositions",
+          "question_id": "OW-packages-aliyun-recordid-truncation",
+          "record": 11,
+          "source": "docs/conversion-upstream.jsonl",
+          "status": "wont_file"
+        },
+        {
+          "kind": "conversion_ndjson",
+          "question_id": "OW-packages-aliyun-recordid-truncation",
+          "record": 0,
+          "source": "properties/generated/openwrt_packages_conversion.ndjson",
+          "status": "sat"
+        }
+      ],
+      "question_ids": [
+        "OW-packages-aliyun-recordid-truncation"
+      ],
+      "regex_ids": [
+        "6c62f8ee55e3b2ecd519374468de04db"
+      ],
+      "repo_id": "openwrt/packages",
+      "repository_url": null,
+      "reserved": false,
+      "site": "net/ddns-scripts/files/usr/lib/ddns/update_aliyun_com.sh:115:RecordId",
+      "source_pin": null,
+      "statuses": [
+        "sat",
+        "wont_file"
+      ]
+    },
+    {
+      "asked": true,
+      "cluster": "openwrt_packages",
+      "evidence": [
+        {
+          "kind": "upstream_dispositions",
+          "question_id": "OW-packages-cloudflare-content-truncation",
+          "record": 12,
+          "source": "docs/conversion-upstream.jsonl",
+          "status": "wont_file"
+        },
+        {
+          "kind": "conversion_ndjson",
+          "question_id": "OW-packages-cloudflare-content-truncation",
+          "record": 2,
+          "source": "properties/generated/openwrt_packages_conversion.ndjson",
+          "status": "sat"
+        }
+      ],
+      "question_ids": [
+        "OW-packages-cloudflare-content-truncation"
+      ],
+      "regex_ids": [
+        "85944375719b64f03a18294e8c971454"
+      ],
+      "repo_id": "openwrt/packages",
+      "repository_url": null,
+      "reserved": false,
+      "site": "net/ddns-scripts/files/usr/lib/ddns/update_cloudflare_com_v4.sh:245:content",
+      "source_pin": null,
+      "statuses": [
+        "sat",
+        "wont_file"
+      ]
+    },
+    {
+      "asked": true,
+      "cluster": "openwrt_packages",
+      "evidence": [
+        {
+          "kind": "conversion_ndjson",
+          "question_id": "OW-packages-dnspod-recordid-no-semicolon",
+          "record": 3,
+          "source": "properties/generated/openwrt_packages_conversion.ndjson",
+          "status": "unsat"
+        }
+      ],
+      "question_ids": [
+        "OW-packages-dnspod-recordid-no-semicolon"
+      ],
+      "regex_ids": [
+        "56a99a03cbe71830a00ce36dc2933d00"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": false,
+      "site": "net/ddns-scripts/files/usr/lib/ddns/update_dnspod_cn_v3.sh:312:RecordId",
+      "source_pin": null,
+      "statuses": [
+        "unsat"
+      ]
+    },
+    {
+      "asked": true,
+      "cluster": "openwrt_packages",
+      "evidence": [
+        {
+          "kind": "conversion_ndjson",
+          "question_id": "OW-packages-huawei-id-no-semicolon",
+          "record": 7,
+          "source": "properties/generated/openwrt_packages_conversion.ndjson",
+          "status": "unsat"
+        }
+      ],
+      "question_ids": [
+        "OW-packages-huawei-id-no-semicolon"
+      ],
+      "regex_ids": [
+        "ba8059e24160f1965fccf4b929dda5ff"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": false,
+      "site": "net/ddns-scripts/files/usr/lib/ddns/update_huaweicloud_com.sh:94:id",
+      "source_pin": null,
+      "statuses": [
+        "unsat"
+      ]
+    },
+    {
+      "asked": true,
+      "cluster": "openwrt_packages",
+      "evidence": [
+        {
+          "kind": "upstream_dispositions",
+          "question_id": "OW-packages-transip-token-truncation",
+          "record": 10,
+          "source": "docs/conversion-upstream.jsonl",
+          "status": "wont_file"
+        },
+        {
+          "kind": "conversion_ndjson",
+          "question_id": "OW-packages-transip-token-truncation",
+          "record": 12,
+          "source": "properties/generated/openwrt_packages_conversion.ndjson",
+          "status": "sat"
+        }
+      ],
+      "question_ids": [
+        "OW-packages-transip-token-truncation"
+      ],
+      "regex_ids": [
+        "0dc5bff4b85420c19c3140aaa0774eb1"
+      ],
+      "repo_id": "openwrt/packages",
+      "repository_url": null,
+      "reserved": false,
+      "site": "net/ddns-scripts/files/usr/lib/ddns/update_transip_nl.sh:96:token",
+      "source_pin": null,
+      "statuses": [
+        "sat",
+        "wont_file"
+      ]
+    },
+    {
+      "asked": true,
+      "cluster": "openwrt_packages",
+      "evidence": [
+        {
+          "kind": "conversion_ndjson",
+          "question_id": "OW-packages-mosquitto-uci-quote-capture",
+          "record": 9,
+          "source": "properties/generated/openwrt_packages_conversion.ndjson",
+          "status": "unsat"
+        }
+      ],
+      "question_ids": [
+        "OW-packages-mosquitto-uci-quote-capture"
+      ],
+      "regex_ids": [
+        "faa08988488042d145600753e211c924"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": false,
+      "site": "net/mosquitto/files/etc/init.d/mosquitto:101:auth_opt",
+      "source_pin": null,
+      "statuses": [
+        "unsat"
+      ]
+    },
+    {
+      "asked": true,
+      "cluster": "openwrt_packages",
+      "evidence": [
+        {
+          "kind": "conversion_ndjson",
+          "question_id": "OW-packages-nftset-passthrough-no-dot",
+          "record": 10,
+          "source": "properties/generated/openwrt_packages_conversion.ndjson",
+          "status": "unsat"
+        }
+      ],
+      "question_ids": [
+        "OW-packages-nftset-passthrough-no-dot"
+      ],
+      "regex_ids": [
+        "d1bfc38618c0bc4d8e6c383805213976"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": false,
+      "site": "net/pbr/files/etc/init.d/pbr:1143:nftset-escape",
+      "source_pin": null,
+      "statuses": [
+        "unsat"
+      ]
+    },
+    {
+      "asked": true,
+      "cluster": "openwrt_packages",
+      "evidence": [
+        {
+          "kind": "conversion_ndjson",
+          "question_id": "OW-packages-sanitizer-image-no-semicolon",
+          "record": 11,
+          "source": "properties/generated/openwrt_packages_conversion.ndjson",
+          "status": "unsat"
+        }
+      ],
+      "question_ids": [
+        "OW-packages-sanitizer-image-no-semicolon"
+      ],
+      "regex_ids": [
+        "d5b40cbc510cb600ff987fd08b771dfe"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": false,
+      "site": "net/pbr/files/etc/init.d/pbr:213:str_extras_to_underscore",
+      "source_pin": null,
+      "statuses": [
+        "unsat"
+      ]
+    },
+    {
+      "asked": true,
+      "cluster": "openwrt_packages",
+      "evidence": [
+        {
+          "kind": "conversion_ndjson",
+          "question_id": "OW-packages-hostname-no-semicolon",
+          "record": 5,
+          "source": "properties/generated/openwrt_packages_conversion.ndjson",
+          "status": "unsat"
+        },
+        {
+          "kind": "conversion_ndjson",
+          "question_id": "OW-packages-hostname-no-space",
+          "record": 6,
+          "source": "properties/generated/openwrt_packages_conversion.ndjson",
+          "status": "unsat"
+        }
+      ],
+      "question_ids": [
+        "OW-packages-hostname-no-semicolon",
+        "OW-packages-hostname-no-space"
+      ],
+      "regex_ids": [
+        "42eec20d5b278d3b48ea9d8707c1dbb4",
+        "54d26d1e3a1d559e10c7e8b54a8aa4ad"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": false,
+      "site": "net/pbr/files/etc/init.d/pbr:354:is_hostname",
+      "source_pin": null,
+      "statuses": [
+        "unsat"
+      ]
+    },
+    {
+      "asked": true,
+      "cluster": "openwrt_packages",
+      "evidence": [
+        {
+          "kind": "conversion_ndjson",
+          "question_id": "OW-packages-wan-mark-hex-capture",
+          "record": 13,
+          "source": "properties/generated/openwrt_packages_conversion.ndjson",
+          "status": "unsat"
+        }
+      ],
+      "question_ids": [
+        "OW-packages-wan-mark-hex-capture"
+      ],
+      "regex_ids": [
+        "aace6dffa4b7eeb658f3b6b4107eae70"
+      ],
+      "repo_id": null,
+      "repository_url": null,
+      "reserved": false,
+      "site": "net/pbr/files/etc/uci-defaults/90-pbr:20:wan_mark",
+      "source_pin": null,
+      "statuses": [
+        "unsat"
+      ]
+    }
+  ],
+  "schema_version": "1",
+  "source_patterns": [
+    {
+      "glob": "properties/generated/*_conversion.ndjson",
+      "kind": "conversion_ndjson"
+    },
+    {
+      "glob": "properties/generated/autonomous_work.jsonl",
+      "kind": "autonomous_measurements"
+    },
+    {
+      "glob": "properties/calibration/**/conversion.ndjson",
+      "kind": "conversion_ndjson"
+    },
+    {
+      "glob": "properties/calibration/**/state.json",
+      "kind": "runner_state"
+    },
+    {
+      "glob": "properties/calibration/**/checkpoint.json",
+      "kind": "attempt_checkpoint"
+    },
+    {
+      "glob": "properties/calibration/**/attempts.json",
+      "kind": "attempts"
+    },
+    {
+      "glob": "properties/calibration/**/roster*.json",
+      "kind": "frozen_roster"
+    },
+    {
+      "glob": "properties/conversion_queue/*.json",
+      "kind": "queue"
+    },
+    {
+      "glob": "properties/calibration/**/review-evidence*.json",
+      "kind": "review_evidence"
+    },
+    {
+      "glob": "properties/calibration/**/review*.ndjson",
+      "kind": "review_decisions"
+    },
+    {
+      "glob": "properties/calibration/**/contract*.json",
+      "kind": "contract_artifact"
+    },
+    {
+      "glob": "properties/calibration/**/shortlist.json",
+      "kind": "shortlist"
+    },
+    {
+      "glob": "properties/calibration/**/queue-transition-replay.json",
+      "kind": "queue_transition_replay"
+    },
+    {
+      "glob": "docs/conversion-upstream.jsonl",
+      "kind": "upstream_dispositions"
+    }
+  ],
+  "sources": [
+    {
+      "kind": "upstream_dispositions",
+      "path": "docs/conversion-upstream.jsonl",
+      "records": 16,
+      "sha256": "c276dd21e0fa2dc262cf036d0b545a06b3804d9e2e872403b899968a3490c6ec"
+    },
+    {
+      "kind": "attempts",
+      "path": "properties/calibration/2026-10-13-autonomous-forge-cli-integration/attempts.json",
+      "records": 6,
+      "sha256": "415e8d2153b641b1acbd1de2227a512c3affa1fdb471f6ab9ef3b4e9e661290b"
+    },
+    {
+      "kind": "attempt_checkpoint",
+      "path": "properties/calibration/2026-10-13-autonomous-forge-cli-integration/checkpoint.json",
+      "records": 6,
+      "sha256": "d0fc3f95bc55171d0cd650f2146d6d777527ecc9968c49d8fa9784b423d65e4f"
+    },
+    {
+      "kind": "contract_artifact",
+      "path": "properties/calibration/2026-10-13-autonomous-forge-cli-integration/contracts.json",
+      "records": 6,
+      "sha256": "9bb02d8b88c7b9bdd3f196e704f1667e732d4fb597c9787c5d74b76c03fcfcce"
+    },
+    {
+      "kind": "conversion_ndjson",
+      "path": "properties/calibration/2026-10-13-autonomous-forge-cli-integration/conversion.ndjson",
+      "records": 6,
+      "sha256": "f8829a9c994df6d2c5e0b820aa0003598d7e41c788f1ee83750332582b4f3dbd"
+    },
+    {
+      "kind": "frozen_roster",
+      "path": "properties/calibration/2026-10-13-autonomous-forge-cli-integration/roster.json",
+      "records": 6,
+      "sha256": "bbb2a8dfbea999ce7c4603167b347bed95972a6c3f27556cbeed2fd70971a552"
+    },
+    {
+      "kind": "contract_artifact",
+      "path": "properties/calibration/2026-10-14-autonomous-tracecat-origin-slug/contract.json",
+      "records": 1,
+      "sha256": "6ca1ba5b864d560293a136bf7569ff643083edb12dd2c086294b7d0d91e0f1f5"
+    },
+    {
+      "kind": "contract_artifact",
+      "path": "properties/calibration/2026-10-15-autonomous-aidevops-node-secret-boundary/contract.json",
+      "records": 1,
+      "sha256": "a1a76c68c8625c0970122a4907b18b8c8655f3f24924a8422988be38fa731654"
+    },
+    {
+      "kind": "contract_artifact",
+      "path": "properties/calibration/2026-10-15-autonomous-aidevops-node-secret-boundary/contracts.json",
+      "records": 1,
+      "sha256": "b49409692874bb6dd54ab4921b30a3ef4ea69128854fbe22d3ca9581685a07a1"
+    },
+    {
+      "kind": "frozen_roster",
+      "path": "properties/calibration/2026-10-15-autonomous-aidevops-node-secret-boundary/roster.json",
+      "records": 1,
+      "sha256": "95e9d8eb8eab4adc17fe2366a18a77bcee8536efa014229e1eea91ba69b06e99"
+    },
+    {
+      "kind": "contract_artifact",
+      "path": "properties/calibration/2026-10-15-autonomous-autoar-html-text-escape-20r2/contract.json",
+      "records": 1,
+      "sha256": "0a2522a04c7a934bbc1614c0f3db7cae7b39cf203c58564b6c3b7331c1151bb8"
+    },
+    {
+      "kind": "contract_artifact",
+      "path": "properties/calibration/2026-10-15-autonomous-autoar-html-text-escape-20r2/contracts.json",
+      "records": 1,
+      "sha256": "39e49759f2019376e2249fc881d25df0f8ed9d20a8d328624734ea299020aef3"
+    },
+    {
+      "kind": "attempts",
+      "path": "properties/calibration/2026-10-15-autonomous-autoar-html-text-escape-20r2/p6-wave-r2/attempts.json",
+      "records": 1,
+      "sha256": "a66a6581017a7d168942498937997dd6818ec585f8a1403761dd617d74e78ef2"
+    },
+    {
+      "kind": "attempt_checkpoint",
+      "path": "properties/calibration/2026-10-15-autonomous-autoar-html-text-escape-20r2/p6-wave-r2/checkpoint.json",
+      "records": 1,
+      "sha256": "04349f28f0e3ce552f9219f084990c78723a62f7dcd8f0a9b90da88d8f796459"
+    },
+    {
+      "kind": "conversion_ndjson",
+      "path": "properties/calibration/2026-10-15-autonomous-autoar-html-text-escape-20r2/p6-wave-r2/conversion.ndjson",
+      "records": 1,
+      "sha256": "c130e9292f88ec1f6d55feba38be68bae095ed92f14004e58dd38eeacc9a6650"
+    },
+    {
+      "kind": "frozen_roster",
+      "path": "properties/calibration/2026-10-15-autonomous-autoar-html-text-escape-20r2/p6-wave-r2/roster.json",
+      "records": 1,
+      "sha256": "cccea366404ccacc7f5da17cdc001ae4b86178cbe6fd1deb15af04c65fa5577a"
+    },
+    {
+      "kind": "runner_state",
+      "path": "properties/calibration/2026-10-15-autonomous-autoar-html-text-escape-20r2/p6-wave-r2/state.json",
+      "records": 1,
+      "sha256": "7a29b85c99b4e31862d7867fba74fc7a5fa7d5a86b7bffb884c6cb5bd3c1bc37"
+    },
+    {
+      "kind": "attempts",
+      "path": "properties/calibration/2026-10-15-autonomous-autoar-html-text-escape-20r2/p6-wave/attempts.json",
+      "records": 1,
+      "sha256": "0562fda71386e22a5c7d3c9c00df7e5a42ecae42dbc2a72f90c43802d4487fd2"
+    },
+    {
+      "kind": "attempt_checkpoint",
+      "path": "properties/calibration/2026-10-15-autonomous-autoar-html-text-escape-20r2/p6-wave/checkpoint.json",
+      "records": 1,
+      "sha256": "e5cdedbfa39d93afea2c1d5b6bf5c27d8c88c69e98adf41b255337f2c9efba7f"
+    },
+    {
+      "kind": "conversion_ndjson",
+      "path": "properties/calibration/2026-10-15-autonomous-autoar-html-text-escape-20r2/p6-wave/conversion.ndjson",
+      "records": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "kind": "frozen_roster",
+      "path": "properties/calibration/2026-10-15-autonomous-autoar-html-text-escape-20r2/p6-wave/roster.json",
+      "records": 1,
+      "sha256": "cccea366404ccacc7f5da17cdc001ae4b86178cbe6fd1deb15af04c65fa5577a"
+    },
+    {
+      "kind": "runner_state",
+      "path": "properties/calibration/2026-10-15-autonomous-autoar-html-text-escape-20r2/p6-wave/state.json",
+      "records": 1,
+      "sha256": "460b58dbcb917958a63b05a6920c11d046700c6c5362b737fca30afa3e3ee97a"
+    },
+    {
+      "kind": "frozen_roster",
+      "path": "properties/calibration/2026-10-15-autonomous-autoar-html-text-escape-20r2/roster.json",
+      "records": 1,
+      "sha256": "cccea366404ccacc7f5da17cdc001ae4b86178cbe6fd1deb15af04c65fa5577a"
+    },
+    {
+      "kind": "contract_artifact",
+      "path": "properties/calibration/2026-10-15-autonomous-malcontent-git-cr-20r2/contract.json",
+      "records": 1,
+      "sha256": "15cf4bbd70ce6d35bed80519a215d4d7229494e1a43935aa8fee02d0ecfc2e19"
+    },
+    {
+      "kind": "contract_artifact",
+      "path": "properties/calibration/2026-10-15-autonomous-malcontent-git-cr-20r2/contracts.json",
+      "records": 1,
+      "sha256": "b42f8682b502fe2fd9d7cbaecfd3f9666c4f9dbde685e6a061b62e6e90f1d9e4"
+    },
+    {
+      "kind": "attempts",
+      "path": "properties/calibration/2026-10-15-autonomous-malcontent-git-cr-20r2/p6-wave/attempts.json",
+      "records": 1,
+      "sha256": "5925bdc3ab5892edc4e31a4f05947e292868116b1b4f90e82a54feebbd0f306a"
+    },
+    {
+      "kind": "attempt_checkpoint",
+      "path": "properties/calibration/2026-10-15-autonomous-malcontent-git-cr-20r2/p6-wave/checkpoint.json",
+      "records": 1,
+      "sha256": "066f1e14a47d7363e487987dae9a9c47687dcdc301ec88a59adc83bca6cc10b8"
+    },
+    {
+      "kind": "conversion_ndjson",
+      "path": "properties/calibration/2026-10-15-autonomous-malcontent-git-cr-20r2/p6-wave/conversion.ndjson",
+      "records": 1,
+      "sha256": "d4d03f4a1b138d210053d54a730cd3baad28dc6f9032b6b9f4b831947520b857"
+    },
+    {
+      "kind": "frozen_roster",
+      "path": "properties/calibration/2026-10-15-autonomous-malcontent-git-cr-20r2/p6-wave/roster.json",
+      "records": 1,
+      "sha256": "2002265b6b66e92c418f9f6f8553b5274de221f43d2dd0280c6a6c3692ff4bfd"
+    },
+    {
+      "kind": "runner_state",
+      "path": "properties/calibration/2026-10-15-autonomous-malcontent-git-cr-20r2/p6-wave/state.json",
+      "records": 1,
+      "sha256": "d91650e112324aaa450b2cd8f71c00736cdf923eed9cee5cf38de6f2d9c428f0"
+    },
+    {
+      "kind": "frozen_roster",
+      "path": "properties/calibration/2026-10-15-autonomous-malcontent-git-cr-20r2/roster.json",
+      "records": 1,
+      "sha256": "2002265b6b66e92c418f9f6f8553b5274de221f43d2dd0280c6a6c3692ff4bfd"
+    },
+    {
+      "kind": "shortlist",
+      "path": "properties/calibration/2026-10-15-autonomous-malcontent-git-cr-20r2/shortlist.json",
+      "records": 7,
+      "sha256": "8846627a39fc1b1f4ac7a4de65848c7c2231e12c8f6a9d24ff24ceb68f74c661"
+    },
+    {
+      "kind": "contract_artifact",
+      "path": "properties/calibration/2026-10-15-autonomous-mycelium-20r2-slice/contract-revision-1.json",
+      "records": 1,
+      "sha256": "889d43dde3c1714f7d38fb6656df3736c9f53e880fee1e09a180c90e5d479dbc"
+    },
+    {
+      "kind": "contract_artifact",
+      "path": "properties/calibration/2026-10-15-autonomous-mycelium-20r2-slice/contract-v1.json",
+      "records": 1,
+      "sha256": "985302556a127e6719a155442120dab3e97000c01596ee267227cc9672c4d3f3"
+    },
+    {
+      "kind": "contract_artifact",
+      "path": "properties/calibration/2026-10-15-autonomous-mycelium-20r2-slice/contract.json",
+      "records": 1,
+      "sha256": "cf5d99f074a2d6622310518606dd9b00cdca1f6457868b1de69111b6fdf3d7cd"
+    },
+    {
+      "kind": "contract_artifact",
+      "path": "properties/calibration/2026-10-15-autonomous-mycelium-20r2-slice/contracts-v1.json",
+      "records": 1,
+      "sha256": "b38131ffa3530ff24338bab61184f2dc239bd255f9ea557a4946ea19b3ae1a3c"
+    },
+    {
+      "kind": "contract_artifact",
+      "path": "properties/calibration/2026-10-15-autonomous-mycelium-20r2-slice/contracts.json",
+      "records": 1,
+      "sha256": "ed6ca7fd77ce8788cb6f807cc52ced4e3f6388ad75cf60f6be0de7ca8ecefae2"
+    },
+    {
+      "kind": "review_decisions",
+      "path": "properties/calibration/2026-10-15-autonomous-mycelium-20r2-slice/review.ndjson",
+      "records": 15,
+      "sha256": "afb1d0e5b24f7f1a2cf39c96c6dfb7fc61586d0886416ca20c1aca0a74ca944b"
+    },
+    {
+      "kind": "frozen_roster",
+      "path": "properties/calibration/2026-10-15-autonomous-mycelium-20r2-slice/roster-v2.json",
+      "records": 1,
+      "sha256": "cbe11b43658542ff2f5ce5e6e74aa23dc9516564d758a5cd9178090a4ef5d66a"
+    },
+    {
+      "kind": "frozen_roster",
+      "path": "properties/calibration/2026-10-15-autonomous-mycelium-20r2-slice/roster.json",
+      "records": 1,
+      "sha256": "66ea14b7d6a62bad8e647d7047059a9df252edbb292be8cb02b63e91355beef9"
+    },
+    {
+      "kind": "shortlist",
+      "path": "properties/calibration/2026-10-15-autonomous-mycelium-20r2-slice/shortlist.json",
+      "records": 15,
+      "sha256": "7fc397be7c3aa5767f646eb64f0dfeb7a3ab9531e9e4fab257094f42421dc84f"
+    },
+    {
+      "kind": "contract_artifact",
+      "path": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/contract-execstart-diagnostic.json",
+      "records": 1,
+      "sha256": "c0760a7faa9dba2659f1d9ccf8abf3f758443938f3f576395242bd37829281d6"
+    },
+    {
+      "kind": "contract_artifact",
+      "path": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/contract.json",
+      "records": 1,
+      "sha256": "933bd4e033128fbfb21bb5fef9b043eae5753cf7904bd6223403073de283de6c"
+    },
+    {
+      "kind": "contract_artifact",
+      "path": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/contracts.json",
+      "records": 1,
+      "sha256": "c0c33b43587d71ea22422a358555e871af3758cd1501766e5e9e437aad19448f"
+    },
+    {
+      "kind": "queue_transition_replay",
+      "path": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/queue-transition-replay.json",
+      "records": 17,
+      "sha256": "421a64890a5b0a8566de96021c1a560dcaf08fa79bb040d61eafa492c1bcb6fb"
+    },
+    {
+      "kind": "review_evidence",
+      "path": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/review-evidence-v2.json",
+      "records": 15,
+      "sha256": "6faf430bc5411749dd0cf1b402e0f778c961406187b61531de6a7bf6d1a43923"
+    },
+    {
+      "kind": "review_evidence",
+      "path": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/review-evidence.json",
+      "records": 15,
+      "sha256": "7414a3cb6e36df6fcb1510b439e130dc82d44b61af2c9d3a99d149c4688b76f8"
+    },
+    {
+      "kind": "review_decisions",
+      "path": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/review-v2.ndjson",
+      "records": 15,
+      "sha256": "3e149afff6e7e96914ff9d74e80d475518d40b3ee7747dbee9d0a4131bd731df"
+    },
+    {
+      "kind": "review_decisions",
+      "path": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/review.ndjson",
+      "records": 15,
+      "sha256": "1e6600ccd16fc25b8bbe932adfc6ed1fa6292c2e95b58d504865bd8d2145c76e"
+    },
+    {
+      "kind": "shortlist",
+      "path": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/shortlist.json",
+      "records": 15,
+      "sha256": "042d1fbec0498af9857d5f9799b07828a75be264e0aeacf1df4ba2cc83dc6597"
+    },
+    {
+      "kind": "conversion_ndjson",
+      "path": "properties/generated/Doberman-Core_conversion.ndjson",
+      "records": 2,
+      "sha256": "59d34df21a39eb29f37f3ceeee7ca42c1138590a55be2150da584290bfae8ea5"
+    },
+    {
+      "kind": "conversion_ndjson",
+      "path": "properties/generated/aidevops_conversion.ndjson",
+      "records": 5,
+      "sha256": "8f7d25d4f9469075b771ac58c4c33a572f0e7819b5251eaedc3646b8e316a201"
+    },
+    {
+      "kind": "autonomous_measurements",
+      "path": "properties/generated/autonomous_work.jsonl",
+      "records": 7,
+      "sha256": "b2700e6f1985a78f0cbfd9cd7df07974266ef726d73bfdf7ed1605a6a6fd6427"
+    },
+    {
+      "kind": "conversion_ndjson",
+      "path": "properties/generated/claude-code-plugins_conversion.ndjson",
+      "records": 3,
+      "sha256": "2fed451cee51b35a9af517bb889e77eea94e26f1ca27a3937439f71033f7e194"
+    },
+    {
+      "kind": "conversion_ndjson",
+      "path": "properties/generated/dogfood_shell_conversion.ndjson",
+      "records": 2,
+      "sha256": "3dabfc2fe5e723a67c4f6149b6946a5bfa540cce83521bb5297eaec324558f07"
+    },
+    {
+      "kind": "conversion_ndjson",
+      "path": "properties/generated/forge-cli_conversion.ndjson",
+      "records": 6,
+      "sha256": "f8829a9c994df6d2c5e0b820aa0003598d7e41c788f1ee83750332582b4f3dbd"
+    },
+    {
+      "kind": "conversion_ndjson",
+      "path": "properties/generated/mycelium_conversion.ndjson",
+      "records": 3,
+      "sha256": "2b711fcba0fb8e0c3962866fe2c50d2e1fedd76706ac6d7ee5b8764c171a3fc4"
+    },
+    {
+      "kind": "conversion_ndjson",
+      "path": "properties/generated/openwrt_luci_conversion.ndjson",
+      "records": 4,
+      "sha256": "27df1592da1ffde93be6d8f6d7dc384a032466ab4c6f4ee1fda045efd7cdfc6f"
+    },
+    {
+      "kind": "conversion_ndjson",
+      "path": "properties/generated/openwrt_packages_conversion.ndjson",
+      "records": 14,
+      "sha256": "14d610ecf93fb895550a941bab1523379e4203293b40250c02c9b80065e24d69"
+    }
+  ],
+  "unbound_records": [
+    {
+      "cluster": null,
+      "question_id": "aggregate:tracecat-origin-gate-20261015-r1",
+      "reason": "history record has no usable site identity",
+      "record": 0,
+      "repository_url": "https://github.com/TracecatHQ/tracecat",
+      "source": "properties/generated/autonomous_work.jsonl",
+      "source_pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+      "status": null
+    },
+    {
+      "cluster": null,
+      "question_id": "aggregate:mycelium-release-preflight-gate-offcohort-20261015-r1",
+      "reason": "history record has no usable site identity",
+      "record": 1,
+      "repository_url": "https://github.com/mycelium0/mycelium",
+      "source": "properties/generated/autonomous_work.jsonl",
+      "source_pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+      "status": null
+    },
+    {
+      "cluster": null,
+      "question_id": "aggregate:mycelium-release-preflight-20r2-gate-calibration-20261015-r1",
+      "reason": "history record has no usable site identity",
+      "record": 2,
+      "repository_url": "https://github.com/mycelium0/mycelium",
+      "source": "properties/generated/autonomous_work.jsonl",
+      "source_pin": "d4f01ba6202d50909d1977810d322259482e0b82",
+      "status": null
+    },
+    {
+      "cluster": null,
+      "question_id": "aggregate:b6e04742-6950-4ce3-acd5-f752e20837e0",
+      "reason": "history record has no usable site identity",
+      "record": 3,
+      "repository_url": "https://github.com/chainguard-dev/malcontent",
+      "source": "properties/generated/autonomous_work.jsonl",
+      "source_pin": "ea3e83e24676a1678a9522141da29b636c9451ab",
+      "status": null
+    },
+    {
+      "cluster": null,
+      "question_id": "aggregate:autoar-html-text-escape-p6-r1-incomplete",
+      "reason": "history record has no usable site identity",
+      "record": 4,
+      "repository_url": "https://github.com/h0tak88r/AutoAR",
+      "source": "properties/generated/autonomous_work.jsonl",
+      "source_pin": "01cd447ad3b1acfed7e0680596c2c74458a4cf06",
+      "status": null
+    },
+    {
+      "cluster": null,
+      "question_id": "aggregate:autoar-html-text-escape-p6-r2",
+      "reason": "history record has no usable site identity",
+      "record": 5,
+      "repository_url": "https://github.com/h0tak88r/AutoAR",
+      "source": "properties/generated/autonomous_work.jsonl",
+      "source_pin": "01cd447ad3b1acfed7e0680596c2c74458a4cf06",
+      "status": null
+    },
+    {
+      "cluster": null,
+      "question_id": "aggregate:mycelium-execstart-diagnostic-offcohort-20261015-r1",
+      "reason": "history record has no usable site identity",
+      "record": 6,
+      "repository_url": "https://github.com/mycelium0/mycelium",
+      "source": "properties/generated/autonomous_work.jsonl",
+      "source_pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+      "status": null
+    }
+  ]
+}

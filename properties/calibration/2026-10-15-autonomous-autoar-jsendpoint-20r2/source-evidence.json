@@ -1,0 +1,34 @@
+{
+  "schema_version": "1",
+  "repository": "https://github.com/h0tak88r/AutoAR",
+  "pin": "01cd447ad3b1acfed7e0680596c2c74458a4cf06",
+  "source_checkout": {
+    "path": "internal/scanner/jsendpoints/jsendpoints.go",
+    "sha256": "e9c03be11f7aab2a4310ea4944de5620e500f2400b13e22a3e1ea5b16745c549",
+    "observed_head": "01cd447ad3b1acfed7e0680596c2c74458a4cf06",
+    "clean": true
+  },
+  "boundary_path": [
+    {
+      "path": "internal/scanner/jsendpoints/jsendpoints.go:187-246",
+      "evidence": "The module loads JS URLs from the domain scan's JS URL list, downloads each response body, and passes the body into extractEndpoints."
+    },
+    {
+      "path": "internal/scanner/jsendpoints/jsendpoints.go:181",
+      "evidence": "The URL/href assignment RE2 expression captures group 1 using [^\"'\\x60\\s]{4,200}."
+    },
+    {
+      "path": "internal/scanner/jsendpoints/jsendpoints.go:305-331",
+      "evidence": "extractEndpoints trims and filters each capture, then returns it to the caller."
+    },
+    {
+      "path": "internal/scanner/jsendpoints/jsendpoints.go:259-299",
+      "evidence": "Returned endpoint strings are written to the JS endpoint text file and structured dashboard findings."
+    },
+    {
+      "path": "README.md:34,126",
+      "evidence": "The project describes JavaScript scanning as extracting API endpoints and authentication-related material from JavaScript files."
+    }
+  ],
+  "review_scope": "URL-assignment capture delimiters only; the proof does not establish endpoint validity, in-scope status, or completeness."
+}

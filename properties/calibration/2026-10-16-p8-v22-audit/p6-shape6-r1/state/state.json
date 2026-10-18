@@ -1,0 +1,551 @@
+{
+  "attempts": [
+    {
+      "contract": {
+        "adoption": {
+          "approved_on": "2026-10-16",
+          "authority": "standing_user_delegation",
+          "contract_sha256": "b56719d864c1b7d96db6bc38cc6f229bfbb3910f6655ed5410633bc09b42777a",
+          "evidence": [
+            "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/pulse-merge-webhook-receiver.sh",
+            "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/pulse-merge-webhook-server.py",
+            "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/configs/webhook-receiver.conf",
+            "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/reference/auto-merge.md",
+            "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/tests/test-pulse-merge-webhook-invalidation.py",
+            "properties/calibration/2026-10-16-autonomous-aidevops-webhook-action-protocol-20r2/review-evidence.json"
+          ],
+          "policy_version": "autonomous-contracts-v1",
+          "rationale": "The pinned config explicitly stores only the environment-variable name, and the receiver comment says the secret is resolved indirectly without logging the value. The identifier check precedes both indirect lookup and unset. Adoption covers only the accepted variable-name language and those two helper call sites.",
+          "review": {
+            "author": "Codex-P7-webhook-source-review",
+            "reviewer": "Codex-independent-contract-review-pass",
+            "same_model": true
+          },
+          "source_file": ".agents/scripts/pulse-merge-webhook-receiver.sh",
+          "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+          "source_sha256": "6d882dac90c3f9deb1a0007c9a4216d70f365a4a34ffacd145eb04cc8ae3a325",
+          "source_url": "https://github.com/marcusquinn/aidevops",
+          "status": "approved"
+        },
+        "declared_domain": "Exact Aidevops pin 8666b6c6c52472b5535aa295f2df593918152cb1; ASCII config strings usable as Bash variable names, unbounded length subject to the OS environment limit; contract covers both _resolve_secret at line 167 and _clear_webhook_secret_env at line 182, with line 167 as the indexed source site.",
+        "guarantee": "The receiver resolves and unsets a configured secret environment variable only when its name is a Bash identifier: an ASCII letter or underscore followed by zero or more ASCII letters, digits, or underscores. Invalid names are rejected before indirect parameter expansion or unset.",
+        "input_source": "Operator configuration from WEBHOOK_SECRET_ENV in the shell-sourceable webhook-receiver.conf or the documented environment override; this name selects which local environment variable holds the secret. The secret value itself is not the regex input.",
+        "provenance": "agent_derived",
+        "schema_version": "1",
+        "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pulse-merge-webhook-receiver.sh:167:1",
+        "trust": "config"
+      },
+      "detail": null,
+      "domain": "The configured secret-variable name accepted by the receiver is a Bash identifier",
+      "gate": {
+        "consumer_adopted": false,
+        "differential_cases": 75,
+        "gate_id": "aidevops-webhook-action-protocol-shape6-r1",
+        "local_gate_command": "/home/lalbers/gitroot/regexproof/.venv/bin/python /home/lalbers/gitroot/regexproof/scripts/aidevops-webhook-action-protocol-regression-gate.py --source-root /tmp/regexproof-pinned-sources/aidevops-8666b6c6c52472b5535aa295f2df593918152cb1 --output /home/lalbers/gitroot/regexproof/properties/calibration/2026-10-16-p8-v22-audit/p6-shape6-r1/product-gate.json",
+        "local_gate_passed": true,
+        "mutation_guard_passed": true,
+        "product_engine_replayed": true,
+        "source_pin_verified": true
+      },
+      "kind": "property",
+      "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "question_id": "AE-aidevops-webhook-secret-env-identifier",
+      "repo_id": "marcusquinn/aidevops",
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pulse-merge-webhook-receiver.sh:167:1",
+      "status": "unsat",
+      "synthesized": false,
+      "url": "https://github.com/marcusquinn/aidevops"
+    },
+    {
+      "contract": {
+        "adoption": {
+          "approved_on": "2026-10-16",
+          "authority": "standing_user_delegation",
+          "contract_sha256": "da66928f8df6ab7b4ccbd27c2e307dbd9a085e2562911e053010cb1231747ea0",
+          "evidence": [
+            "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/pulse-merge-webhook-receiver.sh",
+            "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/pulse-merge-webhook-server.py",
+            "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/configs/webhook-receiver.conf",
+            "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/reference/auto-merge.md",
+            "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/tests/test-pulse-merge-webhook-invalidation.py",
+            "properties/calibration/2026-10-16-autonomous-aidevops-webhook-action-protocol-20r2/review-memo.md"
+          ],
+          "policy_version": "autonomous-contracts-v1",
+          "rationale": "A fresh exact-pin source audit narrowed the guarantee to the exact regex-language theorem. The previous wording also described slug validation and cache-invalidator reachability, which the UNSAT query does not encode; those remain source-reviewed context and finite integrated-helper checks, not claims of this proof.",
+          "review": {
+            "author": "Codex-P7-webhook-source-review",
+            "reviewer": "Codex-P8-fresh-source-audit",
+            "same_model": true
+          },
+          "source_file": ".agents/scripts/pulse-merge-webhook-receiver.sh",
+          "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+          "source_sha256": "6d882dac90c3f9deb1a0007c9a4216d70f365a4a34ffacd145eb04cc8ae3a325",
+          "source_url": "https://github.com/marcusquinn/aidevops",
+          "status": "approved"
+        },
+        "declared_domain": "Exact Aidevops pin 8666b6c6c52472b5535aa295f2df593918152cb1; ASCII strings tested by the Bash `[[ $sha =~ ^[A-Fa-f0-9]{40}$ ]]` regex condition at receiver line 224; NUL is excluded by the local action-line protocol. The theorem is regex-language inclusion only and does not prove the adjacent slug check or downstream call path.",
+        "guarantee": "The receiver's ERE `^[A-Fa-f0-9]{40}$` at line 224 accepts only strings of exactly 40 ASCII hexadecimal characters. This contract covers the regex condition only; repository-slug validation, cache-invalidator reachability, and the complete helper control flow are separate checks and are not proved by this property.",
+        "input_source": "The check SHA associated with an authenticated GitHub webhook payload and serialized into the local action protocol by the pinned Python server. This proof concerns only the receiver's regex check on the token, not repository validation or whether the cache invalidator is called.",
+        "provenance": "agent_derived",
+        "schema_version": "1",
+        "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pulse-merge-webhook-receiver.sh:224:1",
+        "trust": "untrusted-input"
+      },
+      "detail": null,
+      "domain": "The receiver's SHA regex accepts only 40-character ASCII hexadecimal tokens",
+      "gate": {
+        "consumer_adopted": false,
+        "differential_cases": 48,
+        "gate_id": "aidevops-webhook-action-protocol-shape6-r1",
+        "local_gate_command": "/home/lalbers/gitroot/regexproof/.venv/bin/python /home/lalbers/gitroot/regexproof/scripts/aidevops-webhook-action-protocol-regression-gate.py --source-root /tmp/regexproof-pinned-sources/aidevops-8666b6c6c52472b5535aa295f2df593918152cb1 --output /home/lalbers/gitroot/regexproof/properties/calibration/2026-10-16-p8-v22-audit/p6-shape6-r1/product-gate.json",
+        "local_gate_passed": true,
+        "mutation_guard_passed": true,
+        "product_engine_replayed": true,
+        "source_pin_verified": true
+      },
+      "kind": "property",
+      "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "question_id": "AE-aidevops-webhook-check-sha-token",
+      "repo_id": "marcusquinn/aidevops",
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pulse-merge-webhook-receiver.sh:224:1",
+      "status": "unsat",
+      "synthesized": false,
+      "url": "https://github.com/marcusquinn/aidevops"
+    },
+    {
+      "contract": {
+        "adoption": {
+          "approved_on": "2026-10-16",
+          "authority": "standing_user_delegation",
+          "contract_sha256": "b723accf2629d739af9497e5136139dbdaa3c9d3b38221ed7788c887979dec12",
+          "evidence": [
+            "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/pulse-merge-webhook-receiver.sh",
+            "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/pulse-merge-webhook-server.py",
+            "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/configs/webhook-receiver.conf",
+            "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/reference/auto-merge.md",
+            "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/tests/test-pulse-merge-webhook-invalidation.py",
+            "properties/calibration/2026-10-16-autonomous-aidevops-webhook-action-protocol-20r2/review-memo.md"
+          ],
+          "policy_version": "autonomous-contracts-v1",
+          "rationale": "A fresh exact-pin source audit found that the prior contract described the entire positive-number dispatch condition while the attached UNSAT query proves only the regex language. This corrected adoption narrows the guarantee to that exact theorem; the server's positive-integer conversion and the receiver's separate arithmetic predicate remain source-reviewed context, not claims of this proof.",
+          "review": {
+            "author": "Codex-P7-webhook-source-review",
+            "reviewer": "Codex-P8-fresh-source-audit",
+            "same_model": true
+          },
+          "source_file": ".agents/scripts/pulse-merge-webhook-receiver.sh",
+          "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+          "source_sha256": "6d882dac90c3f9deb1a0007c9a4216d70f365a4a34ffacd145eb04cc8ae3a325",
+          "source_url": "https://github.com/marcusquinn/aidevops",
+          "status": "approved"
+        },
+        "declared_domain": "Exact Aidevops pin 8666b6c6c52472b5535aa295f2df593918152cb1; ASCII strings tested by the Bash `[[ $pr_number =~ ^[0-9]+$ ]]` regex condition at receiver line 302; NUL is excluded by the local action-line protocol. The theorem is regex-language inclusion only and makes no claim about Bash arithmetic, positivity, action parsing, or process_pr reachability.",
+        "guarantee": "The Bash ERE `^[0-9]+$` at the PROCESS_PR dispatcher accepts only nonempty ASCII decimal-digit strings. This contract covers the regex condition only; positivity, exact action-field count, and the complete dispatch path are separate checks and are not proved by this property.",
+        "input_source": "PR number text serialized into the local PROCESS_PR action by the pinned Python webhook server from a positive integer in an authenticated GitHub webhook event. This proof concerns only the receiver's regex check on that token, not the server validation or the later `-le 0` predicate.",
+        "provenance": "agent_derived",
+        "schema_version": "1",
+        "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pulse-merge-webhook-receiver.sh:302:6",
+        "trust": "untrusted-input"
+      },
+      "detail": null,
+      "domain": "Every nonempty token admitted by the receiver's Bash PR-number regex contains only decimal digits",
+      "gate": {
+        "consumer_adopted": false,
+        "differential_cases": 272,
+        "gate_id": "aidevops-webhook-action-protocol-shape6-r1",
+        "local_gate_command": "/home/lalbers/gitroot/regexproof/.venv/bin/python /home/lalbers/gitroot/regexproof/scripts/aidevops-webhook-action-protocol-regression-gate.py --source-root /tmp/regexproof-pinned-sources/aidevops-8666b6c6c52472b5535aa295f2df593918152cb1 --output /home/lalbers/gitroot/regexproof/properties/calibration/2026-10-16-p8-v22-audit/p6-shape6-r1/product-gate.json",
+        "local_gate_passed": true,
+        "mutation_guard_passed": true,
+        "product_engine_replayed": true,
+        "source_pin_verified": true
+      },
+      "kind": "property",
+      "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "question_id": "AE-aidevops-webhook-process-pr-number",
+      "repo_id": "marcusquinn/aidevops",
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pulse-merge-webhook-receiver.sh:302:6",
+      "status": "unsat",
+      "synthesized": false,
+      "url": "https://github.com/marcusquinn/aidevops"
+    }
+  ],
+  "cohort_manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+  "contracts": [
+    {
+      "contract": {
+        "adoption": {
+          "approved_on": "2026-10-16",
+          "authority": "standing_user_delegation",
+          "contract_sha256": "b56719d864c1b7d96db6bc38cc6f229bfbb3910f6655ed5410633bc09b42777a",
+          "evidence": [
+            "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/pulse-merge-webhook-receiver.sh",
+            "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/pulse-merge-webhook-server.py",
+            "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/configs/webhook-receiver.conf",
+            "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/reference/auto-merge.md",
+            "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/tests/test-pulse-merge-webhook-invalidation.py",
+            "properties/calibration/2026-10-16-autonomous-aidevops-webhook-action-protocol-20r2/review-evidence.json"
+          ],
+          "policy_version": "autonomous-contracts-v1",
+          "rationale": "The pinned config explicitly stores only the environment-variable name, and the receiver comment says the secret is resolved indirectly without logging the value. The identifier check precedes both indirect lookup and unset. Adoption covers only the accepted variable-name language and those two helper call sites.",
+          "review": {
+            "author": "Codex-P7-webhook-source-review",
+            "reviewer": "Codex-independent-contract-review-pass",
+            "same_model": true
+          },
+          "source_file": ".agents/scripts/pulse-merge-webhook-receiver.sh",
+          "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+          "source_sha256": "6d882dac90c3f9deb1a0007c9a4216d70f365a4a34ffacd145eb04cc8ae3a325",
+          "source_url": "https://github.com/marcusquinn/aidevops",
+          "status": "approved"
+        },
+        "declared_domain": "Exact Aidevops pin 8666b6c6c52472b5535aa295f2df593918152cb1; ASCII config strings usable as Bash variable names, unbounded length subject to the OS environment limit; contract covers both _resolve_secret at line 167 and _clear_webhook_secret_env at line 182, with line 167 as the indexed source site.",
+        "guarantee": "The receiver resolves and unsets a configured secret environment variable only when its name is a Bash identifier: an ASCII letter or underscore followed by zero or more ASCII letters, digits, or underscores. Invalid names are rejected before indirect parameter expansion or unset.",
+        "input_source": "Operator configuration from WEBHOOK_SECRET_ENV in the shell-sourceable webhook-receiver.conf or the documented environment override; this name selects which local environment variable holds the secret. The secret value itself is not the regex input.",
+        "provenance": "agent_derived",
+        "schema_version": "1",
+        "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pulse-merge-webhook-receiver.sh:167:1",
+        "trust": "config"
+      },
+      "domain": "The configured secret-variable name accepted by the receiver is a Bash identifier",
+      "kind": "property",
+      "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "question_id": "AE-aidevops-webhook-secret-env-identifier",
+      "repo_id": "marcusquinn/aidevops",
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pulse-merge-webhook-receiver.sh:167:1",
+      "synthesized": false,
+      "url": "https://github.com/marcusquinn/aidevops"
+    },
+    {
+      "contract": {
+        "adoption": {
+          "approved_on": "2026-10-16",
+          "authority": "standing_user_delegation",
+          "contract_sha256": "da66928f8df6ab7b4ccbd27c2e307dbd9a085e2562911e053010cb1231747ea0",
+          "evidence": [
+            "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/pulse-merge-webhook-receiver.sh",
+            "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/pulse-merge-webhook-server.py",
+            "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/configs/webhook-receiver.conf",
+            "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/reference/auto-merge.md",
+            "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/tests/test-pulse-merge-webhook-invalidation.py",
+            "properties/calibration/2026-10-16-autonomous-aidevops-webhook-action-protocol-20r2/review-memo.md"
+          ],
+          "policy_version": "autonomous-contracts-v1",
+          "rationale": "A fresh exact-pin source audit narrowed the guarantee to the exact regex-language theorem. The previous wording also described slug validation and cache-invalidator reachability, which the UNSAT query does not encode; those remain source-reviewed context and finite integrated-helper checks, not claims of this proof.",
+          "review": {
+            "author": "Codex-P7-webhook-source-review",
+            "reviewer": "Codex-P8-fresh-source-audit",
+            "same_model": true
+          },
+          "source_file": ".agents/scripts/pulse-merge-webhook-receiver.sh",
+          "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+          "source_sha256": "6d882dac90c3f9deb1a0007c9a4216d70f365a4a34ffacd145eb04cc8ae3a325",
+          "source_url": "https://github.com/marcusquinn/aidevops",
+          "status": "approved"
+        },
+        "declared_domain": "Exact Aidevops pin 8666b6c6c52472b5535aa295f2df593918152cb1; ASCII strings tested by the Bash `[[ $sha =~ ^[A-Fa-f0-9]{40}$ ]]` regex condition at receiver line 224; NUL is excluded by the local action-line protocol. The theorem is regex-language inclusion only and does not prove the adjacent slug check or downstream call path.",
+        "guarantee": "The receiver's ERE `^[A-Fa-f0-9]{40}$` at line 224 accepts only strings of exactly 40 ASCII hexadecimal characters. This contract covers the regex condition only; repository-slug validation, cache-invalidator reachability, and the complete helper control flow are separate checks and are not proved by this property.",
+        "input_source": "The check SHA associated with an authenticated GitHub webhook payload and serialized into the local action protocol by the pinned Python server. This proof concerns only the receiver's regex check on the token, not repository validation or whether the cache invalidator is called.",
+        "provenance": "agent_derived",
+        "schema_version": "1",
+        "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pulse-merge-webhook-receiver.sh:224:1",
+        "trust": "untrusted-input"
+      },
+      "domain": "The receiver's SHA regex accepts only 40-character ASCII hexadecimal tokens",
+      "kind": "property",
+      "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "question_id": "AE-aidevops-webhook-check-sha-token",
+      "repo_id": "marcusquinn/aidevops",
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pulse-merge-webhook-receiver.sh:224:1",
+      "synthesized": false,
+      "url": "https://github.com/marcusquinn/aidevops"
+    },
+    {
+      "contract": {
+        "adoption": {
+          "approved_on": "2026-10-16",
+          "authority": "standing_user_delegation",
+          "contract_sha256": "b723accf2629d739af9497e5136139dbdaa3c9d3b38221ed7788c887979dec12",
+          "evidence": [
+            "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/pulse-merge-webhook-receiver.sh",
+            "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/pulse-merge-webhook-server.py",
+            "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/configs/webhook-receiver.conf",
+            "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/reference/auto-merge.md",
+            "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/tests/test-pulse-merge-webhook-invalidation.py",
+            "properties/calibration/2026-10-16-autonomous-aidevops-webhook-action-protocol-20r2/review-memo.md"
+          ],
+          "policy_version": "autonomous-contracts-v1",
+          "rationale": "A fresh exact-pin source audit found that the prior contract described the entire positive-number dispatch condition while the attached UNSAT query proves only the regex language. This corrected adoption narrows the guarantee to that exact theorem; the server's positive-integer conversion and the receiver's separate arithmetic predicate remain source-reviewed context, not claims of this proof.",
+          "review": {
+            "author": "Codex-P7-webhook-source-review",
+            "reviewer": "Codex-P8-fresh-source-audit",
+            "same_model": true
+          },
+          "source_file": ".agents/scripts/pulse-merge-webhook-receiver.sh",
+          "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+          "source_sha256": "6d882dac90c3f9deb1a0007c9a4216d70f365a4a34ffacd145eb04cc8ae3a325",
+          "source_url": "https://github.com/marcusquinn/aidevops",
+          "status": "approved"
+        },
+        "declared_domain": "Exact Aidevops pin 8666b6c6c52472b5535aa295f2df593918152cb1; ASCII strings tested by the Bash `[[ $pr_number =~ ^[0-9]+$ ]]` regex condition at receiver line 302; NUL is excluded by the local action-line protocol. The theorem is regex-language inclusion only and makes no claim about Bash arithmetic, positivity, action parsing, or process_pr reachability.",
+        "guarantee": "The Bash ERE `^[0-9]+$` at the PROCESS_PR dispatcher accepts only nonempty ASCII decimal-digit strings. This contract covers the regex condition only; positivity, exact action-field count, and the complete dispatch path are separate checks and are not proved by this property.",
+        "input_source": "PR number text serialized into the local PROCESS_PR action by the pinned Python webhook server from a positive integer in an authenticated GitHub webhook event. This proof concerns only the receiver's regex check on that token, not the server validation or the later `-le 0` predicate.",
+        "provenance": "agent_derived",
+        "schema_version": "1",
+        "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pulse-merge-webhook-receiver.sh:302:6",
+        "trust": "untrusted-input"
+      },
+      "domain": "Every nonempty token admitted by the receiver's Bash PR-number regex contains only decimal digits",
+      "kind": "property",
+      "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "question_id": "AE-aidevops-webhook-process-pr-number",
+      "repo_id": "marcusquinn/aidevops",
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pulse-merge-webhook-receiver.sh:302:6",
+      "synthesized": false,
+      "url": "https://github.com/marcusquinn/aidevops"
+    }
+  ],
+  "conversion_rows": [
+    {
+      "contract": {
+        "adoption": {
+          "approved_on": "2026-10-16",
+          "authority": "standing_user_delegation",
+          "contract_sha256": "b56719d864c1b7d96db6bc38cc6f229bfbb3910f6655ed5410633bc09b42777a",
+          "evidence": [
+            "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/pulse-merge-webhook-receiver.sh",
+            "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/pulse-merge-webhook-server.py",
+            "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/configs/webhook-receiver.conf",
+            "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/reference/auto-merge.md",
+            "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/tests/test-pulse-merge-webhook-invalidation.py",
+            "properties/calibration/2026-10-16-autonomous-aidevops-webhook-action-protocol-20r2/review-evidence.json"
+          ],
+          "policy_version": "autonomous-contracts-v1",
+          "rationale": "The pinned config explicitly stores only the environment-variable name, and the receiver comment says the secret is resolved indirectly without logging the value. The identifier check precedes both indirect lookup and unset. Adoption covers only the accepted variable-name language and those two helper call sites.",
+          "review": {
+            "author": "Codex-P7-webhook-source-review",
+            "reviewer": "Codex-independent-contract-review-pass",
+            "same_model": true
+          },
+          "source_file": ".agents/scripts/pulse-merge-webhook-receiver.sh",
+          "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+          "source_sha256": "6d882dac90c3f9deb1a0007c9a4216d70f365a4a34ffacd145eb04cc8ae3a325",
+          "source_url": "https://github.com/marcusquinn/aidevops",
+          "status": "approved"
+        },
+        "declared_domain": "Exact Aidevops pin 8666b6c6c52472b5535aa295f2df593918152cb1; ASCII config strings usable as Bash variable names, unbounded length subject to the OS environment limit; contract covers both _resolve_secret at line 167 and _clear_webhook_secret_env at line 182, with line 167 as the indexed source site.",
+        "guarantee": "The receiver resolves and unsets a configured secret environment variable only when its name is a Bash identifier: an ASCII letter or underscore followed by zero or more ASCII letters, digits, or underscores. Invalid names are rejected before indirect parameter expansion or unset.",
+        "input_source": "Operator configuration from WEBHOOK_SECRET_ENV in the shell-sourceable webhook-receiver.conf or the documented environment override; this name selects which local environment variable holds the secret. The secret value itself is not the regex input.",
+        "provenance": "agent_derived",
+        "schema_version": "1",
+        "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pulse-merge-webhook-receiver.sh:167:1",
+        "trust": "config"
+      },
+      "corpus": "aidevops",
+      "disclosure": null,
+      "domain": "The configured secret-variable name accepted by the receiver is a Bash identifier",
+      "engine_versions": {
+        "python": "3.14.8",
+        "z3": "5.0.0"
+      },
+      "family": "AE-aidevops-webhook-secret-env-name",
+      "ground_truth": null,
+      "ground_truth_status": null,
+      "idiom_bucket": "webhook-action-protocol",
+      "kind": "property",
+      "name": "AE-aidevops-webhook-secret-env-identifier",
+      "product_reportable": true,
+      "regex_id": "3f8981d351cff1adcb86b2592f011eb6",
+      "result": "unsat",
+      "schema_version": "1",
+      "shape": 6,
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pulse-merge-webhook-receiver.sh:167:1",
+      "synthesized": false,
+      "wave_id": "aidevops-webhook-action-protocol-shape6-r1",
+      "witness": null
+    },
+    {
+      "contract": {
+        "adoption": {
+          "approved_on": "2026-10-16",
+          "authority": "standing_user_delegation",
+          "contract_sha256": "da66928f8df6ab7b4ccbd27c2e307dbd9a085e2562911e053010cb1231747ea0",
+          "evidence": [
+            "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/pulse-merge-webhook-receiver.sh",
+            "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/pulse-merge-webhook-server.py",
+            "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/configs/webhook-receiver.conf",
+            "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/reference/auto-merge.md",
+            "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/tests/test-pulse-merge-webhook-invalidation.py",
+            "properties/calibration/2026-10-16-autonomous-aidevops-webhook-action-protocol-20r2/review-memo.md"
+          ],
+          "policy_version": "autonomous-contracts-v1",
+          "rationale": "A fresh exact-pin source audit narrowed the guarantee to the exact regex-language theorem. The previous wording also described slug validation and cache-invalidator reachability, which the UNSAT query does not encode; those remain source-reviewed context and finite integrated-helper checks, not claims of this proof.",
+          "review": {
+            "author": "Codex-P7-webhook-source-review",
+            "reviewer": "Codex-P8-fresh-source-audit",
+            "same_model": true
+          },
+          "source_file": ".agents/scripts/pulse-merge-webhook-receiver.sh",
+          "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+          "source_sha256": "6d882dac90c3f9deb1a0007c9a4216d70f365a4a34ffacd145eb04cc8ae3a325",
+          "source_url": "https://github.com/marcusquinn/aidevops",
+          "status": "approved"
+        },
+        "declared_domain": "Exact Aidevops pin 8666b6c6c52472b5535aa295f2df593918152cb1; ASCII strings tested by the Bash `[[ $sha =~ ^[A-Fa-f0-9]{40}$ ]]` regex condition at receiver line 224; NUL is excluded by the local action-line protocol. The theorem is regex-language inclusion only and does not prove the adjacent slug check or downstream call path.",
+        "guarantee": "The receiver's ERE `^[A-Fa-f0-9]{40}$` at line 224 accepts only strings of exactly 40 ASCII hexadecimal characters. This contract covers the regex condition only; repository-slug validation, cache-invalidator reachability, and the complete helper control flow are separate checks and are not proved by this property.",
+        "input_source": "The check SHA associated with an authenticated GitHub webhook payload and serialized into the local action protocol by the pinned Python server. This proof concerns only the receiver's regex check on the token, not repository validation or whether the cache invalidator is called.",
+        "provenance": "agent_derived",
+        "schema_version": "1",
+        "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pulse-merge-webhook-receiver.sh:224:1",
+        "trust": "untrusted-input"
+      },
+      "corpus": "aidevops",
+      "disclosure": null,
+      "domain": "The receiver's SHA regex accepts only 40-character ASCII hexadecimal tokens",
+      "engine_versions": {
+        "python": "3.14.8",
+        "z3": "5.0.0"
+      },
+      "family": "AE-aidevops-webhook-check-sha",
+      "ground_truth": null,
+      "ground_truth_status": null,
+      "idiom_bucket": "webhook-action-protocol",
+      "kind": "property",
+      "name": "AE-aidevops-webhook-check-sha-token",
+      "product_reportable": true,
+      "regex_id": "175262ed69436e24f85d557d9b66b081",
+      "result": "unsat",
+      "schema_version": "1",
+      "shape": 6,
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pulse-merge-webhook-receiver.sh:224:1",
+      "synthesized": false,
+      "wave_id": "aidevops-webhook-action-protocol-shape6-r1",
+      "witness": null
+    },
+    {
+      "contract": {
+        "adoption": {
+          "approved_on": "2026-10-16",
+          "authority": "standing_user_delegation",
+          "contract_sha256": "b723accf2629d739af9497e5136139dbdaa3c9d3b38221ed7788c887979dec12",
+          "evidence": [
+            "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/pulse-merge-webhook-receiver.sh",
+            "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/pulse-merge-webhook-server.py",
+            "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/configs/webhook-receiver.conf",
+            "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/reference/auto-merge.md",
+            "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/tests/test-pulse-merge-webhook-invalidation.py",
+            "properties/calibration/2026-10-16-autonomous-aidevops-webhook-action-protocol-20r2/review-memo.md"
+          ],
+          "policy_version": "autonomous-contracts-v1",
+          "rationale": "A fresh exact-pin source audit found that the prior contract described the entire positive-number dispatch condition while the attached UNSAT query proves only the regex language. This corrected adoption narrows the guarantee to that exact theorem; the server's positive-integer conversion and the receiver's separate arithmetic predicate remain source-reviewed context, not claims of this proof.",
+          "review": {
+            "author": "Codex-P7-webhook-source-review",
+            "reviewer": "Codex-P8-fresh-source-audit",
+            "same_model": true
+          },
+          "source_file": ".agents/scripts/pulse-merge-webhook-receiver.sh",
+          "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+          "source_sha256": "6d882dac90c3f9deb1a0007c9a4216d70f365a4a34ffacd145eb04cc8ae3a325",
+          "source_url": "https://github.com/marcusquinn/aidevops",
+          "status": "approved"
+        },
+        "declared_domain": "Exact Aidevops pin 8666b6c6c52472b5535aa295f2df593918152cb1; ASCII strings tested by the Bash `[[ $pr_number =~ ^[0-9]+$ ]]` regex condition at receiver line 302; NUL is excluded by the local action-line protocol. The theorem is regex-language inclusion only and makes no claim about Bash arithmetic, positivity, action parsing, or process_pr reachability.",
+        "guarantee": "The Bash ERE `^[0-9]+$` at the PROCESS_PR dispatcher accepts only nonempty ASCII decimal-digit strings. This contract covers the regex condition only; positivity, exact action-field count, and the complete dispatch path are separate checks and are not proved by this property.",
+        "input_source": "PR number text serialized into the local PROCESS_PR action by the pinned Python webhook server from a positive integer in an authenticated GitHub webhook event. This proof concerns only the receiver's regex check on that token, not the server validation or the later `-le 0` predicate.",
+        "provenance": "agent_derived",
+        "schema_version": "1",
+        "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pulse-merge-webhook-receiver.sh:302:6",
+        "trust": "untrusted-input"
+      },
+      "corpus": "aidevops",
+      "disclosure": null,
+      "domain": "Every nonempty token admitted by the receiver's Bash PR-number regex contains only decimal digits",
+      "engine_versions": {
+        "python": "3.14.8",
+        "z3": "5.0.0"
+      },
+      "family": "AE-aidevops-webhook-pr-number",
+      "ground_truth": null,
+      "ground_truth_status": null,
+      "idiom_bucket": "webhook-action-protocol",
+      "kind": "property",
+      "name": "AE-aidevops-webhook-process-pr-number",
+      "product_reportable": true,
+      "regex_id": "324c531d2ded6eb579b64104f3ff8753",
+      "result": "unsat",
+      "schema_version": "1",
+      "shape": 6,
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pulse-merge-webhook-receiver.sh:302:6",
+      "synthesized": false,
+      "wave_id": "aidevops-webhook-action-protocol-shape6-r1",
+      "witness": null
+    }
+  ],
+  "corpus": "aidevops",
+  "coverage_digest": "e66bce291439ade91f4ee2b8cd98973980f91c5c4f7c3b40275c40fb58e1fb3e",
+  "execution_caps": {
+    "local_gate_timeout_seconds": 300,
+    "max_active_conversion_waves": 1,
+    "max_adopted_contracts_per_wave": 5,
+    "max_new_questions_per_run": 5,
+    "parallel_walk": false,
+    "solver_retries": 0,
+    "solver_timeout_ms": 30000
+  },
+  "gate_config": {
+    "command": [
+      "/home/lalbers/gitroot/regexproof/.venv/bin/python",
+      "/home/lalbers/gitroot/regexproof/scripts/aidevops-webhook-action-protocol-regression-gate.py",
+      "--source-root",
+      "/tmp/regexproof-pinned-sources/aidevops-8666b6c6c52472b5535aa295f2df593918152cb1",
+      "--output",
+      "/home/lalbers/gitroot/regexproof/properties/calibration/2026-10-16-p8-v22-audit/p6-shape6-r1/product-gate.json"
+    ],
+    "evidence": {
+      "differential_case_counts": {
+        "AE-aidevops-webhook-check-sha-token": 48,
+        "AE-aidevops-webhook-process-pr-number": 272,
+        "AE-aidevops-webhook-secret-env-identifier": 75
+      },
+      "product_engine_replay_question_ids": [
+        "AE-aidevops-webhook-secret-env-identifier",
+        "AE-aidevops-webhook-check-sha-token",
+        "AE-aidevops-webhook-process-pr-number"
+      ]
+    },
+    "gate_id": "aidevops-webhook-action-protocol-shape6-r1",
+    "question_ids": [
+      "AE-aidevops-webhook-secret-env-identifier",
+      "AE-aidevops-webhook-check-sha-token",
+      "AE-aidevops-webhook-process-pr-number"
+    ],
+    "schema_version": "1",
+    "timeout_seconds": 300
+  },
+  "idiom_bucket": "webhook-action-protocol",
+  "runs": [
+    {
+      "active_question_id": null,
+      "finished_at": "2026-10-17T01:03:07+00:00",
+      "gate_failure": null,
+      "gate_passed": true,
+      "gate_wall_ms": 6000.6,
+      "mutation_failures": [],
+      "mutation_wall_ms": 214.7,
+      "new_questions": 3,
+      "question_ids": [
+        "AE-aidevops-webhook-secret-env-identifier",
+        "AE-aidevops-webhook-check-sha-token",
+        "AE-aidevops-webhook-process-pr-number"
+      ],
+      "reason": null,
+      "run_id": "eaf960ce-dd1e-4565-9c39-131baadfe1b3",
+      "solver_wall_ms": 871.9000000000001,
+      "source_failures": {},
+      "source_wall_ms": 28.7,
+      "started_at": "2026-10-17T01:03:06+00:00",
+      "status": "complete"
+    }
+  ],
+  "schema_version": "1",
+  "wave_id": "aidevops-webhook-action-protocol-shape6-r1"
+}

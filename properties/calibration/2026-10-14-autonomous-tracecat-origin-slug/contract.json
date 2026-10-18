@@ -1,0 +1,33 @@
+{
+  "adoption": {
+    "approved_on": "2026-10-14",
+    "authority": "standing_user_delegation",
+    "contract_sha256": "18036f5175d350986be6440e5e7dacb1336a50e3e6cc5d31e41c5ab37f887c31",
+    "evidence": [
+      "https://github.com/TracecatHQ/tracecat/blob/c84d52528a489821f355fc63976fbc7783ae0ad5/tracecat/registry/artifact_keys.py",
+      "https://github.com/TracecatHQ/tracecat/blob/c84d52528a489821f355fc63976fbc7783ae0ad5/tracecat/registry/repositories/schemas.py",
+      "https://github.com/TracecatHQ/tracecat/blob/c84d52528a489821f355fc63976fbc7783ae0ad5/tracecat/registry/sync/schemas.py",
+      "https://github.com/TracecatHQ/tracecat/blob/c84d52528a489821f355fc63976fbc7783ae0ad5/tracecat/registry/sync/runner.py",
+      "RegistryRepositoryCreate and RegistryRepositoryUpdate origins flow into the sync request, then the origin-derived value is a dedicated S3 key segment passed to the artifact upload."
+    ],
+    "policy_version": "autonomous-contracts-v1",
+    "rationale": "The pinned slug substitution independently guarantees that repository-origin text cannot introduce S3 key path separators or dot segments; the output flows into the uploaded artifact key.",
+    "review": {
+      "author": "codex-contract-author",
+      "reviewer": "codex-independent-review-pass",
+      "same_model": true
+    },
+    "source_file": "tracecat/registry/artifact_keys.py",
+    "source_pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+    "source_sha256": "26a7335ee1c219dbd844b7207f60809ae563c70249cf714896c91322a7899e06",
+    "source_url": "https://github.com/TracecatHQ/tracecat",
+    "status": "approved"
+  },
+  "declared_domain": "Tracecat source pin c84d52528a489821f355fc63976fbc7783ae0ad5; registry API origin fields accept 1..255 Unicode characters. The solver theorem is length-independent over each single Unicode code point; the runnable product gate checks the composed helper, 100-character cap, and S3-key component layout over a deterministic and seeded input corpus.",
+  "guarantee": "In the origin-to-slug substitution, every Unicode code point outside ASCII [A-Za-z0-9_-] is replaced by underscore and every code point inside that alphabet is preserved; therefore origin text cannot add slash or dot path separators to its S3 key component.",
+  "input_source": "RegistryRepositoryCreate.origin and RegistryRepositoryUpdate.origin flow through registry sync into get_artifact_s3_key and the S3 upload path.",
+  "provenance": "agent_derived",
+  "schema_version": "1",
+  "site": "TracecatHQ/tracecat@c84d52528a489821f355fc63976fbc7783ae0ad5:tracecat/registry/artifact_keys.py:46:_slugify_origin",
+  "trust": "config"
+}

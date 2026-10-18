@@ -5,7 +5,8 @@ Cluster-ranked candidate sites with a SINGLE status vocabulary
 are derived joins over the queue + ledger — the queue never re-encodes
 ledger truth. Stubs (``provenance=stub``) are QUEUE-ONLY, schema-enforced
 (``schemas/queue_stub.schema.json``): a stub never increments
-``properties_asked`` (it is not a contract).
+``properties_asked``. A claimed stub advances only when a separate full,
+adopted product contract is supplied and validated.
 
 Guards (acceptance criteria):
 - top-15 requirement: a claim must target a ranked candidate within the
@@ -194,6 +195,12 @@ def claim(
                 f"{corpus_status!r}, not {GATED_GO!r}"
             )
         row = _row(q, site)
+        expected_pin = ledger_state.get("source_pin")
+        if expected_pin is not None and row.get("pin") != expected_pin:
+            raise SystemExit(
+                f"conversion_queue: claim refused — {site} queue pin "
+                "does not match the GO decision snapshot"
+            )
         if int(row.get("rank") or 999) > 15:
             raise SystemExit(
                 f"conversion_queue: claim refused — {site} is rank "
@@ -268,9 +275,11 @@ def contract(
     root: pathlib.Path | None = None,
     lock_log: pathlib.Path | None = None,
 ) -> dict[str, Any]:
-    """Adopt a contract for a claimed site. Contract fields are validated
-    by the caller against the contract schema; ``provenance=stub`` rows
-    NEVER contract (they must be re-ranked / human-adopted first)."""
+    """Adopt a validated product contract for a claimed site.
+
+    Queue stubs remain non-product data. Agent-authored contracts need the
+    shared source-bound adoption record before this state transition.
+    """
 
     def _contract() -> dict[str, Any]:
         q = load_queue(cluster, root)
@@ -288,7 +297,10 @@ def contract(
         # wave, else a contract from a stale wave silently lands in a
         # closed queue.
         if lock_log is not None:
-            from regexproof.mine.corpus_lock import _active_wave_id
+            from regexproof.mine.corpus_lock import (
+                _active_wave_id,
+                read_generation,
+            )
 
             try:
                 current_wave = _active_wave_id(cluster, lock_log)
@@ -309,12 +321,39 @@ def contract(
                     f"wave {claimed_wave!r} but active wave is {current_wave!r} "
                     "(stale claim after close/abort)"
                 )
-        if (row.get("provenance") or "human") == "stub":
+            generation = read_generation(cluster, lock_log)
+            artifact_generation = int(q.get("wave_generation", -1))
+            claimed_generation = int(row.get("wave_generation_at_claim", -1))
+            if artifact_generation != generation or claimed_generation != generation:
+                raise SystemExit(
+                    f"conversion_queue: contract refused — {site} claim/artifact "
+                    f"generation does not match current {generation}"
+                )
+        from regexproof.harness.contract import valid_product_contract
+
+        if not isinstance(contract, dict) or contract.get("site") != site:
             raise SystemExit(
-                f"conversion_queue: contract refused — {site} is a stub "
-                "(provenance=stub); stubs never become contracts directly"
+                f"conversion_queue: contract refused — contract.site must match {site!r}"
+            )
+        if lock_log is not None and contract.get("provenance") == "agent_derived":
+            adoption = contract.get("adoption") or {}
+            snapshot = row.get("ledger_state_at_claim")
+            if not isinstance(snapshot, dict) or (
+                adoption.get("source_pin") != row.get("pin")
+                or adoption.get("source_pin") != snapshot.get("source_pin")
+                or adoption.get("source_url", "").rstrip("/")
+                != str(snapshot.get("repository_url") or "").rstrip("/")
+            ):
+                raise SystemExit(
+                    f"conversion_queue: contract refused — adoption source does "
+                    f"not match the claim snapshot for {site}"
+                )
+        if not valid_product_contract(contract):
+            raise SystemExit(
+                f"conversion_queue: contract refused — incomplete or unadopted contract for {site}"
             )
         row["status"] = "contracted"
+        row["provenance"] = contract["provenance"]
         row["contract"] = contract
         _write(q, root)
         return row
@@ -344,6 +383,39 @@ def skip(
     def _skip() -> dict[str, Any]:
         q = load_queue(cluster, root)
         row = _row(q, site)
+        if int(row.get("rank") or 999) > 15:
+            raise SystemExit(
+                f"conversion_queue: skip refused — {site} is rank "
+                f"{row.get('rank')} (top-15 dispositions only)"
+            )
+        if lock_log is not None:
+            from regexproof.mine.corpus_lock import (
+                _active_wave_id,
+                read_generation,
+                wave_status,
+            )
+
+            if wave_status(cluster, lock_log) != "active":
+                raise SystemExit(
+                    f"conversion_queue: skip refused — corpus {cluster} has no active wave"
+                )
+            generation = read_generation(cluster, lock_log)
+            artifact_generation = int(q.get("wave_generation", -1))
+            active_wave = _active_wave_id(cluster, lock_log)
+            if artifact_generation != generation or q.get("wave_id") != active_wave:
+                raise SystemExit(
+                    f"conversion_queue: skip refused — queue {cluster} is stale "
+                    "for the active wave"
+                )
+            row_wave = row.get("wave_id")
+            claimed_generation = row.get("wave_generation_at_claim")
+            if row["status"] == "claimed" and (
+                row_wave != active_wave or int(claimed_generation or -1) != generation
+            ):
+                raise SystemExit(
+                    f"conversion_queue: skip refused — {site} claim is stale "
+                    "for the active wave"
+                )
         if row["status"] == "contracted":
             raise SystemExit(
                 f"conversion_queue: skip refused — {site} is contracted; a live "

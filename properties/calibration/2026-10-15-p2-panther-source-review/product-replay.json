@@ -1,0 +1,100 @@
+{
+  "case_count": 9,
+  "cases": {
+    ".env.local.py": {
+      "expected_selected_for_review": true,
+      "helper_matches_python_regex_and_suffix_model": true,
+      "python_regex_excludes_path": false,
+      "selected_for_review": true,
+      "sentinel_in_prompt": true
+    },
+    "README.md": {
+      "expected_selected_for_review": false,
+      "helper_matches_python_regex_and_suffix_model": true,
+      "python_regex_excludes_path": false,
+      "selected_for_review": false,
+      "sentinel_in_prompt": false
+    },
+    "credentials.json.py": {
+      "expected_selected_for_review": false,
+      "helper_matches_python_regex_and_suffix_model": true,
+      "python_regex_excludes_path": true,
+      "selected_for_review": false,
+      "sentinel_in_prompt": false
+    },
+    "credentials.py": {
+      "expected_selected_for_review": true,
+      "helper_matches_python_regex_and_suffix_model": true,
+      "python_regex_excludes_path": false,
+      "selected_for_review": true,
+      "sentinel_in_prompt": true
+    },
+    "normal.py": {
+      "expected_selected_for_review": true,
+      "helper_matches_python_regex_and_suffix_model": true,
+      "python_regex_excludes_path": false,
+      "selected_for_review": true,
+      "sentinel_in_prompt": true
+    },
+    "password.secret.py": {
+      "expected_selected_for_review": false,
+      "helper_matches_python_regex_and_suffix_model": true,
+      "python_regex_excludes_path": true,
+      "selected_for_review": false,
+      "sentinel_in_prompt": false
+    },
+    "pkg/api_secrets.py": {
+      "expected_selected_for_review": true,
+      "helper_matches_python_regex_and_suffix_model": true,
+      "python_regex_excludes_path": false,
+      "selected_for_review": true,
+      "sentinel_in_prompt": true
+    },
+    "private.pem.py": {
+      "expected_selected_for_review": true,
+      "helper_matches_python_regex_and_suffix_model": true,
+      "python_regex_excludes_path": false,
+      "selected_for_review": true,
+      "sentinel_in_prompt": true
+    },
+    "secrets.py": {
+      "expected_selected_for_review": true,
+      "helper_matches_python_regex_and_suffix_model": true,
+      "python_regex_excludes_path": false,
+      "selected_for_review": true,
+      "sentinel_in_prompt": true
+    }
+  },
+  "claude_invoked": false,
+  "engines": {
+    "git": "git version 2.43.0",
+    "python": "3.14.8"
+  },
+  "failures": [],
+  "gate_id": "panther-precommit-secret-path-review-filter",
+  "mutation": {
+    "claude_invoked": false,
+    "network_used": false,
+    "path": "password.secret.py",
+    "pattern": "^$",
+    "selected_for_review": true,
+    "sentinel_in_prompt": true
+  },
+  "mutation_guard_id": "PA-panther-exclusion-mutation-secret-file-pass-through",
+  "network_used": false,
+  "question_id": "PA-panther-staged-secrets-file-excluded-from-review-prompt",
+  "repository": "https://github.com/panther-labs/panther-analysis",
+  "result": "pass",
+  "schema_version": "1",
+  "source_checkout": "/tmp/regexproof-pinned-sources/panther-analysis-0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a",
+  "source_pin": "0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a",
+  "source_verification": {
+    "head": "0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a",
+    "source_sha256": {
+      ".claude/commands/pr-review.md": "3c6db4056e157cacf208037c6c00650bf2957b2b49d3c53934b8c43c51423ca0",
+      ".scripts/claude_review.py": "bb84d899da9cd10d82712610419f7802d84900541fd1e1c48a94223a12bc4024",
+      ".scripts/pre-commit-wrapper.sh": "05c210b497e357fca50f41231b74dad46ee3c8b9360d314b3e95fcb7722e4a8d",
+      "Makefile": "c217b722a6d10114d1543f120f3813f3e2c4d44f5a56c8192d015a7a0b377b71"
+    }
+  }
+}

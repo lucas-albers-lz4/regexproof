@@ -328,7 +328,7 @@ def extract_js_precise(source: str, *, repo: str, file: str) -> list[dict[str, A
 def _live_code_offsets(source: str) -> set[int]:
     """Offsets that are outside // /* */ comments and string/template literals."""
     live: set[int] = set()
-    i = 0
+    i = _js_source_start(source)
     n = len(source)
     while i < n:
         if source.startswith("//", i):
@@ -350,7 +350,7 @@ def _live_code_offsets(source: str) -> set[int]:
 def _scan_regex_literals(source: str) -> list[tuple[int, str, str]]:
     """Return ``(start_offset, pattern, flags)`` for each regex literal."""
     results: list[tuple[int, str, str]] = []
-    i = 0
+    i = _js_source_start(source)
     n = len(source)
     prev = "sof"
 
@@ -452,6 +452,15 @@ def _scan_regex_literals(source: str) -> list[tuple[int, str, str]]:
         i += 1
         prev = "op"
     return results
+
+
+def _js_source_start(source: str) -> int:
+    """Skip a leading BOM and ECMAScript hashbang comment, if present."""
+    i = 1 if source.startswith("\ufeff") else 0
+    if not source.startswith("#!", i):
+        return i
+    newline = source.find("\n", i)
+    return len(source) if newline < 0 else newline + 1
 
 
 def _skip_string(source: str, i: int) -> int:

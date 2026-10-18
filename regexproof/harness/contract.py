@@ -6,9 +6,14 @@ domain. Mutation guards are never product.
 
 from __future__ import annotations
 
+from functools import lru_cache
 from typing import Any
 
+from jsonschema import Draft202012Validator
+
+from regexproof.contract_adoption import contract_is_adopted
 from regexproof.kinds import PropertyKind
+from regexproof.schemas import property_contract_schema
 
 _PRODUCT_KINDS = frozenset(
     {
@@ -18,8 +23,20 @@ _PRODUCT_KINDS = frozenset(
         PropertyKind.RULE_DIFF.value,
     }
 )
-# agent_derived is schema-valid but not product (smoke until a human adopts it).
+# agent_derived needs a source-bound adoption record; bare drafts remain smoke.
 _PRODUCT_PROVENANCE = frozenset({"human", "version_diff", "cross_engine"})
+
+
+@lru_cache(maxsize=1)
+def _contract_validator() -> Draft202012Validator:
+    return Draft202012Validator(property_contract_schema())
+
+
+def valid_product_contract(contract: Any) -> bool:
+    """Require the full contract schema and a valid autonomous adoption when needed."""
+    if not isinstance(contract, dict) or not _contract_validator().is_valid(contract):
+        return False
+    return contract_is_adopted(contract)
 
 
 def product_reportable(entry: dict[str, Any]) -> bool:
@@ -30,9 +47,18 @@ def product_reportable(entry: dict[str, Any]) -> bool:
     if not isinstance(domain, str) or not domain.strip():
         return False
     contract = entry.get("contract")
-    if not isinstance(contract, dict):
+    if not valid_product_contract(contract):
+        return False
+    if "site" in entry and contract.get("site") != entry.get("site"):
         return False
     guarantee = str(contract.get("guarantee") or "").strip()
     declared = str(contract.get("declared_domain") or domain).strip()
     provenance = str(contract.get("provenance") or "").strip()
-    return bool(guarantee and declared and provenance in _PRODUCT_PROVENANCE)
+    return bool(
+        guarantee
+        and declared
+        and (provenance in _PRODUCT_PROVENANCE or provenance == "agent_derived")
+    )
+
+
+__all__ = ["contract_is_adopted", "product_reportable", "valid_product_contract"]

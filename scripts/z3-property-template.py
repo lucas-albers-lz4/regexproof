@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Z3 regex-sanitation property starter — the 5 canonical shapes.
+"""Z3 regex-sanitation property starter — the 6 canonical shapes.
 
 Part of regexproof. Validated with z3-solver==5.0.0 (2026-08, usrmanage
 spike). Copy and adapt:
@@ -8,6 +8,7 @@ spike). Copy and adapt:
   Shape 3: counterexample finder via string ops (NOT regex — Complement gotcha)
   Shape 4: per-token escape-image check (monolithic image-regex times out)
   Shape 5: rule_diff gap — InRe(s,R2) ∧ Not(InRe(s,R1)) (complement-free)
+  Shape 6: unbounded source-language inclusion in an independent contract
 
 Run: python3 scripts/z3-property-template.py
      python3 scripts/z3-property-template.py --fail-on-property-failure  # CI
@@ -160,6 +161,26 @@ def main() -> int:
         "shape-5 control: R1≡R2 → no gap",
         [Length(s5) >= 1, Length(s5) <= 8],
         InRe(s5, r1) & Not(InRe(s5, r1)),
+        expect_unsat=True,
+    )
+
+    # ---------- Shape 6: unbounded contract-language inclusion ----------
+    # Check a source regex language against a separately composed contract
+    # grammar. Unlike shape 5 this is a property invariant over the entire
+    # regular-language domain, with no length slice or version-pair meaning.
+    letters = Union(Range("a", "z"), Range("A", "Z"))
+    digits = Range("0", "9")
+    source_start = Union(letters, Re("_"))
+    source_tail = Union(source_start, digits)
+    source_identifier = Concat(source_start, Star(source_tail))
+    spec_start = Union(Range("A", "Z"), Range("a", "z"), Re("_"))
+    spec_tail = Union(Range("a", "z"), Range("A", "Z"), digits, Re("_"))
+    contract_identifier = Concat(spec_start, Star(spec_tail))
+    s6 = String("s6")
+    check(
+        "shape-6 source language is within the independent identifier contract",
+        [],
+        InRe(s6, source_identifier) & Not(InRe(s6, contract_identifier)),
         expect_unsat=True,
     )
 

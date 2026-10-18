@@ -1,0 +1,239 @@
+{
+  "attempts": [
+    {
+      "contract": {
+        "adoption": {
+          "approved_on": "2026-10-15",
+          "authority": "standing_user_delegation",
+          "contract_sha256": "b4498e6291105f692c8b281ee975f8a1b3e17c205ec2d5efbe17916790fe2e22",
+          "evidence": [
+            "https://github.com/open-horizon/anax/blob/2f3fa5a506d6565fa68858b7963450567ddda114/cli/cliutils/cliutils.go",
+            "https://github.com/open-horizon/anax/blob/2f3fa5a506d6565fa68858b7963450567ddda114/cli/exchange/org.go",
+            "https://github.com/open-horizon/anax/blob/2f3fa5a506d6565fa68858b7963450567ddda114/cli/cliutils/cliutils_test.go"
+          ],
+          "policy_version": "autonomous-contracts-v1",
+          "rationale": "The pinned source comment and unit cases define the deny-list predicate. Both call sites check it before making an Exchange operation and terminate with a CLI input error when it matches. Scope is limited to those characters and those two commands.",
+          "review": {
+            "author": "codex-contract-author",
+            "reviewer": "codex-independent-review-pass",
+            "same_model": true
+          },
+          "source_file": "cli/cliutils/cliutils.go",
+          "source_pin": "2f3fa5a506d6565fa68858b7963450567ddda114",
+          "source_sha256": "19e98c2f753ff03e83aa442a21cd352f8926efdff20d44d3c111016d908509d0",
+          "source_url": "https://github.com/open-horizon/anax",
+          "status": "approved"
+        },
+        "declared_domain": "Formal projection: one ASCII code point tested against the literal deny-list class in the pinned Go regexp.MatchString call, with Go RE2 whitespace semantics. The product gate checks string-level MatchString behavior over all non-NUL ASCII bytes, representative control/string positions, Unicode samples, and deterministic random strings; no length bound is used. The claim covers only the listed rejected characters and the OrgCreate/OrgDel call sites.",
+        "guarantee": "ValidateOrg returns true for an organization string containing an underscore, comma, Go RE2 ASCII whitespace, question mark, or apostrophe. OrgCreate and OrgDel reject such input with CLI_INPUT_ERROR before their Exchange operation. This is a deny-list guarantee only; it does not define a complete allowed-name grammar or establish URL-path safety for other characters.",
+        "input_source": "The organization argument supplied to the hzn exchange org create or delete command and passed to cliutils.ValidateOrg.",
+        "provenance": "agent_derived",
+        "schema_version": "1",
+        "site": "open-horizon/anax@2f3fa5a506d6565fa68858b7963450567ddda114:cli/cliutils/cliutils.go:2277:MatchString",
+        "trust": "untrusted-input"
+      },
+      "detail": null,
+      "domain": "The pinned Go RE2 organization deny-list class matches exactly the documented invalid ASCII characters in its one-character projection",
+      "gate": {
+        "consumer_adopted": false,
+        "differential_cases": 687,
+        "gate_id": "anax-orgname-denylist-20r2",
+        "local_gate_command": ".venv/bin/python scripts/anax-orgname-denylist-regression-gate.py --product-only --source-root /tmp/regexproof-pinned-sources/anax-2f3fa5a506d6565fa68858b7963450567ddda114 --output properties/calibration/2026-10-15-autonomous-anax-org-validate-20r2/gate-report.json",
+        "local_gate_passed": true,
+        "mutation_guard_passed": true,
+        "product_engine_replayed": true,
+        "source_pin_verified": true
+      },
+      "kind": "property",
+      "pin": "2f3fa5a506d6565fa68858b7963450567ddda114",
+      "question_id": "AN-anax-orgname-denylist-validation",
+      "repo_id": "open-horizon/anax",
+      "site": "open-horizon/anax@2f3fa5a506d6565fa68858b7963450567ddda114:cli/cliutils/cliutils.go:2277:MatchString",
+      "status": "unsat",
+      "synthesized": false,
+      "url": "https://github.com/open-horizon/anax"
+    }
+  ],
+  "cohort_manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+  "contracts": [
+    {
+      "contract": {
+        "adoption": {
+          "approved_on": "2026-10-15",
+          "authority": "standing_user_delegation",
+          "contract_sha256": "b4498e6291105f692c8b281ee975f8a1b3e17c205ec2d5efbe17916790fe2e22",
+          "evidence": [
+            "https://github.com/open-horizon/anax/blob/2f3fa5a506d6565fa68858b7963450567ddda114/cli/cliutils/cliutils.go",
+            "https://github.com/open-horizon/anax/blob/2f3fa5a506d6565fa68858b7963450567ddda114/cli/exchange/org.go",
+            "https://github.com/open-horizon/anax/blob/2f3fa5a506d6565fa68858b7963450567ddda114/cli/cliutils/cliutils_test.go"
+          ],
+          "policy_version": "autonomous-contracts-v1",
+          "rationale": "The pinned source comment and unit cases define the deny-list predicate. Both call sites check it before making an Exchange operation and terminate with a CLI input error when it matches. Scope is limited to those characters and those two commands.",
+          "review": {
+            "author": "codex-contract-author",
+            "reviewer": "codex-independent-review-pass",
+            "same_model": true
+          },
+          "source_file": "cli/cliutils/cliutils.go",
+          "source_pin": "2f3fa5a506d6565fa68858b7963450567ddda114",
+          "source_sha256": "19e98c2f753ff03e83aa442a21cd352f8926efdff20d44d3c111016d908509d0",
+          "source_url": "https://github.com/open-horizon/anax",
+          "status": "approved"
+        },
+        "declared_domain": "Formal projection: one ASCII code point tested against the literal deny-list class in the pinned Go regexp.MatchString call, with Go RE2 whitespace semantics. The product gate checks string-level MatchString behavior over all non-NUL ASCII bytes, representative control/string positions, Unicode samples, and deterministic random strings; no length bound is used. The claim covers only the listed rejected characters and the OrgCreate/OrgDel call sites.",
+        "guarantee": "ValidateOrg returns true for an organization string containing an underscore, comma, Go RE2 ASCII whitespace, question mark, or apostrophe. OrgCreate and OrgDel reject such input with CLI_INPUT_ERROR before their Exchange operation. This is a deny-list guarantee only; it does not define a complete allowed-name grammar or establish URL-path safety for other characters.",
+        "input_source": "The organization argument supplied to the hzn exchange org create or delete command and passed to cliutils.ValidateOrg.",
+        "provenance": "agent_derived",
+        "schema_version": "1",
+        "site": "open-horizon/anax@2f3fa5a506d6565fa68858b7963450567ddda114:cli/cliutils/cliutils.go:2277:MatchString",
+        "trust": "untrusted-input"
+      },
+      "domain": "The pinned Go RE2 organization deny-list class matches exactly the documented invalid ASCII characters in its one-character projection",
+      "kind": "property",
+      "pin": "2f3fa5a506d6565fa68858b7963450567ddda114",
+      "question_id": "AN-anax-orgname-denylist-validation",
+      "repo_id": "open-horizon/anax",
+      "site": "open-horizon/anax@2f3fa5a506d6565fa68858b7963450567ddda114:cli/cliutils/cliutils.go:2277:MatchString",
+      "synthesized": false,
+      "url": "https://github.com/open-horizon/anax"
+    }
+  ],
+  "conversion_rows": [
+    {
+      "contract": {
+        "adoption": {
+          "approved_on": "2026-10-15",
+          "authority": "standing_user_delegation",
+          "contract_sha256": "b4498e6291105f692c8b281ee975f8a1b3e17c205ec2d5efbe17916790fe2e22",
+          "evidence": [
+            "https://github.com/open-horizon/anax/blob/2f3fa5a506d6565fa68858b7963450567ddda114/cli/cliutils/cliutils.go",
+            "https://github.com/open-horizon/anax/blob/2f3fa5a506d6565fa68858b7963450567ddda114/cli/exchange/org.go",
+            "https://github.com/open-horizon/anax/blob/2f3fa5a506d6565fa68858b7963450567ddda114/cli/cliutils/cliutils_test.go"
+          ],
+          "policy_version": "autonomous-contracts-v1",
+          "rationale": "The pinned source comment and unit cases define the deny-list predicate. Both call sites check it before making an Exchange operation and terminate with a CLI input error when it matches. Scope is limited to those characters and those two commands.",
+          "review": {
+            "author": "codex-contract-author",
+            "reviewer": "codex-independent-review-pass",
+            "same_model": true
+          },
+          "source_file": "cli/cliutils/cliutils.go",
+          "source_pin": "2f3fa5a506d6565fa68858b7963450567ddda114",
+          "source_sha256": "19e98c2f753ff03e83aa442a21cd352f8926efdff20d44d3c111016d908509d0",
+          "source_url": "https://github.com/open-horizon/anax",
+          "status": "approved"
+        },
+        "declared_domain": "Formal projection: one ASCII code point tested against the literal deny-list class in the pinned Go regexp.MatchString call, with Go RE2 whitespace semantics. The product gate checks string-level MatchString behavior over all non-NUL ASCII bytes, representative control/string positions, Unicode samples, and deterministic random strings; no length bound is used. The claim covers only the listed rejected characters and the OrgCreate/OrgDel call sites.",
+        "guarantee": "ValidateOrg returns true for an organization string containing an underscore, comma, Go RE2 ASCII whitespace, question mark, or apostrophe. OrgCreate and OrgDel reject such input with CLI_INPUT_ERROR before their Exchange operation. This is a deny-list guarantee only; it does not define a complete allowed-name grammar or establish URL-path safety for other characters.",
+        "input_source": "The organization argument supplied to the hzn exchange org create or delete command and passed to cliutils.ValidateOrg.",
+        "provenance": "agent_derived",
+        "schema_version": "1",
+        "site": "open-horizon/anax@2f3fa5a506d6565fa68858b7963450567ddda114:cli/cliutils/cliutils.go:2277:MatchString",
+        "trust": "untrusted-input"
+      },
+      "corpus": "open-horizon/anax",
+      "disclosure": null,
+      "domain": "The pinned Go RE2 organization deny-list class matches exactly the documented invalid ASCII characters in its one-character projection",
+      "engine_versions": {
+        "python": "3.14.8",
+        "z3": "5.0.0"
+      },
+      "family": "AN-anax-orgname-denylist",
+      "ground_truth": null,
+      "ground_truth_status": null,
+      "idiom_bucket": "org-cli-denylist",
+      "kind": "property",
+      "name": "AN-anax-orgname-denylist-validation",
+      "product_reportable": true,
+      "regex_id": "7dd6aca74c4a62ab53d3fc377b0a3565",
+      "result": "unsat",
+      "schema_version": "1",
+      "shape": 1,
+      "site": "open-horizon/anax@2f3fa5a506d6565fa68858b7963450567ddda114:cli/cliutils/cliutils.go:2277:MatchString",
+      "synthesized": false,
+      "wave_id": "anax-orgname-denylist-20r2-r1",
+      "witness": null
+    }
+  ],
+  "corpus": "open-horizon/anax",
+  "coverage_digest": "8bc11b77c1628de45adf39300c25cd27866d15b07d561bb6756a0cd4c34d8167",
+  "execution_caps": {
+    "local_gate_timeout_seconds": 300,
+    "max_active_conversion_waves": 1,
+    "max_adopted_contracts_per_wave": 5,
+    "max_new_questions_per_run": 5,
+    "parallel_walk": false,
+    "solver_retries": 0,
+    "solver_timeout_ms": 30000
+  },
+  "gate_config": {
+    "command": [
+      ".venv/bin/python",
+      "scripts/anax-orgname-denylist-regression-gate.py",
+      "--product-only",
+      "--source-root",
+      "/tmp/regexproof-pinned-sources/anax-2f3fa5a506d6565fa68858b7963450567ddda114",
+      "--output",
+      "properties/calibration/2026-10-15-autonomous-anax-org-validate-20r2/gate-report.json"
+    ],
+    "evidence": {
+      "differential_case_counts": {
+        "AN-anax-orgname-denylist-validation": 687
+      },
+      "product_engine_replay_question_ids": [
+        "AN-anax-orgname-denylist-validation"
+      ]
+    },
+    "gate_id": "anax-orgname-denylist-20r2",
+    "question_ids": [
+      "AN-anax-orgname-denylist-validation"
+    ],
+    "schema_version": "1",
+    "timeout_seconds": 300
+  },
+  "idiom_bucket": "org-cli-denylist",
+  "runs": [
+    {
+      "active_question_id": null,
+      "finished_at": "2026-10-15T20:32:22+00:00",
+      "gate_failure": "mutation guard failed",
+      "gate_passed": false,
+      "gate_wall_ms": 0.0,
+      "mutation_failures": [
+        "AN-anax-orgname-denylist-mutated-question-mark: mutation guard result='unsat'"
+      ],
+      "mutation_wall_ms": 1.6,
+      "new_questions": 1,
+      "question_ids": [
+        "AN-anax-orgname-denylist-validation"
+      ],
+      "reason": "1 question(s) lack a passing covered local gate; mutation guard failed; mutation guard coverage or replay failed",
+      "run_id": "540464ff-7c64-425b-987e-2177eb881ca6",
+      "solver_wall_ms": 0.1,
+      "source_failures": {},
+      "source_wall_ms": 14.4,
+      "started_at": "2026-10-15T20:32:22+00:00",
+      "status": "needs_review"
+    },
+    {
+      "active_question_id": null,
+      "finished_at": "2026-10-15T20:33:06+00:00",
+      "gate_failure": null,
+      "gate_passed": true,
+      "gate_wall_ms": 438.8,
+      "mutation_failures": [],
+      "mutation_wall_ms": 142.5,
+      "new_questions": 0,
+      "question_ids": [],
+      "reason": null,
+      "run_id": "a4febd2f-a718-4100-9359-d9844667a8a5",
+      "solver_wall_ms": 0.0,
+      "source_failures": {},
+      "source_wall_ms": 14.5,
+      "started_at": "2026-10-15T20:33:06+00:00",
+      "status": "complete"
+    }
+  ],
+  "schema_version": "1",
+  "wave_id": "anax-orgname-denylist-20r2-r1"
+}

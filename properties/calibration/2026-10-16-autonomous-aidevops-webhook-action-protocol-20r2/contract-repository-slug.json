@@ -1,0 +1,34 @@
+{
+  "adoption": {
+    "approved_on": "2026-10-16",
+    "authority": "standing_user_delegation",
+    "contract_sha256": "61f93f6a581fdd24640478bdab7030293e06b1e8fea3beef79e2867d00e6ee3f",
+    "evidence": [
+      "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/pulse-merge-webhook-receiver.sh",
+      "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/pulse-merge-webhook-server.py",
+      "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/configs/webhook-receiver.conf",
+      "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/reference/auto-merge.md",
+      "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/tests/test-pulse-merge-webhook-invalidation.py",
+      "properties/calibration/2026-10-16-autonomous-aidevops-webhook-action-protocol-20r2/review-evidence.json"
+    ],
+    "policy_version": "autonomous-contracts-v1",
+    "rationale": "The pinned server requires an authenticated GitHub delivery and validates repository.full_name before emitting an action token. The shell helper repeats owner/repository checks before cache invalidation or process_pr; the existing source tests exercise the action dispatcher. This contract claims a local protocol guard, not a demonstrated remote vulnerability.",
+    "review": {
+      "author": "Codex-P7-webhook-source-review",
+      "reviewer": "Codex-independent-contract-review-pass",
+      "same_model": true
+    },
+    "source_file": ".agents/scripts/pulse-merge-webhook-receiver.sh",
+    "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+    "source_sha256": "6d882dac90c3f9deb1a0007c9a4216d70f365a4a34ffacd145eb04cc8ae3a325",
+    "source_url": "https://github.com/marcusquinn/aidevops",
+    "status": "approved"
+  },
+  "declared_domain": "Exact Aidevops pin 8666b6c6c52472b5535aa295f2df593918152cb1; ASCII repository.full_name strings received through the authenticated local action pipe; no NUL is representable in the pipe line and the server emits a single protocol token. The property covers the full _webhook_valid_slug helper, including patterns at lines 197 and 198 and the explicit . and .. name checks.",
+  "guarantee": "Before webhook-derived repository text reaches a collection invalidator, check-cache invalidator, or process_pr dispatch, the receiver accepts only one slash-separated repository token whose owner starts with an ASCII letter or digit and whose name is neither . nor ... Both components use only the source helper\u2019s ASCII letters, digits, underscore, dot, and hyphen alphabet; this keeps the action line unambiguous.",
+  "input_source": "The repository.full_name field in a GitHub webhook payload. The pinned Python server verifies the raw-body HMAC and validates the field before emitting local action records; the shell receiver applies this additional guard before dispatch and cache invalidation.",
+  "provenance": "agent_derived",
+  "schema_version": "1",
+  "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pulse-merge-webhook-receiver.sh:197:1",
+  "trust": "untrusted-input"
+}

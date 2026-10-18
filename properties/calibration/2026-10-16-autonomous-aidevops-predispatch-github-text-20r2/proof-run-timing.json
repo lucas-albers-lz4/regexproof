@@ -1,0 +1,20 @@
+{
+  "command": [
+    "/home/lalbers/gitroot/regexproof/.venv/bin/python",
+    "/home/lalbers/gitroot/regexproof/scripts/z3-verify.py",
+    "--json",
+    "--require-ground-truth",
+    "--require-domain",
+    "--require-contract",
+    "--fail-on-property-failure",
+    "AE-aidevops-predispatch-cited-file-traversal-read",
+    "AE-aidevops-predispatch-cited-file-traversal-mutation-guard"
+  ],
+  "completed_at": "2026-10-16T01:45:47.234041Z",
+  "elapsed_basis": "phase_sum",
+  "elapsed_seconds": 7.1127671849681064,
+  "measured_phase": "one Z3 property plus its exact-source ground-truth callback and mutation guard",
+  "run_id": "aidevops-predispatch-cited-file-proof-r1",
+  "schema_version": "1",
+  "started_at": "2026-10-16T01:45:40.121269Z"
+}

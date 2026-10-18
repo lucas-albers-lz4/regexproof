@@ -1,0 +1,17 @@
+{
+  "cohort_id": "2026-09-12-calibration-20-r2",
+  "cohort_manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+  "coverage_digest": "009ec87646db41ba33d09cd5447899931a93111b7edf5b341840b5a239b4703f",
+  "identities": [
+    {
+      "contract_sha256": "84c56ece08e32906b07467c8556c61a3edf0b558af40b701edefa00a035a57be",
+      "pin": "55aa7ef43a9c129beba90823cd8a4db10bb01211",
+      "provenance": "agent_derived",
+      "question_id": "RR-navigation-param-control-characters-rejected",
+      "repo_id": "greydragon888/real-router",
+      "site": "greydragon888/real-router@55aa7ef43a9c129beba90823cd8a4db10bb01211:packages/validation-plugin/src/validators/navigation.ts:69:column-25",
+      "url": "https://github.com/greydragon888/real-router"
+    }
+  ],
+  "schema_version": "2"
+}

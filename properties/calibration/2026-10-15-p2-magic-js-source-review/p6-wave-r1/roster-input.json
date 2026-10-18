@@ -1,0 +1,212 @@
+[
+  {
+    "contract": {
+      "adoption": {
+        "approved_on": "2026-10-15",
+        "authority": "standing_user_delegation",
+        "contract_sha256": "fc9955c606d0ee1258043ac8355015ede63a0e654a67c0ba71297a8294a45b37",
+        "evidence": [
+          "https://github.com/magiclabs/magic-js/blob/e9fb233763160316989863b4739c4656133d45b0/packages/@magic-ext/oauth2/src/crypto.ts",
+          "https://www.rfc-editor.org/rfc/rfc7636#section-4.2",
+          "https://www.rfc-editor.org/rfc/rfc7636#appendix-A",
+          "properties/calibration/2026-10-15-p2-magic-js-source-review/evidence.json regex_id=d06037c9ac7d1e32df213c0b6e3ed279 column=53"
+        ],
+        "policy_version": "autonomous-contracts-v1",
+        "rationale": "The helper Base64-encodes SHA-256(code_verifier), removes padding, and maps the standard alphabet to the URL-safe alphabet before the challenge is sent in an OAuth authorization request. RFC 7636 requires the S256 code challenge to be BASE64URL(SHA256(ASCII(code_verifier))) and defines base64url without padding. The contract covers this output mapping only; it does not claim verifier entropy, state generation, server enforcement, or CSRF correctness.",
+        "review": {
+          "author": "codex-contract-author",
+          "reviewer": "codex-independent-review-pass",
+          "same_model": true
+        },
+        "source_file": "packages/@magic-ext/oauth2/src/crypto.ts",
+        "source_pin": "e9fb233763160316989863b4739c4656133d45b0",
+        "source_sha256": "08e53d21148d56ade6377e2a3d4c96a12a0f6fdbb502f9adc485e97f026e4d8f",
+        "source_url": "https://github.com/magiclabs/magic-js",
+        "status": "approved"
+      },
+      "declared_domain": "RFC 7636 S256 code-challenge bytes pass through the exact three-replacement chain; the Z3 theorem is per input codepoint with no length bound. Exact Node replay checks the RFC 7636 vector and seeded 32-byte digests.",
+      "guarantee": "The pinned OAuth2 helper encodes SHA-256(code_verifier) as unpadded Base64URL before placing code_challenge in the authorization request.",
+      "input_source": "A 32-byte SHA-256 digest returned by CryptoJS for the SDK-generated PKCE verifier.",
+      "provenance": "agent_derived",
+      "schema_version": "1",
+      "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-ext/oauth2/src/crypto.ts:22:column-53",
+      "trust": "internal"
+    },
+    "domain": "RFC 7636 S256 code-challenge bytes pass through the exact three-replacement chain; the Z3 theorem is per input codepoint with no length bound. Exact Node replay checks the RFC 7636 vector and seeded 32-byte digests.",
+    "kind": "property",
+    "pin": "e9fb233763160316989863b4739c4656133d45b0",
+    "question_id": "ME-oauth2-pkce-s256-base64url",
+    "repo_id": "magiclabs/magic-js",
+    "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-ext/oauth2/src/crypto.ts:22:column-53",
+    "synthesized": false,
+    "url": "https://github.com/magiclabs/magic-js"
+  },
+  {
+    "contract": {
+      "adoption": {
+        "approved_on": "2026-10-15",
+        "authority": "standing_user_delegation",
+        "contract_sha256": "00224fc43e2c47dba1776258ebc618735a4ca049fabc1c5108c421013cbacd3c",
+        "evidence": [
+          "https://github.com/magiclabs/magic-js/blob/e9fb233763160316989863b4739c4656133d45b0/packages/@magic-ext/react-native-bare-oauth/src/crypto.ts",
+          "https://www.rfc-editor.org/rfc/rfc7636#section-4.2",
+          "https://www.rfc-editor.org/rfc/rfc7636#appendix-A",
+          "properties/calibration/2026-10-15-p2-magic-js-source-review/evidence.json regex_id=80496e166f99c86adc3befb5c11b0236 column=53"
+        ],
+        "policy_version": "autonomous-contracts-v1",
+        "rationale": "The helper Base64-encodes SHA-256(code_verifier), removes padding, and maps the standard alphabet to the URL-safe alphabet before the challenge is sent in an OAuth authorization request. RFC 7636 requires the S256 code challenge to be BASE64URL(SHA256(ASCII(code_verifier))) and defines base64url without padding. The contract covers this output mapping only; it does not claim verifier entropy, state generation, server enforcement, or CSRF correctness.",
+        "review": {
+          "author": "codex-contract-author",
+          "reviewer": "codex-independent-review-pass",
+          "same_model": true
+        },
+        "source_file": "packages/@magic-ext/react-native-bare-oauth/src/crypto.ts",
+        "source_pin": "e9fb233763160316989863b4739c4656133d45b0",
+        "source_sha256": "63544bcecd9a1522663606418afcacac1877fe5ff2e9e9563c6603d1d11fc71a",
+        "source_url": "https://github.com/magiclabs/magic-js",
+        "status": "approved"
+      },
+      "declared_domain": "RFC 7636 S256 code-challenge bytes pass through the exact three-replacement chain; the Z3 theorem is per input codepoint with no length bound. Exact Node replay checks the RFC 7636 vector and seeded 32-byte digests.",
+      "guarantee": "The pinned React Native bare OAuth helper encodes SHA-256(code_verifier) as unpadded Base64URL before placing code_challenge in the authorization request.",
+      "input_source": "A 32-byte SHA-256 digest returned by CryptoJS for the SDK-generated PKCE verifier.",
+      "provenance": "agent_derived",
+      "schema_version": "1",
+      "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-ext/react-native-bare-oauth/src/crypto.ts:25:column-53",
+      "trust": "internal"
+    },
+    "domain": "RFC 7636 S256 code-challenge bytes pass through the exact three-replacement chain; the Z3 theorem is per input codepoint with no length bound. Exact Node replay checks the RFC 7636 vector and seeded 32-byte digests.",
+    "kind": "property",
+    "pin": "e9fb233763160316989863b4739c4656133d45b0",
+    "question_id": "ME-rn-bare-pkce-s256-base64url",
+    "repo_id": "magiclabs/magic-js",
+    "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-ext/react-native-bare-oauth/src/crypto.ts:25:column-53",
+    "synthesized": false,
+    "url": "https://github.com/magiclabs/magic-js"
+  },
+  {
+    "contract": {
+      "adoption": {
+        "approved_on": "2026-10-15",
+        "authority": "standing_user_delegation",
+        "contract_sha256": "323a23991ab50e0978632e69b6e4afb5951cc0c1858b08d1c24dff0b2b02ffa0",
+        "evidence": [
+          "https://github.com/magiclabs/magic-js/blob/e9fb233763160316989863b4739c4656133d45b0/packages/@magic-ext/react-native-expo-oauth/src/crypto.ts",
+          "https://www.rfc-editor.org/rfc/rfc7636#section-4.2",
+          "https://www.rfc-editor.org/rfc/rfc7636#appendix-A",
+          "properties/calibration/2026-10-15-p2-magic-js-source-review/evidence.json regex_id=e7c3db9abfe611235db53a7af0e585e1 column=53"
+        ],
+        "policy_version": "autonomous-contracts-v1",
+        "rationale": "The helper Base64-encodes SHA-256(code_verifier), removes padding, and maps the standard alphabet to the URL-safe alphabet before the challenge is sent in an OAuth authorization request. RFC 7636 requires the S256 code challenge to be BASE64URL(SHA256(ASCII(code_verifier))) and defines base64url without padding. The contract covers this output mapping only; it does not claim verifier entropy, state generation, server enforcement, or CSRF correctness.",
+        "review": {
+          "author": "codex-contract-author",
+          "reviewer": "codex-independent-review-pass",
+          "same_model": true
+        },
+        "source_file": "packages/@magic-ext/react-native-expo-oauth/src/crypto.ts",
+        "source_pin": "e9fb233763160316989863b4739c4656133d45b0",
+        "source_sha256": "37051fbfab1c76717d216f73d06af87f3fa04f0e08e77ec338f45ed87c117b00",
+        "source_url": "https://github.com/magiclabs/magic-js",
+        "status": "approved"
+      },
+      "declared_domain": "RFC 7636 S256 code-challenge bytes pass through the exact three-replacement chain; the Z3 theorem is per input codepoint with no length bound. Exact Node replay checks the RFC 7636 vector and seeded 32-byte digests.",
+      "guarantee": "The pinned React Native Expo OAuth helper encodes SHA-256(code_verifier) as unpadded Base64URL before placing code_challenge in the authorization request.",
+      "input_source": "A 32-byte SHA-256 digest returned by CryptoJS for the SDK-generated PKCE verifier.",
+      "provenance": "agent_derived",
+      "schema_version": "1",
+      "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-ext/react-native-expo-oauth/src/crypto.ts:25:column-53",
+      "trust": "internal"
+    },
+    "domain": "RFC 7636 S256 code-challenge bytes pass through the exact three-replacement chain; the Z3 theorem is per input codepoint with no length bound. Exact Node replay checks the RFC 7636 vector and seeded 32-byte digests.",
+    "kind": "property",
+    "pin": "e9fb233763160316989863b4739c4656133d45b0",
+    "question_id": "ME-rn-expo-pkce-s256-base64url",
+    "repo_id": "magiclabs/magic-js",
+    "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-ext/react-native-expo-oauth/src/crypto.ts:25:column-53",
+    "synthesized": false,
+    "url": "https://github.com/magiclabs/magic-js"
+  },
+  {
+    "contract": {
+      "adoption": {
+        "approved_on": "2026-10-15",
+        "authority": "standing_user_delegation",
+        "contract_sha256": "07e4e311f4f676b3b6adbfbecf2e2ab45b309d297a4cd969e4bede39c93de750",
+        "evidence": [
+          "https://github.com/magiclabs/magic-js/blob/e9fb233763160316989863b4739c4656133d45b0/packages/@magic-ext/oauth2/src/utils/base64.ts",
+          "https://www.rfc-editor.org/rfc/rfc4648#section-5",
+          "https://www.w3.org/TR/webauthn-3/#dom-publickeycredential-tojson",
+          "properties/calibration/2026-10-15-p2-magic-js-source-review/evidence.json regex_id=aabb6589206de6bbbd7584f5c993a2fb column=26"
+        ],
+        "policy_version": "autonomous-contracts-v1",
+        "rationale": "The exact Base64URL encoder feeds WebAuthn credential JSON fields such as rawId, authenticatorData, clientDataJSON, signatures, and attestationObject. The WebAuthn JSON conversion path names this representation, and RFC 4648 section 5 defines its URL-safe alphabet and optional omitted padding. The contract is limited to the encoder output; it does not claim authentication, decoder rejection of malformed input, or server-side credential validity.",
+        "review": {
+          "author": "codex-contract-author",
+          "reviewer": "codex-independent-review-pass",
+          "same_model": true
+        },
+        "source_file": "packages/@magic-ext/oauth2/src/utils/base64.ts",
+        "source_pin": "e9fb233763160316989863b4739c4656133d45b0",
+        "source_sha256": "1fc563aeb8272d0eb72660799f2d52e275cddb4af55883aeb258b24acdd149fa",
+        "source_url": "https://github.com/magiclabs/magic-js",
+        "status": "approved"
+      },
+      "declared_domain": "One Unicode codepoint passed through the exact encode replacement image with no length bound. Exact Node replay runs the source-authenticated replacement chain for every 0-, 1-, and 2-byte input plus seeded longer buffers.",
+      "guarantee": "For each binary WebAuthn credential response field serialized by the pinned OAuth2 PublicKeyCredential.toJSON polyfill, the encoder emits the WebAuthn Base64URLString representation: URL-safe Base64 without padding.",
+      "input_source": "ArrayBuffer values from PublicKeyCredential.rawId and AuthenticatorResponse fields returned by the browser API.",
+      "provenance": "agent_derived",
+      "schema_version": "1",
+      "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-ext/oauth2/src/utils/base64.ts:4:column-26",
+      "trust": "untrusted-input"
+    },
+    "domain": "One Unicode codepoint passed through the exact encode replacement image with no length bound. Exact Node replay runs the source-authenticated replacement chain for every 0-, 1-, and 2-byte input plus seeded longer buffers.",
+    "kind": "property",
+    "pin": "e9fb233763160316989863b4739c4656133d45b0",
+    "question_id": "ME-oauth2-webauthn-base64url",
+    "repo_id": "magiclabs/magic-js",
+    "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-ext/oauth2/src/utils/base64.ts:4:column-26",
+    "synthesized": false,
+    "url": "https://github.com/magiclabs/magic-js"
+  },
+  {
+    "contract": {
+      "adoption": {
+        "approved_on": "2026-10-15",
+        "authority": "standing_user_delegation",
+        "contract_sha256": "1d09735ade9b5d438961b11c7a59793eb9ef56581aea77562968fd7a722e4a06",
+        "evidence": [
+          "https://github.com/magiclabs/magic-js/blob/e9fb233763160316989863b4739c4656133d45b0/packages/@magic-ext/passkey/src/utils/base64.ts",
+          "https://www.rfc-editor.org/rfc/rfc4648#section-5",
+          "https://www.w3.org/TR/webauthn-3/#dom-publickeycredential-tojson",
+          "properties/calibration/2026-10-15-p2-magic-js-source-review/evidence.json regex_id=d3567fa6611519d8a0fcb76412be684d column=26"
+        ],
+        "policy_version": "autonomous-contracts-v1",
+        "rationale": "The exact Base64URL encoder feeds WebAuthn credential JSON fields such as rawId, authenticatorData, clientDataJSON, signatures, and attestationObject. The WebAuthn JSON conversion path names this representation, and RFC 4648 section 5 defines its URL-safe alphabet and optional omitted padding. The contract is limited to the encoder output; it does not claim authentication, decoder rejection of malformed input, or server-side credential validity.",
+        "review": {
+          "author": "codex-contract-author",
+          "reviewer": "codex-independent-review-pass",
+          "same_model": true
+        },
+        "source_file": "packages/@magic-ext/passkey/src/utils/base64.ts",
+        "source_pin": "e9fb233763160316989863b4739c4656133d45b0",
+        "source_sha256": "b2307e07627a0ab69d0bb2107e0776356f8af913a9cfc3ff02533e32132e8bbc",
+        "source_url": "https://github.com/magiclabs/magic-js",
+        "status": "approved"
+      },
+      "declared_domain": "One Unicode codepoint passed through the exact encode replacement image with no length bound. Exact Node replay runs the source-authenticated replacement chain for every 0-, 1-, and 2-byte input plus seeded longer buffers.",
+      "guarantee": "For each binary WebAuthn credential response field serialized by the pinned Passkey PublicKeyCredential.toJSON polyfill, the encoder emits the WebAuthn Base64URLString representation: URL-safe Base64 without padding.",
+      "input_source": "ArrayBuffer values from PublicKeyCredential.rawId and AuthenticatorResponse fields returned by the browser API.",
+      "provenance": "agent_derived",
+      "schema_version": "1",
+      "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-ext/passkey/src/utils/base64.ts:11:column-26",
+      "trust": "untrusted-input"
+    },
+    "domain": "One Unicode codepoint passed through the exact encode replacement image with no length bound. Exact Node replay runs the source-authenticated replacement chain for every 0-, 1-, and 2-byte input plus seeded longer buffers.",
+    "kind": "property",
+    "pin": "e9fb233763160316989863b4739c4656133d45b0",
+    "question_id": "ME-passkey-base64url",
+    "repo_id": "magiclabs/magic-js",
+    "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-ext/passkey/src/utils/base64.ts:11:column-26",
+    "synthesized": false,
+    "url": "https://github.com/magiclabs/magic-js"
+  }
+]

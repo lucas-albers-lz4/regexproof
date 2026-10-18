@@ -1,0 +1,26 @@
+{
+  "case_classes": {
+    "documented_forbidden_positions": 27,
+    "long_search_strings": 9,
+    "non_nul_ascii_single_character": 127,
+    "safe_and_scope_samples": 12,
+    "seeded_mixed_strings": 512
+  },
+  "differential_cases": 687,
+  "gate_id": "anax-orgname-denylist-20r2",
+  "go_version": "go1.27.2",
+  "mismatches": 0,
+  "mutation_id": "AN-anax-orgname-denylist-mutated-question-mark",
+  "mutation_original_invalid": true,
+  "mutation_weakened_invalid": false,
+  "mutation_witness": "?",
+  "product_engine": "Go regexp (RE2)",
+  "property_id": "AN-anax-orgname-denylist-validation",
+  "repository": "https://github.com/open-horizon/anax",
+  "schema_version": "1",
+  "scope": "exact pinned ValidateOrg deny-list behavior and its one-character source mutation; OrgCreate/OrgDel rejection is source-reviewed; this does not establish a complete organization-name allow-list or path safety for allowed characters",
+  "source_file": "cli/cliutils/cliutils.go",
+  "source_pattern": "[_,\\s\\?\\']",
+  "source_pin": "2f3fa5a506d6565fa68858b7963450567ddda114",
+  "source_sha256": "19e98c2f753ff03e83aa442a21cd352f8926efdff20d44d3c111016d908509d0"
+}

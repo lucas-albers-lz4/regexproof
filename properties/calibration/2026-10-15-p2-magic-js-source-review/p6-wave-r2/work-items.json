@@ -1,0 +1,37 @@
+[
+  {
+    "question_ids": [
+      "ME-wallet-kit-base64url"
+    ],
+    "reviewed": false,
+    "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-ext/wallet-kit/src/utils/base64.ts:11:column-26"
+  },
+  {
+    "question_ids": [
+      "ME-webauthn-base64url"
+    ],
+    "reviewed": false,
+    "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-ext/webauthn/src/utils/base64.ts:11:column-26"
+  },
+  {
+    "question_ids": [
+      "ME-provider-webauthn-base64url"
+    ],
+    "reviewed": false,
+    "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-sdk/provider/src/util/base64-json.ts:54:column-26"
+  },
+  {
+    "question_ids": [
+      "ME-rn-bare-dpop-base64url"
+    ],
+    "reviewed": false,
+    "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-sdk/react-native-bare/src/native-crypto/utils/uint8.ts:71:column-24"
+  },
+  {
+    "question_ids": [
+      "ME-provider-dpop-base64url"
+    ],
+    "reviewed": false,
+    "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-sdk/provider/src/util/web-crypto.ts:106:column-27"
+  }
+]

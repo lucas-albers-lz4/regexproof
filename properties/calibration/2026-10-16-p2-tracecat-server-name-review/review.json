@@ -1,0 +1,29 @@
+{
+  "author": "Codex-P2-source-review",
+  "observed_at": "2026-10-16",
+  "review": {
+    "decision": "adopted",
+    "limitations": [
+      "This is a targeted review of one of 115 Tracecat inventory rows, not a complete repository or package review.",
+      "The theorem concerns only absence of slash and backslash from values accepted by validate_mcp_server_name; it does not prove every stated name-format property.",
+      "The proof is an unbounded alphabet-disjointness result over the ASCII character class used by the pinned validator. Python $ may still accept a final line feed, which is outside this theorem.",
+      "No path traversal, authorization bypass, command injection, or deployed security impact is claimed; the checked value is an MCP integration slug passed to the stdio config validator."
+    ],
+    "pattern": "^[a-zA-Z0-9_-]+$",
+    "product_question_asked": true,
+    "rationale": "The pinned validator comment and error text declare alphanumeric, hyphen, and underscore characters only. The same exact validator is called by validate_mcp_command_config when a name is supplied; AgentPresetService supplies the persisted MCPIntegration.slug, and MCPIntegrationService derives that slug from workspace configuration. Therefore every accepted name in this validator excludes slash and backslash. This contract proves only those two excluded characters, not the whole name grammar or slug generation behavior; no security impact is claimed.",
+    "regex_id": "60bada10a610fde520e8e96c90887d71",
+    "site": "tracecat/integrations/mcp_validation.py:267:11",
+    "source_site_id": "6054f97be853956788ff86afb5fd537445a87cd5b0828326b3e6e5554571856f"
+  },
+  "reviewer": "Codex-independent-source-review-pass",
+  "same_model_or_agent": true,
+  "scope": {
+    "complete_repository_review": false,
+    "inventory_member_site_count": 115,
+    "pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+    "repo_id": "TracecatHQ/tracecat",
+    "reviewed_site_count": 1
+  },
+  "second_pass": true
+}

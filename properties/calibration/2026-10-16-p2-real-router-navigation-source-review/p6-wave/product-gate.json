@@ -1,0 +1,46 @@
+{
+  "contract_sha256": "84c56ece08e32906b07467c8556c61a3edf0b558af40b701edefa00a035a57be",
+  "differential_comparison_count": 17014,
+  "gate_id": "rr-navigation-control-validator-exact-pin",
+  "history_before_sha256": "16ca6ec8dc81fe9236ab42a641eeb0cb0fe0345e5cfb23c0fe2d01af5fb33ac0",
+  "mismatch_count": 0,
+  "mismatches": [],
+  "mutation_id": "RR-navigation-param-del-omission-mutation",
+  "mutation_replay": {
+    "original_outcome": "TypeError",
+    "reproduced": true,
+    "source_mutation": "removed only \\u007F from CONTROL_CHARS_RE in a temporary exact-source copy",
+    "weakened_outcome": "accepted",
+    "witness": "\\u007f"
+  },
+  "node_version": "v26.11.1",
+  "passed": true,
+  "property_id": "RR-navigation-param-control-characters-rejected",
+  "qualified_site": "greydragon888/real-router@55aa7ef43a9c129beba90823cd8a4db10bb01211:packages/validation-plugin/src/validators/navigation.ts:69:column-25",
+  "regex_id": "1e31ed0154408e832cf456d8422b6e38",
+  "replay_adaptations": [
+    "Rewrote the validator's one extensionless relative import to a temporary .mts type-guard barrel exporting the same four pinned functions.",
+    "Copied the exact pinned helper and guard bodies. Node's type stripper removes erased TypeScript syntax.",
+    "Rewrote the sole TypeScript parameter-property constructor in isParams as its equivalent JavaScript field assignment so Node can execute that exact guard body."
+  ],
+  "replay_case_count": 17014,
+  "repo_id": "greydragon888/real-router",
+  "repository_url": "https://github.com/greydragon888/real-router",
+  "review_evidence_sha256": "0b37e2ad9b74fa693ca2d3213a454e1949ee1da9bb3ccba98341e47378061471",
+  "schema_version": "1",
+  "source_binding": {
+    "pin": "55aa7ef43a9c129beba90823cd8a4db10bb01211",
+    "source_files": {
+      "packages/validation-plugin/CHANGELOG.md": "318ae54e5918a681c644c00c42e347ce4c9d08e9bbc56a5d4536abd349fff1f9",
+      "packages/validation-plugin/src/type-guards/guards/navigation.ts": "1da164545d069bfec2b56b4f701f80985dc97c7bd3aa2d80aec25bb95926be89",
+      "packages/validation-plugin/src/type-guards/guards/params.ts": "4d3f2cee1ed7547667f0a42aff758c300dbe74669c6c9218e576e2b120b51c47",
+      "packages/validation-plugin/src/type-guards/guards/primitives.ts": "2c20b34bd5a28bed084b22aeca85c79923f17860d33202fd00c4baaf1703bac8",
+      "packages/validation-plugin/src/type-guards/utilities/type-description.ts": "65c651fce462e31b68c5acfaef8d9e647b977f567b64b4429643515515bbf102",
+      "packages/validation-plugin/src/validationPlugin.ts": "903f06ac7e3a55a85512b25d30acd41b122dd919b9f7478a11b33740c0fbbc2a",
+      "packages/validation-plugin/src/validators/navigation.ts": "619bbc25796534163c82de8f01dab1ab3fc38cd844a7a0742301dab0534173c6",
+      "packages/validation-plugin/tests/functional/navigation.validation.test.ts": "63763865c3a73ab2cb2a23636d07ae2bfec091ea2d1612d3e015b26dc17f01f6"
+    }
+  },
+  "source_pin": "55aa7ef43a9c129beba90823cd8a4db10bb01211",
+  "source_site": "packages/validation-plugin/src/validators/navigation.ts:69:25"
+}

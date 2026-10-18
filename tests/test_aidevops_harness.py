@@ -60,6 +60,7 @@ def test_committed_conversion_ndjson_matches_registry():
         for line in path.read_text(encoding="utf-8").splitlines()
         if line.strip()
     ]
+    rows = [row for row in rows if row.get("wave_id") == "aidevops_w1"]
     assert len(rows) == len(PRODUCT_NAMES)
     names = {r["name"] for r in rows}
     assert names == set(PRODUCT_NAMES)

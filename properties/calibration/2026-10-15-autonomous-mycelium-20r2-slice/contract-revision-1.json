@@ -1,0 +1,25 @@
+{
+  "original_pre_outcome_roster": "roster.json",
+  "previous_contract_sha256": "06daf75a21a03113a274f7dd50ef86ab69a54cc06a97ca1aa2d4460935b0e579",
+  "previous_site": "mycelium0/mycelium@d4f01ba6202d50909d1977810d322259482e0b82:scripts/verify-release.sh:60:SHA256SUMS preflight",
+  "reason": "The P6 source validator requires the final site token to occur literally on the pinned source line; line 60 contains sums_n, not the descriptive label SHA256SUMS preflight.",
+  "result_independent": true,
+  "revised_contract_sha256": "81625627f63dbabf94e2ea02819148bda43d550bb77deea8d4e54b84665848a9",
+  "revised_on": "2026-10-15",
+  "revised_runner_compatibility_roster": "roster-v2.json",
+  "revised_site": "mycelium0/mycelium@d4f01ba6202d50909d1977810d322259482e0b82:scripts/verify-release.sh:60:sums_n",
+  "revision_id": "contract-revision-1",
+  "schema_version": "1",
+  "source_pin": "d4f01ba6202d50909d1977810d322259482e0b82",
+  "source_sha256": "df394a764f2ebd906ffbc9d6bafa58af896b39e895e503a271da3baf710e2b58",
+  "unchanged_fields": [
+    "guarantee",
+    "input_source",
+    "trust",
+    "declared_domain",
+    "provenance",
+    "source_pin",
+    "source_file",
+    "source_sha256"
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "cohort_id": "2026-09-12-calibration-20-r2",
+  "idiom_bucket": "webhook-action-protocol-validation",
+  "repository_url": "https://github.com/marcusquinn/aidevops",
+  "schema_version": "1",
+  "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+  "work_item": "P7 follow-on census after Bash extractor correction; exact source review before contract adoption or solver questions"
+}

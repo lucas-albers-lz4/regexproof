@@ -1,0 +1,33 @@
+{
+  "allocation_sha256": "2f9aa22851b9efad3e7063d5751f18cf36e39b15da72c1f14f9c79967081a651",
+  "campaign_queue_changed": false,
+  "cohort_id": "2026-10-15-aidevops-node-secret-boundary-calibration",
+  "contract_sha256": "7ccfe50a1b868d41b679694f83c1f27b45d91e94e9be19a69c87645b02cc0ba2",
+  "contracted_sites": [
+    {
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/plugins/opencode-aidevops/quality-hooks-secret-read.mjs:7:27",
+      "status": "contracted"
+    }
+  ],
+  "events_sha256": "6117fa9ab46ebde48838bba8bd23716ca3f834c1ae2cf370ab40dd076115a7ee",
+  "final_generation": 1,
+  "final_wave_status": "closed",
+  "first_wave_aborted": true,
+  "first_wave_reason": "Initial isolated queue used the allocation inventory-site form; transition contract identity is repository-qualified. The queue/contract identities were aligned in a fresh wave before disposition.",
+  "population_id": "aidevops-ecma-secret-read-p4-20261015-r1",
+  "product_question_asked": false,
+  "queue_sha256": "847a2f4f1b8abcf728d4944978bc2efef52a098bef73b3d34ce37a73fc9ffb55",
+  "repository_url": "https://github.com/marcusquinn/aidevops",
+  "review_evidence_sha256": "6d67aad75e4dd267667544a2ab26cd961f08191322381b13851b4efa09df9241",
+  "schema_version": "1",
+  "second_wave_transitions": [
+    "claim",
+    "contract",
+    "close"
+  ],
+  "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+  "wave_ids": [
+    "aidevops-node-secret-read-p4-20261015-r1",
+    "aidevops-node-secret-read-p4-20261015-r2"
+  ]
+}

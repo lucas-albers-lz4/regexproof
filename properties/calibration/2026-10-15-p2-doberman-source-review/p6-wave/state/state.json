@@ -1,0 +1,379 @@
+{
+  "attempts": [
+    {
+      "contract": {
+        "adoption": {
+          "approved_on": "2026-10-15",
+          "authority": "standing_user_delegation",
+          "contract_sha256": "d8a26b05f10027b3eb8395d79b3c27a4a06a4f4e9fd006b6f78be9752022aafb",
+          "evidence": [
+            "https://github.com/fu351/Doberman-Core/blob/53ae43c5298a2426c6696147fdd75e2a4aef10e2/src/doberman/hosthooks/codex.py",
+            "https://github.com/fu351/Doberman-Core/blob/53ae43c5298a2426c6696147fdd75e2a4aef10e2/tests/fixtures/codex/README.md",
+            "https://github.com/fu351/Doberman-Core/blob/53ae43c5298a2426c6696147fdd75e2a4aef10e2/tests/unit/test_hosthook_codex.py",
+            "properties/calibration/2026-10-15-p2-doberman-source-review/evidence.json regex_id=f7797e4965e6dd79fda6a4e5f2438f67 column=23"
+          ],
+          "policy_version": "autonomous-contracts-v1",
+          "rationale": "The captured Codex 0.146.1 fixture documents Add, Update, and Delete File directive syntax. The adopted theorem covers one printable-ASCII destination character; the exact-source replay separately exercises longer representative paths and target routing without claiming an unbounded path proof. At this pin, the adapter surfaces extracted destinations as file_write targets for ProtectedPathRule evaluation.",
+          "review": {
+            "author": "Codex source-review pass",
+            "reviewer": "Codex second source-review pass",
+            "same_model": true
+          },
+          "source_file": "src/doberman/hosthooks/codex.py",
+          "source_pin": "53ae43c5298a2426c6696147fdd75e2a4aef10e2",
+          "source_sha256": "0144953c99a6620cbe9128ce7bc7ad6f6e9ea1a64311348db1f70ec0d14f42f3",
+          "source_url": "https://github.com/fu351/Doberman-Core",
+          "status": "approved"
+        },
+        "declared_domain": "One ASCII directive line with zero to three leading ASCII spaces or tabs, one of the exact documented Add File, Update File, or Delete File forms, and a destination consisting of exactly one printable ASCII character from ! through ~. The Z3 theorem covers this one-character domain. The exact-source regression gate separately checks longer representative destinations, CRLF lines, and a mixed multi-directive envelope; these replays do not extend the formal theorem.",
+        "guarantee": "For each documented Add File, Update File, or Delete File directive with one non-whitespace printable-ASCII destination character, the pinned source regex matches the complete directive line and the adapter surfaces the stripped destination as a file_write target.",
+        "input_source": "The plain-text tool_input.command string in a Codex PreToolUse apply_patch payload supplied to Doberman.",
+        "provenance": "agent_derived",
+        "schema_version": "1",
+        "site": "fu351/Doberman-Core@53ae43c5298a2426c6696147fdd75e2a4aef10e2:src/doberman/hosthooks/codex.py:69:_APPLY_PATCH_FILE_RE",
+        "trust": "untrusted-input"
+      },
+      "detail": null,
+      "domain": "One ASCII directive line with zero to three leading ASCII spaces or tabs, one of the exact documented Add File, Update File, or Delete File forms, and a destination consisting of exactly one printable ASCII character from ! through ~. The Z3 theorem covers this one-character domain. The exact-source regression gate separately checks longer representative destinations, CRLF lines, and a mixed multi-directive envelope; these replays do not extend the formal theorem.",
+      "gate": {
+        "consumer_adopted": false,
+        "differential_cases": 385,
+        "gate_id": "doberman-codex-apply-patch-target-extraction",
+        "local_gate_command": "/home/linuxbrew/.linuxbrew/Cellar/python@3.14/3.14.8_2/bin/python3.14 scripts/doberman-codex-apply-patch-regression-gate.py --source-root /tmp/regexproof-pinned-sources/Doberman-Core-53ae43c5298a2426c6696147fdd75e2a4aef10e2 --roster properties/calibration/2026-10-15-p2-doberman-source-review/p6-wave/roster.json --output properties/calibration/2026-10-15-p2-doberman-source-review/p6-wave/product-gate.json",
+        "local_gate_passed": true,
+        "mutation_guard_passed": true,
+        "product_engine_replayed": true,
+        "source_pin_verified": true
+      },
+      "kind": "property",
+      "pin": "53ae43c5298a2426c6696147fdd75e2a4aef10e2",
+      "question_id": "DB-codex-apply-patch-file-target-path",
+      "repo_id": "fu351/Doberman-Core",
+      "site": "fu351/Doberman-Core@53ae43c5298a2426c6696147fdd75e2a4aef10e2:src/doberman/hosthooks/codex.py:69:_APPLY_PATCH_FILE_RE",
+      "status": "unsat",
+      "synthesized": false,
+      "url": "https://github.com/fu351/Doberman-Core"
+    },
+    {
+      "contract": {
+        "adoption": {
+          "approved_on": "2026-10-15",
+          "authority": "standing_user_delegation",
+          "contract_sha256": "9b4e12034ef2e5935a5aa8309d967f71b6c999daadb5093658eadf61cb61e740",
+          "evidence": [
+            "https://github.com/fu351/Doberman-Core/blob/53ae43c5298a2426c6696147fdd75e2a4aef10e2/src/doberman/hosthooks/codex.py",
+            "https://github.com/fu351/Doberman-Core/blob/53ae43c5298a2426c6696147fdd75e2a4aef10e2/tests/fixtures/codex/README.md",
+            "https://github.com/fu351/Doberman-Core/blob/53ae43c5298a2426c6696147fdd75e2a4aef10e2/tests/unit/test_hosthook_codex.py",
+            "properties/calibration/2026-10-15-p2-doberman-source-review/evidence.json regex_id=07feadd45ef45bfb08eb20a6c49cdb3e column=23"
+          ],
+          "policy_version": "autonomous-contracts-v1",
+          "rationale": "The captured Codex 0.146.1 fixture documents Move to directive syntax. The adopted theorem covers one printable-ASCII destination character; the exact-source replay separately exercises longer representative paths and target routing without claiming an unbounded path proof. At this pin, the adapter surfaces extracted destinations as file_write targets for ProtectedPathRule evaluation.",
+          "review": {
+            "author": "Codex source-review pass",
+            "reviewer": "Codex second source-review pass",
+            "same_model": true
+          },
+          "source_file": "src/doberman/hosthooks/codex.py",
+          "source_pin": "53ae43c5298a2426c6696147fdd75e2a4aef10e2",
+          "source_sha256": "0144953c99a6620cbe9128ce7bc7ad6f6e9ea1a64311348db1f70ec0d14f42f3",
+          "source_url": "https://github.com/fu351/Doberman-Core",
+          "status": "approved"
+        },
+        "declared_domain": "One ASCII directive line with zero to three leading ASCII spaces or tabs, the exact documented Move to form, and a destination consisting of exactly one printable ASCII character from ! through ~. The Z3 theorem covers this one-character domain. The exact-source regression gate separately checks longer representative destinations, CRLF lines, and a mixed multi-directive envelope; these replays do not extend the formal theorem.",
+        "guarantee": "For each documented Move to directive with one non-whitespace printable-ASCII destination character, the pinned source regex matches the complete directive line and the adapter surfaces the stripped destination as a file_write target.",
+        "input_source": "The plain-text tool_input.command string in a Codex PreToolUse apply_patch payload supplied to Doberman.",
+        "provenance": "agent_derived",
+        "schema_version": "1",
+        "site": "fu351/Doberman-Core@53ae43c5298a2426c6696147fdd75e2a4aef10e2:src/doberman/hosthooks/codex.py:70:_APPLY_PATCH_MOVE_RE",
+        "trust": "untrusted-input"
+      },
+      "detail": null,
+      "domain": "One ASCII directive line with zero to three leading ASCII spaces or tabs, the exact documented Move to form, and a destination consisting of exactly one printable ASCII character from ! through ~. The Z3 theorem covers this one-character domain. The exact-source regression gate separately checks longer representative destinations, CRLF lines, and a mixed multi-directive envelope; these replays do not extend the formal theorem.",
+      "gate": {
+        "consumer_adopted": false,
+        "differential_cases": 129,
+        "gate_id": "doberman-codex-apply-patch-target-extraction",
+        "local_gate_command": "/home/linuxbrew/.linuxbrew/Cellar/python@3.14/3.14.8_2/bin/python3.14 scripts/doberman-codex-apply-patch-regression-gate.py --source-root /tmp/regexproof-pinned-sources/Doberman-Core-53ae43c5298a2426c6696147fdd75e2a4aef10e2 --roster properties/calibration/2026-10-15-p2-doberman-source-review/p6-wave/roster.json --output properties/calibration/2026-10-15-p2-doberman-source-review/p6-wave/product-gate.json",
+        "local_gate_passed": true,
+        "mutation_guard_passed": true,
+        "product_engine_replayed": true,
+        "source_pin_verified": true
+      },
+      "kind": "property",
+      "pin": "53ae43c5298a2426c6696147fdd75e2a4aef10e2",
+      "question_id": "DB-codex-apply-patch-move-target-path",
+      "repo_id": "fu351/Doberman-Core",
+      "site": "fu351/Doberman-Core@53ae43c5298a2426c6696147fdd75e2a4aef10e2:src/doberman/hosthooks/codex.py:70:_APPLY_PATCH_MOVE_RE",
+      "status": "unsat",
+      "synthesized": false,
+      "url": "https://github.com/fu351/Doberman-Core"
+    }
+  ],
+  "cohort_manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+  "contracts": [
+    {
+      "contract": {
+        "adoption": {
+          "approved_on": "2026-10-15",
+          "authority": "standing_user_delegation",
+          "contract_sha256": "d8a26b05f10027b3eb8395d79b3c27a4a06a4f4e9fd006b6f78be9752022aafb",
+          "evidence": [
+            "https://github.com/fu351/Doberman-Core/blob/53ae43c5298a2426c6696147fdd75e2a4aef10e2/src/doberman/hosthooks/codex.py",
+            "https://github.com/fu351/Doberman-Core/blob/53ae43c5298a2426c6696147fdd75e2a4aef10e2/tests/fixtures/codex/README.md",
+            "https://github.com/fu351/Doberman-Core/blob/53ae43c5298a2426c6696147fdd75e2a4aef10e2/tests/unit/test_hosthook_codex.py",
+            "properties/calibration/2026-10-15-p2-doberman-source-review/evidence.json regex_id=f7797e4965e6dd79fda6a4e5f2438f67 column=23"
+          ],
+          "policy_version": "autonomous-contracts-v1",
+          "rationale": "The captured Codex 0.146.1 fixture documents Add, Update, and Delete File directive syntax. The adopted theorem covers one printable-ASCII destination character; the exact-source replay separately exercises longer representative paths and target routing without claiming an unbounded path proof. At this pin, the adapter surfaces extracted destinations as file_write targets for ProtectedPathRule evaluation.",
+          "review": {
+            "author": "Codex source-review pass",
+            "reviewer": "Codex second source-review pass",
+            "same_model": true
+          },
+          "source_file": "src/doberman/hosthooks/codex.py",
+          "source_pin": "53ae43c5298a2426c6696147fdd75e2a4aef10e2",
+          "source_sha256": "0144953c99a6620cbe9128ce7bc7ad6f6e9ea1a64311348db1f70ec0d14f42f3",
+          "source_url": "https://github.com/fu351/Doberman-Core",
+          "status": "approved"
+        },
+        "declared_domain": "One ASCII directive line with zero to three leading ASCII spaces or tabs, one of the exact documented Add File, Update File, or Delete File forms, and a destination consisting of exactly one printable ASCII character from ! through ~. The Z3 theorem covers this one-character domain. The exact-source regression gate separately checks longer representative destinations, CRLF lines, and a mixed multi-directive envelope; these replays do not extend the formal theorem.",
+        "guarantee": "For each documented Add File, Update File, or Delete File directive with one non-whitespace printable-ASCII destination character, the pinned source regex matches the complete directive line and the adapter surfaces the stripped destination as a file_write target.",
+        "input_source": "The plain-text tool_input.command string in a Codex PreToolUse apply_patch payload supplied to Doberman.",
+        "provenance": "agent_derived",
+        "schema_version": "1",
+        "site": "fu351/Doberman-Core@53ae43c5298a2426c6696147fdd75e2a4aef10e2:src/doberman/hosthooks/codex.py:69:_APPLY_PATCH_FILE_RE",
+        "trust": "untrusted-input"
+      },
+      "domain": "One ASCII directive line with zero to three leading ASCII spaces or tabs, one of the exact documented Add File, Update File, or Delete File forms, and a destination consisting of exactly one printable ASCII character from ! through ~. The Z3 theorem covers this one-character domain. The exact-source regression gate separately checks longer representative destinations, CRLF lines, and a mixed multi-directive envelope; these replays do not extend the formal theorem.",
+      "kind": "property",
+      "pin": "53ae43c5298a2426c6696147fdd75e2a4aef10e2",
+      "question_id": "DB-codex-apply-patch-file-target-path",
+      "repo_id": "fu351/Doberman-Core",
+      "site": "fu351/Doberman-Core@53ae43c5298a2426c6696147fdd75e2a4aef10e2:src/doberman/hosthooks/codex.py:69:_APPLY_PATCH_FILE_RE",
+      "synthesized": false,
+      "url": "https://github.com/fu351/Doberman-Core"
+    },
+    {
+      "contract": {
+        "adoption": {
+          "approved_on": "2026-10-15",
+          "authority": "standing_user_delegation",
+          "contract_sha256": "9b4e12034ef2e5935a5aa8309d967f71b6c999daadb5093658eadf61cb61e740",
+          "evidence": [
+            "https://github.com/fu351/Doberman-Core/blob/53ae43c5298a2426c6696147fdd75e2a4aef10e2/src/doberman/hosthooks/codex.py",
+            "https://github.com/fu351/Doberman-Core/blob/53ae43c5298a2426c6696147fdd75e2a4aef10e2/tests/fixtures/codex/README.md",
+            "https://github.com/fu351/Doberman-Core/blob/53ae43c5298a2426c6696147fdd75e2a4aef10e2/tests/unit/test_hosthook_codex.py",
+            "properties/calibration/2026-10-15-p2-doberman-source-review/evidence.json regex_id=07feadd45ef45bfb08eb20a6c49cdb3e column=23"
+          ],
+          "policy_version": "autonomous-contracts-v1",
+          "rationale": "The captured Codex 0.146.1 fixture documents Move to directive syntax. The adopted theorem covers one printable-ASCII destination character; the exact-source replay separately exercises longer representative paths and target routing without claiming an unbounded path proof. At this pin, the adapter surfaces extracted destinations as file_write targets for ProtectedPathRule evaluation.",
+          "review": {
+            "author": "Codex source-review pass",
+            "reviewer": "Codex second source-review pass",
+            "same_model": true
+          },
+          "source_file": "src/doberman/hosthooks/codex.py",
+          "source_pin": "53ae43c5298a2426c6696147fdd75e2a4aef10e2",
+          "source_sha256": "0144953c99a6620cbe9128ce7bc7ad6f6e9ea1a64311348db1f70ec0d14f42f3",
+          "source_url": "https://github.com/fu351/Doberman-Core",
+          "status": "approved"
+        },
+        "declared_domain": "One ASCII directive line with zero to three leading ASCII spaces or tabs, the exact documented Move to form, and a destination consisting of exactly one printable ASCII character from ! through ~. The Z3 theorem covers this one-character domain. The exact-source regression gate separately checks longer representative destinations, CRLF lines, and a mixed multi-directive envelope; these replays do not extend the formal theorem.",
+        "guarantee": "For each documented Move to directive with one non-whitespace printable-ASCII destination character, the pinned source regex matches the complete directive line and the adapter surfaces the stripped destination as a file_write target.",
+        "input_source": "The plain-text tool_input.command string in a Codex PreToolUse apply_patch payload supplied to Doberman.",
+        "provenance": "agent_derived",
+        "schema_version": "1",
+        "site": "fu351/Doberman-Core@53ae43c5298a2426c6696147fdd75e2a4aef10e2:src/doberman/hosthooks/codex.py:70:_APPLY_PATCH_MOVE_RE",
+        "trust": "untrusted-input"
+      },
+      "domain": "One ASCII directive line with zero to three leading ASCII spaces or tabs, the exact documented Move to form, and a destination consisting of exactly one printable ASCII character from ! through ~. The Z3 theorem covers this one-character domain. The exact-source regression gate separately checks longer representative destinations, CRLF lines, and a mixed multi-directive envelope; these replays do not extend the formal theorem.",
+      "kind": "property",
+      "pin": "53ae43c5298a2426c6696147fdd75e2a4aef10e2",
+      "question_id": "DB-codex-apply-patch-move-target-path",
+      "repo_id": "fu351/Doberman-Core",
+      "site": "fu351/Doberman-Core@53ae43c5298a2426c6696147fdd75e2a4aef10e2:src/doberman/hosthooks/codex.py:70:_APPLY_PATCH_MOVE_RE",
+      "synthesized": false,
+      "url": "https://github.com/fu351/Doberman-Core"
+    }
+  ],
+  "conversion_rows": [
+    {
+      "contract": {
+        "adoption": {
+          "approved_on": "2026-10-15",
+          "authority": "standing_user_delegation",
+          "contract_sha256": "d8a26b05f10027b3eb8395d79b3c27a4a06a4f4e9fd006b6f78be9752022aafb",
+          "evidence": [
+            "https://github.com/fu351/Doberman-Core/blob/53ae43c5298a2426c6696147fdd75e2a4aef10e2/src/doberman/hosthooks/codex.py",
+            "https://github.com/fu351/Doberman-Core/blob/53ae43c5298a2426c6696147fdd75e2a4aef10e2/tests/fixtures/codex/README.md",
+            "https://github.com/fu351/Doberman-Core/blob/53ae43c5298a2426c6696147fdd75e2a4aef10e2/tests/unit/test_hosthook_codex.py",
+            "properties/calibration/2026-10-15-p2-doberman-source-review/evidence.json regex_id=f7797e4965e6dd79fda6a4e5f2438f67 column=23"
+          ],
+          "policy_version": "autonomous-contracts-v1",
+          "rationale": "The captured Codex 0.146.1 fixture documents Add, Update, and Delete File directive syntax. The adopted theorem covers one printable-ASCII destination character; the exact-source replay separately exercises longer representative paths and target routing without claiming an unbounded path proof. At this pin, the adapter surfaces extracted destinations as file_write targets for ProtectedPathRule evaluation.",
+          "review": {
+            "author": "Codex source-review pass",
+            "reviewer": "Codex second source-review pass",
+            "same_model": true
+          },
+          "source_file": "src/doberman/hosthooks/codex.py",
+          "source_pin": "53ae43c5298a2426c6696147fdd75e2a4aef10e2",
+          "source_sha256": "0144953c99a6620cbe9128ce7bc7ad6f6e9ea1a64311348db1f70ec0d14f42f3",
+          "source_url": "https://github.com/fu351/Doberman-Core",
+          "status": "approved"
+        },
+        "declared_domain": "One ASCII directive line with zero to three leading ASCII spaces or tabs, one of the exact documented Add File, Update File, or Delete File forms, and a destination consisting of exactly one printable ASCII character from ! through ~. The Z3 theorem covers this one-character domain. The exact-source regression gate separately checks longer representative destinations, CRLF lines, and a mixed multi-directive envelope; these replays do not extend the formal theorem.",
+        "guarantee": "For each documented Add File, Update File, or Delete File directive with one non-whitespace printable-ASCII destination character, the pinned source regex matches the complete directive line and the adapter surfaces the stripped destination as a file_write target.",
+        "input_source": "The plain-text tool_input.command string in a Codex PreToolUse apply_patch payload supplied to Doberman.",
+        "provenance": "agent_derived",
+        "schema_version": "1",
+        "site": "fu351/Doberman-Core@53ae43c5298a2426c6696147fdd75e2a4aef10e2:src/doberman/hosthooks/codex.py:69:_APPLY_PATCH_FILE_RE",
+        "trust": "untrusted-input"
+      },
+      "corpus": "doberman_core_codex",
+      "disclosure": null,
+      "domain": "One ASCII directive line with zero to three leading ASCII spaces or tabs, one of the exact documented Add File, Update File, or Delete File forms, and a destination consisting of exactly one printable ASCII character from ! through ~. The Z3 theorem covers this one-character domain. The exact-source regression gate separately checks longer representative destinations, CRLF lines, and a mixed multi-directive envelope; these replays do not extend the formal theorem.",
+      "engine_versions": {
+        "python": "3.14.8",
+        "z3": "5.0.0"
+      },
+      "family": "DB-codex-apply-patch-target-extraction",
+      "ground_truth": null,
+      "ground_truth_status": null,
+      "idiom_bucket": "codex-apply-patch-path-extraction",
+      "kind": "property",
+      "name": "DB-codex-apply-patch-file-target-path",
+      "product_reportable": true,
+      "regex_id": "1b88e011d1d199dbe1ac96fa2e2b7d55",
+      "result": "unsat",
+      "schema_version": "1",
+      "shape": 3,
+      "site": "fu351/Doberman-Core@53ae43c5298a2426c6696147fdd75e2a4aef10e2:src/doberman/hosthooks/codex.py:69:_APPLY_PATCH_FILE_RE",
+      "synthesized": false,
+      "wave_id": "doberman-codex-apply-patch",
+      "witness": null
+    },
+    {
+      "contract": {
+        "adoption": {
+          "approved_on": "2026-10-15",
+          "authority": "standing_user_delegation",
+          "contract_sha256": "9b4e12034ef2e5935a5aa8309d967f71b6c999daadb5093658eadf61cb61e740",
+          "evidence": [
+            "https://github.com/fu351/Doberman-Core/blob/53ae43c5298a2426c6696147fdd75e2a4aef10e2/src/doberman/hosthooks/codex.py",
+            "https://github.com/fu351/Doberman-Core/blob/53ae43c5298a2426c6696147fdd75e2a4aef10e2/tests/fixtures/codex/README.md",
+            "https://github.com/fu351/Doberman-Core/blob/53ae43c5298a2426c6696147fdd75e2a4aef10e2/tests/unit/test_hosthook_codex.py",
+            "properties/calibration/2026-10-15-p2-doberman-source-review/evidence.json regex_id=07feadd45ef45bfb08eb20a6c49cdb3e column=23"
+          ],
+          "policy_version": "autonomous-contracts-v1",
+          "rationale": "The captured Codex 0.146.1 fixture documents Move to directive syntax. The adopted theorem covers one printable-ASCII destination character; the exact-source replay separately exercises longer representative paths and target routing without claiming an unbounded path proof. At this pin, the adapter surfaces extracted destinations as file_write targets for ProtectedPathRule evaluation.",
+          "review": {
+            "author": "Codex source-review pass",
+            "reviewer": "Codex second source-review pass",
+            "same_model": true
+          },
+          "source_file": "src/doberman/hosthooks/codex.py",
+          "source_pin": "53ae43c5298a2426c6696147fdd75e2a4aef10e2",
+          "source_sha256": "0144953c99a6620cbe9128ce7bc7ad6f6e9ea1a64311348db1f70ec0d14f42f3",
+          "source_url": "https://github.com/fu351/Doberman-Core",
+          "status": "approved"
+        },
+        "declared_domain": "One ASCII directive line with zero to three leading ASCII spaces or tabs, the exact documented Move to form, and a destination consisting of exactly one printable ASCII character from ! through ~. The Z3 theorem covers this one-character domain. The exact-source regression gate separately checks longer representative destinations, CRLF lines, and a mixed multi-directive envelope; these replays do not extend the formal theorem.",
+        "guarantee": "For each documented Move to directive with one non-whitespace printable-ASCII destination character, the pinned source regex matches the complete directive line and the adapter surfaces the stripped destination as a file_write target.",
+        "input_source": "The plain-text tool_input.command string in a Codex PreToolUse apply_patch payload supplied to Doberman.",
+        "provenance": "agent_derived",
+        "schema_version": "1",
+        "site": "fu351/Doberman-Core@53ae43c5298a2426c6696147fdd75e2a4aef10e2:src/doberman/hosthooks/codex.py:70:_APPLY_PATCH_MOVE_RE",
+        "trust": "untrusted-input"
+      },
+      "corpus": "doberman_core_codex",
+      "disclosure": null,
+      "domain": "One ASCII directive line with zero to three leading ASCII spaces or tabs, the exact documented Move to form, and a destination consisting of exactly one printable ASCII character from ! through ~. The Z3 theorem covers this one-character domain. The exact-source regression gate separately checks longer representative destinations, CRLF lines, and a mixed multi-directive envelope; these replays do not extend the formal theorem.",
+      "engine_versions": {
+        "python": "3.14.8",
+        "z3": "5.0.0"
+      },
+      "family": "DB-codex-apply-patch-target-extraction",
+      "ground_truth": null,
+      "ground_truth_status": null,
+      "idiom_bucket": "codex-apply-patch-path-extraction",
+      "kind": "property",
+      "name": "DB-codex-apply-patch-move-target-path",
+      "product_reportable": true,
+      "regex_id": "57e9f27f8680e454aa6639887f8adbca",
+      "result": "unsat",
+      "schema_version": "1",
+      "shape": 3,
+      "site": "fu351/Doberman-Core@53ae43c5298a2426c6696147fdd75e2a4aef10e2:src/doberman/hosthooks/codex.py:70:_APPLY_PATCH_MOVE_RE",
+      "synthesized": false,
+      "wave_id": "doberman-codex-apply-patch",
+      "witness": null
+    }
+  ],
+  "corpus": "doberman_core_codex",
+  "coverage_digest": "d1467cff6deeebd97fffafa7f9640701d1f71d1c63913d4c4593aa16920052fc",
+  "execution_caps": {
+    "local_gate_timeout_seconds": 300,
+    "max_active_conversion_waves": 1,
+    "max_adopted_contracts_per_wave": 5,
+    "max_new_questions_per_run": 5,
+    "parallel_walk": false,
+    "solver_retries": 0,
+    "solver_timeout_ms": 30000
+  },
+  "gate_config": {
+    "command": [
+      "/home/linuxbrew/.linuxbrew/Cellar/python@3.14/3.14.8_2/bin/python3.14",
+      "scripts/doberman-codex-apply-patch-regression-gate.py",
+      "--source-root",
+      "/tmp/regexproof-pinned-sources/Doberman-Core-53ae43c5298a2426c6696147fdd75e2a4aef10e2",
+      "--roster",
+      "properties/calibration/2026-10-15-p2-doberman-source-review/p6-wave/roster.json",
+      "--output",
+      "properties/calibration/2026-10-15-p2-doberman-source-review/p6-wave/product-gate.json"
+    ],
+    "evidence": {
+      "differential_case_counts": {
+        "DB-codex-apply-patch-file-target-path": 385,
+        "DB-codex-apply-patch-move-target-path": 129
+      },
+      "product_engine_replay_question_ids": [
+        "DB-codex-apply-patch-file-target-path",
+        "DB-codex-apply-patch-move-target-path"
+      ]
+    },
+    "gate_id": "doberman-codex-apply-patch-target-extraction",
+    "question_ids": [
+      "DB-codex-apply-patch-file-target-path",
+      "DB-codex-apply-patch-move-target-path"
+    ],
+    "schema_version": "1",
+    "timeout_seconds": 300
+  },
+  "idiom_bucket": "codex-apply-patch-path-extraction",
+  "runs": [
+    {
+      "active_question_id": null,
+      "finished_at": "2026-10-15T23:40:40+00:00",
+      "gate_failure": null,
+      "gate_passed": true,
+      "gate_wall_ms": 104.2,
+      "mutation_failures": [],
+      "mutation_wall_ms": 11.5,
+      "new_questions": 2,
+      "question_ids": [
+        "DB-codex-apply-patch-file-target-path",
+        "DB-codex-apply-patch-move-target-path"
+      ],
+      "reason": null,
+      "run_id": "66f3306b-8fb3-4ee3-9f16-3f5d46c0a377",
+      "solver_wall_ms": 838.2,
+      "source_failures": {},
+      "source_wall_ms": 14.2,
+      "started_at": "2026-10-15T23:40:39+00:00",
+      "status": "complete"
+    }
+  ],
+  "schema_version": "1",
+  "wave_id": "doberman-codex-apply-patch"
+}

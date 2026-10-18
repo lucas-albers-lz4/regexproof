@@ -1,0 +1,17 @@
+{
+  "cohort_id": "2026-09-12-calibration-20-r2",
+  "cohort_manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+  "coverage_digest": "8bc11b77c1628de45adf39300c25cd27866d15b07d561bb6756a0cd4c34d8167",
+  "identities": [
+    {
+      "contract_sha256": "b4498e6291105f692c8b281ee975f8a1b3e17c205ec2d5efbe17916790fe2e22",
+      "pin": "2f3fa5a506d6565fa68858b7963450567ddda114",
+      "provenance": "agent_derived",
+      "question_id": "AN-anax-orgname-denylist-validation",
+      "repo_id": "open-horizon/anax",
+      "site": "open-horizon/anax@2f3fa5a506d6565fa68858b7963450567ddda114:cli/cliutils/cliutils.go:2277:MatchString",
+      "url": "https://github.com/open-horizon/anax"
+    }
+  ],
+  "schema_version": "2"
+}

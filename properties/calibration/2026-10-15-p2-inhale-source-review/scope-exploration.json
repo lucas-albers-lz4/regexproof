@@ -1,0 +1,56 @@
+{
+  "cases": [
+    {
+      "cross_origin_fetch_observed": true,
+      "cross_origin_fetches": [
+        "https://trusted.example.attacker.test/malware.bin"
+      ],
+      "fetch_calls": [
+        "https://trusted.example",
+        "https://trusted.example.attacker.test/malware.bin"
+      ],
+      "href": "https://trusted.example.attacker.test/malware.bin",
+      "network_used": false,
+      "root_origin": [
+        "https",
+        "trusted.example",
+        null
+      ],
+      "root_url": "https://trusted.example",
+      "source": {
+        "head": "889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8",
+        "source_file": "iModules/rDownload.py",
+        "source_sha256": "3350a9a3d1be11e44dfff3756f90b03f349cc0a59246959047fe4ed0633c6414"
+      },
+      "synthetic_output_files": [
+        "trusted.example/malware.bin"
+      ]
+    },
+    {
+      "cross_origin_fetch_observed": false,
+      "cross_origin_fetches": [],
+      "fetch_calls": [
+        "https://trusted.example/"
+      ],
+      "href": "https://trusted.example.attacker.test/malware.bin",
+      "network_used": false,
+      "root_origin": [
+        "https",
+        "trusted.example",
+        null
+      ],
+      "root_url": "https://trusted.example/",
+      "source": {
+        "head": "889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8",
+        "source_file": "iModules/rDownload.py",
+        "source_sha256": "3350a9a3d1be11e44dfff3756f90b03f349cc0a59246959047fe4ed0633c6414"
+      },
+      "synthetic_output_files": []
+    }
+  ],
+  "impact_confirmed": false,
+  "network_used": false,
+  "question_status": "unresolved_not_counted",
+  "reason": "The pinned helper admits a cross-origin hostname that shares the root URL string prefix, but the repository has no independent documented same-origin requirement for recursive links.",
+  "schema_version": "1"
+}

@@ -1,0 +1,64 @@
+{
+  "cohort": {
+    "cohort_id": "2026-09-12-calibration-20-r2",
+    "manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+    "roster_sha256": "a5e26bfb19f99bb16be47ef6de774b580438dcd3d23abb542524d4ec4312d8a4"
+  },
+  "contract_domain_case_counts": {
+    "DB-codex-apply-patch-file-target-path": 45,
+    "DB-codex-apply-patch-move-target-path": 15
+  },
+  "contract_sha256s": {
+    "DB-codex-apply-patch-file-target-path": "d8a26b05f10027b3eb8395d79b3c27a4a06a4f4e9fd006b6f78be9752022aafb",
+    "DB-codex-apply-patch-move-target-path": "9b4e12034ef2e5935a5aa8309d967f71b6c999daadb5093658eadf61cb61e740"
+  },
+  "crlf_compatibility_case_counts": {
+    "DB-codex-apply-patch-file-target-path": 24,
+    "DB-codex-apply-patch-move-target-path": 8
+  },
+  "differential_case_counts": {
+    "DB-codex-apply-patch-file-target-path": 385,
+    "DB-codex-apply-patch-move-target-path": 129
+  },
+  "differential_cases": 514,
+  "gate_id": "doberman-codex-apply-patch-target-extraction",
+  "multi_directive_cases_per_question": 1,
+  "mutation_guard_passed": true,
+  "mutation_witness": "*** Delete File: .env",
+  "product_engine_replay_question_ids": [
+    "DB-codex-apply-patch-file-target-path",
+    "DB-codex-apply-patch-move-target-path"
+  ],
+  "question_ids": [
+    "DB-codex-apply-patch-file-target-path",
+    "DB-codex-apply-patch-move-target-path"
+  ],
+  "repository": "https://github.com/fu351/Doberman-Core",
+  "representative_long_path_case_counts": {
+    "DB-codex-apply-patch-file-target-path": 315,
+    "DB-codex-apply-patch-move-target-path": 105
+  },
+  "result_rows": [
+    {
+      "contract_sha256": "d8a26b05f10027b3eb8395d79b3c27a4a06a4f4e9fd006b6f78be9752022aafb",
+      "differential_cases": 385,
+      "name": "DB-codex-apply-patch-file-target-path",
+      "status": "reproduced"
+    },
+    {
+      "contract_sha256": "9b4e12034ef2e5935a5aa8309d967f71b6c999daadb5093658eadf61cb61e740",
+      "differential_cases": 129,
+      "name": "DB-codex-apply-patch-move-target-path",
+      "status": "reproduced"
+    }
+  ],
+  "schema_version": "1",
+  "source": {
+    "checkout": "/tmp/regexproof-pinned-sources/Doberman-Core-53ae43c5298a2426c6696147fdd75e2a4aef10e2",
+    "file": "src/doberman/hosthooks/codex.py",
+    "pin": "53ae43c5298a2426c6696147fdd75e2a4aef10e2",
+    "repository_url": "https://github.com/fu351/Doberman-Core",
+    "sha256": "0144953c99a6620cbe9128ce7bc7ad6f6e9ea1a64311348db1f70ec0d14f42f3"
+  },
+  "status": "reproduced"
+}

@@ -1,0 +1,55 @@
+[
+  {
+    "contract": {
+      "adoption": {
+        "approved_on": "2026-10-15",
+        "authority": "standing_user_delegation",
+        "contract_sha256": "480327fa8a307a9310911fd45f9e0048fd049181a6fbc9588e60d4eb58096bb9",
+        "evidence": [
+          "https://github.com/json-editor/json-editor/blob/b31ddabecf4ed3209d37a2f5b29956120cd8f9ce/src/editors/enum.js",
+          "https://github.com/json-editor/json-editor/blob/b31ddabecf4ed3209d37a2f5b29956120cd8f9ce/README.md",
+          "properties/calibration/2026-10-15-p2-json-editor-source-review/evidence.json regex_id=21a271471f4c1c1fbc13a331e0f706da column=24"
+        ],
+        "policy_version": "autonomous-contracts-v1",
+        "rationale": "README enum semantics and the exact source call path establish that schema enum values are displayed by EnumEditor; the three ordered replacements run in the string branch before the result is assigned to display_area.innerHTML. The source site is bound to the exact ampersand-regex column from the frozen P2 inventory, which disambiguates two sibling regexes on the same line. The contract is limited to string leaves from application schema configuration and their HTML text rendering.",
+        "review": {
+          "author": "codex-contract-author",
+          "reviewer": "codex-independent-review-pass",
+          "same_model": true
+        },
+        "source_file": "src/editors/enum.js",
+        "source_pin": "b31ddabecf4ed3209d37a2f5b29956120cd8f9ce",
+        "source_sha256": "315aae54dbaf602bb25c08c064187805a3ac279a61aae8cd6d4d49eec0c44b14",
+        "source_url": "https://github.com/json-editor/json-editor",
+        "status": "approved"
+      },
+      "declared_domain": "Exact frozen 20-r2 pin b31ddabecf4ed3209d37a2f5b29956120cd8f9ce and src/editors/enum.js SHA-256 315aae54dbaf602bb25c08c064187805a3ac279a61aae8cd6d4d49eec0c44b14. The Z3 proof domain is one Unicode codepoint through the exact per-codepoint image of the ordered three-replacement string branch, with no length bound on that token. The source uses global single-character replacements in ampersand/less-than/greater-than order; an exact Node gate checks the real whole-string method over every Unicode scalar value, short exhaustive strings, targeted payloads, and seeded strings. This does not claim a formal whole-string theorem for other EnumEditor values, object keys, attributes, URLs, or script/style contexts.",
+      "guarantee": "For each string leaf in an application schema's enum value, the pinned EnumEditor.getHTML string branch applies the ordered ampersand, less-than, and greater-than replacements before the result reaches display_area.innerHTML. Each such codepoint is emitted as its corresponding HTML text entity, so it is displayed as text rather than parsed as element markup. This claim is limited to string leaves; object keys and non-string values are outside the contract.",
+      "input_source": "String leaves from the application-provided schema.enum values, passed through EnumEditor.build and getHTML into the selected-value display_area.innerHTML sink.",
+      "provenance": "agent_derived",
+      "schema_version": "1",
+      "site": "json-editor/json-editor@b31ddabecf4ed3209d37a2f5b29956120cd8f9ce:src/editors/enum.js:123:column-24",
+      "trust": "config"
+    },
+    "detail": null,
+    "domain": "One Unicode codepoint passed through the pinned, ordered EnumEditor string replacements contains no raw less-than or greater-than delimiter",
+    "gate": {
+      "consumer_adopted": false,
+      "differential_cases": 1116985,
+      "gate_id": "json-editor-enum-html-text-escape",
+      "local_gate_command": "/home/lalbers/gitroot/regexproof/.venv/bin/python scripts/json-editor-enum-escape-regression-gate.py --source-root /tmp/regexproof-pinned-sources/json-editor-b31ddabecf4ed3209d37a2f5b29956120cd8f9ce --output /home/lalbers/gitroot/regexproof/properties/calibration/2026-10-15-p2-json-editor-source-review/p6-wave-r3/product-gate.json",
+      "local_gate_passed": true,
+      "mutation_guard_passed": true,
+      "product_engine_replayed": true,
+      "source_pin_verified": true
+    },
+    "kind": "property",
+    "pin": "b31ddabecf4ed3209d37a2f5b29956120cd8f9ce",
+    "question_id": "JE-json-editor-enum-string-html-text-codepoint-image",
+    "repo_id": "json-editor/json-editor",
+    "site": "json-editor/json-editor@b31ddabecf4ed3209d37a2f5b29956120cd8f9ce:src/editors/enum.js:123:column-24",
+    "status": "unsat",
+    "synthesized": false,
+    "url": "https://github.com/json-editor/json-editor"
+  }
+]

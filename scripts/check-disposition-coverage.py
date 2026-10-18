@@ -323,7 +323,7 @@ def ready_to_file_rows(
     curated: dict[tuple[str, str], dict[str, Any]],
     cl: Any,
 ) -> list[dict[str, Any]]:
-    """GT-confirmed SATs whose curated disposition is not ``wont_file``."""
+    """GT-confirmed SATs requiring a filing decision or approval action."""
     rows: list[dict[str, Any]] = []
     for rec in gt_sats:
         key = (cl.canonical_site(str(rec.get("site") or "")), cl.canonical_question_id(rec))
@@ -331,7 +331,7 @@ def ready_to_file_rows(
         if not isinstance(disp, dict):
             continue
         status = str(disp.get("status") or "")
-        if status == "wont_file":
+        if status not in {"private_first", "approval_missing"}:
             continue
         rows.append(
             {
@@ -377,7 +377,7 @@ def run(
     )
     if ready_to_file:
         ready = ready_to_file_rows(gt_sats, curated, cl)
-        print(f"ready-to-file: {len(ready)} GT-confirmed non-wont_file item(s)")
+        print(f"ready-to-file: {len(ready)} GT-confirmed item(s) needing filing decision/approval")
         for row in ready:
             print(
                 f"  - {row.get('id')}: status={row.get('status')} "
@@ -413,7 +413,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument(
         "--ready-to-file",
         action="store_true",
-        help="List GT-confirmed curated items whose status is not wont_file",
+        help="List GT-confirmed private_first or actionable approval_missing items",
     )
     args = ap.parse_args(argv)
     if not args.generated_dir.is_dir():

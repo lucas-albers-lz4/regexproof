@@ -22,10 +22,11 @@ other page is in this directory. Each entry is one link plus one clause.
 ## Contracts & reporting
 
 - [`CONTRACTS.md`](CONTRACTS.md) — property-contract object, provenance, what batch may scale.
+- [`AUTONOMOUS-CONTRACTS.md`](AUTONOMOUS-CONTRACTS.md) — authorized agent adoption, evidence requirements, and executable counting transition.
 - [`REPORTING.md`](REPORTING.md) — scanner NDJSON / triage / batch MD field contracts.
 - [`conversion-upstream.jsonl`](conversion-upstream.jsonl) — curated last-mile conversion events (filed / fixed / false positive / private_first).
 - [`verified-findings.jsonl`](verified-findings.jsonl) — machine-readable verified implementation findings.
-- [`CLUSTER-CONVERSION.md`](CLUSTER-CONVERSION.md) — conversion-wave SOP: rank / write ≤5 human contracts per idiom slice.
+- [`CLUSTER-CONVERSION.md`](CLUSTER-CONVERSION.md) — conversion-wave SOP: rank / adopt ≤5 evidenced contracts per idiom slice.
 - [`why.md`](why.md) — three claims with different evidence: mirror soundness, encodable fraction, conversion.
 
 ## Operations
@@ -34,6 +35,7 @@ other page is in this directory. Each entry is one link plus one clause.
 - [`CODERABBIT.md`](CODERABBIT.md) — working with CodeRabbit on PRs.
 - [`REDOS.md`](REDOS.md) — ReDoS (complexity) tooling — complements, not replaces, the SMT approach.
 - [`PIPELINE.md`](PIPELINE.md) — operator funnel: mine → rank → probe → gate → wave.
+- [`AUTONOMOUS-CORPUS-PLAN.md`](AUTONOMOUS-CORPUS-PLAN.md) — parent issue draft and dependency-ordered Luna work through a frozen product campaign.
 - [`MINE-SETUP.md`](MINE-SETUP.md) — daily mine setup (scheduled GitHub Code Search job).
 - [`NEWGATE.md`](NEWGATE.md) — consumer adoption: point regexproof at one regex and get a gate.
 - [`PILOT.md`](PILOT.md) — dogfooding report: usrmanage, fwlive, happycow trial runs + lessons.

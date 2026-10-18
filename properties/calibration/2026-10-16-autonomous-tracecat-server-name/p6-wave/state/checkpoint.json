@@ -1,0 +1,378 @@
+{
+  "attempts": [
+    {
+      "contract": {
+        "adoption": {
+          "approved_on": "2026-10-16",
+          "authority": "standing_user_delegation",
+          "contract_sha256": "9045868f6004efccb55e4e6cb0a14e5a7cc5fb805bd61442afa6c791454e7f8b",
+          "evidence": [
+            "https://github.com/TracecatHQ/tracecat/blob/c84d52528a489821f355fc63976fbc7783ae0ad5/tracecat/integrations/mcp_validation.py",
+            "https://github.com/TracecatHQ/tracecat/blob/c84d52528a489821f355fc63976fbc7783ae0ad5/tracecat/integrations/service.py",
+            "https://github.com/TracecatHQ/tracecat/blob/c84d52528a489821f355fc63976fbc7783ae0ad5/tracecat/agent/preset/service.py",
+            "properties/calibration/2026-10-16-p2-tracecat-server-name-review/evidence.json"
+          ],
+          "policy_version": "autonomous-contracts-v1",
+          "rationale": "The pinned validator comment and error text declare alphanumeric, hyphen, and underscore characters only. AgentPresetService passes the persisted workspace MCP integration slug through validate_mcp_command_config to this validator. The contract proves only exclusion of slash and backslash from values the exact function accepts; it does not claim security impact or validate slug generation.",
+          "review": {
+            "author": "Codex-P2-source-review",
+            "reviewer": "Codex-independent-source-review-pass",
+            "same_model": true
+          },
+          "source_file": "tracecat/integrations/mcp_validation.py",
+          "source_pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+          "source_sha256": "41cf730ba1cb592cae684811bbb4d510961a0a441c156313a804b2593085f895",
+          "source_url": "https://github.com/TracecatHQ/tracecat",
+          "status": "approved"
+        },
+        "declared_domain": "Any ASCII string of length 1 through 64 passed as the name argument to Tracecat's validate_mcp_server_name function. The source pattern accepts one or more characters from [A-Za-z0-9_-] and CPython's terminal-dollar behavior may additionally accept one final line feed; this theorem covers only exclusion of slash and backslash, not the full declared name language or slug-generation behavior.",
+        "guarantee": "Every string accepted by the pinned validate_mcp_server_name function excludes slash and backslash characters.",
+        "input_source": "Workspace MCP integration configuration supplies MCPIntegrationCreate.name. MCPIntegrationService normalizes it into the persisted MCPIntegration.slug; AgentPresetService later passes that stored slug as name to validate_mcp_command_config, which invokes validate_mcp_server_name.",
+        "provenance": "agent_derived",
+        "schema_version": "1",
+        "site": "TracecatHQ/tracecat@c84d52528a489821f355fc63976fbc7783ae0ad5:tracecat/integrations/mcp_validation.py:267:re.match",
+        "trust": "config"
+      },
+      "detail": null,
+      "domain": "The exact pinned MCP server-name validator's accepted alphabet excludes both slash and backslash characters",
+      "gate": {
+        "consumer_adopted": false,
+        "differential_cases": 714,
+        "gate_id": "tracecat-mcp-server-name-path-separator-exclusion",
+        "local_gate_command": "/home/lalbers/gitroot/regexproof/.venv/bin/python /home/lalbers/gitroot/regexproof/scripts/tracecat-mcp-server-name-regression-gate.py --source-root /tmp/regexproof-pinned-sources/tracecat-c84d52528a489821f355fc63976fbc7783ae0ad5 --output /home/lalbers/gitroot/regexproof/properties/calibration/2026-10-16-autonomous-tracecat-server-name/p6-wave/product-gate.json",
+        "local_gate_passed": true,
+        "mutation_guard_passed": true,
+        "product_engine_replayed": true,
+        "source_pin_verified": true
+      },
+      "kind": "property",
+      "pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+      "question_id": "TC-mcp-server-name-separators-excluded",
+      "repo_id": "TracecatHQ/tracecat",
+      "site": "TracecatHQ/tracecat@c84d52528a489821f355fc63976fbc7783ae0ad5:tracecat/integrations/mcp_validation.py:267:re.match",
+      "status": "unsat",
+      "synthesized": false,
+      "url": "https://github.com/TracecatHQ/tracecat"
+    }
+  ],
+  "cohort": {
+    "cohort_id": "2026-09-12-calibration-20-r2",
+    "manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+    "repos": [
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "ecma",
+        "pin": "b31ddabecf4ed3209d37a2f5b29956120cd8f9ce",
+        "repo_id": "json-editor/json-editor",
+        "score": 4902,
+        "sites": 1,
+        "url": "https://github.com/json-editor/json-editor"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "posix-shell",
+        "pin": "d4f01ba6202d50909d1977810d322259482e0b82",
+        "repo_id": "mycelium0/mycelium",
+        "score": 21,
+        "sites": 1,
+        "url": "https://github.com/mycelium0/mycelium"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "py_re",
+        "pin": "889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8",
+        "repo_id": "netspooky/inhale",
+        "score": 191,
+        "sites": 1,
+        "url": "https://github.com/netspooky/inhale"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "ecma",
+        "pin": "e9fb233763160316989863b4739c4656133d45b0",
+        "repo_id": "magiclabs/magic-js",
+        "score": 477,
+        "sites": 1,
+        "url": "https://github.com/magiclabs/magic-js"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "ecma",
+        "pin": "d4a39726cad8d8e27e4c0502d1843c3b4180ffbc",
+        "repo_id": "grcengineering/gigachad-grc",
+        "score": 154,
+        "sites": 1,
+        "url": "https://github.com/grcengineering/gigachad-grc"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "posix-shell",
+        "pin": "cea68022f477680f4bb502396c705fe14b3c412f",
+        "repo_id": "melodic-software/claude-code-plugins",
+        "score": 6,
+        "sites": 1,
+        "url": "https://github.com/melodic-software/claude-code-plugins"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "py_re",
+        "pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+        "repo_id": "TracecatHQ/tracecat",
+        "score": 60,
+        "sites": 144,
+        "url": "https://github.com/TracecatHQ/tracecat"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "py_re",
+        "pin": "efcf8e4c0087def553a737dc1c4eebda5d8a90cd",
+        "repo_id": "Agenticstiger/forge-cli",
+        "score": 45,
+        "sites": 447,
+        "url": "https://github.com/Agenticstiger/forge-cli"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "py_re",
+        "pin": "a9c0f06affc35e1f8e45bb77f835b92350c68a0b",
+        "repo_id": "airbnb/binaryalert",
+        "score": 45,
+        "sites": 8,
+        "url": "https://github.com/airbnb/binaryalert"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "ecma",
+        "pin": "978def55c8e68cab3a50a7ee4725039da753f0a1",
+        "repo_id": "xibosignage/xibo-cms",
+        "score": 61,
+        "sites": 1981,
+        "url": "https://github.com/xibosignage/xibo-cms"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "ecma",
+        "pin": "7ea3b445ee7d2ef8004d5ee77dab7544e1b8ef88",
+        "repo_id": "profbernardoj/everclaw-community-branches",
+        "score": 51,
+        "sites": 468,
+        "url": "https://github.com/profbernardoj/everclaw-community-branches"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "go_re",
+        "pin": "01cd447ad3b1acfed7e0680596c2c74458a4cf06",
+        "repo_id": "h0tak88r/AutoAR",
+        "score": 54,
+        "sites": 33,
+        "url": "https://github.com/h0tak88r/AutoAR"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "go_re",
+        "pin": "ea3e83e24676a1678a9522141da29b636c9451ab",
+        "repo_id": "chainguard-dev/malcontent",
+        "score": 52,
+        "sites": 15,
+        "url": "https://github.com/chainguard-dev/malcontent"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "go_re",
+        "pin": "2f3fa5a506d6565fa68858b7963450567ddda114",
+        "repo_id": "open-horizon/anax",
+        "score": 50,
+        "sites": 24,
+        "url": "https://github.com/open-horizon/anax"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "go_re",
+        "pin": "1cf40fcabd330a1fe4e8eb9493b15a99a392e17f",
+        "repo_id": "snyk/snyk-ls",
+        "score": 50,
+        "sites": 35,
+        "url": "https://github.com/snyk/snyk-ls"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "posix-shell",
+        "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+        "repo_id": "marcusquinn/aidevops",
+        "score": 55,
+        "sites": 11330,
+        "url": "https://github.com/marcusquinn/aidevops"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "posix-shell",
+        "pin": "65624396e263074bb8cb2e049f9a9ec6215ea5c1",
+        "repo_id": "Leviticus-Triage/llm-honeypot-intelligence",
+        "score": 34,
+        "sites": 16,
+        "url": "https://github.com/Leviticus-Triage/llm-honeypot-intelligence"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "py_re",
+        "pin": "0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a",
+        "repo_id": "panther-labs/panther-analysis",
+        "score": 56,
+        "sites": 57,
+        "url": "https://github.com/panther-labs/panther-analysis"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "py_re",
+        "pin": "53ae43c5298a2426c6696147fdd75e2a4aef10e2",
+        "repo_id": "fu351/Doberman-Core",
+        "score": 53,
+        "sites": 108,
+        "url": "https://github.com/fu351/Doberman-Core"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "ecma",
+        "pin": "55aa7ef43a9c129beba90823cd8a4db10bb01211",
+        "repo_id": "greydragon888/real-router",
+        "score": 48,
+        "sites": 2882,
+        "url": "https://github.com/greydragon888/real-router"
+      }
+    ],
+    "schema_version": "1"
+  },
+  "cohort_id": "2026-09-12-calibration-20-r2",
+  "manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+  "product_coverage_manifest": {
+    "cohort_id": "2026-09-12-calibration-20-r2",
+    "cohort_manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+    "coverage_digest": "b652d70ffd2c2e99a97f5f81520160d757ffd5bd3738923673b27b2bc445b264",
+    "identities": [
+      {
+        "contract_sha256": "9045868f6004efccb55e4e6cb0a14e5a7cc5fb805bd61442afa6c791454e7f8b",
+        "pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+        "provenance": "agent_derived",
+        "question_id": "TC-mcp-server-name-separators-excluded",
+        "repo_id": "TracecatHQ/tracecat",
+        "site": "TracecatHQ/tracecat@c84d52528a489821f355fc63976fbc7783ae0ad5:tracecat/integrations/mcp_validation.py:267:re.match",
+        "url": "https://github.com/TracecatHQ/tracecat"
+      }
+    ],
+    "schema_version": "2"
+  },
+  "rows": [
+    {
+      "canonical": {
+        "contract": {
+          "adoption": {
+            "approved_on": "2026-10-16",
+            "authority": "standing_user_delegation",
+            "contract_sha256": "9045868f6004efccb55e4e6cb0a14e5a7cc5fb805bd61442afa6c791454e7f8b",
+            "evidence": [
+              "https://github.com/TracecatHQ/tracecat/blob/c84d52528a489821f355fc63976fbc7783ae0ad5/tracecat/integrations/mcp_validation.py",
+              "https://github.com/TracecatHQ/tracecat/blob/c84d52528a489821f355fc63976fbc7783ae0ad5/tracecat/integrations/service.py",
+              "https://github.com/TracecatHQ/tracecat/blob/c84d52528a489821f355fc63976fbc7783ae0ad5/tracecat/agent/preset/service.py",
+              "properties/calibration/2026-10-16-p2-tracecat-server-name-review/evidence.json"
+            ],
+            "policy_version": "autonomous-contracts-v1",
+            "rationale": "The pinned validator comment and error text declare alphanumeric, hyphen, and underscore characters only. AgentPresetService passes the persisted workspace MCP integration slug through validate_mcp_command_config to this validator. The contract proves only exclusion of slash and backslash from values the exact function accepts; it does not claim security impact or validate slug generation.",
+            "review": {
+              "author": "Codex-P2-source-review",
+              "reviewer": "Codex-independent-source-review-pass",
+              "same_model": true
+            },
+            "source_file": "tracecat/integrations/mcp_validation.py",
+            "source_pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+            "source_sha256": "41cf730ba1cb592cae684811bbb4d510961a0a441c156313a804b2593085f895",
+            "source_url": "https://github.com/TracecatHQ/tracecat",
+            "status": "approved"
+          },
+          "declared_domain": "Any ASCII string of length 1 through 64 passed as the name argument to Tracecat's validate_mcp_server_name function. The source pattern accepts one or more characters from [A-Za-z0-9_-] and CPython's terminal-dollar behavior may additionally accept one final line feed; this theorem covers only exclusion of slash and backslash, not the full declared name language or slug-generation behavior.",
+          "guarantee": "Every string accepted by the pinned validate_mcp_server_name function excludes slash and backslash characters.",
+          "input_source": "Workspace MCP integration configuration supplies MCPIntegrationCreate.name. MCPIntegrationService normalizes it into the persisted MCPIntegration.slug; AgentPresetService later passes that stored slug as name to validate_mcp_command_config, which invokes validate_mcp_server_name.",
+          "provenance": "agent_derived",
+          "schema_version": "1",
+          "site": "TracecatHQ/tracecat@c84d52528a489821f355fc63976fbc7783ae0ad5:tracecat/integrations/mcp_validation.py:267:re.match",
+          "trust": "config"
+        },
+        "corpus": "tracecat_mcp_server_name",
+        "disclosure": null,
+        "domain": "The exact pinned MCP server-name validator's accepted alphabet excludes both slash and backslash characters",
+        "engine_versions": {
+          "python": "3.14.8",
+          "z3": "5.0.0"
+        },
+        "family": "TC-tracecat-server-name",
+        "ground_truth": null,
+        "ground_truth_status": null,
+        "idiom_bucket": "mcp-stdio-env-key-validation",
+        "kind": "property",
+        "name": "TC-mcp-server-name-separators-excluded",
+        "product_reportable": true,
+        "regex_id": "e1680be2c25a3df50c60e04db19440e1",
+        "result": "unsat",
+        "schema_version": "1",
+        "shape": 1,
+        "site": "TracecatHQ/tracecat@c84d52528a489821f355fc63976fbc7783ae0ad5:tracecat/integrations/mcp_validation.py:267:re.match",
+        "synthesized": false,
+        "wave_id": "tracecat-server-name-20261016",
+        "witness": null
+      },
+      "contract": {
+        "adoption": {
+          "approved_on": "2026-10-16",
+          "authority": "standing_user_delegation",
+          "contract_sha256": "9045868f6004efccb55e4e6cb0a14e5a7cc5fb805bd61442afa6c791454e7f8b",
+          "evidence": [
+            "https://github.com/TracecatHQ/tracecat/blob/c84d52528a489821f355fc63976fbc7783ae0ad5/tracecat/integrations/mcp_validation.py",
+            "https://github.com/TracecatHQ/tracecat/blob/c84d52528a489821f355fc63976fbc7783ae0ad5/tracecat/integrations/service.py",
+            "https://github.com/TracecatHQ/tracecat/blob/c84d52528a489821f355fc63976fbc7783ae0ad5/tracecat/agent/preset/service.py",
+            "properties/calibration/2026-10-16-p2-tracecat-server-name-review/evidence.json"
+          ],
+          "policy_version": "autonomous-contracts-v1",
+          "rationale": "The pinned validator comment and error text declare alphanumeric, hyphen, and underscore characters only. AgentPresetService passes the persisted workspace MCP integration slug through validate_mcp_command_config to this validator. The contract proves only exclusion of slash and backslash from values the exact function accepts; it does not claim security impact or validate slug generation.",
+          "review": {
+            "author": "Codex-P2-source-review",
+            "reviewer": "Codex-independent-source-review-pass",
+            "same_model": true
+          },
+          "source_file": "tracecat/integrations/mcp_validation.py",
+          "source_pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+          "source_sha256": "41cf730ba1cb592cae684811bbb4d510961a0a441c156313a804b2593085f895",
+          "source_url": "https://github.com/TracecatHQ/tracecat",
+          "status": "approved"
+        },
+        "declared_domain": "Any ASCII string of length 1 through 64 passed as the name argument to Tracecat's validate_mcp_server_name function. The source pattern accepts one or more characters from [A-Za-z0-9_-] and CPython's terminal-dollar behavior may additionally accept one final line feed; this theorem covers only exclusion of slash and backslash, not the full declared name language or slug-generation behavior.",
+        "guarantee": "Every string accepted by the pinned validate_mcp_server_name function excludes slash and backslash characters.",
+        "input_source": "Workspace MCP integration configuration supplies MCPIntegrationCreate.name. MCPIntegrationService normalizes it into the persisted MCPIntegration.slug; AgentPresetService later passes that stored slug as name to validate_mcp_command_config, which invokes validate_mcp_server_name.",
+        "provenance": "agent_derived",
+        "schema_version": "1",
+        "site": "TracecatHQ/tracecat@c84d52528a489821f355fc63976fbc7783ae0ad5:tracecat/integrations/mcp_validation.py:267:re.match",
+        "trust": "config"
+      },
+      "disposition": {
+        "approval_escape": null,
+        "approval_ref": null,
+        "backfilled": false,
+        "disposition_date": null,
+        "filed_at": null,
+        "reason_code": "unsat_guarantee",
+        "resolved_at": null,
+        "status": "not_applicable"
+      },
+      "domain": "The exact pinned MCP server-name validator's accepted alphabet excludes both slash and backslash characters",
+      "ground_truth_status": "not_applicable",
+      "kind": "property",
+      "pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+      "question_id": "TC-mcp-server-name-separators-excluded",
+      "repo_id": "TracecatHQ/tracecat",
+      "result": "unsat",
+      "schema_version": "1",
+      "site": "TracecatHQ/tracecat@c84d52528a489821f355fc63976fbc7783ae0ad5:tracecat/integrations/mcp_validation.py:267:re.match",
+      "synthesized": false,
+      "url": "https://github.com/TracecatHQ/tracecat"
+    }
+  ],
+  "schema_version": "3"
+}

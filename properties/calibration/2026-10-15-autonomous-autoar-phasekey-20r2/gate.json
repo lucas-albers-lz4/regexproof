@@ -1,0 +1,25 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "scripts/autoar-phase-key-regression-gate.py",
+    "--product-only",
+    "--source-root",
+    "/tmp/regexproof-pinned-sources/AutoAR-01cd447ad3b1acfed7e0680596c2c74458a4cf06",
+    "--output",
+    "properties/calibration/2026-10-15-autonomous-autoar-phasekey-20r2/gate-report.json"
+  ],
+  "evidence": {
+    "differential_case_counts": {
+      "AA-autoar-phase-log-module-component-safe": 662
+    },
+    "product_engine_replay_question_ids": [
+      "AA-autoar-phase-log-module-component-safe"
+    ]
+  },
+  "gate_id": "autoar-phase-key-component-20r2",
+  "question_ids": [
+    "AA-autoar-phase-log-module-component-safe"
+  ],
+  "schema_version": "1",
+  "timeout_seconds": 300
+}

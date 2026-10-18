@@ -1,0 +1,25 @@
+{
+  "schema_version": "1",
+  "artifact_kind": "p6-runner-preflight-failure",
+  "observed_at": "2026-10-16",
+  "wave_id": "aidevops-webhook-scope-correction-r1",
+  "cohort_id": "2026-09-12-calibration-20-r2",
+  "roster": "properties/calibration/2026-10-16-p8-v22-audit/p6-scope-correction/roster.json",
+  "roster_coverage_digest": "e66bce291439ade91f4ee2b8cd98973980f91c5c4f7c3b40275c40fb58e1fb3e",
+  "question_ids": [
+    "AE-aidevops-webhook-secret-env-identifier",
+    "AE-aidevops-webhook-check-sha-token",
+    "AE-aidevops-webhook-process-pr-number"
+  ],
+  "command": "scripts/run-autonomous-proof-wave.py with the frozen corrected roster and exact pinned Aidevops checkout",
+  "result": "preflight_rejected",
+  "error": "AE-aidevops-webhook-secret-env-identifier: canonical emitter has no registered shape",
+  "failure_stage": "_normalized_contracts canonical emitter shape lookup",
+  "solver_questions_started": 0,
+  "product_gate_started": false,
+  "state_directory_created": false,
+  "counts_added": false,
+  "shape_alias_added": false,
+  "reason": "The standalone exact-pin gate passes, but the P6 runner requires every question ID to be registered in scripts/emit-conversion-ndjson.py:SHAPE. The three Bash language-inclusion properties have no shape entries. No existing shape was inferred or assigned because the documented shapes do not clearly encode this contract family.",
+  "next_action": "Define and document an admissible encoding/reporting shape for these language-inclusion properties, or keep them on the standalone exact-pin gate path until the canonical emitter and runner support them. Preserve this preflight failure; do not count it as a solver attempt or passing wave."
+}

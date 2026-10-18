@@ -1,0 +1,26 @@
+{
+  "cohort_id": "2026-09-12-calibration-20-r2",
+  "cohort_manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+  "coverage_digest": "a21613161220c52d1f3db7013c739431163c38b7fd6624f7970e678cbceef695",
+  "identities": [
+    {
+      "contract_sha256": "638cd5d8ac2bcbb72f33dc8090d6b87b9922ae3fd3200f61c215ea892149d6ce",
+      "pin": "889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8",
+      "provenance": "agent_derived",
+      "question_id": "IH-inhale-file-url-output-root-confinement",
+      "repo_id": "netspooky/inhale",
+      "site": "netspooky/inhale@889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8:iModules/rDownload.py:111:url",
+      "url": "https://github.com/netspooky/inhale"
+    },
+    {
+      "contract_sha256": "1c6a9e52deabba8c246092f93ee4c2e1333967ab7516f63da3006dfa6f2c1df2",
+      "pin": "889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8",
+      "provenance": "agent_derived",
+      "question_id": "IH-inhale-directory-url-output-root-confinement",
+      "repo_id": "netspooky/inhale",
+      "site": "netspooky/inhale@889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8:iModules/rDownload.py:129:url",
+      "url": "https://github.com/netspooky/inhale"
+    }
+  ],
+  "schema_version": "2"
+}

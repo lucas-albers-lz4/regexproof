@@ -1,5 +1,20 @@
 # Operator-minutes metric (#575 Wave 6)
 
+**Autonomous policy update:** agents may adopt contracts under
+[AUTONOMOUS-CONTRACTS.md](AUTONOMOUS-CONTRACTS.md) without owner approval per
+contract. The stopwatch recorders below measure actual human participation.
+Agent review/runtime, usage/cost, and human interventions need separate
+measurements. `scripts/record-autonomous-run.py` writes them to
+`properties/generated/autonomous_work.jsonl`; summarize with
+`scripts/autonomous-scorecard.py`. Token and cost values stay null when the
+runtime does not expose them. Do not populate the human series from agent
+runtime or compare a new autonomous series to the old human baseline as though
+their units and populations were identical.
+
+The scorecard accepts repeated `--cohort-id` options to include only selected
+cohorts. Keep off-cohort calibrations out of a frozen-campaign summary; the
+unfiltered view intentionally aggregates every recorded run.
+
 The #550 speed AC is **operator-minutes per human-reviewed survivor**, not
 probes per UTC-day and not batch idle time. This document is the SOP.
 Numbers live in [`properties/generated/operator_minutes.jsonl`](../properties/generated/operator_minutes.jsonl)
@@ -132,3 +147,31 @@ Each conversion-clock line has this shape:
 `question_id` is null for skips. `outcome` is `contracted` or one of the
 `skipped_*` values listed above. Ranks are unique from 1 through 15 within a
 `(corpus, wave_id)`; a wave also has one source pin and one idiom bucket.
+
+## Autonomous run artifact: `autonomous_work.jsonl`
+
+This append-only log measures agent elapsed time, available token/cost usage,
+human interventions, useful proof/gate outcomes, and downstream bug outcomes.
+It keeps three tracks distinct: contract-backed decisions and runnable gates;
+SAT witnesses through replay/reachability/impact; and third-party reports,
+confirmation, and fixes. Each row binds to the cohort digest, repository pin,
+and wave. `input_tokens`, `output_tokens`, `cost_usd`, and
+`human_active_minutes` may be null when unavailable. A null is unknown, not
+zero. The scorecard reports each outcome chain separately and returns a null
+rate when its denominator is zero.
+
+The recorder reads historical v1/v2 rows and writes v3 rows. V2 and v3
+distinguish `wall_clock` elapsed time from `phase_sum` elapsed time. Wall-clock
+rows must agree with their start/end timestamps. Phase-sum rows report the sum
+of measured active runner phases, while start/end timestamps bound the
+observation window; this supports subsecond work when runner timestamps have
+only whole-second precision. V3 also requires a `work_items` JSON array. Each
+item has a `site`, a `reviewed` boolean, and `question_ids`; the reviewed-site
+and attempted-question counts must match the identities in that array. Supply
+it with `scripts/record-autonomous-run.py --work-items FILE`. This lets the
+question-history index distinguish reviewed reservations from attempted
+questions. Historical v1/v2 aggregate rows have no such identity list; the
+index reports their nonzero counts as unresolved instead of inventing sites.
+The scorecard reports totals by basis as well as the combined total. It rejects
+inconsistent outcome chains, such as a third-party fix without a maintainer
+confirmation. It never sends reports or changes disclosure state.

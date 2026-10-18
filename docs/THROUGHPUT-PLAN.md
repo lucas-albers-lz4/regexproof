@@ -1,8 +1,14 @@
 # Corpus and contract throughput plan
 
-**As of:** 2026-10-08
+**Evidence snapshot:** 2026-10-08; adoption policy updated 2026-10-13.
 **Purpose:** raise the rate of completed, product-valid contract work while
 using corpus ingestion to test compiler coverage.
+
+The current implementation/campaign plan is
+[AUTONOMOUS-CORPUS-PLAN.md](AUTONOMOUS-CORPUS-PLAN.md), with an Oct 13
+GitHub-main baseline. [AUTONOMOUS-CONTRACTS.md](AUTONOMOUS-CONTRACTS.md)
+supersedes the human-only adoption requirement. The figures below remain the
+dated Oct 8 snapshot, not live mine status.
 
 ## What the current evidence says
 
@@ -22,9 +28,11 @@ using corpus ingestion to test compiler coverage.
   see [`PIPELINE.md`](PIPELINE.md).
 - The newest complete calibration is 20 pinned repositories with no failures.
   All four dialect families remain productive by the compiler novelty rule,
-  while the frozen cohort has **0 human product properties** and no PR4
-  conversion checkpoint. The compiler can ingest diverse patterns; product
-  effectiveness is still unmeasured. See [`SATURATION.md`](SATURATION.md).
+  while the original baseline artifact had **0 embedded human product
+  properties** and no PR4 conversion checkpoint. The Oct 13 Forge integration
+  fixture is retrospective and does not replace a prospective cohort wave.
+  See [`SATURATION.md`](SATURATION.md) and the
+  [autonomous implementation fixture](../properties/calibration/2026-10-13-autonomous-forge-cli-integration/README.md).
 - No frozen 30-repository manifest exists yet; candidate supplements from the
   older 20-repository pool cannot be assumed to extend the 20-r2 manifest.
   Select and freeze ten new eligible repositories before checkout work.
@@ -60,19 +68,20 @@ a throughput result.
 ### 3. Convert the admitted surface into product evidence
 
 For each wave, rank 15 sites within one unused idiom bucket, read their source
-context, and record a stopwatch outcome for every reviewed site, including
-skips. A human adopts at most five contracts with named sinks, then the
-operator encodes the cheapest valid shape, runs the real product engine,
+context, and record the outcome and appropriate timing for every reviewed site,
+including skips. The operator adopts at most five evidenced contracts with
+named sinks, encodes the cheapest valid shape, runs the real product engine,
 grounds SAT witnesses, and emits the conversion rows. Report:
 
 - reviewed sites and skip reasons;
-- human-adopted contracts and contracts per active review hour;
+- adopted contracts by provenance and contracts per measured review effort;
 - properties asked → SAT → ground-truthed → filed/private-first → accepted;
 - any claims that source replay or engine comparison refuted.
 
 Use [`CLUSTER-CONVERSION.md`](CLUSTER-CONVERSION.md) and
 [`metrics-operator-minutes.md`](metrics-operator-minutes.md). The stopwatch is
 for a human's active review; agents must not invent or backfill human minutes.
+Agent runtime/usage belongs in a separate series.
 
 ### 4. Continue the staged calibration, with product coverage in parallel
 
@@ -80,9 +89,9 @@ Prepare a 30-repository calibration manifest by preserving every exact pin in
 the completed 20-r2 manifest and adding ten eligible independent repositories
 from the current admitted pool. Freeze its digest before cloning or observing.
 In parallel, derive the independent product-coverage manifest for the frozen
-cohort and work toward the existing first checkpoint of 50 human product
-properties (100 is the preferred target). Product rows must be human-adopted,
-ground-truthed as required, and bound to the exact cohort pins. Do not treat
+cohort and work toward the first checkpoint of 50 eligible product
+properties (100 is the preferred target). Product rows need evidenced adoption,
+ground truth as required, and binding to the exact cohort pins. Do not treat
 the 30-repository run as evidence of product success by itself.
 
 ## Weekly decision rule
@@ -95,10 +104,10 @@ At the end of each week, use one of these actions:
 | Queue falling; 5–7 or more gated repositories completed | Continue the current cadence and refresh the next cohort candidate pool. |
 | Compiler novelty remains above the `<0.03` stop threshold | Continue the staged calibration for that dialect family. |
 | Frozen-cohort product denominator below 50 or PR4 absent | Continue conversion and coverage work; make no efficacy claim. |
-| At least 50 human product properties plus PR4 checkpoint | Review the asked→SAT→ground-truth→filing→acceptance funnel and decide whether to expand toward 100, retarget, or stop. |
+| At least 50 eligible product properties plus migrated PR4 checkpoint | Review useful gates and the asked→SAT→ground-truth→filing→acceptance funnel; decide whether to expand toward 100, retarget, or stop. |
 
-The existing numerical thresholds are retained; this plan introduces no new
-success threshold. Human input is needed when adopting a proposed guarantee,
-setting a different product-success bar, or making a disclosure decision.
-Those choices do not block queue processing, source inventory, candidate
-preparation, or recording actual review time.
+The existing numerical checkpoints are retained; crossing them is not a
+success threshold. Routine contract adoption is autonomous under the new
+policy once its executable eligibility migration lands. Owner input remains
+appropriate for investment/success criteria and authorized disclosure. Those
+choices do not block independent queue, inventory, or conversion work.

@@ -1,0 +1,761 @@
+{
+  "author": "Codex source-review pass",
+  "limitations": [
+    "This is a complete raw-site review only for panther-labs/panther-analysis at the frozen 20-r2 pin; it does not establish coverage for other cohort members or complete P2.",
+    "The 44 skipped regexes parse, normalize, or classify developer metadata and telemetry; skips are not claims that detection behavior is correct or complete.",
+    "The adopted contract covers path selection for a staged file named secrets.py. It does not establish that a real file contained a secret, that the hook ran on a real developer machine, or that a Claude service received data.",
+    "The exact-source gate uses a temporary Git repository and synthetic file contents. It does not invoke the Claude CLI or make an external request."
+  ],
+  "observed_at": "2026-10-15",
+  "reviewer": "Codex second source-review pass",
+  "reviews": [
+    {
+      "decision": "skip",
+      "pattern": "^.*\\.svc\\.id\\.goog\\[gke-system/.*\\]$",
+      "product_question_asked": false,
+      "rationale": "The pinned helper uses this match to parse, normalize, or classify an event/telemetry value for detection enrichment. The surrounding code does not use the result to permit an operation, enforce an authorization boundary, or sanitize data for a separate trust domain; no independent event-language contract is stated for this regex.",
+      "reason_code": "telemetry_enrichment_or_normalization",
+      "regex_id": "01fcf1b142c31503868912a0b885edc6",
+      "review_refs": [
+        {
+          "line": 109,
+          "path": "global_helpers/panther_gcp_helpers.py",
+          "why": "helper call site and return/use context"
+        }
+      ],
+      "site": "global_helpers/panther_gcp_helpers.py:109:4"
+    },
+    {
+      "decision": "skip",
+      "pattern": "^service-[\\d]+@containerregistry\\.iam\\.gserviceaccount\\.com$",
+      "product_question_asked": false,
+      "rationale": "The pinned helper uses this match to parse, normalize, or classify an event/telemetry value for detection enrichment. The surrounding code does not use the result to permit an operation, enforce an authorization boundary, or sanitize data for a separate trust domain; no independent event-language contract is stated for this regex.",
+      "reason_code": "telemetry_enrichment_or_normalization",
+      "regex_id": "08c1af6063110d82f63b0cd3d37567cd",
+      "review_refs": [
+        {
+          "line": 105,
+          "path": "global_helpers/panther_gcp_helpers.py",
+          "why": "helper call site and return/use context"
+        }
+      ],
+      "site": "global_helpers/panther_gcp_helpers.py:105:4"
+    },
+    {
+      "decision": "skip",
+      "pattern": "[^a-z0-9]",
+      "product_question_asked": false,
+      "rationale": "This regex matches or extracts a telemetry field in a detection rule. The code uses it to classify an event and produce an alert, not to accept or reject a value at a security boundary. The frozen source provides no independent complete event-language specification for a regex proof.",
+      "reason_code": "detection_event_match_without_independent_language_contract",
+      "regex_id": "1381fe04fdec8e85f300f9ec7bf7be92",
+      "review_refs": [
+        {
+          "line": 10,
+          "path": "queries/gsuite_queries/gsuite_oauth_token_new_ip_rule.py",
+          "why": "detection rule regex and event use"
+        }
+      ],
+      "site": "queries/gsuite_queries/gsuite_oauth_token_new_ip_rule.py:10:11"
+    },
+    {
+      "decision": "skip",
+      "pattern": ".+@.+\\.[a-zA-Z]{2,}",
+      "product_question_asked": false,
+      "rationale": "The pinned helper uses this match to parse, normalize, or classify an event/telemetry value for detection enrichment. The surrounding code does not use the result to permit an operation, enforce an authorization boundary, or sanitize data for a separate trust domain; no independent event-language contract is stated for this regex.",
+      "reason_code": "telemetry_enrichment_or_normalization",
+      "regex_id": "2365a15e8370c9f6420c9ac4c7b49ebd",
+      "review_refs": [
+        {
+          "line": 201,
+          "path": "global_helpers/panther_databricks_helpers.py",
+          "why": "helper call site and return/use context"
+        }
+      ],
+      "site": "global_helpers/panther_databricks_helpers.py:201:7"
+    },
+    {
+      "decision": "skip",
+      "pattern": "^TA\\d+\\:T\\d+(\\.\\d+)?$",
+      "product_question_asked": false,
+      "rationale": "This pattern checks the syntax of MITRE ATT&CK tag strings in repository metadata. It is a developer lint rule; the matched tag is not used as an authorization, validation, or sanitization boundary.",
+      "reason_code": "metadata_format_lint",
+      "regex_id": "28fb2593e3d0adab2e350a257fc0861e",
+      "review_refs": [
+        {
+          "line": 13,
+          "path": ".scripts/mitre_mapping_check.py",
+          "why": "MITRE tag syntax check"
+        }
+      ],
+      "site": ".scripts/mitre_mapping_check.py:13:16"
+    },
+    {
+      "decision": "skip",
+      "pattern": "gsutil.*rewrite",
+      "product_question_asked": false,
+      "rationale": "This regex matches or extracts a telemetry field in a detection rule. The code uses it to classify an event and produce an alert, not to accept or reject a value at a security boundary. The frozen source provides no independent complete event-language specification for a regex proof.",
+      "reason_code": "detection_event_match_without_independent_language_contract",
+      "regex_id": "331940f3beb8cf08859939284b6b7c24",
+      "review_refs": [
+        {
+          "line": 7,
+          "path": "rules/gcp_audit_rules/gcp_gcs_object_rewrite.py",
+          "why": "detection rule regex and event use"
+        }
+      ],
+      "site": "rules/gcp_audit_rules/gcp_gcs_object_rewrite.py:7:4"
+    },
+    {
+      "decision": "skip",
+      "pattern": "CREATE\\s+USER\\s+(?:IF\\s+NOT\\s+EXISTS\\s+)?(\\S+)",
+      "product_question_asked": false,
+      "rationale": "This regex matches or extracts a telemetry field in a detection rule. The code uses it to classify an event and produce an alert, not to accept or reject a value at a security boundary. The frozen source provides no independent complete event-language specification for a regex proof.",
+      "reason_code": "detection_event_match_without_independent_language_contract",
+      "regex_id": "341dd8765b6748159ec0b595844b6409",
+      "review_refs": [
+        {
+          "line": 3,
+          "path": "queries/snowflake_queries/snowflake_user_created.py",
+          "why": "detection rule regex and event use"
+        }
+      ],
+      "site": "queries/snowflake_queries/snowflake_user_created.py:3:18"
+    },
+    {
+      "decision": "skip",
+      "pattern": "GET\\s+(?:\\$\\$|')?@([a-zA-Z0-9_\\.]+)",
+      "product_question_asked": false,
+      "rationale": "This regex matches or extracts a telemetry field in a detection rule. The code uses it to classify an event and produce an alert, not to accept or reject a value at a security boundary. The frozen source provides no independent complete event-language specification for a regex proof.",
+      "reason_code": "detection_event_match_without_independent_language_contract",
+      "regex_id": "36f7ea8b92a57c21e7ab45bc32818877",
+      "review_refs": [
+        {
+          "line": 6,
+          "path": "rules/snowflake_rules/snowflake_stream_file_downloaded.py",
+          "why": "detection rule regex and event use"
+        }
+      ],
+      "site": "rules/snowflake_rules/snowflake_stream_file_downloaded.py:6:13"
+    },
+    {
+      "decision": "skip",
+      "pattern": "COPY\\s+INTO\\s+(?:\\$\\$|')?@([\\w\\./]+)(?:\\$\\$|')?\\s+FROM",
+      "product_question_asked": false,
+      "rationale": "This regex matches or extracts a telemetry field in a detection rule. The code uses it to classify an event and produce an alert, not to accept or reject a value at a security boundary. The frozen source provides no independent complete event-language specification for a regex proof.",
+      "reason_code": "detection_event_match_without_independent_language_contract",
+      "regex_id": "3790422c248508ed2f73fcd16e8fd639",
+      "review_refs": [
+        {
+          "line": 4,
+          "path": "rules/snowflake_rules/snowflake_stream_table_copied_into_stage.py",
+          "why": "detection rule regex and event use"
+        }
+      ],
+      "site": "rules/snowflake_rules/snowflake_stream_table_copied_into_stage.py:4:12"
+    },
+    {
+      "decision": "skip",
+      "pattern": "^[A-Za-z0-9+/]*={0,2}$",
+      "product_question_asked": false,
+      "rationale": "The pinned helper uses this match to parse, normalize, or classify an event/telemetry value for detection enrichment. The surrounding code does not use the result to permit an operation, enforce an authorization boundary, or sanitize data for a separate trust domain; no independent event-language contract is stated for this regex.",
+      "reason_code": "telemetry_enrichment_or_normalization",
+      "regex_id": "3e7c41c9da9502d1ae2d269540fb44ce",
+      "review_refs": [
+        {
+          "line": 200,
+          "path": "global_helpers/panther_base_helpers.py",
+          "why": "helper call site and return/use context"
+        }
+      ],
+      "site": "global_helpers/panther_base_helpers.py:200:11"
+    },
+    {
+      "decision": "skip",
+      "pattern": "[^a-z0-9]",
+      "product_question_asked": false,
+      "rationale": "This regex matches or extracts a telemetry field in a detection rule. The code uses it to classify an event and produce an alert, not to accept or reject a value at a security boundary. The frozen source provides no independent complete event-language specification for a regex proof.",
+      "reason_code": "detection_event_match_without_independent_language_contract",
+      "regex_id": "44d37053222fb88a58868dffa1d2c3f3",
+      "review_refs": [
+        {
+          "line": 43,
+          "path": "rules/microsoft_rules/windows_credential_dumping_tool.py",
+          "why": "detection rule regex and event use"
+        }
+      ],
+      "site": "rules/microsoft_rules/windows_credential_dumping_tool.py:43:11"
+    },
+    {
+      "decision": "skip",
+      "pattern": "[^a-z0-9]",
+      "product_question_asked": false,
+      "rationale": "This regex matches or extracts a telemetry field in a detection rule. The code uses it to classify an event and produce an alert, not to accept or reject a value at a security boundary. The frozen source provides no independent complete event-language specification for a regex proof.",
+      "reason_code": "detection_event_match_without_independent_language_contract",
+      "regex_id": "46157a3597851c168fa5dd0c77e3dc31",
+      "review_refs": [
+        {
+          "line": 10,
+          "path": "queries/gsuite_queries/gsuite_login_type_anomaly_rule.py",
+          "why": "detection rule regex and event use"
+        }
+      ],
+      "site": "queries/gsuite_queries/gsuite_login_type_anomaly_rule.py:10:11"
+    },
+    {
+      "decision": "skip",
+      "pattern": "[aA]dministrator",
+      "product_question_asked": false,
+      "rationale": "This regex matches or extracts a telemetry field in a detection rule. The code uses it to classify an event and produce an alert, not to accept or reject a value at a security boundary. The frozen source provides no independent complete event-language specification for a regex proof.",
+      "reason_code": "detection_event_match_without_independent_language_contract",
+      "regex_id": "464c056b9d0c36720217bd993f0892f2",
+      "review_refs": [
+        {
+          "line": 5,
+          "path": "rules/okta_rules/okta_admin_role_assigned.py",
+          "why": "detection rule regex and event use"
+        }
+      ],
+      "site": "rules/okta_rules/okta_admin_role_assigned.py:5:16"
+    },
+    {
+      "decision": "skip",
+      "pattern": "command/rewrite-k-s",
+      "product_question_asked": false,
+      "rationale": "This regex matches or extracts a telemetry field in a detection rule. The code uses it to classify an event and produce an alert, not to accept or reject a value at a security boundary. The frozen source provides no independent complete event-language specification for a regex proof.",
+      "reason_code": "detection_event_match_without_independent_language_contract",
+      "regex_id": "517fd1dbc530af3f266114f5bd7a8773",
+      "review_refs": [
+        {
+          "line": 6,
+          "path": "rules/gcp_audit_rules/gcp_gcs_object_rewrite.py",
+          "why": "detection rule regex and event use"
+        }
+      ],
+      "site": "rules/gcp_audit_rules/gcp_gcs_object_rewrite.py:6:4"
+    },
+    {
+      "decision": "skip",
+      "pattern": "^.*\\.svc\\.id\\.goog\\[kube-system/.*\\]$",
+      "product_question_asked": false,
+      "rationale": "The pinned helper uses this match to parse, normalize, or classify an event/telemetry value for detection enrichment. The surrounding code does not use the result to permit an operation, enforce an authorization boundary, or sanitize data for a separate trust domain; no independent event-language contract is stated for this regex.",
+      "reason_code": "telemetry_enrichment_or_normalization",
+      "regex_id": "53f512818692ddcf2fde54eb37a8aacb",
+      "review_refs": [
+        {
+          "line": 108,
+          "path": "global_helpers/panther_gcp_helpers.py",
+          "why": "helper call site and return/use context"
+        }
+      ],
+      "site": "global_helpers/panther_gcp_helpers.py:108:4"
+    },
+    {
+      "decision": "skip",
+      "pattern": "^[+-](?:RuleID|PolicyID|QueryName):\\s*\"?(.+?)[\"\\n]",
+      "product_question_asked": false,
+      "rationale": "This pattern extracts rule identifiers from locally staged Git diff lines for developer reporting. It does not consume an untrusted product input or control access, sanitization, or a security-sensitive sink.",
+      "reason_code": "internal_git_diff_metadata_parser",
+      "regex_id": "5824c2780f189481a4dd527a14ce433e",
+      "review_refs": [
+        {
+          "line": 13,
+          "path": ".scripts/deleted_rules.py",
+          "why": "Git diff metadata extraction"
+        }
+      ],
+      "site": ".scripts/deleted_rules.py:13:15"
+    },
+    {
+      "decision": "skip",
+      "pattern": "CREATE\\s+(?:OR\\s+REPLACE\\s+)?(?:TEMPORARY\\s+|TEMP\\s+)STAGE\\s+(?:IF\\s+NOT\\s+EXISTS\\s+)?([a-zA-Z0-9_\\.]+)",
+      "product_question_asked": false,
+      "rationale": "This regex matches or extracts a telemetry field in a detection rule. The code uses it to classify an event and produce an alert, not to accept or reject a value at a security boundary. The frozen source provides no independent complete event-language specification for a regex proof.",
+      "reason_code": "detection_event_match_without_independent_language_contract",
+      "regex_id": "5afcbb3536b0607b1410e209b407f96f",
+      "review_refs": [
+        {
+          "line": 5,
+          "path": "rules/snowflake_rules/snowflake_stream_temp_stage_created.py",
+          "why": "detection rule regex and event use"
+        }
+      ],
+      "site": "rules/snowflake_rules/snowflake_stream_temp_stage_created.py:5:13"
+    },
+    {
+      "decision": "skip",
+      "pattern": "^[A-Za-z0-9]{32}$",
+      "product_question_asked": false,
+      "rationale": "The pinned helper uses this match to parse, normalize, or classify an event/telemetry value for detection enrichment. The surrounding code does not use the result to permit an operation, enforce an authorization boundary, or sanitize data for a separate trust domain; no independent event-language contract is stated for this regex.",
+      "reason_code": "telemetry_enrichment_or_normalization",
+      "regex_id": "5cba464479eecb01cea4e3fb75bf9e7c",
+      "review_refs": [
+        {
+          "line": 197,
+          "path": "global_helpers/panther_base_helpers.py",
+          "why": "helper call site and return/use context"
+        }
+      ],
+      "site": "global_helpers/panther_base_helpers.py:197:26"
+    },
+    {
+      "decision": "skip",
+      "pattern": "^/api/v2/organizations/[^/\\s]+/invitations$",
+      "product_question_asked": false,
+      "rationale": "This regex matches or extracts a telemetry field in a detection rule. The code uses it to classify an event and produce an alert, not to accept or reject a value at a security boundary. The frozen source provides no independent complete event-language specification for a regex proof.",
+      "reason_code": "detection_event_match_without_independent_language_contract",
+      "regex_id": "5d34562efb58a8e84351285b71b99d6d",
+      "review_refs": [
+        {
+          "line": 5,
+          "path": "rules/auth0_rules/auth0_user_invitation_created.py",
+          "why": "detection rule regex and event use"
+        }
+      ],
+      "site": "rules/auth0_rules/auth0_user_invitation_created.py:5:9"
+    },
+    {
+      "decision": "skip",
+      "pattern": ":assumed-role/.+/i-[0-9a-f]+$",
+      "product_question_asked": false,
+      "rationale": "This regex matches or extracts a telemetry field in a detection rule. The code uses it to classify an event and produce an alert, not to accept or reject a value at a security boundary. The frozen source provides no independent complete event-language specification for a regex proof.",
+      "reason_code": "detection_event_match_without_independent_language_contract",
+      "regex_id": "5e61a55f3a0b8848f0cde96ac53add00",
+      "review_refs": [
+        {
+          "line": 9,
+          "path": "rules/aws_cloudtrail_rules/aws_imds_credential_exfiltration.py",
+          "why": "detection rule regex and event use"
+        }
+      ],
+      "site": "rules/aws_cloudtrail_rules/aws_imds_credential_exfiltration.py:9:27"
+    },
+    {
+      "decision": "skip",
+      "pattern": "\\.\\d+",
+      "product_question_asked": false,
+      "rationale": "The pinned helper uses this match to parse, normalize, or classify an event/telemetry value for detection enrichment. The surrounding code does not use the result to permit an operation, enforce an authorization boundary, or sanitize data for a separate trust domain; no independent event-language contract is stated for this regex.",
+      "reason_code": "telemetry_enrichment_or_normalization",
+      "regex_id": "5f75df3b547fcba6336770f4cccc98f3",
+      "review_refs": [
+        {
+          "line": 165,
+          "path": "global_helpers/panther_base_helpers.py",
+          "why": "helper call site and return/use context"
+        }
+      ],
+      "site": "global_helpers/panther_base_helpers.py:165:27"
+    },
+    {
+      "decision": "skip",
+      "pattern": "create user (\\w+).*",
+      "product_question_asked": false,
+      "rationale": "This regex matches or extracts a telemetry field in a detection rule. The code uses it to classify an event and produce an alert, not to accept or reject a value at a security boundary. The frozen source provides no independent complete event-language specification for a regex proof.",
+      "reason_code": "detection_event_match_without_independent_language_contract",
+      "regex_id": "67e10b4098fa9e204565ca72e4888647",
+      "review_refs": [
+        {
+          "line": 5,
+          "path": "rules/snowflake_rules/snowflake_stream_user_created.py",
+          "why": "detection rule regex and event use"
+        }
+      ],
+      "site": "rules/snowflake_rules/snowflake_stream_user_created.py:5:19"
+    },
+    {
+      "decision": "skip",
+      "pattern": "alter\\s+user\\s+(.+?)\\s+.*?set\\s+disabled\\s*=\\s*false",
+      "product_question_asked": false,
+      "rationale": "This regex matches or extracts a telemetry field in a detection rule. The code uses it to classify an event and produce an alert, not to accept or reject a value at a security boundary. The frozen source provides no independent complete event-language specification for a regex proof.",
+      "reason_code": "detection_event_match_without_independent_language_contract",
+      "regex_id": "6a25a9e9857b23ac33cf1d1cd150d00c",
+      "review_refs": [
+        {
+          "line": 5,
+          "path": "rules/snowflake_rules/snowflake_stream_user_enabled.py",
+          "why": "detection rule regex and event use"
+        }
+      ],
+      "site": "rules/snowflake_rules/snowflake_stream_user_enabled.py:5:20"
+    },
+    {
+      "decision": "skip",
+      "pattern": "Role changed from (?P<old_role>.+) to (?P<new_role>[^$]+)",
+      "product_question_asked": false,
+      "rationale": "The pinned helper uses this match to parse, normalize, or classify an event/telemetry value for detection enrichment. The surrounding code does not use the result to permit an operation, enforce an authorization boundary, or sanitize data for a separate trust domain; no independent event-language contract is stated for this regex.",
+      "reason_code": "telemetry_enrichment_or_normalization",
+      "regex_id": "7b146b7c636787b286e1a0d49080a3fc",
+      "review_refs": [
+        {
+          "line": 12,
+          "path": "global_helpers/panther_zendesk_helpers.py",
+          "why": "helper call site and return/use context"
+        }
+      ],
+      "site": "global_helpers/panther_zendesk_helpers.py:12:24"
+    },
+    {
+      "decision": "skip",
+      "pattern": "^[\\d]+-compute@developer\\.gserviceaccount\\.com$",
+      "product_question_asked": false,
+      "rationale": "The pinned helper uses this match to parse, normalize, or classify an event/telemetry value for detection enrichment. The surrounding code does not use the result to permit an operation, enforce an authorization boundary, or sanitize data for a separate trust domain; no independent event-language contract is stated for this regex.",
+      "reason_code": "telemetry_enrichment_or_normalization",
+      "regex_id": "8a0b14045c9cd37690108f4b8968a51e",
+      "review_refs": [
+        {
+          "line": 100,
+          "path": "global_helpers/panther_gcp_helpers.py",
+          "why": "helper call site and return/use context"
+        }
+      ],
+      "site": "global_helpers/panther_gcp_helpers.py:100:4"
+    },
+    {
+      "decision": "skip",
+      "pattern": "^container-engine-robot@.*\\.iam\\.gserviceaccount\\.com$",
+      "product_question_asked": false,
+      "rationale": "The pinned helper uses this match to parse, normalize, or classify an event/telemetry value for detection enrichment. The surrounding code does not use the result to permit an operation, enforce an authorization boundary, or sanitize data for a separate trust domain; no independent event-language contract is stated for this regex.",
+      "reason_code": "telemetry_enrichment_or_normalization",
+      "regex_id": "8df72845f317baee22e8ab5b0ad71615",
+      "review_refs": [
+        {
+          "line": 101,
+          "path": "global_helpers/panther_gcp_helpers.py",
+          "why": "helper call site and return/use context"
+        }
+      ],
+      "site": "global_helpers/panther_gcp_helpers.py:101:4"
+    },
+    {
+      "decision": "skip",
+      "pattern": "[\\w.+%-]+@[\\w.-]+\\.[a-zA-Z]{2,}",
+      "product_question_asked": false,
+      "rationale": "The pinned helper uses this match to parse, normalize, or classify an event/telemetry value for detection enrichment. The surrounding code does not use the result to permit an operation, enforce an authorization boundary, or sanitize data for a separate trust domain; no independent event-language contract is stated for this regex.",
+      "reason_code": "telemetry_enrichment_or_normalization",
+      "regex_id": "920e52863bb625baee1a9f3a4b3186c3",
+      "review_refs": [
+        {
+          "line": 27,
+          "path": "global_helpers/panther_base_helpers.py",
+          "why": "helper call site and return/use context"
+        }
+      ],
+      "site": "global_helpers/panther_base_helpers.py:27:14"
+    },
+    {
+      "decision": "skip",
+      "pattern": "COPY\\s+INTO\\s+(?:\\$\\$|')?@([\\w\\.]+)",
+      "product_question_asked": false,
+      "rationale": "This regex matches or extracts a telemetry field in a detection rule. The code uses it to classify an event and produce an alert, not to accept or reject a value at a security boundary. The frozen source provides no independent complete event-language specification for a regex proof.",
+      "reason_code": "detection_event_match_without_independent_language_contract",
+      "regex_id": "9b806c63ffe666df6cfc374931b4c3da",
+      "review_refs": [
+        {
+          "line": 3,
+          "path": "rules/snowflake_rules/snowflake_stream_table_copied_into_stage.py",
+          "why": "detection rule regex and event use"
+        }
+      ],
+      "site": "rules/snowflake_rules/snowflake_stream_table_copied_into_stage.py:3:13"
+    },
+    {
+      "decision": "skip",
+      "pattern": "^[\\d]+@cloudservices\\.gserviceaccount\\.com$",
+      "product_question_asked": false,
+      "rationale": "The pinned helper uses this match to parse, normalize, or classify an event/telemetry value for detection enrichment. The surrounding code does not use the result to permit an operation, enforce an authorization boundary, or sanitize data for a separate trust domain; no independent event-language contract is stated for this regex.",
+      "reason_code": "telemetry_enrichment_or_normalization",
+      "regex_id": "b01e6439e2fb0e815863ff3e9d6a3f6d",
+      "review_refs": [
+        {
+          "line": 106,
+          "path": "global_helpers/panther_gcp_helpers.py",
+          "why": "helper call site and return/use context"
+        }
+      ],
+      "site": "global_helpers/panther_gcp_helpers.py:106:4"
+    },
+    {
+      "decision": "skip",
+      "pattern": "command/rewrite-k",
+      "product_question_asked": false,
+      "rationale": "This regex matches or extracts a telemetry field in a detection rule. The code uses it to classify an event and produce an alert, not to accept or reject a value at a security boundary. The frozen source provides no independent complete event-language specification for a regex proof.",
+      "reason_code": "detection_event_match_without_independent_language_contract",
+      "regex_id": "b38d4799176cd5a5a82c0d86f3f9dfa5",
+      "review_refs": [
+        {
+          "line": 5,
+          "path": "rules/gcp_audit_rules/gcp_gcs_object_rewrite.py",
+          "why": "detection rule regex and event use"
+        }
+      ],
+      "site": "rules/gcp_audit_rules/gcp_gcs_object_rewrite.py:5:4"
+    },
+    {
+      "decision": "skip",
+      "pattern": "GET\\s+(?:\\$\\$|')?@([a-zA-Z0-9_\\./]+)(?:\\$\\$|')?\\s",
+      "product_question_asked": false,
+      "rationale": "This regex matches or extracts a telemetry field in a detection rule. The code uses it to classify an event and produce an alert, not to accept or reject a value at a security boundary. The frozen source provides no independent complete event-language specification for a regex proof.",
+      "reason_code": "detection_event_match_without_independent_language_contract",
+      "regex_id": "c1d430ccd7bde06ac7d8c9702a05826d",
+      "review_refs": [
+        {
+          "line": 5,
+          "path": "rules/snowflake_rules/snowflake_stream_file_downloaded.py",
+          "why": "detection rule regex and event use"
+        }
+      ],
+      "site": "rules/snowflake_rules/snowflake_stream_file_downloaded.py:5:12"
+    },
+    {
+      "decision": "skip",
+      "pattern": "^\\*{0,2}Overall:?\\*{0,2}\\s*\\*{0,2}PASS\\*{0,2}",
+      "product_question_asked": false,
+      "rationale": "This regex parses the Claude review verdict string after the prompt has already been assembled. It controls whether the local hook reports issues; it does not filter staged paths, authorize an operation, sanitize output, or enforce a security boundary.",
+      "reason_code": "internal_ai_review_verdict_parser",
+      "regex_id": "c49927ca2b901b3aa7de8b76b3a0b0ca",
+      "review_refs": [
+        {
+          "line": 252,
+          "path": ".scripts/claude_review.py",
+          "why": "review-output verdict parser"
+        }
+      ],
+      "site": ".scripts/claude_review.py:252:7"
+    },
+    {
+      "decision": "skip",
+      "pattern": "\\.(\\d+)",
+      "product_question_asked": false,
+      "rationale": "The pinned helper uses this match to parse, normalize, or classify an event/telemetry value for detection enrichment. The surrounding code does not use the result to permit an operation, enforce an authorization boundary, or sanitize data for a separate trust domain; no independent event-language contract is stated for this regex.",
+      "reason_code": "telemetry_enrichment_or_normalization",
+      "regex_id": "c56d9f4c018f1375ab81a61df3c60ee4",
+      "review_refs": [
+        {
+          "line": 163,
+          "path": "global_helpers/panther_base_helpers.py",
+          "why": "helper call site and return/use context"
+        }
+      ],
+      "site": "global_helpers/panther_base_helpers.py:163:26"
+    },
+    {
+      "decision": "skip",
+      "pattern": "'type':\\s*'([^']+)'",
+      "product_question_asked": false,
+      "rationale": "This regex matches or extracts a telemetry field in a detection rule. The code uses it to classify an event and produce an alert, not to accept or reject a value at a security boundary. The frozen source provides no independent complete event-language specification for a regex proof.",
+      "reason_code": "detection_event_match_without_independent_language_contract",
+      "regex_id": "c828932bfdcbeecd070e1f38b73e108c",
+      "review_refs": [
+        {
+          "line": 14,
+          "path": "rules/anthropic_rules/anthropic_org_settings_updated.py",
+          "why": "detection rule regex and event use"
+        }
+      ],
+      "site": "rules/anthropic_rules/anthropic_org_settings_updated.py:14:12"
+    },
+    {
+      "decision": "skip",
+      "pattern": "\"type\":\\s*\"([^\"]+)\"",
+      "product_question_asked": false,
+      "rationale": "This regex matches or extracts a telemetry field in a detection rule. The code uses it to classify an event and produce an alert, not to accept or reject a value at a security boundary. The frozen source provides no independent complete event-language specification for a regex proof.",
+      "reason_code": "detection_event_match_without_independent_language_contract",
+      "regex_id": "c9e6576ace65295d6131e1d97ca1f8f0",
+      "review_refs": [
+        {
+          "line": 16,
+          "path": "rules/anthropic_rules/anthropic_org_settings_updated.py",
+          "why": "detection rule regex and event use"
+        }
+      ],
+      "site": "rules/anthropic_rules/anthropic_org_settings_updated.py:16:16"
+    },
+    {
+      "decision": "skip",
+      "pattern": "Owner changed from (?P<old_owner>.+) to (?P<new_owner>[^$]+)",
+      "product_question_asked": false,
+      "rationale": "This regex matches or extracts a telemetry field in a detection rule. The code uses it to classify an event and produce an alert, not to accept or reject a value at a security boundary. The frozen source provides no independent complete event-language specification for a regex proof.",
+      "reason_code": "detection_event_match_without_independent_language_contract",
+      "regex_id": "d89a2f6407e678c57899bffe8fbf2fb7",
+      "review_refs": [
+        {
+          "line": 5,
+          "path": "rules/zendesk_rules/zendesk_new_owner.py",
+          "why": "detection rule regex and event use"
+        }
+      ],
+      "site": "rules/zendesk_rules/zendesk_new_owner.py:5:24"
+    },
+    {
+      "decision": "skip",
+      "pattern": "^service-[\\d]+@container-engine-robot\\.iam\\.gserviceaccount\\.com$",
+      "product_question_asked": false,
+      "rationale": "The pinned helper uses this match to parse, normalize, or classify an event/telemetry value for detection enrichment. The surrounding code does not use the result to permit an operation, enforce an authorization boundary, or sanitize data for a separate trust domain; no independent event-language contract is stated for this regex.",
+      "reason_code": "telemetry_enrichment_or_normalization",
+      "regex_id": "dd01767ad207abbfafa1eec2d0b2398b",
+      "review_refs": [
+        {
+          "line": 104,
+          "path": "global_helpers/panther_gcp_helpers.py",
+          "why": "helper call site and return/use context"
+        }
+      ],
+      "site": "global_helpers/panther_gcp_helpers.py:104:4"
+    },
+    {
+      "decision": "skip",
+      "pattern": "(?P<app>.*) role changed from (?P<old_role>.+) to (?P<new_role>.*)",
+      "product_question_asked": false,
+      "rationale": "The pinned helper uses this match to parse, normalize, or classify an event/telemetry value for detection enrichment. The surrounding code does not use the result to permit an operation, enforce an authorization boundary, or sanitize data for a separate trust domain; no independent event-language contract is stated for this regex.",
+      "reason_code": "telemetry_enrichment_or_normalization",
+      "regex_id": "e416669cd6c0af38a9af9847942c4b95",
+      "review_refs": [
+        {
+          "line": 9,
+          "path": "global_helpers/panther_zendesk_helpers.py",
+          "why": "helper call site and return/use context"
+        }
+      ],
+      "site": "global_helpers/panther_zendesk_helpers.py:9:28"
+    },
+    {
+      "decision": "skip",
+      "pattern": "\\.(\\d+)Z",
+      "product_question_asked": false,
+      "rationale": "The pinned helper uses this match to parse, normalize, or classify an event/telemetry value for detection enrichment. The surrounding code does not use the result to permit an operation, enforce an authorization boundary, or sanitize data for a separate trust domain; no independent event-language contract is stated for this regex.",
+      "reason_code": "telemetry_enrichment_or_normalization",
+      "regex_id": "e6d0121225a9428590bd67fb2f2dad2f",
+      "review_refs": [
+        {
+          "line": 175,
+          "path": "global_helpers/panther_base_helpers.py",
+          "why": "helper call site and return/use context"
+        }
+      ],
+      "site": "global_helpers/panther_base_helpers.py:175:25"
+    },
+    {
+      "decision": "skip",
+      "pattern": "^\\*{0,2}Overall:?\\*{0,2}\\s*\\*{0,2}ISSUES FOUND\\*{0,2}",
+      "product_question_asked": false,
+      "rationale": "This regex parses the Claude review verdict string after the prompt has already been assembled. It controls whether the local hook reports issues; it does not filter staged paths, authorize an operation, sanitize output, or enforce a security boundary.",
+      "reason_code": "internal_ai_review_verdict_parser",
+      "regex_id": "eae75087f8a557430296ae3839f26be2",
+      "review_refs": [
+        {
+          "line": 246,
+          "path": ".scripts/claude_review.py",
+          "why": "review-output verdict parser"
+        }
+      ],
+      "site": ".scripts/claude_review.py:246:7"
+    },
+    {
+      "decision": "skip",
+      "pattern": "\\.\\d+Z",
+      "product_question_asked": false,
+      "rationale": "The pinned helper uses this match to parse, normalize, or classify an event/telemetry value for detection enrichment. The surrounding code does not use the result to permit an operation, enforce an authorization boundary, or sanitize data for a separate trust domain; no independent event-language contract is stated for this regex.",
+      "reason_code": "telemetry_enrichment_or_normalization",
+      "regex_id": "ed10b4f817417a1acaaab924765871c3",
+      "review_refs": [
+        {
+          "line": 177,
+          "path": "global_helpers/panther_base_helpers.py",
+          "why": "helper call site and return/use context"
+        }
+      ],
+      "site": "global_helpers/panther_base_helpers.py:177:26"
+    },
+    {
+      "decision": "adopted",
+      "pattern": "\\.env$|\\.pem$|\\.key$|credentials\\.json|secrets\\.json|\\.secret",
+      "product_question_asked": true,
+      "rationale": "The helper filters staged reviewable paths before read_file_contents and the claude --print invocation. The pinned /pr-review instructions say to exclude files matching secrets; the EXCLUDE_PATTERNS branch for secrets\\.json is narrower, so a staged secrets.py path is still selected. This adopts only the path exclusion contract and does not claim the file contains a real secret or that any external transmission occurred.",
+      "reason_code": "sensitive_staged_path_must_not_reach_review_prompt",
+      "regex_id": "ee34b3bdcbfe1cbd0b7007f87c03b639",
+      "review_refs": [
+        {
+          "line": 48,
+          "path": ".scripts/claude_review.py",
+          "why": "staged-path filter and extension allow-list"
+        },
+        {
+          "line": 54,
+          "path": ".scripts/claude_review.py",
+          "why": "selected staged file contents are read from the index"
+        },
+        {
+          "line": 224,
+          "path": ".scripts/claude_review.py",
+          "why": "review prompt is passed to the Claude CLI"
+        },
+        {
+          "line": 5,
+          "path": ".scripts/pre-commit-wrapper.sh",
+          "why": "pre-commit wrapper invokes this review helper"
+        },
+        {
+          "line": 93,
+          "path": "Makefile",
+          "why": "installation replaces the pre-commit hook with the wrapper"
+        },
+        {
+          "line": 7,
+          "path": ".claude/commands/pr-review.md",
+          "why": "repository review policy excludes paths matching secrets"
+        }
+      ],
+      "site": ".scripts/claude_review.py:21:19"
+    },
+    {
+      "decision": "skip",
+      "pattern": "^gke-[\\d]+@.*\\.iam\\.gserviceaccount\\.com$",
+      "product_question_asked": false,
+      "rationale": "The pinned helper uses this match to parse, normalize, or classify an event/telemetry value for detection enrichment. The surrounding code does not use the result to permit an operation, enforce an authorization boundary, or sanitize data for a separate trust domain; no independent event-language contract is stated for this regex.",
+      "reason_code": "telemetry_enrichment_or_normalization",
+      "regex_id": "f85bd2ee1e75bc00f611e1f43b2a6e01",
+      "review_refs": [
+        {
+          "line": 102,
+          "path": "global_helpers/panther_gcp_helpers.py",
+          "why": "helper call site and return/use context"
+        }
+      ],
+      "site": "global_helpers/panther_gcp_helpers.py:102:4"
+    },
+    {
+      "decision": "skip",
+      "pattern": "\\.(css|js|png|jpg|jpeg|gif|svg|woff2?|ttf|ico|map)$",
+      "product_question_asked": false,
+      "rationale": "This regex matches or extracts a telemetry field in a detection rule. The code uses it to classify an event and produce an alert, not to accept or reject a value at a security boundary. The frozen source provides no independent complete event-language specification for a regex proof.",
+      "reason_code": "detection_event_match_without_independent_language_contract",
+      "regex_id": "fba3d120f0ab4b81b095ad13d0d4c972",
+      "review_refs": [
+        {
+          "line": 5,
+          "path": "rules/aws_waf_rules/aws_waf_managed_ip_reputation.py",
+          "why": "detection rule regex and event use"
+        }
+      ],
+      "site": "rules/aws_waf_rules/aws_waf_managed_ip_reputation.py:5:23"
+    },
+    {
+      "decision": "skip",
+      "pattern": "^.*\\.svc\\.id\\.goog\\[gke-managed-system/.*\\]$",
+      "product_question_asked": false,
+      "rationale": "The pinned helper uses this match to parse, normalize, or classify an event/telemetry value for detection enrichment. The surrounding code does not use the result to permit an operation, enforce an authorization boundary, or sanitize data for a separate trust domain; no independent event-language contract is stated for this regex.",
+      "reason_code": "telemetry_enrichment_or_normalization",
+      "regex_id": "ffef2755f3e7db96de0e7eb52a19f5ff",
+      "review_refs": [
+        {
+          "line": 110,
+          "path": "global_helpers/panther_gcp_helpers.py",
+          "why": "helper call site and return/use context"
+        }
+      ],
+      "site": "global_helpers/panther_gcp_helpers.py:110:4"
+    }
+  ],
+  "same_model_or_agent": true,
+  "schema_version": "1",
+  "second_pass": true
+}

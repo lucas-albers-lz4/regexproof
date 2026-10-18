@@ -1,0 +1,387 @@
+{
+  "attempts": [
+    {
+      "contract": {
+        "adoption": {
+          "approved_on": "2026-10-15",
+          "authority": "standing_user_delegation",
+          "contract_sha256": "db5d22f87290865e215e0732278b9cf7ad9667271e1845e68a028064c79e2c56",
+          "evidence": [
+            "https://github.com/fu351/Doberman-Core/blob/53ae43c5298a2426c6696147fdd75e2a4aef10e2/src/doberman/engine/rules/secrets.py",
+            "https://github.com/fu351/Doberman-Core/blob/53ae43c5298a2426c6696147fdd75e2a4aef10e2/src/doberman/proxy/normalize.py",
+            "https://github.com/fu351/Doberman-Core/blob/53ae43c5298a2426c6696147fdd75e2a4aef10e2/src/doberman/engine/rules/paths.py",
+            "https://github.com/fu351/Doberman-Core/blob/53ae43c5298a2426c6696147fdd75e2a4aef10e2/src/doberman/canonical.py",
+            "https://github.com/fu351/Doberman-Core/blob/53ae43c5298a2426c6696147fdd75e2a4aef10e2/docs/SETUP.md",
+            "https://github.com/fu351/Doberman-Core/blob/53ae43c5298a2426c6696147fdd75e2a4aef10e2/docs/REASON_CODES.md"
+          ],
+          "policy_version": "autonomous-contracts-v1",
+          "rationale": "The source comment classifies .npmrc and credentials as secret stores; REASON_CODES.md says a recognized secret-file access requires AUTH. The setup guide supports Windows, normalize.py preserves the path target, and the path rule canonicalizes native paths to lowercase slash-separated relative form. Its default globs include .env, PEM/key files and SSH keys but omit .npmrc and credentials, so they do not cover this gap. The direct Python regex and SecretLeakageRule replay establish the current miss; native Windows execution and downstream impact remain explicitly pending.",
+          "review": {
+            "author": "codex-contract-author",
+            "reviewer": "codex-independent-review-pass",
+            "same_model": true
+          },
+          "source_file": "src/doberman/engine/rules/secrets.py",
+          "source_pin": "53ae43c5298a2426c6696147fdd75e2a4aef10e2",
+          "source_sha256": "a73b183b5ac0da101e1411384e12ffe7da9f48f59947ec76a447974e246179fa",
+          "source_url": "https://github.com/fu351/Doberman-Core",
+          "status": "approved"
+        },
+        "declared_domain": "ASCII drive-absolute Windows paths using any drive letter, beginning with <letter>:\\ and containing one or more non-empty directory components made from letters, digits, underscore, hyphen, period, or space, followed by the exact basename .npmrc or credentials; paths are under 256 characters and contain no secret-shaped payload that triggers argument redaction. Evaluate Python re.search with the pinned (?ix) source pattern.",
+        "guarantee": "The secret-store classifier recognizes native Windows paths whose final component is .npmrc or credentials, independent of path content.",
+        "input_source": "Untrusted agent file path supplied under the path key to an intercepted fs_read tool; proxy normalize preserves it as SecurityObject.target and SecretLeakageRule checks that target.",
+        "provenance": "agent_derived",
+        "schema_version": "1",
+        "site": "fu351/Doberman-Core@53ae43c5298a2426c6696147fdd75e2a4aef10e2:src/doberman/engine/rules/secrets.py:223:_SECRET_PATH",
+        "trust": "untrusted-input"
+      },
+      "detail": null,
+      "domain": "BUG DEMO: a Windows drive path to .npmrc or credentials is not recognized by the pinned secret-store search regex",
+      "gate": {
+        "consumer_adopted": false,
+        "differential_cases": 0,
+        "gate_id": "doberman-secret-path-regression-gate-v1",
+        "local_gate_command": "PYTHONPATH=/tmp/regexproof-doberman-deps python3 scripts/doberman-secret-path-regression-gate.py --source-root /tmp/regexproof-pinned-sources/Doberman-Core-53ae43c5298a2426c6696147fdd75e2a4aef10e2 --output properties/calibration/2026-10-15-autonomous-doberman-win-secret-path-20r2/gate-report.json",
+        "local_gate_passed": true,
+        "mutation_guard_passed": true,
+        "product_engine_replayed": true,
+        "source_pin_verified": true
+      },
+      "kind": "bug_demo",
+      "pin": "53ae43c5298a2426c6696147fdd75e2a4aef10e2",
+      "question_id": "PY-doberman-secret-store-windows-miss",
+      "repo_id": "fu351/Doberman-Core",
+      "site": "fu351/Doberman-Core@53ae43c5298a2426c6696147fdd75e2a4aef10e2:src/doberman/engine/rules/secrets.py:223:_SECRET_PATH",
+      "status": "sat",
+      "synthesized": false,
+      "url": "https://github.com/fu351/Doberman-Core"
+    }
+  ],
+  "cohort": {
+    "cohort_id": "2026-09-12-calibration-20-r2",
+    "manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+    "repos": [
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "ecma",
+        "pin": "b31ddabecf4ed3209d37a2f5b29956120cd8f9ce",
+        "repo_id": "json-editor/json-editor",
+        "score": 4902,
+        "sites": 1,
+        "url": "https://github.com/json-editor/json-editor"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "posix-shell",
+        "pin": "d4f01ba6202d50909d1977810d322259482e0b82",
+        "repo_id": "mycelium0/mycelium",
+        "score": 21,
+        "sites": 1,
+        "url": "https://github.com/mycelium0/mycelium"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "py_re",
+        "pin": "889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8",
+        "repo_id": "netspooky/inhale",
+        "score": 191,
+        "sites": 1,
+        "url": "https://github.com/netspooky/inhale"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "ecma",
+        "pin": "e9fb233763160316989863b4739c4656133d45b0",
+        "repo_id": "magiclabs/magic-js",
+        "score": 477,
+        "sites": 1,
+        "url": "https://github.com/magiclabs/magic-js"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "ecma",
+        "pin": "d4a39726cad8d8e27e4c0502d1843c3b4180ffbc",
+        "repo_id": "grcengineering/gigachad-grc",
+        "score": 154,
+        "sites": 1,
+        "url": "https://github.com/grcengineering/gigachad-grc"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "posix-shell",
+        "pin": "cea68022f477680f4bb502396c705fe14b3c412f",
+        "repo_id": "melodic-software/claude-code-plugins",
+        "score": 6,
+        "sites": 1,
+        "url": "https://github.com/melodic-software/claude-code-plugins"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "py_re",
+        "pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+        "repo_id": "TracecatHQ/tracecat",
+        "score": 60,
+        "sites": 144,
+        "url": "https://github.com/TracecatHQ/tracecat"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "py_re",
+        "pin": "efcf8e4c0087def553a737dc1c4eebda5d8a90cd",
+        "repo_id": "Agenticstiger/forge-cli",
+        "score": 45,
+        "sites": 447,
+        "url": "https://github.com/Agenticstiger/forge-cli"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "py_re",
+        "pin": "a9c0f06affc35e1f8e45bb77f835b92350c68a0b",
+        "repo_id": "airbnb/binaryalert",
+        "score": 45,
+        "sites": 8,
+        "url": "https://github.com/airbnb/binaryalert"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "ecma",
+        "pin": "978def55c8e68cab3a50a7ee4725039da753f0a1",
+        "repo_id": "xibosignage/xibo-cms",
+        "score": 61,
+        "sites": 1981,
+        "url": "https://github.com/xibosignage/xibo-cms"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "ecma",
+        "pin": "7ea3b445ee7d2ef8004d5ee77dab7544e1b8ef88",
+        "repo_id": "profbernardoj/everclaw-community-branches",
+        "score": 51,
+        "sites": 468,
+        "url": "https://github.com/profbernardoj/everclaw-community-branches"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "go_re",
+        "pin": "01cd447ad3b1acfed7e0680596c2c74458a4cf06",
+        "repo_id": "h0tak88r/AutoAR",
+        "score": 54,
+        "sites": 33,
+        "url": "https://github.com/h0tak88r/AutoAR"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "go_re",
+        "pin": "ea3e83e24676a1678a9522141da29b636c9451ab",
+        "repo_id": "chainguard-dev/malcontent",
+        "score": 52,
+        "sites": 15,
+        "url": "https://github.com/chainguard-dev/malcontent"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "go_re",
+        "pin": "2f3fa5a506d6565fa68858b7963450567ddda114",
+        "repo_id": "open-horizon/anax",
+        "score": 50,
+        "sites": 24,
+        "url": "https://github.com/open-horizon/anax"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "go_re",
+        "pin": "1cf40fcabd330a1fe4e8eb9493b15a99a392e17f",
+        "repo_id": "snyk/snyk-ls",
+        "score": 50,
+        "sites": 35,
+        "url": "https://github.com/snyk/snyk-ls"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "posix-shell",
+        "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+        "repo_id": "marcusquinn/aidevops",
+        "score": 55,
+        "sites": 11330,
+        "url": "https://github.com/marcusquinn/aidevops"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "posix-shell",
+        "pin": "65624396e263074bb8cb2e049f9a9ec6215ea5c1",
+        "repo_id": "Leviticus-Triage/llm-honeypot-intelligence",
+        "score": 34,
+        "sites": 16,
+        "url": "https://github.com/Leviticus-Triage/llm-honeypot-intelligence"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "py_re",
+        "pin": "0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a",
+        "repo_id": "panther-labs/panther-analysis",
+        "score": 56,
+        "sites": 57,
+        "url": "https://github.com/panther-labs/panther-analysis"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "py_re",
+        "pin": "53ae43c5298a2426c6696147fdd75e2a4aef10e2",
+        "repo_id": "fu351/Doberman-Core",
+        "score": 53,
+        "sites": 108,
+        "url": "https://github.com/fu351/Doberman-Core"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "ecma",
+        "pin": "55aa7ef43a9c129beba90823cd8a4db10bb01211",
+        "repo_id": "greydragon888/real-router",
+        "score": 48,
+        "sites": 2882,
+        "url": "https://github.com/greydragon888/real-router"
+      }
+    ],
+    "schema_version": "1"
+  },
+  "cohort_id": "2026-09-12-calibration-20-r2",
+  "manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+  "product_coverage_manifest": {
+    "cohort_id": "2026-09-12-calibration-20-r2",
+    "cohort_manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+    "coverage_digest": "4a8002cd804533291dc608e94fbf3fecab66870955928b71c7411b7e57c657c7",
+    "identities": [
+      {
+        "contract_sha256": "db5d22f87290865e215e0732278b9cf7ad9667271e1845e68a028064c79e2c56",
+        "pin": "53ae43c5298a2426c6696147fdd75e2a4aef10e2",
+        "provenance": "agent_derived",
+        "question_id": "PY-doberman-secret-store-windows-miss",
+        "repo_id": "fu351/Doberman-Core",
+        "site": "fu351/Doberman-Core@53ae43c5298a2426c6696147fdd75e2a4aef10e2:src/doberman/engine/rules/secrets.py:223:_SECRET_PATH",
+        "url": "https://github.com/fu351/Doberman-Core"
+      }
+    ],
+    "schema_version": "2"
+  },
+  "rows": [
+    {
+      "canonical": {
+        "contract": {
+          "adoption": {
+            "approved_on": "2026-10-15",
+            "authority": "standing_user_delegation",
+            "contract_sha256": "db5d22f87290865e215e0732278b9cf7ad9667271e1845e68a028064c79e2c56",
+            "evidence": [
+              "https://github.com/fu351/Doberman-Core/blob/53ae43c5298a2426c6696147fdd75e2a4aef10e2/src/doberman/engine/rules/secrets.py",
+              "https://github.com/fu351/Doberman-Core/blob/53ae43c5298a2426c6696147fdd75e2a4aef10e2/src/doberman/proxy/normalize.py",
+              "https://github.com/fu351/Doberman-Core/blob/53ae43c5298a2426c6696147fdd75e2a4aef10e2/src/doberman/engine/rules/paths.py",
+              "https://github.com/fu351/Doberman-Core/blob/53ae43c5298a2426c6696147fdd75e2a4aef10e2/src/doberman/canonical.py",
+              "https://github.com/fu351/Doberman-Core/blob/53ae43c5298a2426c6696147fdd75e2a4aef10e2/docs/SETUP.md",
+              "https://github.com/fu351/Doberman-Core/blob/53ae43c5298a2426c6696147fdd75e2a4aef10e2/docs/REASON_CODES.md"
+            ],
+            "policy_version": "autonomous-contracts-v1",
+            "rationale": "The source comment classifies .npmrc and credentials as secret stores; REASON_CODES.md says a recognized secret-file access requires AUTH. The setup guide supports Windows, normalize.py preserves the path target, and the path rule canonicalizes native paths to lowercase slash-separated relative form. Its default globs include .env, PEM/key files and SSH keys but omit .npmrc and credentials, so they do not cover this gap. The direct Python regex and SecretLeakageRule replay establish the current miss; native Windows execution and downstream impact remain explicitly pending.",
+            "review": {
+              "author": "codex-contract-author",
+              "reviewer": "codex-independent-review-pass",
+              "same_model": true
+            },
+            "source_file": "src/doberman/engine/rules/secrets.py",
+            "source_pin": "53ae43c5298a2426c6696147fdd75e2a4aef10e2",
+            "source_sha256": "a73b183b5ac0da101e1411384e12ffe7da9f48f59947ec76a447974e246179fa",
+            "source_url": "https://github.com/fu351/Doberman-Core",
+            "status": "approved"
+          },
+          "declared_domain": "ASCII drive-absolute Windows paths using any drive letter, beginning with <letter>:\\ and containing one or more non-empty directory components made from letters, digits, underscore, hyphen, period, or space, followed by the exact basename .npmrc or credentials; paths are under 256 characters and contain no secret-shaped payload that triggers argument redaction. Evaluate Python re.search with the pinned (?ix) source pattern.",
+          "guarantee": "The secret-store classifier recognizes native Windows paths whose final component is .npmrc or credentials, independent of path content.",
+          "input_source": "Untrusted agent file path supplied under the path key to an intercepted fs_read tool; proxy normalize preserves it as SecurityObject.target and SecretLeakageRule checks that target.",
+          "provenance": "agent_derived",
+          "schema_version": "1",
+          "site": "fu351/Doberman-Core@53ae43c5298a2426c6696147fdd75e2a4aef10e2:src/doberman/engine/rules/secrets.py:223:_SECRET_PATH",
+          "trust": "untrusted-input"
+        },
+        "corpus": "Doberman-Core",
+        "disclosure": null,
+        "domain": "BUG DEMO: a Windows drive path to .npmrc or credentials is not recognized by the pinned secret-store search regex",
+        "engine_versions": {
+          "python": "3.14.8",
+          "z3": "5.0.0"
+        },
+        "family": "PY-doberman-secret-store-path",
+        "ground_truth": null,
+        "ground_truth_status": "reproduced",
+        "idiom_bucket": "windows-secret-store-path",
+        "kind": "bug_demo",
+        "name": "PY-doberman-secret-store-windows-miss",
+        "pattern": "(?ix)\n    (?:^|/)\\.env(?:\\.[\\w.-]+)?$       # .env, .env.local, .env.production\n    | (?:^|[./])env$                  # app.env / prod.env / .env (any .env file)\n    | \\.pem$                          # certificates / keys\n    | \\.key$                          # private keys\n    | (?:^|/)id_rsa[\\w.-]*$           # ssh private keys\n    | (?:^|/)id_ed25519[\\w.-]*$\n    | (?:^|/)\\.npmrc$                 # often carries auth tokens\n    | (?:^|/)credentials$             # aws/gcloud credentials files\n    ",
+        "product_engine_version": "3.15.0",
+        "product_reportable": true,
+        "regex_id": "1da0edb358526b5f1d6ae780f0116744",
+        "result": "sat",
+        "schema_version": "1",
+        "site": "fu351/Doberman-Core@53ae43c5298a2426c6696147fdd75e2a4aef10e2:src/doberman/engine/rules/secrets.py:223:_SECRET_PATH",
+        "synthesized": false,
+        "wave_id": "doberman_secret_path_20r2_r1",
+        "witness": {
+          "s": "k:\\P\\.npmrc"
+        }
+      },
+      "contract": {
+        "adoption": {
+          "approved_on": "2026-10-15",
+          "authority": "standing_user_delegation",
+          "contract_sha256": "db5d22f87290865e215e0732278b9cf7ad9667271e1845e68a028064c79e2c56",
+          "evidence": [
+            "https://github.com/fu351/Doberman-Core/blob/53ae43c5298a2426c6696147fdd75e2a4aef10e2/src/doberman/engine/rules/secrets.py",
+            "https://github.com/fu351/Doberman-Core/blob/53ae43c5298a2426c6696147fdd75e2a4aef10e2/src/doberman/proxy/normalize.py",
+            "https://github.com/fu351/Doberman-Core/blob/53ae43c5298a2426c6696147fdd75e2a4aef10e2/src/doberman/engine/rules/paths.py",
+            "https://github.com/fu351/Doberman-Core/blob/53ae43c5298a2426c6696147fdd75e2a4aef10e2/src/doberman/canonical.py",
+            "https://github.com/fu351/Doberman-Core/blob/53ae43c5298a2426c6696147fdd75e2a4aef10e2/docs/SETUP.md",
+            "https://github.com/fu351/Doberman-Core/blob/53ae43c5298a2426c6696147fdd75e2a4aef10e2/docs/REASON_CODES.md"
+          ],
+          "policy_version": "autonomous-contracts-v1",
+          "rationale": "The source comment classifies .npmrc and credentials as secret stores; REASON_CODES.md says a recognized secret-file access requires AUTH. The setup guide supports Windows, normalize.py preserves the path target, and the path rule canonicalizes native paths to lowercase slash-separated relative form. Its default globs include .env, PEM/key files and SSH keys but omit .npmrc and credentials, so they do not cover this gap. The direct Python regex and SecretLeakageRule replay establish the current miss; native Windows execution and downstream impact remain explicitly pending.",
+          "review": {
+            "author": "codex-contract-author",
+            "reviewer": "codex-independent-review-pass",
+            "same_model": true
+          },
+          "source_file": "src/doberman/engine/rules/secrets.py",
+          "source_pin": "53ae43c5298a2426c6696147fdd75e2a4aef10e2",
+          "source_sha256": "a73b183b5ac0da101e1411384e12ffe7da9f48f59947ec76a447974e246179fa",
+          "source_url": "https://github.com/fu351/Doberman-Core",
+          "status": "approved"
+        },
+        "declared_domain": "ASCII drive-absolute Windows paths using any drive letter, beginning with <letter>:\\ and containing one or more non-empty directory components made from letters, digits, underscore, hyphen, period, or space, followed by the exact basename .npmrc or credentials; paths are under 256 characters and contain no secret-shaped payload that triggers argument redaction. Evaluate Python re.search with the pinned (?ix) source pattern.",
+        "guarantee": "The secret-store classifier recognizes native Windows paths whose final component is .npmrc or credentials, independent of path content.",
+        "input_source": "Untrusted agent file path supplied under the path key to an intercepted fs_read tool; proxy normalize preserves it as SecurityObject.target and SecretLeakageRule checks that target.",
+        "provenance": "agent_derived",
+        "schema_version": "1",
+        "site": "fu351/Doberman-Core@53ae43c5298a2426c6696147fdd75e2a4aef10e2:src/doberman/engine/rules/secrets.py:223:_SECRET_PATH",
+        "trust": "untrusted-input"
+      },
+      "disposition": {
+        "approval_escape": null,
+        "approval_ref": null,
+        "backfilled": false,
+        "disposition_date": null,
+        "filed_at": null,
+        "reason_code": null,
+        "resolved_at": null,
+        "status": "pending_product_triage"
+      },
+      "domain": "BUG DEMO: a Windows drive path to .npmrc or credentials is not recognized by the pinned secret-store search regex",
+      "ground_truth_status": "reproduced",
+      "kind": "bug_demo",
+      "pin": "53ae43c5298a2426c6696147fdd75e2a4aef10e2",
+      "question_id": "PY-doberman-secret-store-windows-miss",
+      "repo_id": "fu351/Doberman-Core",
+      "result": "sat",
+      "schema_version": "1",
+      "site": "fu351/Doberman-Core@53ae43c5298a2426c6696147fdd75e2a4aef10e2:src/doberman/engine/rules/secrets.py:223:_SECRET_PATH",
+      "synthesized": false,
+      "url": "https://github.com/fu351/Doberman-Core"
+    }
+  ],
+  "schema_version": "3"
+}

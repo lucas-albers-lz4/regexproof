@@ -1,0 +1,22 @@
+{
+  "contract_sha256": "b48b75cf862d9882a7bc2a36746c77f11552777d91127c07d53d05fb76d53411",
+  "differential_cases": 2467,
+  "family": "TC-tracecat-artifact-path-segment",
+  "gate_id": "tracecat-mount-only-artifact-path-segment",
+  "guarantee": "Each sanitized artifact type, ID, or hydrated filename is one nonempty relative path component without slash, backslash, or dot traversal components.",
+  "limitations": "Component-level path safety only; symlink ancestry, host_root provenance, races, and collisions are outside this contract. No current vulnerability or attacker-controlled reachability is claimed.",
+  "mismatches": 0,
+  "mutation_id": "TC-artifact-path-segment-slash-escape-mutation",
+  "mutation_input": "../../outside",
+  "mutation_only_change": "The exact pinned regex class was weakened to preserve slash.",
+  "path_escape_mutation_reproduced": true,
+  "product_engine": "CPython re and pathlib through the exact pinned _safe_path_segment helper",
+  "property_id": "TC-artifact-path-segment-safe-image",
+  "repository": "https://github.com/TracecatHQ/tracecat",
+  "schema_version": "1",
+  "separator_containing_inputs": 2057,
+  "source_file": "packages/tracecat-ee/tracecat_ee/agent/artifacts/mount_only_provider.py",
+  "source_pattern": "[^A-Za-z0-9_.-]+",
+  "source_pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+  "source_sha256": "b9ef06e9fa2582b4c376ab8eb526eef1dc9adeb1c7d2d92e1c8da92ac14a3b11"
+}

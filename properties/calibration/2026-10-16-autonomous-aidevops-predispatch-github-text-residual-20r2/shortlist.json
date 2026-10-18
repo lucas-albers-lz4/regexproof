@@ -1,0 +1,135 @@
+{
+  "allocation_sha256": "34fbe5533e95b5bad02c4d717e86e18fc3245ea8ec3628177d8929f6e9e02e8b",
+  "bucket": "pre-dispatch-github-text",
+  "cohort_id": "2026-09-12-calibration-20-r2",
+  "keep": [
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": ".agents/scripts/pre-dispatch-validator-helper.sh",
+      "idiom_class": "novel_idiom",
+      "pattern": "^[0-9]+$",
+      "regex_id": "da131ed2a545cd8f1bd1999bb0fbbba7",
+      "site": ".agents/scripts/pre-dispatch-validator-helper.sh:1062:column-4"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": ".agents/scripts/pre-dispatch-validator-helper.sh",
+      "idiom_class": "novel_idiom",
+      "pattern": "^[0-9]+$",
+      "regex_id": "47e5aebec9439ac88a112ac690214f25",
+      "site": ".agents/scripts/pre-dispatch-validator-helper.sh:1075:column-1"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": ".agents/scripts/pre-dispatch-validator-helper.sh",
+      "idiom_class": "novel_idiom",
+      "pattern": "^[0-9a-fA-F]{40}$",
+      "regex_id": "d402abf21f1409bff29e772b5c6ef32c",
+      "site": ".agents/scripts/pre-dispatch-validator-helper.sh:1077:column-4"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": ".agents/scripts/pre-dispatch-validator-helper.sh",
+      "idiom_class": "novel_idiom",
+      "pattern": "aidevops:generator=review-followup|source:review-scanner|review-followup:PR|Unaddressed review bot suggestions",
+      "regex_id": "f0ac4ff9d62e08b7a7b2b7bcb7f65337",
+      "site": ".agents/scripts/pre-dispatch-validator-helper.sh:1574:column-31"
+    },
+    {
+      "call_kind": "substitution",
+      "encodable": true,
+      "file": ".agents/scripts/pre-dispatch-validator-helper.sh",
+      "idiom_class": "novel_idiom",
+      "pattern": "cited_file=",
+      "regex_id": "94007cad844a13064fdbd898542938e3",
+      "site": ".agents/scripts/pre-dispatch-validator-helper.sh:1878:column-77"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": ".agents/scripts/pre-dispatch-validator-helper.sh",
+      "idiom_class": "novel_idiom",
+      "pattern": "threshold=[0-9]+",
+      "regex_id": "74fe9f403cf62d875f8b4ef8537381d4",
+      "site": ".agents/scripts/pre-dispatch-validator-helper.sh:1879:column-51"
+    },
+    {
+      "call_kind": "substitution",
+      "encodable": true,
+      "file": ".agents/scripts/pre-dispatch-validator-helper.sh",
+      "idiom_class": "novel_idiom",
+      "pattern": "threshold=",
+      "regex_id": "9bfa5841cb29143635d48f33ea102135",
+      "site": ".agents/scripts/pre-dispatch-validator-helper.sh:1879:column-81"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": ".agents/scripts/pre-dispatch-validator-helper.sh",
+      "idiom_class": "novel_idiom",
+      "pattern": "stall_hours=[0-9]+",
+      "regex_id": "a90d86147cd1c07be88679df5aa0f152",
+      "site": ".agents/scripts/pre-dispatch-validator-helper.sh:1882:column-54"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": ".agents/scripts/pre-dispatch-validator-helper.sh",
+      "idiom_class": "novel_idiom",
+      "pattern": "cited_file=[^ >]+",
+      "regex_id": "e3c276b4b79b794ead2391c6e95852b4",
+      "site": ".agents/scripts/pre-dispatch-validator-helper.sh:273:column-33"
+    },
+    {
+      "call_kind": "substitution",
+      "encodable": true,
+      "file": ".agents/scripts/pre-dispatch-validator-helper.sh",
+      "idiom_class": "novel_idiom",
+      "pattern": ":[0-9]*(-[0-9]*){0,1}$",
+      "regex_id": "ea494519d1983cbfe8bd18ca5a9f453f",
+      "site": ".agents/scripts/pre-dispatch-validator-helper.sh:929:column-230"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": ".agents/scripts/pre-dispatch-validator-helper.sh",
+      "idiom_class": "novel_idiom",
+      "pattern": "^$",
+      "regex_id": "e2c3b754808dea0062528936732ac125",
+      "site": ".agents/scripts/pre-dispatch-validator-helper.sh:939:column-34"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": ".agents/scripts/pre-dispatch-validator-helper.sh",
+      "idiom_class": "novel_idiom",
+      "pattern": "^v?[0-9]+\\.[0-9]+\\.[0-9]+$",
+      "regex_id": "b00c45afb98f8671e9bbcc44683e8142",
+      "site": ".agents/scripts/pre-dispatch-validator-helper.sh:939:column-49"
+    },
+    {
+      "call_kind": "substitution",
+      "encodable": true,
+      "file": ".agents/scripts/pre-dispatch-validator-helper.sh",
+      "idiom_class": "novel_idiom",
+      "pattern": "`[A-Za-z0-9._/-]+\\.[A-Za-z0-9]{1,10}(:[0-9]+(-[0-9]+)?)?`",
+      "regex_id": "b1152cae139694597dc450a916ce4e4d",
+      "site": ".agents/scripts/pre-dispatch-validator-helper.sh:963:column-38"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": ".agents/scripts/pre-dispatch-validator-helper.sh",
+      "idiom_class": "novel_idiom",
+      "pattern": "^[a-z][a-z0-9_]{3,}$",
+      "regex_id": "762d2dee2f84a539ee37efd796a301c9",
+      "site": ".agents/scripts/pre-dispatch-validator-helper.sh:964:column-95"
+    }
+  ],
+  "schema_version": "1",
+  "selection_note": "All 14 identities left by the frozen first-wave allocation; deterministic residual census, not a reallocated sample."
+}

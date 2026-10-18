@@ -1,0 +1,29 @@
+{
+  "candidate_sites": [
+    {
+      "claimed_at": "2026-10-15T18:32:15+00:00",
+      "corpus": "aidevops",
+      "created_at": "2026-10-15T18:25:53Z",
+      "idiom_bucket": "ecma-plugins",
+      "ledger_state_at_claim": {
+        "conversion_ledger_sha256": "ad715ef9b3e5be15ee88c5a790d1ebf35dfc47f5adb460a5409a94239c1deb24",
+        "gate_decision_sha256": "02875563f71ec7459f3a97967a663da09d281478507cba82cfd49c75ce3fcb4c",
+        "n": 11,
+        "now_iso": "2026-10-15T18:32:15+00:00",
+        "repository_url": "https://github.com/marcusquinn/aidevops",
+        "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1"
+      },
+      "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "rank": 1,
+      "reasons": [],
+      "site": ".agents/plugins/opencode-aidevops/quality-hooks-secret-read.mjs:7:27",
+      "status": "claimed",
+      "wave_generation_at_claim": 0,
+      "wave_id": "aidevops-node-secret-read-p4-20261015-r1"
+    }
+  ],
+  "cluster": "aidevops",
+  "schema_version": "1",
+  "wave_generation": 0,
+  "wave_id": "aidevops-node-secret-read-p4-20261015-r1"
+}

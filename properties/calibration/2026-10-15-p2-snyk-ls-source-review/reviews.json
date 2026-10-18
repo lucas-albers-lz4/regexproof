@@ -1,0 +1,683 @@
+{
+  "author": "Codex source-review pass",
+  "limitations": [
+    "This is a complete raw-regex review only for snyk/snyk-ls at the frozen 20-r2 pin; it does not establish coverage for the other cohort members or complete P2.",
+    "No Snyk service, supported IDE client, external endpoint, or downstream Markdown renderer was contacted or exercised.",
+    "The custom endpoint transformations remain configuration behavior; their policy for arbitrary custom hosts is not independently established.",
+    "The Markdown hover transformation remains unresolved pending verification of the supported consumer rendering and output sanitization requirement."
+  ],
+  "observed_at": "2026-10-15",
+  "reviewer": "Codex second source-review pass",
+  "reviews": [
+    {
+      "decision": "skip",
+      "pattern": "^(ap[pi]\\.)?",
+      "product_question_asked": false,
+      "rationale": "This regex rewrites the host component of a URL after net/url parsing while deriving the Code API endpoint from the operator-configured Snyk API endpoint. It participates in endpoint selection, but the source provides no independent policy for arbitrary custom hosts and does not use this expression as an access-control or untrusted-input validator. Preserve the behavior as configuration plumbing; no product property is adopted from the transformation alone.",
+      "reason_code": "operator_config_endpoint_derivation",
+      "regex_id": "d7b8d5888679e8c662f2b57e75e28bfc",
+      "review_refs": [
+        {
+          "line": 657,
+          "path": "application/config/config.go",
+          "why": "exact pinned regex site and its immediate use"
+        },
+        {
+          "line": 652,
+          "path": "application/config/config.go",
+          "why": "helper parses the configured endpoint and rewrites its host"
+        },
+        {
+          "line": 93,
+          "path": "infrastructure/code/snyk_code_http_client.go",
+          "why": "caller obtains the derived endpoint for the Code client"
+        }
+      ],
+      "site": "application/config/config.go:657:0"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "<br\\s?/?>",
+      "product_question_asked": false,
+      "rationale": "ToHovers applies this replacement in Markdown format and a later workspace caller publishes the resulting message through the LSP hover channel. The source comment says this branch sanitizes the message, while the regex only rewrites br tags and leaves other markup untouched. Whether remote issue text is rendered as active HTML by supported clients, and what sanitization guarantee is required at this sink, is not established by this pinned source review. Preserve as unresolved; do not count a contract-backed question until the actual consumer behavior and independent output policy are established.",
+      "reason_code": "hover_markdown_rendering_requirement_unverified",
+      "regex_id": "985d134ee9b343eef69d91e810a3b72e",
+      "review_refs": [
+        {
+          "line": 42,
+          "path": "domain/ide/converter/converter.go",
+          "why": "exact pinned regex site and its immediate use"
+        },
+        {
+          "line": 566,
+          "path": "domain/ide/converter/converter.go",
+          "why": "formats issue messages for LSP hovers"
+        },
+        {
+          "line": 585,
+          "path": "domain/ide/converter/converter.go",
+          "why": "applies the br-only replacement in Markdown mode"
+        },
+        {
+          "line": 894,
+          "path": "domain/ide/workspace/folder.go",
+          "why": "sends converted hover messages to the LSP hover channel"
+        }
+      ],
+      "site": "domain/ide/converter/converter.go:42:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "@@ -(\\d+),?(\\d*) \\+(\\d+),?(\\d*) @@",
+      "product_question_asked": false,
+      "rationale": "The pattern recognizes unified-diff hunk coordinates so remediation code can parse patch structure. This is a parsing/behavior-correctness concern; the pinned site does not gate authorization, validate a security boundary, or sanitize data for another trust domain, and no independent security property for this hunk grammar is stated.",
+      "reason_code": "diff_hunk_parser_without_security_contract",
+      "regex_id": "4a6f2a4a831bc8404284c9999ed41711",
+      "review_refs": [
+        {
+          "line": 1019,
+          "path": "domain/snyk/remediation/remy.go",
+          "why": "exact pinned regex site and its immediate use"
+        }
+      ],
+      "site": "domain/snyk/remediation/remy.go:1019:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "/commit/.*",
+      "product_question_asked": false,
+      "rationale": "The pattern removes a commit-path suffix from a URL to derive a short repository/tab title for IDE presentation. It does not validate a fetch target, authorize a repository operation, or sanitize content for a trust-domain boundary.",
+      "reason_code": "presentation_url_title_extraction",
+      "regex_id": "4f3e6b96bd3a9b39126a15485c9bd4ff",
+      "review_refs": [
+        {
+          "line": 348,
+          "path": "infrastructure/code/code_html.go",
+          "why": "exact pinned regex site and its immediate use"
+        },
+        {
+          "line": 345,
+          "path": "infrastructure/code/code_html.go",
+          "why": "shortens a URL for tab-title display"
+        },
+        {
+          "line": 351,
+          "path": "infrastructure/code/code_html.go",
+          "why": "returns the derived presentation title"
+        }
+      ],
+      "site": "infrastructure/code/code_html.go:348:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "##\\s",
+      "product_question_asked": false,
+      "rationale": "The pattern is used to format or parse Snyk Code issue text and unified diff details for IDE output. It does not decide whether a security finding is authorized or filter untrusted input before a separate sink; the relevant code path is product presentation/patch parsing, with no independent complete security-language specification.",
+      "reason_code": "issue_or_diff_presentation_parser",
+      "regex_id": "79f12a2313fd1284b673ac82d176030d",
+      "review_refs": [
+        {
+          "line": 204,
+          "path": "infrastructure/code/convert.go",
+          "why": "exact pinned regex site and its immediate use"
+        }
+      ],
+      "site": "infrastructure/code/convert.go:204:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "\\((\\d)\\)",
+      "product_question_asked": false,
+      "rationale": "The pattern is used to format or parse Snyk Code issue text and unified diff details for IDE output. It does not decide whether a security finding is authorized or filter untrusted input before a separate sink; the relevant code path is product presentation/patch parsing, with no independent complete security-language specification.",
+      "reason_code": "issue_or_diff_presentation_parser",
+      "regex_id": "d7ffafb43cdc67eea1494e45e752c9b4",
+      "review_refs": [
+        {
+          "line": 529,
+          "path": "infrastructure/code/convert.go",
+          "why": "exact pinned regex site and its immediate use"
+        }
+      ],
+      "site": "infrastructure/code/convert.go:529:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "\\[(.*?)\\]",
+      "product_question_asked": false,
+      "rationale": "The pattern is used to format or parse Snyk Code issue text and unified diff details for IDE output. It does not decide whether a security finding is authorized or filter untrusted input before a separate sink; the relevant code path is product presentation/patch parsing, with no independent complete security-language specification.",
+      "reason_code": "issue_or_diff_presentation_parser",
+      "regex_id": "ea2c5c5c0356aa8220430f4b2dc34cb8",
+      "review_refs": [
+        {
+          "line": 567,
+          "path": "infrastructure/code/convert.go",
+          "why": "exact pinned regex site and its immediate use"
+        }
+      ],
+      "site": "infrastructure/code/convert.go:567:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "@@ -(\\d+),?(\\d*) \\+(\\d+),?(\\d*) @@",
+      "product_question_asked": false,
+      "rationale": "The pattern is used to format or parse Snyk Code issue text and unified diff details for IDE output. It does not decide whether a security finding is authorized or filter untrusted input before a separate sink; the relevant code path is product presentation/patch parsing, with no independent complete security-language specification.",
+      "reason_code": "issue_or_diff_presentation_parser",
+      "regex_id": "6cc224a1a8400b7cd76aa1de546cc5eb",
+      "review_refs": [
+        {
+          "line": 632,
+          "path": "infrastructure/code/convert.go",
+          "why": "exact pinned regex site and its immediate use"
+        }
+      ],
+      "site": "infrastructure/code/convert.go:632:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "^(deeproxy\\.)?",
+      "product_question_asked": false,
+      "rationale": "The regex rewrites a deeproxy host prefix to api. while the Code HTTP client builds the request endpoint returned by configuration logic. This is endpoint plumbing over an operator-configured/custom service URL, not a security validation rule; the pinned source provides no independent host-language or origin guarantee suitable for a product contract.",
+      "reason_code": "operator_config_endpoint_derivation",
+      "regex_id": "205bfbdc5456f72d3860562412e87630",
+      "review_refs": [
+        {
+          "line": 46,
+          "path": "infrastructure/code/snyk_code_http_client.go",
+          "why": "exact pinned regex site and its immediate use"
+        },
+        {
+          "line": 93,
+          "path": "infrastructure/code/snyk_code_http_client.go",
+          "why": "loads the configured or derived endpoint"
+        },
+        {
+          "line": 109,
+          "path": "infrastructure/code/snyk_code_http_client.go",
+          "why": "applies the host rewrite before creating the client"
+        }
+      ],
+      "site": "infrastructure/code/snyk_code_http_client.go:46:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "(?s)<script\\b[^>]*>.*?</script>",
+      "product_question_asked": false,
+      "rationale": "This regex is used in a test or vendored dependency test fixture. The pinned production call path does not use this occurrence to validate, authorize, or sanitize a runtime input.",
+      "reason_code": "test_or_vendored_fixture_pattern",
+      "regex_id": "b97ee7866c390c04f2d95ab126dbadb5",
+      "review_refs": [
+        {
+          "line": 881,
+          "path": "infrastructure/configuration/config_html_test.go",
+          "why": "exact pinned regex site and its immediate use"
+        }
+      ],
+      "site": "infrastructure/configuration/config_html_test.go:881:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "(?s)<style\\b[^>]*>.*?</style>",
+      "product_question_asked": false,
+      "rationale": "This regex is used in a test or vendored dependency test fixture. The pinned production call path does not use this occurrence to validate, authorize, or sanitize a runtime input.",
+      "reason_code": "test_or_vendored_fixture_pattern",
+      "regex_id": "428b3ba6a5ad0b1ede80b641ffa0e8e6",
+      "review_refs": [
+        {
+          "line": 882,
+          "path": "infrastructure/configuration/config_html_test.go",
+          "why": "exact pinned regex site and its immediate use"
+        }
+      ],
+      "site": "infrastructure/configuration/config_html_test.go:882:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "name=\"([^\"]+)\"",
+      "product_question_asked": false,
+      "rationale": "This regex is used in a test or vendored dependency test fixture. The pinned production call path does not use this occurrence to validate, authorize, or sanitize a runtime input.",
+      "reason_code": "test_or_vendored_fixture_pattern",
+      "regex_id": "a4f4ce24fb1e52d617a64ac70fc4c65c",
+      "review_refs": [
+        {
+          "line": 885,
+          "path": "infrastructure/configuration/config_html_test.go",
+          "why": "exact pinned regex site and its immediate use"
+        }
+      ],
+      "site": "infrastructure/configuration/config_html_test.go:885:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "^trustedFolder_\\d+$",
+      "product_question_asked": false,
+      "rationale": "This regex is used in a test or vendored dependency test fixture. The pinned production call path does not use this occurrence to validate, authorize, or sanitize a runtime input.",
+      "reason_code": "test_or_vendored_fixture_pattern",
+      "regex_id": "53308d5f6f2cced347f84bdf0526eea5",
+      "review_refs": [
+        {
+          "line": 894,
+          "path": "infrastructure/configuration/config_html_test.go",
+          "why": "exact pinned regex site and its immediate use"
+        }
+      ],
+      "site": "infrastructure/configuration/config_html_test.go:894:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "^folder_\\d+_(.+)$",
+      "product_question_asked": false,
+      "rationale": "This regex is used in a test or vendored dependency test fixture. The pinned production call path does not use this occurrence to validate, authorize, or sanitize a runtime input.",
+      "reason_code": "test_or_vendored_fixture_pattern",
+      "regex_id": "6765abf7c52737c4be92afa9ad232836",
+      "review_refs": [
+        {
+          "line": 895,
+          "path": "infrastructure/configuration/config_html_test.go",
+          "why": "exact pinned regex site and its immediate use"
+        }
+      ],
+      "site": "infrastructure/configuration/config_html_test.go:895:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "^\\s*\\$\\{([^}]+)\\}\\s*$",
+      "product_question_asked": false,
+      "rationale": "The pattern recognizes Maven property references in the parsed project AST so an IDE code action can locate and update the corresponding version property. It processes repository manifest data for an explicit user-requested remediation edit, not a security authorization or output-sanitization boundary. No independent complete contract for the full property-reference grammar is available here.",
+      "reason_code": "project_manifest_parser_not_security_boundary",
+      "regex_id": "8d160671410f620b5a9e06295bf927de",
+      "review_refs": [
+        {
+          "line": 349,
+          "path": "infrastructure/oss/code_actions.go",
+          "why": "exact pinned regex site and its immediate use"
+        },
+        {
+          "line": 367,
+          "path": "infrastructure/oss/code_actions.go",
+          "why": "captures a Maven property reference from a dependency AST node"
+        },
+        {
+          "line": 388,
+          "path": "infrastructure/oss/code_actions.go",
+          "why": "follows a nested property reference in the project AST"
+        }
+      ],
+      "site": "infrastructure/oss/code_actions.go:349:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "\\$\\{\\w+\\}",
+      "product_question_asked": false,
+      "rationale": "This regex is used in a test or vendored dependency test fixture. The pinned production call path does not use this occurrence to validate, authorize, or sanitize a runtime input.",
+      "reason_code": "test_or_vendored_fixture_pattern",
+      "regex_id": "ecd83ce0f3518aee793c264768da26cd",
+      "review_refs": [
+        {
+          "line": 67,
+          "path": "infrastructure/oss/oss_html_test.go",
+          "why": "exact pinned regex site and its immediate use"
+        }
+      ],
+      "site": "infrastructure/oss/oss_html_test.go:67:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "\\$\\{\\w+\\}",
+      "product_question_asked": false,
+      "rationale": "This regex is used in a test or vendored dependency test fixture. The pinned production call path does not use this occurrence to validate, authorize, or sanitize a runtime input.",
+      "reason_code": "test_or_vendored_fixture_pattern",
+      "regex_id": "2f9cb86397c4f481eb93f79025e86ad5",
+      "review_refs": [
+        {
+          "line": 200,
+          "path": "infrastructure/oss/oss_html_test.go",
+          "why": "exact pinned regex site and its immediate use"
+        }
+      ],
+      "site": "infrastructure/oss/oss_html_test.go:200:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "^(.+)://((.*)@)?(.+?)(:(\\d*))?/?((.*)\\?)?((.*)#)L?(\\d+)(?:,(\\d+))?(-L?(\\d+)(?:,(\\d+))?)?",
+      "product_question_asked": false,
+      "rationale": "AddRangeToUri uses this regex to detect an existing line/range fragment and avoid appending a second navigation fragment. This is URI display/navigation formatting. It does not resolve filesystem access or authorize the URI, and the actual path conversion uses separate URI library and path logic.",
+      "reason_code": "navigation_uri_formatting_not_access_control",
+      "regex_id": "c23cc155c5160ae54e2581c24849bd95",
+      "review_refs": [
+        {
+          "line": 41,
+          "path": "internal/uri/uri_util.go",
+          "why": "exact pinned regex site and its immediate use"
+        },
+        {
+          "line": 216,
+          "path": "internal/uri/uri_util.go",
+          "why": "only checks whether a range fragment already exists"
+        },
+        {
+          "line": 128,
+          "path": "internal/uri/uri_util.go",
+          "why": "filesystem path conversion is a separate operation"
+        }
+      ],
+      "site": "internal/uri/uri_util.go:41:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "[^a-z0-9_\\-]+",
+      "product_question_asked": false,
+      "rationale": "NormalizeBranchName applies this expression after trimming, lowercasing, and replacing spaces, then passes the result to go-git branch-reference APIs. It does not execute a shell command or authorize a repository operation; the exact guarantee for empty/colliding names is not independently specified, so no security property is adopted.",
+      "reason_code": "local_git_branch_name_normalization",
+      "regex_id": "723a063fd5b374ba01ef415e4a3d4e78",
+      "review_refs": [
+        {
+          "line": 36,
+          "path": "internal/vcs/git_utils.go",
+          "why": "exact pinned regex site and its immediate use"
+        },
+        {
+          "line": 118,
+          "path": "internal/vcs/git_utils.go",
+          "why": "normalizes a branch label using the regex"
+        },
+        {
+          "line": 73,
+          "path": "internal/vcs/checkout_handler.go",
+          "why": "uses the normalized folder and base-branch labels for checkout naming"
+        }
+      ],
+      "site": "internal/vcs/git_utils.go:36:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "[\\da-f]{8}-[\\da-f]{4}-[\\da-f]{4}-[\\da-f]{4}-[\\da-f]{12}",
+      "product_question_asked": false,
+      "rationale": "This regex is used in a test or vendored dependency test fixture. The pinned production call path does not use this occurrence to validate, authorize, or sanitize a runtime input.",
+      "reason_code": "test_or_vendored_fixture_pattern",
+      "regex_id": "24b691e2ed63b0b5a52225c798a01d26",
+      "review_refs": [
+        {
+          "line": 25,
+          "path": "licenses/github.com/hashicorp/go-uuid/uuid_test.go",
+          "why": "exact pinned regex site and its immediate use"
+        }
+      ],
+      "site": "licenses/github.com/hashicorp/go-uuid/uuid_test.go:25:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "[\\da-f]{8}-[\\da-f]{4}-[\\da-f]{4}-[\\da-f]{4}-[\\da-f]{12}",
+      "product_question_asked": false,
+      "rationale": "This regex is used in a test or vendored dependency test fixture. The pinned production call path does not use this occurrence to validate, authorize, or sanitize a runtime input.",
+      "reason_code": "test_or_vendored_fixture_pattern",
+      "regex_id": "fb7bc3af5caf0e1da42dc0b876e48bd6",
+      "review_refs": [
+        {
+          "line": 56,
+          "path": "licenses/github.com/hashicorp/go-uuid/uuid_test.go",
+          "why": "exact pinned regex site and its immediate use"
+        }
+      ],
+      "site": "licenses/github.com/hashicorp/go-uuid/uuid_test.go:56:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "github\\.com/snyk/snyk-ls\\s+v\\d+\\.\\d+\\.\\d+-(\\d{14}-[a-f0-9]{12})",
+      "product_question_asked": false,
+      "rationale": "This script reads local repository, dependency, or plugin source text to build the compatibility matrix by extracting version or protocol constants. It is developer tooling and the matched values are display/compatibility metadata, not values that authorize a security-sensitive operation or cross a runtime trust boundary.",
+      "reason_code": "compatibility_tooling_metadata_parser",
+      "regex_id": "27b7c84b37bde853406202f7c95f2145",
+      "review_refs": [
+        {
+          "line": 229,
+          "path": "scripts/compatibility-matrix/cli_analyzer.go",
+          "why": "exact pinned regex site and its immediate use"
+        }
+      ],
+      "site": "scripts/compatibility-matrix/cli_analyzer.go:229:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "github\\.com/snyk/snyk-ls\\s+([a-f0-9]{40})",
+      "product_question_asked": false,
+      "rationale": "This script reads local repository, dependency, or plugin source text to build the compatibility matrix by extracting version or protocol constants. It is developer tooling and the matched values are display/compatibility metadata, not values that authorize a security-sensitive operation or cross a runtime trust boundary.",
+      "reason_code": "compatibility_tooling_metadata_parser",
+      "regex_id": "dead59208bfe14c38acedee47f963b81",
+      "review_refs": [
+        {
+          "line": 233,
+          "path": "scripts/compatibility-matrix/cli_analyzer.go",
+          "why": "exact pinned regex site and its immediate use"
+        }
+      ],
+      "site": "scripts/compatibility-matrix/cli_analyzer.go:233:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "LspProtocolVersion\\s*=\\s*(\\d+)",
+      "product_question_asked": false,
+      "rationale": "This script reads local repository, dependency, or plugin source text to build the compatibility matrix by extracting version or protocol constants. It is developer tooling and the matched values are display/compatibility metadata, not values that authorize a security-sensitive operation or cross a runtime trust boundary.",
+      "reason_code": "compatibility_tooling_metadata_parser",
+      "regex_id": "6bf8b53b7950ff9c0defc6d4dff4213b",
+      "review_refs": [
+        {
+          "line": 288,
+          "path": "scripts/compatibility-matrix/cli_analyzer.go",
+          "why": "exact pinned regex site and its immediate use"
+        }
+      ],
+      "site": "scripts/compatibility-matrix/cli_analyzer.go:288:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "LS_PROTOCOL_VERSION\\s*=\\s*(\\d+)",
+      "product_question_asked": false,
+      "rationale": "This script reads local repository, dependency, or plugin source text to build the compatibility matrix by extracting version or protocol constants. It is developer tooling and the matched values are display/compatibility metadata, not values that authorize a security-sensitive operation or cross a runtime trust boundary.",
+      "reason_code": "compatibility_tooling_metadata_parser",
+      "regex_id": "48c473a181dc100a4ad09946004350d8",
+      "review_refs": [
+        {
+          "line": 297,
+          "path": "scripts/compatibility-matrix/cli_analyzer.go",
+          "why": "exact pinned regex site and its immediate use"
+        }
+      ],
+      "site": "scripts/compatibility-matrix/cli_analyzer.go:297:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "(?m)^export\\s+const\\s+PROTOCOL_VERSION\\s*=\\s*(\\d+)",
+      "product_question_asked": false,
+      "rationale": "This script reads local repository, dependency, or plugin source text to build the compatibility matrix by extracting version or protocol constants. It is developer tooling and the matched values are display/compatibility metadata, not values that authorize a security-sensitive operation or cross a runtime trust boundary.",
+      "reason_code": "compatibility_tooling_metadata_parser",
+      "regex_id": "75c1772e9027d7bf50f3e341c376dc00",
+      "review_refs": [
+        {
+          "line": 159,
+          "path": "scripts/compatibility-matrix/plugins.go",
+          "why": "exact pinned regex site and its immediate use"
+        }
+      ],
+      "site": "scripts/compatibility-matrix/plugins.go:159:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "(?m)(?:val|const)\\s+PROTOCOL_VERSION\\s*=\\s*\"?(\\d+)\"?",
+      "product_question_asked": false,
+      "rationale": "This script reads local repository, dependency, or plugin source text to build the compatibility matrix by extracting version or protocol constants. It is developer tooling and the matched values are display/compatibility metadata, not values that authorize a security-sensitive operation or cross a runtime trust boundary.",
+      "reason_code": "compatibility_tooling_metadata_parser",
+      "regex_id": "f2f41014998f7f46e7b8f8f51f6b7394",
+      "review_refs": [
+        {
+          "line": 197,
+          "path": "scripts/compatibility-matrix/plugins.go",
+          "why": "exact pinned regex site and its immediate use"
+        }
+      ],
+      "site": "scripts/compatibility-matrix/plugins.go:197:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "(?m)private\\s+static\\s+final\\s+(?:String|int)\\s+PROTOCOL_VERSION\\s*=\\s*\"?(\\d+)\"?",
+      "product_question_asked": false,
+      "rationale": "This script reads local repository, dependency, or plugin source text to build the compatibility matrix by extracting version or protocol constants. It is developer tooling and the matched values are display/compatibility metadata, not values that authorize a security-sensitive operation or cross a runtime trust boundary.",
+      "reason_code": "compatibility_tooling_metadata_parser",
+      "regex_id": "b38aa32477caa5bd2b195d857ff2c4a4",
+      "review_refs": [
+        {
+          "line": 198,
+          "path": "scripts/compatibility-matrix/plugins.go",
+          "why": "exact pinned regex site and its immediate use"
+        }
+      ],
+      "site": "scripts/compatibility-matrix/plugins.go:198:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "(?m)requiredProtocolVersion[\"\\s:=]+(\\d+)",
+      "product_question_asked": false,
+      "rationale": "This script reads local repository, dependency, or plugin source text to build the compatibility matrix by extracting version or protocol constants. It is developer tooling and the matched values are display/compatibility metadata, not values that authorize a security-sensitive operation or cross a runtime trust boundary.",
+      "reason_code": "compatibility_tooling_metadata_parser",
+      "regex_id": "344067b536eb13f52f855dc28498cb9d",
+      "review_refs": [
+        {
+          "line": 199,
+          "path": "scripts/compatibility-matrix/plugins.go",
+          "why": "exact pinned regex site and its immediate use"
+        }
+      ],
+      "site": "scripts/compatibility-matrix/plugins.go:199:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "(?m)val\\s+requiredLsProtocolVersion\\s*=\\s*\"?(\\d+)\"?",
+      "product_question_asked": false,
+      "rationale": "This script reads local repository, dependency, or plugin source text to build the compatibility matrix by extracting version or protocol constants. It is developer tooling and the matched values are display/compatibility metadata, not values that authorize a security-sensitive operation or cross a runtime trust boundary.",
+      "reason_code": "compatibility_tooling_metadata_parser",
+      "regex_id": "35f3ed61c67045660764e72650469dfe",
+      "review_refs": [
+        {
+          "line": 200,
+          "path": "scripts/compatibility-matrix/plugins.go",
+          "why": "exact pinned regex site and its immediate use"
+        }
+      ],
+      "site": "scripts/compatibility-matrix/plugins.go:200:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "(?m)(?:const|static)\\s+(?:readonly\\s+)?(?:string|int)\\s+ProtocolVersion\\s*=\\s*\"?(\\d+)\"?",
+      "product_question_asked": false,
+      "rationale": "This script reads local repository, dependency, or plugin source text to build the compatibility matrix by extracting version or protocol constants. It is developer tooling and the matched values are display/compatibility metadata, not values that authorize a security-sensitive operation or cross a runtime trust boundary.",
+      "reason_code": "compatibility_tooling_metadata_parser",
+      "regex_id": "79e07c408344e3408967801aa848db5f",
+      "review_refs": [
+        {
+          "line": 241,
+          "path": "scripts/compatibility-matrix/plugins.go",
+          "why": "exact pinned regex site and its immediate use"
+        }
+      ],
+      "site": "scripts/compatibility-matrix/plugins.go:241:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "(?m)RequiredProtocolVersion\\s*[=:]\\s*\"?(\\d+)\"?",
+      "product_question_asked": false,
+      "rationale": "This script reads local repository, dependency, or plugin source text to build the compatibility matrix by extracting version or protocol constants. It is developer tooling and the matched values are display/compatibility metadata, not values that authorize a security-sensitive operation or cross a runtime trust boundary.",
+      "reason_code": "compatibility_tooling_metadata_parser",
+      "regex_id": "5d873b8f13362a9e352c04c77c421cfc",
+      "review_refs": [
+        {
+          "line": 242,
+          "path": "scripts/compatibility-matrix/plugins.go",
+          "why": "exact pinned regex site and its immediate use"
+        }
+      ],
+      "site": "scripts/compatibility-matrix/plugins.go:242:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "(?m)\"requiredProtocolVersion\"\\s*:\\s*\"?(\\d+)\"?",
+      "product_question_asked": false,
+      "rationale": "This script reads local repository, dependency, or plugin source text to build the compatibility matrix by extracting version or protocol constants. It is developer tooling and the matched values are display/compatibility metadata, not values that authorize a security-sensitive operation or cross a runtime trust boundary.",
+      "reason_code": "compatibility_tooling_metadata_parser",
+      "regex_id": "5ae947a885032c5ac63368d08493834e",
+      "review_refs": [
+        {
+          "line": 243,
+          "path": "scripts/compatibility-matrix/plugins.go",
+          "why": "exact pinned regex site and its immediate use"
+        }
+      ],
+      "site": "scripts/compatibility-matrix/plugins.go:243:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "(?m)PROTOCOL_VERSION\\s*=\\s*\"?(\\d+)\"?",
+      "product_question_asked": false,
+      "rationale": "This script reads local repository, dependency, or plugin source text to build the compatibility matrix by extracting version or protocol constants. It is developer tooling and the matched values are display/compatibility metadata, not values that authorize a security-sensitive operation or cross a runtime trust boundary.",
+      "reason_code": "compatibility_tooling_metadata_parser",
+      "regex_id": "aa8a25dc341c47cea8ffacc80588200c",
+      "review_refs": [
+        {
+          "line": 284,
+          "path": "scripts/compatibility-matrix/plugins.go",
+          "why": "exact pinned regex site and its immediate use"
+        }
+      ],
+      "site": "scripts/compatibility-matrix/plugins.go:284:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "(?m)protocolVersion\\s*=\\s*\"?(\\d+)\"?",
+      "product_question_asked": false,
+      "rationale": "This script reads local repository, dependency, or plugin source text to build the compatibility matrix by extracting version or protocol constants. It is developer tooling and the matched values are display/compatibility metadata, not values that authorize a security-sensitive operation or cross a runtime trust boundary.",
+      "reason_code": "compatibility_tooling_metadata_parser",
+      "regex_id": "6cfae0185bb2af9c4685e806de9b3185",
+      "review_refs": [
+        {
+          "line": 285,
+          "path": "scripts/compatibility-matrix/plugins.go",
+          "why": "exact pinned regex site and its immediate use"
+        }
+      ],
+      "site": "scripts/compatibility-matrix/plugins.go:285:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "(?m)requiredProtocolVersion[\"\\s:=]+(\\d+)",
+      "product_question_asked": false,
+      "rationale": "This script reads local repository, dependency, or plugin source text to build the compatibility matrix by extracting version or protocol constants. It is developer tooling and the matched values are display/compatibility metadata, not values that authorize a security-sensitive operation or cross a runtime trust boundary.",
+      "reason_code": "compatibility_tooling_metadata_parser",
+      "regex_id": "aebaca0ddcf58752c15c9682a9ab48ea",
+      "review_refs": [
+        {
+          "line": 286,
+          "path": "scripts/compatibility-matrix/plugins.go",
+          "why": "exact pinned regex site and its immediate use"
+        }
+      ],
+      "site": "scripts/compatibility-matrix/plugins.go:286:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "(?m)Bundle-Version:\\s*(\\d+\\.\\d+\\.\\d+)(?:\\.identifier)?",
+      "product_question_asked": false,
+      "rationale": "This script reads local repository, dependency, or plugin source text to build the compatibility matrix by extracting version or protocol constants. It is developer tooling and the matched values are display/compatibility metadata, not values that authorize a security-sensitive operation or cross a runtime trust boundary.",
+      "reason_code": "compatibility_tooling_metadata_parser",
+      "regex_id": "e37891e7c7fda2c9bda1b6576137676f",
+      "review_refs": [
+        {
+          "line": 328,
+          "path": "scripts/compatibility-matrix/plugins.go",
+          "why": "exact pinned regex site and its immediate use"
+        }
+      ],
+      "site": "scripts/compatibility-matrix/plugins.go:328:0"
+    }
+  ],
+  "same_model_or_agent": true,
+  "schema_version": "1",
+  "second_pass": true
+}

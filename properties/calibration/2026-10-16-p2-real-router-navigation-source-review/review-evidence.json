@@ -1,0 +1,311 @@
+{
+  "candidates": [
+    {
+      "call_kind": "search",
+      "decision": "adopted",
+      "pattern": "[\\u0000-\\u001F\\u007F]",
+      "rank": 1,
+      "rationale": "Pinned comments, the opt-in plugin wiring, and the functional navigation test support the narrow guarantee that validateNavigateParams rejects string parameter values containing C0 or DEL control characters. Caller input is classified as application configuration/API input; no remote-attacker reachability or broader security impact is claimed.",
+      "reason_code": "documented-validator-invariant",
+      "regex_id": "1e31ed0154408e832cf456d8422b6e38",
+      "shortlist_site": "packages/validation-plugin/src/validators/navigation.ts:69:column-25",
+      "site": "packages/validation-plugin/src/validators/navigation.ts:69:column-25",
+      "source_binding": {
+        "evidence_ref": "https://github.com/greydragon888/real-router/blob/55aa7ef43a9c129beba90823cd8a4db10bb01211/packages/validation-plugin/src/validators/navigation.ts",
+        "path": "packages/validation-plugin/src/validators/navigation.ts",
+        "pin": "55aa7ef43a9c129beba90823cd8a4db10bb01211",
+        "repository_url": "https://github.com/greydragon888/real-router",
+        "sha256": "619bbc25796534163c82de8f01dab1ab3fc38cd844a7a0742301dab0534173c6"
+      },
+      "source_pin": "55aa7ef43a9c129beba90823cd8a4db10bb01211",
+      "window": {
+        "lines": [
+          {
+            "is_target": false,
+            "line": 44,
+            "text": "      `[router.navigateToState] Invalid state.params: ${getTypeDescription(candidate.params)}. Expected plain object.`,"
+          },
+          {
+            "is_target": false,
+            "line": 45,
+            "text": "    );"
+          },
+          {
+            "is_target": false,
+            "line": 46,
+            "text": "  }"
+          },
+          {
+            "is_target": false,
+            "line": 47,
+            "text": "  if (!isString(candidate.path)) {"
+          },
+          {
+            "is_target": false,
+            "line": 48,
+            "text": "    throw new TypeError("
+          },
+          {
+            "is_target": false,
+            "line": 49,
+            "text": "      `[router.navigateToState] Invalid state.path: ${getTypeDescription(candidate.path)}. Expected string.`,"
+          },
+          {
+            "is_target": false,
+            "line": 50,
+            "text": "    );"
+          },
+          {
+            "is_target": false,
+            "line": 51,
+            "text": "  }"
+          },
+          {
+            "is_target": false,
+            "line": 52,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 53,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 54,
+            "text": "export function validateNavigationOptions("
+          },
+          {
+            "is_target": false,
+            "line": 55,
+            "text": "  opts: unknown,"
+          },
+          {
+            "is_target": false,
+            "line": 56,
+            "text": "  methodName: string,"
+          },
+          {
+            "is_target": false,
+            "line": 57,
+            "text": "): asserts opts is NavigationOptions {"
+          },
+          {
+            "is_target": false,
+            "line": 58,
+            "text": "  if (!isNavigationOptions(opts)) {"
+          },
+          {
+            "is_target": false,
+            "line": 59,
+            "text": "    throw new TypeError("
+          },
+          {
+            "is_target": false,
+            "line": 60,
+            "text": "      `[router.${methodName}] Invalid options: ${getTypeDescription(opts)}. Expected NavigationOptions object.`,"
+          },
+          {
+            "is_target": false,
+            "line": 61,
+            "text": "    );"
+          },
+          {
+            "is_target": false,
+            "line": 62,
+            "text": "  }"
+          },
+          {
+            "is_target": false,
+            "line": 63,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 64,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 65,
+            "text": "// C0 control chars (U+0000–U+001F) and DEL (U+007F). Core percent-encodes them"
+          },
+          {
+            "is_target": false,
+            "line": 66,
+            "text": "// into the URL path (%00, %01, …) instead of failing, admitting unreadable,"
+          },
+          {
+            "is_target": false,
+            "line": 67,
+            "text": "// non-copyable paths into committed state (#942)."
+          },
+          {
+            "is_target": false,
+            "line": 68,
+            "text": "// eslint-disable-next-line no-control-regex -- matching control characters IS the validation here (#942)"
+          },
+          {
+            "is_target": true,
+            "line": 69,
+            "text": "const CONTROL_CHARS_RE = /[\\u0000-\\u001F\\u007F]/;"
+          },
+          {
+            "is_target": false,
+            "line": 70,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 71,
+            "text": "/**"
+          },
+          {
+            "is_target": false,
+            "line": 72,
+            "text": " * Rejects param VALUES that cannot safely round-trip through a URL path:"
+          },
+          {
+            "is_target": false,
+            "line": 73,
+            "text": " * - `symbol` / `bigint` stringify lossily — a Symbol keeps its raw identity in"
+          },
+          {
+            "is_target": false,
+            "line": 74,
+            "text": " *   `state.params` and never matches back from the path, so navigation"
+          },
+          {
+            "is_target": false,
+            "line": 75,
+            "text": " *   \"succeeds\" with a corrupt, non-round-tripping path (#934);"
+          },
+          {
+            "is_target": false,
+            "line": 76,
+            "text": " * - a `string` carrying control characters corrupts the path segment (#942)."
+          },
+          {
+            "is_target": false,
+            "line": 77,
+            "text": " *"
+          },
+          {
+            "is_target": false,
+            "line": 78,
+            "text": " * Pinpoints the offending key so the message is actionable, instead of the"
+          },
+          {
+            "is_target": false,
+            "line": 79,
+            "text": " * generic \"params must be a plain object\" shape error."
+          },
+          {
+            "is_target": false,
+            "line": 80,
+            "text": " */"
+          },
+          {
+            "is_target": false,
+            "line": 81,
+            "text": "function assertValidParamValues("
+          },
+          {
+            "is_target": false,
+            "line": 82,
+            "text": "  params: Record<string, unknown>,"
+          },
+          {
+            "is_target": false,
+            "line": 83,
+            "text": "  methodName: string,"
+          },
+          {
+            "is_target": false,
+            "line": 84,
+            "text": "): void {"
+          },
+          {
+            "is_target": false,
+            "line": 85,
+            "text": "  for (const key in params) {"
+          },
+          {
+            "is_target": false,
+            "line": 86,
+            "text": "    if (!Object.hasOwn(params, key)) {"
+          },
+          {
+            "is_target": false,
+            "line": 87,
+            "text": "      continue;"
+          },
+          {
+            "is_target": false,
+            "line": 88,
+            "text": "    }"
+          },
+          {
+            "is_target": false,
+            "line": 89,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 90,
+            "text": "    const value = params[key];"
+          },
+          {
+            "is_target": false,
+            "line": 91,
+            "text": "    const valueType = typeof value;"
+          },
+          {
+            "is_target": false,
+            "line": 92,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 93,
+            "text": "    if (valueType === \"symbol\" || valueType === \"bigint\") {"
+          },
+          {
+            "is_target": false,
+            "line": 94,
+            "text": "      throw new TypeError("
+          }
+        ],
+        "path": "packages/validation-plugin/src/validators/navigation.ts",
+        "target_line": 69,
+        "token": "column-25",
+        "window_end": 94,
+        "window_lines": 51,
+        "window_start": 44
+      }
+    }
+  ],
+  "cohort_id": "2026-09-12-calibration-20-r2",
+  "repository_url": "https://github.com/greydragon888/real-router",
+  "review_source": {
+    "row_count": 1,
+    "sha256": "da864d2e287787da83795794d520d318a8b6d647dbf3a1aabe34c1f2c11dcab4"
+  },
+  "run_context_sha256": "2057a3f1077a62e008dd6972e26a955f8d13357d42cc75542fbd24ff9ec802a9",
+  "schema_version": "1",
+  "shortlist_site_path_prefix": "",
+  "shortlist_source": {
+    "row_count": 1,
+    "sha256": "f9c43e48def457cd4c29cbd7652de66b154d08c0ac171ef51dfc9e43f847bd49"
+  },
+  "source_files": [
+    {
+      "evidence_ref": "https://github.com/greydragon888/real-router/blob/55aa7ef43a9c129beba90823cd8a4db10bb01211/packages/validation-plugin/src/validators/navigation.ts",
+      "path": "packages/validation-plugin/src/validators/navigation.ts",
+      "pin": "55aa7ef43a9c129beba90823cd8a4db10bb01211",
+      "repository_url": "https://github.com/greydragon888/real-router",
+      "sha256": "619bbc25796534163c82de8f01dab1ab3fc38cd844a7a0742301dab0534173c6"
+    }
+  ],
+  "source_pin": "55aa7ef43a9c129beba90823cd8a4db10bb01211"
+}

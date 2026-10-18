@@ -10,6 +10,7 @@ from pathlib import Path
 import pytest
 
 from regexproof.mine.cohort_manifest import build_manifest
+from regexproof.contract_adoption import contract_digest
 from regexproof.mine.saturation import ManifestError, build_report, dumps_report, load_manifest
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -17,18 +18,51 @@ SCRIPT = ROOT / "scripts" / "saturation-report.py"
 
 
 def _property(index: int, *, result="unsat", ground_truthed=False,
-              filed=False, accepted=False):
-    return {
+              filed=False, accepted=False, provenance="human", contract=None):
+    row = {
         "site": f"src/validator.py:{index}:4",
         "question_id": f"question-{index}",
         "kind": "property",
-        "provenance": "human",
+        "provenance": provenance,
         "synthesized": False,
         "result": result,
         "ground_truthed": ground_truthed,
         "filed": filed,
         "accepted": accepted,
     }
+    if contract is not None:
+        row["contract"] = contract
+    return row
+
+
+def _agent_contract(site):
+    value = {
+        "schema_version": "1",
+        "site": site,
+        "guarantee": "The accepted value excludes a shell separator.",
+        "input_source": "untrusted request field",
+        "trust": "untrusted-input",
+        "declared_domain": "ASCII bytes",
+        "provenance": "agent_derived",
+    }
+    pin = "a" * 40
+    url = "https://github.com/example/project"
+    value["adoption"] = {
+        "policy_version": "autonomous-contracts-v1",
+        "status": "approved",
+        "authority": "standing_user_delegation",
+        "approved_on": "2026-10-13",
+        "rationale": "The caller and pinned source establish this boundary.",
+        "evidence": [f"{url}/blob/{pin}/src/validator.py"],
+        "source_url": url,
+        "source_pin": pin,
+        "source_file": "src/validator.py",
+        "source_sha256": "b" * 64,
+        "contract_sha256": "0" * 64,
+        "review": {"author": "agent-a", "reviewer": "agent-b", "same_model": True},
+    }
+    value["adoption"]["contract_sha256"] = contract_digest(value)
+    return value
 
 
 def _repo(repo_id: str, family: str, **overrides):
@@ -202,7 +236,7 @@ def test_product_denominator_rejects_duplicate_and_non_product_rows():
     duplicate = _property(0)
     with pytest.raises(ManifestError, match="duplicates product identity"):
         build_report(_manifest(_repo("bad", "py", product_properties=[duplicate, duplicate])))
-    with pytest.raises(ManifestError, match="provenance must be 'human'"):
+    with pytest.raises(ManifestError, match="complete adopted contract"):
         build_report(
             _manifest(
                 _repo(
@@ -216,6 +250,29 @@ def test_product_denominator_rejects_duplicate_and_non_product_rows():
         build_report(
             _manifest(
                 _repo("bad", "py", product_properties=[{**_property(0), "kind": "rule_diff"}])
+            )
+        )
+
+
+def test_agent_and_machine_pair_series_require_complete_contracts():
+    site = "src/validator.py:0:4"
+    adopted = _agent_contract(site)
+    prop = _property(0, provenance="agent_derived", contract=adopted)
+    report = build_report(_manifest(_repo("agent", "py", product_properties=[prop])))
+    assert report["cohort_totals"]["properties_asked"] == 1
+    assert report["cohort_totals"]["product_provenance"] == {
+        "human": 0, "autonomous": 1, "machine_pair": 0
+    }
+
+    changed = dict(adopted)
+    changed["guarantee"] = "changed after adoption"
+    with pytest.raises(ManifestError, match="complete adopted contract"):
+        build_report(
+            _manifest(
+                _repo(
+                    "agent", "py",
+                    product_properties=[_property(0, provenance="agent_derived", contract=changed)],
+                )
             )
         )
 

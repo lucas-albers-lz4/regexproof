@@ -1,0 +1,34 @@
+{
+  "adoption": {
+    "approved_on": "2026-10-16",
+    "authority": "standing_user_delegation",
+    "contract_sha256": "b723accf2629d739af9497e5136139dbdaa3c9d3b38221ed7788c887979dec12",
+    "evidence": [
+      "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/pulse-merge-webhook-receiver.sh",
+      "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/pulse-merge-webhook-server.py",
+      "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/configs/webhook-receiver.conf",
+      "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/reference/auto-merge.md",
+      "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/tests/test-pulse-merge-webhook-invalidation.py",
+      "properties/calibration/2026-10-16-autonomous-aidevops-webhook-action-protocol-20r2/review-memo.md"
+    ],
+    "policy_version": "autonomous-contracts-v1",
+    "rationale": "A fresh exact-pin source audit found that the prior contract described the entire positive-number dispatch condition while the attached UNSAT query proves only the regex language. This corrected adoption narrows the guarantee to that exact theorem; the server's positive-integer conversion and the receiver's separate arithmetic predicate remain source-reviewed context, not claims of this proof.",
+    "review": {
+      "author": "Codex-P7-webhook-source-review",
+      "reviewer": "Codex-P8-fresh-source-audit",
+      "same_model": true
+    },
+    "source_file": ".agents/scripts/pulse-merge-webhook-receiver.sh",
+    "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+    "source_sha256": "6d882dac90c3f9deb1a0007c9a4216d70f365a4a34ffacd145eb04cc8ae3a325",
+    "source_url": "https://github.com/marcusquinn/aidevops",
+    "status": "approved"
+  },
+  "declared_domain": "Exact Aidevops pin 8666b6c6c52472b5535aa295f2df593918152cb1; ASCII strings tested by the Bash `[[ $pr_number =~ ^[0-9]+$ ]]` regex condition at receiver line 302; NUL is excluded by the local action-line protocol. The theorem is regex-language inclusion only and makes no claim about Bash arithmetic, positivity, action parsing, or process_pr reachability.",
+  "guarantee": "The Bash ERE `^[0-9]+$` at the PROCESS_PR dispatcher accepts only nonempty ASCII decimal-digit strings. This contract covers the regex condition only; positivity, exact action-field count, and the complete dispatch path are separate checks and are not proved by this property.",
+  "input_source": "PR number text serialized into the local PROCESS_PR action by the pinned Python webhook server from a positive integer in an authenticated GitHub webhook event. This proof concerns only the receiver's regex check on that token, not the server validation or the later `-le 0` predicate.",
+  "provenance": "agent_derived",
+  "schema_version": "1",
+  "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pulse-merge-webhook-receiver.sh:302:6",
+  "trust": "untrusted-input"
+}

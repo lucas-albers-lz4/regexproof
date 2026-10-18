@@ -1,0 +1,250 @@
+{
+  "all_dispositions_source_bound": true,
+  "campaign_counted": false,
+  "cohort_id": "off-cohort-mycelium-current-pin",
+  "conversion_ledger_sha256": "ad715ef9b3e5be15ee88c5a790d1ebf35dfc47f5adb460a5409a94239c1deb24",
+  "event_log": "{\"at\": \"2026-10-15T16:59:35+00:00\", \"corpus\": \"mycelium\", \"event\": \"wave_opened\", \"generation\": 0, \"wave_id\": \"mycelium-diagnostic-p3-transition-20261015-r1\"}\n{\"at\": \"2026-10-15T16:59:36+00:00\", \"corpus\": \"mycelium\", \"event\": \"wave_closed\", \"force\": false, \"generation\": 1, \"skip_reasons\": {}, \"wave_id\": \"mycelium-diagnostic-p3-transition-20261015-r1\"}\n",
+  "gate_decision_sha256": "ecdcb89356b42b10c3fe25dc6ebcbfc0c74b041da6cf0c7b099275d521a8b682",
+  "initial_generation": 0,
+  "post_close_generation": 1,
+  "queue_sha256_after_close": "b7ccd36e5a3cb065c6dfeb4b7bcad6c2fa3a9107e89c166e6439c004d5a58785",
+  "queue_status_counts": {
+    "contracted": 2,
+    "skipped_duplicate": 1,
+    "skipped_out_of_scope": 12
+  },
+  "queue_top15_complete": true,
+  "repository_url": "https://github.com/mycelium0/mycelium",
+  "review_evidence_v2_sha256": "6faf430bc5411749dd0cf1b402e0f778c961406187b61531de6a7bf6d1a43923",
+  "schema_version": "1",
+  "scope": "Temporary queue directory and temporary corpus event log. The repository campaign queue and event log were not changed.",
+  "source_evidence_join": {
+    "candidate_bindings": [
+      {
+        "decision": "adopted",
+        "rank": 1,
+        "regex_id": "148896941c21d4a17551f044bd40fc88",
+        "site": "scripts/update_unit_drift_drill.sh:184:3",
+        "source_sha256": "4e28f0bd727ba842fed7840bdd163fbef32dc911f7c8e6bea409895ced4c6493"
+      },
+      {
+        "decision": "skipped",
+        "rank": 2,
+        "regex_id": "f2aef01c87f5ffd746de7b1e52bdb19c",
+        "site": "scripts/node-bootstrap.sh:1083:60",
+        "source_sha256": "3f0c03d5db1e13665969d255583823cd0ea8f7cc618bb3539ac26fe94c907b27"
+      },
+      {
+        "decision": "skipped",
+        "rank": 3,
+        "regex_id": "e61fc06da665bfb8c2eaaca06b5f3d3f",
+        "site": "scripts/node-bootstrap.sh:1084:60",
+        "source_sha256": "3f0c03d5db1e13665969d255583823cd0ea8f7cc618bb3539ac26fe94c907b27"
+      },
+      {
+        "decision": "skipped",
+        "rank": 4,
+        "regex_id": "6a34d6601a5a58a39757c91e8be39776",
+        "site": "scripts/update_unit_drift_drill.sh:236:35",
+        "source_sha256": "4e28f0bd727ba842fed7840bdd163fbef32dc911f7c8e6bea409895ced4c6493"
+      },
+      {
+        "decision": "skipped",
+        "rank": 5,
+        "regex_id": "7535d130b86cbb737c1cc319253765a0",
+        "site": "scripts/fungi:101:40",
+        "source_sha256": "b922a88d84b3b67ec77061f0a51425c0d90f7b0b66d1853a7c9b51ebb52650aa"
+      },
+      {
+        "decision": "skipped",
+        "rank": 6,
+        "regex_id": "0717d6d2e9bbe31b9a22b0bc28b57342",
+        "site": "scripts/fungi:84:99",
+        "source_sha256": "b922a88d84b3b67ec77061f0a51425c0d90f7b0b66d1853a7c9b51ebb52650aa"
+      },
+      {
+        "decision": "skipped",
+        "rank": 7,
+        "regex_id": "f141465a40b05772f4f65177261c26cc",
+        "site": "scripts/fungi:85:87",
+        "source_sha256": "b922a88d84b3b67ec77061f0a51425c0d90f7b0b66d1853a7c9b51ebb52650aa"
+      },
+      {
+        "decision": "skipped",
+        "rank": 8,
+        "regex_id": "645c26907591a263de2b28370d80b122",
+        "site": "scripts/update_unit_drift_drill.sh:120:15",
+        "source_sha256": "4e28f0bd727ba842fed7840bdd163fbef32dc911f7c8e6bea409895ced4c6493"
+      },
+      {
+        "decision": "skipped",
+        "rank": 9,
+        "regex_id": "d6716c975ea7ad327b150381a7b37a83",
+        "site": "scripts/update_unit_drift_drill.sh:120:60",
+        "source_sha256": "4e28f0bd727ba842fed7840bdd163fbef32dc911f7c8e6bea409895ced4c6493"
+      },
+      {
+        "decision": "skipped",
+        "rank": 10,
+        "regex_id": "dab00b6e0a2731ef075d1547b03dc013",
+        "site": "scripts/update_unit_drift_drill.sh:184:45",
+        "source_sha256": "4e28f0bd727ba842fed7840bdd163fbef32dc911f7c8e6bea409895ced4c6493"
+      },
+      {
+        "decision": "adopted",
+        "rank": 11,
+        "regex_id": "0d22d2b135243d0c3d21c7a247776783",
+        "site": "scripts/verify-release.sh:60:10",
+        "source_sha256": "df394a764f2ebd906ffbc9d6bafa58af896b39e895e503a271da3baf710e2b58"
+      },
+      {
+        "decision": "skipped",
+        "rank": 12,
+        "regex_id": "182c7edc3432798e986eb07b0f4e73a6",
+        "site": "scripts/fungi:42:1",
+        "source_sha256": "b922a88d84b3b67ec77061f0a51425c0d90f7b0b66d1853a7c9b51ebb52650aa"
+      },
+      {
+        "decision": "skipped",
+        "rank": 13,
+        "regex_id": "ffb8742a5ea4e9a56d636c6ad8511128",
+        "site": "scripts/fungi:77:51",
+        "source_sha256": "b922a88d84b3b67ec77061f0a51425c0d90f7b0b66d1853a7c9b51ebb52650aa"
+      },
+      {
+        "decision": "skipped",
+        "rank": 14,
+        "regex_id": "d8d45304ef898304d066587397ec814e",
+        "site": "scripts/update_unit_drift_drill.sh:120:86",
+        "source_sha256": "4e28f0bd727ba842fed7840bdd163fbef32dc911f7c8e6bea409895ced4c6493"
+      },
+      {
+        "decision": "skipped",
+        "rank": 15,
+        "regex_id": "2036b05dd504e0eb23c832ae4c1fbf08",
+        "site": "scripts/update_unit_drift_drill.sh:184:71",
+        "source_sha256": "4e28f0bd727ba842fed7840bdd163fbef32dc911f7c8e6bea409895ced4c6493"
+      }
+    ],
+    "review_evidence_path": "properties/calibration/2026-10-15-autonomous-mycelium-script-slice/review-evidence-v2.json",
+    "review_evidence_sha256": "6faf430bc5411749dd0cf1b402e0f778c961406187b61531de6a7bf6d1a43923",
+    "review_to_evidence_fields": [
+      "site",
+      "pattern",
+      "call_kind",
+      "regex_id",
+      "decision"
+    ],
+    "shortlist_count": 15,
+    "source_pin_verified": true
+  },
+  "source_pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+  "transition_count": 17,
+  "transition_result_counts": {
+    "claimed": 2,
+    "contracted": 2,
+    "skipped_duplicate": 1,
+    "skipped_out_of_scope": 12
+  },
+  "transitions": [
+    {
+      "action": "claim",
+      "rank": 1,
+      "stdout": "{\"claimed_at\": \"2026-10-15T16:59:35+00:00\", \"corpus\": \"mycelium\", \"created_at\": \"2026-10-15T16:00:00+00:00\", \"ledger_state_at_claim\": {\"conversion_ledger_sha256\": \"ad715ef9b3e5be15ee88c5a790d1ebf35dfc47f5adb460a5409a94239c1deb24\", \"gate_decision_sha256\": \"ecdcb89356b42b10c3fe25dc6ebcbfc0c74b041da6cf0c7b099275d521a8b682\", \"n\": 11, \"now_iso\": \"2026-10-15T16:59:35+00:00\", \"repository_url\": \"https://github.com/mycelium0/mycelium\", \"source_pin\": \"4b53dc7629ca3bc88bf5467db481ad2af7130711\"}, \"pin\": \"4b53dc7629ca3bc88bf5467db481ad2af7130711\", \"rank\": 1, \"reasons\": [], \"site\": \"mycelium0/mycelium@4b53dc7629ca3bc88bf5467db481ad2af7130711:scripts/update_unit_drift_drill.sh:184:3\", \"status\": \"claimed\", \"wave_generation_at_claim\": 0, \"wave_id\": \"mycelium-diagnostic-p3-transition-20261015-r1\"}"
+    },
+    {
+      "action": "contract",
+      "rank": 1,
+      "stdout": "{\"claimed_at\": \"2026-10-15T16:59:35+00:00\", \"contract\": {\"adoption\": {\"approved_on\": \"2026-10-15\", \"authority\": \"standing_user_delegation\", \"contract_sha256\": \"16113f8c1d77c200771d0e484fd20bc7efeb3288a21df31caf53da5c465bd586\", \"evidence\": [\"https://github.com/mycelium0/mycelium/blob/4b53dc7629ca3bc88bf5467db481ad2af7130711/scripts/update_unit_drift_drill.sh\", \"https://github.com/mycelium0/mycelium/blob/4b53dc7629ca3bc88bf5467db481ad2af7130711/control/lib/nb_update_apply.sh\", \"https://github.com/mycelium0/mycelium/blob/4b53dc7629ca3bc88bf5467db481ad2af7130711/tests/conformance/node_update_artifact_root.sh\", \"https://github.com/systemd/systemd-stable/blob/v255.4/src/systemctl/systemctl-show.c\", \"https://github.com/systemd/systemd-stable/blob/v255.4/man/systemd.service.xml\", \"properties/calibration/2026-10-15-autonomous-mycelium-script-slice/systemd-execstart-semicolon-replay.json\"], \"policy_version\": \"autonomous-contracts-v1\", \"rationale\": \"Systemd 255.4 source and a harmless live user-manager unit show that a literal semicolon in argv is serialized without escaping. The pinned drift drill capture stops at that semicolon and omits a later security flag. Adopt this narrow diagnostic-preservation guarantee under the standing autonomous policy. The pinned updater separately rejects --insecure-no-verify under systemd or non-TTY execution, so this does not claim a reachable authentication bypass.\", \"review\": {\"author\": \"codex-contract-author\", \"reviewer\": \"codex-adversarial-self-review\", \"same_model\": true}, \"source_file\": \"scripts/update_unit_drift_drill.sh\", \"source_pin\": \"4b53dc7629ca3bc88bf5467db481ad2af7130711\", \"source_sha256\": \"4e28f0bd727ba842fed7840bdd163fbef32dc911f7c8e6bea409895ced4c6493\", \"source_url\": \"https://github.com/mycelium0/mycelium\", \"status\": \"approved\"}, \"declared_domain\": \"systemd 255.4 systemctl-show output for a single ExecStart argv field, with no embedded NUL or newline in the serialized line, a literal semicolon inside an argv element before --insecure-no-verify, and the standard trailing \\\" ; ignore_errors=\\\" property separator. The scope is flag preservation by the pinned sed capture and downstream check; it says nothing about execution authorization.\", \"guarantee\": \"For the pinned update-unit drift drill, when systemd 255.4 serializes one effective ExecStart whose argv contains --insecure-no-verify after a literal semicolon argument, the argv extraction must preserve the flag so the downstream provenance-bypass check can report it.\", \"input_source\": \"The effective ExecStart argv serialized by systemctl show for an operator-configured systemd unit; the bytes are configuration-derived diagnostics and feed the drift drill security checks.\", \"provenance\": \"agent_derived\", \"schema_version\": \"1\", \"site\": \"mycelium0/mycelium@4b53dc7629ca3bc88bf5467db481ad2af7130711:scripts/update_unit_drift_drill.sh:184:3\", \"trust\": \"config\"}, \"corpus\": \"mycelium\", \"created_at\": \"2026-10-15T16:00:00+00:00\", \"ledger_state_at_claim\": {\"conversion_ledger_sha256\": \"ad715ef9b3e5be15ee88c5a790d1ebf35dfc47f5adb460a5409a94239c1deb24\", \"gate_decision_sha256\": \"ecdcb89356b42b10c3fe25dc6ebcbfc0c74b041da6cf0c7b099275d521a8b682\", \"n\": 11, \"now_iso\": \"2026-10-15T16:59:35+00:00\", \"repository_url\": \"https://github.com/mycelium0/mycelium\", \"source_pin\": \"4b53dc7629ca3bc88bf5467db481ad2af7130711\"}, \"pin\": \"4b53dc7629ca3bc88bf5467db481ad2af7130711\", \"provenance\": \"agent_derived\", \"rank\": 1, \"reasons\": [], \"site\": \"mycelium0/mycelium@4b53dc7629ca3bc88bf5467db481ad2af7130711:scripts/update_unit_drift_drill.sh:184:3\", \"status\": \"contracted\", \"wave_generation_at_claim\": 0, \"wave_id\": \"mycelium-diagnostic-p3-transition-20261015-r1\"}"
+    },
+    {
+      "action": "claim",
+      "rank": 11,
+      "stdout": "{\"claimed_at\": \"2026-10-15T16:59:35+00:00\", \"corpus\": \"mycelium\", \"created_at\": \"2026-10-15T16:00:00+00:00\", \"ledger_state_at_claim\": {\"conversion_ledger_sha256\": \"ad715ef9b3e5be15ee88c5a790d1ebf35dfc47f5adb460a5409a94239c1deb24\", \"gate_decision_sha256\": \"ecdcb89356b42b10c3fe25dc6ebcbfc0c74b041da6cf0c7b099275d521a8b682\", \"n\": 11, \"now_iso\": \"2026-10-15T16:59:35+00:00\", \"repository_url\": \"https://github.com/mycelium0/mycelium\", \"source_pin\": \"4b53dc7629ca3bc88bf5467db481ad2af7130711\"}, \"pin\": \"4b53dc7629ca3bc88bf5467db481ad2af7130711\", \"rank\": 11, \"reasons\": [], \"site\": \"mycelium0/mycelium@4b53dc7629ca3bc88bf5467db481ad2af7130711:scripts/verify-release.sh:60:SHA256SUMS preflight\", \"status\": \"claimed\", \"wave_generation_at_claim\": 0, \"wave_id\": \"mycelium-diagnostic-p3-transition-20261015-r1\"}"
+    },
+    {
+      "action": "contract",
+      "rank": 11,
+      "stdout": "{\"claimed_at\": \"2026-10-15T16:59:35+00:00\", \"contract\": {\"adoption\": {\"approved_on\": \"2026-10-15\", \"authority\": \"standing_user_delegation\", \"contract_sha256\": \"e2cd96b8264cac527e48dc0b24f6e3f6fd169a98dd5508310e83e0ff6a9585be\", \"evidence\": [\"https://github.com/mycelium0/mycelium/blob/4b53dc7629ca3bc88bf5467db481ad2af7130711/scripts/verify-release.sh\", \"https://github.com/mycelium0/mycelium/blob/4b53dc7629ca3bc88bf5467db481ad2af7130711/README.md\", \"https://github.com/mycelium0/mycelium/blob/4b53dc7629ca3bc88bf5467db481ad2af7130711/docs/RELEASING.md\", \"The pinned script documents empty/truncated checksum responses and requires a nonempty well-formed SHA256 record before invoking the platform checksum utility; README and release docs distinguish integrity-only checking from authenticity.\"], \"policy_version\": \"autonomous-contracts-v1\", \"rationale\": \"A malformed HTTP response or empty checksum file must not be accepted as an integrity result merely because an installed checksum utility ignores malformed/empty input. The source preflight is the shared fail-closed guard; this contract makes no authenticity claim.\", \"review\": {\"author\": \"codex-contract-author\", \"reviewer\": \"codex-independent-review-pass\", \"same_model\": true}, \"source_file\": \"scripts/verify-release.sh\", \"source_pin\": \"4b53dc7629ca3bc88bf5467db481ad2af7130711\", \"source_sha256\": \"df394a764f2ebd906ffbc9d6bafa58af896b39e895e503a271da3baf710e2b58\", \"source_url\": \"https://github.com/mycelium0/mycelium\", \"status\": \"approved\"}, \"declared_domain\": \"One ASCII LF-delimited checksum or error-response line, excluding NUL; the solver property covers every line of length 0..63, with no additional content assumptions. The product gate exercises the pinned verifier with an empty file, a longer checksum-free response, and a well-formed checksum record. The guarantee is only that no source-pattern match occurs without the required 64-hex prefix and delimiters; the solver does not prove authenticity or the external checksum utility's behavior.\", \"guarantee\": \"When a downloaded SHA256SUMS file has no line beginning with exactly 64 ASCII hexadecimal digits followed by POSIX whitespace, an optional '*' marker, and a non-whitespace filename character, verify-release.sh fails before calling the platform checksum command and cannot print an integrity success result. This is a preflight guarantee only; it does not establish release authenticity.\", \"input_source\": \"The SHA256SUMS text file supplied alongside a downloaded release artifact; until signature verification succeeds, its bytes are untrusted network input. The helper also documents integrity-only mode while the maintainer signing key is unavailable.\", \"provenance\": \"agent_derived\", \"schema_version\": \"1\", \"site\": \"mycelium0/mycelium@4b53dc7629ca3bc88bf5467db481ad2af7130711:scripts/verify-release.sh:60:SHA256SUMS preflight\", \"trust\": \"untrusted-input\"}, \"corpus\": \"mycelium\", \"created_at\": \"2026-10-15T16:00:00+00:00\", \"ledger_state_at_claim\": {\"conversion_ledger_sha256\": \"ad715ef9b3e5be15ee88c5a790d1ebf35dfc47f5adb460a5409a94239c1deb24\", \"gate_decision_sha256\": \"ecdcb89356b42b10c3fe25dc6ebcbfc0c74b041da6cf0c7b099275d521a8b682\", \"n\": 11, \"now_iso\": \"2026-10-15T16:59:35+00:00\", \"repository_url\": \"https://github.com/mycelium0/mycelium\", \"source_pin\": \"4b53dc7629ca3bc88bf5467db481ad2af7130711\"}, \"pin\": \"4b53dc7629ca3bc88bf5467db481ad2af7130711\", \"provenance\": \"agent_derived\", \"rank\": 11, \"reasons\": [], \"site\": \"mycelium0/mycelium@4b53dc7629ca3bc88bf5467db481ad2af7130711:scripts/verify-release.sh:60:SHA256SUMS preflight\", \"status\": \"contracted\", \"wave_generation_at_claim\": 0, \"wave_id\": \"mycelium-diagnostic-p3-transition-20261015-r1\"}"
+    },
+    {
+      "action": "skip",
+      "rank": 2,
+      "reason": "out_of_scope",
+      "stdout": "{\"corpus\": \"mycelium\", \"created_at\": \"2026-10-15T16:00:00+00:00\", \"pin\": \"4b53dc7629ca3bc88bf5467db481ad2af7130711\", \"rank\": 2, \"reasons\": [{\"note\": \"Status-only local ss listener port parse; no trust boundary.\", \"reason\": \"out_of_scope\"}], \"site\": \"mycelium0/mycelium@4b53dc7629ca3bc88bf5467db481ad2af7130711:scripts/node-bootstrap.sh:1083:60\", \"status\": \"skipped_out_of_scope\"}"
+    },
+    {
+      "action": "skip",
+      "rank": 3,
+      "reason": "out_of_scope",
+      "stdout": "{\"corpus\": \"mycelium\", \"created_at\": \"2026-10-15T16:00:00+00:00\", \"pin\": \"4b53dc7629ca3bc88bf5467db481ad2af7130711\", \"rank\": 3, \"reasons\": [{\"note\": \"Duplicate UDP status-only listener port parse; no trust boundary.\", \"reason\": \"out_of_scope\"}], \"site\": \"mycelium0/mycelium@4b53dc7629ca3bc88bf5467db481ad2af7130711:scripts/node-bootstrap.sh:1084:60\", \"status\": \"skipped_out_of_scope\"}"
+    },
+    {
+      "action": "skip",
+      "rank": 4,
+      "reason": "duplicate",
+      "stdout": "{\"corpus\": \"mycelium\", \"created_at\": \"2026-10-15T16:00:00+00:00\", \"pin\": \"4b53dc7629ca3bc88bf5467db481ad2af7130711\", \"rank\": 4, \"reasons\": [{\"note\": \"Duplicate symptom of rank 1; captured argv truncation already reviewed.\", \"reason\": \"duplicate\"}], \"site\": \"mycelium0/mycelium@4b53dc7629ca3bc88bf5467db481ad2af7130711:scripts/update_unit_drift_drill.sh:236:35\", \"status\": \"skipped_duplicate\"}"
+    },
+    {
+      "action": "skip",
+      "rank": 5,
+      "reason": "out_of_scope",
+      "stdout": "{\"corpus\": \"mycelium\", \"created_at\": \"2026-10-15T16:00:00+00:00\", \"pin\": \"4b53dc7629ca3bc88bf5467db481ad2af7130711\", \"rank\": 5, \"reasons\": [{\"note\": \"Local version-banner display only.\", \"reason\": \"out_of_scope\"}], \"site\": \"mycelium0/mycelium@4b53dc7629ca3bc88bf5467db481ad2af7130711:scripts/fungi:101:40\", \"status\": \"skipped_out_of_scope\"}"
+    },
+    {
+      "action": "skip",
+      "rank": 6,
+      "reason": "out_of_scope",
+      "stdout": "{\"corpus\": \"mycelium\", \"created_at\": \"2026-10-15T16:00:00+00:00\", \"pin\": \"4b53dc7629ca3bc88bf5467db481ad2af7130711\", \"rank\": 6, \"reasons\": [{\"note\": \"Duplicate local version-banner display.\", \"reason\": \"out_of_scope\"}], \"site\": \"mycelium0/mycelium@4b53dc7629ca3bc88bf5467db481ad2af7130711:scripts/fungi:84:99\", \"status\": \"skipped_out_of_scope\"}"
+    },
+    {
+      "action": "skip",
+      "rank": 7,
+      "reason": "out_of_scope",
+      "stdout": "{\"corpus\": \"mycelium\", \"created_at\": \"2026-10-15T16:00:00+00:00\", \"pin\": \"4b53dc7629ca3bc88bf5467db481ad2af7130711\", \"rank\": 7, \"reasons\": [{\"note\": \"Local version-banner display only.\", \"reason\": \"out_of_scope\"}], \"site\": \"mycelium0/mycelium@4b53dc7629ca3bc88bf5467db481ad2af7130711:scripts/fungi:85:87\", \"status\": \"skipped_out_of_scope\"}"
+    },
+    {
+      "action": "skip",
+      "rank": 8,
+      "reason": "out_of_scope",
+      "stdout": "{\"corpus\": \"mycelium\", \"created_at\": \"2026-10-15T16:00:00+00:00\", \"pin\": \"4b53dc7629ca3bc88bf5467db481ad2af7130711\", \"rank\": 8, \"reasons\": [{\"note\": \"Filters inactive systemd comment lines before diff.\", \"reason\": \"out_of_scope\"}], \"site\": \"mycelium0/mycelium@4b53dc7629ca3bc88bf5467db481ad2af7130711:scripts/update_unit_drift_drill.sh:120:15\", \"status\": \"skipped_out_of_scope\"}"
+    },
+    {
+      "action": "skip",
+      "rank": 9,
+      "reason": "out_of_scope",
+      "stdout": "{\"corpus\": \"mycelium\", \"created_at\": \"2026-10-15T16:00:00+00:00\", \"pin\": \"4b53dc7629ca3bc88bf5467db481ad2af7130711\", \"rank\": 9, \"reasons\": [{\"note\": \"Whitespace normalization does not determine command or flag enforcement.\", \"reason\": \"out_of_scope\"}], \"site\": \"mycelium0/mycelium@4b53dc7629ca3bc88bf5467db481ad2af7130711:scripts/update_unit_drift_drill.sh:120:60\", \"status\": \"skipped_out_of_scope\"}"
+    },
+    {
+      "action": "skip",
+      "rank": 10,
+      "reason": "out_of_scope",
+      "stdout": "{\"corpus\": \"mycelium\", \"created_at\": \"2026-10-15T16:00:00+00:00\", \"pin\": \"4b53dc7629ca3bc88bf5467db481ad2af7130711\", \"rank\": 10, \"reasons\": [{\"note\": \"Trailing-space normalization is separate from rank 1 and has no standalone guarantee.\", \"reason\": \"out_of_scope\"}], \"site\": \"mycelium0/mycelium@4b53dc7629ca3bc88bf5467db481ad2af7130711:scripts/update_unit_drift_drill.sh:184:45\", \"status\": \"skipped_out_of_scope\"}"
+    },
+    {
+      "action": "skip",
+      "rank": 12,
+      "reason": "out_of_scope",
+      "stdout": "{\"corpus\": \"mycelium\", \"created_at\": \"2026-10-15T16:00:00+00:00\", \"pin\": \"4b53dc7629ca3bc88bf5467db481ad2af7130711\", \"rank\": 12, \"reasons\": [{\"note\": \"Documentation help extraction only.\", \"reason\": \"out_of_scope\"}], \"site\": \"mycelium0/mycelium@4b53dc7629ca3bc88bf5467db481ad2af7130711:scripts/fungi:42:1\", \"status\": \"skipped_out_of_scope\"}"
+    },
+    {
+      "action": "skip",
+      "rank": 13,
+      "reason": "out_of_scope",
+      "stdout": "{\"corpus\": \"mycelium\", \"created_at\": \"2026-10-15T16:00:00+00:00\", \"pin\": \"4b53dc7629ca3bc88bf5467db481ad2af7130711\", \"rank\": 13, \"reasons\": [{\"note\": \"Read-only listener status presentation only.\", \"reason\": \"out_of_scope\"}], \"site\": \"mycelium0/mycelium@4b53dc7629ca3bc88bf5467db481ad2af7130711:scripts/fungi:77:51\", \"status\": \"skipped_out_of_scope\"}"
+    },
+    {
+      "action": "skip",
+      "rank": 14,
+      "reason": "out_of_scope",
+      "stdout": "{\"corpus\": \"mycelium\", \"created_at\": \"2026-10-15T16:00:00+00:00\", \"pin\": \"4b53dc7629ca3bc88bf5467db481ad2af7130711\", \"rank\": 14, \"reasons\": [{\"note\": \"Removes empty configuration records; no standalone security guarantee.\", \"reason\": \"out_of_scope\"}], \"site\": \"mycelium0/mycelium@4b53dc7629ca3bc88bf5467db481ad2af7130711:scripts/update_unit_drift_drill.sh:120:86\", \"status\": \"skipped_out_of_scope\"}"
+    },
+    {
+      "action": "skip",
+      "rank": 15,
+      "reason": "out_of_scope",
+      "stdout": "{\"corpus\": \"mycelium\", \"created_at\": \"2026-10-15T16:00:00+00:00\", \"pin\": \"4b53dc7629ca3bc88bf5467db481ad2af7130711\", \"rank\": 15, \"reasons\": [{\"note\": \"Removes empty effective ExecStart display rows; no standalone guarantee.\", \"reason\": \"out_of_scope\"}], \"site\": \"mycelium0/mycelium@4b53dc7629ca3bc88bf5467db481ad2af7130711:scripts/update_unit_drift_drill.sh:184:71\", \"status\": \"skipped_out_of_scope\"}"
+    }
+  ],
+  "wave_id": "mycelium-diagnostic-p3-transition-20261015-r1"
+}

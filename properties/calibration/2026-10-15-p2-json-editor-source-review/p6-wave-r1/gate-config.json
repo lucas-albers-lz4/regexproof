@@ -1,0 +1,24 @@
+{
+  "command": [
+    "/home/lalbers/gitroot/regexproof/.venv/bin/python",
+    "scripts/json-editor-enum-escape-regression-gate.py",
+    "--source-root",
+    "/tmp/regexproof-pinned-sources/json-editor-b31ddabecf4ed3209d37a2f5b29956120cd8f9ce",
+    "--output",
+    "/home/lalbers/gitroot/regexproof/properties/calibration/2026-10-15-p2-json-editor-source-review/p6-wave-r1/product-gate.json"
+  ],
+  "evidence": {
+    "differential_case_counts": {
+      "JE-json-editor-enum-string-html-text-codepoint-image": 1116985
+    },
+    "product_engine_replay_question_ids": [
+      "JE-json-editor-enum-string-html-text-codepoint-image"
+    ]
+  },
+  "gate_id": "json-editor-enum-html-text-escape",
+  "question_ids": [
+    "JE-json-editor-enum-string-html-text-codepoint-image"
+  ],
+  "schema_version": "1",
+  "timeout_seconds": 300
+}

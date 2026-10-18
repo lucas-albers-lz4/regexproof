@@ -1,0 +1,7 @@
+{
+  "schema_version": "1",
+  "cohort_id": "2026-09-12-calibration-20-r2",
+  "repository_url": "https://github.com/greydragon888/real-router",
+  "source_pin": "55aa7ef43a9c129beba90823cd8a4db10bb01211",
+  "purpose": "One-item source-bound review and queue-to-proof lifecycle calibration; not a sampled allocation or P7 15/5 wave."
+}

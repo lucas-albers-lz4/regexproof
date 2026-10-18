@@ -1,0 +1,211 @@
+{
+  "artifact_kind": "p2-gitlink-source-sites",
+  "cohort_id": "2026-09-12-calibration-20-r2",
+  "dialect_family": "ecma",
+  "extractor": "scripts/dogfood-singleton-analysis.py:extract_repo(include_hidden=True)",
+  "extractor_sources": {
+    "regexproof/batch/manifests.py": "bfb491ea5779f8f289c101477e9e078f3499fd5f4a0462b6eb81cf61c7541dbe",
+    "regexproof/extractors/go_regexp.py": "2c748eac922170b230cb716a6e4c85f64cf5e9a68dfafe63c2823f7066eb22da",
+    "regexproof/extractors/js_babel.py": "523b1bff7ea53d1a31c068a624a53133806604d0f2474f3f11e040afbfaa5d02",
+    "regexproof/extractors/python_ast.py": "87677e00a0291aa6735c637be2467dbb4fae03f6610059713916ba3a0c076379",
+    "regexproof/extractors/record.py": "4ed83d72c6b1542669976d340754e692c55d20e8037edf2c06869addd4333866",
+    "regexproof/extractors/shell_posix.py": "5af6faa911c85f895ddfe371cfd4fb15235f1ee179af4612ad9b113973927613",
+    "regexproof/mine/p2_source_inventory.py": "c781e2c1e0127253fe5dc91fc41a41e95bd2c8984b58793d5841b23617a6d8a3",
+    "regexproof/regex_id.py": "2843b134bf58d1ce4005f4db16e8dffb77462a27c2d494056510699aeae21fd5",
+    "regexproof/schemas/__init__.py": "a899f3324f438fc2c12092f77bf06b555e81429d4066b8e5613fc927316f41fc",
+    "scripts/dogfood-singleton-analysis.py": "788c634e480c2a6e2da488e7e97508654de10a003d0bfd713159adf5c913c0d9",
+    "scripts/freeze-p2-source-inventory.py": "4318264d0855a76ef554e9c3451eda9bc582f257cfe33d9275bd283ec360a943"
+  },
+  "generator": "scripts/freeze-p2-gitlink-inventory.py",
+  "generator_sha256": "3b4393d7c002879c554bb33544922d7f012f67a7ad41f026982fbf4d4cacc74e",
+  "gitlink_audit_sha256": "b966301b77bdde68b5f180abf7dc7dc682680d9c25d6b4e5b301af7ced537b89",
+  "gitlinks": [
+    {
+      "commit": "1e2ba9c2baa8dd41a8459f8257ab2578470b0f77",
+      "nested_gitlinks_excluded": [
+        {
+          "commit_oid": "28fbe27c64c226e67c921c45042219945baf3c08",
+          "path": "claw-repos/bookingclaw.org"
+        },
+        {
+          "commit_oid": "02363764415f9943fc482ffd6a2b757a9328d438",
+          "path": "claw-repos/briefingclaw.com"
+        },
+        {
+          "commit_oid": "0008ee5d4df05ca36bb4a498bed6f5f1f0ff97f7",
+          "path": "claw-repos/emailclaw.org"
+        },
+        {
+          "commit_oid": "b52f757af4039204682b0536f66f01a8884dac4a",
+          "path": "claw-repos/familyclaw.org"
+        },
+        {
+          "commit_oid": "e335013280281a17e82c55e3820a6b0ae79e8238",
+          "path": "claw-repos/friendclaw.xyz"
+        },
+        {
+          "commit_oid": "444d9ced56aac3baa984c3fc1f9eb0c9795bd030",
+          "path": "claw-repos/homeclaw.org"
+        },
+        {
+          "commit_oid": "363b32285de03ad59b455427d90dafe4275d3167",
+          "path": "claw-repos/investclaw.ai"
+        },
+        {
+          "commit_oid": "7882d4ba040d262c55a69fa39935c09cfd441ea2",
+          "path": "claw-repos/officeclaw.ai"
+        },
+        {
+          "commit_oid": "7ebf96e1f87b2384b022c16710866fa0b09f8707",
+          "path": "claw-repos/officeclaw.org"
+        },
+        {
+          "commit_oid": "b73e8a2883be71e1df14f9872f33a0d27ccdb144",
+          "path": "everclaw"
+        },
+        {
+          "commit_oid": "603157608c740e365f705488a33bec7080843525",
+          "path": "everclaw-fork"
+        },
+        {
+          "commit_oid": "f161a75ab9ce3460e85ccbbf3042b0330972979a",
+          "path": "everclaw-template"
+        },
+        {
+          "commit_oid": "798f7285dbd2b77be772326f53f9853b6730acb0",
+          "path": "installopenclaw.xyz"
+        },
+        {
+          "commit_oid": "e87e752589ad460c17d434ff56bcac4762a117c3",
+          "path": "skills/clawdstrike"
+        },
+        {
+          "commit_oid": "a6f294ee0ba5aab91d8b0f5b798dda160a8a0279",
+          "path": "skills/everclaw"
+        }
+      ],
+      "oversized_files": 0,
+      "path": "archive/misc/everclaw",
+      "repository_url": "https://github.com/profbernardoj/morpheus-agent",
+      "scanned_files": 447,
+      "site_count": 4184,
+      "status": "incomplete",
+      "tree_oid": "9821d34ae066ce3acbf3f37b7fc35a769feba149"
+    },
+    {
+      "commit": "798f7285dbd2b77be772326f53f9853b6730acb0",
+      "nested_gitlinks_excluded": [],
+      "oversized_files": 0,
+      "path": "archive/misc/installopenclaw.xyz",
+      "repository_url": "https://github.com/profbernardoj/installopenclaw.xyz",
+      "scanned_files": 0,
+      "site_count": 0,
+      "status": "complete",
+      "tree_oid": "391e600a30f5a0bd531e4322eec1916ffcbebd25"
+    },
+    {
+      "commit": "e87e752589ad460c17d434ff56bcac4762a117c3",
+      "nested_gitlinks_excluded": [],
+      "oversized_files": 0,
+      "path": "skills/clawdstrike",
+      "repository_url": "https://github.com/cantinaxyz/clawdstrike-skill",
+      "scanned_files": 0,
+      "site_count": 0,
+      "status": "complete",
+      "tree_oid": "fb8eea013ee2227269e51c6511b7211f80760246"
+    },
+    {
+      "commit": "a6f294ee0ba5aab91d8b0f5b798dda160a8a0279",
+      "nested_gitlinks_excluded": [
+        {
+          "commit_oid": "28fbe27c64c226e67c921c45042219945baf3c08",
+          "path": "claw-repos/bookingclaw.org"
+        },
+        {
+          "commit_oid": "02363764415f9943fc482ffd6a2b757a9328d438",
+          "path": "claw-repos/briefingclaw.com"
+        },
+        {
+          "commit_oid": "0008ee5d4df05ca36bb4a498bed6f5f1f0ff97f7",
+          "path": "claw-repos/emailclaw.org"
+        },
+        {
+          "commit_oid": "b52f757af4039204682b0536f66f01a8884dac4a",
+          "path": "claw-repos/familyclaw.org"
+        },
+        {
+          "commit_oid": "e335013280281a17e82c55e3820a6b0ae79e8238",
+          "path": "claw-repos/friendclaw.xyz"
+        },
+        {
+          "commit_oid": "444d9ced56aac3baa984c3fc1f9eb0c9795bd030",
+          "path": "claw-repos/homeclaw.org"
+        },
+        {
+          "commit_oid": "363b32285de03ad59b455427d90dafe4275d3167",
+          "path": "claw-repos/investclaw.ai"
+        },
+        {
+          "commit_oid": "7882d4ba040d262c55a69fa39935c09cfd441ea2",
+          "path": "claw-repos/officeclaw.ai"
+        },
+        {
+          "commit_oid": "7ebf96e1f87b2384b022c16710866fa0b09f8707",
+          "path": "claw-repos/officeclaw.org"
+        },
+        {
+          "commit_oid": "1adaf3bbd736d5cd63768769816e205f216ed322",
+          "path": "everclaw"
+        },
+        {
+          "commit_oid": "603157608c740e365f705488a33bec7080843525",
+          "path": "everclaw-fork"
+        },
+        {
+          "commit_oid": "f161a75ab9ce3460e85ccbbf3042b0330972979a",
+          "path": "everclaw-template"
+        },
+        {
+          "commit_oid": "798f7285dbd2b77be772326f53f9853b6730acb0",
+          "path": "installopenclaw.xyz"
+        },
+        {
+          "commit_oid": "e87e752589ad460c17d434ff56bcac4762a117c3",
+          "path": "skills/clawdstrike"
+        },
+        {
+          "commit_oid": "1adaf3bbd736d5cd63768769816e205f216ed322",
+          "path": "skills/everclaw"
+        }
+      ],
+      "oversized_files": 0,
+      "path": "skills/everclaw",
+      "repository_url": "https://github.com/profbernardoj/morpheus-agent",
+      "scanned_files": 439,
+      "site_count": 4177,
+      "status": "incomplete",
+      "tree_oid": "3907e383a58cd32d9bcc8243e630cbc1c956a663"
+    }
+  ],
+  "interpretation": "Unreviewed raw source sites from exact verified Gitlink trees only; not boundaries, contracts, product questions, or proof outcomes.",
+  "manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+  "parent_inventory_sha256": "ded55abeae141b76a4511b08c2c989db69f7b343985f99df42ae08c039722583",
+  "root_pin": "7ea3b445ee7d2ef8004d5ee77dab7544e1b8ef88",
+  "root_repository": "profbernardoj/everclaw-community-branches",
+  "root_tree_oid": "7c6b5fcd4298af6bb6f87d8902e3c310ec89dd1a",
+  "root_url": "https://github.com/profbernardoj/everclaw-community-branches",
+  "schema_version": "1",
+  "summary": {
+    "contracts": 0,
+    "questions": 0,
+    "reviewed_sites": 0,
+    "source_sites": 8361,
+    "source_sites_ndjson_sha256": "4be48f9a0e2c92785e7a54a5529f4b3517f9eda72e169ba26a12c2414efc8341",
+    "unresolved_gitlinks": 2,
+    "verified_gitlinks_scanned": 4
+  },
+  "unresolved_gitlinks": [
+    "archive/misc/everclaw-fork",
+    "archive/misc/everclaw-template"
+  ]
+}

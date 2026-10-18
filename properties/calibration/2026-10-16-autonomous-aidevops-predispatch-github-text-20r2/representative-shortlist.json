@@ -1,0 +1,15 @@
+{
+  "cohort_id": "2026-09-12-calibration-20-r2",
+  "keep": [
+    {
+      "call_kind": "search",
+      "file": ".agents/scripts/pre-dispatch-validator-helper.sh",
+      "pattern": "detector=[a-z0-9_-]+",
+      "regex_id": "70a9a1372cba48766f412858a95898fd",
+      "site": ".agents/scripts/pre-dispatch-validator-helper.sh:1881:column-47"
+    }
+  ],
+  "repository_url": "https://github.com/marcusquinn/aidevops",
+  "schema_version": "1",
+  "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1"
+}

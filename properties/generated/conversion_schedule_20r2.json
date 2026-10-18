@@ -1,0 +1,73 @@
+{
+  "bucket_registry_digest": "dfa210febe66dc3e7634a6e46c58666cb8bc0eabd1e1cc460452771eea4566ea",
+  "cache_interplay_note": "GO-cluster utilization accelerates #550 lease pressure \u2014 leased clone count + byte caps apply; there is NO immortal lease set. Each conversion wave must fit within the current cache budget and release leases on close-out.",
+  "capacity_reservation": {
+    "novel_exploration_share": 0.2,
+    "productive_share": 0.7,
+    "unbiased_slice_share": 0.1
+  },
+  "cohort_scope": {
+    "cohort_id": "2026-09-12-calibration-20-r2",
+    "manifest_path": "properties/calibration/2026-09-12-calibration-20-r2/manifest.json",
+    "manifest_sha256": "cfcfeaa19a37e8704adf84d8979e71a9887ced3a71030fc3572d96c1a8270a78"
+  },
+  "generated_at": null,
+  "registered_bucket_count": 5,
+  "registered_bucket_rejections": [
+    {
+      "bucket": "ecma-plugins",
+      "cluster": "aidevops",
+      "reason": "dialect-family-missing-or-mismatched"
+    },
+    {
+      "bucket": "git-crlf-smuggling",
+      "cluster": "malcontent",
+      "reason": "dialect-family-missing-or-mismatched"
+    }
+  ],
+  "schema_version": "1",
+  "selections": [
+    {
+      "cluster": "AutoAR",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "aidevops",
+      "mine_re_ranked": false,
+      "selected_bucket": "pre-dispatch-github-text",
+      "selection_basis": "named-next-unused",
+      "used_buckets": [
+        "shell-hook-guards"
+      ]
+    },
+    {
+      "cluster": "malcontent",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "real-router",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": [
+        "navigation-param-control-calibration"
+      ]
+    },
+    {
+      "cluster": "xibo-cms",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    }
+  ],
+  "wont_file_classes": {
+    "third_party": 4
+  }
+}

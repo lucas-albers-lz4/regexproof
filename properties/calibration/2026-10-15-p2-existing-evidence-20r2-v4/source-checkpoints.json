@@ -1,0 +1,535 @@
+{
+  "artifact_kind": "p2-retrospective-evidence-source-manifest",
+  "checkpoint_root": "properties/calibration",
+  "checkpoints": [
+    {
+      "attempts": 6,
+      "excluded_questions": [],
+      "matched_questions": [
+        {
+          "pin": "efcf8e4c0087def553a737dc1c4eebda5d8a90cd",
+          "question_id": "FC-forge-cli-url-password-no-space",
+          "repo_id": "Agenticstiger/forge-cli",
+          "site": "Agenticstiger/forge-cli@efcf8e4c0087def553a737dc1c4eebda5d8a90cd:fluid_build/observability/secret_redactor.py:151:_URL_USERINFO_RE",
+          "source_inventory_match": {
+            "dialect_family": "py_re",
+            "git_blob_oid": "77fab5fa5ed9c5b70225754086edb30952d1a83d",
+            "pattern": "([A-Za-z][A-Za-z0-9+.\\-]{0,40}://[^/?#@:\\s]{0,256}:)[^/?#@\\s]{1,4096}(@)",
+            "regex_id": "36193d66c878503940113f7a49cd6637",
+            "source_file": "fluid_build/observability/secret_redactor.py",
+            "source_file_sha256": "dc30bab3b9e729cdecec5369145a8717a7d42b830edeca1d3dae9005e51ddade",
+            "source_site_id": "d126bc5d33a1f47a7f4e5ec6dcfb9eba3df49228a2515ace7598ade8b20296d5"
+          },
+          "status": "unsat"
+        },
+        {
+          "pin": "efcf8e4c0087def553a737dc1c4eebda5d8a90cd",
+          "question_id": "FC-forge-cli-dmm-value-no-semicolon",
+          "repo_id": "Agenticstiger/forge-cli",
+          "site": "Agenticstiger/forge-cli@efcf8e4c0087def553a737dc1c4eebda5d8a90cd:fluid_build/providers/datamesh_manager/datamesh_manager.py:88:_SECRET_ERROR_PATTERNS",
+          "source_inventory_match": {
+            "dialect_family": "py_re",
+            "git_blob_oid": "7aeb865be682952f0f52c8bebb4da9802459fb28",
+            "pattern": "(?i)(x-api-key|api[_-]?key|password|token|secret)([\\\"'\\s:=]+)([^\\\"'\\s,;}]+)",
+            "regex_id": "42945370897f9b7baa15eb18ffe9e11a",
+            "source_file": "fluid_build/providers/datamesh_manager/datamesh_manager.py",
+            "source_file_sha256": "cbbafc4ca8bc6b43c8a6a87d22c942c22cae8f2af1e73862f02c17b68ae357cb",
+            "source_site_id": "4c9e23f0bbadd71e48590580ad2a6b74efe4ec7f20f6dc6e558c1be981d1d7c5"
+          },
+          "status": "unsat"
+        },
+        {
+          "pin": "efcf8e4c0087def553a737dc1c4eebda5d8a90cd",
+          "question_id": "FC-forge-cli-llm-userinfo-no-at",
+          "repo_id": "Agenticstiger/forge-cli",
+          "site": "Agenticstiger/forge-cli@efcf8e4c0087def553a737dc1c4eebda5d8a90cd:fluid_build/llm/providers.py:287:LlmConfig.redacted_endpoint",
+          "source_inventory_match": {
+            "dialect_family": "py_re",
+            "git_blob_oid": "53e3817ade4fb446ed5ff054cd07c079999c9998",
+            "pattern": "(https?://)([^@/]+)@",
+            "regex_id": "7d48eb9a8625fc88a624f044dbc3669c",
+            "source_file": "fluid_build/llm/providers.py",
+            "source_file_sha256": "3bfda921604d22c2811393f7798b8d743f67beeb2122520cfc04cd3502ceeac8",
+            "source_site_id": "0641058e26026d0062adfc18db5f1e343f28287c0a359d607cd4064c4bd85786"
+          },
+          "status": "unsat"
+        },
+        {
+          "pin": "efcf8e4c0087def553a737dc1c4eebda5d8a90cd",
+          "question_id": "FC-forge-cli-jaas-escaped-quote-covered",
+          "repo_id": "Agenticstiger/forge-cli",
+          "site": "Agenticstiger/forge-cli@efcf8e4c0087def553a737dc1c4eebda5d8a90cd:fluid_build/observability/secret_redactor.py:218:_JAAS_CONFIG_RE",
+          "source_inventory_match": {
+            "dialect_family": "py_re",
+            "git_blob_oid": "77fab5fa5ed9c5b70225754086edb30952d1a83d",
+            "pattern": "(?i)([\\w.]{,64}sasl\\.jaas\\.config\"?\\s{,8}[:=]\\s{,8}\")((?:[^\"\\\\]|\\\\.){,2048})(\")",
+            "regex_id": "ac27086ef42ea1bd9131a19adbb7f311",
+            "source_file": "fluid_build/observability/secret_redactor.py",
+            "source_file_sha256": "dc30bab3b9e729cdecec5369145a8717a7d42b830edeca1d3dae9005e51ddade",
+            "source_site_id": "5e7338e627c4452d51c5d2789bc0e7757c4250c2f5e31e8bd254f95bd1de5ba7"
+          },
+          "status": "unsat"
+        },
+        {
+          "pin": "efcf8e4c0087def553a737dc1c4eebda5d8a90cd",
+          "question_id": "FC-forge-cli-sensitive-env-key-covered",
+          "repo_id": "Agenticstiger/forge-cli",
+          "site": "Agenticstiger/forge-cli@efcf8e4c0087def553a737dc1c4eebda5d8a90cd:fluid_build/build_runners/base.py:54:SENSITIVE_ENV_KEY_RE",
+          "source_inventory_match": {
+            "dialect_family": "py_re",
+            "git_blob_oid": "2847122a7ec473bcc9b324cd3b3903d08c6cc7e4",
+            "pattern": "(?i)(password|passphrase|secret|token|api[_-]?key|private[_-]?key|credential|auth)",
+            "regex_id": "eb40ddf2fa8e51f662e971c28a7787c3",
+            "source_file": "fluid_build/build_runners/base.py",
+            "source_file_sha256": "5e1274001ae1f3a3d41f8c59c059e5d991db221c8c1fd328a471c7f917207842",
+            "source_site_id": "840d092b215b33c4c6bc2b7b585c099f5168e698cf59af58249619e38d2ca8ee"
+          },
+          "status": "unsat"
+        },
+        {
+          "pin": "efcf8e4c0087def553a737dc1c4eebda5d8a90cd",
+          "question_id": "FC-forge-cli-sensitive-env-helper-redacts",
+          "repo_id": "Agenticstiger/forge-cli",
+          "site": "Agenticstiger/forge-cli@efcf8e4c0087def553a737dc1c4eebda5d8a90cd:fluid_build/build_runners/base.py:54:SENSITIVE_ENV_KEY_RE",
+          "source_inventory_match": {
+            "dialect_family": "py_re",
+            "git_blob_oid": "2847122a7ec473bcc9b324cd3b3903d08c6cc7e4",
+            "pattern": "(?i)(password|passphrase|secret|token|api[_-]?key|private[_-]?key|credential|auth)",
+            "regex_id": "eb40ddf2fa8e51f662e971c28a7787c3",
+            "source_file": "fluid_build/build_runners/base.py",
+            "source_file_sha256": "5e1274001ae1f3a3d41f8c59c059e5d991db221c8c1fd328a471c7f917207842",
+            "source_site_id": "840d092b215b33c4c6bc2b7b585c099f5168e698cf59af58249619e38d2ca8ee"
+          },
+          "status": "unsat"
+        }
+      ],
+      "path": "properties/calibration/2026-10-13-autonomous-forge-cli-integration/checkpoint.json",
+      "sha256": "d0fc3f95bc55171d0cd650f2146d6d777527ecc9968c49d8fa9784b423d65e4f"
+    },
+    {
+      "attempts": 5,
+      "excluded_questions": [],
+      "matched_questions": [
+        {
+          "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+          "question_id": "AI-aidevops-brief-tid-capture",
+          "repo_id": "marcusquinn/aidevops",
+          "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/hooks/brief-filename-guard.sh:105:t[0-9]+",
+          "source_inventory_match": {
+            "dialect_family": "posix-shell",
+            "git_blob_oid": "c1936c9efe832e643439618be91f2ca4ee4c548d",
+            "pattern": "^todo/tasks/(t[0-9]+)-brief\\.md$",
+            "regex_id": "5f531005ead418cb4d7875415243e9ba",
+            "source_file": ".agents/hooks/brief-filename-guard.sh",
+            "source_file_sha256": "03bcbd91198dbb746f39a7acd1ff98ec1295f95ed49254cd55bc108bf7f6c2f0",
+            "source_site_id": "3260211e24e0caaece666a7bb3e7ec8da05d18b96bb43fd65e79ad0b84b0cd16"
+          },
+          "status": "unsat"
+        },
+        {
+          "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+          "question_id": "AI-aidevops-brief-tid-no-semicolon",
+          "repo_id": "marcusquinn/aidevops",
+          "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/hooks/brief-filename-guard.sh:84:brief\\.md",
+          "source_inventory_match": {
+            "dialect_family": "posix-shell",
+            "git_blob_oid": "c1936c9efe832e643439618be91f2ca4ee4c548d",
+            "pattern": "^todo/tasks/t[0-9]+-brief\\.md$",
+            "regex_id": "0d3486c78048978eb75c20208eeee1e2",
+            "source_file": ".agents/hooks/brief-filename-guard.sh",
+            "source_file_sha256": "03bcbd91198dbb746f39a7acd1ff98ec1295f95ed49254cd55bc108bf7f6c2f0",
+            "source_site_id": "d7de758de35d9ec23b7ac444a5b64c47ada415c92b67bf805811ee0b83657ba5"
+          },
+          "status": "unsat"
+        },
+        {
+          "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+          "question_id": "AI-aidevops-cred-ident-no-semicolon",
+          "repo_id": "marcusquinn/aidevops",
+          "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/hooks/credential-emission-pre-push.sh:103:remote_url",
+          "source_inventory_match": {
+            "dialect_family": "posix-shell",
+            "git_blob_oid": "2b6a41d9c338a7a78e6216a4b7aee3788a19fbc6",
+            "pattern": "\\$\\{?(remote_url|origin_url)\\}?",
+            "regex_id": "6b1ccefd9114b26356d8830252590da9",
+            "source_file": ".agents/hooks/credential-emission-pre-push.sh",
+            "source_file_sha256": "85d0191e0599b6e7c7d439c049b079e5f21c6a8934861259475846db9d6afca6",
+            "source_site_id": "a395927a008d0f9483c9773281e7db22e11a7e4a7921d0e011a823492b7f7874"
+          },
+          "status": "unsat"
+        },
+        {
+          "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+          "question_id": "AI-aidevops-scope-heading-no-semicolon",
+          "repo_id": "marcusquinn/aidevops",
+          "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/hooks/scope-guard-pre-push.sh:137:Files",
+          "source_inventory_match": {
+            "dialect_family": "posix-shell",
+            "git_blob_oid": "a2cdac69faa63c5b6fbec407a3a2bada50f5b664",
+            "pattern": "^##[#]?[[:space:]]+Files[[:space:]]+Scope",
+            "regex_id": "75a2b0cdb920ee136c31950ecc5882aa",
+            "source_file": ".agents/hooks/scope-guard-pre-push.sh",
+            "source_file_sha256": "9e0b9c250138acfa70d6c6392d869001df2b1cb5e2e149b05f2e75bdb8fdeec2",
+            "source_site_id": "50b498331de2ace3959c4d68f95e0eb54f713e69330747542e89270858b12957"
+          },
+          "status": "unsat"
+        },
+        {
+          "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+          "question_id": "AI-aidevops-gh-issue-digit-capture",
+          "repo_id": "marcusquinn/aidevops",
+          "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/hooks/task-id-collision-guard.sh:378:#[0-9]+",
+          "source_inventory_match": {
+            "dialect_family": "posix-shell",
+            "git_blob_oid": "e9f7809ec9307c39b708839340ee53eb396a0a6c",
+            "pattern": "#[0-9]+",
+            "regex_id": "0913e809327b8778c375c5c83c98d46f",
+            "source_file": ".agents/hooks/task-id-collision-guard.sh",
+            "source_file_sha256": "91abddb42b622d2cc1ed280c51d82dad8c78299bb9fb47717ea0a053006d3934",
+            "source_site_id": "59fd36cd292702b3c42d31d724f13fd859d60531b13c25c8b014c13632c4b967"
+          },
+          "status": "unsat"
+        }
+      ],
+      "path": "properties/calibration/2026-10-15-autonomous-aidevops-posix-shell-20r2/p6-wave-r1/checkpoint.json",
+      "sha256": "e117b37ca0a8288f1f30aa2dacc54a29927f1c6aed0034da66371d73abf6c285"
+    },
+    {
+      "attempts": 1,
+      "excluded_questions": [],
+      "matched_questions": [
+        {
+          "pin": "2f3fa5a506d6565fa68858b7963450567ddda114",
+          "question_id": "AN-anax-orgname-denylist-validation",
+          "repo_id": "open-horizon/anax",
+          "site": "open-horizon/anax@2f3fa5a506d6565fa68858b7963450567ddda114:cli/cliutils/cliutils.go:2277:MatchString",
+          "source_inventory_match": {
+            "dialect_family": "go_re",
+            "git_blob_oid": "3fa4a304840bdcdfe62c4ac6a9a41c78e5b798e9",
+            "pattern": "[_,\\s\\?\\']",
+            "regex_id": "62852dc4df8cb2605fa2701ba0309fce",
+            "source_file": "cli/cliutils/cliutils.go",
+            "source_file_sha256": "19e98c2f753ff03e83aa442a21cd352f8926efdff20d44d3c111016d908509d0",
+            "source_site_id": "d5b2471b769d226dd9166514c29c7f66bd9d55ee813ec92d44f6701122350665"
+          },
+          "status": "unsat"
+        }
+      ],
+      "path": "properties/calibration/2026-10-15-autonomous-anax-org-validate-20r2/p6-wave-r1/checkpoint.json",
+      "sha256": "646d3848459520b4c8e5e5050ff08546e2b5f7591eb3cc80c92477e6e4a4d5d2"
+    },
+    {
+      "attempts": 1,
+      "excluded_questions": [
+        {
+          "pin": "01cd447ad3b1acfed7e0680596c2c74458a4cf06",
+          "question_id": "AA-autoar-html-text-escape-codepoint-image",
+          "reason": "source_site_outside_declared_dialect_inventory",
+          "repo_id": "h0tak88r/AutoAR",
+          "site": "h0tak88r/AutoAR@01cd447ad3b1acfed7e0680596c2c74458a4cf06:internal/api/ui/pages/html-escape.js:2:esc",
+          "status": "unsat"
+        }
+      ],
+      "matched_questions": [],
+      "path": "properties/calibration/2026-10-15-autonomous-autoar-html-text-escape-20r2/p6-wave-r2/checkpoint.json",
+      "sha256": "04349f28f0e3ce552f9219f084990c78723a62f7dcd8f0a9b90da88d8f796459"
+    },
+    {
+      "attempts": 1,
+      "excluded_questions": [
+        {
+          "pin": "01cd447ad3b1acfed7e0680596c2c74458a4cf06",
+          "question_id": "AA-autoar-html-text-escape-codepoint-image",
+          "reason": "source_site_outside_declared_dialect_inventory",
+          "repo_id": "h0tak88r/AutoAR",
+          "site": "h0tak88r/AutoAR@01cd447ad3b1acfed7e0680596c2c74458a4cf06:internal/api/ui/pages/html-escape.js:2:esc",
+          "status": "error"
+        }
+      ],
+      "matched_questions": [],
+      "path": "properties/calibration/2026-10-15-autonomous-autoar-html-text-escape-20r2/p6-wave/checkpoint.json",
+      "sha256": "e5cdedbfa39d93afea2c1d5b6bf5c27d8c88c69e98adf41b255337f2c9efba7f"
+    },
+    {
+      "attempts": 1,
+      "excluded_questions": [],
+      "matched_questions": [
+        {
+          "pin": "01cd447ad3b1acfed7e0680596c2c74458a4cf06",
+          "question_id": "AA-autoar-jsendpoint-assignment-capture-delimiter",
+          "repo_id": "h0tak88r/AutoAR",
+          "site": "h0tak88r/AutoAR@01cd447ad3b1acfed7e0680596c2c74458a4cf06:internal/scanner/jsendpoints/jsendpoints.go:181:BASE_URL",
+          "source_inventory_match": {
+            "dialect_family": "go_re",
+            "git_blob_oid": "2453b830e0c03aca9795c7b28d3eedac6005a7b9",
+            "pattern": "(?:url|href|endpoint|baseURL|apiUrl|apiBase|API_URL|BASE_URL)\\s*[:=]\\s*[\"'\\x60]([^\"'\\x60\\s]{4,200})",
+            "regex_id": "2adeb9478d35c366f385366d0a292c5d",
+            "source_file": "internal/scanner/jsendpoints/jsendpoints.go",
+            "source_file_sha256": "e9c03be11f7aab2a4310ea4944de5620e500f2400b13e22a3e1ea5b16745c549",
+            "source_site_id": "5c03ed6b7aac01f51ce63ec4d28836830ac389b28cb68299022e8a3597e72c2b"
+          },
+          "status": "unsat"
+        }
+      ],
+      "path": "properties/calibration/2026-10-15-autonomous-autoar-jsendpoint-20r2/p6-wave-r1/checkpoint.json",
+      "sha256": "cb1bf93aef178f5e37cdce091c80110f6423b9ee13529f5ff8be577c1e3d5a2a"
+    },
+    {
+      "attempts": 1,
+      "excluded_questions": [],
+      "matched_questions": [
+        {
+          "pin": "01cd447ad3b1acfed7e0680596c2c74458a4cf06",
+          "question_id": "AA-autoar-jsendpoint-loopback-script-src-fetch",
+          "repo_id": "h0tak88r/AutoAR",
+          "site": "h0tak88r/AutoAR@01cd447ad3b1acfed7e0680596c2c74458a4cf06:internal/scanner/jsendpoints/jsendpoints.go:22:scriptSrcRe",
+          "source_inventory_match": {
+            "dialect_family": "go_re",
+            "git_blob_oid": "2453b830e0c03aca9795c7b28d3eedac6005a7b9",
+            "pattern": "(?i)<script[^>]+src\\s*=\\s*[\"']([^\"'>\\s]+)[\"']",
+            "regex_id": "950e4d80c2d4335df9c5c996598ace0a",
+            "source_file": "internal/scanner/jsendpoints/jsendpoints.go",
+            "source_file_sha256": "e9c03be11f7aab2a4310ea4944de5620e500f2400b13e22a3e1ea5b16745c549",
+            "source_site_id": "13f96f4f0eb71775079533de8335e779ac0eb3d6bd69daf0116c5c4571827579"
+          },
+          "status": "sat"
+        }
+      ],
+      "path": "properties/calibration/2026-10-15-autonomous-autoar-jsendpoint-scope-escape-20r2/p6-wave-r1/checkpoint.json",
+      "sha256": "8b4bda05ff18d60bf0a01901c23c9098da3dc35b9c4a6277782dc227ae3a5832"
+    },
+    {
+      "attempts": 1,
+      "excluded_questions": [],
+      "matched_questions": [
+        {
+          "pin": "01cd447ad3b1acfed7e0680596c2c74458a4cf06",
+          "question_id": "AA-autoar-phase-log-module-component-safe",
+          "repo_id": "h0tak88r/AutoAR",
+          "site": "h0tak88r/AutoAR@01cd447ad3b1acfed7e0680596c2c74458a4cf06:internal/utils/phase_logs.go:206:MustCompile",
+          "source_inventory_match": {
+            "dialect_family": "go_re",
+            "git_blob_oid": "c63307cb3ceac1ac918f6ad94197f2ddd55962bc",
+            "pattern": "[^a-zA-Z0-9_-]+",
+            "regex_id": "3a3b41054975f175c3a3e91ffe2c7638",
+            "source_file": "internal/utils/phase_logs.go",
+            "source_file_sha256": "3dec250b5802efadac77c6ba9cf9ce19f5fec09a8111674ab13a56d35e601ddc",
+            "source_site_id": "6c4c5e34cc6587a6d944a912b8e3566dc5a12f9596d1e475315eb25e9edb0495"
+          },
+          "status": "unsat"
+        }
+      ],
+      "path": "properties/calibration/2026-10-15-autonomous-autoar-phasekey-20r2/p6-wave-r1/checkpoint.json",
+      "sha256": "ce443d4b1cda7155aec4d33378105a93622a20936c4a400dd5d98c4c59ffa7bd"
+    },
+    {
+      "attempts": 1,
+      "excluded_questions": [],
+      "matched_questions": [
+        {
+          "pin": "ea3e83e24676a1678a9522141da29b636c9451ab",
+          "question_id": "MC-malcontent-author-metadata-extra-markdown-link",
+          "repo_id": "chainguard-dev/malcontent",
+          "site": "chainguard-dev/malcontent@ea3e83e24676a1678a9522141da29b636c9451ab:pkg/report/report.go:117:authorWithURLRe",
+          "source_inventory_match": {
+            "dialect_family": "go_re",
+            "git_blob_oid": "2c36a8848f31acd08c7f63786bf6e3763f70517f",
+            "pattern": "(.*?) \\((http.*)\\)",
+            "regex_id": "a7bcb9db692144d89bb2cb0dd86ec1ce",
+            "source_file": "pkg/report/report.go",
+            "source_file_sha256": "bb3ab2bc50fb835f4add14d8c1f6b71140335313c016575bd55eef224fe690de",
+            "source_site_id": "e7ea69802727a271a67f059a01becfbebd6c33c6fa08204aa9997ec6a1e9eeed"
+          },
+          "status": "sat"
+        }
+      ],
+      "path": "properties/calibration/2026-10-15-autonomous-malcontent-author-markdown-20r2/p6-wave/checkpoint.json",
+      "sha256": "08bc242d90dabaee04ab91bdf998bfd736f1fb58f5276f17441b23ecf2483790"
+    },
+    {
+      "attempts": 1,
+      "excluded_questions": [],
+      "matched_questions": [
+        {
+          "pin": "ea3e83e24676a1678a9522141da29b636c9451ab",
+          "question_id": "MC-malcontent-description-metadata-extra-markdown-link",
+          "repo_id": "chainguard-dev/malcontent",
+          "site": "chainguard-dev/malcontent@ea3e83e24676a1678a9522141da29b636c9451ab:pkg/report/report.go:118:threatHuntingKeywordRe",
+          "source_inventory_match": {
+            "dialect_family": "go_re",
+            "git_blob_oid": "2c36a8848f31acd08c7f63786bf6e3763f70517f",
+            "pattern": "Detection patterns for the tool '(.*)' taken from the ThreatHunting-Keywords github project",
+            "regex_id": "c513e62cf1a010053a7632bf3b1377fc",
+            "source_file": "pkg/report/report.go",
+            "source_file_sha256": "bb3ab2bc50fb835f4add14d8c1f6b71140335313c016575bd55eef224fe690de",
+            "source_site_id": "4a8f1940e5d98aa15f17be719997d9f27fde5afce197f24d419da8d6fe33412e"
+          },
+          "status": "sat"
+        }
+      ],
+      "path": "properties/calibration/2026-10-15-autonomous-malcontent-description-markdown-20r2/p6-wave/checkpoint.json",
+      "sha256": "b51b42d128172c38866529975b8d83ec1a8d65fb8d6f3d4c1ad83e45674afd1f"
+    },
+    {
+      "attempts": 1,
+      "excluded_questions": [
+        {
+          "pin": "ea3e83e24676a1678a9522141da29b636c9451ab",
+          "question_id": "MC-malcontent-cve48384-embedded-cr-excludes-lf",
+          "reason": "source_site_outside_declared_dialect_inventory",
+          "repo_id": "chainguard-dev/malcontent",
+          "site": "chainguard-dev/malcontent@ea3e83e24676a1678a9522141da29b636c9451ab:rules/impact/exploit/cve-2025-48384.yara:22:path_embedded_cr",
+          "status": "unsat"
+        }
+      ],
+      "matched_questions": [],
+      "path": "properties/calibration/2026-10-15-autonomous-malcontent-git-cr-20r2/p6-wave/checkpoint.json",
+      "sha256": "066f1e14a47d7363e487987dae9a9c47687dcdc301ec88a59adc83bca6cc10b8"
+    },
+    {
+      "attempts": 1,
+      "excluded_questions": [],
+      "matched_questions": [
+        {
+          "pin": "d4f01ba6202d50909d1977810d322259482e0b82",
+          "question_id": "MY-mycelium-20r2-release-preflight-requires-64-hex",
+          "repo_id": "mycelium0/mycelium",
+          "site": "mycelium0/mycelium@d4f01ba6202d50909d1977810d322259482e0b82:scripts/verify-release.sh:60:sums_n",
+          "source_inventory_match": {
+            "dialect_family": "posix-shell",
+            "git_blob_oid": "7350bee99d381be6a0a184c118756e956769df2f",
+            "pattern": "^[0-9a-fA-F]{64}[[:space:]]+[*]?[^[:space:]]",
+            "regex_id": "42e4541996b1350d941a7cabbd386d79",
+            "source_file": "scripts/verify-release.sh",
+            "source_file_sha256": "df394a764f2ebd906ffbc9d6bafa58af896b39e895e503a271da3baf710e2b58",
+            "source_site_id": "ce4fcfd83046de4e4eae67a21a442674c4e94f389aedd2cebf0554b7bd1aef27"
+          },
+          "status": "unsat"
+        }
+      ],
+      "path": "properties/calibration/2026-10-15-autonomous-mycelium-20r2-slice/p6-wave-r1/checkpoint.json",
+      "sha256": "4202cb0c46060d402ee50679a522e28a1ee4ef817e094c16a48c4cbeb5e6d746"
+    },
+    {
+      "artifact_kind": "canonical_conversion_ndjson",
+      "attempts": 2,
+      "corroborated_questions": [],
+      "excluded_questions": [],
+      "matched_questions": [
+        {
+          "question_id": "PY-doberman-disk-wipe-token",
+          "site": "fu351/Doberman-Core@53ae43c5298a2426c6696147fdd75e2a4aef10e2:src/doberman/engine/rules/commands.py:434:_DISK_WIPE",
+          "source_inventory_match": {
+            "dialect_family": "py_re",
+            "git_blob_oid": "8e1d1731987dfd912783e25b707bbddbfd64e4df",
+            "pattern": "^(?:mkfs(?:\\.\\w+)?|shred|wipefs|format-volume|clear-disk|format)$",
+            "regex_id": "7fb9749ccbf780ec366cd79d65b83ffc",
+            "source_file": "src/doberman/engine/rules/commands.py",
+            "source_file_sha256": "ffb5ac17aed6ad8db3152a015032173ddbfd7c93ab7ca5ccad04c37586ff0917",
+            "source_site_id": "a1a2aeed2977dfb32fd7e90afe37c3a79f9d144471597f06845eea72665f6919"
+          },
+          "status": "sat"
+        },
+        {
+          "question_id": "PY-doberman-windows-root-token",
+          "site": "fu351/Doberman-Core@53ae43c5298a2426c6696147fdd75e2a4aef10e2:src/doberman/engine/rules/commands.py:266:_WINDOWS_ROOT_RE",
+          "source_inventory_match": {
+            "dialect_family": "py_re",
+            "git_blob_oid": "8e1d1731987dfd912783e25b707bbddbfd64e4df",
+            "pattern": "^[A-Za-z]:[/\\\\]?(\\*)?$",
+            "regex_id": "791ec4524475105c8d00b4728f2cb28d",
+            "source_file": "src/doberman/engine/rules/commands.py",
+            "source_file_sha256": "ffb5ac17aed6ad8db3152a015032173ddbfd7c93ab7ca5ccad04c37586ff0917",
+            "source_site_id": "1b4bef4fd714918230cd9bb907eebc0744e67024ec73003998dc4325e9acbbbb"
+          },
+          "status": "sat"
+        }
+      ],
+      "path": "properties/generated/Doberman-Core_conversion.ndjson",
+      "raw_rows": 2,
+      "sha256": "59d34df21a39eb29f37f3ceeee7ca42c1138590a55be2150da584290bfae8ea5"
+    },
+    {
+      "artifact_kind": "canonical_conversion_ndjson",
+      "attempts": 6,
+      "corroborated_questions": [
+        {
+          "question_id": "FC-forge-cli-dmm-value-no-semicolon",
+          "site": "Agenticstiger/forge-cli@efcf8e4c0087def553a737dc1c4eebda5d8a90cd:fluid_build/providers/datamesh_manager/datamesh_manager.py:88:_SECRET_ERROR_PATTERNS",
+          "status": "unsat"
+        },
+        {
+          "question_id": "FC-forge-cli-jaas-escaped-quote-covered",
+          "site": "Agenticstiger/forge-cli@efcf8e4c0087def553a737dc1c4eebda5d8a90cd:fluid_build/observability/secret_redactor.py:218:_JAAS_CONFIG_RE",
+          "status": "unsat"
+        },
+        {
+          "question_id": "FC-forge-cli-llm-userinfo-no-at",
+          "site": "Agenticstiger/forge-cli@efcf8e4c0087def553a737dc1c4eebda5d8a90cd:fluid_build/llm/providers.py:287:LlmConfig.redacted_endpoint",
+          "status": "unsat"
+        },
+        {
+          "question_id": "FC-forge-cli-sensitive-env-helper-redacts",
+          "site": "Agenticstiger/forge-cli@efcf8e4c0087def553a737dc1c4eebda5d8a90cd:fluid_build/build_runners/base.py:54:SENSITIVE_ENV_KEY_RE",
+          "status": "unsat"
+        },
+        {
+          "question_id": "FC-forge-cli-sensitive-env-key-covered",
+          "site": "Agenticstiger/forge-cli@efcf8e4c0087def553a737dc1c4eebda5d8a90cd:fluid_build/build_runners/base.py:54:SENSITIVE_ENV_KEY_RE",
+          "status": "unsat"
+        },
+        {
+          "question_id": "FC-forge-cli-url-password-no-space",
+          "site": "Agenticstiger/forge-cli@efcf8e4c0087def553a737dc1c4eebda5d8a90cd:fluid_build/observability/secret_redactor.py:151:_URL_USERINFO_RE",
+          "status": "unsat"
+        }
+      ],
+      "excluded_questions": [],
+      "matched_questions": [],
+      "path": "properties/generated/forge-cli_conversion.ndjson",
+      "raw_rows": 6,
+      "sha256": "f8829a9c994df6d2c5e0b820aa0003598d7e41c788f1ee83750332582b4f3dbd"
+    }
+  ],
+  "cohort_file_sha256": "cfcfeaa19a37e8704adf84d8979e71a9887ced3a71030fc3572d96c1a8270a78",
+  "cohort_id": "2026-09-12-calibration-20-r2",
+  "cohort_manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+  "conversion_root": "properties/generated",
+  "excluded_attempt_count": 3,
+  "excluded_attempts": [
+    {
+      "pin": "01cd447ad3b1acfed7e0680596c2c74458a4cf06",
+      "question_id": "AA-autoar-html-text-escape-codepoint-image",
+      "reason": "source_site_outside_declared_dialect_inventory",
+      "repo_id": "h0tak88r/AutoAR",
+      "site": "h0tak88r/AutoAR@01cd447ad3b1acfed7e0680596c2c74458a4cf06:internal/api/ui/pages/html-escape.js:2:esc",
+      "source_checkpoint": "properties/calibration/2026-10-15-autonomous-autoar-html-text-escape-20r2/p6-wave-r2/checkpoint.json",
+      "status": "unsat"
+    },
+    {
+      "pin": "01cd447ad3b1acfed7e0680596c2c74458a4cf06",
+      "question_id": "AA-autoar-html-text-escape-codepoint-image",
+      "reason": "source_site_outside_declared_dialect_inventory",
+      "repo_id": "h0tak88r/AutoAR",
+      "site": "h0tak88r/AutoAR@01cd447ad3b1acfed7e0680596c2c74458a4cf06:internal/api/ui/pages/html-escape.js:2:esc",
+      "source_checkpoint": "properties/calibration/2026-10-15-autonomous-autoar-html-text-escape-20r2/p6-wave/checkpoint.json",
+      "status": "error"
+    },
+    {
+      "pin": "ea3e83e24676a1678a9522141da29b636c9451ab",
+      "question_id": "MC-malcontent-cve48384-embedded-cr-excludes-lf",
+      "reason": "source_site_outside_declared_dialect_inventory",
+      "repo_id": "chainguard-dev/malcontent",
+      "site": "chainguard-dev/malcontent@ea3e83e24676a1678a9522141da29b636c9451ab:rules/impact/exploit/cve-2025-48384.yara:22:path_embedded_cr",
+      "source_checkpoint": "properties/calibration/2026-10-15-autonomous-malcontent-git-cr-20r2/p6-wave/checkpoint.json",
+      "status": "unsat"
+    }
+  ],
+  "input_set_sha256": "647881e765271671667477969cef9ea509ec5bbb6610f425146bcf05d093acc0",
+  "matched_question_count": 20,
+  "schema_version": "1",
+  "scope": "retrospective exact-pin attempts matched to the P2 declared-dialect source inventory",
+  "source_inventory_file_sha256": "1f5e955431a31e131da9eca3bc325e31c5123d141cc3244698e797e82df09b03",
+  "source_site_count": 20784,
+  "source_sites_file_sha256": "381c0ca4d80c8f050b5446f378f6d95bd9b54ec83c02a48e5072a10beaabc73c"
+}

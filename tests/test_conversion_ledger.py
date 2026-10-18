@@ -196,6 +196,8 @@ def test_aggregate_fixture_tree(tmp_path: Path):
     md = cl.render_md(data)
     assert "sites extracted" in md
     assert "accepted upstream" in md
+    assert "Product conversion provenance" in md
+    assert "autonomous (`agent_derived`)" in md
     assert "yara_split" in data
     assert "encodable_fraction_excluding_yara" in data["rates"]
 
@@ -402,8 +404,16 @@ def test_ci_golden_regenerates_and_drift_checks_ledger():
         "claude-code-plugins_w1",
         "dogfood_shell_w1",
         "doberman_w1",
+        "forge-cli_helper_image",
         "forge-cli_w1",
+        "doberman_secret_path_20r2_r1",
+        "rr-nav-controls-p6-20261016",
+        "aidevops-predispatch-20r2-20261016-r1",
+        "aidevops_predispatch_threshold_residual_20r2",
+        "aidevops-webhook-action-protocol-20r2-20261016-r1",
     }
+    assert pw["forge-cli_helper_image"]["properties_asked"] == 1
+    assert pw["forge-cli_helper_image"]["shape_counts"] == {"4": 1}
     for w in pw.values():
         assert w["properties_asked"] >= w["properties_sat"]
         assert w["properties_sat"] >= w["sat_ground_truthed"]
@@ -415,7 +425,13 @@ def test_ci_golden_regenerates_and_drift_checks_ledger():
     assert star["mine_queue_cap"] > 0
     assert isinstance(star["history"], list) and star["history"]
     assert star["admission_window_end"] == star["history"][-1]["week_end"]
-    assert data["queue_health"]["artifacts_present"] is False  # Phase C pending
+    queue = data["queue_health"]
+    assert queue["artifacts_present"] is True
+    assert queue["emitted"] >= 0
+    assert queue["claimed"] >= 0
+    assert queue["contracted"] >= 0
+    assert queue["skipped"] >= 0
+    assert queue["median_age_days"] is None or queue["median_age_days"] >= 0
     smc = data["shape_mix_by_corpus"]
     assert {"openwrt_packages", "openwrt_luci", "aidevops", "mycelium", "claude-code-plugins"} <= set(smc)
     assert (
@@ -563,6 +579,8 @@ def _wave_row(**overrides):
         "shape": 1,
     }
     row.update(overrides)
+    if "contract" not in overrides:
+        row["contract"] = _human_contract(site=row["site"])
     return row
 
 

@@ -1,0 +1,24 @@
+{
+  "command": [
+    "/home/lalbers/gitroot/regexproof/.venv/bin/python",
+    "/home/lalbers/gitroot/regexproof/scripts/tracecat-mcp-env-key-regression-gate.py",
+    "--source-root",
+    "/tmp/regexproof-pinned-sources/tracecat-c84d52528a489821f355fc63976fbc7783ae0ad5",
+    "--output",
+    "/home/lalbers/gitroot/regexproof/properties/calibration/2026-10-15-autonomous-tracecat-mcp-env-key/p6-wave/product-gate.json"
+  ],
+  "evidence": {
+    "differential_case_counts": {
+      "TC-mcp-env-key-accepts-terminal-lf": 1442
+    },
+    "product_engine_replay_question_ids": [
+      "TC-mcp-env-key-accepts-terminal-lf"
+    ]
+  },
+  "gate_id": "tracecat-mcp-env-key-declared-grammar",
+  "question_ids": [
+    "TC-mcp-env-key-accepts-terminal-lf"
+  ],
+  "schema_version": "1",
+  "timeout_seconds": 300
+}

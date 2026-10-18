@@ -1,0 +1,306 @@
+{
+  "candidates": [
+    {
+      "call_kind": "search",
+      "decision": "adopted",
+      "pattern": "^(id_(rsa|dsa|ecdsa|ed25519)|\\.env(\\..*)?|credentials(\\.sh|\\.json|\\.ya?ml)?|service-account(\\.json)?|kubeconfig|config\\.json|op-vault-export.*|.*password.*|.*passwd.*|.*secret.*)$",
+      "rank": 1,
+      "rationale": "Reachable pre-read rule: the exact-pin quality hook sends model-controlled tool arguments through checkSecretReadWithApproval, whose ordinary read path falls back to checkSecretReadGate. The helper normalizes the path, applies basename semantics, skips .pub files first, and returns a blocking reason when SECRET_BASENAME_RE matches. This review adopts only the basename branch; it does not infer that the list is complete or assess false-positive rates.",
+      "reason_code": "reachable_pre_read_secret_basename_guard",
+      "regex_id": "6db7d4e94a6d0c8c24ed7e5b8a1f36b6",
+      "shortlist_site": ".agents/plugins/opencode-aidevops/quality-hooks-secret-read.mjs:7:27",
+      "site": ".agents/plugins/opencode-aidevops/quality-hooks-secret-read.mjs:7:27",
+      "source_binding": {
+        "evidence_ref": "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/plugins/opencode-aidevops/quality-hooks-secret-read.mjs",
+        "path": ".agents/plugins/opencode-aidevops/quality-hooks-secret-read.mjs",
+        "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+        "repository_url": "https://github.com/marcusquinn/aidevops",
+        "sha256": "668f7dc002b263d58def6003194fd83dfa91b82b2fdcb9a10b1427f1cb942cf0"
+      },
+      "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "window": {
+        "lines": [
+          {
+            "is_target": false,
+            "line": 1,
+            "text": "// SPDX-License-Identifier: MIT"
+          },
+          {
+            "is_target": false,
+            "line": 2,
+            "text": "// SPDX-FileCopyrightText: 2025-2026 Marcus Quinn"
+          },
+          {
+            "is_target": false,
+            "line": 3,
+            "text": "// Secret/private-key pre-read guard for OpenCode file-read tools."
+          },
+          {
+            "is_target": false,
+            "line": 4,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 5,
+            "text": "import { basename, normalize } from \"path\";"
+          },
+          {
+            "is_target": false,
+            "line": 6,
+            "text": ""
+          },
+          {
+            "is_target": true,
+            "line": 7,
+            "text": "const SECRET_BASENAME_RE = /^(id_(rsa|dsa|ecdsa|ed25519)|\\.env(\\..*)?|credentials(\\.sh|\\.json|\\.ya?ml)?|service-account(\\.json)?|kubeconfig|config\\.json|op-vault-export.*|.*password.*|.*passwd.*|.*secret.*)$/i;"
+          },
+          {
+            "is_target": false,
+            "line": 8,
+            "text": "const SECRET_EXTENSION_RE = /\\.(pem|key|p12|pfx|kdbx|age|asc|gpg)$/i;"
+          },
+          {
+            "is_target": false,
+            "line": 9,
+            "text": "const PUBLIC_KEY_RE = /\\.pub$/i;"
+          },
+          {
+            "is_target": false,
+            "line": 10,
+            "text": "const HOST_RUNTIME_CONFIG_RE = /(^|[/\\\\])\\.config[/\\\\]opencode[/\\\\]opencode\\.jsonc?$/i;"
+          },
+          {
+            "is_target": false,
+            "line": 11,
+            "text": "const SECRET_PATH_RE = /(^|[/\\\\])(\\.ssh|\\.gnupg|\\.aws|\\.azure|\\.config[/\\\\]gcloud|\\.kube|1password|op-vault|password-store)([/\\\\]|$)/i;"
+          },
+          {
+            "is_target": false,
+            "line": 12,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 13,
+            "text": "/**"
+          },
+          {
+            "is_target": false,
+            "line": 14,
+            "text": " * Check if a tool name is a file read operation."
+          },
+          {
+            "is_target": false,
+            "line": 15,
+            "text": " * @param {string} tool"
+          },
+          {
+            "is_target": false,
+            "line": 16,
+            "text": " * @returns {boolean}"
+          },
+          {
+            "is_target": false,
+            "line": 17,
+            "text": " */"
+          },
+          {
+            "is_target": false,
+            "line": 18,
+            "text": "export function isReadTool(tool) {"
+          },
+          {
+            "is_target": false,
+            "line": 19,
+            "text": "  return [\"Read\", \"read\", \"Glob\", \"glob\", \"NotebookRead\", \"notebook_read\"].includes(tool || \"\");"
+          },
+          {
+            "is_target": false,
+            "line": 20,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 21,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 22,
+            "text": "/**"
+          },
+          {
+            "is_target": false,
+            "line": 23,
+            "text": " * Extract a path-like argument from a file-read tool payload."
+          },
+          {
+            "is_target": false,
+            "line": 24,
+            "text": " * @param {object} args"
+          },
+          {
+            "is_target": false,
+            "line": 25,
+            "text": " * @returns {string}"
+          },
+          {
+            "is_target": false,
+            "line": 26,
+            "text": " */"
+          },
+          {
+            "is_target": false,
+            "line": 27,
+            "text": "export function extractReadPath(args = {}) {"
+          },
+          {
+            "is_target": false,
+            "line": 28,
+            "text": "  return args.filePath || args.file_path || args.path || args.pattern || \"\";"
+          },
+          {
+            "is_target": false,
+            "line": 29,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 30,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 31,
+            "text": "/**"
+          },
+          {
+            "is_target": false,
+            "line": 32,
+            "text": " * Return a block reason for high-risk secret paths, or empty string when safe."
+          },
+          {
+            "is_target": false,
+            "line": 33,
+            "text": " * @param {string} filePath"
+          },
+          {
+            "is_target": false,
+            "line": 34,
+            "text": " * @returns {string}"
+          },
+          {
+            "is_target": false,
+            "line": 35,
+            "text": " */"
+          },
+          {
+            "is_target": false,
+            "line": 36,
+            "text": "export function secretReadBlockReason(filePath) {"
+          },
+          {
+            "is_target": false,
+            "line": 37,
+            "text": "  if (!filePath || typeof filePath !== \"string\") return \"\";"
+          },
+          {
+            "is_target": false,
+            "line": 38,
+            "text": "  const normalized = normalize(filePath);"
+          },
+          {
+            "is_target": false,
+            "line": 39,
+            "text": "  const base = basename(normalized);"
+          },
+          {
+            "is_target": false,
+            "line": 40,
+            "text": "  if (PUBLIC_KEY_RE.test(base)) return \"\";"
+          },
+          {
+            "is_target": false,
+            "line": 41,
+            "text": "  if (SECRET_BASENAME_RE.test(base)) return \"secret-bearing basename\";"
+          },
+          {
+            "is_target": false,
+            "line": 42,
+            "text": "  if (SECRET_EXTENSION_RE.test(base)) return \"secret-bearing file extension\";"
+          },
+          {
+            "is_target": false,
+            "line": 43,
+            "text": "  if (HOST_RUNTIME_CONFIG_RE.test(normalized)) return \"host runtime config path\";"
+          },
+          {
+            "is_target": false,
+            "line": 44,
+            "text": "  if (SECRET_PATH_RE.test(normalized)) return \"credential-store path\";"
+          },
+          {
+            "is_target": false,
+            "line": 45,
+            "text": "  return \"\";"
+          },
+          {
+            "is_target": false,
+            "line": 46,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 47,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 48,
+            "text": "/**"
+          },
+          {
+            "is_target": false,
+            "line": 49,
+            "text": " * Block OpenCode file-read tools before secret content enters model context."
+          },
+          {
+            "is_target": false,
+            "line": 50,
+            "text": " * @param {string} tool"
+          }
+        ],
+        "path": ".agents/plugins/opencode-aidevops/quality-hooks-secret-read.mjs",
+        "target_line": 7,
+        "token": "27",
+        "window_end": 50,
+        "window_lines": 50,
+        "window_start": 1
+      }
+    }
+  ],
+  "cohort_id": "2026-10-15-aidevops-node-secret-boundary-calibration",
+  "repository_url": "https://github.com/marcusquinn/aidevops",
+  "review_source": {
+    "row_count": 1,
+    "sha256": "5aefba1850052333d0bb3cca9317a93681195b07b6e840ffed8142e760c41590"
+  },
+  "run_context_sha256": "705970bf47312e249f7d9894526382f1186d21b9d5a5329d8ee6c62ff848676f",
+  "schema_version": "1",
+  "shortlist_site_path_prefix": "",
+  "shortlist_source": {
+    "row_count": 1,
+    "sha256": "05216613d44ea7ff2f2c69bac032f84f1772f483b24ff437bf329671346b139c"
+  },
+  "source_files": [
+    {
+      "evidence_ref": "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/plugins/opencode-aidevops/quality-hooks-secret-read.mjs",
+      "path": ".agents/plugins/opencode-aidevops/quality-hooks-secret-read.mjs",
+      "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "repository_url": "https://github.com/marcusquinn/aidevops",
+      "sha256": "668f7dc002b263d58def6003194fd83dfa91b82b2fdcb9a10b1427f1cb942cf0"
+    }
+  ],
+  "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1"
+}

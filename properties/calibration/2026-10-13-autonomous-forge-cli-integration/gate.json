@@ -1,0 +1,28 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/test_forge_cli_harness.py"
+  ],
+  "evidence": {
+    "differential_case_counts": {
+      "FC-forge-cli-sensitive-env-helper-redacts": 5680
+    },
+    "product_engine_replay_question_ids": [
+      "FC-forge-cli-sensitive-env-helper-redacts"
+    ]
+  },
+  "gate_id": "forge-cli-local-regression-suite-v1",
+  "question_ids": [
+    "FC-forge-cli-dmm-value-no-semicolon",
+    "FC-forge-cli-jaas-escaped-quote-covered",
+    "FC-forge-cli-llm-userinfo-no-at",
+    "FC-forge-cli-sensitive-env-helper-redacts",
+    "FC-forge-cli-sensitive-env-key-covered",
+    "FC-forge-cli-url-password-no-space"
+  ],
+  "schema_version": "1",
+  "timeout_seconds": 300
+}

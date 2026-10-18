@@ -1,0 +1,10 @@
+{
+  "campaign_counted": false,
+  "cohort_id": "off-cohort-mycelium-current-pin",
+  "contract_sha256": "e2cd96b8264cac527e48dc0b24f6e3f6fd169a98dd5508310e83e0ff6a9585be",
+  "gate_id": "MY-mycelium-release-preflight-requires-64-hex",
+  "gate_script": "scripts/mycelium-release-preflight-regression-gate.py",
+  "repository_url": "https://github.com/mycelium0/mycelium",
+  "schema_version": "1",
+  "source_pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711"
+}

@@ -1,0 +1,17 @@
+{
+  "claim": "A source-matched Bash slug accepted by the complete helper fits one safe owner/repository token, excluding . and .. repository names.",
+  "declared_contract_file": "contract-repository-slug.json",
+  "dialect": "posix-shell",
+  "input_domain": "ascii; exact pinned local action token; NUL excluded by the line protocol",
+  "limitation": "TIMEOUT is not a proof; this attempt is excluded from useful-proof counts.",
+  "not_proven": true,
+  "question_id": "AE-aidevops-webhook-repository-action-token",
+  "reason_unknown": "timeout",
+  "result": "timeout",
+  "schema_version": "1",
+  "shell_syntax": "bash_ksh",
+  "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pulse-merge-webhook-receiver.sh:197:1",
+  "source_pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$",
+  "timeout_ms": 30000,
+  "wall_ms": 30062.3
+}

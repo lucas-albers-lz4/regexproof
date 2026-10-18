@@ -1,0 +1,25 @@
+{
+  "command": [
+    "/home/lalbers/gitroot/regexproof/.venv/bin/python",
+    "/home/lalbers/gitroot/regexproof/scripts/tracecat-table-identifier-regression-gate.py",
+    "--source-root",
+    "/tmp/tracecat-p2-review-20261016",
+    "--output",
+    "/home/lalbers/gitroot/regexproof/properties/calibration/2026-10-17-autonomous-tracecat-table-identifier/p6-wave/product-gate.json",
+    "--skip-proof"
+  ],
+  "evidence": {
+    "differential_case_counts": {
+      "TC-table-identifier-double-quote-excluded": 2227
+    },
+    "product_engine_replay_question_ids": [
+      "TC-table-identifier-double-quote-excluded"
+    ]
+  },
+  "gate_id": "tracecat-table-identifier-quote-exclusion",
+  "question_ids": [
+    "TC-table-identifier-double-quote-excluded"
+  ],
+  "schema_version": "1",
+  "timeout_seconds": 300
+}

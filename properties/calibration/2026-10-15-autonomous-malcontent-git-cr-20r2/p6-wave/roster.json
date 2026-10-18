@@ -1,0 +1,17 @@
+{
+  "cohort_id": "2026-09-12-calibration-20-r2",
+  "cohort_manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+  "coverage_digest": "1f9182deca433234bb7ae6819c3266c34fdf672e592990d69ae1ecdb6e36c161",
+  "identities": [
+    {
+      "contract_sha256": "064a75636c18a570a15e6a90a6ab199e32f1cefc75554bec9664e7f7bb11c676",
+      "pin": "ea3e83e24676a1678a9522141da29b636c9451ab",
+      "provenance": "agent_derived",
+      "question_id": "MC-malcontent-cve48384-embedded-cr-excludes-lf",
+      "repo_id": "chainguard-dev/malcontent",
+      "site": "chainguard-dev/malcontent@ea3e83e24676a1678a9522141da29b636c9451ab:rules/impact/exploit/cve-2025-48384.yara:22:path_embedded_cr",
+      "url": "https://github.com/chainguard-dev/malcontent"
+    }
+  ],
+  "schema_version": "2"
+}

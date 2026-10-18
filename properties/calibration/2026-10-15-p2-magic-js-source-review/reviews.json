@@ -1,0 +1,1220 @@
+{
+  "schema_version": "1",
+  "observed_at": "2026-10-15",
+  "author": "Codex source-review pass",
+  "reviewer": "Codex second source-review pass",
+  "second_pass": true,
+  "same_model_or_agent": true,
+  "reviews": [
+    {
+      "regex_id": "66560c9810bc383d04e6ce2ee6680331",
+      "site": "packages/@magic-ext/farcaster/src/utils.ts:4:45",
+      "pattern": "android",
+      "decision": "skip",
+      "reason_code": "user_agent_platform_detection",
+      "rationale": "This regex classifies the browser or operating-system family for a UI/platform compatibility path. The user-agent or platform data does not select an authorization decision, and the caller uses the result to choose mobile, clipboard, or wallet presentation behavior.",
+      "review_refs": [
+        {
+          "path": "packages/@magic-ext/farcaster/src/utils.ts",
+          "line": 4,
+          "why": "exact user-agent regex and platform branch"
+        },
+        {
+          "path": "packages/@magic-ext/farcaster/src/index.ts",
+          "line": 93,
+          "why": "mobile detection selects a client presentation flow"
+        }
+      ],
+      "product_question_asked": false
+    },
+    {
+      "regex_id": "b848ded788b3868be2a604276452e2fd",
+      "site": "packages/@magic-ext/farcaster/src/utils.ts:8:45",
+      "pattern": "iPhone|iPod",
+      "decision": "skip",
+      "reason_code": "user_agent_platform_detection",
+      "rationale": "This regex classifies the browser or operating-system family for a UI/platform compatibility path. The user-agent or platform data does not select an authorization decision, and the caller uses the result to choose mobile, clipboard, or wallet presentation behavior.",
+      "review_refs": [
+        {
+          "path": "packages/@magic-ext/farcaster/src/utils.ts",
+          "line": 8,
+          "why": "exact user-agent regex and platform branch"
+        },
+        {
+          "path": "packages/@magic-ext/farcaster/src/index.ts",
+          "line": 93,
+          "why": "mobile detection selects a client presentation flow"
+        }
+      ],
+      "product_question_asked": false
+    },
+    {
+      "regex_id": "fc600088c27243c8d5308866da287895",
+      "site": "packages/@magic-ext/farcaster/src/utils.ts:14:5",
+      "pattern": "iPad",
+      "decision": "skip",
+      "reason_code": "user_agent_platform_detection",
+      "rationale": "This regex classifies the browser or operating-system family for a UI/platform compatibility path. The user-agent or platform data does not select an authorization decision, and the caller uses the result to choose mobile, clipboard, or wallet presentation behavior.",
+      "review_refs": [
+        {
+          "path": "packages/@magic-ext/farcaster/src/utils.ts",
+          "line": 14,
+          "why": "exact user-agent regex and platform branch"
+        },
+        {
+          "path": "packages/@magic-ext/farcaster/src/index.ts",
+          "line": 93,
+          "why": "mobile detection selects a client presentation flow"
+        }
+      ],
+      "product_question_asked": false
+    },
+    {
+      "regex_id": "d06037c9ac7d1e32df213c0b6e3ed279",
+      "site": "packages/@magic-ext/oauth2/src/crypto.ts:22:53",
+      "pattern": "=",
+      "decision": "adopted",
+      "reason_code": "oauth_pkce_s256_base64url_representation",
+      "rationale": "The helper Base64-encodes SHA-256(code_verifier), removes padding, and maps the standard alphabet to the URL-safe alphabet before the challenge is sent in an OAuth authorization request. RFC 7636 requires the S256 code challenge to be BASE64URL(SHA256(ASCII(code_verifier))) and defines base64url without padding. The contract covers this output mapping only; it does not claim verifier entropy, state generation, server enforcement, or CSRF correctness.",
+      "review_refs": [
+        {
+          "path": "packages/@magic-ext/oauth2/src/crypto.ts",
+          "line": 12,
+          "why": "PKCE helper requires Web Crypto random values and computes S256 challenge"
+        },
+        {
+          "path": "packages/@magic-ext/oauth2/src/index.ts",
+          "line": 70,
+          "why": "OAuth login submits the code challenge while retaining the verifier locally"
+        }
+      ],
+      "product_question_asked": true,
+      "question_id": "ME-oauth2-pkce-s256-base64url"
+    },
+    {
+      "regex_id": "5c75602fb10116df491946ce4a459693",
+      "site": "packages/@magic-ext/oauth2/src/crypto.ts:22:71",
+      "pattern": "\\+",
+      "decision": "skip",
+      "reason_code": "internal_presentation_or_format_behavior",
+      "rationale": "The exact pinned source uses this regex for application presentation or format plumbing. The caller does not use it to authorize a security-sensitive action, enforce an independently specified untrusted-input boundary, or emit escaped data into a separate trust domain.",
+      "review_refs": [
+        {
+          "path": "packages/@magic-ext/oauth2/src/crypto.ts",
+          "line": 22,
+          "why": "exact pinned regex site and immediate consumer"
+        }
+      ],
+      "product_question_asked": false
+    },
+    {
+      "regex_id": "645a987221eefae0396a66c939b50f2c",
+      "site": "packages/@magic-ext/oauth2/src/crypto.ts:22:91",
+      "pattern": "\\/",
+      "decision": "skip",
+      "reason_code": "internal_presentation_or_format_behavior",
+      "rationale": "The exact pinned source uses this regex for application presentation or format plumbing. The caller does not use it to authorize a security-sensitive action, enforce an independently specified untrusted-input boundary, or emit escaped data into a separate trust domain.",
+      "review_refs": [
+        {
+          "path": "packages/@magic-ext/oauth2/src/crypto.ts",
+          "line": 22,
+          "why": "exact pinned regex site and immediate consumer"
+        }
+      ],
+      "product_question_asked": false
+    },
+    {
+      "regex_id": "aabb6589206de6bbbd7584f5c993a2fb",
+      "site": "packages/@magic-ext/oauth2/src/utils/base64.ts:4:26",
+      "pattern": "=",
+      "decision": "adopted",
+      "reason_code": "webauthn_credential_base64url_representation",
+      "rationale": "The exact Base64URL encoder feeds WebAuthn credential JSON fields such as rawId, authenticatorData, clientDataJSON, signatures, and attestationObject. The WebAuthn JSON conversion path names this representation, and RFC 4648 section 5 defines its URL-safe alphabet and optional omitted padding. The contract is limited to the encoder output; it does not claim authentication, decoder rejection of malformed input, or server-side credential validity.",
+      "review_refs": [
+        {
+          "path": "packages/@magic-ext/oauth2/src/utils/base64.ts",
+          "line": 1,
+          "why": "Base64URL class documents the encoder and inverse decoder"
+        },
+        {
+          "path": "packages/@magic-ext/oauth2/src/utils/polyfills.ts",
+          "line": 32,
+          "why": "WebAuthn credential JSON polyfill and encoded credential fields"
+        },
+        {
+          "path": "packages/@magic-ext/oauth2/src/utils/polyfills.ts",
+          "line": 92,
+          "why": "WebAuthn request options decode server-provided challenge and credential IDs"
+        }
+      ],
+      "product_question_asked": true,
+      "question_id": "ME-oauth2-webauthn-base64url"
+    },
+    {
+      "regex_id": "b0db305871acb1ed5a96b8f70d818886",
+      "site": "packages/@magic-ext/oauth2/src/utils/base64.ts:4:44",
+      "pattern": "\\+",
+      "decision": "skip",
+      "reason_code": "internal_presentation_or_format_behavior",
+      "rationale": "The exact pinned source uses this regex for application presentation or format plumbing. The caller does not use it to authorize a security-sensitive action, enforce an independently specified untrusted-input boundary, or emit escaped data into a separate trust domain.",
+      "review_refs": [
+        {
+          "path": "packages/@magic-ext/oauth2/src/utils/base64.ts",
+          "line": 4,
+          "why": "exact pinned regex site and immediate consumer"
+        }
+      ],
+      "product_question_asked": false
+    },
+    {
+      "regex_id": "1007832d1b5e9ada155514eaa224e24c",
+      "site": "packages/@magic-ext/oauth2/src/utils/base64.ts:4:64",
+      "pattern": "\\/",
+      "decision": "skip",
+      "reason_code": "internal_presentation_or_format_behavior",
+      "rationale": "The exact pinned source uses this regex for application presentation or format plumbing. The caller does not use it to authorize a security-sensitive action, enforce an independently specified untrusted-input boundary, or emit escaped data into a separate trust domain.",
+      "review_refs": [
+        {
+          "path": "packages/@magic-ext/oauth2/src/utils/base64.ts",
+          "line": 4,
+          "why": "exact pinned regex site and immediate consumer"
+        }
+      ],
+      "product_question_asked": false
+    },
+    {
+      "regex_id": "f7eae57e8b1f0fddeff97ff5f755cdf9",
+      "site": "packages/@magic-ext/oauth2/src/utils/base64.ts:8:37",
+      "pattern": "-",
+      "decision": "skip",
+      "reason_code": "internal_presentation_or_format_behavior",
+      "rationale": "The exact pinned source uses this regex for application presentation or format plumbing. The caller does not use it to authorize a security-sensitive action, enforce an independently specified untrusted-input boundary, or emit escaped data into a separate trust domain.",
+      "review_refs": [
+        {
+          "path": "packages/@magic-ext/oauth2/src/utils/base64.ts",
+          "line": 8,
+          "why": "exact pinned regex site and immediate consumer"
+        }
+      ],
+      "product_question_asked": false
+    },
+    {
+      "regex_id": "bf75b6a101fb7505667d0861f4b7106c",
+      "site": "packages/@magic-ext/oauth2/src/utils/base64.ts:8:56",
+      "pattern": "_",
+      "decision": "skip",
+      "reason_code": "internal_presentation_or_format_behavior",
+      "rationale": "The exact pinned source uses this regex for application presentation or format plumbing. The caller does not use it to authorize a security-sensitive action, enforce an independently specified untrusted-input boundary, or emit escaped data into a separate trust domain.",
+      "review_refs": [
+        {
+          "path": "packages/@magic-ext/oauth2/src/utils/base64.ts",
+          "line": 8,
+          "why": "exact pinned regex site and immediate consumer"
+        }
+      ],
+      "product_question_asked": false
+    },
+    {
+      "regex_id": "d3567fa6611519d8a0fcb76412be684d",
+      "site": "packages/@magic-ext/passkey/src/utils/base64.ts:11:26",
+      "pattern": "=",
+      "decision": "adopted",
+      "reason_code": "webauthn_credential_base64url_representation",
+      "rationale": "The exact Base64URL encoder feeds WebAuthn credential JSON fields such as rawId, authenticatorData, clientDataJSON, signatures, and attestationObject. The WebAuthn JSON conversion path names this representation, and RFC 4648 section 5 defines its URL-safe alphabet and optional omitted padding. The contract is limited to the encoder output; it does not claim authentication, decoder rejection of malformed input, or server-side credential validity.",
+      "review_refs": [
+        {
+          "path": "packages/@magic-ext/passkey/src/utils/base64.ts",
+          "line": 1,
+          "why": "Base64URL class documents the encoder and inverse decoder"
+        },
+        {
+          "path": "packages/@magic-ext/passkey/src/utils/polyfills.ts",
+          "line": 30,
+          "why": "WebAuthn credential JSON polyfill and encoded credential fields"
+        }
+      ],
+      "product_question_asked": true,
+      "question_id": "ME-passkey-base64url"
+    },
+    {
+      "regex_id": "ad31ed3289c6684c593bdcdd1131f471",
+      "site": "packages/@magic-ext/passkey/src/utils/base64.ts:11:44",
+      "pattern": "\\+",
+      "decision": "skip",
+      "reason_code": "internal_presentation_or_format_behavior",
+      "rationale": "The exact pinned source uses this regex for application presentation or format plumbing. The caller does not use it to authorize a security-sensitive action, enforce an independently specified untrusted-input boundary, or emit escaped data into a separate trust domain.",
+      "review_refs": [
+        {
+          "path": "packages/@magic-ext/passkey/src/utils/base64.ts",
+          "line": 11,
+          "why": "exact pinned regex site and immediate consumer"
+        }
+      ],
+      "product_question_asked": false
+    },
+    {
+      "regex_id": "96b6815b4766a423b34b53c3a3d5d27f",
+      "site": "packages/@magic-ext/passkey/src/utils/base64.ts:11:64",
+      "pattern": "\\/",
+      "decision": "skip",
+      "reason_code": "internal_presentation_or_format_behavior",
+      "rationale": "The exact pinned source uses this regex for application presentation or format plumbing. The caller does not use it to authorize a security-sensitive action, enforce an independently specified untrusted-input boundary, or emit escaped data into a separate trust domain.",
+      "review_refs": [
+        {
+          "path": "packages/@magic-ext/passkey/src/utils/base64.ts",
+          "line": 11,
+          "why": "exact pinned regex site and immediate consumer"
+        }
+      ],
+      "product_question_asked": false
+    },
+    {
+      "regex_id": "ab7acdeb1649f36739aa2bc45fa910c6",
+      "site": "packages/@magic-ext/passkey/src/utils/base64.ts:18:37",
+      "pattern": "-",
+      "decision": "skip",
+      "reason_code": "internal_presentation_or_format_behavior",
+      "rationale": "The exact pinned source uses this regex for application presentation or format plumbing. The caller does not use it to authorize a security-sensitive action, enforce an independently specified untrusted-input boundary, or emit escaped data into a separate trust domain.",
+      "review_refs": [
+        {
+          "path": "packages/@magic-ext/passkey/src/utils/base64.ts",
+          "line": 18,
+          "why": "exact pinned regex site and immediate consumer"
+        }
+      ],
+      "product_question_asked": false
+    },
+    {
+      "regex_id": "8b62ce6a8be7b72b2f423fb2c9573329",
+      "site": "packages/@magic-ext/passkey/src/utils/base64.ts:18:56",
+      "pattern": "_",
+      "decision": "skip",
+      "reason_code": "internal_presentation_or_format_behavior",
+      "rationale": "The exact pinned source uses this regex for application presentation or format plumbing. The caller does not use it to authorize a security-sensitive action, enforce an independently specified untrusted-input boundary, or emit escaped data into a separate trust domain.",
+      "review_refs": [
+        {
+          "path": "packages/@magic-ext/passkey/src/utils/base64.ts",
+          "line": 18,
+          "why": "exact pinned regex site and immediate consumer"
+        }
+      ],
+      "product_question_asked": false
+    },
+    {
+      "regex_id": "80496e166f99c86adc3befb5c11b0236",
+      "site": "packages/@magic-ext/react-native-bare-oauth/src/crypto.ts:25:53",
+      "pattern": "=",
+      "decision": "adopted",
+      "reason_code": "oauth_pkce_s256_base64url_representation",
+      "rationale": "The helper Base64-encodes SHA-256(code_verifier), removes padding, and maps the standard alphabet to the URL-safe alphabet before the challenge is sent in an OAuth authorization request. RFC 7636 requires the S256 code challenge to be BASE64URL(SHA256(ASCII(code_verifier))) and defines base64url without padding. The contract covers this output mapping only; it does not claim verifier entropy, state generation, server enforcement, or CSRF correctness.",
+      "review_refs": [
+        {
+          "path": "packages/@magic-ext/react-native-bare-oauth/src/crypto.ts",
+          "line": 15,
+          "why": "PKCE helper requires native secure random values and computes S256 challenge"
+        },
+        {
+          "path": "packages/@magic-ext/react-native-bare-oauth/src/index.ts",
+          "line": 23,
+          "why": "React Native OAuth login submits the challenge and state"
+        }
+      ],
+      "product_question_asked": true,
+      "question_id": "ME-rn-bare-pkce-s256-base64url"
+    },
+    {
+      "regex_id": "0cde396f0caa0b8751333fde6f8f7e69",
+      "site": "packages/@magic-ext/react-native-bare-oauth/src/crypto.ts:25:71",
+      "pattern": "\\+",
+      "decision": "skip",
+      "reason_code": "internal_presentation_or_format_behavior",
+      "rationale": "The exact pinned source uses this regex for application presentation or format plumbing. The caller does not use it to authorize a security-sensitive action, enforce an independently specified untrusted-input boundary, or emit escaped data into a separate trust domain.",
+      "review_refs": [
+        {
+          "path": "packages/@magic-ext/react-native-bare-oauth/src/crypto.ts",
+          "line": 25,
+          "why": "exact pinned regex site and immediate consumer"
+        }
+      ],
+      "product_question_asked": false
+    },
+    {
+      "regex_id": "0f3f22e48eb304548a86cc0761d18e0f",
+      "site": "packages/@magic-ext/react-native-bare-oauth/src/crypto.ts:25:91",
+      "pattern": "\\/",
+      "decision": "skip",
+      "reason_code": "internal_presentation_or_format_behavior",
+      "rationale": "The exact pinned source uses this regex for application presentation or format plumbing. The caller does not use it to authorize a security-sensitive action, enforce an independently specified untrusted-input boundary, or emit escaped data into a separate trust domain.",
+      "review_refs": [
+        {
+          "path": "packages/@magic-ext/react-native-bare-oauth/src/crypto.ts",
+          "line": 25,
+          "why": "exact pinned regex site and immediate consumer"
+        }
+      ],
+      "product_question_asked": false
+    },
+    {
+      "regex_id": "e7c3db9abfe611235db53a7af0e585e1",
+      "site": "packages/@magic-ext/react-native-expo-oauth/src/crypto.ts:25:53",
+      "pattern": "=",
+      "decision": "adopted",
+      "reason_code": "oauth_pkce_s256_base64url_representation",
+      "rationale": "The helper Base64-encodes SHA-256(code_verifier), removes padding, and maps the standard alphabet to the URL-safe alphabet before the challenge is sent in an OAuth authorization request. RFC 7636 requires the S256 code challenge to be BASE64URL(SHA256(ASCII(code_verifier))) and defines base64url without padding. The contract covers this output mapping only; it does not claim verifier entropy, state generation, server enforcement, or CSRF correctness.",
+      "review_refs": [
+        {
+          "path": "packages/@magic-ext/react-native-expo-oauth/src/crypto.ts",
+          "line": 15,
+          "why": "PKCE helper requires native secure random values and computes S256 challenge"
+        },
+        {
+          "path": "packages/@magic-ext/react-native-expo-oauth/src/index.ts",
+          "line": 26,
+          "why": "React Native OAuth login submits the challenge and state"
+        }
+      ],
+      "product_question_asked": true,
+      "question_id": "ME-rn-expo-pkce-s256-base64url"
+    },
+    {
+      "regex_id": "b02e15512377557a013266a996f848a1",
+      "site": "packages/@magic-ext/react-native-expo-oauth/src/crypto.ts:25:71",
+      "pattern": "\\+",
+      "decision": "skip",
+      "reason_code": "internal_presentation_or_format_behavior",
+      "rationale": "The exact pinned source uses this regex for application presentation or format plumbing. The caller does not use it to authorize a security-sensitive action, enforce an independently specified untrusted-input boundary, or emit escaped data into a separate trust domain.",
+      "review_refs": [
+        {
+          "path": "packages/@magic-ext/react-native-expo-oauth/src/crypto.ts",
+          "line": 25,
+          "why": "exact pinned regex site and immediate consumer"
+        }
+      ],
+      "product_question_asked": false
+    },
+    {
+      "regex_id": "9c658725b675f90bc35b7d850db1b91d",
+      "site": "packages/@magic-ext/react-native-expo-oauth/src/crypto.ts:25:91",
+      "pattern": "\\/",
+      "decision": "skip",
+      "reason_code": "internal_presentation_or_format_behavior",
+      "rationale": "The exact pinned source uses this regex for application presentation or format plumbing. The caller does not use it to authorize a security-sensitive action, enforce an independently specified untrusted-input boundary, or emit escaped data into a separate trust domain.",
+      "review_refs": [
+        {
+          "path": "packages/@magic-ext/react-native-expo-oauth/src/crypto.ts",
+          "line": 25,
+          "why": "exact pinned regex site and immediate consumer"
+        }
+      ],
+      "product_question_asked": false
+    },
+    {
+      "regex_id": "d5b6d6379124cb94e68a3fe09f4ff7e2",
+      "site": "packages/@magic-ext/wallet-kit/rollup.config.mjs:43:41",
+      "pattern": "\\[data-color-mode=(light|dark)\\]\\s*$",
+      "decision": "skip",
+      "reason_code": "build_time_css_selector_extraction",
+      "rationale": "These regexes parse CSS selector strings during the wallet-kit build to retain theme and text-style rules. They operate on repository build assets and do not validate untrusted runtime input or protect a product security sink.",
+      "review_refs": [
+        {
+          "path": "packages/@magic-ext/wallet-kit/rollup.config.mjs",
+          "line": 42,
+          "why": "selectors are evaluated in the build-time CSS extraction routine"
+        }
+      ],
+      "product_question_asked": false
+    },
+    {
+      "regex_id": "1a7c8c33513f17b0135c3b725fd89556",
+      "site": "packages/@magic-ext/wallet-kit/rollup.config.mjs:43:98",
+      "pattern": "^\\[data-color-mode=(light|dark)\\]$",
+      "decision": "skip",
+      "reason_code": "build_time_css_selector_extraction",
+      "rationale": "These regexes parse CSS selector strings during the wallet-kit build to retain theme and text-style rules. They operate on repository build assets and do not validate untrusted runtime input or protect a product security sink.",
+      "review_refs": [
+        {
+          "path": "packages/@magic-ext/wallet-kit/rollup.config.mjs",
+          "line": 42,
+          "why": "selectors are evaluated in the build-time CSS extraction routine"
+        }
+      ],
+      "product_question_asked": false
+    },
+    {
+      "regex_id": "f1217adc041e7908d40f6f1aea9473bb",
+      "site": "packages/@magic-ext/wallet-kit/rollup.config.mjs:48:22",
+      "pattern": "^\\s*\\.text-style-[a-z0-9-]+\\s*$",
+      "decision": "skip",
+      "reason_code": "build_time_css_selector_extraction",
+      "rationale": "These regexes parse CSS selector strings during the wallet-kit build to retain theme and text-style rules. They operate on repository build assets and do not validate untrusted runtime input or protect a product security sink.",
+      "review_refs": [
+        {
+          "path": "packages/@magic-ext/wallet-kit/rollup.config.mjs",
+          "line": 42,
+          "why": "selectors are evaluated in the build-time CSS extraction routine"
+        }
+      ],
+      "product_question_asked": false
+    },
+    {
+      "regex_id": "3e2245da18e143b78ce2fe2bbf7fb6c3",
+      "site": "packages/@magic-ext/wallet-kit/src/lib/validators.ts:22:4",
+      "pattern": "^(([^<>()[\\]\\\\.,;:\\s@\"]+(\\.[^<>()[\\]\\\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$",
+      "decision": "unresolved",
+      "reason_code": "email_validator_intent_and_server_boundary_unverified",
+      "rationale": "This regex validates untrusted email text in the wallet-kit login form before startEmailLogin. The repository does not state the accepted email syntax independently or establish that client-side validation is a security boundary with server-side enforcement. Preserve as unresolved; do not count a property question until the intended format and authoritative enforcement path are established.",
+      "review_refs": [
+        {
+          "path": "packages/@magic-ext/wallet-kit/src/lib/validators.ts",
+          "line": 18,
+          "why": "email validator entry point and exact regex"
+        },
+        {
+          "path": "packages/@magic-ext/wallet-kit/src/components/EmailInput.tsx",
+          "line": 24,
+          "why": "form blocks locally invalid and sanctioned email values before calling startEmailLogin"
+        }
+      ],
+      "product_question_asked": false
+    },
+    {
+      "regex_id": "391688fc4ca696e393db3abe1344951b",
+      "site": "packages/@magic-ext/wallet-kit/src/utils/base64.ts:11:26",
+      "pattern": "=",
+      "decision": "adopted",
+      "reason_code": "webauthn_credential_base64url_representation",
+      "rationale": "The exact Base64URL encoder feeds WebAuthn credential JSON fields such as rawId, authenticatorData, clientDataJSON, signatures, and attestationObject. The WebAuthn JSON conversion path names this representation, and RFC 4648 section 5 defines its URL-safe alphabet and optional omitted padding. The contract is limited to the encoder output; it does not claim authentication, decoder rejection of malformed input, or server-side credential validity.",
+      "review_refs": [
+        {
+          "path": "packages/@magic-ext/wallet-kit/src/utils/base64.ts",
+          "line": 1,
+          "why": "Base64URL class documents the encoder and inverse decoder"
+        },
+        {
+          "path": "packages/@magic-ext/wallet-kit/src/utils/polyfills.ts",
+          "line": 30,
+          "why": "WebAuthn credential JSON polyfill and encoded credential fields"
+        }
+      ],
+      "product_question_asked": true,
+      "question_id": "ME-wallet-kit-base64url"
+    },
+    {
+      "regex_id": "3d29510cb395ef4101b4f95321220509",
+      "site": "packages/@magic-ext/wallet-kit/src/utils/base64.ts:11:44",
+      "pattern": "\\+",
+      "decision": "skip",
+      "reason_code": "internal_presentation_or_format_behavior",
+      "rationale": "The exact pinned source uses this regex for application presentation or format plumbing. The caller does not use it to authorize a security-sensitive action, enforce an independently specified untrusted-input boundary, or emit escaped data into a separate trust domain.",
+      "review_refs": [
+        {
+          "path": "packages/@magic-ext/wallet-kit/src/utils/base64.ts",
+          "line": 11,
+          "why": "exact pinned regex site and immediate consumer"
+        }
+      ],
+      "product_question_asked": false
+    },
+    {
+      "regex_id": "186e2359c3caf708223f0fc5297b335f",
+      "site": "packages/@magic-ext/wallet-kit/src/utils/base64.ts:11:64",
+      "pattern": "\\/",
+      "decision": "skip",
+      "reason_code": "internal_presentation_or_format_behavior",
+      "rationale": "The exact pinned source uses this regex for application presentation or format plumbing. The caller does not use it to authorize a security-sensitive action, enforce an independently specified untrusted-input boundary, or emit escaped data into a separate trust domain.",
+      "review_refs": [
+        {
+          "path": "packages/@magic-ext/wallet-kit/src/utils/base64.ts",
+          "line": 11,
+          "why": "exact pinned regex site and immediate consumer"
+        }
+      ],
+      "product_question_asked": false
+    },
+    {
+      "regex_id": "db752638658715a88d11a960f6e79e6f",
+      "site": "packages/@magic-ext/wallet-kit/src/utils/base64.ts:18:37",
+      "pattern": "-",
+      "decision": "skip",
+      "reason_code": "internal_presentation_or_format_behavior",
+      "rationale": "The exact pinned source uses this regex for application presentation or format plumbing. The caller does not use it to authorize a security-sensitive action, enforce an independently specified untrusted-input boundary, or emit escaped data into a separate trust domain.",
+      "review_refs": [
+        {
+          "path": "packages/@magic-ext/wallet-kit/src/utils/base64.ts",
+          "line": 18,
+          "why": "exact pinned regex site and immediate consumer"
+        }
+      ],
+      "product_question_asked": false
+    },
+    {
+      "regex_id": "49500a29bd6490b1c7d0dd1c50690fac",
+      "site": "packages/@magic-ext/wallet-kit/src/utils/base64.ts:18:56",
+      "pattern": "_",
+      "decision": "skip",
+      "reason_code": "internal_presentation_or_format_behavior",
+      "rationale": "The exact pinned source uses this regex for application presentation or format plumbing. The caller does not use it to authorize a security-sensitive action, enforce an independently specified untrusted-input boundary, or emit escaped data into a separate trust domain.",
+      "review_refs": [
+        {
+          "path": "packages/@magic-ext/wallet-kit/src/utils/base64.ts",
+          "line": 18,
+          "why": "exact pinned regex site and immediate consumer"
+        }
+      ],
+      "product_question_asked": false
+    },
+    {
+      "regex_id": "2689f315c0c8c9b3b6483f9cde53e4a3",
+      "site": "packages/@magic-ext/wallet-kit/src/utils/copy.ts:36:23",
+      "pattern": "ipad|ipod|iphone",
+      "decision": "skip",
+      "reason_code": "user_agent_platform_detection",
+      "rationale": "This regex classifies the browser or operating-system family for a UI/platform compatibility path. The user-agent or platform data does not select an authorization decision, and the caller uses the result to choose mobile, clipboard, or wallet presentation behavior.",
+      "review_refs": [
+        {
+          "path": "packages/@magic-ext/wallet-kit/src/utils/copy.ts",
+          "line": 36,
+          "why": "exact user-agent regex and platform branch"
+        },
+        {
+          "path": "packages/@magic-ext/wallet-kit/src/utils/copy.ts",
+          "line": 35,
+          "why": "iOS clipboard compatibility workaround"
+        }
+      ],
+      "product_question_asked": false
+    },
+    {
+      "regex_id": "7648eb15fb32f9456d277fb9b2dbe520",
+      "site": "packages/@magic-ext/wallet-kit/src/utils/device.ts:2:45",
+      "pattern": "android",
+      "decision": "skip",
+      "reason_code": "user_agent_platform_detection",
+      "rationale": "This regex classifies the browser or operating-system family for a UI/platform compatibility path. The user-agent or platform data does not select an authorization decision, and the caller uses the result to choose mobile, clipboard, or wallet presentation behavior.",
+      "review_refs": [
+        {
+          "path": "packages/@magic-ext/wallet-kit/src/utils/device.ts",
+          "line": 2,
+          "why": "exact user-agent regex and platform branch"
+        },
+        {
+          "path": "packages/@magic-ext/wallet-kit/src/views/WalletConnectView.tsx",
+          "line": 36,
+          "why": "mobile detection selects wallet-connect presentation"
+        }
+      ],
+      "product_question_asked": false
+    },
+    {
+      "regex_id": "4fc0ab29d9a62368749617f95bd381b0",
+      "site": "packages/@magic-ext/wallet-kit/src/utils/device.ts:6:45",
+      "pattern": "iPhone|iPod",
+      "decision": "skip",
+      "reason_code": "user_agent_platform_detection",
+      "rationale": "This regex classifies the browser or operating-system family for a UI/platform compatibility path. The user-agent or platform data does not select an authorization decision, and the caller uses the result to choose mobile, clipboard, or wallet presentation behavior.",
+      "review_refs": [
+        {
+          "path": "packages/@magic-ext/wallet-kit/src/utils/device.ts",
+          "line": 6,
+          "why": "exact user-agent regex and platform branch"
+        },
+        {
+          "path": "packages/@magic-ext/wallet-kit/src/views/WalletConnectView.tsx",
+          "line": 36,
+          "why": "mobile detection selects wallet-connect presentation"
+        }
+      ],
+      "product_question_asked": false
+    },
+    {
+      "regex_id": "84a7c767c566cb89c440ffc535f42c82",
+      "site": "packages/@magic-ext/wallet-kit/src/utils/device.ts:12:5",
+      "pattern": "iPad",
+      "decision": "skip",
+      "reason_code": "user_agent_platform_detection",
+      "rationale": "This regex classifies the browser or operating-system family for a UI/platform compatibility path. The user-agent or platform data does not select an authorization decision, and the caller uses the result to choose mobile, clipboard, or wallet presentation behavior.",
+      "review_refs": [
+        {
+          "path": "packages/@magic-ext/wallet-kit/src/utils/device.ts",
+          "line": 12,
+          "why": "exact user-agent regex and platform branch"
+        },
+        {
+          "path": "packages/@magic-ext/wallet-kit/src/views/WalletConnectView.tsx",
+          "line": 36,
+          "why": "mobile detection selects wallet-connect presentation"
+        }
+      ],
+      "product_question_asked": false
+    },
+    {
+      "regex_id": "9d74cad7da31ec1d69bd83ae6d906dce",
+      "site": "packages/@magic-ext/webauthn/src/utils/base64.ts:11:26",
+      "pattern": "=",
+      "decision": "adopted",
+      "reason_code": "webauthn_credential_base64url_representation",
+      "rationale": "The exact Base64URL encoder feeds WebAuthn credential JSON fields such as rawId, authenticatorData, clientDataJSON, signatures, and attestationObject. The WebAuthn JSON conversion path names this representation, and RFC 4648 section 5 defines its URL-safe alphabet and optional omitted padding. The contract is limited to the encoder output; it does not claim authentication, decoder rejection of malformed input, or server-side credential validity.",
+      "review_refs": [
+        {
+          "path": "packages/@magic-ext/webauthn/src/utils/base64.ts",
+          "line": 1,
+          "why": "Base64URL class documents the encoder and inverse decoder"
+        },
+        {
+          "path": "packages/@magic-ext/webauthn/src/utils/polyfills.ts",
+          "line": 30,
+          "why": "WebAuthn credential JSON polyfill and encoded credential fields"
+        }
+      ],
+      "product_question_asked": true,
+      "question_id": "ME-webauthn-base64url"
+    },
+    {
+      "regex_id": "fe10db3d1d14b7ac89fca4c8bfa2fe63",
+      "site": "packages/@magic-ext/webauthn/src/utils/base64.ts:11:44",
+      "pattern": "\\+",
+      "decision": "skip",
+      "reason_code": "internal_presentation_or_format_behavior",
+      "rationale": "The exact pinned source uses this regex for application presentation or format plumbing. The caller does not use it to authorize a security-sensitive action, enforce an independently specified untrusted-input boundary, or emit escaped data into a separate trust domain.",
+      "review_refs": [
+        {
+          "path": "packages/@magic-ext/webauthn/src/utils/base64.ts",
+          "line": 11,
+          "why": "exact pinned regex site and immediate consumer"
+        }
+      ],
+      "product_question_asked": false
+    },
+    {
+      "regex_id": "78900a1bb6e1ccfd5dc440cfa1244663",
+      "site": "packages/@magic-ext/webauthn/src/utils/base64.ts:11:64",
+      "pattern": "\\/",
+      "decision": "skip",
+      "reason_code": "internal_presentation_or_format_behavior",
+      "rationale": "The exact pinned source uses this regex for application presentation or format plumbing. The caller does not use it to authorize a security-sensitive action, enforce an independently specified untrusted-input boundary, or emit escaped data into a separate trust domain.",
+      "review_refs": [
+        {
+          "path": "packages/@magic-ext/webauthn/src/utils/base64.ts",
+          "line": 11,
+          "why": "exact pinned regex site and immediate consumer"
+        }
+      ],
+      "product_question_asked": false
+    },
+    {
+      "regex_id": "bf7a49bf4ebf1284458aba35aa19c8c9",
+      "site": "packages/@magic-ext/webauthn/src/utils/base64.ts:18:37",
+      "pattern": "-",
+      "decision": "skip",
+      "reason_code": "internal_presentation_or_format_behavior",
+      "rationale": "The exact pinned source uses this regex for application presentation or format plumbing. The caller does not use it to authorize a security-sensitive action, enforce an independently specified untrusted-input boundary, or emit escaped data into a separate trust domain.",
+      "review_refs": [
+        {
+          "path": "packages/@magic-ext/webauthn/src/utils/base64.ts",
+          "line": 18,
+          "why": "exact pinned regex site and immediate consumer"
+        }
+      ],
+      "product_question_asked": false
+    },
+    {
+      "regex_id": "f5a7ed7fb67df7e943ac353fb6bd44c3",
+      "site": "packages/@magic-ext/webauthn/src/utils/base64.ts:18:56",
+      "pattern": "_",
+      "decision": "skip",
+      "reason_code": "internal_presentation_or_format_behavior",
+      "rationale": "The exact pinned source uses this regex for application presentation or format plumbing. The caller does not use it to authorize a security-sensitive action, enforce an independently specified untrusted-input boundary, or emit escaped data into a separate trust domain.",
+      "review_refs": [
+        {
+          "path": "packages/@magic-ext/webauthn/src/utils/base64.ts",
+          "line": 18,
+          "why": "exact pinned regex site and immediate consumer"
+        }
+      ],
+      "product_question_asked": false
+    },
+    {
+      "regex_id": "c3999feda55fbb15985f37353e7b96d4",
+      "site": "packages/@magic-sdk/provider/src/util/base64-json.ts:16:46",
+      "pattern": "%[0-9A-F]{2}",
+      "decision": "skip",
+      "reason_code": "utf8_query_transport_encoding_no_security_boundary",
+      "rationale": "encodeJSON uses this regex to convert encodeURIComponent percent escapes to byte-valued characters before btoa, so arbitrary Unicode JSON can be represented. That is a documented transport-format correctness property, but the pinned caller only serializes SDK configuration into Base64 JSON and this transform does not enforce authorization or sanitize across a trust boundary. It is useful functionality coverage, not an adopted security contract.",
+      "review_refs": [
+        {
+          "path": "packages/@magic-sdk/provider/src/util/base64-json.ts",
+          "line": 9,
+          "why": "pinned source documents this as UTF-8-safe Base64 JSON encoding"
+        },
+        {
+          "path": "packages/@magic-sdk/provider/src/core/sdk.ts",
+          "line": 195,
+          "why": "SDK serializes configuration and metadata as Base64 JSON"
+        }
+      ],
+      "product_question_asked": false
+    },
+    {
+      "regex_id": "67d8a25db747c86892aa65a39d0cb68b",
+      "site": "packages/@magic-sdk/provider/src/util/base64-json.ts:54:26",
+      "pattern": "=",
+      "decision": "adopted",
+      "reason_code": "webauthn_credential_base64url_representation",
+      "rationale": "The exact Base64URL encoder feeds WebAuthn credential JSON fields such as rawId, authenticatorData, clientDataJSON, signatures, and attestationObject. The WebAuthn JSON conversion path names this representation, and RFC 4648 section 5 defines its URL-safe alphabet and optional omitted padding. The contract is limited to the encoder output; it does not claim authentication, decoder rejection of malformed input, or server-side credential validity.",
+      "review_refs": [
+        {
+          "path": "packages/@magic-sdk/provider/src/util/base64-json.ts",
+          "line": 44,
+          "why": "Base64URL class documents the encoder and inverse decoder"
+        },
+        {
+          "path": "packages/@magic-sdk/provider/src/util/polyfills.ts",
+          "line": 29,
+          "why": "Provider WebAuthn credential JSON polyfill uses encoded fields"
+        },
+        {
+          "path": "packages/@magic-sdk/provider/src/util/polyfills.ts",
+          "line": 88,
+          "why": "Provider WebAuthn request options decode server-provided values"
+        }
+      ],
+      "product_question_asked": true,
+      "question_id": "ME-provider-webauthn-base64url"
+    },
+    {
+      "regex_id": "65c4b0bd80ddf9f60e07ce36cdfbc353",
+      "site": "packages/@magic-sdk/provider/src/util/base64-json.ts:54:44",
+      "pattern": "\\+",
+      "decision": "skip",
+      "reason_code": "internal_presentation_or_format_behavior",
+      "rationale": "The exact pinned source uses this regex for application presentation or format plumbing. The caller does not use it to authorize a security-sensitive action, enforce an independently specified untrusted-input boundary, or emit escaped data into a separate trust domain.",
+      "review_refs": [
+        {
+          "path": "packages/@magic-sdk/provider/src/util/base64-json.ts",
+          "line": 54,
+          "why": "exact pinned regex site and immediate consumer"
+        }
+      ],
+      "product_question_asked": false
+    },
+    {
+      "regex_id": "029ce6aea36c6ea38ea37ec7729f03ec",
+      "site": "packages/@magic-sdk/provider/src/util/base64-json.ts:54:64",
+      "pattern": "\\/",
+      "decision": "skip",
+      "reason_code": "internal_presentation_or_format_behavior",
+      "rationale": "The exact pinned source uses this regex for application presentation or format plumbing. The caller does not use it to authorize a security-sensitive action, enforce an independently specified untrusted-input boundary, or emit escaped data into a separate trust domain.",
+      "review_refs": [
+        {
+          "path": "packages/@magic-sdk/provider/src/util/base64-json.ts",
+          "line": 54,
+          "why": "exact pinned regex site and immediate consumer"
+        }
+      ],
+      "product_question_asked": false
+    },
+    {
+      "regex_id": "3a55a7ae235aaa70063aa0567d366f8d",
+      "site": "packages/@magic-sdk/provider/src/util/base64-json.ts:61:37",
+      "pattern": "-",
+      "decision": "skip",
+      "reason_code": "internal_presentation_or_format_behavior",
+      "rationale": "The exact pinned source uses this regex for application presentation or format plumbing. The caller does not use it to authorize a security-sensitive action, enforce an independently specified untrusted-input boundary, or emit escaped data into a separate trust domain.",
+      "review_refs": [
+        {
+          "path": "packages/@magic-sdk/provider/src/util/base64-json.ts",
+          "line": 61,
+          "why": "exact pinned regex site and immediate consumer"
+        }
+      ],
+      "product_question_asked": false
+    },
+    {
+      "regex_id": "898c13aec6d4784bbc0ad1c89b900528",
+      "site": "packages/@magic-sdk/provider/src/util/base64-json.ts:61:56",
+      "pattern": "_",
+      "decision": "skip",
+      "reason_code": "internal_presentation_or_format_behavior",
+      "rationale": "The exact pinned source uses this regex for application presentation or format plumbing. The caller does not use it to authorize a security-sensitive action, enforce an independently specified untrusted-input boundary, or emit escaped data into a separate trust domain.",
+      "review_refs": [
+        {
+          "path": "packages/@magic-sdk/provider/src/util/base64-json.ts",
+          "line": 61,
+          "why": "exact pinned regex site and immediate consumer"
+        }
+      ],
+      "product_question_asked": false
+    },
+    {
+      "regex_id": "41917fe3de7963740d05e58b3458d55d",
+      "site": "packages/@magic-sdk/provider/src/util/semver.js:15:416",
+      "pattern": "\\bsemver\\b",
+      "decision": "skip",
+      "reason_code": "version_parser_without_security_boundary",
+      "rationale": "These are regular expressions in a locally bundled semver implementation used by the SDK for version parsing and range comparison. They parse version metadata; the pinned source shows no authorization or output-sanitization boundary at these sites.",
+      "review_refs": [
+        {
+          "path": "packages/@magic-sdk/provider/src/util/semver.js",
+          "line": 6,
+          "why": "source identifies the bundled semver implementation"
+        },
+        {
+          "path": "packages/@magic-sdk/provider/src/core/sdk.ts",
+          "line": 7,
+          "why": "SDK imports semver coerce and range comparison helpers"
+        }
+      ],
+      "product_question_asked": false
+    },
+    {
+      "regex_id": "539dbab27ce9142cc4548dc2ddd8dff5",
+      "site": "packages/@magic-sdk/provider/src/util/semver.js:15:3579",
+      "pattern": "^[0-9]+$",
+      "decision": "skip",
+      "reason_code": "version_parser_without_security_boundary",
+      "rationale": "These are regular expressions in a locally bundled semver implementation used by the SDK for version parsing and range comparison. They parse version metadata; the pinned source shows no authorization or output-sanitization boundary at these sites.",
+      "review_refs": [
+        {
+          "path": "packages/@magic-sdk/provider/src/util/semver.js",
+          "line": 6,
+          "why": "source identifies the bundled semver implementation"
+        },
+        {
+          "path": "packages/@magic-sdk/provider/src/core/sdk.ts",
+          "line": 7,
+          "why": "SDK imports semver coerce and range comparison helpers"
+        }
+      ],
+      "product_question_asked": false
+    },
+    {
+      "regex_id": "c6513b9a7040cc497edfaca27173fe5e",
+      "site": "packages/@magic-sdk/provider/src/util/semver.js:15:4981",
+      "pattern": "^[0-9]+$",
+      "decision": "skip",
+      "reason_code": "version_parser_without_security_boundary",
+      "rationale": "These are regular expressions in a locally bundled semver implementation used by the SDK for version parsing and range comparison. They parse version metadata; the pinned source shows no authorization or output-sanitization boundary at these sites.",
+      "review_refs": [
+        {
+          "path": "packages/@magic-sdk/provider/src/util/semver.js",
+          "line": 6,
+          "why": "source identifies the bundled semver implementation"
+        },
+        {
+          "path": "packages/@magic-sdk/provider/src/core/sdk.ts",
+          "line": 7,
+          "why": "SDK imports semver coerce and range comparison helpers"
+        }
+      ],
+      "product_question_asked": false
+    },
+    {
+      "regex_id": "d8bc85f82bd3efce56fa6ef9904ef9ee",
+      "site": "packages/@magic-sdk/provider/src/util/semver.js:15:10657",
+      "pattern": "\\s*\\|\\|\\s*",
+      "decision": "skip",
+      "reason_code": "version_parser_without_security_boundary",
+      "rationale": "These are regular expressions in a locally bundled semver implementation used by the SDK for version parsing and range comparison. They parse version metadata; the pinned source shows no authorization or output-sanitization boundary at these sites.",
+      "review_refs": [
+        {
+          "path": "packages/@magic-sdk/provider/src/util/semver.js",
+          "line": 6,
+          "why": "source identifies the bundled semver implementation"
+        },
+        {
+          "path": "packages/@magic-sdk/provider/src/core/sdk.ts",
+          "line": 7,
+          "why": "SDK imports semver coerce and range comparison helpers"
+        }
+      ],
+      "product_question_asked": false
+    },
+    {
+      "regex_id": "b80327ca8db23771585ee82dfa7e365d",
+      "site": "packages/@magic-sdk/provider/src/util/semver.js:15:11352",
+      "pattern": "\\s+",
+      "decision": "skip",
+      "reason_code": "version_parser_without_security_boundary",
+      "rationale": "These are regular expressions in a locally bundled semver implementation used by the SDK for version parsing and range comparison. They parse version metadata; the pinned source shows no authorization or output-sanitization boundary at these sites.",
+      "review_refs": [
+        {
+          "path": "packages/@magic-sdk/provider/src/util/semver.js",
+          "line": 6,
+          "why": "source identifies the bundled semver implementation"
+        },
+        {
+          "path": "packages/@magic-sdk/provider/src/core/sdk.ts",
+          "line": 7,
+          "why": "SDK imports semver coerce and range comparison helpers"
+        }
+      ],
+      "product_question_asked": false
+    },
+    {
+      "regex_id": "3ffffb7f32d61dae18d2a3744bc05f1c",
+      "site": "packages/@magic-sdk/provider/src/util/semver.js:15:11502",
+      "pattern": "\\s+",
+      "decision": "skip",
+      "reason_code": "version_parser_without_security_boundary",
+      "rationale": "These are regular expressions in a locally bundled semver implementation used by the SDK for version parsing and range comparison. They parse version metadata; the pinned source shows no authorization or output-sanitization boundary at these sites.",
+      "review_refs": [
+        {
+          "path": "packages/@magic-sdk/provider/src/util/semver.js",
+          "line": 6,
+          "why": "source identifies the bundled semver implementation"
+        },
+        {
+          "path": "packages/@magic-sdk/provider/src/core/sdk.ts",
+          "line": 7,
+          "why": "SDK imports semver coerce and range comparison helpers"
+        }
+      ],
+      "product_question_asked": false
+    },
+    {
+      "regex_id": "bad3d06d1d299afc19ffa8b5bd375036",
+      "site": "packages/@magic-sdk/provider/src/util/semver.js:15:12586",
+      "pattern": "\\s+",
+      "decision": "skip",
+      "reason_code": "version_parser_without_security_boundary",
+      "rationale": "These are regular expressions in a locally bundled semver implementation used by the SDK for version parsing and range comparison. They parse version metadata; the pinned source shows no authorization or output-sanitization boundary at these sites.",
+      "review_refs": [
+        {
+          "path": "packages/@magic-sdk/provider/src/util/semver.js",
+          "line": 6,
+          "why": "source identifies the bundled semver implementation"
+        },
+        {
+          "path": "packages/@magic-sdk/provider/src/core/sdk.ts",
+          "line": 7,
+          "why": "SDK imports semver coerce and range comparison helpers"
+        }
+      ],
+      "product_question_asked": false
+    },
+    {
+      "regex_id": "dc30d302a0bda78ed0baf9bc72c57d33",
+      "site": "packages/@magic-sdk/provider/src/util/semver.js:15:13053",
+      "pattern": "\\s+",
+      "decision": "skip",
+      "reason_code": "version_parser_without_security_boundary",
+      "rationale": "These are regular expressions in a locally bundled semver implementation used by the SDK for version parsing and range comparison. They parse version metadata; the pinned source shows no authorization or output-sanitization boundary at these sites.",
+      "review_refs": [
+        {
+          "path": "packages/@magic-sdk/provider/src/util/semver.js",
+          "line": 6,
+          "why": "source identifies the bundled semver implementation"
+        },
+        {
+          "path": "packages/@magic-sdk/provider/src/core/sdk.ts",
+          "line": 7,
+          "why": "SDK imports semver coerce and range comparison helpers"
+        }
+      ],
+      "product_question_asked": false
+    },
+    {
+      "regex_id": "253c64a6f0dfda498fc355bf97d39d53",
+      "site": "packages/@magic-sdk/provider/src/util/semver.js:15:13864",
+      "pattern": "\\s+",
+      "decision": "skip",
+      "reason_code": "version_parser_without_security_boundary",
+      "rationale": "These are regular expressions in a locally bundled semver implementation used by the SDK for version parsing and range comparison. They parse version metadata; the pinned source shows no authorization or output-sanitization boundary at these sites.",
+      "review_refs": [
+        {
+          "path": "packages/@magic-sdk/provider/src/util/semver.js",
+          "line": 6,
+          "why": "source identifies the bundled semver implementation"
+        },
+        {
+          "path": "packages/@magic-sdk/provider/src/core/sdk.ts",
+          "line": 7,
+          "why": "SDK imports semver coerce and range comparison helpers"
+        }
+      ],
+      "product_question_asked": false
+    },
+    {
+      "regex_id": "060e2b7aec4f211fcb52aa249cfa65d2",
+      "site": "packages/@magic-sdk/provider/src/util/web-crypto.ts:106:27",
+      "pattern": "\\+",
+      "decision": "adopted",
+      "reason_code": "dpop_jws_base64url_representation",
+      "rationale": "binToUrlBase64 creates each DPoP JWS compact component from the JSON header/claims bytes and Web Crypto signature bytes. The transformation removes padding and maps the two standard Base64 symbols to the URL-safe alphabet before dot-joining the three components. RFC 7515 requires these protected-header, payload, and signature components to use unpadded Base64URL. The contract covers this output mapping only; it does not claim DPoP claim validity, key custody, or server acceptance.",
+      "review_refs": [
+        {
+          "path": "packages/@magic-sdk/provider/src/util/web-crypto.ts",
+          "line": 54,
+          "why": "DPoP header and claims are encoded before creating the signing input"
+        },
+        {
+          "path": "packages/@magic-sdk/provider/src/util/web-crypto.ts",
+          "line": 62,
+          "why": "signature bytes are encoded and joined as the final DPoP compact component"
+        },
+        {
+          "path": "packages/@magic-sdk/provider/src/util/web-crypto.ts",
+          "line": 105,
+          "why": "exact Base64URL encoder used for both text and signature bytes"
+        }
+      ],
+      "product_question_asked": true,
+      "question_id": "ME-provider-dpop-base64url"
+    },
+    {
+      "regex_id": "97ad87a35609e352a2b9e035b069a055",
+      "site": "packages/@magic-sdk/provider/src/util/web-crypto.ts:106:47",
+      "pattern": "\\/",
+      "decision": "skip",
+      "reason_code": "internal_presentation_or_format_behavior",
+      "rationale": "The exact pinned source uses this regex for application presentation or format plumbing. The caller does not use it to authorize a security-sensitive action, enforce an independently specified untrusted-input boundary, or emit escaped data into a separate trust domain.",
+      "review_refs": [
+        {
+          "path": "packages/@magic-sdk/provider/src/util/web-crypto.ts",
+          "line": 106,
+          "why": "exact pinned regex site and immediate consumer"
+        }
+      ],
+      "product_question_asked": false
+    },
+    {
+      "regex_id": "32ea265dc97464c2781e857a75705345",
+      "site": "packages/@magic-sdk/provider/src/util/web-crypto.ts:106:67",
+      "pattern": "=+",
+      "decision": "skip",
+      "reason_code": "internal_presentation_or_format_behavior",
+      "rationale": "The exact pinned source uses this regex for application presentation or format plumbing. The caller does not use it to authorize a security-sensitive action, enforce an independently specified untrusted-input boundary, or emit escaped data into a separate trust domain.",
+      "review_refs": [
+        {
+          "path": "packages/@magic-sdk/provider/src/util/web-crypto.ts",
+          "line": 106,
+          "why": "exact pinned regex site and immediate consumer"
+        }
+      ],
+      "product_question_asked": false
+    },
+    {
+      "regex_id": "5614d87df6154792ec00026c243ff5c5",
+      "site": "packages/@magic-sdk/provider/src/util/web-crypto.ts:113:24",
+      "pattern": "%([0-9A-F]{2})",
+      "decision": "skip",
+      "reason_code": "dpop_json_input_ascii_percent_escape_unreachable",
+      "rationale": "This helper percent-decodes encodeURIComponent output before Base64URL conversion, but its only caller passes JSON.stringify of an internally constructed DPoP header and claims object. The header contains fixed ASCII fields and exported JWK Base64URL strings; claims contain an integer timestamp and ASCII UUID. No non-ASCII text reaches this regex in the pinned call path, so a UTF-8 conversion proof here would be vacuous for the product flow.",
+      "review_refs": [
+        {
+          "path": "packages/@magic-sdk/provider/src/util/web-crypto.ts",
+          "line": 43,
+          "why": "the DPoP header and claims fields are constructed from fixed strings, exported JWK values, integer timestamp, and UUID"
+        },
+        {
+          "path": "packages/@magic-sdk/provider/src/util/web-crypto.ts",
+          "line": 54,
+          "why": "the only callers JSON-stringify these constructed ASCII-only objects before strToUrlBase64"
+        },
+        {
+          "path": "packages/@magic-sdk/provider/src/util/web-crypto.ts",
+          "line": 109,
+          "why": "percent escape regex is in the private UTF-8 conversion helper"
+        }
+      ],
+      "product_question_asked": false
+    },
+    {
+      "regex_id": "53b9bb2ec809d82012a74705bd6d9c92",
+      "site": "packages/@magic-sdk/react-native-bare/src/native-crypto/utils/uint8.ts:71:24",
+      "pattern": "\\+",
+      "decision": "adopted",
+      "reason_code": "dpop_jws_base64url_representation",
+      "rationale": "The helper encodes DPoP header, claims, and signature bytes into the compact proof string. Its source documentation names Base64Url and RFC 4648, and the surrounding signing code joins the three encoded components with dots. The contract covers the helper output alphabet and padding only; it does not establish key custody, DPoP claim validity, or proof acceptance by a server.",
+      "review_refs": [
+        {
+          "path": "packages/@magic-sdk/react-native-bare/src/native-crypto/utils/uint8.ts",
+          "line": 57,
+          "why": "helper documentation identifies Base64Url and RFC 4648"
+        },
+        {
+          "path": "packages/@magic-sdk/react-native-bare/src/native-crypto/dpop.ts",
+          "line": 42,
+          "why": "header and claims are encoded into the DPoP signing input"
+        },
+        {
+          "path": "packages/@magic-sdk/react-native-bare/src/native-crypto/dpop.ts",
+          "line": 56,
+          "why": "signature bytes are converted and placed in the final proof"
+        }
+      ],
+      "product_question_asked": true,
+      "question_id": "ME-rn-bare-dpop-base64url"
+    },
+    {
+      "regex_id": "b78196d49fcfd93d7138d485f4a8eea1",
+      "site": "packages/@magic-sdk/react-native-bare/src/native-crypto/utils/uint8.ts:71:44",
+      "pattern": "\\/",
+      "decision": "skip",
+      "reason_code": "internal_presentation_or_format_behavior",
+      "rationale": "The exact pinned source uses this regex for application presentation or format plumbing. The caller does not use it to authorize a security-sensitive action, enforce an independently specified untrusted-input boundary, or emit escaped data into a separate trust domain.",
+      "review_refs": [
+        {
+          "path": "packages/@magic-sdk/react-native-bare/src/native-crypto/utils/uint8.ts",
+          "line": 71,
+          "why": "exact pinned regex site and immediate consumer"
+        }
+      ],
+      "product_question_asked": false
+    },
+    {
+      "regex_id": "01ab588e676b283f6b86cd0380d2a80e",
+      "site": "packages/@magic-sdk/react-native-bare/src/native-crypto/utils/uint8.ts:71:64",
+      "pattern": "=+$",
+      "decision": "skip",
+      "reason_code": "internal_presentation_or_format_behavior",
+      "rationale": "The exact pinned source uses this regex for application presentation or format plumbing. The caller does not use it to authorize a security-sensitive action, enforce an independently specified untrusted-input boundary, or emit escaped data into a separate trust domain.",
+      "review_refs": [
+        {
+          "path": "packages/@magic-sdk/react-native-bare/src/native-crypto/utils/uint8.ts",
+          "line": 71,
+          "why": "exact pinned regex site and immediate consumer"
+        }
+      ],
+      "product_question_asked": false
+    },
+    {
+      "regex_id": "16dddd562a4e6a864f7dc7b50aac87ff",
+      "site": "scripts/utils/esbuild.ts:174:33",
+      "pattern": ".*",
+      "decision": "skip",
+      "reason_code": "internal_presentation_or_format_behavior",
+      "rationale": "The exact pinned source uses this regex for application presentation or format plumbing. The caller does not use it to authorize a security-sensitive action, enforce an independently specified untrusted-input boundary, or emit escaped data into a separate trust domain.",
+      "review_refs": [
+        {
+          "path": "scripts/utils/esbuild.ts",
+          "line": 174,
+          "why": "exact pinned regex site and immediate consumer"
+        }
+      ],
+      "product_question_asked": false
+    },
+    {
+      "regex_id": "93240f0dab1162bedc952952f0896a67",
+      "site": "scripts/utils/esbuild.ts:195:36",
+      "pattern": "^@styled\\/",
+      "decision": "skip",
+      "reason_code": "internal_presentation_or_format_behavior",
+      "rationale": "The exact pinned source uses this regex for application presentation or format plumbing. The caller does not use it to authorize a security-sensitive action, enforce an independently specified untrusted-input boundary, or emit escaped data into a separate trust domain.",
+      "review_refs": [
+        {
+          "path": "scripts/utils/esbuild.ts",
+          "line": 195,
+          "why": "exact pinned regex site and immediate consumer"
+        }
+      ],
+      "product_question_asked": false
+    }
+  ],
+  "limitations": [
+    "Review covers the corrected v3 static ECMA inventory for magiclabs/magic-js at its exact frozen 20-r2 pin; it does not complete P2 for the cohort.",
+    "A dynamic new RegExp at scripts/utils/esbuild.ts:169 receives packageName keys from the internal esbuild globals configuration. It is outside the static literal inventory and is classified as build-time configuration, not a runtime input boundary.",
+    "The wallet-kit email regex remains unresolved because the accepted email syntax and authoritative server enforcement path are not established by this pinned source review.",
+    "No OAuth, WebAuthn, DPoP server, browser service, or external maintainer was contacted or exercised."
+  ]
+}

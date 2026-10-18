@@ -1,0 +1,9 @@
+[
+  {
+    "site": "open-horizon/anax@2f3fa5a506d6565fa68858b7963450567ddda114:cli/cliutils/cliutils.go:2277:MatchString",
+    "reviewed": true,
+    "question_ids": [
+      "AN-anax-orgname-denylist-validation"
+    ]
+  }
+]

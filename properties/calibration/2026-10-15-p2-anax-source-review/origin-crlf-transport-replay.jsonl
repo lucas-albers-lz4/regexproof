@@ -1,0 +1,6 @@
+{"case":"ordinary","status":"HTTP/1.1 204 No Content","handler_ran":true,"origin":"https://good.example"}
+{"case":"obs_fold","status":"HTTP/1.1 204 No Content","handler_ran":true,"origin":"https://fold.example X-Injected: yes"}
+{"case":"separate_header_after_origin","status":"HTTP/1.1 204 No Content","handler_ran":true,"origin":"https://split.example","injected_header":"yes"}
+{"case":"bare_lf_inside_origin","status":"HTTP/1.1 204 No Content","handler_ran":true,"origin":"https://lf.example","injected_header":"yes"}
+{"case":"bare_cr_inside_origin","status":"HTTP/1.1 400 Bad Request","handler_ran":false}
+{"case":"repeated_origin","status":"HTTP/1.1 204 No Content","handler_ran":true,"origin":"https://first.example"}

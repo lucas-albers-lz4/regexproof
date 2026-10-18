@@ -1,0 +1,23 @@
+{
+  "caller_file": "internal/scanner/subdomainmonitor/subdomainmonitor.go",
+  "caller_path": [
+    "subdomainmonitor.diffJSEndpoints reads live subdomains for the scanned domain",
+    "the caller supplies their HTTP(S) URLs to CollectEndpointsForHosts"
+  ],
+  "caller_sha256": "c9ad92e7c9aa6fdd8fa81df81c240ff4fd14a31009820bef3670ff8c2c2932dc",
+  "parser_file": "internal/scanner/jsendpoints/jsendpoints.go",
+  "parser_sha256": "e9c03be11f7aab2a4310ea4944de5620e500f2400b13e22a3e1ea5b16745c549",
+  "readme_file": "README.md",
+  "readme_sha256": "ff9fa0d8ec9e4be93b49a94ecc6104b32cb8db36dac08636740f63f90304a78d",
+  "repository": "https://github.com/h0tak88r/AutoAR",
+  "resolution_path": [
+    "scriptSrcRe captures an absolute HTTP URL from untrusted page HTML",
+    "ResolveReference keeps the absolute URL's origin",
+    "the collector checks HTTP(S) and a .js path but performs no origin or address-class check",
+    "downloadFile issues the request from the scanner process"
+  ],
+  "reviewed_site": "h0tak88r/AutoAR@01cd447ad3b1acfed7e0680596c2c74458a4cf06:internal/scanner/jsendpoints/jsendpoints.go:22:scriptSrcRe",
+  "scope_statement": "Only use it on targets where you have explicit written permission, or on bug bounty programs where the target is in-scope.",
+  "source_pin": "01cd447ad3b1acfed7e0680596c2c74458a4cf06",
+  "source_review_conclusion": "scriptSrcRe captures a URL from remote HTML; absolute references retain their origin; only scheme and .js path are checked before downloadFile fetches the URL. The caller obtains hosts from live subdomains for the scanned domain. README requires authorized/in-scope targets. No same-origin or private-address policy is documented, so this remains a loopback-fetch candidate with security impact unconfirmed."
+}

@@ -4,6 +4,14 @@ Machine-readable and human reports from the batch / harness pipeline. Schemas
 live under `regexproof/schemas/`. Writers: `regexproof/batch/report.py`,
 `regexproof/batch/triage.py`, `scripts/z3-verify.py`.
 
+**Autonomous policy transition (2026-10-13):**
+[AUTONOMOUS-CONTRACTS.md](AUTONOMOUS-CONTRACTS.md) permits evidenced agent
+adoption. The field contracts below describe shipped reports. The shared P1
+eligibility gate reports human, autonomous, and machine-pair rows separately;
+PR4 v3 binds the independent roster to contract hashes and keeps failed or
+unstarted attempts visible. Historical human totals and stopwatch measurements
+retain their original meaning.
+
 ## Cross-cutting semantics
 
 | Rule | Meaning |
@@ -199,6 +207,12 @@ AGENTS.md must match or cite them — enforced by
   `filed`, `filed_plan` ("filed upstream, awaiting response" — distinct from
   `wont_file`), `wont_file`, `false_positive`, `private_first`,
   `fixed_upstream`, `approval_missing`, `out_of_scope_redos`.
+- **Checkpoint-only interim states:** `pending_ground_truth` means the SAT
+  witness has not reproduced in the product implementation;
+  `pending_product_triage` means it did reproduce, while product reachability
+  and security impact still need disposition. These values belong only in a
+  frozen checkpoint's `disposition` field. They are not filing decisions and
+  must not be written to `docs/conversion-upstream.jsonl`.
 - **`approval_missing` escape (required, #556):** a row with
   `status=approval_missing` must carry `approval_escape` — either
   `approval_present` (with `approval_ref`: approval file path or issue/PR

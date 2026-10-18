@@ -1,0 +1,3151 @@
+{
+  "candidates": [
+    {
+      "call_kind": "search",
+      "decision": "skipped",
+      "pattern": "^[0-9]+$",
+      "rank": 1,
+      "rationale": "The pattern is applied to the local date command output before emitting a millisecond timestamp. No untrusted field reaches this check.",
+      "reason_code": "internal_runtime_value",
+      "regex_id": "1454c65f603dc1523fe156ebb9006950",
+      "shortlist_site": ".agents/scripts/pulse-merge-webhook-receiver.sh:136:1",
+      "site": ".agents/scripts/pulse-merge-webhook-receiver.sh:136:1",
+      "source_binding": {
+        "evidence_ref": "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/pulse-merge-webhook-receiver.sh",
+        "path": ".agents/scripts/pulse-merge-webhook-receiver.sh",
+        "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+        "repository_url": "https://github.com/marcusquinn/aidevops",
+        "sha256": "6d882dac90c3f9deb1a0007c9a4216d70f365a4a34ffacd145eb04cc8ae3a325"
+      },
+      "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "window": {
+        "lines": [
+          {
+            "is_target": false,
+            "line": 111,
+            "text": "WEBHOOK_DELIVERY_LEDGER_FILE=\"${WEBHOOK_DELIVERY_LEDGER_FILE:-${HOME}/.aidevops/state/pulse-merge-webhook-deliveries.json}\""
+          },
+          {
+            "is_target": false,
+            "line": 112,
+            "text": "WEBHOOK_DELIVERY_TTL_SECONDS=\"${WEBHOOK_DELIVERY_TTL_SECONDS:-604800}\""
+          },
+          {
+            "is_target": false,
+            "line": 113,
+            "text": "WEBHOOK_DELIVERY_MAX_ENTRIES=\"${WEBHOOK_DELIVERY_MAX_ENTRIES:-4096}\""
+          },
+          {
+            "is_target": false,
+            "line": 114,
+            "text": "WEBHOOK_DISPATCH_MAX_CONCURRENCY=\"${WEBHOOK_DISPATCH_MAX_CONCURRENCY:-4}\""
+          },
+          {
+            "is_target": false,
+            "line": 115,
+            "text": "WEBHOOK_ACTION_PROTOCOL_VERSION=\"${WEBHOOK_ACTION_PROTOCOL_VERSION:-v1}\""
+          },
+          {
+            "is_target": false,
+            "line": 116,
+            "text": "_WEBHOOK_INVALIDATION_FAILED=0"
+          },
+          {
+            "is_target": false,
+            "line": 117,
+            "text": "_WEBHOOK_DELIVERY_RECEIVED_MS=0"
+          },
+          {
+            "is_target": false,
+            "line": 118,
+            "text": "mkdir -p \"$(dirname \"$WEBHOOK_LOG_FILE\")\""
+          },
+          {
+            "is_target": false,
+            "line": 119,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 120,
+            "text": "_whlog() {"
+          },
+          {
+            "is_target": false,
+            "line": 121,
+            "text": "\tlocal level=\"$1\""
+          },
+          {
+            "is_target": false,
+            "line": 122,
+            "text": "\tshift"
+          },
+          {
+            "is_target": false,
+            "line": 123,
+            "text": "\tlocal ts"
+          },
+          {
+            "is_target": false,
+            "line": 124,
+            "text": "\tts=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          },
+          {
+            "is_target": false,
+            "line": 125,
+            "text": "\tprintf '[%s] [%s] %s\\n' \"$ts\" \"$level\" \"$*\" >>\"$WEBHOOK_LOG_FILE\""
+          },
+          {
+            "is_target": false,
+            "line": 126,
+            "text": "\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 127,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 128,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 129,
+            "text": "_webhook_now_ms() {"
+          },
+          {
+            "is_target": false,
+            "line": 130,
+            "text": "\tlocal now_ms=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 131,
+            "text": "\tif declare -F _gh_now_ms >/dev/null 2>&1; then"
+          },
+          {
+            "is_target": false,
+            "line": 132,
+            "text": "\t\t_gh_now_ms || return 1"
+          },
+          {
+            "is_target": false,
+            "line": 133,
+            "text": "\t\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 134,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 135,
+            "text": "\tnow_ms=$(date +%s 2>/dev/null) || return 1"
+          },
+          {
+            "is_target": true,
+            "line": 136,
+            "text": "\t[[ \"$now_ms\" =~ ^[0-9]+$ ]] || return 1"
+          },
+          {
+            "is_target": false,
+            "line": 137,
+            "text": "\tprintf '%s\\n' \"$((now_ms * 1000))\""
+          },
+          {
+            "is_target": false,
+            "line": 138,
+            "text": "\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 139,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 140,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 141,
+            "text": "_webhook_record_invalidation_evidence() {"
+          },
+          {
+            "is_target": false,
+            "line": 142,
+            "text": "\tlocal received_ms=\"${_WEBHOOK_DELIVERY_RECEIVED_MS:-0}\""
+          },
+          {
+            "is_target": false,
+            "line": 143,
+            "text": "\tlocal now_ms=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 144,
+            "text": "\tlocal lag_ms=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 145,
+            "text": "\tdeclare -F gh_record_efficiency_evidence >/dev/null 2>&1 || return 0"
+          },
+          {
+            "is_target": false,
+            "line": 146,
+            "text": "\tgh_record_efficiency_evidence webhook.invalidations 1 2>/dev/null || true"
+          },
+          {
+            "is_target": false,
+            "line": 147,
+            "text": "\t[[ \"$received_ms\" =~ ^[0-9]+$ && \"$received_ms\" -gt 0 ]] || return 0"
+          },
+          {
+            "is_target": false,
+            "line": 148,
+            "text": "\tnow_ms=$(_webhook_now_ms) || return 0"
+          },
+          {
+            "is_target": false,
+            "line": 149,
+            "text": "\t[[ \"$now_ms\" =~ ^[0-9]+$ && \"$now_ms\" -ge \"$received_ms\" ]] || return 0"
+          },
+          {
+            "is_target": false,
+            "line": 150,
+            "text": "\tlag_ms=$((now_ms - received_ms))"
+          },
+          {
+            "is_target": false,
+            "line": 151,
+            "text": "\t[[ \"$lag_ms\" -le 604800000 ]] || return 0"
+          },
+          {
+            "is_target": false,
+            "line": 152,
+            "text": "\tgh_record_efficiency_evidence webhook.lag_ms \"$lag_ms\" 2>/dev/null || true"
+          },
+          {
+            "is_target": false,
+            "line": 153,
+            "text": "\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 154,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 155,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 156,
+            "text": "_webhook_record_missed_recovery() {"
+          },
+          {
+            "is_target": false,
+            "line": 157,
+            "text": "\tif declare -F gh_record_efficiency_evidence >/dev/null 2>&1; then"
+          },
+          {
+            "is_target": false,
+            "line": 158,
+            "text": "\t\tgh_record_efficiency_evidence webhook.missed_recoveries 1 2>/dev/null || true"
+          },
+          {
+            "is_target": false,
+            "line": 159,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 160,
+            "text": "\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 161,
+            "text": "}"
+          }
+        ],
+        "path": ".agents/scripts/pulse-merge-webhook-receiver.sh",
+        "target_line": 136,
+        "token": "1",
+        "window_end": 161,
+        "window_lines": 51,
+        "window_start": 111
+      }
+    },
+    {
+      "call_kind": "search",
+      "decision": "skipped",
+      "pattern": "^[0-9]+$",
+      "rank": 2,
+      "rationale": "The value comes from the receiver-local server-to-shell timing record, not from a request field; the security and protocol checks live in the authenticated server and the action parser.",
+      "reason_code": "internal_server_timestamp",
+      "regex_id": "2257924cc63bf89d151fabf3e22e77f9",
+      "shortlist_site": ".agents/scripts/pulse-merge-webhook-receiver.sh:147:1",
+      "site": ".agents/scripts/pulse-merge-webhook-receiver.sh:147:1",
+      "source_binding": {
+        "evidence_ref": "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/pulse-merge-webhook-receiver.sh",
+        "path": ".agents/scripts/pulse-merge-webhook-receiver.sh",
+        "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+        "repository_url": "https://github.com/marcusquinn/aidevops",
+        "sha256": "6d882dac90c3f9deb1a0007c9a4216d70f365a4a34ffacd145eb04cc8ae3a325"
+      },
+      "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "window": {
+        "lines": [
+          {
+            "is_target": false,
+            "line": 122,
+            "text": "\tshift"
+          },
+          {
+            "is_target": false,
+            "line": 123,
+            "text": "\tlocal ts"
+          },
+          {
+            "is_target": false,
+            "line": 124,
+            "text": "\tts=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          },
+          {
+            "is_target": false,
+            "line": 125,
+            "text": "\tprintf '[%s] [%s] %s\\n' \"$ts\" \"$level\" \"$*\" >>\"$WEBHOOK_LOG_FILE\""
+          },
+          {
+            "is_target": false,
+            "line": 126,
+            "text": "\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 127,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 128,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 129,
+            "text": "_webhook_now_ms() {"
+          },
+          {
+            "is_target": false,
+            "line": 130,
+            "text": "\tlocal now_ms=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 131,
+            "text": "\tif declare -F _gh_now_ms >/dev/null 2>&1; then"
+          },
+          {
+            "is_target": false,
+            "line": 132,
+            "text": "\t\t_gh_now_ms || return 1"
+          },
+          {
+            "is_target": false,
+            "line": 133,
+            "text": "\t\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 134,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 135,
+            "text": "\tnow_ms=$(date +%s 2>/dev/null) || return 1"
+          },
+          {
+            "is_target": false,
+            "line": 136,
+            "text": "\t[[ \"$now_ms\" =~ ^[0-9]+$ ]] || return 1"
+          },
+          {
+            "is_target": false,
+            "line": 137,
+            "text": "\tprintf '%s\\n' \"$((now_ms * 1000))\""
+          },
+          {
+            "is_target": false,
+            "line": 138,
+            "text": "\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 139,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 140,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 141,
+            "text": "_webhook_record_invalidation_evidence() {"
+          },
+          {
+            "is_target": false,
+            "line": 142,
+            "text": "\tlocal received_ms=\"${_WEBHOOK_DELIVERY_RECEIVED_MS:-0}\""
+          },
+          {
+            "is_target": false,
+            "line": 143,
+            "text": "\tlocal now_ms=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 144,
+            "text": "\tlocal lag_ms=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 145,
+            "text": "\tdeclare -F gh_record_efficiency_evidence >/dev/null 2>&1 || return 0"
+          },
+          {
+            "is_target": false,
+            "line": 146,
+            "text": "\tgh_record_efficiency_evidence webhook.invalidations 1 2>/dev/null || true"
+          },
+          {
+            "is_target": true,
+            "line": 147,
+            "text": "\t[[ \"$received_ms\" =~ ^[0-9]+$ && \"$received_ms\" -gt 0 ]] || return 0"
+          },
+          {
+            "is_target": false,
+            "line": 148,
+            "text": "\tnow_ms=$(_webhook_now_ms) || return 0"
+          },
+          {
+            "is_target": false,
+            "line": 149,
+            "text": "\t[[ \"$now_ms\" =~ ^[0-9]+$ && \"$now_ms\" -ge \"$received_ms\" ]] || return 0"
+          },
+          {
+            "is_target": false,
+            "line": 150,
+            "text": "\tlag_ms=$((now_ms - received_ms))"
+          },
+          {
+            "is_target": false,
+            "line": 151,
+            "text": "\t[[ \"$lag_ms\" -le 604800000 ]] || return 0"
+          },
+          {
+            "is_target": false,
+            "line": 152,
+            "text": "\tgh_record_efficiency_evidence webhook.lag_ms \"$lag_ms\" 2>/dev/null || true"
+          },
+          {
+            "is_target": false,
+            "line": 153,
+            "text": "\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 154,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 155,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 156,
+            "text": "_webhook_record_missed_recovery() {"
+          },
+          {
+            "is_target": false,
+            "line": 157,
+            "text": "\tif declare -F gh_record_efficiency_evidence >/dev/null 2>&1; then"
+          },
+          {
+            "is_target": false,
+            "line": 158,
+            "text": "\t\tgh_record_efficiency_evidence webhook.missed_recoveries 1 2>/dev/null || true"
+          },
+          {
+            "is_target": false,
+            "line": 159,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 160,
+            "text": "\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 161,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 162,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 163,
+            "text": "# Resolve the secret value from the env var named in WEBHOOK_SECRET_ENV."
+          },
+          {
+            "is_target": false,
+            "line": 164,
+            "text": "# We never log the secret itself — only whether it is set."
+          },
+          {
+            "is_target": false,
+            "line": 165,
+            "text": "_resolve_secret() {"
+          },
+          {
+            "is_target": false,
+            "line": 166,
+            "text": "\tlocal env_var_name=\"${WEBHOOK_SECRET_ENV:-GITHUB_WEBHOOK_SECRET}\""
+          },
+          {
+            "is_target": false,
+            "line": 167,
+            "text": "\t[[ \"$env_var_name\" =~ ^[A-Za-z_][A-Za-z0-9_]*$ ]] || return 1"
+          },
+          {
+            "is_target": false,
+            "line": 168,
+            "text": "\t# shellcheck disable=SC2086"
+          },
+          {
+            "is_target": false,
+            "line": 169,
+            "text": "\tlocal secret_val=\"${!env_var_name:-}\""
+          },
+          {
+            "is_target": false,
+            "line": 170,
+            "text": "\tif [[ -z \"$secret_val\" ]]; then"
+          },
+          {
+            "is_target": false,
+            "line": 171,
+            "text": "\t\t# Try gopass as a secondary source — best-effort, fail-quiet."
+          },
+          {
+            "is_target": false,
+            "line": 172,
+            "text": "\t\tif command -v gopass >/dev/null 2>&1; then"
+          }
+        ],
+        "path": ".agents/scripts/pulse-merge-webhook-receiver.sh",
+        "target_line": 147,
+        "token": "1",
+        "window_end": 172,
+        "window_lines": 51,
+        "window_start": 122
+      }
+    },
+    {
+      "call_kind": "search",
+      "decision": "skipped",
+      "pattern": "^[0-9]+$",
+      "rank": 3,
+      "rationale": "The compared current time comes from the local clock helper. This is internal timing evidence, not a security-boundary input.",
+      "reason_code": "internal_runtime_timestamp",
+      "regex_id": "484b07d8fce3e935342cdf03e7a8a0a2",
+      "shortlist_site": ".agents/scripts/pulse-merge-webhook-receiver.sh:149:1",
+      "site": ".agents/scripts/pulse-merge-webhook-receiver.sh:149:1",
+      "source_binding": {
+        "evidence_ref": "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/pulse-merge-webhook-receiver.sh",
+        "path": ".agents/scripts/pulse-merge-webhook-receiver.sh",
+        "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+        "repository_url": "https://github.com/marcusquinn/aidevops",
+        "sha256": "6d882dac90c3f9deb1a0007c9a4216d70f365a4a34ffacd145eb04cc8ae3a325"
+      },
+      "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "window": {
+        "lines": [
+          {
+            "is_target": false,
+            "line": 124,
+            "text": "\tts=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          },
+          {
+            "is_target": false,
+            "line": 125,
+            "text": "\tprintf '[%s] [%s] %s\\n' \"$ts\" \"$level\" \"$*\" >>\"$WEBHOOK_LOG_FILE\""
+          },
+          {
+            "is_target": false,
+            "line": 126,
+            "text": "\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 127,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 128,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 129,
+            "text": "_webhook_now_ms() {"
+          },
+          {
+            "is_target": false,
+            "line": 130,
+            "text": "\tlocal now_ms=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 131,
+            "text": "\tif declare -F _gh_now_ms >/dev/null 2>&1; then"
+          },
+          {
+            "is_target": false,
+            "line": 132,
+            "text": "\t\t_gh_now_ms || return 1"
+          },
+          {
+            "is_target": false,
+            "line": 133,
+            "text": "\t\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 134,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 135,
+            "text": "\tnow_ms=$(date +%s 2>/dev/null) || return 1"
+          },
+          {
+            "is_target": false,
+            "line": 136,
+            "text": "\t[[ \"$now_ms\" =~ ^[0-9]+$ ]] || return 1"
+          },
+          {
+            "is_target": false,
+            "line": 137,
+            "text": "\tprintf '%s\\n' \"$((now_ms * 1000))\""
+          },
+          {
+            "is_target": false,
+            "line": 138,
+            "text": "\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 139,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 140,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 141,
+            "text": "_webhook_record_invalidation_evidence() {"
+          },
+          {
+            "is_target": false,
+            "line": 142,
+            "text": "\tlocal received_ms=\"${_WEBHOOK_DELIVERY_RECEIVED_MS:-0}\""
+          },
+          {
+            "is_target": false,
+            "line": 143,
+            "text": "\tlocal now_ms=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 144,
+            "text": "\tlocal lag_ms=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 145,
+            "text": "\tdeclare -F gh_record_efficiency_evidence >/dev/null 2>&1 || return 0"
+          },
+          {
+            "is_target": false,
+            "line": 146,
+            "text": "\tgh_record_efficiency_evidence webhook.invalidations 1 2>/dev/null || true"
+          },
+          {
+            "is_target": false,
+            "line": 147,
+            "text": "\t[[ \"$received_ms\" =~ ^[0-9]+$ && \"$received_ms\" -gt 0 ]] || return 0"
+          },
+          {
+            "is_target": false,
+            "line": 148,
+            "text": "\tnow_ms=$(_webhook_now_ms) || return 0"
+          },
+          {
+            "is_target": true,
+            "line": 149,
+            "text": "\t[[ \"$now_ms\" =~ ^[0-9]+$ && \"$now_ms\" -ge \"$received_ms\" ]] || return 0"
+          },
+          {
+            "is_target": false,
+            "line": 150,
+            "text": "\tlag_ms=$((now_ms - received_ms))"
+          },
+          {
+            "is_target": false,
+            "line": 151,
+            "text": "\t[[ \"$lag_ms\" -le 604800000 ]] || return 0"
+          },
+          {
+            "is_target": false,
+            "line": 152,
+            "text": "\tgh_record_efficiency_evidence webhook.lag_ms \"$lag_ms\" 2>/dev/null || true"
+          },
+          {
+            "is_target": false,
+            "line": 153,
+            "text": "\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 154,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 155,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 156,
+            "text": "_webhook_record_missed_recovery() {"
+          },
+          {
+            "is_target": false,
+            "line": 157,
+            "text": "\tif declare -F gh_record_efficiency_evidence >/dev/null 2>&1; then"
+          },
+          {
+            "is_target": false,
+            "line": 158,
+            "text": "\t\tgh_record_efficiency_evidence webhook.missed_recoveries 1 2>/dev/null || true"
+          },
+          {
+            "is_target": false,
+            "line": 159,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 160,
+            "text": "\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 161,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 162,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 163,
+            "text": "# Resolve the secret value from the env var named in WEBHOOK_SECRET_ENV."
+          },
+          {
+            "is_target": false,
+            "line": 164,
+            "text": "# We never log the secret itself — only whether it is set."
+          },
+          {
+            "is_target": false,
+            "line": 165,
+            "text": "_resolve_secret() {"
+          },
+          {
+            "is_target": false,
+            "line": 166,
+            "text": "\tlocal env_var_name=\"${WEBHOOK_SECRET_ENV:-GITHUB_WEBHOOK_SECRET}\""
+          },
+          {
+            "is_target": false,
+            "line": 167,
+            "text": "\t[[ \"$env_var_name\" =~ ^[A-Za-z_][A-Za-z0-9_]*$ ]] || return 1"
+          },
+          {
+            "is_target": false,
+            "line": 168,
+            "text": "\t# shellcheck disable=SC2086"
+          },
+          {
+            "is_target": false,
+            "line": 169,
+            "text": "\tlocal secret_val=\"${!env_var_name:-}\""
+          },
+          {
+            "is_target": false,
+            "line": 170,
+            "text": "\tif [[ -z \"$secret_val\" ]]; then"
+          },
+          {
+            "is_target": false,
+            "line": 171,
+            "text": "\t\t# Try gopass as a secondary source — best-effort, fail-quiet."
+          },
+          {
+            "is_target": false,
+            "line": 172,
+            "text": "\t\tif command -v gopass >/dev/null 2>&1; then"
+          },
+          {
+            "is_target": false,
+            "line": 173,
+            "text": "\t\t\tsecret_val=$(gopass show -o \"aidevops/${env_var_name}\" 2>/dev/null || true)"
+          },
+          {
+            "is_target": false,
+            "line": 174,
+            "text": "\t\tfi"
+          }
+        ],
+        "path": ".agents/scripts/pulse-merge-webhook-receiver.sh",
+        "target_line": 149,
+        "token": "1",
+        "window_end": 174,
+        "window_lines": 51,
+        "window_start": 124
+      }
+    },
+    {
+      "call_kind": "search",
+      "decision": "adopted",
+      "pattern": "^[A-Za-z_][A-Za-z0-9_]*$",
+      "rank": 4,
+      "rationale": "WEBHOOK_SECRET_ENV is operator configuration. The exact function checks the Bash identifier grammar before indirect expansion; the same contract will replay both resolve and clear paths.",
+      "reason_code": "secret_env_identifier",
+      "regex_id": "81124d60d9486d93420cc2be400664d0",
+      "shortlist_site": ".agents/scripts/pulse-merge-webhook-receiver.sh:167:1",
+      "site": ".agents/scripts/pulse-merge-webhook-receiver.sh:167:1",
+      "source_binding": {
+        "evidence_ref": "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/pulse-merge-webhook-receiver.sh",
+        "path": ".agents/scripts/pulse-merge-webhook-receiver.sh",
+        "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+        "repository_url": "https://github.com/marcusquinn/aidevops",
+        "sha256": "6d882dac90c3f9deb1a0007c9a4216d70f365a4a34ffacd145eb04cc8ae3a325"
+      },
+      "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "window": {
+        "lines": [
+          {
+            "is_target": false,
+            "line": 142,
+            "text": "\tlocal received_ms=\"${_WEBHOOK_DELIVERY_RECEIVED_MS:-0}\""
+          },
+          {
+            "is_target": false,
+            "line": 143,
+            "text": "\tlocal now_ms=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 144,
+            "text": "\tlocal lag_ms=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 145,
+            "text": "\tdeclare -F gh_record_efficiency_evidence >/dev/null 2>&1 || return 0"
+          },
+          {
+            "is_target": false,
+            "line": 146,
+            "text": "\tgh_record_efficiency_evidence webhook.invalidations 1 2>/dev/null || true"
+          },
+          {
+            "is_target": false,
+            "line": 147,
+            "text": "\t[[ \"$received_ms\" =~ ^[0-9]+$ && \"$received_ms\" -gt 0 ]] || return 0"
+          },
+          {
+            "is_target": false,
+            "line": 148,
+            "text": "\tnow_ms=$(_webhook_now_ms) || return 0"
+          },
+          {
+            "is_target": false,
+            "line": 149,
+            "text": "\t[[ \"$now_ms\" =~ ^[0-9]+$ && \"$now_ms\" -ge \"$received_ms\" ]] || return 0"
+          },
+          {
+            "is_target": false,
+            "line": 150,
+            "text": "\tlag_ms=$((now_ms - received_ms))"
+          },
+          {
+            "is_target": false,
+            "line": 151,
+            "text": "\t[[ \"$lag_ms\" -le 604800000 ]] || return 0"
+          },
+          {
+            "is_target": false,
+            "line": 152,
+            "text": "\tgh_record_efficiency_evidence webhook.lag_ms \"$lag_ms\" 2>/dev/null || true"
+          },
+          {
+            "is_target": false,
+            "line": 153,
+            "text": "\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 154,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 155,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 156,
+            "text": "_webhook_record_missed_recovery() {"
+          },
+          {
+            "is_target": false,
+            "line": 157,
+            "text": "\tif declare -F gh_record_efficiency_evidence >/dev/null 2>&1; then"
+          },
+          {
+            "is_target": false,
+            "line": 158,
+            "text": "\t\tgh_record_efficiency_evidence webhook.missed_recoveries 1 2>/dev/null || true"
+          },
+          {
+            "is_target": false,
+            "line": 159,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 160,
+            "text": "\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 161,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 162,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 163,
+            "text": "# Resolve the secret value from the env var named in WEBHOOK_SECRET_ENV."
+          },
+          {
+            "is_target": false,
+            "line": 164,
+            "text": "# We never log the secret itself — only whether it is set."
+          },
+          {
+            "is_target": false,
+            "line": 165,
+            "text": "_resolve_secret() {"
+          },
+          {
+            "is_target": false,
+            "line": 166,
+            "text": "\tlocal env_var_name=\"${WEBHOOK_SECRET_ENV:-GITHUB_WEBHOOK_SECRET}\""
+          },
+          {
+            "is_target": true,
+            "line": 167,
+            "text": "\t[[ \"$env_var_name\" =~ ^[A-Za-z_][A-Za-z0-9_]*$ ]] || return 1"
+          },
+          {
+            "is_target": false,
+            "line": 168,
+            "text": "\t# shellcheck disable=SC2086"
+          },
+          {
+            "is_target": false,
+            "line": 169,
+            "text": "\tlocal secret_val=\"${!env_var_name:-}\""
+          },
+          {
+            "is_target": false,
+            "line": 170,
+            "text": "\tif [[ -z \"$secret_val\" ]]; then"
+          },
+          {
+            "is_target": false,
+            "line": 171,
+            "text": "\t\t# Try gopass as a secondary source — best-effort, fail-quiet."
+          },
+          {
+            "is_target": false,
+            "line": 172,
+            "text": "\t\tif command -v gopass >/dev/null 2>&1; then"
+          },
+          {
+            "is_target": false,
+            "line": 173,
+            "text": "\t\t\tsecret_val=$(gopass show -o \"aidevops/${env_var_name}\" 2>/dev/null || true)"
+          },
+          {
+            "is_target": false,
+            "line": 174,
+            "text": "\t\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 175,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 176,
+            "text": "\tprintf '%s' \"$secret_val\""
+          },
+          {
+            "is_target": false,
+            "line": 177,
+            "text": "\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 178,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 179,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 180,
+            "text": "_clear_webhook_secret_env() {"
+          },
+          {
+            "is_target": false,
+            "line": 181,
+            "text": "\tlocal env_var_name=\"${WEBHOOK_SECRET_ENV:-GITHUB_WEBHOOK_SECRET}\""
+          },
+          {
+            "is_target": false,
+            "line": 182,
+            "text": "\t[[ \"$env_var_name\" =~ ^[A-Za-z_][A-Za-z0-9_]*$ ]] || return 1"
+          },
+          {
+            "is_target": false,
+            "line": 183,
+            "text": "\tunset \"$env_var_name\""
+          },
+          {
+            "is_target": false,
+            "line": 184,
+            "text": "\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 185,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 186,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 187,
+            "text": "_webhook_positive_integer() {"
+          },
+          {
+            "is_target": false,
+            "line": 188,
+            "text": "\tlocal value=\"$1\""
+          },
+          {
+            "is_target": false,
+            "line": 189,
+            "text": "\t[[ \"$value\" =~ ^[0-9]+$ && \"$value\" -gt 0 ]]"
+          },
+          {
+            "is_target": false,
+            "line": 190,
+            "text": "\treturn $?"
+          },
+          {
+            "is_target": false,
+            "line": 191,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 192,
+            "text": ""
+          }
+        ],
+        "path": ".agents/scripts/pulse-merge-webhook-receiver.sh",
+        "target_line": 167,
+        "token": "1",
+        "window_end": 192,
+        "window_lines": 51,
+        "window_start": 142
+      }
+    },
+    {
+      "call_kind": "search",
+      "decision": "skipped",
+      "pattern": "^[A-Za-z_][A-Za-z0-9_]*$",
+      "rank": 5,
+      "rationale": "This is the second occurrence of the same environment-name guard in the clear helper. It is covered by the line-167 contract and gate rather than counted as another independent question.",
+      "reason_code": "shared_contract_duplicate",
+      "regex_id": "36b8e5b02a910142562c180278b7aae5",
+      "shortlist_site": ".agents/scripts/pulse-merge-webhook-receiver.sh:182:1",
+      "site": ".agents/scripts/pulse-merge-webhook-receiver.sh:182:1",
+      "source_binding": {
+        "evidence_ref": "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/pulse-merge-webhook-receiver.sh",
+        "path": ".agents/scripts/pulse-merge-webhook-receiver.sh",
+        "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+        "repository_url": "https://github.com/marcusquinn/aidevops",
+        "sha256": "6d882dac90c3f9deb1a0007c9a4216d70f365a4a34ffacd145eb04cc8ae3a325"
+      },
+      "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "window": {
+        "lines": [
+          {
+            "is_target": false,
+            "line": 157,
+            "text": "\tif declare -F gh_record_efficiency_evidence >/dev/null 2>&1; then"
+          },
+          {
+            "is_target": false,
+            "line": 158,
+            "text": "\t\tgh_record_efficiency_evidence webhook.missed_recoveries 1 2>/dev/null || true"
+          },
+          {
+            "is_target": false,
+            "line": 159,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 160,
+            "text": "\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 161,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 162,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 163,
+            "text": "# Resolve the secret value from the env var named in WEBHOOK_SECRET_ENV."
+          },
+          {
+            "is_target": false,
+            "line": 164,
+            "text": "# We never log the secret itself — only whether it is set."
+          },
+          {
+            "is_target": false,
+            "line": 165,
+            "text": "_resolve_secret() {"
+          },
+          {
+            "is_target": false,
+            "line": 166,
+            "text": "\tlocal env_var_name=\"${WEBHOOK_SECRET_ENV:-GITHUB_WEBHOOK_SECRET}\""
+          },
+          {
+            "is_target": false,
+            "line": 167,
+            "text": "\t[[ \"$env_var_name\" =~ ^[A-Za-z_][A-Za-z0-9_]*$ ]] || return 1"
+          },
+          {
+            "is_target": false,
+            "line": 168,
+            "text": "\t# shellcheck disable=SC2086"
+          },
+          {
+            "is_target": false,
+            "line": 169,
+            "text": "\tlocal secret_val=\"${!env_var_name:-}\""
+          },
+          {
+            "is_target": false,
+            "line": 170,
+            "text": "\tif [[ -z \"$secret_val\" ]]; then"
+          },
+          {
+            "is_target": false,
+            "line": 171,
+            "text": "\t\t# Try gopass as a secondary source — best-effort, fail-quiet."
+          },
+          {
+            "is_target": false,
+            "line": 172,
+            "text": "\t\tif command -v gopass >/dev/null 2>&1; then"
+          },
+          {
+            "is_target": false,
+            "line": 173,
+            "text": "\t\t\tsecret_val=$(gopass show -o \"aidevops/${env_var_name}\" 2>/dev/null || true)"
+          },
+          {
+            "is_target": false,
+            "line": 174,
+            "text": "\t\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 175,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 176,
+            "text": "\tprintf '%s' \"$secret_val\""
+          },
+          {
+            "is_target": false,
+            "line": 177,
+            "text": "\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 178,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 179,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 180,
+            "text": "_clear_webhook_secret_env() {"
+          },
+          {
+            "is_target": false,
+            "line": 181,
+            "text": "\tlocal env_var_name=\"${WEBHOOK_SECRET_ENV:-GITHUB_WEBHOOK_SECRET}\""
+          },
+          {
+            "is_target": true,
+            "line": 182,
+            "text": "\t[[ \"$env_var_name\" =~ ^[A-Za-z_][A-Za-z0-9_]*$ ]] || return 1"
+          },
+          {
+            "is_target": false,
+            "line": 183,
+            "text": "\tunset \"$env_var_name\""
+          },
+          {
+            "is_target": false,
+            "line": 184,
+            "text": "\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 185,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 186,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 187,
+            "text": "_webhook_positive_integer() {"
+          },
+          {
+            "is_target": false,
+            "line": 188,
+            "text": "\tlocal value=\"$1\""
+          },
+          {
+            "is_target": false,
+            "line": 189,
+            "text": "\t[[ \"$value\" =~ ^[0-9]+$ && \"$value\" -gt 0 ]]"
+          },
+          {
+            "is_target": false,
+            "line": 190,
+            "text": "\treturn $?"
+          },
+          {
+            "is_target": false,
+            "line": 191,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 192,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 193,
+            "text": "_webhook_valid_slug() {"
+          },
+          {
+            "is_target": false,
+            "line": 194,
+            "text": "\tlocal slug=\"$1\""
+          },
+          {
+            "is_target": false,
+            "line": 195,
+            "text": "\tlocal owner=\"${slug%%/*}\""
+          },
+          {
+            "is_target": false,
+            "line": 196,
+            "text": "\tlocal name=\"${slug#*/}\""
+          },
+          {
+            "is_target": false,
+            "line": 197,
+            "text": "\t[[ \"$slug\" =~ ^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$ ]] || return 1"
+          },
+          {
+            "is_target": false,
+            "line": 198,
+            "text": "\t[[ \"$owner\" =~ ^[A-Za-z0-9][A-Za-z0-9_.-]*$ ]] || return 1"
+          },
+          {
+            "is_target": false,
+            "line": 199,
+            "text": "\t[[ \"$name\" != \".\" && \"$name\" != \"..\" ]]"
+          },
+          {
+            "is_target": false,
+            "line": 200,
+            "text": "\treturn $?"
+          },
+          {
+            "is_target": false,
+            "line": 201,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 202,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 203,
+            "text": "_webhook_invalidate_collection() {"
+          },
+          {
+            "is_target": false,
+            "line": 204,
+            "text": "\tlocal kind=\"$1\""
+          },
+          {
+            "is_target": false,
+            "line": 205,
+            "text": "\tlocal slug=\"$2\""
+          },
+          {
+            "is_target": false,
+            "line": 206,
+            "text": "\tlocal helper=\"${SCRIPT_DIR}/pulse-batch-prefetch-helper.sh\""
+          },
+          {
+            "is_target": false,
+            "line": 207,
+            "text": "\tcase \"$kind\" in"
+          }
+        ],
+        "path": ".agents/scripts/pulse-merge-webhook-receiver.sh",
+        "target_line": 182,
+        "token": "1",
+        "window_end": 207,
+        "window_lines": 51,
+        "window_start": 157
+      }
+    },
+    {
+      "call_kind": "search",
+      "decision": "unresolved",
+      "pattern": "^[0-9]+$",
+      "rank": 6,
+      "rationale": "The helper combines an ASCII digit regex with Bash numeric comparison. The docs do not state whether leading-zero decimal text is valid; Bash arithmetic treats such values specially, so the product domain is unresolved.",
+      "reason_code": "numeric_config_domain",
+      "regex_id": "d95f0ae2af66b143b297cf0880059f20",
+      "shortlist_site": ".agents/scripts/pulse-merge-webhook-receiver.sh:189:1",
+      "site": ".agents/scripts/pulse-merge-webhook-receiver.sh:189:1",
+      "source_binding": {
+        "evidence_ref": "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/pulse-merge-webhook-receiver.sh",
+        "path": ".agents/scripts/pulse-merge-webhook-receiver.sh",
+        "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+        "repository_url": "https://github.com/marcusquinn/aidevops",
+        "sha256": "6d882dac90c3f9deb1a0007c9a4216d70f365a4a34ffacd145eb04cc8ae3a325"
+      },
+      "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "window": {
+        "lines": [
+          {
+            "is_target": false,
+            "line": 164,
+            "text": "# We never log the secret itself — only whether it is set."
+          },
+          {
+            "is_target": false,
+            "line": 165,
+            "text": "_resolve_secret() {"
+          },
+          {
+            "is_target": false,
+            "line": 166,
+            "text": "\tlocal env_var_name=\"${WEBHOOK_SECRET_ENV:-GITHUB_WEBHOOK_SECRET}\""
+          },
+          {
+            "is_target": false,
+            "line": 167,
+            "text": "\t[[ \"$env_var_name\" =~ ^[A-Za-z_][A-Za-z0-9_]*$ ]] || return 1"
+          },
+          {
+            "is_target": false,
+            "line": 168,
+            "text": "\t# shellcheck disable=SC2086"
+          },
+          {
+            "is_target": false,
+            "line": 169,
+            "text": "\tlocal secret_val=\"${!env_var_name:-}\""
+          },
+          {
+            "is_target": false,
+            "line": 170,
+            "text": "\tif [[ -z \"$secret_val\" ]]; then"
+          },
+          {
+            "is_target": false,
+            "line": 171,
+            "text": "\t\t# Try gopass as a secondary source — best-effort, fail-quiet."
+          },
+          {
+            "is_target": false,
+            "line": 172,
+            "text": "\t\tif command -v gopass >/dev/null 2>&1; then"
+          },
+          {
+            "is_target": false,
+            "line": 173,
+            "text": "\t\t\tsecret_val=$(gopass show -o \"aidevops/${env_var_name}\" 2>/dev/null || true)"
+          },
+          {
+            "is_target": false,
+            "line": 174,
+            "text": "\t\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 175,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 176,
+            "text": "\tprintf '%s' \"$secret_val\""
+          },
+          {
+            "is_target": false,
+            "line": 177,
+            "text": "\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 178,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 179,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 180,
+            "text": "_clear_webhook_secret_env() {"
+          },
+          {
+            "is_target": false,
+            "line": 181,
+            "text": "\tlocal env_var_name=\"${WEBHOOK_SECRET_ENV:-GITHUB_WEBHOOK_SECRET}\""
+          },
+          {
+            "is_target": false,
+            "line": 182,
+            "text": "\t[[ \"$env_var_name\" =~ ^[A-Za-z_][A-Za-z0-9_]*$ ]] || return 1"
+          },
+          {
+            "is_target": false,
+            "line": 183,
+            "text": "\tunset \"$env_var_name\""
+          },
+          {
+            "is_target": false,
+            "line": 184,
+            "text": "\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 185,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 186,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 187,
+            "text": "_webhook_positive_integer() {"
+          },
+          {
+            "is_target": false,
+            "line": 188,
+            "text": "\tlocal value=\"$1\""
+          },
+          {
+            "is_target": true,
+            "line": 189,
+            "text": "\t[[ \"$value\" =~ ^[0-9]+$ && \"$value\" -gt 0 ]]"
+          },
+          {
+            "is_target": false,
+            "line": 190,
+            "text": "\treturn $?"
+          },
+          {
+            "is_target": false,
+            "line": 191,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 192,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 193,
+            "text": "_webhook_valid_slug() {"
+          },
+          {
+            "is_target": false,
+            "line": 194,
+            "text": "\tlocal slug=\"$1\""
+          },
+          {
+            "is_target": false,
+            "line": 195,
+            "text": "\tlocal owner=\"${slug%%/*}\""
+          },
+          {
+            "is_target": false,
+            "line": 196,
+            "text": "\tlocal name=\"${slug#*/}\""
+          },
+          {
+            "is_target": false,
+            "line": 197,
+            "text": "\t[[ \"$slug\" =~ ^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$ ]] || return 1"
+          },
+          {
+            "is_target": false,
+            "line": 198,
+            "text": "\t[[ \"$owner\" =~ ^[A-Za-z0-9][A-Za-z0-9_.-]*$ ]] || return 1"
+          },
+          {
+            "is_target": false,
+            "line": 199,
+            "text": "\t[[ \"$name\" != \".\" && \"$name\" != \"..\" ]]"
+          },
+          {
+            "is_target": false,
+            "line": 200,
+            "text": "\treturn $?"
+          },
+          {
+            "is_target": false,
+            "line": 201,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 202,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 203,
+            "text": "_webhook_invalidate_collection() {"
+          },
+          {
+            "is_target": false,
+            "line": 204,
+            "text": "\tlocal kind=\"$1\""
+          },
+          {
+            "is_target": false,
+            "line": 205,
+            "text": "\tlocal slug=\"$2\""
+          },
+          {
+            "is_target": false,
+            "line": 206,
+            "text": "\tlocal helper=\"${SCRIPT_DIR}/pulse-batch-prefetch-helper.sh\""
+          },
+          {
+            "is_target": false,
+            "line": 207,
+            "text": "\tcase \"$kind\" in"
+          },
+          {
+            "is_target": false,
+            "line": 208,
+            "text": "\tissues | prs) ;;"
+          },
+          {
+            "is_target": false,
+            "line": 209,
+            "text": "\t*) return 1 ;;"
+          },
+          {
+            "is_target": false,
+            "line": 210,
+            "text": "\tesac"
+          },
+          {
+            "is_target": false,
+            "line": 211,
+            "text": "\t_webhook_valid_slug \"$slug\" || return 1"
+          },
+          {
+            "is_target": false,
+            "line": 212,
+            "text": "\t[[ -x \"$helper\" ]] || return 1"
+          },
+          {
+            "is_target": false,
+            "line": 213,
+            "text": "\tif ! \"$helper\" invalidate-collection --kind \"$kind\" --slug \"$slug\" >/dev/null 2>>\"$WEBHOOK_LOG_FILE\"; then"
+          },
+          {
+            "is_target": false,
+            "line": 214,
+            "text": "\t\treturn 1"
+          }
+        ],
+        "path": ".agents/scripts/pulse-merge-webhook-receiver.sh",
+        "target_line": 189,
+        "token": "1",
+        "window_end": 214,
+        "window_lines": 51,
+        "window_start": 164
+      }
+    },
+    {
+      "call_kind": "search",
+      "decision": "adopted",
+      "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$",
+      "rank": 7,
+      "rationale": "The exact helper validates remote webhook-derived owner/repository text before it enters invalidation calls or the PROCESS_PR action. The adjacent owner-start and dot-name checks are part of this whole-helper contract.",
+      "reason_code": "webhook_slug_protocol_token",
+      "regex_id": "5a7fd7c1c8fd9810475a78e11a0f5d0e",
+      "shortlist_site": ".agents/scripts/pulse-merge-webhook-receiver.sh:197:1",
+      "site": ".agents/scripts/pulse-merge-webhook-receiver.sh:197:1",
+      "source_binding": {
+        "evidence_ref": "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/pulse-merge-webhook-receiver.sh",
+        "path": ".agents/scripts/pulse-merge-webhook-receiver.sh",
+        "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+        "repository_url": "https://github.com/marcusquinn/aidevops",
+        "sha256": "6d882dac90c3f9deb1a0007c9a4216d70f365a4a34ffacd145eb04cc8ae3a325"
+      },
+      "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "window": {
+        "lines": [
+          {
+            "is_target": false,
+            "line": 172,
+            "text": "\t\tif command -v gopass >/dev/null 2>&1; then"
+          },
+          {
+            "is_target": false,
+            "line": 173,
+            "text": "\t\t\tsecret_val=$(gopass show -o \"aidevops/${env_var_name}\" 2>/dev/null || true)"
+          },
+          {
+            "is_target": false,
+            "line": 174,
+            "text": "\t\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 175,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 176,
+            "text": "\tprintf '%s' \"$secret_val\""
+          },
+          {
+            "is_target": false,
+            "line": 177,
+            "text": "\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 178,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 179,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 180,
+            "text": "_clear_webhook_secret_env() {"
+          },
+          {
+            "is_target": false,
+            "line": 181,
+            "text": "\tlocal env_var_name=\"${WEBHOOK_SECRET_ENV:-GITHUB_WEBHOOK_SECRET}\""
+          },
+          {
+            "is_target": false,
+            "line": 182,
+            "text": "\t[[ \"$env_var_name\" =~ ^[A-Za-z_][A-Za-z0-9_]*$ ]] || return 1"
+          },
+          {
+            "is_target": false,
+            "line": 183,
+            "text": "\tunset \"$env_var_name\""
+          },
+          {
+            "is_target": false,
+            "line": 184,
+            "text": "\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 185,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 186,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 187,
+            "text": "_webhook_positive_integer() {"
+          },
+          {
+            "is_target": false,
+            "line": 188,
+            "text": "\tlocal value=\"$1\""
+          },
+          {
+            "is_target": false,
+            "line": 189,
+            "text": "\t[[ \"$value\" =~ ^[0-9]+$ && \"$value\" -gt 0 ]]"
+          },
+          {
+            "is_target": false,
+            "line": 190,
+            "text": "\treturn $?"
+          },
+          {
+            "is_target": false,
+            "line": 191,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 192,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 193,
+            "text": "_webhook_valid_slug() {"
+          },
+          {
+            "is_target": false,
+            "line": 194,
+            "text": "\tlocal slug=\"$1\""
+          },
+          {
+            "is_target": false,
+            "line": 195,
+            "text": "\tlocal owner=\"${slug%%/*}\""
+          },
+          {
+            "is_target": false,
+            "line": 196,
+            "text": "\tlocal name=\"${slug#*/}\""
+          },
+          {
+            "is_target": true,
+            "line": 197,
+            "text": "\t[[ \"$slug\" =~ ^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$ ]] || return 1"
+          },
+          {
+            "is_target": false,
+            "line": 198,
+            "text": "\t[[ \"$owner\" =~ ^[A-Za-z0-9][A-Za-z0-9_.-]*$ ]] || return 1"
+          },
+          {
+            "is_target": false,
+            "line": 199,
+            "text": "\t[[ \"$name\" != \".\" && \"$name\" != \"..\" ]]"
+          },
+          {
+            "is_target": false,
+            "line": 200,
+            "text": "\treturn $?"
+          },
+          {
+            "is_target": false,
+            "line": 201,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 202,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 203,
+            "text": "_webhook_invalidate_collection() {"
+          },
+          {
+            "is_target": false,
+            "line": 204,
+            "text": "\tlocal kind=\"$1\""
+          },
+          {
+            "is_target": false,
+            "line": 205,
+            "text": "\tlocal slug=\"$2\""
+          },
+          {
+            "is_target": false,
+            "line": 206,
+            "text": "\tlocal helper=\"${SCRIPT_DIR}/pulse-batch-prefetch-helper.sh\""
+          },
+          {
+            "is_target": false,
+            "line": 207,
+            "text": "\tcase \"$kind\" in"
+          },
+          {
+            "is_target": false,
+            "line": 208,
+            "text": "\tissues | prs) ;;"
+          },
+          {
+            "is_target": false,
+            "line": 209,
+            "text": "\t*) return 1 ;;"
+          },
+          {
+            "is_target": false,
+            "line": 210,
+            "text": "\tesac"
+          },
+          {
+            "is_target": false,
+            "line": 211,
+            "text": "\t_webhook_valid_slug \"$slug\" || return 1"
+          },
+          {
+            "is_target": false,
+            "line": 212,
+            "text": "\t[[ -x \"$helper\" ]] || return 1"
+          },
+          {
+            "is_target": false,
+            "line": 213,
+            "text": "\tif ! \"$helper\" invalidate-collection --kind \"$kind\" --slug \"$slug\" >/dev/null 2>>\"$WEBHOOK_LOG_FILE\"; then"
+          },
+          {
+            "is_target": false,
+            "line": 214,
+            "text": "\t\treturn 1"
+          },
+          {
+            "is_target": false,
+            "line": 215,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 216,
+            "text": "\t_whlog INFO \"Invalidated canonical ${kind} snapshot for ${slug}\""
+          },
+          {
+            "is_target": false,
+            "line": 217,
+            "text": "\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 218,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 219,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 220,
+            "text": "_webhook_invalidate_checks() {"
+          },
+          {
+            "is_target": false,
+            "line": 221,
+            "text": "\tlocal slug=\"$1\""
+          },
+          {
+            "is_target": false,
+            "line": 222,
+            "text": "\tlocal sha=\"$2\""
+          }
+        ],
+        "path": ".agents/scripts/pulse-merge-webhook-receiver.sh",
+        "target_line": 197,
+        "token": "1",
+        "window_end": 222,
+        "window_lines": 51,
+        "window_start": 172
+      }
+    },
+    {
+      "call_kind": "search",
+      "decision": "skipped",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]*$",
+      "rank": 8,
+      "rationale": "This adjacent regex is a required subcheck of the line-197 repository-slug contract, not an independent product property.",
+      "reason_code": "shared_slug_contract_duplicate",
+      "regex_id": "cd0105596f7c5965b3d284b2e864b352",
+      "shortlist_site": ".agents/scripts/pulse-merge-webhook-receiver.sh:198:1",
+      "site": ".agents/scripts/pulse-merge-webhook-receiver.sh:198:1",
+      "source_binding": {
+        "evidence_ref": "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/pulse-merge-webhook-receiver.sh",
+        "path": ".agents/scripts/pulse-merge-webhook-receiver.sh",
+        "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+        "repository_url": "https://github.com/marcusquinn/aidevops",
+        "sha256": "6d882dac90c3f9deb1a0007c9a4216d70f365a4a34ffacd145eb04cc8ae3a325"
+      },
+      "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "window": {
+        "lines": [
+          {
+            "is_target": false,
+            "line": 173,
+            "text": "\t\t\tsecret_val=$(gopass show -o \"aidevops/${env_var_name}\" 2>/dev/null || true)"
+          },
+          {
+            "is_target": false,
+            "line": 174,
+            "text": "\t\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 175,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 176,
+            "text": "\tprintf '%s' \"$secret_val\""
+          },
+          {
+            "is_target": false,
+            "line": 177,
+            "text": "\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 178,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 179,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 180,
+            "text": "_clear_webhook_secret_env() {"
+          },
+          {
+            "is_target": false,
+            "line": 181,
+            "text": "\tlocal env_var_name=\"${WEBHOOK_SECRET_ENV:-GITHUB_WEBHOOK_SECRET}\""
+          },
+          {
+            "is_target": false,
+            "line": 182,
+            "text": "\t[[ \"$env_var_name\" =~ ^[A-Za-z_][A-Za-z0-9_]*$ ]] || return 1"
+          },
+          {
+            "is_target": false,
+            "line": 183,
+            "text": "\tunset \"$env_var_name\""
+          },
+          {
+            "is_target": false,
+            "line": 184,
+            "text": "\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 185,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 186,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 187,
+            "text": "_webhook_positive_integer() {"
+          },
+          {
+            "is_target": false,
+            "line": 188,
+            "text": "\tlocal value=\"$1\""
+          },
+          {
+            "is_target": false,
+            "line": 189,
+            "text": "\t[[ \"$value\" =~ ^[0-9]+$ && \"$value\" -gt 0 ]]"
+          },
+          {
+            "is_target": false,
+            "line": 190,
+            "text": "\treturn $?"
+          },
+          {
+            "is_target": false,
+            "line": 191,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 192,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 193,
+            "text": "_webhook_valid_slug() {"
+          },
+          {
+            "is_target": false,
+            "line": 194,
+            "text": "\tlocal slug=\"$1\""
+          },
+          {
+            "is_target": false,
+            "line": 195,
+            "text": "\tlocal owner=\"${slug%%/*}\""
+          },
+          {
+            "is_target": false,
+            "line": 196,
+            "text": "\tlocal name=\"${slug#*/}\""
+          },
+          {
+            "is_target": false,
+            "line": 197,
+            "text": "\t[[ \"$slug\" =~ ^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$ ]] || return 1"
+          },
+          {
+            "is_target": true,
+            "line": 198,
+            "text": "\t[[ \"$owner\" =~ ^[A-Za-z0-9][A-Za-z0-9_.-]*$ ]] || return 1"
+          },
+          {
+            "is_target": false,
+            "line": 199,
+            "text": "\t[[ \"$name\" != \".\" && \"$name\" != \"..\" ]]"
+          },
+          {
+            "is_target": false,
+            "line": 200,
+            "text": "\treturn $?"
+          },
+          {
+            "is_target": false,
+            "line": 201,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 202,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 203,
+            "text": "_webhook_invalidate_collection() {"
+          },
+          {
+            "is_target": false,
+            "line": 204,
+            "text": "\tlocal kind=\"$1\""
+          },
+          {
+            "is_target": false,
+            "line": 205,
+            "text": "\tlocal slug=\"$2\""
+          },
+          {
+            "is_target": false,
+            "line": 206,
+            "text": "\tlocal helper=\"${SCRIPT_DIR}/pulse-batch-prefetch-helper.sh\""
+          },
+          {
+            "is_target": false,
+            "line": 207,
+            "text": "\tcase \"$kind\" in"
+          },
+          {
+            "is_target": false,
+            "line": 208,
+            "text": "\tissues | prs) ;;"
+          },
+          {
+            "is_target": false,
+            "line": 209,
+            "text": "\t*) return 1 ;;"
+          },
+          {
+            "is_target": false,
+            "line": 210,
+            "text": "\tesac"
+          },
+          {
+            "is_target": false,
+            "line": 211,
+            "text": "\t_webhook_valid_slug \"$slug\" || return 1"
+          },
+          {
+            "is_target": false,
+            "line": 212,
+            "text": "\t[[ -x \"$helper\" ]] || return 1"
+          },
+          {
+            "is_target": false,
+            "line": 213,
+            "text": "\tif ! \"$helper\" invalidate-collection --kind \"$kind\" --slug \"$slug\" >/dev/null 2>>\"$WEBHOOK_LOG_FILE\"; then"
+          },
+          {
+            "is_target": false,
+            "line": 214,
+            "text": "\t\treturn 1"
+          },
+          {
+            "is_target": false,
+            "line": 215,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 216,
+            "text": "\t_whlog INFO \"Invalidated canonical ${kind} snapshot for ${slug}\""
+          },
+          {
+            "is_target": false,
+            "line": 217,
+            "text": "\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 218,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 219,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 220,
+            "text": "_webhook_invalidate_checks() {"
+          },
+          {
+            "is_target": false,
+            "line": 221,
+            "text": "\tlocal slug=\"$1\""
+          },
+          {
+            "is_target": false,
+            "line": 222,
+            "text": "\tlocal sha=\"$2\""
+          },
+          {
+            "is_target": false,
+            "line": 223,
+            "text": "\t_webhook_valid_slug \"$slug\" || return 1"
+          }
+        ],
+        "path": ".agents/scripts/pulse-merge-webhook-receiver.sh",
+        "target_line": 198,
+        "token": "1",
+        "window_end": 223,
+        "window_lines": 51,
+        "window_start": 173
+      }
+    },
+    {
+      "call_kind": "search",
+      "decision": "adopted",
+      "pattern": "^[A-Fa-f0-9]{40}$",
+      "rank": 9,
+      "rationale": "The exact helper checks the SHA-shaped request-derived value before passing it to the cache invalidator. This is a downstream guard; the server also validates the field.",
+      "reason_code": "webhook_sha_token",
+      "regex_id": "ce3f8739086067661f9a956fbc95ebe3",
+      "shortlist_site": ".agents/scripts/pulse-merge-webhook-receiver.sh:224:1",
+      "site": ".agents/scripts/pulse-merge-webhook-receiver.sh:224:1",
+      "source_binding": {
+        "evidence_ref": "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/pulse-merge-webhook-receiver.sh",
+        "path": ".agents/scripts/pulse-merge-webhook-receiver.sh",
+        "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+        "repository_url": "https://github.com/marcusquinn/aidevops",
+        "sha256": "6d882dac90c3f9deb1a0007c9a4216d70f365a4a34ffacd145eb04cc8ae3a325"
+      },
+      "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "window": {
+        "lines": [
+          {
+            "is_target": false,
+            "line": 199,
+            "text": "\t[[ \"$name\" != \".\" && \"$name\" != \"..\" ]]"
+          },
+          {
+            "is_target": false,
+            "line": 200,
+            "text": "\treturn $?"
+          },
+          {
+            "is_target": false,
+            "line": 201,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 202,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 203,
+            "text": "_webhook_invalidate_collection() {"
+          },
+          {
+            "is_target": false,
+            "line": 204,
+            "text": "\tlocal kind=\"$1\""
+          },
+          {
+            "is_target": false,
+            "line": 205,
+            "text": "\tlocal slug=\"$2\""
+          },
+          {
+            "is_target": false,
+            "line": 206,
+            "text": "\tlocal helper=\"${SCRIPT_DIR}/pulse-batch-prefetch-helper.sh\""
+          },
+          {
+            "is_target": false,
+            "line": 207,
+            "text": "\tcase \"$kind\" in"
+          },
+          {
+            "is_target": false,
+            "line": 208,
+            "text": "\tissues | prs) ;;"
+          },
+          {
+            "is_target": false,
+            "line": 209,
+            "text": "\t*) return 1 ;;"
+          },
+          {
+            "is_target": false,
+            "line": 210,
+            "text": "\tesac"
+          },
+          {
+            "is_target": false,
+            "line": 211,
+            "text": "\t_webhook_valid_slug \"$slug\" || return 1"
+          },
+          {
+            "is_target": false,
+            "line": 212,
+            "text": "\t[[ -x \"$helper\" ]] || return 1"
+          },
+          {
+            "is_target": false,
+            "line": 213,
+            "text": "\tif ! \"$helper\" invalidate-collection --kind \"$kind\" --slug \"$slug\" >/dev/null 2>>\"$WEBHOOK_LOG_FILE\"; then"
+          },
+          {
+            "is_target": false,
+            "line": 214,
+            "text": "\t\treturn 1"
+          },
+          {
+            "is_target": false,
+            "line": 215,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 216,
+            "text": "\t_whlog INFO \"Invalidated canonical ${kind} snapshot for ${slug}\""
+          },
+          {
+            "is_target": false,
+            "line": 217,
+            "text": "\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 218,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 219,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 220,
+            "text": "_webhook_invalidate_checks() {"
+          },
+          {
+            "is_target": false,
+            "line": 221,
+            "text": "\tlocal slug=\"$1\""
+          },
+          {
+            "is_target": false,
+            "line": 222,
+            "text": "\tlocal sha=\"$2\""
+          },
+          {
+            "is_target": false,
+            "line": 223,
+            "text": "\t_webhook_valid_slug \"$slug\" || return 1"
+          },
+          {
+            "is_target": true,
+            "line": 224,
+            "text": "\t[[ \"$sha\" =~ ^[A-Fa-f0-9]{40}$ ]] || return 1"
+          },
+          {
+            "is_target": false,
+            "line": 225,
+            "text": "\tdeclare -F gh_pr_check_status_cache_invalidate >/dev/null 2>&1 || return 1"
+          },
+          {
+            "is_target": false,
+            "line": 226,
+            "text": "\tgh_pr_check_status_cache_invalidate \"$slug\" \"$sha\" || return 1"
+          },
+          {
+            "is_target": false,
+            "line": 227,
+            "text": "\t_whlog INFO \"Invalidated exact-SHA check snapshot for ${slug}\""
+          },
+          {
+            "is_target": false,
+            "line": 228,
+            "text": "\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 229,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 230,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 231,
+            "text": "_webhook_wait_for_dispatch_slot() {"
+          },
+          {
+            "is_target": false,
+            "line": 232,
+            "text": "\tlocal max_concurrency=\"${WEBHOOK_DISPATCH_MAX_CONCURRENCY:-4}\""
+          },
+          {
+            "is_target": false,
+            "line": 233,
+            "text": "\t_webhook_positive_integer \"$max_concurrency\" || max_concurrency=4"
+          },
+          {
+            "is_target": false,
+            "line": 234,
+            "text": "\twhile [[ \"$(jobs -rp | wc -l)\" -ge \"$max_concurrency\" ]]; do"
+          },
+          {
+            "is_target": false,
+            "line": 235,
+            "text": "\t\tsleep 0.2"
+          },
+          {
+            "is_target": false,
+            "line": 236,
+            "text": "\tdone"
+          },
+          {
+            "is_target": false,
+            "line": 237,
+            "text": "\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 238,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 239,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 240,
+            "text": "_dispatch_webhook_action_line() {"
+          },
+          {
+            "is_target": false,
+            "line": 241,
+            "text": "\tlocal line=\"$1\""
+          },
+          {
+            "is_target": false,
+            "line": 242,
+            "text": "\tlocal verb=\"\" version=\"\" scope=\"\" first=\"\" second=\"\" extra=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 243,
+            "text": "\tcase \"$line\" in"
+          },
+          {
+            "is_target": false,
+            "line": 244,
+            "text": "\t'#'*)"
+          },
+          {
+            "is_target": false,
+            "line": 245,
+            "text": "\t\t_whlog INFO \"${line#'# '}\""
+          },
+          {
+            "is_target": false,
+            "line": 246,
+            "text": "\t\tif [[ \"$line\" == '# accepted '* ]]; then"
+          },
+          {
+            "is_target": false,
+            "line": 247,
+            "text": "\t\t\t_WEBHOOK_INVALIDATION_FAILED=0"
+          },
+          {
+            "is_target": false,
+            "line": 248,
+            "text": "\t\t\t_WEBHOOK_DELIVERY_RECEIVED_MS=0"
+          },
+          {
+            "is_target": false,
+            "line": 249,
+            "text": "\t\tfi"
+          }
+        ],
+        "path": ".agents/scripts/pulse-merge-webhook-receiver.sh",
+        "target_line": 224,
+        "token": "1",
+        "window_end": 249,
+        "window_lines": 51,
+        "window_start": 199
+      }
+    },
+    {
+      "call_kind": "search",
+      "decision": "skipped",
+      "pattern": "^[0-9]+$",
+      "rank": 10,
+      "rationale": "The action record is emitted by the pinned local Python server from its own receive timestamp. This line validates the local protocol record and is not an external-input boundary.",
+      "reason_code": "internal_action_timestamp",
+      "regex_id": "8fb8db3a8d2a00b87172e6340d868915",
+      "shortlist_site": ".agents/scripts/pulse-merge-webhook-receiver.sh:257:5",
+      "site": ".agents/scripts/pulse-merge-webhook-receiver.sh:257:5",
+      "source_binding": {
+        "evidence_ref": "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/pulse-merge-webhook-receiver.sh",
+        "path": ".agents/scripts/pulse-merge-webhook-receiver.sh",
+        "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+        "repository_url": "https://github.com/marcusquinn/aidevops",
+        "sha256": "6d882dac90c3f9deb1a0007c9a4216d70f365a4a34ffacd145eb04cc8ae3a325"
+      },
+      "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "window": {
+        "lines": [
+          {
+            "is_target": false,
+            "line": 232,
+            "text": "\tlocal max_concurrency=\"${WEBHOOK_DISPATCH_MAX_CONCURRENCY:-4}\""
+          },
+          {
+            "is_target": false,
+            "line": 233,
+            "text": "\t_webhook_positive_integer \"$max_concurrency\" || max_concurrency=4"
+          },
+          {
+            "is_target": false,
+            "line": 234,
+            "text": "\twhile [[ \"$(jobs -rp | wc -l)\" -ge \"$max_concurrency\" ]]; do"
+          },
+          {
+            "is_target": false,
+            "line": 235,
+            "text": "\t\tsleep 0.2"
+          },
+          {
+            "is_target": false,
+            "line": 236,
+            "text": "\tdone"
+          },
+          {
+            "is_target": false,
+            "line": 237,
+            "text": "\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 238,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 239,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 240,
+            "text": "_dispatch_webhook_action_line() {"
+          },
+          {
+            "is_target": false,
+            "line": 241,
+            "text": "\tlocal line=\"$1\""
+          },
+          {
+            "is_target": false,
+            "line": 242,
+            "text": "\tlocal verb=\"\" version=\"\" scope=\"\" first=\"\" second=\"\" extra=\"\""
+          },
+          {
+            "is_target": false,
+            "line": 243,
+            "text": "\tcase \"$line\" in"
+          },
+          {
+            "is_target": false,
+            "line": 244,
+            "text": "\t'#'*)"
+          },
+          {
+            "is_target": false,
+            "line": 245,
+            "text": "\t\t_whlog INFO \"${line#'# '}\""
+          },
+          {
+            "is_target": false,
+            "line": 246,
+            "text": "\t\tif [[ \"$line\" == '# accepted '* ]]; then"
+          },
+          {
+            "is_target": false,
+            "line": 247,
+            "text": "\t\t\t_WEBHOOK_INVALIDATION_FAILED=0"
+          },
+          {
+            "is_target": false,
+            "line": 248,
+            "text": "\t\t\t_WEBHOOK_DELIVERY_RECEIVED_MS=0"
+          },
+          {
+            "is_target": false,
+            "line": 249,
+            "text": "\t\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 250,
+            "text": "\t\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 251,
+            "text": "\t\t;;"
+          },
+          {
+            "is_target": false,
+            "line": 252,
+            "text": "\t'') return 0 ;;"
+          },
+          {
+            "is_target": false,
+            "line": 253,
+            "text": "\tesac"
+          },
+          {
+            "is_target": false,
+            "line": 254,
+            "text": "\tIFS=' ' read -r verb version scope first second extra <<<\"$line\""
+          },
+          {
+            "is_target": false,
+            "line": 255,
+            "text": "\tcase \"${verb} ${version} ${scope}\" in"
+          },
+          {
+            "is_target": false,
+            "line": 256,
+            "text": "\t\"DELIVERY v1 received-ms\")"
+          },
+          {
+            "is_target": true,
+            "line": 257,
+            "text": "\t\tif [[ \"$first\" =~ ^[0-9]+$ && \"$first\" -gt 0 \\"
+          },
+          {
+            "is_target": false,
+            "line": 258,
+            "text": "\t\t\t&& -z \"$second\" && -z \"$extra\" ]]; then"
+          },
+          {
+            "is_target": false,
+            "line": 259,
+            "text": "\t\t\t_WEBHOOK_DELIVERY_RECEIVED_MS=\"$first\""
+          },
+          {
+            "is_target": false,
+            "line": 260,
+            "text": "\t\t\t_WEBHOOK_INVALIDATION_FAILED=0"
+          },
+          {
+            "is_target": false,
+            "line": 261,
+            "text": "\t\telse"
+          },
+          {
+            "is_target": false,
+            "line": 262,
+            "text": "\t\t\t_WEBHOOK_DELIVERY_RECEIVED_MS=0"
+          },
+          {
+            "is_target": false,
+            "line": 263,
+            "text": "\t\t\t_WEBHOOK_INVALIDATION_FAILED=1"
+          },
+          {
+            "is_target": false,
+            "line": 264,
+            "text": "\t\t\t_whlog ERROR \"Rejected malformed delivery timing record\""
+          },
+          {
+            "is_target": false,
+            "line": 265,
+            "text": "\t\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 266,
+            "text": "\t\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 267,
+            "text": "\t\t;;"
+          },
+          {
+            "is_target": false,
+            "line": 268,
+            "text": "\t\"INVALIDATE v1 collection\")"
+          },
+          {
+            "is_target": false,
+            "line": 269,
+            "text": "\t\t_WEBHOOK_INVALIDATION_FAILED=0"
+          },
+          {
+            "is_target": false,
+            "line": 270,
+            "text": "\t\tif [[ -n \"$extra\" ]]; then"
+          },
+          {
+            "is_target": false,
+            "line": 271,
+            "text": "\t\t\t_WEBHOOK_INVALIDATION_FAILED=1"
+          },
+          {
+            "is_target": false,
+            "line": 272,
+            "text": "\t\t\t_whlog ERROR \"Rejected malformed collection invalidation record\""
+          },
+          {
+            "is_target": false,
+            "line": 273,
+            "text": "\t\telif ! _webhook_invalidate_collection \"$first\" \"$second\"; then"
+          },
+          {
+            "is_target": false,
+            "line": 274,
+            "text": "\t\t\t_WEBHOOK_INVALIDATION_FAILED=1"
+          },
+          {
+            "is_target": false,
+            "line": 275,
+            "text": "\t\t\t_webhook_record_missed_recovery"
+          },
+          {
+            "is_target": false,
+            "line": 276,
+            "text": "\t\t\t_whlog ERROR \"Failed collection invalidation; polling recovery remains active\""
+          },
+          {
+            "is_target": false,
+            "line": 277,
+            "text": "\t\telse"
+          },
+          {
+            "is_target": false,
+            "line": 278,
+            "text": "\t\t\t_webhook_record_invalidation_evidence"
+          },
+          {
+            "is_target": false,
+            "line": 279,
+            "text": "\t\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 280,
+            "text": "\t\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 281,
+            "text": "\t\t;;"
+          },
+          {
+            "is_target": false,
+            "line": 282,
+            "text": "\t\"INVALIDATE v1 checks\")"
+          }
+        ],
+        "path": ".agents/scripts/pulse-merge-webhook-receiver.sh",
+        "target_line": 257,
+        "token": "5",
+        "window_end": 282,
+        "window_lines": 51,
+        "window_start": 232
+      }
+    },
+    {
+      "call_kind": "search",
+      "decision": "adopted",
+      "pattern": "^[0-9]+$",
+      "rank": 11,
+      "rationale": "The dispatcher only calls process_pr after parsing an action record and validating its remote-event-derived slug and positive decimal PR number. The server authenticates and parses the webhook first; this is a final shell-side protocol guard.",
+      "reason_code": "webhook_pr_number_token",
+      "regex_id": "b9dfec0e0db0d4a2679af29e4e83391a",
+      "shortlist_site": ".agents/scripts/pulse-merge-webhook-receiver.sh:302:6",
+      "site": ".agents/scripts/pulse-merge-webhook-receiver.sh:302:6",
+      "source_binding": {
+        "evidence_ref": "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/pulse-merge-webhook-receiver.sh",
+        "path": ".agents/scripts/pulse-merge-webhook-receiver.sh",
+        "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+        "repository_url": "https://github.com/marcusquinn/aidevops",
+        "sha256": "6d882dac90c3f9deb1a0007c9a4216d70f365a4a34ffacd145eb04cc8ae3a325"
+      },
+      "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "window": {
+        "lines": [
+          {
+            "is_target": false,
+            "line": 277,
+            "text": "\t\telse"
+          },
+          {
+            "is_target": false,
+            "line": 278,
+            "text": "\t\t\t_webhook_record_invalidation_evidence"
+          },
+          {
+            "is_target": false,
+            "line": 279,
+            "text": "\t\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 280,
+            "text": "\t\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 281,
+            "text": "\t\t;;"
+          },
+          {
+            "is_target": false,
+            "line": 282,
+            "text": "\t\"INVALIDATE v1 checks\")"
+          },
+          {
+            "is_target": false,
+            "line": 283,
+            "text": "\t\t_WEBHOOK_INVALIDATION_FAILED=0"
+          },
+          {
+            "is_target": false,
+            "line": 284,
+            "text": "\t\tif [[ -n \"$extra\" ]]; then"
+          },
+          {
+            "is_target": false,
+            "line": 285,
+            "text": "\t\t\t_WEBHOOK_INVALIDATION_FAILED=1"
+          },
+          {
+            "is_target": false,
+            "line": 286,
+            "text": "\t\t\t_whlog ERROR \"Rejected malformed check invalidation record\""
+          },
+          {
+            "is_target": false,
+            "line": 287,
+            "text": "\t\telif ! _webhook_invalidate_checks \"$first\" \"$second\"; then"
+          },
+          {
+            "is_target": false,
+            "line": 288,
+            "text": "\t\t\t_WEBHOOK_INVALIDATION_FAILED=1"
+          },
+          {
+            "is_target": false,
+            "line": 289,
+            "text": "\t\t\t_webhook_record_missed_recovery"
+          },
+          {
+            "is_target": false,
+            "line": 290,
+            "text": "\t\t\t_whlog ERROR \"Failed check invalidation; polling recovery remains active\""
+          },
+          {
+            "is_target": false,
+            "line": 291,
+            "text": "\t\telse"
+          },
+          {
+            "is_target": false,
+            "line": 292,
+            "text": "\t\t\t_webhook_record_invalidation_evidence"
+          },
+          {
+            "is_target": false,
+            "line": 293,
+            "text": "\t\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 294,
+            "text": "\t\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 295,
+            "text": "\t\t;;"
+          },
+          {
+            "is_target": false,
+            "line": 296,
+            "text": "\tesac"
+          },
+          {
+            "is_target": false,
+            "line": 297,
+            "text": "\tif [[ \"$verb\" == \"PROCESS_PR\" && -n \"$version\" && -n \"$scope\" \\"
+          },
+          {
+            "is_target": false,
+            "line": 298,
+            "text": "\t\t&& -z \"$first\" && -z \"$second\" && -z \"$extra\" ]]; then"
+          },
+          {
+            "is_target": false,
+            "line": 299,
+            "text": "\t\tlocal slug=\"$version\""
+          },
+          {
+            "is_target": false,
+            "line": 300,
+            "text": "\t\tlocal pr_number=\"$scope\""
+          },
+          {
+            "is_target": false,
+            "line": 301,
+            "text": "\t\tif ! _webhook_valid_slug \"$slug\" \\"
+          },
+          {
+            "is_target": true,
+            "line": 302,
+            "text": "\t\t\t|| [[ ! \"$pr_number\" =~ ^[0-9]+$ || \"$pr_number\" -le 0 ]]; then"
+          },
+          {
+            "is_target": false,
+            "line": 303,
+            "text": "\t\t\t_whlog WARN \"Malformed PROCESS_PR action\""
+          },
+          {
+            "is_target": false,
+            "line": 304,
+            "text": "\t\t\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 305,
+            "text": "\t\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 306,
+            "text": "\t\tif [[ \"$_WEBHOOK_INVALIDATION_FAILED\" == \"1\" ]]; then"
+          },
+          {
+            "is_target": false,
+            "line": 307,
+            "text": "\t\t\t_whlog WARN \"Skipped process_pr because canonical invalidation failed; polling remains active\""
+          },
+          {
+            "is_target": false,
+            "line": 308,
+            "text": "\t\t\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 309,
+            "text": "\t\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 310,
+            "text": "\t\t_whlog INFO \"Dispatching process_pr ${slug}#${pr_number}\""
+          },
+          {
+            "is_target": false,
+            "line": 311,
+            "text": "\t\t("
+          },
+          {
+            "is_target": false,
+            "line": 312,
+            "text": "\t\t\tset +e"
+          },
+          {
+            "is_target": false,
+            "line": 313,
+            "text": "\t\t\tprocess_pr \"$slug\" \"$pr_number\""
+          },
+          {
+            "is_target": false,
+            "line": 314,
+            "text": "\t\t\t_whlog INFO \"process_pr ${slug}#${pr_number} returned ${?}\""
+          },
+          {
+            "is_target": false,
+            "line": 315,
+            "text": "\t\t) &"
+          },
+          {
+            "is_target": false,
+            "line": 316,
+            "text": "\t\t_webhook_wait_for_dispatch_slot"
+          },
+          {
+            "is_target": false,
+            "line": 317,
+            "text": "\t\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 318,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 319,
+            "text": "\tif [[ \"$verb\" == \"INVALIDATE\" || \"$verb\" == \"DELIVERY\" ]]; then"
+          },
+          {
+            "is_target": false,
+            "line": 320,
+            "text": "\t\t_WEBHOOK_INVALIDATION_FAILED=1"
+          },
+          {
+            "is_target": false,
+            "line": 321,
+            "text": "\tfi"
+          },
+          {
+            "is_target": false,
+            "line": 322,
+            "text": "\t_whlog WARN \"Unknown line from server\""
+          },
+          {
+            "is_target": false,
+            "line": 323,
+            "text": "\treturn 0"
+          },
+          {
+            "is_target": false,
+            "line": 324,
+            "text": "}"
+          },
+          {
+            "is_target": false,
+            "line": 325,
+            "text": ""
+          },
+          {
+            "is_target": false,
+            "line": 326,
+            "text": "# ============================================================================="
+          },
+          {
+            "is_target": false,
+            "line": 327,
+            "text": "# Subcommand: --check (config + secret validation, no listener)"
+          }
+        ],
+        "path": ".agents/scripts/pulse-merge-webhook-receiver.sh",
+        "target_line": 302,
+        "token": "6",
+        "window_end": 327,
+        "window_lines": 51,
+        "window_start": 277
+      }
+    }
+  ],
+  "cohort_id": "2026-09-12-calibration-20-r2",
+  "repository_url": "https://github.com/marcusquinn/aidevops",
+  "review_source": {
+    "row_count": 11,
+    "sha256": "076b5f30b2103801e64b541c6bc94a944e2d10a78613ac0314bb01e88465e50c"
+  },
+  "run_context_sha256": "c6df1c89c02079e8f5c7494e2e2e70a1d293f1b6d830f5afc5ff59648bd7abcc",
+  "schema_version": "1",
+  "shortlist_site_path_prefix": "",
+  "shortlist_source": {
+    "row_count": 11,
+    "sha256": "7395aac1fe44e11e4deeabf29f45b827d168d28c18e8df134ca1e9e23de54966"
+  },
+  "source_files": [
+    {
+      "evidence_ref": "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/pulse-merge-webhook-receiver.sh",
+      "path": ".agents/scripts/pulse-merge-webhook-receiver.sh",
+      "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "repository_url": "https://github.com/marcusquinn/aidevops",
+      "sha256": "6d882dac90c3f9deb1a0007c9a4216d70f365a4a34ffacd145eb04cc8ae3a325"
+    }
+  ],
+  "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1"
+}

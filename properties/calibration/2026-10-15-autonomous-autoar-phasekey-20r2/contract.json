@@ -1,0 +1,32 @@
+{
+  "adoption": {
+    "approved_on": "2026-10-15",
+    "authority": "standing_user_delegation",
+    "contract_sha256": "0f141a8d77e3d423034438f5aaad9907e223d2c829f489ef6312022254d21d6b",
+    "evidence": [
+      "https://github.com/h0tak88r/AutoAR/blob/01cd447ad3b1acfed7e0680596c2c74458a4cf06/internal/utils/phase_logs.go",
+      "https://github.com/h0tak88r/AutoAR/blob/01cd447ad3b1acfed7e0680596c2c74458a4cf06/internal/api/scan_results_api.go",
+      "https://github.com/h0tak88r/AutoAR/blob/01cd447ad3b1acfed7e0680596c2c74458a4cf06/internal/api/api.go",
+      "https://github.com/h0tak88r/AutoAR/blob/01cd447ad3b1acfed7e0680596c2c74458a4cf06/internal/utils/json_output.go"
+    ],
+    "policy_version": "autonomous-contracts-v1",
+    "rationale": "The caller-controlled module query reaches ReadPhaseLogFile, which sanitizes the phase key before composing the filename under phase-logs. The regex replaces dot and path-separator runs before filepath.Join. The contract is limited to that module-derived component; scanID, the results root, symlinks, and collisions between sanitized names are outside scope.",
+    "review": {
+      "author": "codex-contract-author",
+      "reviewer": "codex-independent-review-pass",
+      "same_model": true
+    },
+    "source_file": "internal/utils/phase_logs.go",
+    "source_pin": "01cd447ad3b1acfed7e0680596c2c74458a4cf06",
+    "source_sha256": "3dec250b5802efadac77c6ba9cf9ce19f5fec09a8111674ab13a56d35e601ddc",
+    "source_url": "https://github.com/h0tak88r/AutoAR",
+    "status": "approved"
+  },
+  "declared_domain": "The caller-controlled module query value is a decoded Go string. The formal property is length-independent over the one-character ASCII projection of '.', '/', and '\\'. The exact pinned sanitizer and regression gate additionally cover full strings including all non-NUL ASCII characters, path-shaped inputs, Unicode, controls, and deterministic random cases. The claim applies only to the module-derived filename component; scanID, the configured results root, symlinks, and collisions between distinct sanitized module names are outside scope.",
+  "guarantee": "For the GET /api/scans/:id/logs?module=... path, every '.', '/', and '\\' in the caller-supplied module value is matched by the pinned sanitizeRe before filename construction and is replaced; the resulting module-derived filename component contains no dot or path separator and cannot traverse outside the phase-logs directory through that component.",
+  "input_source": "The caller-controlled module query parameter read by apiGetScanPhaseLogs and passed to ReadPhaseLogFile as phaseKey when the in-memory phase buffer is empty.",
+  "provenance": "agent_derived",
+  "schema_version": "1",
+  "site": "h0tak88r/AutoAR@01cd447ad3b1acfed7e0680596c2c74458a4cf06:internal/utils/phase_logs.go:206:MustCompile",
+  "trust": "untrusted-input"
+}

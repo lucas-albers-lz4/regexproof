@@ -1,11 +1,14 @@
 {
+  "bucket_registry_digest": "328719b567fcacf3ec5f3f4c9d4bea7f0c2fb6d5883d480e16bd6a7e0a4455d6",
   "cache_interplay_note": "GO-cluster utilization accelerates #550 lease pressure \u2014 leased clone count + byte caps apply; there is NO immortal lease set. Each conversion wave must fit within the current cache budget and release leases on close-out.",
   "capacity_reservation": {
     "novel_exploration_share": 0.2,
     "productive_share": 0.7,
     "unbiased_slice_share": 0.1
   },
-  "generated_at": "2026-08-24T04:30:00Z",
+  "generated_at": "2026-10-16T01:05:00Z",
+  "registered_bucket_count": 4,
+  "registered_bucket_rejections": [],
   "schema_version": "1",
   "selections": [
     {
@@ -144,8 +147,8 @@
     {
       "cluster": "aidevops",
       "mine_re_ranked": false,
-      "selected_bucket": null,
-      "selection_basis": "unregistered-next",
+      "selected_bucket": "ecma-plugins",
+      "selection_basis": "named-next-unused",
       "used_buckets": [
         "shell-hook-guards"
       ]
@@ -189,8 +192,10 @@
       "cluster": "claude-code-plugins",
       "mine_re_ranked": false,
       "selected_bucket": null,
-      "selection_basis": "none-available",
-      "used_buckets": []
+      "selection_basis": "unregistered-next",
+      "used_buckets": [
+        "plugin-hook-guards"
+      ]
     },
     {
       "cluster": "coreruleset",
@@ -225,7 +230,9 @@
       "mine_re_ranked": false,
       "selected_bucket": null,
       "selection_basis": "none-available",
-      "used_buckets": []
+      "used_buckets": [
+        "normalize-fixpoint"
+      ]
     },
     {
       "cluster": "dompurify",
@@ -335,8 +342,8 @@
     {
       "cluster": "malcontent",
       "mine_re_ranked": false,
-      "selected_bucket": null,
-      "selection_basis": "none-available",
+      "selected_bucket": "git-crlf-smuggling",
+      "selection_basis": "named-next-unused",
       "used_buckets": []
     },
     {
@@ -356,8 +363,8 @@
     {
       "cluster": "mycelium",
       "mine_re_ranked": false,
-      "selected_bucket": null,
-      "selection_basis": "unregistered-next",
+      "selected_bucket": "scripts-bootstrap",
+      "selection_basis": "named-next-unused",
       "used_buckets": [
         "control-failclosed"
       ]
@@ -443,7 +450,9 @@
       "mine_re_ranked": false,
       "selected_bucket": null,
       "selection_basis": "none-available",
-      "used_buckets": []
+      "used_buckets": [
+        "navigation-param-control-calibration"
+      ]
     },
     {
       "cluster": "sec_check",

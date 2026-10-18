@@ -1,0 +1,9 @@
+[
+  {
+    "question_ids": [
+      "RR-route-segment-allowed-alphabet"
+    ],
+    "reviewed": false,
+    "site": "greydragon888/real-router@55aa7ef43a9c129beba90823cd8a4db10bb01211:packages/route-utils/src/constants.ts:13:column-36"
+  }
+]

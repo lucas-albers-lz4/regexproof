@@ -1,0 +1,28 @@
+{
+  "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+  "repository": "https://github.com/marcusquinn/aidevops",
+  "representative": {
+    "path": ".agents/plugins/opencode-aidevops/quality-hooks-secret-read.mjs",
+    "sha256": "668f7dc002b263d58def6003194fd83dfa91b82b2fdcb9a10b1427f1cb942cf0",
+    "site": ".agents/plugins/opencode-aidevops/quality-hooks-secret-read.mjs:8:28",
+    "pattern": "\\.(pem|key|p12|pfx|kdbx|age|asc|gpg)$",
+    "flags": "i",
+    "call_kind": "search"
+  },
+  "callers": [
+    {
+      "path": ".agents/plugins/opencode-aidevops/quality-hooks.mjs",
+      "sha256": "3da80b121d778f474e4f7e25983e6041877731cf415fae90e61ed8c64677747d",
+      "evidence": "handleToolBefore routes arguments through checkSecretReadWithApproval and supplies checkSecretReadGate."
+    },
+    {
+      "path": ".agents/plugins/opencode-aidevops/source-access-approval.mjs",
+      "sha256": "c7bfa82af900399621f2d1c107470a9fe65b39d2814f5191da9f04f78d32860d",
+      "evidence": "For a read path outside the special signed-snapshot allowance, checkSecretReadWithApproval falls back to checkSecretReadGate; the extension branch is not the special allowance."
+    }
+  ],
+  "scope_decision": {
+    "previous_status": "ECMA plugin was deferred and explicitly excluded from the BusyBox shell family.",
+    "revisit_basis": "The exact pinned source contains a concrete Node pre-read guard for untrusted model-controlled file paths. The extension rule blocks private-key material before read content reaches model context. Treat this as a distinct Node product slice and question family; do not mix it into AI-aidevops BusyBox shell work or claim that the whole repository is a security tool."
+  }
+}

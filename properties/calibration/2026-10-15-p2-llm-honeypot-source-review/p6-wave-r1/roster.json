@@ -1,0 +1,26 @@
+{
+  "cohort_id": "2026-09-12-calibration-20-r2",
+  "cohort_manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+  "coverage_digest": "db203d1213bfa5b6e17d53808a3be43ab39c642e045951dbbebcd19785093491",
+  "identities": [
+    {
+      "contract_sha256": "aac841ad61eca3ca7456f39a303a5a10e4ce4fca55def8fca9de57a227b3a347",
+      "pin": "65624396e263074bb8cb2e049f9a9ec6215ea5c1",
+      "provenance": "agent_derived",
+      "question_id": "LH-llm-honeypot-private-ip-rfc1918-redaction",
+      "repo_id": "Leviticus-Triage/llm-honeypot-intelligence",
+      "site": "Leviticus-Triage/llm-honeypot-intelligence@65624396e263074bb8cb2e049f9a9ec6215ea5c1:scripts/sync-to-github.sh:76:PRIVATE_IP_PATTERN",
+      "url": "https://github.com/Leviticus-Triage/llm-honeypot-intelligence"
+    },
+    {
+      "contract_sha256": "e7fd7ec708484187bd7151c34d04aadcdb225233815f28cfd4565afd9b9d7fa0",
+      "pin": "65624396e263074bb8cb2e049f9a9ec6215ea5c1",
+      "provenance": "agent_derived",
+      "question_id": "LH-llm-honeypot-tor-newnym-response-sequencing",
+      "repo_id": "Leviticus-Triage/llm-honeypot-intelligence",
+      "site": "Leviticus-Triage/llm-honeypot-intelligence@65624396e263074bb8cb2e049f9a9ec6215ea5c1:spiderfoot-toolbox/tor-gateway/rotate-tor.sh:34:250 OK",
+      "url": "https://github.com/Leviticus-Triage/llm-honeypot-intelligence"
+    }
+  ],
+  "schema_version": "2"
+}

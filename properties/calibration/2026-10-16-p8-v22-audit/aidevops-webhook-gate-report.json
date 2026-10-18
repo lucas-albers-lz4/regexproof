@@ -1,0 +1,219 @@
+{
+  "confirmed_security_impact": 0,
+  "consumer_adopted": false,
+  "contract_digests": {
+    "contract-check-sha-regex-only.json": "da66928f8df6ab7b4ccbd27c2e307dbd9a085e2562911e053010cb1231747ea0",
+    "contract-process-pr-number-regex-only.json": "b723accf2629d739af9497e5136139dbdaa3c9d3b38221ed7788c887979dec12",
+    "contract-repository-slug.json": "61f93f6a581fdd24640478bdab7030293e06b1e8fea3beef79e2867d00e6ee3f",
+    "contract-secret-env-name.json": "b56719d864c1b7d96db6bc38cc6f229bfbb3910f6655ed5410633bc09b42777a"
+  },
+  "differential_cases": 671,
+  "differential_cases_by_pattern": {
+    "check_sha": 39,
+    "pr_number": 263,
+    "repository_owner": 38,
+    "repository_slug": 267,
+    "secret_env_name": 64
+  },
+  "external_reports": 0,
+  "formal_properties": 3,
+  "formal_results": [
+    {
+      "backend": "seq",
+      "call_kind": "search",
+      "domain": "The configured secret-variable name accepted by the receiver is a Bash identifier",
+      "engine_versions": {
+        "python": "3.14.8",
+        "z3": "5.0.0"
+      },
+      "expect_unsat": true,
+      "family": "AE-aidevops-webhook-secret-env-name",
+      "ground_truth": null,
+      "input_domain": "ascii",
+      "kind": "property",
+      "name": "AE-aidevops-webhook-secret-env-identifier",
+      "not_proven": false,
+      "ok": true,
+      "product": true,
+      "result": "unsat",
+      "schema_version": "1",
+      "state": "stock",
+      "wall_ms": 0.2,
+      "witness": null
+    },
+    {
+      "backend": "seq",
+      "call_kind": "search",
+      "domain": "The receiver's SHA regex accepts only 40-character ASCII hexadecimal tokens",
+      "engine_versions": {
+        "python": "3.14.8",
+        "z3": "5.0.0"
+      },
+      "expect_unsat": true,
+      "family": "AE-aidevops-webhook-check-sha",
+      "ground_truth": null,
+      "input_domain": "ascii",
+      "kind": "property",
+      "name": "AE-aidevops-webhook-check-sha-token",
+      "not_proven": false,
+      "ok": true,
+      "product": true,
+      "result": "unsat",
+      "schema_version": "1",
+      "state": "stock",
+      "wall_ms": 881.6,
+      "witness": null
+    },
+    {
+      "backend": "seq",
+      "call_kind": "search",
+      "domain": "Every nonempty token admitted by the receiver's Bash PR-number regex contains only decimal digits",
+      "engine_versions": {
+        "python": "3.14.8",
+        "z3": "5.0.0"
+      },
+      "expect_unsat": true,
+      "family": "AE-aidevops-webhook-pr-number",
+      "ground_truth": null,
+      "input_domain": "ascii",
+      "kind": "property",
+      "name": "AE-aidevops-webhook-process-pr-number",
+      "not_proven": false,
+      "ok": true,
+      "product": true,
+      "result": "unsat",
+      "schema_version": "1",
+      "state": "stock",
+      "wall_ms": 0.0,
+      "witness": null
+    },
+    {
+      "backend": "seq",
+      "call_kind": "search",
+      "domain": "MUTATION GUARD: allowing a digit in the first variable-name position loses the identifier check",
+      "engine_versions": {
+        "python": "3.14.8",
+        "z3": "5.0.0"
+      },
+      "expect_unsat": false,
+      "family": "AE-aidevops-webhook-secret-env-name",
+      "ground_truth": "reproduced",
+      "input_domain": "ascii",
+      "kind": "mutation_guard",
+      "name": "AE-aidevops-webhook-secret-env-mutation",
+      "not_proven": false,
+      "ok": true,
+      "product": false,
+      "result": "sat",
+      "schema_version": "1",
+      "state": "stock",
+      "wall_ms": 0.2,
+      "witness": {
+        "name": "8SECRET"
+      }
+    },
+    {
+      "backend": "seq",
+      "call_kind": "search",
+      "domain": "MUTATION GUARD: weakening the owner-first-character rule admits a leading-dot owner",
+      "engine_versions": {
+        "python": "3.14.8",
+        "z3": "5.0.0"
+      },
+      "expect_unsat": false,
+      "family": "AE-aidevops-webhook-repository-slug",
+      "ground_truth": "reproduced",
+      "input_domain": "ascii",
+      "kind": "mutation_guard",
+      "name": "AE-aidevops-webhook-slug-owner-mutation",
+      "not_proven": false,
+      "ok": true,
+      "product": false,
+      "result": "sat",
+      "schema_version": "1",
+      "state": "stock",
+      "wall_ms": 0.4,
+      "witness": {
+        "slug": ".owner/repo"
+      }
+    },
+    {
+      "backend": "seq",
+      "call_kind": "search",
+      "domain": "MUTATION GUARD: shortening the SHA length range admits a one-character token to cache invalidation",
+      "engine_versions": {
+        "python": "3.14.8",
+        "z3": "5.0.0"
+      },
+      "expect_unsat": false,
+      "family": "AE-aidevops-webhook-check-sha",
+      "ground_truth": "reproduced",
+      "input_domain": "ascii",
+      "kind": "mutation_guard",
+      "name": "AE-aidevops-webhook-check-sha-mutation",
+      "not_proven": false,
+      "ok": true,
+      "product": false,
+      "result": "sat",
+      "schema_version": "1",
+      "state": "stock",
+      "wall_ms": 0.2,
+      "witness": {
+        "sha": "a"
+      }
+    },
+    {
+      "backend": "seq",
+      "call_kind": "search",
+      "domain": "MUTATION GUARD: dropping the digits-only check admits Bash arithmetic text to process_pr",
+      "engine_versions": {
+        "python": "3.14.8",
+        "z3": "5.0.0"
+      },
+      "expect_unsat": false,
+      "family": "AE-aidevops-webhook-pr-number",
+      "ground_truth": "reproduced",
+      "input_domain": "ascii",
+      "kind": "mutation_guard",
+      "name": "AE-aidevops-webhook-process-pr-number-mutation",
+      "not_proven": false,
+      "ok": true,
+      "product": false,
+      "result": "sat",
+      "schema_version": "1",
+      "state": "stock",
+      "wall_ms": 0.2,
+      "witness": {
+        "number": "2#1"
+      }
+    }
+  ],
+  "formal_unsat_results": 3,
+  "full_slug_inclusion": {
+    "attempt_record": "slug-inclusion-attempt.json",
+    "note": "The 30-second whole-helper inclusion query timed out; finite Bash/product replays do not replace that unbounded proof.",
+    "result": "not_proven"
+  },
+  "gate_id": "aidevops-webhook-action-protocol",
+  "integrated_helper_cases": 48,
+  "integrated_helper_cases_by_contract": {
+    "check_sha": 9,
+    "pr_number": 9,
+    "repository_slug": 19,
+    "secret_env_name": 10,
+    "secret_resolve_and_clear": 1
+  },
+  "local_gate_passed": true,
+  "maintainer_confirmations": 0,
+  "mismatches": 0,
+  "mutation_guards": 4,
+  "mutation_replays": 4,
+  "product_engine": "Bash [[ =~ ]] on /bin/bash with LC_ALL inherited from source replay; exact pinned receiver helper functions",
+  "repository": "https://github.com/marcusquinn/aidevops",
+  "schema_version": "1",
+  "scope": "Source-backed local receiver protocol checks only. Aidevops admission is scale-based with security-boundary=false; this gate does not claim a remote vulnerability.",
+  "source_file": ".agents/scripts/pulse-merge-webhook-receiver.sh",
+  "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+  "source_sha256": "6d882dac90c3f9deb1a0007c9a4216d70f365a4a34ffacd145eb04cc8ae3a325",
+  "third_party_fixes": 0
+}

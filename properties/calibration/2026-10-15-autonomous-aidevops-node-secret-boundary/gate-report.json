@@ -1,0 +1,88 @@
+{
+  "caller_sha256": {
+    ".agents/plugins/opencode-aidevops/quality-hooks.mjs": "3da80b121d778f474e4f7e25983e6041877731cf415fae90e61ed8c64677747d",
+    ".agents/plugins/opencode-aidevops/source-access-approval.mjs": "c7bfa82af900399621f2d1c107470a9fe65b39d2814f5191da9f04f78d32860d"
+  },
+  "declared_extensions": [
+    "pem",
+    "key",
+    "p12",
+    "pfx",
+    "kdbx",
+    "age",
+    "asc",
+    "gpg"
+  ],
+  "differential_cases": 71,
+  "formal_results": [
+    {
+      "backend": "seq",
+      "call_kind": "search",
+      "domain": "Every ASCII basename ending in a declared private-key extension is matched by the pinned case-insensitive secret-extension rule before a read tool runs",
+      "engine_versions": {
+        "python": "3.14.8",
+        "z3": "5.0.0"
+      },
+      "expect_unsat": true,
+      "family": "AE-aidevops-secret-read-extension",
+      "ground_truth": null,
+      "input_domain": "ascii",
+      "kind": "property",
+      "name": "AE-aidevops-secret-read-extension-coverage",
+      "not_proven": false,
+      "ok": true,
+      "product": true,
+      "result": "unsat",
+      "schema_version": "1",
+      "state": "stock",
+      "wall_ms": 83.9,
+      "witness": null
+    },
+    {
+      "backend": "seq",
+      "call_kind": null,
+      "domain": "MUTATION GUARD: removing the .pem alternative must admit a private-key basename that the real pinned pre-read hook then fails to block",
+      "engine_versions": {
+        "python": "3.14.8",
+        "z3": "5.0.0"
+      },
+      "expect_unsat": false,
+      "family": "AE-aidevops-secret-read-extension",
+      "ground_truth": "reproduced",
+      "input_domain": "ascii",
+      "kind": "mutation_guard",
+      "name": "AE-aidevops-secret-read-mutated-pem-reaches-read",
+      "not_proven": false,
+      "ok": true,
+      "product": false,
+      "result": "sat",
+      "schema_version": "1",
+      "state": "stock",
+      "wall_ms": 0.9,
+      "witness": {
+        "basename": "proof.pem"
+      }
+    }
+  ],
+  "gate_id": "aidevops-node-secret-read-extension",
+  "mismatches": 0,
+  "mutation_id": "AE-aidevops-secret-read-mutated-pem-reaches-read",
+  "mutation_product_result": {
+    "blocked": false,
+    "message": "",
+    "reason": ""
+  },
+  "mutation_witness": "/tmp/proof.pem",
+  "node_version": "v26.11.1",
+  "positive_extension_cases": 67,
+  "product_engine": "Node.js ECMAScript RegExp and node:path",
+  "property_id": "AE-aidevops-secret-read-extension-coverage",
+  "public_key_and_negative_cases": 4,
+  "repository": "https://github.com/marcusquinn/aidevops",
+  "schema_version": "1",
+  "scope": "Private-key extension branch of the exact pinned pre-read gate; other path rules are out of scope.",
+  "source_file": ".agents/plugins/opencode-aidevops/quality-hooks-secret-read.mjs",
+  "source_pattern": "\\.(pem|key|p12|pfx|kdbx|age|asc|gpg)$",
+  "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+  "source_sha256": "668f7dc002b263d58def6003194fd83dfa91b82b2fdcb9a10b1427f1cb942cf0"
+}

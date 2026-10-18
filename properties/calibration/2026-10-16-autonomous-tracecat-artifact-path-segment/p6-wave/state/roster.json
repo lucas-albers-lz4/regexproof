@@ -1,0 +1,17 @@
+{
+  "cohort_id": "2026-09-12-calibration-20-r2",
+  "cohort_manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+  "coverage_digest": "712e6d864dd43421f3acf39a60ffa2b6543689f6891d1c9fbea271b9630bfd65",
+  "identities": [
+    {
+      "contract_sha256": "b48b75cf862d9882a7bc2a36746c77f11552777d91127c07d53d05fb76d53411",
+      "pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+      "provenance": "agent_derived",
+      "question_id": "TC-artifact-path-segment-safe-image",
+      "repo_id": "TracecatHQ/tracecat",
+      "site": "TracecatHQ/tracecat@c84d52528a489821f355fc63976fbc7783ae0ad5:packages/tracecat-ee/tracecat_ee/agent/artifacts/mount_only_provider.py:31:_SAFE_PATH_SEGMENT_RE",
+      "url": "https://github.com/TracecatHQ/tracecat"
+    }
+  ],
+  "schema_version": "2"
+}

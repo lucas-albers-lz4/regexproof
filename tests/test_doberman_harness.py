@@ -124,6 +124,7 @@ def test_committed_conversion_ndjson_matches_registry():
         for line in path.read_text(encoding="utf-8").splitlines()
         if line.strip()
     ]
+    rows = [row for row in rows if row.get("wave_id") == "doberman_w1"]
     assert {row["name"] for row in rows} == set(PRODUCT_NAMES)
     for row in rows:
         assert row["family"] == FAMILY

@@ -1,0 +1,37 @@
+{
+  "schema_version": "1",
+  "reviewed_on": "2026-10-16",
+  "author": "Codex-P2-source-review",
+  "reviewer": "Codex-independent-source-review-pass",
+  "same_model": true,
+  "scope": "Targeted review of one exact-pin Real-Router inventory row; not a full repository regex review.",
+  "decision": "adopted",
+  "regex_id": "bb84d7f740e031ca1c1fc94bd75826bf",
+  "inventory_site": "packages/route-utils/src/constants.ts:13:36",
+  "source_pattern": "^[\\w.-]+$",
+  "source_file": "packages/route-utils/src/constants.ts",
+  "source_file_sha256": "ba3add9f6367eb2b031b7bf5869f6703a8d6290fcb064e4855e09a17ce6011db",
+  "review_refs": [
+    {
+      "path": "packages/route-utils/src/segmentTesters.ts",
+      "sha256": "95d029dc8991b10818390ca195a625116668ffc9da23688944a4dd97d1c9d193",
+      "lines": [86, 107],
+      "why": "All three exported segment testers call this validator after non-empty and type checks; it checks length before SAFE_SEGMENT_PATTERN and throws on a mismatch."
+    },
+    {
+      "path": "packages/route-utils/INVARIANTS.md",
+      "sha256": "5efffb78e83b542a319f37c0e0e50c29495bbfee0a4979f598b16dddbd4ee35d",
+      "lines": [46, 59],
+      "why": "The checked-in invariant table declares the same character partition and maximum-length behavior for all three testers."
+    },
+    {
+      "path": "packages/route-utils/src/index.ts",
+      "sha256": "1be08e0a3b6b1a4347db865ea999c32c31ccf051e08560156744f9594d3324ab",
+      "lines": [1, 12],
+      "why": "The reviewed helper functions are exported from the route-utils package entry point."
+    }
+  ],
+  "rationale": "The exact pinned source comment defines JavaScript \\w as ASCII letters, digits, and underscore; the class adds dot and hyphen. The shared helper applies this predicate to all three exported route segment testers, and the package invariant independently declares the character partition. The accepted claim is a library-level validation invariant only. The cohort GO decision is based on scale, and this review does not classify Real-Router as a security tool or establish attacker reachability or security impact.",
+  "question_id": "RR-route-segment-allowed-alphabet",
+  "question_asked": true
+}

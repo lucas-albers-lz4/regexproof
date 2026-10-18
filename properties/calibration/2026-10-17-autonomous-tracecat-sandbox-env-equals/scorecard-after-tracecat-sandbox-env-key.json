@@ -1,0 +1,57 @@
+{
+  "cohort_filter": null,
+  "counts": {
+    "consumer_adopted_gates": 0,
+    "contracts_adopted": 5,
+    "decided_faithful_questions": 58,
+    "differential_cases": 3506570,
+    "human_interventions": 0,
+    "local_runnable_gates": 39,
+    "maintainer_confirmations": 0,
+    "mutation_checks_passed": 50,
+    "proof_questions_attempted": 60,
+    "reachable_violations": 10,
+    "replayed_witnesses": 10,
+    "reviewed_sites": 5,
+    "sat_candidates": 10,
+    "security_impact_confirmed": 0,
+    "third_party_fixes": 0,
+    "third_party_reports_sent": 0,
+    "unsat_guarantees": 48
+  },
+  "policy_version": "autonomous-contracts-v1",
+  "rates": {
+    "consumer_adopted_per_local_gate": 0.0,
+    "contracts_per_agent_hour": 7.945575026047408,
+    "decided_per_attempted": 0.9666666666666667,
+    "impact_confirmed_per_reachable": 0.0,
+    "reachable_violation_per_replayed": 1.0,
+    "replayed_per_sat_candidate": 1.0,
+    "third_party_confirmation_per_report_sent": null,
+    "third_party_fix_per_confirmation": null,
+    "unsat_per_decided": 0.8275862068965517
+  },
+  "rates_are_null_when_denominator_is_zero": true,
+  "resource_totals": {
+    "cost_rows_missing": 39,
+    "cost_usd": null,
+    "elapsed_seconds": 2265.412,
+    "elapsed_seconds_by_basis": {
+      "phase_sum": 172.752,
+      "wall_clock": 2092.66
+    },
+    "human_active_minutes": null,
+    "human_time_rows_missing": 39,
+    "input_token_rows_missing": 39,
+    "input_tokens": null,
+    "output_token_rows_missing": 39,
+    "output_tokens": null
+  },
+  "run_count": 39,
+  "schema_version": "2",
+  "track_order": [
+    "useful_proofs_and_gates",
+    "bug_discovery",
+    "external_outcomes"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "cohort_id": "2026-09-12-calibration-20-r2",
+  "cohort_manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+  "coverage_digest": "b7be22578a71f35a33e4aad5543f69cc10f090b8d1f637de4df1c37e69c87748",
+  "identities": [
+    {
+      "contract_sha256": "2b0b67bb2e463f1c05ce5fb755598c7501dbd9825ef16833abb1e7e12183ae78",
+      "pin": "01cd447ad3b1acfed7e0680596c2c74458a4cf06",
+      "provenance": "agent_derived",
+      "question_id": "AA-autoar-html-text-escape-codepoint-image",
+      "repo_id": "h0tak88r/AutoAR",
+      "site": "h0tak88r/AutoAR@01cd447ad3b1acfed7e0680596c2c74458a4cf06:internal/api/ui/pages/html-escape.js:2:esc",
+      "url": "https://github.com/h0tak88r/AutoAR"
+    }
+  ],
+  "schema_version": "2"
+}

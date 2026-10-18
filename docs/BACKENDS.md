@@ -66,7 +66,7 @@ wiring needs a build step or vendored binary.
 
 ## Rule of thumb
 
-Start with stock `z3-solver` `seq` backend + the 5 canonical shapes (incl.
+Start with stock `z3-solver` `seq` backend + the 6 canonical shapes (incl.
 shape-5 `rule_diff`). Escalate to Z3-Noodler only when: (a) the pattern is
 JS/ECMA and you want to show that it is correct as written, or (b) stock Z3 times out on a
 property that decomposition could not fix.

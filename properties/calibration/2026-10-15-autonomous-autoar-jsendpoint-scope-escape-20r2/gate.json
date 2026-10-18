@@ -1,0 +1,24 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "scripts/autoar-jsendpoint-scope-regression-gate.py",
+    "--source-root",
+    "/tmp/regexproof-pinned-sources/AutoAR-01cd447ad3b1acfed7e0680596c2c74458a4cf06",
+    "--output",
+    "properties/calibration/2026-10-15-autonomous-autoar-jsendpoint-scope-escape-20r2/gate-report.json"
+  ],
+  "evidence": {
+    "differential_case_counts": {
+      "AA-autoar-jsendpoint-loopback-script-src-fetch": 2
+    },
+    "product_engine_replay_question_ids": [
+      "AA-autoar-jsendpoint-loopback-script-src-fetch"
+    ]
+  },
+  "gate_id": "autoar-jsendpoint-scope-candidate-20r2",
+  "question_ids": [
+    "AA-autoar-jsendpoint-loopback-script-src-fetch"
+  ],
+  "schema_version": "1",
+  "timeout_seconds": 300
+}

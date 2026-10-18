@@ -24,9 +24,12 @@ from pathlib import Path
 from typing import Any, Mapping
 
 from .cohort_manifest import CohortManifestError, validate_manifest as validate_cohort
+from regexproof.contract_adoption import contract_digest, contract_is_adopted
+from regexproof.harness.contract import valid_product_contract
 
 SCHEMA_VERSION = "1"  # row, canonical, and contract schema version
-CHECKPOINT_SCHEMA_VERSION = "2"
+LEGACY_CHECKPOINT_SCHEMA_VERSION = "2"
+CHECKPOINT_SCHEMA_VERSION = "3"
 PIN_RE = re.compile(r"^[0-9a-f]{40}$")
 DIGEST_RE = re.compile(r"^[0-9a-f]{64}$")
 PRODUCT_KINDS = frozenset({"property", "counterexample_finder", "bug_demo"})
@@ -41,6 +44,9 @@ FILED_STATUSES = frozenset({"filed", "private_first", "fixed_upstream"})
 ACCEPTED_STATUSES = frozenset({"fixed_upstream"})
 DISPOSITION_STATUSES = frozenset(
     {
+        "not_applicable",
+        "pending_ground_truth",
+        "pending_product_triage",
         "filed_plan",
         "filed",
         "private_first",
@@ -59,6 +65,7 @@ ROOT_FIELDS = {
     "product_coverage_manifest",
     "rows",
 }
+ROOT_FIELDS_V3 = ROOT_FIELDS | {"attempts"}
 EXPECTED_ROW_FIELDS = {"repo_id", "url", "pin", "site", "question_id"}
 PRODUCT_COVERAGE_FIELDS = {
     "schema_version",
@@ -67,6 +74,9 @@ PRODUCT_COVERAGE_FIELDS = {
     "identities",
     "coverage_digest",
 }
+PRODUCT_ROSTER_FIELDS = PRODUCT_COVERAGE_FIELDS | {"schema_version"}
+PRODUCT_ROSTER_IDENTITY_FIELDS = EXPECTED_ROW_FIELDS | {"contract_sha256", "provenance"}
+PRODUCT_COVERAGE_FIELDS_V2 = PRODUCT_COVERAGE_FIELDS
 ROW_FIELDS = {
     "repo_id",
     "url",
@@ -92,7 +102,32 @@ CONTRACT_FIELDS = {
     "declared_domain",
     "provenance",
 }
-CONTRACT_OPTIONAL_FIELDS = {"family_contract"}
+CONTRACT_OPTIONAL_FIELDS = {"family_contract", "adoption"}
+ATTEMPT_STATUSES = frozenset(
+    {
+        "sat", "sat_pending_ground_truth", "sat_replay_failed", "unsat",
+        "timeout", "unknown", "encoding_failed",
+        "missing_engine", "unreachable", "behavioral_only", "error",
+        "not_attempted",
+    }
+)
+SAT_ATTEMPT_STATUSES = frozenset(
+    {"sat", "sat_pending_ground_truth", "sat_replay_failed"}
+)
+PROOF_ATTEMPT_STATUSES = SAT_ATTEMPT_STATUSES | {"unsat"}
+ATTEMPT_FIELDS = {
+    "repo_id", "url", "pin", "site", "question_id", "kind",
+    "synthesized", "contract", "domain", "status", "detail", "gate",
+}
+ROSTER_SOURCE_FIELDS = {
+    "repo_id", "url", "pin", "site", "question_id", "kind",
+    "synthesized", "domain", "contract",
+}
+GATE_FIELDS = {
+    "source_pin_verified", "product_engine_replayed", "mutation_guard_passed",
+    "differential_cases", "gate_id", "local_gate_command", "local_gate_passed",
+    "consumer_adopted",
+}
 DISPOSITION_FIELDS = {
     "status",
     "filed_at",
@@ -174,8 +209,8 @@ def _stable_identity(
 
 def _coverage_digest(manifest: Mapping[str, Any]) -> str:
     content = {
-        field: manifest[field]
-        for field in PRODUCT_COVERAGE_FIELDS
+        field: value
+        for field, value in manifest.items()
         if field != "coverage_digest"
     }
     content["identities"] = [
@@ -203,7 +238,7 @@ def _is_gt_pass(status: str) -> bool:
     return status in GT_PASS
 
 
-def _validate_contract(value: Any, context: str) -> dict[str, str]:
+def _validate_contract(value: Any, context: str) -> dict[str, Any]:
     contract = _object(value, f"{context}.contract")
     missing = sorted(CONTRACT_FIELDS - set(contract))
     extra = sorted(set(contract) - CONTRACT_FIELDS - CONTRACT_OPTIONAL_FIELDS)
@@ -225,14 +260,19 @@ def _validate_contract(value: Any, context: str) -> dict[str, str]:
         raise _fail(
             f"{context}.contract.trust must be one of {sorted(TRUST_CLASSES)}"
         )
-    if normalized["provenance"] != "human":
-        raise _fail(f"{context}.contract.provenance must be 'human'")
     if contract["site"] != normalized["site"]:
         raise _fail(f"{context}.contract.site must be stable and non-empty")
     if "family_contract" in contract:
         if not isinstance(contract["family_contract"], Mapping):
             raise _fail(f"{context}.contract.family_contract must be an object")
         normalized["family_contract"] = contract["family_contract"]
+    if "adoption" in contract:
+        normalized["adoption"] = contract["adoption"]
+    if normalized["provenance"] == "agent_derived":
+        if not valid_product_contract(dict(contract)):
+            raise _fail(f"{context}.contract has missing or invalid autonomous adoption")
+    elif normalized["provenance"] not in {"human", "version_diff", "cross_engine"}:
+        raise _fail(f"{context}.contract.provenance is not an adopted provenance")
     return normalized
 
 
@@ -392,6 +432,19 @@ def _validate_row(value: Any, index: int) -> dict[str, Any]:
     status = normalized["disposition"]["status"]
     filed_at = normalized["disposition"]["filed_at"]
     gt = _is_gt_pass(gt_status)
+    if status == "not_applicable" and normalized["result"] != "unsat":
+        raise _fail(f"{context}.disposition not_applicable requires UNSAT")
+    if status == "pending_ground_truth" and not (
+        normalized["result"] == "sat" and not gt
+    ):
+        raise _fail(f"{context}.disposition pending_ground_truth requires ungrounded SAT")
+    if status == "pending_product_triage" and not (
+        normalized["result"] == "sat" and gt and filed_at is None
+    ):
+        raise _fail(
+            f"{context}.disposition pending_product_triage requires a replayed SAT "
+            "with no filing timestamp"
+        )
     filed_by_status = status in FILED_STATUSES
     accepted = status in ACCEPTED_STATUSES
     if (filed_by_status or filed_at is not None) and not (
@@ -540,7 +593,7 @@ def checkpoint_from_canonical_rows(
         )
     result = dict(validated_cohort)
     checkpoint = {
-        "schema_version": CHECKPOINT_SCHEMA_VERSION,
+        "schema_version": LEGACY_CHECKPOINT_SCHEMA_VERSION,
         "cohort_id": _text(result.get("cohort_id"), "cohort_id", "cohort"),
         "manifest_digest": _digest(result.get("manifest_digest"), "manifest_digest", "cohort"),
         "cohort": result,
@@ -551,8 +604,46 @@ def checkpoint_from_canonical_rows(
     return checkpoint
 
 
+def checkpoint_from_attempts(
+    attempts: list[Mapping[str, Any]],
+    rows: list[Mapping[str, Any]],
+    *,
+    cohort: Mapping[str, Any],
+    product_coverage_manifest: Mapping[str, Any],
+) -> dict[str, Any]:
+    """Build a v3 checkpoint from a frozen roster and all attempt outcomes.
+
+    ``attempts`` is fixed before results are inspected. ``rows`` contains the
+    detailed SAT/UNSAT proof, replay, and disposition records for decided
+    attempts only. Every roster identity must have exactly one attempt status;
+    non-decided statuses remain part of the denominator.
+    """
+    try:
+        validated_cohort = validate_cohort(cohort)
+    except CohortManifestError as exc:
+        raise _fail(f"invalid frozen cohort: {exc}") from exc
+    coverage, _expected = _validate_product_coverage_manifest(
+        product_coverage_manifest, validated_cohort
+    )
+    checkpoint = {
+        "schema_version": CHECKPOINT_SCHEMA_VERSION,
+        "cohort_id": validated_cohort["cohort_id"],
+        "manifest_digest": validated_cohort["manifest_digest"],
+        "cohort": validated_cohort,
+        "product_coverage_manifest": coverage,
+        "attempts": [dict(item) for item in attempts],
+        "rows": [dict(item) for item in rows],
+    }
+    _validated_root(checkpoint)
+    return checkpoint
+
+
 def _validate_product_identities(
-    value: Any, cohort: Mapping[str, Any], context_prefix: str
+    value: Any,
+    cohort: Mapping[str, Any],
+    context_prefix: str,
+    *,
+    roster: bool = False,
 ) -> tuple[list[dict[str, str]], set[tuple[str, str, str, str, str]]]:
     if not isinstance(value, list) or not value:
         raise _fail(f"{context_prefix} must be a non-empty list")
@@ -564,14 +655,24 @@ def _validate_product_identities(
     for index, raw in enumerate(value):
         context = f"{context_prefix}[{index}]"
         item = _object(raw, context)
-        _exact_fields(item, EXPECTED_ROW_FIELDS, context)
+        _exact_fields(
+            item,
+            PRODUCT_ROSTER_IDENTITY_FIELDS if roster else EXPECTED_ROW_FIELDS,
+            context,
+        )
         identity = _stable_identity(item, context)
         if identity[:3] not in allowed:
             raise _fail(f"{context} repository is outside the frozen cohort")
         if identity in identities:
             raise _fail(f"{context} duplicates expected stable product identity")
         identities.add(identity)
-        normalized.append(dict(item))
+        if roster:
+            _digest(item["contract_sha256"], "contract_sha256", context)
+            if item["provenance"] not in {"human", "agent_derived", "version_diff", "cross_engine"}:
+                raise _fail(f"{context}.provenance is not an adopted provenance")
+            normalized.append(dict(item))
+        else:
+            normalized.append(dict(item))
     return normalized, identities
 
 
@@ -596,15 +697,77 @@ def build_product_coverage_manifest(
     return manifest
 
 
+def build_product_roster(
+    contracts: list[Mapping[str, Any]], cohort: Mapping[str, Any]
+) -> dict[str, Any]:
+    """Freeze contract identities and hashes without consuming result rows."""
+    try:
+        validated_cohort = validate_cohort(cohort)
+    except CohortManifestError as exc:
+        raise _fail(f"invalid frozen cohort: {exc}") from exc
+    allowed = {
+        (repo["repo_id"], repo["url"], repo["pin"]): repo
+        for repo in validated_cohort["repos"]
+    }
+    identities: list[dict[str, Any]] = []
+    seen: set[tuple[str, str, str, str, str]] = set()
+    for index, raw in enumerate(contracts):
+        context = f"product_roster.contracts[{index}]"
+        item = _object(raw, context)
+        _exact_fields(item, ROSTER_SOURCE_FIELDS, context)
+        repo_id = _text(item.get("repo_id"), "repo_id", context)
+        url = _text(item.get("url"), "url", context)
+        pin = _pin(item.get("pin"), context)
+        if (repo_id, url, pin) not in allowed:
+            raise _fail(f"{context} repository is outside the frozen cohort")
+        site = _text(item.get("site"), "site", context)
+        question_id = _text(item.get("question_id"), "question_id", context)
+        kind = _text(item.get("kind"), "kind", context)
+        if kind not in PRODUCT_KINDS or item.get("synthesized") is not False:
+            raise _fail(f"{context} must describe a non-synthesized product kind")
+        domain = _text(item.get("domain"), "domain", context)
+        contract = item.get("contract")
+        if not valid_product_contract(contract) or contract.get("site") != site:
+            raise _fail(f"{context}.contract must be a complete adopted contract for site")
+        provenance = contract.get("provenance")
+        if provenance == "agent_derived":
+            adoption = contract.get("adoption", {})
+            if adoption.get("source_url", "").rstrip("/") != url.rstrip("/") or adoption.get("source_pin") != pin:
+                raise _fail(f"{context}.contract adoption source does not match cohort pin")
+        identity = (repo_id, url, pin, site, question_id)
+        if identity in seen:
+            raise _fail(f"{context} duplicates frozen product identity")
+        seen.add(identity)
+        identities.append({
+            "repo_id": repo_id,
+            "url": url,
+            "pin": pin,
+            "site": site,
+            "question_id": question_id,
+            "contract_sha256": contract_digest(contract),
+            "provenance": provenance,
+        })
+    identities.sort(key=lambda row: _stable_identity(row, "product_roster.identity"))
+    roster = {
+        "schema_version": "2",
+        "cohort_id": validated_cohort["cohort_id"],
+        "cohort_manifest_digest": validated_cohort["manifest_digest"],
+        "identities": identities,
+    }
+    roster["coverage_digest"] = _coverage_digest(roster)
+    _validate_product_coverage_manifest(roster, validated_cohort)
+    return roster
+
+
 def _validate_product_coverage_manifest(
     value: Any, cohort: Mapping[str, Any]
 ) -> tuple[dict[str, Any], set[tuple[str, str, str, str, str]]]:
     manifest = _object(value, "product_coverage_manifest")
     _exact_fields(manifest, PRODUCT_COVERAGE_FIELDS, "product_coverage_manifest")
-    if manifest["schema_version"] != SCHEMA_VERSION:
+    roster = manifest["schema_version"] == "2"
+    if manifest["schema_version"] not in {SCHEMA_VERSION, "2"}:
         raise _fail(
-            "product_coverage_manifest.schema_version must "
-            f"be {SCHEMA_VERSION!r}"
+            f"product_coverage_manifest.schema_version must be {SCHEMA_VERSION!r} or '2'"
         )
     cohort_id = _text(
         manifest["cohort_id"], "cohort_id", "product_coverage_manifest"
@@ -621,13 +784,14 @@ def _validate_product_coverage_manifest(
             "product coverage cohort_manifest_digest does not match the frozen cohort"
         )
     identities, identity_set = _validate_product_identities(
-        manifest["identities"], cohort, "product_coverage_manifest.identities"
+        manifest["identities"], cohort, "product_coverage_manifest.identities",
+        roster=roster,
     )
     coverage_digest = _digest(
         manifest["coverage_digest"], "coverage_digest", "product_coverage_manifest"
     )
     normalized = {
-        "schema_version": SCHEMA_VERSION,
+        "schema_version": "2" if roster else SCHEMA_VERSION,
         "cohort_id": cohort_id,
         "cohort_manifest_digest": cohort_digest,
         "identities": identities,
@@ -638,11 +802,102 @@ def _validate_product_coverage_manifest(
     return normalized, identity_set
 
 
-def _validated_root(document: Any) -> tuple[dict[str, Any], list[dict[str, Any]]]:
+def _validate_attempt(value: Any, index: int, cohort_repo: Mapping[str, Any]) -> dict[str, Any]:
+    context = f"attempts[{index}]"
+    attempt = _object(value, context)
+    _exact_fields(attempt, ATTEMPT_FIELDS, context)
+    identity = _stable_identity(attempt, context)
+    if identity[:3] != (
+        cohort_repo["repo_id"], cohort_repo["url"], cohort_repo["pin"]
+    ):
+        raise _fail(f"{context} repository identity does not match its cohort pin")
+    kind = _text(attempt["kind"], "kind", context)
+    if kind not in PRODUCT_KINDS:
+        raise _fail(f"{context}.kind must be a product kind")
+    if attempt["synthesized"] is not False:
+        raise _fail(f"{context}.synthesized must be false")
+    domain = _text(attempt["domain"], "domain", context)
+    contract = _validate_contract(attempt["contract"], context)
+    if not valid_product_contract(dict(attempt["contract"])):
+        raise _fail(f"{context}.contract must be a complete adopted property contract")
+    if contract["site"] != identity[3]:
+        raise _fail(f"{context}.contract.site must equal attempt.site")
+    provenance = contract["provenance"]
+    if not contract_is_adopted(dict(attempt["contract"])):
+        raise _fail(f"{context}.contract is not adopted")
+    if provenance == "agent_derived":
+        adoption = contract.get("adoption", {})
+        if (
+            adoption.get("source_url", "").rstrip("/") != identity[1].rstrip("/")
+            or adoption.get("source_pin") != identity[2]
+        ):
+            raise _fail(f"{context}.contract adoption source does not match cohort pin")
+    status = _text(attempt["status"], "status", context)
+    if status not in ATTEMPT_STATUSES:
+        raise _fail(f"{context}.status {status!r} is unknown")
+    detail = attempt["detail"]
+    if detail is not None and not isinstance(detail, str):
+        raise _fail(f"{context}.detail must be a string or null")
+    if status not in {"sat", "unsat"} and not (isinstance(detail, str) and detail.strip()):
+        raise _fail(f"{context}.detail is required for unresolved status {status!r}")
+    gate = _object(attempt["gate"], f"{context}.gate")
+    _exact_fields(gate, GATE_FIELDS, f"{context}.gate")
+    for field in (
+        "source_pin_verified", "product_engine_replayed",
+        "mutation_guard_passed", "local_gate_passed", "consumer_adopted",
+    ):
+        if not isinstance(gate[field], bool):
+            raise _fail(f"{context}.gate.{field} must be a boolean")
+    differential_cases = gate["differential_cases"]
+    if isinstance(differential_cases, bool) or not isinstance(differential_cases, int) or differential_cases < 0:
+        raise _fail(f"{context}.gate.differential_cases must be a non-negative integer")
+    command = gate["local_gate_command"]
+    if command is not None:
+        command = _text(command, "local_gate_command", f"{context}.gate")
+    gate_id = gate["gate_id"]
+    if gate_id is not None:
+        gate_id = _text(gate_id, "gate_id", f"{context}.gate")
+    if gate["local_gate_passed"] and (
+        not command or not gate_id or not gate["source_pin_verified"] or not gate["mutation_guard_passed"]
+    ):
+        raise _fail(
+            f"{context}.gate.local_gate_passed requires a command, pinned source, and passed mutation guard"
+        )
+    if gate["consumer_adopted"] and not gate["local_gate_passed"]:
+        raise _fail(f"{context}.gate.consumer_adopted requires local_gate_passed")
+    if status == "sat" and gate["product_engine_replayed"] is not True:
+        raise _fail(f"{context}.gate.product_engine_replayed is required for SAT")
+    if status in {"sat_pending_ground_truth", "sat_replay_failed"} and gate[
+        "product_engine_replayed"
+    ]:
+        raise _fail(
+            f"{context}.gate.product_engine_replayed must be false for an unverified SAT"
+        )
+    return {
+        **dict(zip(("repo_id", "url", "pin", "site", "question_id"), identity, strict=True)),
+        "kind": kind,
+        "synthesized": False,
+        "contract": dict(attempt["contract"]),
+        "domain": domain,
+        "status": status,
+        "detail": detail,
+        "gate": {**dict(gate), "gate_id": gate_id, "local_gate_command": command},
+    }
+
+
+def _validated_root(
+    document: Any,
+) -> tuple[dict[str, Any], list[dict[str, Any]], list[dict[str, Any]], str]:
     root = _object(document, "checkpoint")
-    _exact_fields(root, ROOT_FIELDS, "checkpoint")
-    if root["schema_version"] != CHECKPOINT_SCHEMA_VERSION:
-        raise _fail(f"schema_version must be {CHECKPOINT_SCHEMA_VERSION!r}")
+    version = root.get("schema_version")
+    if version == LEGACY_CHECKPOINT_SCHEMA_VERSION:
+        _exact_fields(root, ROOT_FIELDS, "checkpoint")
+    elif version == CHECKPOINT_SCHEMA_VERSION:
+        _exact_fields(root, ROOT_FIELDS_V3, "checkpoint")
+    else:
+        raise _fail(
+            f"schema_version must be {LEGACY_CHECKPOINT_SCHEMA_VERSION!r} or {CHECKPOINT_SCHEMA_VERSION!r}"
+        )
     cohort_id = _text(root["cohort_id"], "cohort_id", "checkpoint")
     digest = _digest(root["manifest_digest"], "manifest_digest", "checkpoint")
     try:
@@ -659,6 +914,10 @@ def _validated_root(document: Any) -> tuple[dict[str, Any], list[dict[str, Any]]
     _product_coverage_manifest, expected = _validate_product_coverage_manifest(
         root["product_coverage_manifest"], cohort
     )
+    if version == LEGACY_CHECKPOINT_SCHEMA_VERSION and _product_coverage_manifest["schema_version"] != "1":
+        raise _fail("v2 checkpoint requires product_coverage_manifest.schema_version '1'")
+    if version == CHECKPOINT_SCHEMA_VERSION and _product_coverage_manifest["schema_version"] != "2":
+        raise _fail("v3 checkpoint requires a frozen product roster (coverage schema '2')")
 
     allowed = {
         (repo["repo_id"], repo["url"], repo["pin"]): repo for repo in cohort["repos"]
@@ -667,6 +926,8 @@ def _validated_root(document: Any) -> tuple[dict[str, Any], list[dict[str, Any]]
     seen: set[tuple[str, str, str, str, str]] = set()
     for index, raw in enumerate(rows):
         row = _validate_row(raw, index)
+        if version == LEGACY_CHECKPOINT_SCHEMA_VERSION and row["contract"]["provenance"] != "human":
+            raise _fail(f"rows[{index}].contract.provenance must be 'human' in v2")
         repo_identity = (row["repo_id"], row["url"], row["pin"])
         if repo_identity not in allowed:
             raise _fail(f"rows[{index}] repository is outside the frozen cohort")
@@ -685,15 +946,90 @@ def _validated_root(document: Any) -> tuple[dict[str, Any], list[dict[str, Any]]
             )
         seen.add(identity)
         normalized.append(row)
-    missing = sorted(expected - seen)
-    if missing:
-        raise _fail(f"rows omit expected stable product identity {missing[0]!r}")
-    return cohort, normalized
+    attempts: list[dict[str, Any]] = []
+    if version == LEGACY_CHECKPOINT_SCHEMA_VERSION:
+        missing = sorted(expected - seen)
+        if missing:
+            raise _fail(f"rows omit expected stable product identity {missing[0]!r}")
+        attempts = [
+            {
+                "repo_id": row["repo_id"], "url": row["url"], "pin": row["pin"],
+                "site": row["site"], "question_id": row["question_id"],
+                "kind": row["kind"], "synthesized": False,
+                "contract": row["contract"], "domain": row["domain"],
+                "status": row["result"], "detail": None,
+                "gate": {
+                    "source_pin_verified": False,
+                    "product_engine_replayed": False,
+                    "mutation_guard_passed": False,
+                    "differential_cases": 0,
+                    "gate_id": None,
+                    "local_gate_command": None,
+                    "local_gate_passed": False,
+                    "consumer_adopted": False,
+                },
+            }
+            for row in normalized
+        ]
+    else:
+        raw_attempts = root["attempts"]
+        if not isinstance(raw_attempts, list):
+            raise _fail("attempts must be a list")
+        repo_by_identity = {
+            (repo["repo_id"], repo["url"], repo["pin"]): repo for repo in cohort["repos"]
+        }
+        attempt_seen: set[tuple[str, str, str, str, str]] = set()
+        status_by_identity: dict[tuple[str, str, str, str, str], dict[str, Any]] = {}
+        roster_by_identity = {
+            _stable_identity(item, "product_coverage_manifest.identities"): item
+            for item in _product_coverage_manifest["identities"]
+        }
+        for index, raw in enumerate(raw_attempts):
+            raw_obj = _object(raw, f"attempts[{index}]")
+            identity = _stable_identity(raw_obj, f"attempts[{index}]")
+            repo_identity = identity[:3]
+            if repo_identity not in repo_by_identity:
+                raise _fail(f"attempts[{index}] repository is outside the frozen cohort")
+            attempt = _validate_attempt(raw_obj, index, repo_by_identity[repo_identity])
+            roster_item = roster_by_identity.get(identity)
+            if roster_item is None:
+                raise _fail(f"attempts[{index}] is not in the frozen product roster")
+            if (
+                contract_digest(attempt["contract"]) != roster_item["contract_sha256"]
+                or attempt["contract"]["provenance"] != roster_item["provenance"]
+            ):
+                raise _fail(f"attempts[{index}] contract differs from the frozen product roster")
+            if identity in attempt_seen:
+                raise _fail(f"attempts[{index}] duplicates stable product identity")
+            attempt_seen.add(identity)
+            status_by_identity[identity] = attempt
+            attempts.append(attempt)
+        if attempt_seen != expected:
+            missing = sorted(expected - attempt_seen)
+            extra = sorted(attempt_seen - expected)
+            detail = f"missing {missing[0]!r}" if missing else f"extra {extra[0]!r}"
+            raise _fail(f"attempt roster does not match coverage manifest ({detail})")
+        for row in normalized:
+            identity = (row["repo_id"], row["url"], row["pin"], row["site"], row["question_id"])
+            attempt = status_by_identity.get(identity)
+            expected_result = (
+                "sat" if attempt and attempt["status"] in SAT_ATTEMPT_STATUSES
+                else attempt["status"] if attempt else None
+            )
+            if attempt is None or expected_result != row["result"]:
+                raise _fail(f"rows[{row['site']!r}] result does not match attempt status")
+            for field in ("kind", "synthesized", "contract", "domain"):
+                if row[field] != attempt[field]:
+                    raise _fail(f"rows[{row['site']!r}].{field} does not match attempt roster")
+        for identity, attempt in status_by_identity.items():
+            if attempt["status"] in PROOF_ATTEMPT_STATUSES and identity not in seen:
+                raise _fail(f"decided attempt {identity!r} is missing its proof row")
+    return cohort, normalized, attempts, version
 
 
 def validate_checkpoint(document: Any) -> list[dict[str, Any]]:
     """Validate a checkpoint and return normalized product rows."""
-    _cohort, rows = _validated_root(document)
+    _cohort, rows, _attempts, _version = _validated_root(document)
     return rows
 
 
@@ -826,12 +1162,13 @@ def _target_intervals() -> dict[str, Any]:
 
 def build_report(document: Any) -> dict[str, Any]:
     """Return deterministic funnel counts and interpretations for a checkpoint."""
-    cohort, rows = _validated_root(document)
+    cohort, rows, attempts, version = _validated_root(document)
     root = _object(document, "checkpoint")
     coverage_manifest = _object(
         root["product_coverage_manifest"], "product_coverage_manifest"
     )
-    asked = len(rows)
+    attempt_counts = Counter(attempt["status"] for attempt in attempts)
+    asked = sum(count for status, count in attempt_counts.items() if status != "not_attempted")
     sat_rows = [row for row in rows if row["result"] == "sat"]
     gt_rows = [row for row in sat_rows if _is_gt_pass(row["ground_truth_status"])]
     filed_rows = [
@@ -857,6 +1194,43 @@ def build_report(document: Any) -> dict[str, Any]:
         "private_first": len(private_rows),
         "accepted": len(accepted_rows),
     }
+    provenance_counts = Counter(
+        attempt["contract"]["provenance"] for attempt in attempts
+    )
+    unresolved_statuses = {
+        status: count for status, count in sorted(attempt_counts.items())
+        if status not in {"sat", "unsat"}
+    }
+    local_gate_ids = {
+        attempt["gate"]["gate_id"] for attempt in attempts
+        if attempt["gate"]["local_gate_passed"]
+    }
+    useful_gate_ids = {
+        attempt["gate"]["gate_id"] for attempt in attempts
+        if attempt["gate"]["local_gate_passed"]
+        and attempt["gate"]["source_pin_verified"]
+        and attempt["gate"]["mutation_guard_passed"]
+        and (
+            attempt["gate"]["product_engine_replayed"]
+            or attempt["gate"]["differential_cases"] > 0
+        )
+    }
+    consumer_gate_ids = {
+        attempt["gate"]["gate_id"] for attempt in attempts
+        if attempt["gate"]["consumer_adopted"]
+    }
+    gate_counts = {
+        "decided_contract_backed_proofs": len(rows),
+        "local_runnable_gates": len(local_gate_ids),
+        "useful_regression_gates": len(useful_gate_ids),
+        "consumer_adopted_gates": len(consumer_gate_ids),
+        "product_engine_replays": sum(
+            attempt["gate"]["product_engine_replayed"] for attempt in attempts
+        ),
+        "differential_cases": sum(
+            attempt["gate"]["differential_cases"] for attempt in attempts
+        ),
+    }
     rates = {
         "sat_per_asked": _ratio(counts["sat"], counts["asked"]),
         "ground_truthed_per_sat": _ratio(counts["ground_truthed"], counts["sat"]),
@@ -870,17 +1244,39 @@ def build_report(document: Any) -> dict[str, Any]:
     }
     dispositions = Counter(row["disposition"]["status"] for row in rows)
     return {
-        "schema_version": CHECKPOINT_SCHEMA_VERSION,
+        "schema_version": version,
         "cohort_id": cohort["cohort_id"],
         "manifest_digest": cohort["manifest_digest"],
         "product_coverage_digest": coverage_manifest["coverage_digest"],
         "counts": counts,
+        "coverage": {
+            "eligible": len(attempts),
+            "attempted": asked,
+            "decided": len(rows),
+            "not_proven": asked - len(rows),
+            "not_attempted": attempt_counts.get("not_attempted", 0),
+            "status_breakdown": {status: attempt_counts[status] for status in sorted(attempt_counts)},
+            "unresolved_statuses": unresolved_statuses,
+        },
+        "contract_provenance": {
+            "human": provenance_counts.get("human", 0),
+            "autonomous": provenance_counts.get("agent_derived", 0),
+            "machine_pair": sum(
+                provenance_counts.get(status, 0)
+                for status in ("version_diff", "cross_engine")
+            ),
+        },
+        "useful_gate_outcomes": gate_counts,
         "rates": rates,
         "disposition_breakdown": {
             status: dispositions[status] for status in sorted(dispositions)
         },
         "sample_sizes": {
-            "unit": "human product properties",
+            "unit": (
+                "eligible product questions"
+                if version == CHECKPOINT_SCHEMA_VERSION
+                else "human product properties"
+            ),
             "asked": asked,
             "sat": len(sat_rows),
             "ground_truthed": len(gt_rows),
@@ -932,8 +1328,10 @@ __all__ = [
     "ConversionCheckpointError",
     "build_product_coverage_manifest",
     "build_report",
+    "checkpoint_from_attempts",
     "canonical_row_to_checkpoint",
     "checkpoint_from_canonical_rows",
+    "build_product_roster",
     "coverage_manifest_digest",
     "dumps_report",
     "load_checkpoint",

@@ -1,0 +1,564 @@
+{
+  "attempts": [
+    {
+      "contract": {
+        "adoption": {
+          "approved_on": "2026-10-15",
+          "authority": "standing_user_delegation",
+          "contract_sha256": "aac841ad61eca3ca7456f39a303a5a10e4ce4fca55def8fca9de57a227b3a347",
+          "evidence": [
+            "https://github.com/Leviticus-Triage/llm-honeypot-intelligence/blob/65624396e263074bb8cb2e049f9a9ec6215ea5c1/scripts/sync-to-github.sh",
+            "https://github.com/Leviticus-Triage/llm-honeypot-intelligence/blob/65624396e263074bb8cb2e049f9a9ec6215ea5c1/scripts/sync-to-github.sh#L26",
+            "https://github.com/Leviticus-Triage/llm-honeypot-intelligence/blob/65624396e263074bb8cb2e049f9a9ec6215ea5c1/scripts/sync-to-github.sh#L69-L76",
+            "https://github.com/Leviticus-Triage/llm-honeypot-intelligence/blob/65624396e263074bb8cb2e049f9a9ec6215ea5c1/scripts/sync-to-github.sh#L81-L110",
+            "https://github.com/Leviticus-Triage/llm-honeypot-intelligence/blob/65624396e263074bb8cb2e049f9a9ec6215ea5c1/scripts/sync-to-github.sh#L154-L189",
+            "https://github.com/Leviticus-Triage/llm-honeypot-intelligence/blob/65624396e263074bb8cb2e049f9a9ec6215ea5c1/docs/setup-guide.md#L174-L176",
+            "https://www.rfc-editor.org/rfc/rfc1918.html"
+          ],
+          "policy_version": "autonomous-contracts-v1",
+          "rationale": "The pinned source labels this helper as a private-IP sanitizer and applies it to generated rule and threat-intelligence files before the automated GitHub commit/push. RFC 1918 defines the three private IPv4 blocks; treating its stated guarantee as the contract exposes the uncovered 10/8 and 172.16/12 cases. This adopts the documented privacy boundary without asserting that a real secret was published.",
+          "review": {
+            "author": "Codex source-review pass",
+            "reviewer": "Codex second source-review pass",
+            "same_model": true
+          },
+          "source_file": "scripts/sync-to-github.sh",
+          "source_pin": "65624396e263074bb8cb2e049f9a9ec6215ea5c1",
+          "source_sha256": "b7cbcd83598d83848516d282de897706da5828df1f1ab6ebcb3f4d87bd203122",
+          "source_url": "https://github.com/Leviticus-Triage/llm-honeypot-intelligence",
+          "status": "approved"
+        },
+        "declared_domain": "ASCII text files with the suffixes selected by sanitize_dir, containing a canonical dotted-decimal IPv4 address in 10.0.0.0/8, 172.16.0.0/12, or 192.168.0.0/16; the broader contract is checked by an address-language counterexample query and exact pinned sed helper replay. POSIX shell text excludes NUL.",
+        "guarantee": "Every canonical RFC 1918 IPv4 address in an eligible generated artifact is replaced with [REDACTED] before the sync script commits or pushes it to the configured GitHub remote.",
+        "input_source": "Rules and threat-intelligence text copied from the ollama-rules-output and ollama-threat-output Docker volumes into the repository before automated synchronization.",
+        "provenance": "agent_derived",
+        "schema_version": "1",
+        "site": "Leviticus-Triage/llm-honeypot-intelligence@65624396e263074bb8cb2e049f9a9ec6215ea5c1:scripts/sync-to-github.sh:76:PRIVATE_IP_PATTERN",
+        "trust": "untrusted-input"
+      },
+      "detail": null,
+      "domain": "COUNTEREXAMPLE FINDER: an RFC 1918 IPv4 token can pass through the exact pinned sed pattern without replacement",
+      "gate": {
+        "consumer_adopted": false,
+        "differential_cases": 65541,
+        "gate_id": "llm-honeypot-exact-pin-shell-boundaries",
+        "local_gate_command": ".venv/bin/python scripts/llm-honeypot-boundary-regression-gate.py --source-root /tmp/regexproof-pinned-sources/llm-honeypot-intelligence-65624396e263074bb8cb2e049f9a9ec6215ea5c1 --output /home/lalbers/gitroot/regexproof/properties/calibration/2026-10-15-p2-llm-honeypot-source-review/product-replay-p6.json",
+        "local_gate_passed": true,
+        "mutation_guard_passed": true,
+        "product_engine_replayed": true,
+        "source_pin_verified": true
+      },
+      "kind": "counterexample_finder",
+      "pin": "65624396e263074bb8cb2e049f9a9ec6215ea5c1",
+      "question_id": "LH-llm-honeypot-private-ip-rfc1918-redaction",
+      "repo_id": "Leviticus-Triage/llm-honeypot-intelligence",
+      "site": "Leviticus-Triage/llm-honeypot-intelligence@65624396e263074bb8cb2e049f9a9ec6215ea5c1:scripts/sync-to-github.sh:76:PRIVATE_IP_PATTERN",
+      "status": "sat",
+      "synthesized": false,
+      "url": "https://github.com/Leviticus-Triage/llm-honeypot-intelligence"
+    },
+    {
+      "contract": {
+        "adoption": {
+          "approved_on": "2026-10-15",
+          "authority": "standing_user_delegation",
+          "contract_sha256": "e7fd7ec708484187bd7151c34d04aadcdb225233815f28cfd4565afd9b9d7fa0",
+          "evidence": [
+            "https://github.com/Leviticus-Triage/llm-honeypot-intelligence/blob/65624396e263074bb8cb2e049f9a9ec6215ea5c1/spiderfoot-toolbox/tor-gateway/rotate-tor.sh",
+            "https://github.com/Leviticus-Triage/llm-honeypot-intelligence/blob/65624396e263074bb8cb2e049f9a9ec6215ea5c1/spiderfoot-toolbox/tor-gateway/rotate-tor.sh#L1-L3",
+            "https://github.com/Leviticus-Triage/llm-honeypot-intelligence/blob/65624396e263074bb8cb2e049f9a9ec6215ea5c1/spiderfoot-toolbox/tor-gateway/rotate-tor.sh#L26-L46",
+            "https://github.com/Leviticus-Triage/llm-honeypot-intelligence/blob/65624396e263074bb8cb2e049f9a9ec6215ea5c1/spiderfoot-toolbox/tor-gateway/entrypoint.sh#L67-L75",
+            "https://spec.torproject.org/control-spec/commands.html"
+          ],
+          "policy_version": "autonomous-contracts-v1",
+          "rationale": "The pinned helper sends AUTHENTICATE, SIGNAL NEWNYM, and QUIT in one control-port stream, then logs success when grep finds 250 OK anywhere in the combined reply. The standing script comment says exit rotation is mandatory; the Tor control specification ties 250 OK to command success and defines non-250 errors. The contract checks that the status of SIGNAL NEWNYM, rather than an earlier authentication reply, controls the result.",
+          "review": {
+            "author": "Codex source-review pass",
+            "reviewer": "Codex second source-review pass",
+            "same_model": true
+          },
+          "source_file": "spiderfoot-toolbox/tor-gateway/rotate-tor.sh",
+          "source_pin": "65624396e263074bb8cb2e049f9a9ec6215ea5c1",
+          "source_sha256": "0670c3cfcb76b47b0b91a000918afaa9ceea077d6c7b77c4f4a66f1c38522334",
+          "source_url": "https://github.com/Leviticus-Triage/llm-honeypot-intelligence",
+          "status": "approved"
+        },
+        "declared_domain": "CRLF-delimited ASCII Tor ControlPort response lines for the three commands issued by send_newnym, including a successful 250 authentication reply followed by a 5xx signal error; no NUL. The property models the response transcript and the real pinned shell function is replayed with a local fake nc command.",
+        "guarantee": "send_newnym reports success only when the reply to SIGNAL NEWNYM is successful; a prior AUTHENTICATE success must not make a later signal failure look successful.",
+        "input_source": "ASCII Tor ControlPort replies to the local AUTHENTICATE, SIGNAL NEWNYM, QUIT command sequence sent by the rotator.",
+        "provenance": "agent_derived",
+        "schema_version": "1",
+        "site": "Leviticus-Triage/llm-honeypot-intelligence@65624396e263074bb8cb2e049f9a9ec6215ea5c1:spiderfoot-toolbox/tor-gateway/rotate-tor.sh:34:250 OK",
+        "trust": "internal"
+      },
+      "detail": null,
+      "domain": "COUNTEREXAMPLE FINDER: an AUTHENTICATE 250 OK followed by a failed SIGNAL NEWNYM reply still makes the pinned grep success predicate true",
+      "gate": {
+        "consumer_adopted": false,
+        "differential_cases": 4,
+        "gate_id": "llm-honeypot-exact-pin-shell-boundaries",
+        "local_gate_command": ".venv/bin/python scripts/llm-honeypot-boundary-regression-gate.py --source-root /tmp/regexproof-pinned-sources/llm-honeypot-intelligence-65624396e263074bb8cb2e049f9a9ec6215ea5c1 --output /home/lalbers/gitroot/regexproof/properties/calibration/2026-10-15-p2-llm-honeypot-source-review/product-replay-p6.json",
+        "local_gate_passed": true,
+        "mutation_guard_passed": true,
+        "product_engine_replayed": true,
+        "source_pin_verified": true
+      },
+      "kind": "counterexample_finder",
+      "pin": "65624396e263074bb8cb2e049f9a9ec6215ea5c1",
+      "question_id": "LH-llm-honeypot-tor-newnym-response-sequencing",
+      "repo_id": "Leviticus-Triage/llm-honeypot-intelligence",
+      "site": "Leviticus-Triage/llm-honeypot-intelligence@65624396e263074bb8cb2e049f9a9ec6215ea5c1:spiderfoot-toolbox/tor-gateway/rotate-tor.sh:34:250 OK",
+      "status": "sat",
+      "synthesized": false,
+      "url": "https://github.com/Leviticus-Triage/llm-honeypot-intelligence"
+    }
+  ],
+  "cohort": {
+    "cohort_id": "2026-09-12-calibration-20-r2",
+    "manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+    "repos": [
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "ecma",
+        "pin": "b31ddabecf4ed3209d37a2f5b29956120cd8f9ce",
+        "repo_id": "json-editor/json-editor",
+        "score": 4902,
+        "sites": 1,
+        "url": "https://github.com/json-editor/json-editor"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "posix-shell",
+        "pin": "d4f01ba6202d50909d1977810d322259482e0b82",
+        "repo_id": "mycelium0/mycelium",
+        "score": 21,
+        "sites": 1,
+        "url": "https://github.com/mycelium0/mycelium"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "py_re",
+        "pin": "889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8",
+        "repo_id": "netspooky/inhale",
+        "score": 191,
+        "sites": 1,
+        "url": "https://github.com/netspooky/inhale"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "ecma",
+        "pin": "e9fb233763160316989863b4739c4656133d45b0",
+        "repo_id": "magiclabs/magic-js",
+        "score": 477,
+        "sites": 1,
+        "url": "https://github.com/magiclabs/magic-js"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "ecma",
+        "pin": "d4a39726cad8d8e27e4c0502d1843c3b4180ffbc",
+        "repo_id": "grcengineering/gigachad-grc",
+        "score": 154,
+        "sites": 1,
+        "url": "https://github.com/grcengineering/gigachad-grc"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "posix-shell",
+        "pin": "cea68022f477680f4bb502396c705fe14b3c412f",
+        "repo_id": "melodic-software/claude-code-plugins",
+        "score": 6,
+        "sites": 1,
+        "url": "https://github.com/melodic-software/claude-code-plugins"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "py_re",
+        "pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+        "repo_id": "TracecatHQ/tracecat",
+        "score": 60,
+        "sites": 144,
+        "url": "https://github.com/TracecatHQ/tracecat"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "py_re",
+        "pin": "efcf8e4c0087def553a737dc1c4eebda5d8a90cd",
+        "repo_id": "Agenticstiger/forge-cli",
+        "score": 45,
+        "sites": 447,
+        "url": "https://github.com/Agenticstiger/forge-cli"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "py_re",
+        "pin": "a9c0f06affc35e1f8e45bb77f835b92350c68a0b",
+        "repo_id": "airbnb/binaryalert",
+        "score": 45,
+        "sites": 8,
+        "url": "https://github.com/airbnb/binaryalert"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "ecma",
+        "pin": "978def55c8e68cab3a50a7ee4725039da753f0a1",
+        "repo_id": "xibosignage/xibo-cms",
+        "score": 61,
+        "sites": 1981,
+        "url": "https://github.com/xibosignage/xibo-cms"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "ecma",
+        "pin": "7ea3b445ee7d2ef8004d5ee77dab7544e1b8ef88",
+        "repo_id": "profbernardoj/everclaw-community-branches",
+        "score": 51,
+        "sites": 468,
+        "url": "https://github.com/profbernardoj/everclaw-community-branches"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "go_re",
+        "pin": "01cd447ad3b1acfed7e0680596c2c74458a4cf06",
+        "repo_id": "h0tak88r/AutoAR",
+        "score": 54,
+        "sites": 33,
+        "url": "https://github.com/h0tak88r/AutoAR"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "go_re",
+        "pin": "ea3e83e24676a1678a9522141da29b636c9451ab",
+        "repo_id": "chainguard-dev/malcontent",
+        "score": 52,
+        "sites": 15,
+        "url": "https://github.com/chainguard-dev/malcontent"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "go_re",
+        "pin": "2f3fa5a506d6565fa68858b7963450567ddda114",
+        "repo_id": "open-horizon/anax",
+        "score": 50,
+        "sites": 24,
+        "url": "https://github.com/open-horizon/anax"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "go_re",
+        "pin": "1cf40fcabd330a1fe4e8eb9493b15a99a392e17f",
+        "repo_id": "snyk/snyk-ls",
+        "score": 50,
+        "sites": 35,
+        "url": "https://github.com/snyk/snyk-ls"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "posix-shell",
+        "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+        "repo_id": "marcusquinn/aidevops",
+        "score": 55,
+        "sites": 11330,
+        "url": "https://github.com/marcusquinn/aidevops"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "posix-shell",
+        "pin": "65624396e263074bb8cb2e049f9a9ec6215ea5c1",
+        "repo_id": "Leviticus-Triage/llm-honeypot-intelligence",
+        "score": 34,
+        "sites": 16,
+        "url": "https://github.com/Leviticus-Triage/llm-honeypot-intelligence"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "py_re",
+        "pin": "0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a",
+        "repo_id": "panther-labs/panther-analysis",
+        "score": 56,
+        "sites": 57,
+        "url": "https://github.com/panther-labs/panther-analysis"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "py_re",
+        "pin": "53ae43c5298a2426c6696147fdd75e2a4aef10e2",
+        "repo_id": "fu351/Doberman-Core",
+        "score": 53,
+        "sites": 108,
+        "url": "https://github.com/fu351/Doberman-Core"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "ecma",
+        "pin": "55aa7ef43a9c129beba90823cd8a4db10bb01211",
+        "repo_id": "greydragon888/real-router",
+        "score": 48,
+        "sites": 2882,
+        "url": "https://github.com/greydragon888/real-router"
+      }
+    ],
+    "schema_version": "1"
+  },
+  "cohort_id": "2026-09-12-calibration-20-r2",
+  "manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+  "product_coverage_manifest": {
+    "cohort_id": "2026-09-12-calibration-20-r2",
+    "cohort_manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+    "coverage_digest": "db203d1213bfa5b6e17d53808a3be43ab39c642e045951dbbebcd19785093491",
+    "identities": [
+      {
+        "contract_sha256": "aac841ad61eca3ca7456f39a303a5a10e4ce4fca55def8fca9de57a227b3a347",
+        "pin": "65624396e263074bb8cb2e049f9a9ec6215ea5c1",
+        "provenance": "agent_derived",
+        "question_id": "LH-llm-honeypot-private-ip-rfc1918-redaction",
+        "repo_id": "Leviticus-Triage/llm-honeypot-intelligence",
+        "site": "Leviticus-Triage/llm-honeypot-intelligence@65624396e263074bb8cb2e049f9a9ec6215ea5c1:scripts/sync-to-github.sh:76:PRIVATE_IP_PATTERN",
+        "url": "https://github.com/Leviticus-Triage/llm-honeypot-intelligence"
+      },
+      {
+        "contract_sha256": "e7fd7ec708484187bd7151c34d04aadcdb225233815f28cfd4565afd9b9d7fa0",
+        "pin": "65624396e263074bb8cb2e049f9a9ec6215ea5c1",
+        "provenance": "agent_derived",
+        "question_id": "LH-llm-honeypot-tor-newnym-response-sequencing",
+        "repo_id": "Leviticus-Triage/llm-honeypot-intelligence",
+        "site": "Leviticus-Triage/llm-honeypot-intelligence@65624396e263074bb8cb2e049f9a9ec6215ea5c1:spiderfoot-toolbox/tor-gateway/rotate-tor.sh:34:250 OK",
+        "url": "https://github.com/Leviticus-Triage/llm-honeypot-intelligence"
+      }
+    ],
+    "schema_version": "2"
+  },
+  "rows": [
+    {
+      "canonical": {
+        "contract": {
+          "adoption": {
+            "approved_on": "2026-10-15",
+            "authority": "standing_user_delegation",
+            "contract_sha256": "aac841ad61eca3ca7456f39a303a5a10e4ce4fca55def8fca9de57a227b3a347",
+            "evidence": [
+              "https://github.com/Leviticus-Triage/llm-honeypot-intelligence/blob/65624396e263074bb8cb2e049f9a9ec6215ea5c1/scripts/sync-to-github.sh",
+              "https://github.com/Leviticus-Triage/llm-honeypot-intelligence/blob/65624396e263074bb8cb2e049f9a9ec6215ea5c1/scripts/sync-to-github.sh#L26",
+              "https://github.com/Leviticus-Triage/llm-honeypot-intelligence/blob/65624396e263074bb8cb2e049f9a9ec6215ea5c1/scripts/sync-to-github.sh#L69-L76",
+              "https://github.com/Leviticus-Triage/llm-honeypot-intelligence/blob/65624396e263074bb8cb2e049f9a9ec6215ea5c1/scripts/sync-to-github.sh#L81-L110",
+              "https://github.com/Leviticus-Triage/llm-honeypot-intelligence/blob/65624396e263074bb8cb2e049f9a9ec6215ea5c1/scripts/sync-to-github.sh#L154-L189",
+              "https://github.com/Leviticus-Triage/llm-honeypot-intelligence/blob/65624396e263074bb8cb2e049f9a9ec6215ea5c1/docs/setup-guide.md#L174-L176",
+              "https://www.rfc-editor.org/rfc/rfc1918.html"
+            ],
+            "policy_version": "autonomous-contracts-v1",
+            "rationale": "The pinned source labels this helper as a private-IP sanitizer and applies it to generated rule and threat-intelligence files before the automated GitHub commit/push. RFC 1918 defines the three private IPv4 blocks; treating its stated guarantee as the contract exposes the uncovered 10/8 and 172.16/12 cases. This adopts the documented privacy boundary without asserting that a real secret was published.",
+            "review": {
+              "author": "Codex source-review pass",
+              "reviewer": "Codex second source-review pass",
+              "same_model": true
+            },
+            "source_file": "scripts/sync-to-github.sh",
+            "source_pin": "65624396e263074bb8cb2e049f9a9ec6215ea5c1",
+            "source_sha256": "b7cbcd83598d83848516d282de897706da5828df1f1ab6ebcb3f4d87bd203122",
+            "source_url": "https://github.com/Leviticus-Triage/llm-honeypot-intelligence",
+            "status": "approved"
+          },
+          "declared_domain": "ASCII text files with the suffixes selected by sanitize_dir, containing a canonical dotted-decimal IPv4 address in 10.0.0.0/8, 172.16.0.0/12, or 192.168.0.0/16; the broader contract is checked by an address-language counterexample query and exact pinned sed helper replay. POSIX shell text excludes NUL.",
+          "guarantee": "Every canonical RFC 1918 IPv4 address in an eligible generated artifact is replaced with [REDACTED] before the sync script commits or pushes it to the configured GitHub remote.",
+          "input_source": "Rules and threat-intelligence text copied from the ollama-rules-output and ollama-threat-output Docker volumes into the repository before automated synchronization.",
+          "provenance": "agent_derived",
+          "schema_version": "1",
+          "site": "Leviticus-Triage/llm-honeypot-intelligence@65624396e263074bb8cb2e049f9a9ec6215ea5c1:scripts/sync-to-github.sh:76:PRIVATE_IP_PATTERN",
+          "trust": "untrusted-input"
+        },
+        "corpus": "llm-honeypot-intelligence",
+        "disclosure": null,
+        "domain": "COUNTEREXAMPLE FINDER: an RFC 1918 IPv4 token can pass through the exact pinned sed pattern without replacement",
+        "engine_versions": {
+          "python": "3.14.8",
+          "z3": "5.0.0"
+        },
+        "family": "LH-llm-honeypot-private-ip-redaction",
+        "ground_truth": null,
+        "ground_truth_status": "reproduced",
+        "idiom_bucket": "p2-shell-boundary-calibration",
+        "kind": "counterexample_finder",
+        "name": "LH-llm-honeypot-private-ip-rfc1918-redaction",
+        "product_reportable": true,
+        "regex_id": "d26fc9469804626f0333de522a6febb7",
+        "result": "sat",
+        "schema_version": "1",
+        "shape": 3,
+        "site": "Leviticus-Triage/llm-honeypot-intelligence@65624396e263074bb8cb2e049f9a9ec6215ea5c1:scripts/sync-to-github.sh:76:PRIVATE_IP_PATTERN",
+        "synthesized": false,
+        "wave_id": "llm-honeypot-boundary-p2-r1",
+        "witness": null
+      },
+      "contract": {
+        "adoption": {
+          "approved_on": "2026-10-15",
+          "authority": "standing_user_delegation",
+          "contract_sha256": "aac841ad61eca3ca7456f39a303a5a10e4ce4fca55def8fca9de57a227b3a347",
+          "evidence": [
+            "https://github.com/Leviticus-Triage/llm-honeypot-intelligence/blob/65624396e263074bb8cb2e049f9a9ec6215ea5c1/scripts/sync-to-github.sh",
+            "https://github.com/Leviticus-Triage/llm-honeypot-intelligence/blob/65624396e263074bb8cb2e049f9a9ec6215ea5c1/scripts/sync-to-github.sh#L26",
+            "https://github.com/Leviticus-Triage/llm-honeypot-intelligence/blob/65624396e263074bb8cb2e049f9a9ec6215ea5c1/scripts/sync-to-github.sh#L69-L76",
+            "https://github.com/Leviticus-Triage/llm-honeypot-intelligence/blob/65624396e263074bb8cb2e049f9a9ec6215ea5c1/scripts/sync-to-github.sh#L81-L110",
+            "https://github.com/Leviticus-Triage/llm-honeypot-intelligence/blob/65624396e263074bb8cb2e049f9a9ec6215ea5c1/scripts/sync-to-github.sh#L154-L189",
+            "https://github.com/Leviticus-Triage/llm-honeypot-intelligence/blob/65624396e263074bb8cb2e049f9a9ec6215ea5c1/docs/setup-guide.md#L174-L176",
+            "https://www.rfc-editor.org/rfc/rfc1918.html"
+          ],
+          "policy_version": "autonomous-contracts-v1",
+          "rationale": "The pinned source labels this helper as a private-IP sanitizer and applies it to generated rule and threat-intelligence files before the automated GitHub commit/push. RFC 1918 defines the three private IPv4 blocks; treating its stated guarantee as the contract exposes the uncovered 10/8 and 172.16/12 cases. This adopts the documented privacy boundary without asserting that a real secret was published.",
+          "review": {
+            "author": "Codex source-review pass",
+            "reviewer": "Codex second source-review pass",
+            "same_model": true
+          },
+          "source_file": "scripts/sync-to-github.sh",
+          "source_pin": "65624396e263074bb8cb2e049f9a9ec6215ea5c1",
+          "source_sha256": "b7cbcd83598d83848516d282de897706da5828df1f1ab6ebcb3f4d87bd203122",
+          "source_url": "https://github.com/Leviticus-Triage/llm-honeypot-intelligence",
+          "status": "approved"
+        },
+        "declared_domain": "ASCII text files with the suffixes selected by sanitize_dir, containing a canonical dotted-decimal IPv4 address in 10.0.0.0/8, 172.16.0.0/12, or 192.168.0.0/16; the broader contract is checked by an address-language counterexample query and exact pinned sed helper replay. POSIX shell text excludes NUL.",
+        "guarantee": "Every canonical RFC 1918 IPv4 address in an eligible generated artifact is replaced with [REDACTED] before the sync script commits or pushes it to the configured GitHub remote.",
+        "input_source": "Rules and threat-intelligence text copied from the ollama-rules-output and ollama-threat-output Docker volumes into the repository before automated synchronization.",
+        "provenance": "agent_derived",
+        "schema_version": "1",
+        "site": "Leviticus-Triage/llm-honeypot-intelligence@65624396e263074bb8cb2e049f9a9ec6215ea5c1:scripts/sync-to-github.sh:76:PRIVATE_IP_PATTERN",
+        "trust": "untrusted-input"
+      },
+      "disposition": {
+        "approval_escape": null,
+        "approval_ref": null,
+        "backfilled": false,
+        "disposition_date": null,
+        "filed_at": null,
+        "reason_code": "reachability_and_security_impact_unresolved",
+        "resolved_at": null,
+        "status": "pending_product_triage"
+      },
+      "domain": "COUNTEREXAMPLE FINDER: an RFC 1918 IPv4 token can pass through the exact pinned sed pattern without replacement",
+      "ground_truth_status": "reproduced",
+      "kind": "counterexample_finder",
+      "pin": "65624396e263074bb8cb2e049f9a9ec6215ea5c1",
+      "question_id": "LH-llm-honeypot-private-ip-rfc1918-redaction",
+      "repo_id": "Leviticus-Triage/llm-honeypot-intelligence",
+      "result": "sat",
+      "schema_version": "1",
+      "site": "Leviticus-Triage/llm-honeypot-intelligence@65624396e263074bb8cb2e049f9a9ec6215ea5c1:scripts/sync-to-github.sh:76:PRIVATE_IP_PATTERN",
+      "synthesized": false,
+      "url": "https://github.com/Leviticus-Triage/llm-honeypot-intelligence"
+    },
+    {
+      "canonical": {
+        "contract": {
+          "adoption": {
+            "approved_on": "2026-10-15",
+            "authority": "standing_user_delegation",
+            "contract_sha256": "e7fd7ec708484187bd7151c34d04aadcdb225233815f28cfd4565afd9b9d7fa0",
+            "evidence": [
+              "https://github.com/Leviticus-Triage/llm-honeypot-intelligence/blob/65624396e263074bb8cb2e049f9a9ec6215ea5c1/spiderfoot-toolbox/tor-gateway/rotate-tor.sh",
+              "https://github.com/Leviticus-Triage/llm-honeypot-intelligence/blob/65624396e263074bb8cb2e049f9a9ec6215ea5c1/spiderfoot-toolbox/tor-gateway/rotate-tor.sh#L1-L3",
+              "https://github.com/Leviticus-Triage/llm-honeypot-intelligence/blob/65624396e263074bb8cb2e049f9a9ec6215ea5c1/spiderfoot-toolbox/tor-gateway/rotate-tor.sh#L26-L46",
+              "https://github.com/Leviticus-Triage/llm-honeypot-intelligence/blob/65624396e263074bb8cb2e049f9a9ec6215ea5c1/spiderfoot-toolbox/tor-gateway/entrypoint.sh#L67-L75",
+              "https://spec.torproject.org/control-spec/commands.html"
+            ],
+            "policy_version": "autonomous-contracts-v1",
+            "rationale": "The pinned helper sends AUTHENTICATE, SIGNAL NEWNYM, and QUIT in one control-port stream, then logs success when grep finds 250 OK anywhere in the combined reply. The standing script comment says exit rotation is mandatory; the Tor control specification ties 250 OK to command success and defines non-250 errors. The contract checks that the status of SIGNAL NEWNYM, rather than an earlier authentication reply, controls the result.",
+            "review": {
+              "author": "Codex source-review pass",
+              "reviewer": "Codex second source-review pass",
+              "same_model": true
+            },
+            "source_file": "spiderfoot-toolbox/tor-gateway/rotate-tor.sh",
+            "source_pin": "65624396e263074bb8cb2e049f9a9ec6215ea5c1",
+            "source_sha256": "0670c3cfcb76b47b0b91a000918afaa9ceea077d6c7b77c4f4a66f1c38522334",
+            "source_url": "https://github.com/Leviticus-Triage/llm-honeypot-intelligence",
+            "status": "approved"
+          },
+          "declared_domain": "CRLF-delimited ASCII Tor ControlPort response lines for the three commands issued by send_newnym, including a successful 250 authentication reply followed by a 5xx signal error; no NUL. The property models the response transcript and the real pinned shell function is replayed with a local fake nc command.",
+          "guarantee": "send_newnym reports success only when the reply to SIGNAL NEWNYM is successful; a prior AUTHENTICATE success must not make a later signal failure look successful.",
+          "input_source": "ASCII Tor ControlPort replies to the local AUTHENTICATE, SIGNAL NEWNYM, QUIT command sequence sent by the rotator.",
+          "provenance": "agent_derived",
+          "schema_version": "1",
+          "site": "Leviticus-Triage/llm-honeypot-intelligence@65624396e263074bb8cb2e049f9a9ec6215ea5c1:spiderfoot-toolbox/tor-gateway/rotate-tor.sh:34:250 OK",
+          "trust": "internal"
+        },
+        "corpus": "llm-honeypot-intelligence",
+        "disclosure": null,
+        "domain": "COUNTEREXAMPLE FINDER: an AUTHENTICATE 250 OK followed by a failed SIGNAL NEWNYM reply still makes the pinned grep success predicate true",
+        "engine_versions": {
+          "python": "3.14.8",
+          "z3": "5.0.0"
+        },
+        "family": "LH-llm-honeypot-tor-newnym-response",
+        "ground_truth": null,
+        "ground_truth_status": "reproduced",
+        "idiom_bucket": "p2-shell-boundary-calibration",
+        "kind": "counterexample_finder",
+        "name": "LH-llm-honeypot-tor-newnym-response-sequencing",
+        "product_reportable": true,
+        "regex_id": "d51b369a9e02d39625656d1fb14a3437",
+        "result": "sat",
+        "schema_version": "1",
+        "shape": 3,
+        "site": "Leviticus-Triage/llm-honeypot-intelligence@65624396e263074bb8cb2e049f9a9ec6215ea5c1:spiderfoot-toolbox/tor-gateway/rotate-tor.sh:34:250 OK",
+        "synthesized": false,
+        "wave_id": "llm-honeypot-boundary-p2-r1",
+        "witness": null
+      },
+      "contract": {
+        "adoption": {
+          "approved_on": "2026-10-15",
+          "authority": "standing_user_delegation",
+          "contract_sha256": "e7fd7ec708484187bd7151c34d04aadcdb225233815f28cfd4565afd9b9d7fa0",
+          "evidence": [
+            "https://github.com/Leviticus-Triage/llm-honeypot-intelligence/blob/65624396e263074bb8cb2e049f9a9ec6215ea5c1/spiderfoot-toolbox/tor-gateway/rotate-tor.sh",
+            "https://github.com/Leviticus-Triage/llm-honeypot-intelligence/blob/65624396e263074bb8cb2e049f9a9ec6215ea5c1/spiderfoot-toolbox/tor-gateway/rotate-tor.sh#L1-L3",
+            "https://github.com/Leviticus-Triage/llm-honeypot-intelligence/blob/65624396e263074bb8cb2e049f9a9ec6215ea5c1/spiderfoot-toolbox/tor-gateway/rotate-tor.sh#L26-L46",
+            "https://github.com/Leviticus-Triage/llm-honeypot-intelligence/blob/65624396e263074bb8cb2e049f9a9ec6215ea5c1/spiderfoot-toolbox/tor-gateway/entrypoint.sh#L67-L75",
+            "https://spec.torproject.org/control-spec/commands.html"
+          ],
+          "policy_version": "autonomous-contracts-v1",
+          "rationale": "The pinned helper sends AUTHENTICATE, SIGNAL NEWNYM, and QUIT in one control-port stream, then logs success when grep finds 250 OK anywhere in the combined reply. The standing script comment says exit rotation is mandatory; the Tor control specification ties 250 OK to command success and defines non-250 errors. The contract checks that the status of SIGNAL NEWNYM, rather than an earlier authentication reply, controls the result.",
+          "review": {
+            "author": "Codex source-review pass",
+            "reviewer": "Codex second source-review pass",
+            "same_model": true
+          },
+          "source_file": "spiderfoot-toolbox/tor-gateway/rotate-tor.sh",
+          "source_pin": "65624396e263074bb8cb2e049f9a9ec6215ea5c1",
+          "source_sha256": "0670c3cfcb76b47b0b91a000918afaa9ceea077d6c7b77c4f4a66f1c38522334",
+          "source_url": "https://github.com/Leviticus-Triage/llm-honeypot-intelligence",
+          "status": "approved"
+        },
+        "declared_domain": "CRLF-delimited ASCII Tor ControlPort response lines for the three commands issued by send_newnym, including a successful 250 authentication reply followed by a 5xx signal error; no NUL. The property models the response transcript and the real pinned shell function is replayed with a local fake nc command.",
+        "guarantee": "send_newnym reports success only when the reply to SIGNAL NEWNYM is successful; a prior AUTHENTICATE success must not make a later signal failure look successful.",
+        "input_source": "ASCII Tor ControlPort replies to the local AUTHENTICATE, SIGNAL NEWNYM, QUIT command sequence sent by the rotator.",
+        "provenance": "agent_derived",
+        "schema_version": "1",
+        "site": "Leviticus-Triage/llm-honeypot-intelligence@65624396e263074bb8cb2e049f9a9ec6215ea5c1:spiderfoot-toolbox/tor-gateway/rotate-tor.sh:34:250 OK",
+        "trust": "internal"
+      },
+      "disposition": {
+        "approval_escape": null,
+        "approval_ref": null,
+        "backfilled": false,
+        "disposition_date": null,
+        "filed_at": null,
+        "reason_code": "reachability_and_security_impact_unresolved",
+        "resolved_at": null,
+        "status": "pending_product_triage"
+      },
+      "domain": "COUNTEREXAMPLE FINDER: an AUTHENTICATE 250 OK followed by a failed SIGNAL NEWNYM reply still makes the pinned grep success predicate true",
+      "ground_truth_status": "reproduced",
+      "kind": "counterexample_finder",
+      "pin": "65624396e263074bb8cb2e049f9a9ec6215ea5c1",
+      "question_id": "LH-llm-honeypot-tor-newnym-response-sequencing",
+      "repo_id": "Leviticus-Triage/llm-honeypot-intelligence",
+      "result": "sat",
+      "schema_version": "1",
+      "site": "Leviticus-Triage/llm-honeypot-intelligence@65624396e263074bb8cb2e049f9a9ec6215ea5c1:spiderfoot-toolbox/tor-gateway/rotate-tor.sh:34:250 OK",
+      "synthesized": false,
+      "url": "https://github.com/Leviticus-Triage/llm-honeypot-intelligence"
+    }
+  ],
+  "schema_version": "3"
+}

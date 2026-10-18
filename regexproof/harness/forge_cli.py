@@ -1,9 +1,8 @@
 """Forge CLI secret-redaction conversion properties.
 
 Wave 1 covers five human-adopted contracts from
-``sweep/forge-cli-conversion/plan.md`` at pin ``PIN``. The helper-image
-follow-up adds regression replay for ``_render_command_for_log``; it adds no
-product contract or conversion row until a person adopts the finite guarantee.
+``sweep/forge-cli-conversion/plan.md`` at pin ``PIN``. The helper-image follow-up
+adds a separate contract for the real ``_render_command_for_log`` sink.
 PRODUCT and MATCH are independently specified; aliasing them is
 Concat-identity and is not a countable property.
 
@@ -11,8 +10,7 @@ Three slots are length-independent shape-1 alphabets taken from the pinned
 Python classes (new alphabets, not hostname / JSON / IPv4). Wave 1 also has two
 coverage inclusions: an escaped-quote JAAS product grammar against
 ``_JAAS_CONFIG_RE`` and the documented sensitive-key forms against
-``SENSITIVE_ENV_KEY_RE``. The helper-image follow-up exercises the renderer
-against the pinned source.
+``SENSITIVE_ENV_KEY_RE``. The helper-image follow-up exercises the renderer.
 The unencodable LLM query ``[^&]+`` at
 ``providers.py:280`` is skipped; the adopted LLM site is the encodable
 userinfo substitution at ``:287``.
@@ -156,16 +154,54 @@ ENV_WEAK_MATCH = Union(
 )
 
 
-def _contract(site: str, guarantee: str, input_source: str, trust: str, domain: str) -> dict:
-    return {
+def _contract(
+    site: str, guarantee: str, input_source: str, trust: str, domain: str,
+    *, provenance: str = "human", adoption: dict | None = None,
+) -> dict:
+    value = {
         "schema_version": "1",
         "site": site,
         "guarantee": guarantee,
         "input_source": input_source,
         "trust": trust,
         "declared_domain": domain,
-        "provenance": "human",
+        "provenance": provenance,
     }
+    if adoption is not None:
+        value["adoption"] = adoption
+    return value
+
+
+_HELPER_IMAGE_ADOPTION = {
+    "policy_version": "autonomous-contracts-v1",
+    "status": "approved",
+    "authority": "standing_user_delegation",
+    "approved_on": "2026-10-13",
+    "rationale": (
+        "The sensitive-key expression and pinned dbt command renderer are reviewed "
+        "together; enumerated configuration keys must have their values replaced "
+        "before log output."
+    ),
+    "evidence": [
+        "https://github.com/Agenticstiger/forge-cli/blob/"
+        "efcf8e4c0087def553a737dc1c4eebda5d8a90cd/"
+        "fluid_build/build_runners/base.py",
+        "https://github.com/Agenticstiger/forge-cli/blob/"
+        "efcf8e4c0087def553a737dc1c4eebda5d8a90cd/"
+        "fluid_build/build_runners/dbt/runner.py",
+        "The dbt runner passes -e and --env argv values through the renderer before they are logged.",
+    ],
+    "source_url": "https://github.com/Agenticstiger/forge-cli",
+    "source_pin": PIN,
+    "source_file": "fluid_build/build_runners/base.py",
+    "source_sha256": "5e1274001ae1f3a3d41f8c59c059e5d991db221c8c1fd328a471c7f917207842",
+    "contract_sha256": "ba9e12c17f7f6a06b6130089e59d91e3a3f50c62a1dcf6c204d87be2e6ffa2b3",
+    "review": {
+        "author": "codex-contract-author",
+        "reviewer": "codex-independent-review-pass",
+        "same_model": True,
+    },
+}
 
 
 def _alphabet_no(ch: str, name: str, alphabet, site: str, guarantee: str,
@@ -278,6 +314,44 @@ def forge_cli_sensitive_env_key_covered():
 
 
 @prop(
+    "FC-forge-cli-sensitive-env-helper-redacts",
+    "the pinned _render_command_for_log replaces the value for every documented "
+    "sensitive environment key with the exact KEY=<redacted> image",
+    expect_unsat=True,
+    kind="property",
+    family=FAMILY,
+    input_domain="ascii",
+    call_kind="search",
+    contract=_contract(
+        SITE_ENV,
+        "for documented sensitive KEY=VALUE configuration passed after -e or "
+        "--env, _render_command_for_log emits KEY=<redacted> and never the value",
+        "operator/provider dbt command configuration supplied as argv to the log renderer",
+        "config",
+        "pinned forge-cli revision; every documented key with all 5680 ASCII "
+        "letter-case assignments is replayed as dbt run -e/--env KEY=CLEAR_SENTINEL; "
+        "additional hand-labeled cases cover empty and delimiter-"
+        "containing values, repeated entries, and terminal newlines; key forms "
+        "include optional empty/underscore/hyphen separators for api/private keys",
+        provenance="agent_derived",
+        adoption=_HELPER_IMAGE_ADOPTION,
+    ),
+)
+def forge_cli_sensitive_env_helper_redacts():
+    s = String("s")
+    return [InRe(s, ENV_PRODUCT), Length(s) <= 32], Not(InRe(s, ENV_MATCH))
+
+
+def _forge_cli_api_key_mutation_ground_truth(witness: dict) -> bool:
+    key = witness.get("s")
+    if not isinstance(key, str):
+        return False
+    from regexproof.groundtruth.forge_cli_replay import redaction_mutation_reproduces
+
+    return redaction_mutation_reproduces(key, ENV_WEAKENED_PATTERN)
+
+
+@prop(
     "FC-forge-cli-mutated-sensitive-env-api-key",
     "MUTATION GUARD: removing api[_-]?key recognition admits a documented key "
     "whose value the real helper exposes",
@@ -285,6 +359,7 @@ def forge_cli_sensitive_env_key_covered():
     kind="mutation_guard",
     family=FAMILY,
     input_domain="ascii",
+    ground_truth=_forge_cli_api_key_mutation_ground_truth,
 )
 def forge_cli_mutated_sensitive_env_api_key():
     s = String("s")

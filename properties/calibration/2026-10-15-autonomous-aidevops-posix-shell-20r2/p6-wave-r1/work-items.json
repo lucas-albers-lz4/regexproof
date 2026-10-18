@@ -1,0 +1,37 @@
+[
+  {
+    "question_ids": [
+      "AI-aidevops-brief-tid-capture"
+    ],
+    "reviewed": false,
+    "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/hooks/brief-filename-guard.sh:105:t[0-9]+"
+  },
+  {
+    "question_ids": [
+      "AI-aidevops-brief-tid-no-semicolon"
+    ],
+    "reviewed": false,
+    "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/hooks/brief-filename-guard.sh:84:brief\\.md"
+  },
+  {
+    "question_ids": [
+      "AI-aidevops-cred-ident-no-semicolon"
+    ],
+    "reviewed": false,
+    "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/hooks/credential-emission-pre-push.sh:103:remote_url"
+  },
+  {
+    "question_ids": [
+      "AI-aidevops-gh-issue-digit-capture"
+    ],
+    "reviewed": false,
+    "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/hooks/task-id-collision-guard.sh:378:#[0-9]+"
+  },
+  {
+    "question_ids": [
+      "AI-aidevops-scope-heading-no-semicolon"
+    ],
+    "reviewed": false,
+    "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/hooks/scope-guard-pre-push.sh:137:Files"
+  }
+]

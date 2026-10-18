@@ -1,0 +1,36 @@
+{
+  "command": [
+    "/home/lalbers/gitroot/regexproof/.venv/bin/python",
+    "scripts/magic-js-base64url-regression-gate.py",
+    "--source-root",
+    "/tmp/regexproof-pinned-sources/magic-js-e9fb233763160316989863b4739c4656133d45b0",
+    "--output",
+    "properties/calibration/2026-10-15-p2-magic-js-source-review/p6-wave-r1/product-gate.json"
+  ],
+  "evidence": {
+    "differential_case_counts": {
+      "ME-oauth2-pkce-s256-base64url": 2049,
+      "ME-oauth2-webauthn-base64url": 67841,
+      "ME-passkey-base64url": 67841,
+      "ME-rn-bare-pkce-s256-base64url": 2049,
+      "ME-rn-expo-pkce-s256-base64url": 2049
+    },
+    "product_engine_replay_question_ids": [
+      "ME-oauth2-pkce-s256-base64url",
+      "ME-rn-bare-pkce-s256-base64url",
+      "ME-rn-expo-pkce-s256-base64url",
+      "ME-oauth2-webauthn-base64url",
+      "ME-passkey-base64url"
+    ]
+  },
+  "gate_id": "magic-js-base64url-output-image",
+  "question_ids": [
+    "ME-oauth2-pkce-s256-base64url",
+    "ME-rn-bare-pkce-s256-base64url",
+    "ME-rn-expo-pkce-s256-base64url",
+    "ME-oauth2-webauthn-base64url",
+    "ME-passkey-base64url"
+  ],
+  "schema_version": "1",
+  "timeout_seconds": 300
+}

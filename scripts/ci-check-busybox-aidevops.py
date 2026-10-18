@@ -15,6 +15,7 @@ Run from the golden job after busybox is installed.
 from __future__ import annotations
 
 import random
+import re
 import shutil
 import string
 import subprocess
@@ -30,6 +31,7 @@ from regexproof.harness.core import REGISTRY
 
 CRED_IDENT = r"\$\{?(remote_url|origin_url)\}?"
 SCOPE_HEADING = r"^##[#]?[[:space:]]+Files[[:space:]]+Scope"
+PINNED_BUSYBOX_VERSION = "1.36.1"
 
 
 def _require_busybox() -> None:
@@ -39,6 +41,19 @@ def _require_busybox() -> None:
             file=sys.stderr,
         )
         raise SystemExit(2)
+    proc = subprocess.run(
+        ["busybox"], capture_output=True, text=True, timeout=5, check=False
+    )
+    first_line = proc.stdout.splitlines()[0] if proc.stdout.splitlines() else ""
+    match = re.match(r"^BusyBox v([^ ]+) ", first_line)
+    if proc.returncode != 0 or match is None or match.group(1) != PINNED_BUSYBOX_VERSION:
+        print(
+            "error: aidevops product replay requires pinned BusyBox "
+            f"v{PINNED_BUSYBOX_VERSION}; got {first_line or f'exit={proc.returncode}'}",
+            file=sys.stderr,
+        )
+        raise SystemExit(2)
+    print(f"BusyBox product engine pin: {first_line}")
 
 
 def _busybox_grep_o(pattern: str, stream: str) -> str:

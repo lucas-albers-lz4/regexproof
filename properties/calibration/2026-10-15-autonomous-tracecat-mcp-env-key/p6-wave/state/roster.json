@@ -1,0 +1,17 @@
+{
+  "cohort_id": "2026-09-12-calibration-20-r2",
+  "cohort_manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+  "coverage_digest": "e4260077ff733fa8f1cb5f6cf313e444ff47921c0b111f53a9379c39e64c01ca",
+  "identities": [
+    {
+      "contract_sha256": "992095d408e11b9aad97f844d4b8a0f32e13ae6c546e917ac5cc21e8cd6e6271",
+      "pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+      "provenance": "agent_derived",
+      "question_id": "TC-mcp-env-key-accepts-terminal-lf",
+      "repo_id": "TracecatHQ/tracecat",
+      "site": "TracecatHQ/tracecat@c84d52528a489821f355fc63976fbc7783ae0ad5:tracecat/integrations/mcp_validation.py:178:re.match",
+      "url": "https://github.com/TracecatHQ/tracecat"
+    }
+  ],
+  "schema_version": "2"
+}

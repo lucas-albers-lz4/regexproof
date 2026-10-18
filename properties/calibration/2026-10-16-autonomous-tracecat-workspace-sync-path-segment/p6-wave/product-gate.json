@@ -1,0 +1,23 @@
+{
+  "component_alphabet_mutation_reproduced": true,
+  "contract_sha256": "b15b7d8309756877c16a3b4cec06b35419c9723b36df02aead475809612261aa",
+  "differential_cases": 2469,
+  "family": "TC-tracecat-workspace-sync-path-segment",
+  "gate_id": "tracecat-workspace-sync-path-segment-component",
+  "guarantee": "New workspace-sync source-ID components are nonempty, at most 96 characters, and use only the declared ASCII path-component alphabet.",
+  "limitations": "Component-level output guarantee only; export-root enforcement, symlink behavior, collisions, and Git-provider path behavior are outside this contract. No current vulnerability or attacker-controlled reachability is claimed.",
+  "mismatches": 0,
+  "mutation_id": "TC-workspace-sync-path-segment-colon-mutation",
+  "mutation_input": ":",
+  "mutation_only_change": "The exact pinned regex class was weakened to preserve colon.",
+  "path_escape_mutation_reproduced": false,
+  "product_engine": "CPython re and pathlib through the exact pinned path_segment helper",
+  "property_id": "TC-workspace-sync-path-segment-component-image",
+  "repository": "https://github.com/TracecatHQ/tracecat",
+  "schema_version": "1",
+  "separator_containing_inputs": 2057,
+  "source_file": "tracecat/workspace_sync/adapters/base.py",
+  "source_pattern": "[^A-Za-z0-9_.-]+",
+  "source_pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+  "source_sha256": "fee3084582517c417c3b8dab6f372b71e423f3c1b413cdec8dbb58663a99cce6"
+}

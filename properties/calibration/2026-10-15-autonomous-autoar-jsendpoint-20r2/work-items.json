@@ -1,0 +1,9 @@
+[
+  {
+    "question_ids": [
+      "AA-autoar-jsendpoint-assignment-capture-delimiter"
+    ],
+    "reviewed": true,
+    "site": "h0tak88r/AutoAR@01cd447ad3b1acfed7e0680596c2c74458a4cf06:internal/scanner/jsendpoints/jsendpoints.go:181:BASE_URL"
+  }
+]

@@ -1,0 +1,76 @@
+{
+  "schema_version": "1",
+  "reviewed_on": "2026-10-15",
+  "repository_url": "https://github.com/chainguard-dev/malcontent",
+  "source_pin": "ea3e83e24676a1678a9522141da29b636c9451ab",
+  "source_files": [
+    {
+      "path": "rules/exec/remote_commands/code_eval.yara",
+      "sha256": "34a659f93dba9f6197864cda2514cd9093e93b7dd6a163703b93234a13c0f9bc"
+    },
+    {
+      "path": "rules/crypto/rc4.yara",
+      "sha256": "745c12ff29adf008cb9165342b36aa93c53ed2db3165ead790c6933f1c56c34f"
+    },
+    {
+      "path": "rules/exfil/stealer/php.yara",
+      "sha256": "6df9df6b42522c9b3a81482ec8f443e3e6fac5485282bc3e95ca4018f0409fe5"
+    },
+    {
+      "path": "rules/impact/exploit/cve-2025-48384.yara",
+      "sha256": "b6d017494cd9ecc7a9843832229fa45789c7edc06ccba093c0381d151a2a2552"
+    }
+  ],
+  "input_artifact": "properties/generated/malcontent.ndjson",
+  "input_usage_mismatch_count": 5,
+  "post_fix_mechanical_hit_count": 2,
+  "post_fix_mechanical_hit_regex_ids": [
+    "107c7b1d0efdf826f2fb8a036fdd1602",
+    "1bd3cd2bfc5607dbf3be54c87b8eebe6"
+  ],
+  "product_bug_count": 0,
+  "contract_count": 0,
+  "historical_generated_artifact_rewritten": false,
+  "dispositions": [
+    {
+      "regex_id": "107c7b1d0efdf826f2fb8a036fdd1602",
+      "site": "rules/impact/exploit/cve-2025-48384.yara:25:url_eof_cr",
+      "disposition": "source-intent-confirmed; behavior-only triage retained",
+      "refuted_claim": "A trailing dollar sign used with YARA search is, by itself, evidence of a search/full-match usage mismatch.",
+      "evidence": "The pinned rule comment says the dollar anchors end-of-data and does not fire on a normal CRLF terminator. YARA string declarations are extracted with call_kind=search. No separate URL-at-EOF product fixture or formal full-rule proof is claimed."
+    },
+    {
+      "regex_id": "1bd3cd2bfc5607dbf3be54c87b8eebe6",
+      "site": "rules/impact/exploit/cve-2025-48384.yara:24:path_eof_cr",
+      "disposition": "source-intent-confirmed; behavior-only triage retained",
+      "refuted_claim": "A trailing dollar sign used with YARA search is, by itself, evidence of a search/full-match usage mismatch.",
+      "evidence": "The pinned rule comment says the dollar anchors end-of-data and does not fire on a normal CRLF terminator. The exact-engine gate includes a bare-CR-at-EOF path fixture, but this does not establish the complete regex/condition language."
+    },
+    {
+      "regex_id": "3f723987db7902f9b0fcbad675bd409e",
+      "site": "rules/exec/remote_commands/code_eval.yara:231:$val",
+      "disposition": "detector-false-positive; fixed for future scans",
+      "refuted_claim": "The pattern ends in an active end-of-input anchor.",
+      "evidence": "The source regex ends in escaped \\$ to match a literal PHP variable marker; the final dollar is escaped by an odd-length backslash run. The usage detector now checks escape parity."
+    },
+    {
+      "regex_id": "abed3d951b3300df5f549acaa9a3abf5",
+      "site": "rules/crypto/rc4.yara:36:$opt9",
+      "disposition": "detector-false-positive; fixed for future scans",
+      "refuted_claim": "The pattern ends in an active end-of-input anchor.",
+      "evidence": "The source defines a YARA literal string containing apostrophe, ampersand, percent, and dollar. The YARA extractor escapes the literal dollar before the generic usage detector sees it."
+    },
+    {
+      "regex_id": "d1d65d2aa84500027d41f558cfb0dfcd",
+      "site": "rules/exfil/stealer/php.yara:12:$copy",
+      "disposition": "detector-false-positive; fixed for future scans",
+      "refuted_claim": "The pattern ends in an active end-of-input anchor.",
+      "evidence": "The source defines the YARA literal string copy($; the YARA extractor escapes the dollar as literal content. The usage detector now checks escape parity."
+    }
+  ],
+  "limitations": [
+    "The input NDJSON is retained as historical generated output; it has not been rewritten.",
+    "Two intentional EOF-anchor rows remain mechanically flagged and are triage observations, not product findings or contract results.",
+    "The review found no reachable product violation, security-impact confirmation, external report, or accepted fix."
+  ]
+}

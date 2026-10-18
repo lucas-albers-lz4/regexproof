@@ -1,0 +1,16 @@
+{
+  "cohort_id": "2026-09-12-calibration-20-r2",
+  "cohort_manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+  "identities": [
+    {
+      "contract_sha256": "b3fd8a5fd9f203c22babfb9dabc8fcbc56a03cfcfc7e51e4692216632f40f09d",
+      "pin": "978def55c8e68cab3a50a7ee4725039da753f0a1",
+      "question_id": "XC-xibo-csrf-cookie-capture-isolation",
+      "repo_id": "xibosignage/xibo-cms",
+      "site": "xibosignage/xibo-cms@978def55c8e68cab3a50a7ee4725039da753f0a1:frontend/src/pages/Administration/Applications/Authorize/AuthorizeApplication.tsx:42:38",
+      "url": "https://github.com/xibosignage/xibo-cms"
+    }
+  ],
+  "schema_version": "1",
+  "scope": "one-site, pre-outcome retrospective calibration"
+}

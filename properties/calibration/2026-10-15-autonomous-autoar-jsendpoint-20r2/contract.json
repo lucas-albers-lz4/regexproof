@@ -1,0 +1,30 @@
+{
+  "adoption": {
+    "approved_on": "2026-10-15",
+    "authority": "standing_user_delegation",
+    "contract_sha256": "08a1fa78ea3c703ce240028172737ad05419f1182d7a10bba041c0ddb9076820",
+    "evidence": [
+      "https://github.com/h0tak88r/AutoAR/blob/01cd447ad3b1acfed7e0680596c2c74458a4cf06/internal/scanner/jsendpoints/jsendpoints.go",
+      "https://github.com/h0tak88r/AutoAR/blob/01cd447ad3b1acfed7e0680596c2c74458a4cf06/README.md"
+    ],
+    "policy_version": "autonomous-contracts-v1",
+    "rationale": "The pinned jsendpoints parser extracts capture group 1 from remote JavaScript, then writes returned endpoints into text and dashboard results. The contract is limited to the delimiter exclusion explicitly enforced by the assignment pattern character class; endpoint validity, in-scope status, and extraction completeness remain outside the claim.",
+    "review": {
+      "author": "codex-contract-author",
+      "reviewer": "codex-independent-review-pass",
+      "same_model": true
+    },
+    "source_file": "internal/scanner/jsendpoints/jsendpoints.go",
+    "source_pin": "01cd447ad3b1acfed7e0680596c2c74458a4cf06",
+    "source_sha256": "e9c03be11f7aab2a4310ea4944de5620e500f2400b13e22a3e1ea5b16745c549",
+    "source_url": "https://github.com/h0tak88r/AutoAR",
+    "status": "approved"
+  },
+  "declared_domain": "One ASCII character from capture group 1 of the pinned Go RE2 assignment pattern; the full captured token is 4..200 characters. The property covers exclusion of ASCII double quote, apostrophe, backtick, space, tab, LF, form feed, and CR only. It does not claim endpoint validity, scope safety, or extraction completeness.",
+  "guarantee": "The captured URL-like value from a JavaScript url/href/endpoint assignment contains no quote, backtick, or Go RE2 whitespace delimiter before it is stored in the JavaScript endpoint results.",
+  "input_source": "Untrusted JavaScript response bodies downloaded from the domain scan's JS URL list and passed to extractEndpoints.",
+  "provenance": "agent_derived",
+  "schema_version": "1",
+  "site": "h0tak88r/AutoAR@01cd447ad3b1acfed7e0680596c2c74458a4cf06:internal/scanner/jsendpoints/jsendpoints.go:181:BASE_URL",
+  "trust": "untrusted-input"
+}

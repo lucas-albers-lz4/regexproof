@@ -1,0 +1,79 @@
+{
+  "actual_selection_counts": {
+    "novel_idiom": 0,
+    "productive": 0,
+    "unbiased": 1,
+    "unbiased_reallocation": 0
+  },
+  "allocation_shares": {
+    "novel_idiom": 0.2,
+    "productive": 0.7,
+    "unbiased": 0.1
+  },
+  "bucket_registry_sha256": "c85d0686eb79de323d1ce95fafce9559e29fd7a95653deb83cd2431c165f323e",
+  "classification_sha256_verified": "b9c885e1f27ba5b5fee6ca55c0d7a7b26928be95b5fa5dd300285f563e6ed4d3",
+  "classifications_reverified": 2,
+  "cluster": "aidevops",
+  "gate_decision_sha256": "02875563f71ec7459f3a97967a663da09d281478507cba82cfd49c75ce3fcb4c",
+  "idiom_bucket": "ecma-plugins",
+  "inventory_rows_reverified": 2,
+  "inventory_sha256_verified": "c47a41b43a9a021e81e5ad656fe1d00c00a6b618632e66d8fbd23013b4de0111",
+  "nominal_quotas": {
+    "novel_idiom": 0,
+    "productive": 0,
+    "unbiased": 1
+  },
+  "novel_idiom_unique_count": 0,
+  "outcome_ledger_sha256_verified": "ad715ef9b3e5be15ee88c5a790d1ebf35dfc47f5adb460a5409a94239c1deb24",
+  "population_id": "aidevops-ecma-secret-read-p4-20261015-r1",
+  "population_sha256": "f18c79c5b74a17157cfb0629dd4bc1d3922b438df726095746289f17e6b8cc68",
+  "population_stratum_counts": {
+    "novel_idiom": 0,
+    "productive": 0,
+    "unbiased": 2
+  },
+  "pre_outcome_seed_required": true,
+  "productive_unique_count": 0,
+  "question_history_sha256_verified": "85a6fcd3e6e38991b58f01e288142d80b53e97608dbaf2f166dea6c5fa3b5407",
+  "question_history_sites_reverified": 2,
+  "question_history_sources_reverified": 59,
+  "question_history_unbound_records": 7,
+  "registered_candidate_cap": 2,
+  "repository_url": "https://github.com/marcusquinn/aidevops",
+  "sample_size_requested": 1,
+  "sample_size_selected": 1,
+  "schedule_sha256": "8c56b598195abbe5c4585f35fa3b37788a413b7c87873b48b2c09a8f4553c66d",
+  "scheduler_selected_bucket": "ecma-plugins",
+  "scheduler_selection_basis": "named-next-unused",
+  "schema_version": "1",
+  "selected_candidates": [
+    {
+      "call_kind": "search",
+      "classification_evidence": "This is a separate branch in the adopted source-read helper. No contract-backed conversion-ledger row addresses this basename predicate; the neighboring Forge `secret-redaction` bucket covers text substitution and is not this read-path rule, so the class remains unclassified.",
+      "dialect": "ecma",
+      "encodable": true,
+      "flags": "i",
+      "idiom_bucket": "ecma-plugins",
+      "idiom_class": "unclassified",
+      "idiom_key": "secret-file-basename-deny",
+      "inventory_site": ".agents/plugins/opencode-aidevops/quality-hooks-secret-read.mjs:7:27",
+      "pattern": "^(id_(rsa|dsa|ecdsa|ed25519)|\\.env(\\..*)?|credentials(\\.sh|\\.json|\\.ya?ml)?|service-account(\\.json)?|kubeconfig|config\\.json|op-vault-export.*|.*password.*|.*passwd.*|.*secret.*)$",
+      "prior_question_ids": [],
+      "regex_id": "6db7d4e94a6d0c8c24ed7e5b8a1f36b6",
+      "selection_mode": "unbiased",
+      "site": ".agents/plugins/opencode-aidevops/quality-hooks-secret-read.mjs:7:27",
+      "source_file": ".agents/plugins/opencode-aidevops/quality-hooks-secret-read.mjs",
+      "source_sha256": "668f7dc002b263d58def6003194fd83dfa91b82b2fdcb9a10b1427f1cb942cf0",
+      "trust_class": "untrusted-input"
+    }
+  ],
+  "selection_seed": "aa2b7b706ff1f7495e37e9c0b63b5a51eb28f464e9299af1c506a170d1762abe",
+  "selection_seed_commitment_verified": true,
+  "selection_seed_sha256": "7c1a674d3c592f5f93bc13726d67dad3a729249f0ecbb2ed21b818c0618f0105",
+  "source_checkout": "/tmp/regexproof-pinned-sources/aidevops-8666b6c6c52472b5535aa295f2df593918152cb1",
+  "source_files_reverified": 1,
+  "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+  "unbiased_reallocation_count": 0,
+  "unbiased_unique_count": 1,
+  "wave_opened": false
+}

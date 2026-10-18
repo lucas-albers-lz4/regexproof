@@ -1,0 +1,38 @@
+{
+  "artifact_kind": "malcontent-description-markdown-product-replay",
+  "downstream_disposition": {
+    "reason": "Raw Markdown contains the metadata-derived link and table delimiter; no downstream viewer or consumer impact is confirmed, and no report was sent.",
+    "status": "pending_product_triage"
+  },
+  "gate_id": "malcontent-description-markdown-extra-link-v1",
+  "limitations": [
+    "One one-line ASCII description witness is replayed; no all-input guarantee is claimed.",
+    "No Markdown viewer is executed, so link handling by downstream consumers is unknown."
+  ],
+  "product_replay": {
+    "checkout_root": "/tmp/regexproof-pinned-sources/malcontent-ea3e83e24676a1678a9522141da29b636c9451ab",
+    "description": "references 'Benign' | [click](https://attacker.invalid)' tool",
+    "go_version": "go version go1.27.2 linux/amd64",
+    "input_sha256": "a34ff99a7a84482f88803c6d85563597e5631a8f56830ca7c22db6be9e1a3aaf",
+    "markdown": "## sample.bin [\ud83d\udd35 LOW]\n\n| RISK | KEY | DESCRIPTION | EVIDENCE |\n|:--|:--|:--|:--|\n| LOW | [default](https://github.com/chainguard-dev/malcontent/blob/main/rules/default#regexproof_description_metadata_replay) | references 'Benign' | [click](https://attacker.invalid)' tool | [regexproof-description-sentinel](https://github.com/search?q=regexproof-description-sentinel&type=code) |\n\n",
+    "renderer_source_file": "pkg/render/markdown.go",
+    "renderer_source_file_sha256": "77b3123a08f5a3e73f1cbe303278067cb05b8e5ee14643726824d26bce8f4035",
+    "replay_source_sha256": "23e178380495ad207b5deb2884b1a763043d16bab83f6863e352e76570b8ad3d",
+    "repository_url": "https://github.com/chainguard-dev/malcontent",
+    "rule_name": "regexproof_description_metadata_replay",
+    "source_file": "pkg/report/report.go",
+    "source_file_sha256": "bb3ab2bc50fb835f4add14d8c1f6b71140335313c016575bd55eef224fe690de",
+    "source_pin": "ea3e83e24676a1678a9522141da29b636c9451ab",
+    "yara_x_c_api_version": "1.19.0",
+    "yara_x_go_binding_version": "1.19.0"
+  },
+  "schema_version": "1",
+  "source": {
+    "file": "pkg/report/report.go",
+    "pin": "ea3e83e24676a1678a9522141da29b636c9451ab",
+    "repository_url": "https://github.com/chainguard-dev/malcontent",
+    "sha256": "bb3ab2bc50fb835f4add14d8c1f6b71140335313c016575bd55eef224fe690de",
+    "source_ref": "https://github.com/chainguard-dev/malcontent/blob/ea3e83e24676a1678a9522141da29b636c9451ab/pkg/report/report.go"
+  },
+  "status": "reproduced"
+}

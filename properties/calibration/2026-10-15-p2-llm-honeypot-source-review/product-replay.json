@@ -1,0 +1,80 @@
+{
+  "artifact_kind": "llm-honeypot-p2-product-replay",
+  "cohort_id": "2026-09-12-calibration-20-r2",
+  "confirmed_security_impact": 0,
+  "engines": {
+    "bash": "GNU bash, version 5.2.21(1)-release (x86_64-pc-linux-gnu)",
+    "grep": "grep (GNU grep) 3.11",
+    "host_platform": "Linux-6.17.0-42-generic-x86_64-with-glibc2.39",
+    "python": "3.14.8",
+    "sed": "/usr/bin/sed (GNU sed) 4.9"
+  },
+  "external_report_sent": false,
+  "maintainer_confirmation": false,
+  "pin": "65624396e263074bb8cb2e049f9a9ec6215ea5c1",
+  "private_ip_redaction": {
+    "differential_cases": 65541,
+    "exhaustive_192_168_addresses": 65536,
+    "exhaustive_redacted": 65536,
+    "interpretation": "The exact helper redacts all tested 192.168/16 tokens but leaves representative 10/8 and 172.16/12 private addresses unchanged. No actual generated artifact or published repository data was inspected.",
+    "mutation_input": "source=192.168.4.9;\n",
+    "mutation_output": "source=192.168.4.9;\n",
+    "sample_input": "10.0.0.1 172.16.0.1 192.168.1.1 8.8.8.8\n",
+    "sample_output": "10.0.0.1 172.16.0.1 [REDACTED] 8.8.8.8\n"
+  },
+  "repo_id": "Leviticus-Triage/llm-honeypot-intelligence",
+  "repository_url": "https://github.com/Leviticus-Triage/llm-honeypot-intelligence",
+  "result": "pass_candidate_reproduced",
+  "schema_version": "1",
+  "source_replay": {
+    "clean_checkout_head": "65624396e263074bb8cb2e049f9a9ec6215ea5c1",
+    "method": "Exact pinned function definitions were extracted from authenticated source files and run in isolated temporary directories. The Tor nc command was replaced by a local fixture that supplied fixed protocol replies; no network or real credentials were used.",
+    "sanitizer_pattern": "192\\.168\\.[0-9]+\\.[0-9]+",
+    "tor_pattern": "250 OK"
+  },
+  "third_party_fix": false,
+  "tor_newnym": {
+    "auth_success_then_signal_error": {
+      "commands": "AUTHENTICATE dead\nSIGNAL NEWNYM\nQUIT\n",
+      "expected_commands": "AUTHENTICATE dead\nSIGNAL NEWNYM\nQUIT\n",
+      "pattern_override": null,
+      "process_returncode": 0,
+      "reply": "250 OK\r\n551 Internal error\r\n250 closing connection\r\n",
+      "stderr": "",
+      "stdout": "success",
+      "success": true
+    },
+    "differential_cases": 4,
+    "failure_only_sequence": {
+      "commands": "AUTHENTICATE dead\nSIGNAL NEWNYM\nQUIT\n",
+      "expected_commands": "AUTHENTICATE dead\nSIGNAL NEWNYM\nQUIT\n",
+      "pattern_override": null,
+      "process_returncode": 0,
+      "reply": "551 Internal error\r\n",
+      "stderr": "",
+      "stdout": "failure",
+      "success": false
+    },
+    "interpretation": "The exact helper reports success when AUTHENTICATE returns 250 OK and the later SIGNAL NEWNYM reply returns 551. This demonstrates response-sequence handling in the pinned function; it does not establish that a deployed Tor instance reached this error state or that a scan used the unchanged exit.",
+    "successful_sequence": {
+      "commands": "AUTHENTICATE dead\nSIGNAL NEWNYM\nQUIT\n",
+      "expected_commands": "AUTHENTICATE dead\nSIGNAL NEWNYM\nQUIT\n",
+      "pattern_override": null,
+      "process_returncode": 0,
+      "reply": "250 OK\r\n250 OK\r\n250 closing connection\r\n",
+      "stderr": "",
+      "stdout": "success",
+      "success": true
+    },
+    "widened_matcher_mutation": {
+      "commands": "AUTHENTICATE dead\nSIGNAL NEWNYM\nQUIT\n",
+      "expected_commands": "AUTHENTICATE dead\nSIGNAL NEWNYM\nQUIT\n",
+      "pattern_override": ".*",
+      "process_returncode": 0,
+      "reply": "551 Internal error\r\n",
+      "stderr": "",
+      "stdout": "success",
+      "success": true
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "cohort_id": "2026-09-12-calibration-20-r2",
+  "population_count": 1,
+  "rank_method": "singleton after source review; rank is queue ordering only, not an allocator score",
+  "ranked": [
+    {
+      "question_id": "RR-navigation-param-control-characters-rejected",
+      "rank": 1,
+      "regex_id": "1e31ed0154408e832cf456d8422b6e38",
+      "site": "greydragon888/real-router@55aa7ef43a9c129beba90823cd8a4db10bb01211:packages/validation-plugin/src/validators/navigation.ts:69:column-25",
+      "source_file_sha256": "619bbc25796534163c82de8f01dab1ab3fc38cd844a7a0742301dab0534173c6",
+      "source_pin": "55aa7ef43a9c129beba90823cd8a4db10bb01211"
+    }
+  ],
+  "schema_version": "1",
+  "selection_kind": "targeted_singleton_p6_integration_calibration"
+}

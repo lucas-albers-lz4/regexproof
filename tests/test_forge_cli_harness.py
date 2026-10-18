@@ -13,6 +13,7 @@ from z3 import AllChar, Concat, InRe, Length, Re, Solver, Star, String, StringVa
 from regexproof.harness import REGISTRY, check_mutation_coverage, run_one
 from regexproof.harness.contract import product_reportable
 from regexproof.harness.forge_cli import (
+    PIN,
     DMM_VALUE_CHAR,
     DMM_VALUE_PATTERN,
     ENV_API_POLICY_KEYS,
@@ -40,24 +41,36 @@ PRODUCT_NAMES = (
     "FC-forge-cli-llm-userinfo-no-at",
     "FC-forge-cli-jaas-escaped-quote-covered",
     "FC-forge-cli-sensitive-env-key-covered",
+    "FC-forge-cli-sensitive-env-helper-redacts",
 )
 
 
-def test_forge_cli_product_contracts_are_registered():
-    entries = [entry for entry in REGISTRY.values() if entry["family"] == FAMILY]
-    assert len(entries) == 7
-    properties = [entry for entry in entries if entry["kind"] == "property"]
-    assert len(properties) == 5
-    assert all(entry["contract"]["provenance"] == "human" for entry in properties)
-    assert all(entry["input_domain"] == "ascii" for entry in entries)
+def test_forge_cli_contracts_keep_truthful_human_and_autonomous_provenance():
+    entries = [(name, entry) for name, entry in REGISTRY.items() if entry["family"] == FAMILY]
+    assert len(entries) == 8
+    properties = [(name, entry) for name, entry in entries if entry["kind"] == "property"]
+    assert len(properties) == 6
+    helper_name = "FC-forge-cli-sensitive-env-helper-redacts"
+    assert all(
+        entry["contract"]["provenance"] == "human"
+        for name, entry in properties if name != helper_name
+    )
+    assert REGISTRY[helper_name]["contract"]["provenance"] == "agent_derived"
+    assert all(entry["input_domain"] == "ascii" for _name, entry in entries)
     schema = load_schema("property_contract.schema.json")
-    for entry in properties:
+    for _name, entry in properties:
         jsonschema.validate(instance=entry["contract"], schema=schema)
         assert product_reportable(entry) is True
     assert REGISTRY["FC-forge-cli-llm-userinfo-no-at"]["contract"]["site"].endswith(
         "providers.py:287:LlmConfig.redacted_endpoint"
     )
-    assert "FC-forge-cli-sensitive-env-helper-redacts" not in REGISTRY
+    helper_contract = REGISTRY[
+        helper_name
+    ]["contract"]
+    assert helper_contract["trust"] == "config"
+    assert PIN in helper_contract["site"]
+    assert "never the value" in helper_contract["guarantee"]
+    assert helper_contract["adoption"]["policy_version"] == "autonomous-contracts-v1"
 
 
 def test_forge_cli_properties_hold_and_mutation_guard_flips():
@@ -72,15 +85,6 @@ def test_forge_cli_properties_hold_and_mutation_guard_flips():
         if REGISTRY[name]["kind"] == "mutation_guard":
             if REGISTRY[name]["ground_truth"] is None:
                 assert result["ground_truth"] == "mutation-guard-sat-expected"
-                if name == "FC-forge-cli-mutated-sensitive-env-api-key":
-                    from regexproof.groundtruth.forge_cli_replay import (
-                        redaction_mutation_reproduces,
-                    )
-
-                    assert result["witness"]["s"].lower() in ENV_API_POLICY_KEYS
-                    assert redaction_mutation_reproduces(
-                        result["witness"]["s"], ENV_WEAKENED_PATTERN
-                    )
             else:
                 assert result["ground_truth"] == "reproduced"
                 assert result["witness"]["s"].lower() in ENV_API_POLICY_KEYS
@@ -247,7 +251,16 @@ def test_committed_conversion_rows_match_registry():
         jsonschema.validate(instance=row, schema=schema)
         assert row["family"] == FAMILY
         assert row["corpus"] == "forge-cli"
-        assert row["wave_id"] == "forge-cli_w1"
+        expected_wave = (
+            "forge-cli_helper_image"
+            if row["name"] == "FC-forge-cli-sensitive-env-helper-redacts"
+            else "forge-cli_w1"
+        )
+        assert row["wave_id"] == expected_wave
+        if row["name"] == "FC-forge-cli-sensitive-env-helper-redacts":
+            assert row["shape"] == 4
+            assert row["contract"]["trust"] == "config"
+            assert "5680 ASCII letter-case assignments" in row["contract"]["declared_domain"]
         assert row["idiom_bucket"] == "secret-redaction"
         assert row["product_reportable"] is True
         assert row["result"] == "unsat"
@@ -266,9 +279,7 @@ def test_wave_closeout_records_scope_and_next_step():
     assert "0 SAT" in text
     assert "providers.py:280" in text
     assert "Concat-identity" in text
-    assert "#648 helper-image replay" in text
+    assert "#648 helper-image follow-up" in text
     assert "all 5,680 ASCII case assignments" in text
-    assert "shape 2 proves only" in text
-    assert "does not prove the renderer's output image" in text
-    assert "exact-witness mutation replay" in text
-    assert "no claim is made for arbitrary values" in text.lower()
+    assert "Python `3.14.7`" in text and "Z3 `5.0.0`" in text
+    assert "ground-truth callback" in text

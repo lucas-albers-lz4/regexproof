@@ -1,0 +1,222 @@
+{
+  "attempts": [
+    {
+      "contract": {
+        "adoption": {
+          "approved_on": "2026-10-17",
+          "authority": "standing_user_delegation",
+          "contract_sha256": "6dd7a201dab44fac9bb782c93d02229f081105d93511db5e66c8e6c407258bf9",
+          "evidence": [
+            "https://github.com/TracecatHQ/tracecat/blob/c84d52528a489821f355fc63976fbc7783ae0ad5/tracecat/tables/schemas.py",
+            "https://github.com/TracecatHQ/tracecat/blob/c84d52528a489821f355fc63976fbc7783ae0ad5/tracecat/tables/service.py",
+            "https://github.com/TracecatHQ/tracecat/blob/c84d52528a489821f355fc63976fbc7783ae0ad5/tracecat/tables/router.py",
+            "The authorized table:create routes validate TableCreate and TableColumnCreate; the exact service validates names again, and column DDL wraps identifiers with quote_identifier."
+          ],
+          "policy_version": "autonomous-contracts-v1",
+          "rationale": "A narrowly scoped source-backed theorem that table and column request validators reject SQL double quotes is useful as a request-layer regression gate because the pinned raw DDL helper uses double-quoted identifiers. The exact service also rejects quotes before DDL, so this contract makes no current vulnerability or impact claim.",
+          "review": {
+            "author": "Codex P2 source-review pass",
+            "reviewer": "Codex exact-source and sink reviewer",
+            "same_model": true
+          },
+          "source_file": "tracecat/tables/schemas.py",
+          "source_pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+          "source_sha256": "3cf61426a27e200640ad55406dc3f67ee7cd445b2cf70d73205e0709b594e881",
+          "source_url": "https://github.com/TracecatHQ/tracecat",
+          "status": "approved"
+        },
+        "declared_domain": "A single character from the exact Python re language admitted by IDENTIFIER_PATTERN in the pinned source. The product gate additionally exercises TableCreate.name and TableColumnCreate.name at their pinned 1..100 length bounds. Existing stored names and direct callers outside the named routes are not covered.",
+        "guarantee": "The pinned TableCreate.name and TableColumnCreate.name request validators reject a double quote before values reach table or column creation. This protects the raw double-quoted identifier formatting used by the pinned DDL path. The contract does not claim SQL injection, attacker reachability, or deployed impact; the service also applies its stricter validate_identifier check before DDL.",
+        "input_source": "Names are supplied as workspace table and column configuration to authenticated table routes guarded by table:create. The public routes validate TableCreate and TableColumnCreate models before calling TablesService. The service validates names again before dynamic DDL; column DDL formats identifiers with quote_identifier.",
+        "provenance": "agent_derived",
+        "schema_version": "1",
+        "site": "TracecatHQ/tracecat@c84d52528a489821f355fc63976fbc7783ae0ad5:tracecat/tables/schemas.py:17:re.compile",
+        "trust": "config"
+      },
+      "detail": null,
+      "domain": "A one-character value admitted by the exact pinned table/column identifier allowlist cannot contain a double quote",
+      "gate": {
+        "consumer_adopted": false,
+        "differential_cases": 2227,
+        "gate_id": "tracecat-table-identifier-quote-exclusion",
+        "local_gate_command": "/home/lalbers/gitroot/regexproof/.venv/bin/python /home/lalbers/gitroot/regexproof/scripts/tracecat-table-identifier-regression-gate.py --source-root /tmp/tracecat-p2-review-20261016 --output /home/lalbers/gitroot/regexproof/properties/calibration/2026-10-17-autonomous-tracecat-table-identifier/p6-wave/product-gate.json --skip-proof",
+        "local_gate_passed": true,
+        "mutation_guard_passed": true,
+        "product_engine_replayed": true,
+        "source_pin_verified": true
+      },
+      "kind": "property",
+      "pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+      "question_id": "TC-table-identifier-double-quote-excluded",
+      "repo_id": "TracecatHQ/tracecat",
+      "site": "TracecatHQ/tracecat@c84d52528a489821f355fc63976fbc7783ae0ad5:tracecat/tables/schemas.py:17:re.compile",
+      "status": "unsat",
+      "synthesized": false,
+      "url": "https://github.com/TracecatHQ/tracecat"
+    }
+  ],
+  "cohort_manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+  "contracts": [
+    {
+      "contract": {
+        "adoption": {
+          "approved_on": "2026-10-17",
+          "authority": "standing_user_delegation",
+          "contract_sha256": "6dd7a201dab44fac9bb782c93d02229f081105d93511db5e66c8e6c407258bf9",
+          "evidence": [
+            "https://github.com/TracecatHQ/tracecat/blob/c84d52528a489821f355fc63976fbc7783ae0ad5/tracecat/tables/schemas.py",
+            "https://github.com/TracecatHQ/tracecat/blob/c84d52528a489821f355fc63976fbc7783ae0ad5/tracecat/tables/service.py",
+            "https://github.com/TracecatHQ/tracecat/blob/c84d52528a489821f355fc63976fbc7783ae0ad5/tracecat/tables/router.py",
+            "The authorized table:create routes validate TableCreate and TableColumnCreate; the exact service validates names again, and column DDL wraps identifiers with quote_identifier."
+          ],
+          "policy_version": "autonomous-contracts-v1",
+          "rationale": "A narrowly scoped source-backed theorem that table and column request validators reject SQL double quotes is useful as a request-layer regression gate because the pinned raw DDL helper uses double-quoted identifiers. The exact service also rejects quotes before DDL, so this contract makes no current vulnerability or impact claim.",
+          "review": {
+            "author": "Codex P2 source-review pass",
+            "reviewer": "Codex exact-source and sink reviewer",
+            "same_model": true
+          },
+          "source_file": "tracecat/tables/schemas.py",
+          "source_pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+          "source_sha256": "3cf61426a27e200640ad55406dc3f67ee7cd445b2cf70d73205e0709b594e881",
+          "source_url": "https://github.com/TracecatHQ/tracecat",
+          "status": "approved"
+        },
+        "declared_domain": "A single character from the exact Python re language admitted by IDENTIFIER_PATTERN in the pinned source. The product gate additionally exercises TableCreate.name and TableColumnCreate.name at their pinned 1..100 length bounds. Existing stored names and direct callers outside the named routes are not covered.",
+        "guarantee": "The pinned TableCreate.name and TableColumnCreate.name request validators reject a double quote before values reach table or column creation. This protects the raw double-quoted identifier formatting used by the pinned DDL path. The contract does not claim SQL injection, attacker reachability, or deployed impact; the service also applies its stricter validate_identifier check before DDL.",
+        "input_source": "Names are supplied as workspace table and column configuration to authenticated table routes guarded by table:create. The public routes validate TableCreate and TableColumnCreate models before calling TablesService. The service validates names again before dynamic DDL; column DDL formats identifiers with quote_identifier.",
+        "provenance": "agent_derived",
+        "schema_version": "1",
+        "site": "TracecatHQ/tracecat@c84d52528a489821f355fc63976fbc7783ae0ad5:tracecat/tables/schemas.py:17:re.compile",
+        "trust": "config"
+      },
+      "domain": "A one-character value admitted by the exact pinned table/column identifier allowlist cannot contain a double quote",
+      "kind": "property",
+      "pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+      "question_id": "TC-table-identifier-double-quote-excluded",
+      "repo_id": "TracecatHQ/tracecat",
+      "site": "TracecatHQ/tracecat@c84d52528a489821f355fc63976fbc7783ae0ad5:tracecat/tables/schemas.py:17:re.compile",
+      "synthesized": false,
+      "url": "https://github.com/TracecatHQ/tracecat"
+    }
+  ],
+  "conversion_rows": [
+    {
+      "contract": {
+        "adoption": {
+          "approved_on": "2026-10-17",
+          "authority": "standing_user_delegation",
+          "contract_sha256": "6dd7a201dab44fac9bb782c93d02229f081105d93511db5e66c8e6c407258bf9",
+          "evidence": [
+            "https://github.com/TracecatHQ/tracecat/blob/c84d52528a489821f355fc63976fbc7783ae0ad5/tracecat/tables/schemas.py",
+            "https://github.com/TracecatHQ/tracecat/blob/c84d52528a489821f355fc63976fbc7783ae0ad5/tracecat/tables/service.py",
+            "https://github.com/TracecatHQ/tracecat/blob/c84d52528a489821f355fc63976fbc7783ae0ad5/tracecat/tables/router.py",
+            "The authorized table:create routes validate TableCreate and TableColumnCreate; the exact service validates names again, and column DDL wraps identifiers with quote_identifier."
+          ],
+          "policy_version": "autonomous-contracts-v1",
+          "rationale": "A narrowly scoped source-backed theorem that table and column request validators reject SQL double quotes is useful as a request-layer regression gate because the pinned raw DDL helper uses double-quoted identifiers. The exact service also rejects quotes before DDL, so this contract makes no current vulnerability or impact claim.",
+          "review": {
+            "author": "Codex P2 source-review pass",
+            "reviewer": "Codex exact-source and sink reviewer",
+            "same_model": true
+          },
+          "source_file": "tracecat/tables/schemas.py",
+          "source_pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+          "source_sha256": "3cf61426a27e200640ad55406dc3f67ee7cd445b2cf70d73205e0709b594e881",
+          "source_url": "https://github.com/TracecatHQ/tracecat",
+          "status": "approved"
+        },
+        "declared_domain": "A single character from the exact Python re language admitted by IDENTIFIER_PATTERN in the pinned source. The product gate additionally exercises TableCreate.name and TableColumnCreate.name at their pinned 1..100 length bounds. Existing stored names and direct callers outside the named routes are not covered.",
+        "guarantee": "The pinned TableCreate.name and TableColumnCreate.name request validators reject a double quote before values reach table or column creation. This protects the raw double-quoted identifier formatting used by the pinned DDL path. The contract does not claim SQL injection, attacker reachability, or deployed impact; the service also applies its stricter validate_identifier check before DDL.",
+        "input_source": "Names are supplied as workspace table and column configuration to authenticated table routes guarded by table:create. The public routes validate TableCreate and TableColumnCreate models before calling TablesService. The service validates names again before dynamic DDL; column DDL formats identifiers with quote_identifier.",
+        "provenance": "agent_derived",
+        "schema_version": "1",
+        "site": "TracecatHQ/tracecat@c84d52528a489821f355fc63976fbc7783ae0ad5:tracecat/tables/schemas.py:17:re.compile",
+        "trust": "config"
+      },
+      "corpus": "tracecat_table_identifier",
+      "disclosure": null,
+      "domain": "A one-character value admitted by the exact pinned table/column identifier allowlist cannot contain a double quote",
+      "engine_versions": {
+        "python": "3.14.8",
+        "z3": "5.0.0"
+      },
+      "family": "TC-tracecat-table-identifier",
+      "ground_truth": null,
+      "ground_truth_status": null,
+      "idiom_bucket": "sql-identifier-quote-allowlist",
+      "kind": "property",
+      "name": "TC-table-identifier-double-quote-excluded",
+      "product_reportable": true,
+      "regex_id": "5ad353598ae9716f051fe1d296d1a43e",
+      "result": "unsat",
+      "schema_version": "1",
+      "shape": 1,
+      "site": "TracecatHQ/tracecat@c84d52528a489821f355fc63976fbc7783ae0ad5:tracecat/tables/schemas.py:17:re.compile",
+      "synthesized": false,
+      "wave_id": "tracecat-table-identifier-20261017",
+      "witness": null
+    }
+  ],
+  "corpus": "tracecat_table_identifier",
+  "coverage_digest": "01a1c2ec079b2779fcac919ff2d82b6f99dfbcf97c010d51878a681741471723",
+  "execution_caps": {
+    "local_gate_timeout_seconds": 300,
+    "max_active_conversion_waves": 1,
+    "max_adopted_contracts_per_wave": 5,
+    "max_new_questions_per_run": 5,
+    "parallel_walk": false,
+    "solver_retries": 0,
+    "solver_timeout_ms": 30000
+  },
+  "gate_config": {
+    "command": [
+      "/home/lalbers/gitroot/regexproof/.venv/bin/python",
+      "/home/lalbers/gitroot/regexproof/scripts/tracecat-table-identifier-regression-gate.py",
+      "--source-root",
+      "/tmp/tracecat-p2-review-20261016",
+      "--output",
+      "/home/lalbers/gitroot/regexproof/properties/calibration/2026-10-17-autonomous-tracecat-table-identifier/p6-wave/product-gate.json",
+      "--skip-proof"
+    ],
+    "evidence": {
+      "differential_case_counts": {
+        "TC-table-identifier-double-quote-excluded": 2227
+      },
+      "product_engine_replay_question_ids": [
+        "TC-table-identifier-double-quote-excluded"
+      ]
+    },
+    "gate_id": "tracecat-table-identifier-quote-exclusion",
+    "question_ids": [
+      "TC-table-identifier-double-quote-excluded"
+    ],
+    "schema_version": "1",
+    "timeout_seconds": 300
+  },
+  "idiom_bucket": "sql-identifier-quote-allowlist",
+  "runs": [
+    {
+      "active_question_id": null,
+      "finished_at": "2026-10-17T15:58:45+00:00",
+      "gate_failure": null,
+      "gate_passed": true,
+      "gate_wall_ms": 1871.9,
+      "mutation_failures": [],
+      "mutation_wall_ms": 148.0,
+      "new_questions": 1,
+      "question_ids": [
+        "TC-table-identifier-double-quote-excluded"
+      ],
+      "reason": null,
+      "run_id": "6563f2d9-fbbb-4073-b562-550bc7115e71",
+      "solver_wall_ms": 0.2,
+      "source_failures": {},
+      "source_wall_ms": 19.0,
+      "started_at": "2026-10-17T15:58:45+00:00",
+      "status": "complete"
+    }
+  ],
+  "schema_version": "1",
+  "wave_id": "tracecat-table-identifier-20261017"
+}

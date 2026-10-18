@@ -1,0 +1,56 @@
+[
+  {
+    "contract": {
+      "adoption": {
+        "approved_on": "2026-10-15",
+        "authority": "standing_user_delegation",
+        "contract_sha256": "53e40f4edde4e27b36ea9aedb0ee0aa4473925c8737b0348a80c416e5398293f",
+        "evidence": [
+          "https://github.com/chainguard-dev/malcontent/blob/ea3e83e24676a1678a9522141da29b636c9451ab/pkg/report/report.go",
+          "https://github.com/chainguard-dev/malcontent/blob/ea3e83e24676a1678a9522141da29b636c9451ab/pkg/render/markdown.go",
+          "https://github.com/chainguard-dev/malcontent/blob/ea3e83e24676a1678a9522141da29b636c9451ab/cmd/mal/mal.go",
+          "properties/calibration/2026-10-15-autonomous-malcontent-author-markdown-20r2/product-replay.json"
+        ],
+        "policy_version": "autonomous-contracts-v1",
+        "rationale": "The pinned code independently documents Markdown injection escaping for report text, exposes optional third-party YARA rules, parses author metadata through authorWithURLRe and url.Parse, and places the stored author URL in a Markdown link. A full YARA-X-to-report.Generate-to-Markdown replay reproduced a second attacker-chosen HTTPS link. The contract is a counterexample-finding question; the regex model alone is not treated as proof of the output effect.",
+        "review": {
+          "author": "codex-contract-author",
+          "reviewer": "codex-independent-review-pass",
+          "same_model": true
+        },
+        "source_file": "pkg/report/report.go",
+        "source_pin": "ea3e83e24676a1678a9522141da29b636c9451ab",
+        "source_sha256": "bb3ab2bc50fb835f4add14d8c1f6b71140335313c016575bd55eef224fe690de",
+        "source_url": "https://github.com/chainguard-dev/malcontent",
+        "status": "approved"
+      },
+      "declared_domain": "Counterexample domain: one-line ASCII YARA author metadata that matches the Go RE2 search expression, whose captured URL is accepted by net/url.Parse, with a non-prefix reference URL so the later author-URL compatibility branch does not replace the capture. Product reachability is checked by compiling a valid YARA rule, matching a sentinel, calling the exact pinned report.Generate and Markdown renderer with YARA-X 1.19.0. The solver fixes one concrete witness; it does not establish safety for all metadata or downstream Markdown viewers.",
+      "guarantee": "Third-party YARA author metadata accepted by the pinned authorWithURLRe and Go URL parser must not close the generated Markdown author link or add a second hyperlink in Malcontent's Markdown report.",
+      "input_source": "The author metadata value from an operator-enabled third-party YARA rule, read through Malcontent's RuleFS and parsed into a report behavior.",
+      "provenance": "agent_derived",
+      "schema_version": "1",
+      "site": "chainguard-dev/malcontent@ea3e83e24676a1678a9522141da29b636c9451ab:pkg/report/report.go:117:authorWithURLRe",
+      "trust": "config"
+    },
+    "detail": "SAT and real-engine replay recovered from the same-run local gate report after canonical-row serialization failed; solver was not retried",
+    "domain": "The pinned authorWithURLRe search capture must not permit source metadata to close its Markdown link and add a second external link",
+    "gate": {
+      "consumer_adopted": false,
+      "differential_cases": 2034,
+      "gate_id": "malcontent-author-markdown-extra-link-v1",
+      "local_gate_command": ".venv/bin/python scripts/malcontent-author-markdown-regression-gate.py --output /home/lalbers/gitroot/regexproof/properties/calibration/2026-10-15-autonomous-malcontent-author-markdown-20r2/p6-gate-report.json",
+      "local_gate_passed": true,
+      "mutation_guard_passed": true,
+      "product_engine_replayed": true,
+      "source_pin_verified": true
+    },
+    "kind": "counterexample_finder",
+    "pin": "ea3e83e24676a1678a9522141da29b636c9451ab",
+    "question_id": "MC-malcontent-author-metadata-extra-markdown-link",
+    "repo_id": "chainguard-dev/malcontent",
+    "site": "chainguard-dev/malcontent@ea3e83e24676a1678a9522141da29b636c9451ab:pkg/report/report.go:117:authorWithURLRe",
+    "status": "sat",
+    "synthesized": false,
+    "url": "https://github.com/chainguard-dev/malcontent"
+  }
+]

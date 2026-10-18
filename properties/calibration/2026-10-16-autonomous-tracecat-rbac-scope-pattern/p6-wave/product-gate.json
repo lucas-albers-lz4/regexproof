@@ -1,0 +1,38 @@
+{
+  "accepted_cases": 23,
+  "contract_sha256": "d2ea2654e8f12284f6c8e27571db6f2c5f9aaefb8e6b0907bf9799fb3b032bd0",
+  "differential_cases": 2632,
+  "family": "TC-tracecat-rbac-scope-pattern",
+  "gate_id": "tracecat-rbac-scope-glob-alphabet",
+  "guarantee": "A custom scope accepted by the pinned POST route's request schema and service validation contains no question-mark or bracket glob syntax; asterisk remains the only admitted glob metacharacter.",
+  "limitations": "The contract covers newly submitted names through the pinned authorized create-scope route only. It does not cover pre-existing stored scopes, direct internal calls that bypass ScopeCreate, role assignment policy, least privilege, or deployed security impact. No current vulnerability, external report, maintainer confirmation, or fix is claimed.",
+  "mismatches": 0,
+  "mutation_effect": "Weakening both exact allowlists to admit `?` accepts the custom scope and the exact scope matcher treats `?` as a glob metacharacter when `*` is also present.",
+  "mutation_id": "TC-rbac-scope-question-mark-mutation",
+  "mutation_reproduced": true,
+  "mutation_required_scope": "action:toolsXokta.list_users:execute",
+  "mutation_scope": "action:tools?okta.*:execute",
+  "nonstar_metacharacter_rejections": {
+    "?": 1903,
+    "[": 1916,
+    "]": 1901
+  },
+  "product_engine": "Pydantic 2.12.5 request model plus exact pinned Python re validator and fnmatch scope_matches",
+  "property_id": "TC-rbac-scope-nonstar-glob-metacharacters-excluded",
+  "repository": "https://github.com/TracecatHQ/tracecat",
+  "request_schema_file": "packages/tracecat-ee/tracecat_ee/rbac/schemas.py",
+  "route_file": "packages/tracecat-ee/tracecat_ee/rbac/router.py",
+  "schema_rejects_terminal_lf": true,
+  "schema_version": "1",
+  "service_file": "packages/tracecat-ee/tracecat_ee/rbac/service.py",
+  "source_files": {
+    "packages/tracecat-ee/tracecat_ee/rbac/router.py": "6e33f2c1805b6524d0ec6aee781364b70925d0409f1e95abb34f44568aedd42b",
+    "packages/tracecat-ee/tracecat_ee/rbac/schemas.py": "ad6abc48ad281e0f2869506c717410e8b7e605bc326543e0ef17787731583142",
+    "packages/tracecat-ee/tracecat_ee/rbac/service.py": "72fc139aedfe964c1a1a0965232a01aa4545f35156109a2839321f2bb00cea3a",
+    "tracecat/authz/controls.py": "a63e61a139aeb35665b43f2a000095b42e8c6050778144f7c9f28af5c58ed32b"
+  },
+  "source_pattern": "^[a-z0-9:_.*-]+$",
+  "source_pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+  "standalone_python_helper_accepts_terminal_lf": true,
+  "terminal_lf_note": "The helper alone has Python `$` final-newline behavior, but the exact Pydantic request schema rejects the value before the only pinned POST caller reaches it. This is not an HTTP acceptance or security finding at this pin."
+}

@@ -1,0 +1,32 @@
+{
+  "adoption": {
+    "approved_on": "2026-10-15",
+    "authority": "standing_user_delegation",
+    "contract_sha256": "9b4e12034ef2e5935a5aa8309d967f71b6c999daadb5093658eadf61cb61e740",
+    "evidence": [
+      "https://github.com/fu351/Doberman-Core/blob/53ae43c5298a2426c6696147fdd75e2a4aef10e2/src/doberman/hosthooks/codex.py",
+      "https://github.com/fu351/Doberman-Core/blob/53ae43c5298a2426c6696147fdd75e2a4aef10e2/tests/fixtures/codex/README.md",
+      "https://github.com/fu351/Doberman-Core/blob/53ae43c5298a2426c6696147fdd75e2a4aef10e2/tests/unit/test_hosthook_codex.py",
+      "properties/calibration/2026-10-15-p2-doberman-source-review/evidence.json regex_id=07feadd45ef45bfb08eb20a6c49cdb3e column=23"
+    ],
+    "policy_version": "autonomous-contracts-v1",
+    "rationale": "The captured Codex 0.146.1 fixture documents Move to directive syntax. The adopted theorem covers one printable-ASCII destination character; the exact-source replay separately exercises longer representative paths and target routing without claiming an unbounded path proof. At this pin, the adapter surfaces extracted destinations as file_write targets for ProtectedPathRule evaluation.",
+    "review": {
+      "author": "Codex source-review pass",
+      "reviewer": "Codex second source-review pass",
+      "same_model": true
+    },
+    "source_file": "src/doberman/hosthooks/codex.py",
+    "source_pin": "53ae43c5298a2426c6696147fdd75e2a4aef10e2",
+    "source_sha256": "0144953c99a6620cbe9128ce7bc7ad6f6e9ea1a64311348db1f70ec0d14f42f3",
+    "source_url": "https://github.com/fu351/Doberman-Core",
+    "status": "approved"
+  },
+  "declared_domain": "One ASCII directive line with zero to three leading ASCII spaces or tabs, the exact documented Move to form, and a destination consisting of exactly one printable ASCII character from ! through ~. The Z3 theorem covers this one-character domain. The exact-source regression gate separately checks longer representative destinations, CRLF lines, and a mixed multi-directive envelope; these replays do not extend the formal theorem.",
+  "guarantee": "For each documented Move to directive with one non-whitespace printable-ASCII destination character, the pinned source regex matches the complete directive line and the adapter surfaces the stripped destination as a file_write target.",
+  "input_source": "The plain-text tool_input.command string in a Codex PreToolUse apply_patch payload supplied to Doberman.",
+  "provenance": "agent_derived",
+  "schema_version": "1",
+  "site": "fu351/Doberman-Core@53ae43c5298a2426c6696147fdd75e2a4aef10e2:src/doberman/hosthooks/codex.py:70:_APPLY_PATCH_MOVE_RE",
+  "trust": "untrusted-input"
+}

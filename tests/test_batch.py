@@ -69,6 +69,34 @@ def test_intent_fixtures_both_classes():
         assert bool(hits) == case["expect_finding"], case["id"]
 
 
+def test_usage_mismatch_does_not_treat_escaped_dollar_as_anchor():
+    patterns = [
+        r"create_function\([\'\"]{2},\$",
+        r"'\&%\$",
+        r"copy\(\$",
+    ]
+    records = [
+        {"regex_id": f"{index:032x}", "pattern": pattern, "call_kind": "search"}
+        for index, pattern in enumerate(patterns, 1)
+    ]
+    assert detect_usage_mismatches(records) == []
+    escaped_end_anchor = {
+        "regex_id": "e" * 32,
+        "pattern": r"^copy\(\$",
+        "call_kind": "match",
+    }
+    assert detect_usage_mismatches([escaped_end_anchor]) == []
+
+    # Two preceding backslashes escape each other, leaving the final dollar
+    # active as an end anchor.
+    active = {
+        "regex_id": "f" * 32,
+        "pattern": r"literal\\$",
+        "call_kind": "search",
+    }
+    assert [hit["regex_id"] for hit in detect_usage_mismatches([active])] == ["f" * 32]
+
+
 def test_intent_no_substring_false_positive_on_curl():
     hits = detect_intent_mismatches(
         [

@@ -1,0 +1,10 @@
+{
+  "campaign_counted": false,
+  "cohort_id": "off-cohort-mycelium-current-pin",
+  "contract_sha256": "16113f8c1d77c200771d0e484fd20bc7efeb3288a21df31caf53da5c465bd586",
+  "gate_id": "MY-mycelium-drift-systemd-semicolon-drops-bypass",
+  "gate_script": "scripts/mycelium-execstart-diagnostic-reproduction-gate.py",
+  "repository_url": "https://github.com/mycelium0/mycelium",
+  "schema_version": "1",
+  "source_pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711"
+}

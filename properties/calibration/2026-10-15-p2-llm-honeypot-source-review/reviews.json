@@ -1,0 +1,390 @@
+{
+  "schema_version": "1",
+  "observed_at": "2026-10-15",
+  "author": "Codex source-review pass",
+  "reviewer": "Codex separate source re-read",
+  "second_pass": true,
+  "same_model_or_agent": true,
+  "limitations": [
+    "Complete raw-site review for Leviticus-Triage/llm-honeypot-intelligence at the frozen 20-r2 pin only; it does not close P2.",
+    "The same model performed the author and second source-review passes; this is not independent human annotation.",
+    "Two adopted questions establish source-level candidates only. The local replay did not inspect real generated artifacts, expose private addresses, use a live Tor daemon, or transmit a report.",
+    "The repo source shows Docker-volume inputs and a configured GitHub push, but this review does not establish that the upstream repository is public or that any private address was actually committed."
+  ],
+  "reviews": [
+    {
+      "regex_id": "7d76a1348826b96898f93834d5befbde",
+      "site": "deploy/systemd/install.sh:42:28",
+      "pattern": "$CRON_MARKER",
+      "decision": "skip",
+      "reason_code": "operator_crontab_maintenance",
+      "rationale": "The literal CRON_MARKER is used only to find a legacy operator crontab line before removal. A false positive could remove a similarly named cron line, but this match does not validate attacker input or enforce a security policy.",
+      "review_refs": [
+        {
+          "path": "deploy/systemd/install.sh",
+          "line": 42,
+          "why": "legacy cron marker presence check"
+        },
+        {
+          "path": "deploy/systemd/install.sh",
+          "line": 46,
+          "why": "matching lines are removed from the operator crontab"
+        }
+      ]
+    },
+    {
+      "regex_id": "797d497fa21bfe01e47f9325587317b8",
+      "site": "deploy/systemd/install.sh:46:41",
+      "pattern": "$CRON_MARKER",
+      "decision": "skip",
+      "reason_code": "operator_crontab_maintenance",
+      "rationale": "The same literal CRON_MARKER is used in grep -v to remove the legacy scheduled job. This is operator configuration maintenance; its broad substring behavior is not a security-boundary property.",
+      "review_refs": [
+        {
+          "path": "deploy/systemd/install.sh",
+          "line": 42,
+          "why": "marker determines whether cron rewrite runs"
+        },
+        {
+          "path": "deploy/systemd/install.sh",
+          "line": 46,
+          "why": "filtered crontab is reloaded"
+        }
+      ]
+    },
+    {
+      "regex_id": "bc513ea6e7865790dca00db628562b6f",
+      "site": "deploy/tpot-cloud/connect-ai-stack.sh:22:63",
+      "pattern": "^hostname ",
+      "decision": "skip",
+      "reason_code": "ssh_config_hostname_extraction",
+      "rationale": "The awk pattern extracts the Hostname field from ssh -G output to display/connect to the configured T-Pot destination. The target comes from operator SSH configuration, and no authorization or sanitizer guarantee is attached to this regex.",
+      "review_refs": [
+        {
+          "path": "deploy/tpot-cloud/connect-ai-stack.sh",
+          "line": 22,
+          "why": "ssh configuration is converted into the destination host"
+        }
+      ]
+    },
+    {
+      "regex_id": "3f32311b811c8d0edbf2ac4883d76ba8",
+      "site": "deploy/tpot-cloud/install.sh:24:10",
+      "pattern": "MemTotal",
+      "decision": "skip",
+      "reason_code": "procfs_capacity_display",
+      "rationale": "The awk pattern selects MemTotal from /proc/meminfo to calculate an informational hardware warning. It is not an input validator or security control.",
+      "review_refs": [
+        {
+          "path": "deploy/tpot-cloud/install.sh",
+          "line": 24,
+          "why": "procfs value feeds the memory display"
+        },
+        {
+          "path": "deploy/tpot-cloud/install.sh",
+          "line": 27,
+          "why": "threshold only emits a warning"
+        }
+      ]
+    },
+    {
+      "regex_id": "18711019a46b1f0435105325ddc87f8d",
+      "site": "deploy/tpot-cloud/remote-deploy.sh:36:44",
+      "pattern": "^identityfile ",
+      "decision": "skip",
+      "reason_code": "ssh_config_identity_selection",
+      "rationale": "The awk pattern selects IdentityFile entries from local ssh -G output; the caller then checks whether a configured file exists. This is operator SSH configuration handling and has no regex-specific security guarantee in this call path.",
+      "review_refs": [
+        {
+          "path": "deploy/tpot-cloud/remote-deploy.sh",
+          "line": 27,
+          "why": "helper resolves identity from local SSH config"
+        },
+        {
+          "path": "deploy/tpot-cloud/remote-deploy.sh",
+          "line": 36,
+          "why": "IdentityFile output is consumed by the loop"
+        }
+      ]
+    },
+    {
+      "regex_id": "57ca68a896f9e29eaf7c4bc21610f3d9",
+      "site": "deploy/tpot-cloud/verify.sh:27:49",
+      "pattern": "elasticsearch|tpot",
+      "decision": "skip",
+      "reason_code": "container_health_display",
+      "rationale": "The ERE looks for Elasticsearch or T-Pot names in docker ps output to produce an operator health message. It is a status check and print path, not an access decision or security sanitizer.",
+      "review_refs": [
+        {
+          "path": "deploy/tpot-cloud/verify.sh",
+          "line": 27,
+          "why": "container-name check"
+        },
+        {
+          "path": "deploy/tpot-cloud/verify.sh",
+          "line": 28,
+          "why": "match only emits a health message"
+        }
+      ]
+    },
+    {
+      "regex_id": "9ce0ed89fb9b6eeb62e1fcb4547f17dd",
+      "site": "deploy/tpot-cloud/wire-llm.sh:32:5",
+      "pattern": "^${key}=",
+      "decision": "skip",
+      "reason_code": "operator_env_key_lookup",
+      "rationale": "set_kv receives four fixed internal key names at its call sites and uses grep to decide whether to append or replace an operator-edited dotenv entry. The key is not untrusted pattern input and the regex does not enforce a trust boundary.",
+      "review_refs": [
+        {
+          "path": "deploy/tpot-cloud/wire-llm.sh",
+          "line": 30,
+          "why": "helper parameter source"
+        },
+        {
+          "path": "deploy/tpot-cloud/wire-llm.sh",
+          "line": 39,
+          "why": "fixed literal key call sites"
+        }
+      ]
+    },
+    {
+      "regex_id": "2550a4a0ec08f3f41638e5819319a8c8",
+      "site": "deploy/tpot-cloud/wire-llm.sh:33:4",
+      "pattern": "^${key}=.*",
+      "decision": "skip",
+      "reason_code": "operator_env_key_rewrite",
+      "rationale": "The sed expression is built from the same fixed internal set_kv keys and updates an operator configuration file. Its value interpolation may affect edit correctness, but that is not a regex-based security-boundary guarantee at this site.",
+      "review_refs": [
+        {
+          "path": "deploy/tpot-cloud/wire-llm.sh",
+          "line": 30,
+          "why": "key and value are helper parameters"
+        },
+        {
+          "path": "deploy/tpot-cloud/wire-llm.sh",
+          "line": 39,
+          "why": "callers pass the fixed key set"
+        }
+      ]
+    },
+    {
+      "regex_id": "2f05349e8149b8b95694346059bc9586",
+      "site": "deploy/tpot-cloud/wire-llm.sh:44:0",
+      "pattern": "^BEELZEBUB_LLM_HOST|^GALAH_LLM_SERVER_URL|^BEELZEBUB_OLLAMA_MODEL|^GALAH_LLM_MODEL",
+      "decision": "skip",
+      "reason_code": "operator_env_summary_display",
+      "rationale": "This ERE selects configured LLM endpoint/model keys for display after the fixed set_kv calls. It is presentation filtering, not input validation or access control.",
+      "review_refs": [
+        {
+          "path": "deploy/tpot-cloud/wire-llm.sh",
+          "line": 39,
+          "why": "fixed configuration entries are updated"
+        },
+        {
+          "path": "deploy/tpot-cloud/wire-llm.sh",
+          "line": 44,
+          "why": "selected entries are printed for operator review"
+        }
+      ]
+    },
+    {
+      "regex_id": "79c02fa8a048e93799d5ae0b91187165",
+      "site": "scripts/sync-blocklist-to-tpot.sh:49:9",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+",
+      "decision": "skip",
+      "reason_code": "blocklist_count_only",
+      "rationale": "The IPv4-shaped ERE computes a count that is written to the sync log. File copying and remote synchronization proceed independently; the match neither validates the blocklist nor gates blocking behavior.",
+      "review_refs": [
+        {
+          "path": "scripts/sync-blocklist-to-tpot.sh",
+          "line": 49,
+          "why": "line count is computed"
+        },
+        {
+          "path": "scripts/sync-blocklist-to-tpot.sh",
+          "line": 71,
+          "why": "count is only included in a log message"
+        }
+      ]
+    },
+    {
+      "regex_id": "6436c434a10d47ceb0defe2c4f391b95",
+      "site": "scripts/sync-noise-to-tpot.sh:39:9",
+      "pattern": ",noise",
+      "decision": "skip",
+      "reason_code": "noise_count_only",
+      "rationale": "The substring ERE counts CSV rows for an operator log. The file itself is still synchronized; no row is admitted, rejected, or treated as trusted based on this count.",
+      "review_refs": [
+        {
+          "path": "scripts/sync-noise-to-tpot.sh",
+          "line": 39,
+          "why": "count-only match"
+        },
+        {
+          "path": "scripts/sync-noise-to-tpot.sh",
+          "line": 51,
+          "why": "file sync is independent of count"
+        }
+      ]
+    },
+    {
+      "regex_id": "c48371fa7d357aef5aeb3fd77c16d6a1",
+      "site": "scripts/sync-to-github.sh:76:8",
+      "pattern": "${PRIVATE_IP_PATTERN}",
+      "decision": "adopted",
+      "reason_code": "rfc1918_private_ip_publication_redaction",
+      "rationale": "The pinned script calls this helper a private-IP sanitizer, applies it to generated rules and threat-intelligence files copied from Docker volumes, then commits/pushes those artifacts. RFC 1918 gives an independent domain for private IPv4 addresses. The formal counterexample is one unredacted 10/8 token; the exact pinned helper replay confirms representative 10/8 and 172.16/12 values remain unchanged. No real generated data or repository publication was inspected.",
+      "review_refs": [
+        {
+          "path": "scripts/sync-to-github.sh",
+          "line": 26,
+          "why": "literal private-IP pattern"
+        },
+        {
+          "path": "scripts/sync-to-github.sh",
+          "line": 69,
+          "why": "sanitizer intent comment"
+        },
+        {
+          "path": "scripts/sync-to-github.sh",
+          "line": 76,
+          "why": "regex is applied by sed"
+        },
+        {
+          "path": "scripts/sync-to-github.sh",
+          "line": 83,
+          "why": "sanitizer follows copied rule artifacts"
+        },
+        {
+          "path": "scripts/sync-to-github.sh",
+          "line": 101,
+          "why": "sanitizer follows copied threat-intel artifacts"
+        },
+        {
+          "path": "scripts/sync-to-github.sh",
+          "line": 160,
+          "why": "selected generated directories are staged"
+        },
+        {
+          "path": "scripts/sync-to-github.sh",
+          "line": 186,
+          "why": "configured GitHub remote is pushed"
+        },
+        {
+          "path": "docs/setup-guide.md",
+          "line": 174,
+          "why": "documented Docker output volumes"
+        }
+      ],
+      "question_id": "LH-llm-honeypot-private-ip-rfc1918-redaction",
+      "product_question_asked": true
+    },
+    {
+      "regex_id": "93dd7f99a16081c477145a8ddea04c0a",
+      "site": "spiderfoot-toolbox/scripts/verify-egress.sh:14:24",
+      "pattern": "\"IsTor\":true",
+      "decision": "skip",
+      "reason_code": "tor_egress_diagnostic_presence",
+      "rationale": "The pattern checks a field substring in the HTTPS check.torproject.org JSON response and only prints a diagnostic. It is not used to classify user-controlled data or to select a security-sensitive route.",
+      "review_refs": [
+        {
+          "path": "spiderfoot-toolbox/scripts/verify-egress.sh",
+          "line": 14,
+          "why": "external Tor status field is checked"
+        },
+        {
+          "path": "spiderfoot-toolbox/scripts/verify-egress.sh",
+          "line": 15,
+          "why": "match only prints a status"
+        }
+      ]
+    },
+    {
+      "regex_id": "7009bd4cc8fbe8eafcb55c5646a6bce9",
+      "site": "spiderfoot-toolbox/tor-gateway/entrypoint.sh:89:108",
+      "pattern": "\"IsTor\":true",
+      "decision": "skip",
+      "reason_code": "tor_bootstrap_readiness",
+      "rationale": "The pattern checks the expected Tor-project JSON marker during startup before the firewall setup. The response comes from the HTTPS bootstrap probe; this regex is a readiness heuristic, not the egress enforcement rule itself. The exact status parser is not claimed to validate arbitrary response bodies.",
+      "review_refs": [
+        {
+          "path": "spiderfoot-toolbox/tor-gateway/entrypoint.sh",
+          "line": 82,
+          "why": "Tor bootstrap begins"
+        },
+        {
+          "path": "spiderfoot-toolbox/tor-gateway/entrypoint.sh",
+          "line": 89,
+          "why": "status marker controls readiness"
+        },
+        {
+          "path": "spiderfoot-toolbox/tor-gateway/entrypoint.sh",
+          "line": 105,
+          "why": "firewall setup follows readiness"
+        }
+      ]
+    },
+    {
+      "regex_id": "09cf0491a0aab6944eab8077de33e78c",
+      "site": "spiderfoot-toolbox/tor-gateway/rotate-mac.sh:27:50",
+      "pattern": "state UP",
+      "decision": "skip",
+      "reason_code": "interface_state_recovery",
+      "rationale": "The pattern looks for the interface state in ip link output to decide whether to attempt bringing the configured interface up. It is a recovery/status branch; the configured interface and command output are local operator/system state.",
+      "review_refs": [
+        {
+          "path": "spiderfoot-toolbox/tor-gateway/rotate-mac.sh",
+          "line": 26,
+          "why": "interface state is checked"
+        },
+        {
+          "path": "spiderfoot-toolbox/tor-gateway/rotate-mac.sh",
+          "line": 27,
+          "why": "match selects the recovery branch"
+        },
+        {
+          "path": "spiderfoot-toolbox/tor-gateway/rotate-mac.sh",
+          "line": 28,
+          "why": "state match only suppresses an ip-link repair attempt"
+        }
+      ]
+    },
+    {
+      "regex_id": "25c97ef2d8ba9885df04bf7ca0cbae41",
+      "site": "spiderfoot-toolbox/tor-gateway/rotate-tor.sh:34:10",
+      "pattern": "250 OK",
+      "decision": "adopted",
+      "reason_code": "tor_control_signal_reply_success",
+      "rationale": "The helper sends AUTHENTICATE, SIGNAL NEWNYM, and QUIT together, then searches the complete response stream for 250 OK. A successful authentication reply followed by a 551/552 signal error therefore returns success. The exact pinned function reproduced this with a local fake nc response; no live Tor instance or scan deployment was used.",
+      "review_refs": [
+        {
+          "path": "spiderfoot-toolbox/tor-gateway/rotate-tor.sh",
+          "line": 2,
+          "why": "rotation is documented as mandatory"
+        },
+        {
+          "path": "spiderfoot-toolbox/tor-gateway/rotate-tor.sh",
+          "line": 32,
+          "why": "three commands share one stream"
+        },
+        {
+          "path": "spiderfoot-toolbox/tor-gateway/rotate-tor.sh",
+          "line": 34,
+          "why": "one grep scans all replies"
+        },
+        {
+          "path": "spiderfoot-toolbox/tor-gateway/rotate-tor.sh",
+          "line": 40,
+          "why": "grep status is logged as signal success"
+        },
+        {
+          "path": "spiderfoot-toolbox/tor-gateway/entrypoint.sh",
+          "line": 67,
+          "why": "rotator liveness is enforced by watchdog"
+        }
+      ],
+      "question_id": "LH-llm-honeypot-tor-newnym-response-sequencing",
+      "product_question_asked": true
+    }
+  ]
+}

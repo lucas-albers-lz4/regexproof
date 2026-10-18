@@ -8,10 +8,12 @@ without a taint engine and without proving every extracted site.
 [`why.md`](why.md) (two machines + conversion; Heap saturates the compiler,
 not this) · [`PLAYBOOK.md`](PLAYBOOK.md) (spike first) ·
 [`DYNAMIC.md`](DYNAMIC.md) (interpolated patterns) ·
-[`AGENTS.md`](../AGENTS.md) (shapes 1–5) · first application:
+[`AGENTS.md`](../AGENTS.md) (shapes 1–6) · first application:
 [`sweep/openwrt-conversion/plan.md`](../sweep/openwrt-conversion/plan.md)
 · latest posix-shell cluster:
 [`sweep/claude-code-plugins-conversion/plan.md`](../sweep/claude-code-plugins-conversion/plan.md)
+· deterministic sampling implementation:
+[`CONVERSION-ALLOCATION.md`](CONVERSION-ALLOCATION.md)
 
 A **cluster** is a source-native unit with one trust map and one device
 engine: an OpenWrt feed, an agent-runtime tree (OpenClaw), a distro’s init
@@ -20,6 +22,11 @@ scripts. It is not “one GitHub URL” and not “every repo in the mine queue.
 This document is the conversion SOP. Admission ([`sweep/corpus-admission-gate.md`](../sweep/corpus-admission-gate.md))
 decides whether to scan. Batch decides encodable fraction. **This** decides
 whether anyone asks a real property.
+
+**Adoption policy:** [AUTONOMOUS-CONTRACTS.md](AUTONOMOUS-CONTRACTS.md), authorized
+2026-10-13, permits agent adoption with source-bound evidence and a separate
+review pass. The executable counting migration is the first implementation
+slice in [AUTONOMOUS-CORPUS-PLAN.md](AUTONOMOUS-CORPUS-PLAN.md).
 
 ## Why this exists
 
@@ -34,7 +41,7 @@ The factory already scales. Conversion does not:
 Heap’s-law / singleton novelty saturates the first two. The conversion ledger
 saturates the third. Untargeted shape-1/2 synthesis (`synth_max_sites`,
 `properties_asked_synthesized`) is compiler smoke. `agent_derived` contracts
-are schema-valid and **not product** until a human adopts them
+require source-bound evidence for product eligibility
 ([`CONTRACTS.md`](CONTRACTS.md) provenance table).
 
 Site-level taint is **out of architecture** ([`CONTRACTS.md`](CONTRACTS.md)
@@ -53,7 +60,7 @@ of serial 15/5 waves, not one lifetime cap of 10 contracts.
 **Hard caps (load-bearing):**
 
 - Rank **15** survivors for reading **from the current idiom bucket**.
-- Write **≤5** human contracts per wave (mix below).
+- Adopt **≤5** evidenced contracts per wave (mix below).
 - Wave 1 expand: **at most +5** if the stop rule fires, and only on a
   **new idiom** (not another `is_hostname`).
 - Further 15/5 waves on the **same cluster** are allowed when the close-out
@@ -145,13 +152,70 @@ the quality gate (happycow interpolated `re.search` already had `re.escape`;
 usrmanage P5 “no `=` in values” was false because audit lines embed
 `from=`). Reject if you cannot name a sink in one sentence.
 
-Write 5 contracts (`provenance=human` after that read). If an agent drafted
-the JSON, a human still adopts it or the row stays `agent_derived` smoke.
+When the scheduler has selected a registered bucket, freeze the eligible site
+population, classification evidence, conversion-ledger snapshot, and selection
+seed before asking properties. The deterministic allocator described in
+[`CONVERSION-ALLOCATION.md`](CONVERSION-ALLOCATION.md) produces the shortlist;
+its nominal shares do not override the 15-site review and ≤5-contract wave
+caps above.
+
+Adopt at most 5 contracts after that read and the separate evidence review.
+Keep agent-authored contracts at `provenance=agent_derived` with their adoption
+records. Use `human` only for actual human adoption. Per-contract owner
+approval is not required.
 
 Spike in a throwaway script first ([`PLAYBOOK.md`](PLAYBOOK.md)). Then
 register and emit the ledger join (below). Each shipped family needs at
 least one mutation guard. Run with `--require-contract --require-ground-truth`.
 TIMEOUT is not a pass.
+
+### Bind reviews and advance the queue
+
+Build source-bound evidence from the frozen review, shortlist, run context, and
+clean source checkout. The builder checks all 15 identities, source pin, and
+repository URL, then records bounded source windows and file hashes. If the
+shortlist uses a corpus-overlay path, pass its exact root with
+`--site-path-prefix`; do not infer aliases from suffixes.
+
+```sh
+python3 scripts/build-conversion-review-evidence.py \
+  --reviews "$REVIEW_NDJSON" --shortlist "$SHORTLIST_JSON" \
+  --run-context "$RUN_CONTEXT_JSON" --checkout "$PINNED_CHECKOUT" \
+  --repository-url "$REPOSITORY_URL" --pin "$SOURCE_PIN" \
+  --cohort-id "$COHORT_ID" --output "$REVIEW_EVIDENCE_JSON"
+```
+
+Add `--site-path-prefix "$OVERLAY_ROOT"` only when the shortlist paths include
+a corpus overlay that is absent from the upstream checkout path. Keep a
+candidate `unresolved` when sink or serialization evidence is insufficient;
+do not convert uncertainty into an out-of-scope skip.
+
+After the queue artifact is emitted for an active wave, use
+`scripts/conversion-queue-transition.py` instead of editing queue JSON:
+
+```sh
+python3 scripts/conversion-queue-transition.py claim \
+  --cluster "$CLUSTER" --site "$SITE" \
+  --gate-decision "$GO_DECISION_JSON" \
+  --conversion-ledger properties/generated/conversion-ledger.json
+
+python3 scripts/conversion-queue-transition.py contract \
+  --cluster "$CLUSTER" --site "$SITE" \
+  --contract "$ADOPTED_CONTRACT_JSON" --checkout "$PINNED_CHECKOUT"
+
+python3 scripts/conversion-queue-transition.py skip \
+  --cluster "$CLUSTER" --site "$SITE" \
+  --reason out_of_scope --note "$EVIDENCE_NOTE"
+```
+
+Run one transition per reviewed site. A claim snapshots the GO decision and
+conversion ledger and requires their source pin to match the queue row. A
+contract transition requires an adopted `agent_derived` contract and rechecks
+its source bytes against the pinned checkout. Skip reasons are enumerated and
+need an evidence note. All transitions validate wave ID/generation and write
+under the shared corpus-event lock; a closed or stale wave cannot accept a
+late transition. Leave unresolved rows open, so the wave cannot close until
+they receive evidence-backed dispositions.
 
 ### Gate 3 — ground-truth the cluster engine
 
@@ -176,11 +240,11 @@ close-out **is the deny-list** for the next wave — efficiency is skips,
 not speed. Seams from wave 1 (family, emit, product-engine checker, ledger
 glob) are reused; later waves are rank-slice → read → ≤5 → emit.
 
-Time each top-15 site review separately from admission review. At close-out,
-record one conversion stopwatch row per site, including skipped candidates;
-see [`metrics-operator-minutes.md`](metrics-operator-minutes.md). This is the
-reading-cost denominator for conversion yield per hour. Do not count clone,
-batch, or solver wall time as operator minutes.
+Time each top-15 site review separately from admission review. Record actual
+human stopwatch time under [`metrics-operator-minutes.md`](metrics-operator-minutes.md)
+when a person reviews; autonomous review needs its own agent-runtime/usage
+series. Include skipped candidates. Do not count clone, batch, solver, or
+agent wall time as human operator minutes.
 
 Then pick **exactly one**:
 
@@ -204,12 +268,15 @@ the wrong type). Do not climb toward coverage. Compiler novelty stop
 ## Ledger join (required seam)
 
 Harness registry properties (usrmanage P1–P6) do **not** automatically
-increment conversion-ledger `properties_asked`. Today the ledger counts:
+increment conversion-ledger `properties_asked`. The ledger joins these
+explicit sources:
 
 - scanner NDJSON product kinds on files whose **stem** matches a
   `*_batch_summary.json` (`scripts/conversion-ledger.py`
   `scanner_ndjson_files` — `<corpus>.ndjson` only)
 - contracted batch shape-5 rows
+- `*_conversion.ndjson` for harness-backed wave outcomes, through the
+  fail-closed special case below
 - `docs/conversion-upstream.jsonl` for the last mile (filed / fixed / FP)
 
 `openwrt_packages_conversion.ndjson` does **not** match
@@ -226,10 +293,11 @@ sidecars (`crs_cross_engine_findings.ndjson` stays excluded).
 
 **Count rule:** a conversion row increments `properties_asked` only when
 `product_reportable(entry)` is true **and** `synthesized` is absent/false
-**and** `contract.provenance=human`. `kind` alone is not enough —
-`classify_scanner_rows` today would count an `agent_derived` or
-contract-less product kind as asked (the #479 failure mode with a
-different flag). Mutation guards stay out of this file.
+**and** its provenance/adoption evidence passes the shared eligibility policy.
+`kind` alone is not enough. A bare `agent_derived` draft or contract-less
+product kind cannot count. The conversion-ledger uses the shared eligibility
+predicate and publishes separate human, autonomous, and machine-pair series.
+Mutation guards stay out of this file.
 
 **Required artifact:** `properties/generated/<corpus>_conversion.ndjson`
 
@@ -240,7 +308,7 @@ different flag). Mutation guards stay out of this file.
 - Each product row must conform to **both** `scanner_finding.schema.json`
   and `property_contract.schema.json`. Require `contract.site`,
   `guarantee`, `input_source`, `trust`, `declared_domain`,
-  `provenance=human`.
+  truthful provenance and, for autonomous adoption, the validated review record.
 - Scanner top-level `domain` is required (`product_reportable` reads it).
   Map harness `ground_truth` (string) → scanner `ground_truth_status`; do
   not leave `ground_truth` as a string or `sat_ground_truthed` stays 0.
@@ -251,10 +319,10 @@ different flag). Mutation guards stay out of this file.
 
 A fixture test must prove: (a) a `product_reportable` `*_conversion.ndjson`
 row increments `properties_asked` with **no** matching batch summary; (b)
-a scanner-schema-valid row with an incomplete or `agent_derived` contract
-is **rejected** and does not increment the numerator. Until this glob and
-count rule exist, a wave that only lands harness registry entries is
-invisible to the ledger.
+a scanner-schema-valid row with an incomplete contract or unadopted
+`agent_derived` draft is **rejected** and does not increment the numerator;
+(c) an evidenced autonomous adoption counts. A wave that only lands
+harness registry entries is invisible to the conversion ledger.
 
 Last mile (file / wont_file / false_positive) still goes through
 `docs/conversion-upstream.jsonl` and [`SECURITY.md`](../SECURITY.md).
@@ -287,9 +355,10 @@ not auto-open public upstream issues. Human approval before filing.
 1. One-paragraph trust map + vocab tokens.
 2. Probe (if missing) + batch (minutes). Not `WAVE_CORPORA`.
 3. Cheap reject + rank 15 with that vocab.
-4. Read 15, write 5 (2–3 shape 1, 1–2 shape 3), `provenance=human`.
-5. Record the completed review time and outcome for each top-15 candidate,
-   including every skip.
+4. Read 15, adopt at most 5 (2–3 shape 1, 1–2 shape 3 where suitable), with
+   truthful provenance and source-backed adoption evidence.
+5. Record the appropriate human or agent review time/usage and outcome for
+   each top-15 candidate, including every skip.
 6. Ground-truth on the engine that actually runs.
 7. Generate `*_conversion.ndjson` from harness run records; regenerate the
    conversion ledger (special-case glob, not a broader `*.ndjson` scan).

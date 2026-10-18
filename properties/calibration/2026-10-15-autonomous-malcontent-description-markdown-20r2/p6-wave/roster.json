@@ -1,0 +1,17 @@
+{
+  "cohort_id": "2026-09-12-calibration-20-r2",
+  "cohort_manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+  "coverage_digest": "87c46a15b9850e3d0adae586997ef4623aa721a87f542ca09268e5dfef0ae354",
+  "identities": [
+    {
+      "contract_sha256": "e3513639aae043c6e5a41b06f5d9c81773e125481a70aa5bfc9789d6d0c05fd3",
+      "pin": "ea3e83e24676a1678a9522141da29b636c9451ab",
+      "provenance": "agent_derived",
+      "question_id": "MC-malcontent-description-metadata-extra-markdown-link",
+      "repo_id": "chainguard-dev/malcontent",
+      "site": "chainguard-dev/malcontent@ea3e83e24676a1678a9522141da29b636c9451ab:pkg/report/report.go:118:threatHuntingKeywordRe",
+      "url": "https://github.com/chainguard-dev/malcontent"
+    }
+  ],
+  "schema_version": "2"
+}

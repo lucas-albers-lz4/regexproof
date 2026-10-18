@@ -1,0 +1,42 @@
+{
+  "artifact_kind": "p2-exact-pin-admission-fraction",
+  "cohort_id": "2026-09-12-calibration-20-r2",
+  "cohort_manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+  "cohort_manifest_sha256": "cfcfeaa19a37e8704adf84d8979e71a9887ced3a71030fc3572d96c1a8270a78",
+  "compile_reasons": {
+    "backref": 1,
+    "empty-class": 1,
+    "gnu-extension": 48,
+    "internal-anchor": 117,
+    "ok": 808,
+    "parse-error": 45,
+    "pattern-too-long": 1,
+    "per-alternative-anchor": 2
+  },
+  "compile_wall_seconds": 13.182,
+  "compiled_records": 1023,
+  "compiler_fingerprint": "9594d2c7576e3dfc",
+  "dialect_family": "posix-shell",
+  "encodable": 808,
+  "engine_versions": {
+    "python": "3.14.8",
+    "z3": "5.0.0"
+  },
+  "fraction": 0.7898,
+  "prior_nearby_pin_fraction": {
+    "fraction": 0.8105,
+    "source_pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+    "used_as_exact_pin_evidence": false
+  },
+  "repo_id": "mycelium0/mycelium",
+  "repository_url": "https://github.com/mycelium0/mycelium",
+  "schema_version": "1",
+  "source_inventory_path": "properties/calibration/2026-10-15-p2-source-inventory-v2/inventory.json",
+  "source_inventory_sha256": "1f5e955431a31e131da9eca3bc325e31c5123d141cc3244698e797e82df09b03",
+  "source_pin": "d4f01ba6202d50909d1977810d322259482e0b82",
+  "source_rows": 1023,
+  "source_sites_path": "properties/calibration/2026-10-15-p2-source-inventory-v2/sites.ndjson",
+  "source_sites_sha256": "381c0ca4d80c8f050b5446f378f6d95bd9b54ec83c02a48e5072a10beaabc73c",
+  "threshold_reference": 0.85,
+  "threshold_result": "below"
+}

@@ -1,0 +1,44 @@
+{
+  "case_classes": {
+    "non_nul_ascii_single_character": 127,
+    "nul_single_character": 1,
+    "path_and_normalization_seeds": 22,
+    "seeded_mixed_strings": 512
+  },
+  "cohort": {
+    "cohort_id": "2026-09-12-calibration-20-r2",
+    "manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d"
+  },
+  "contract_sha256": "0f141a8d77e3d423034438f5aaad9907e223d2c829f489ef6312022254d21d6b",
+  "differential_cases": 662,
+  "gate_id": "autoar-phase-key-component-20r2",
+  "go_version": "go1.25.7",
+  "mismatches": 0,
+  "mutation": {
+    "input": "../../outside",
+    "original_component": "outside",
+    "real_source_replay": true,
+    "weakened_component": "../../outside",
+    "weakened_escapes_phase_logs": true,
+    "weakened_pattern": "[^a-zA-Z0-9_./-]+",
+    "weakened_relative_path": "../../outside.jsonl"
+  },
+  "product_engine": "pinned Go sanitizePhaseKey and filepath.Join",
+  "question_id": "AA-autoar-phase-log-module-component-safe",
+  "repository": "https://github.com/h0tak88r/AutoAR",
+  "roster_sha256": "09f0d406a663a41c49accf1fc55d9f967799f4105cd24bd86ffb5fae46e071b1",
+  "schema_version": "1",
+  "scope": "The module-derived phase-log filename component contains no dot or path separator. The gate does not establish scanID or results-root containment, symlink safety, or uniqueness of sanitized names.",
+  "source": {
+    "caller_file": "internal/api/scan_results_api.go",
+    "caller_sha256": "1f77c4d3a709d839871db11c70c17c002c98f57bf1a8814e3ec04cb972834998",
+    "file": "internal/utils/phase_logs.go",
+    "pin": "01cd447ad3b1acfed7e0680596c2c74458a4cf06",
+    "results_root_file": "internal/utils/json_output.go",
+    "results_root_sha256": "de0032fe9862995108414b3ebc0f75a49e7d93090f2646b6ea98caa8217938e5",
+    "routes_file": "internal/api/api.go",
+    "routes_sha256": "8dc5737c711df971d84c28fb4ccc720f7c1f895b852edf7ec9525b4d72f46631",
+    "sha256": "3dec250b5802efadac77c6ba9cf9ce19f5fec09a8111674ab13a56d35e601ddc"
+  },
+  "status": "passed"
+}

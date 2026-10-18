@@ -70,13 +70,24 @@ Historical-numerator rule (#554): curated dispositions in [`conversion-upstream.
 The current funnel counts are maintained in the generated
 [conversion ledger](../properties/generated/conversion-ledger.md); avoid
 copying point-in-time totals here. The ledger keeps synthesized rows separate
-from human product properties and rule-diff pilots separate from the
-conversion-wave denominator. Scanner classification rows are not security
-bugs. SAT + ground-truth is a candidate finding, not the same as a filed or
-accepted issue. `docs/verified-findings.jsonl` remains the toolkit-trap log;
-it is not the product numerator.
+from contract-backed human, autonomous, and machine-pair conversions, and
+rule-diff pilots separate from the conversion-wave denominator. Scanner
+classification rows are not security bugs. SAT + ground-truth is a candidate
+finding, not the same as a filed or accepted issue. `docs/verified-findings.jsonl`
+remains the toolkit-trap log; it is not the product numerator.
 
-The next measurement that speaks to the end result is conversion yield on already-admitted security-boundary corpora, not another mine flush. The SOP for that measurement is **conversion waves** on a frozen cluster (rank 15, write ≤5 human contracts **per idiom slice**, ground-truth the device engine, emit `*_conversion.ndjson` so the ledger moves): [`CLUSTER-CONVERSION.md`](CLUSTER-CONVERSION.md). First application: [`sweep/openwrt-conversion/plan.md`](../sweep/openwrt-conversion/plan.md).
+The next measurement that speaks to the end result is conversion yield on already-admitted security-boundary corpora, not another mine flush. The SOP for that measurement is **conversion waves** on a frozen cluster (rank 15, adopt ≤5 evidenced contracts **per idiom slice**, ground-truth the device engine, emit `*_conversion.ndjson` so the ledger moves): [`CLUSTER-CONVERSION.md`](CLUSTER-CONVERSION.md). First application: [`sweep/openwrt-conversion/plan.md`](../sweep/openwrt-conversion/plan.md).
+
+The owner authorized autonomous contract adoption on 2026-10-13. See
+[`AUTONOMOUS-CONTRACTS.md`](AUTONOMOUS-CONTRACTS.md) and the
+[`parent plan`](AUTONOMOUS-CORPUS-PLAN.md). Useful source-backed proofs and
+regression gates are the primary measurable output; real bugs, independent
+confirmation, and fixes are downstream outcomes. The first implementation
+slice now enforces source-bound adoption across the harness, queue, conversion
+ledger, saturation report, and v3 checkpoint. The Forge helper-image contract
+is the first autonomous source-backed product row; its results are a vertical
+integration case, not a 50-question efficacy checkpoint. More agent-derived
+smoke is not an efficacy result.
 
 ## Progress — what has actually been accomplished
 

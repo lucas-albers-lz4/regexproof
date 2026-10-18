@@ -1,0 +1,1864 @@
+{
+  "author": "Codex P2 inventory triage pass",
+  "limitations": [
+    "Coverage is complete for the 115 Tracecat rows in frozen inventory v5, not a claim that every regex in all unselected repository files was extracted.",
+    "The second pass used the same model/agent as the first inventory triage. It is not independent third-party or human annotation.",
+    "Unresolved rows do not count as adopted contracts or product questions; they require a separate source-backed contract and replay.",
+    "The three adopted rows repeat previously adopted Tracecat contracts. This full review adds no unique product question, proof, gate, bug confirmation, or fix.",
+    "No new security finding or downstream impact is claimed by this review."
+  ],
+  "observed_at": "2026-10-16",
+  "reviewer": "Codex source-review pass (pending)",
+  "reviews": [
+    {
+      "decision": "skip",
+      "pattern": "^act-([0-9a-fA-F]{32})$",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage classified the test, benchmark, evaluation, or migration location as non-runtime product code.",
+      "reason_code": "inventory_scope_triage",
+      "regex_id": "d6af22659a465e2492130366e2e5dccb",
+      "review_refs": [
+        {
+          "line": 26,
+          "path": "alembic/versions/9079ae19374b_add_action_graph_fields.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "alembic/versions/9079ae19374b_add_action_graph_fields.py:26:28"
+    },
+    {
+      "decision": "skip",
+      "pattern": "[^\\w\\s-]",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage classified the test, benchmark, evaluation, or migration location as non-runtime product code.",
+      "reason_code": "inventory_scope_triage",
+      "regex_id": "1e89772e848d63c7599740e33da5d438",
+      "review_refs": [
+        {
+          "line": 48,
+          "path": "alembic/versions/f4695a7728a8_custom_mcp_providers.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "alembic/versions/f4695a7728a8_custom_mcp_providers.py:48:11"
+    },
+    {
+      "decision": "skip",
+      "pattern": "[-\\s]+",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage classified the test, benchmark, evaluation, or migration location as non-runtime product code.",
+      "reason_code": "inventory_scope_triage",
+      "regex_id": "38dcd6426f2d8f8517ce09dadb1bf50a",
+      "review_refs": [
+        {
+          "line": 49,
+          "path": "alembic/versions/f4695a7728a8_custom_mcp_providers.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "alembic/versions/f4695a7728a8_custom_mcp_providers.py:49:11"
+    },
+    {
+      "decision": "skip",
+      "pattern": "^\\s*API:.*\\(internal: (\\d+)\\)$",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage classified the test, benchmark, evaluation, or migration location as non-runtime product code.",
+      "reason_code": "inventory_scope_triage",
+      "regex_id": "6ee0b5e02b650bbd683825b5746aa4ae",
+      "review_refs": [
+        {
+          "line": 3720,
+          "path": "packages/tracecat-benchmark/tests/test_tooling.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "packages/tracecat-benchmark/tests/test_tooling.py:3720:16"
+    },
+    {
+      "decision": "skip",
+      "pattern": "^(?P<name>[a-zA-Z_:][a-zA-Z0-9_:]*)(?:\\{(?P<labels>.*)\\})?\\s+(?P<value>[+-]?(?:\\d+(?:\\.\\d*)?|\\.\\d+)(?:[eE][+-]?\\d+)?|[+-]Inf|NaN)(?:\\s+\\d+)?$",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage classified the test, benchmark, evaluation, or migration location as non-runtime product code.",
+      "reason_code": "inventory_scope_triage",
+      "regex_id": "058606107c010dedc3a5909c1dd0f7aa",
+      "review_refs": [
+        {
+          "line": 60,
+          "path": "packages/tracecat-benchmark/tracecat_benchmark/activity_metrics.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "packages/tracecat-benchmark/tracecat_benchmark/activity_metrics.py:60:30"
+    },
+    {
+      "decision": "skip",
+      "pattern": "(?P<name>[a-zA-Z_][a-zA-Z0-9_]*)=\"(?P<value>(?:\\\\.|[^\"\\\\])*)\"",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage classified the test, benchmark, evaluation, or migration location as non-runtime product code.",
+      "reason_code": "inventory_scope_triage",
+      "regex_id": "f599fa21aa074eb55ec5bdfe9cb21e0d",
+      "review_refs": [
+        {
+          "line": 67,
+          "path": "packages/tracecat-benchmark/tracecat_benchmark/activity_metrics.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "packages/tracecat-benchmark/tracecat_benchmark/activity_metrics.py:67:29"
+    },
+    {
+      "decision": "skip",
+      "pattern": "^[A-Za-z_][A-Za-z0-9_]*$",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage classified the test, benchmark, evaluation, or migration location as non-runtime product code.",
+      "reason_code": "inventory_scope_triage",
+      "regex_id": "cc3c1553e595354479110a07f3cb251b",
+      "review_refs": [
+        {
+          "line": 125,
+          "path": "packages/tracecat-benchmark/tracecat_benchmark/collector.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "packages/tracecat-benchmark/tracecat_benchmark/collector.py:125:23"
+    },
+    {
+      "decision": "skip",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]*$",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage classified the test, benchmark, evaluation, or migration location as non-runtime product code.",
+      "reason_code": "inventory_scope_triage",
+      "regex_id": "85140811c563a5b7fc99770457b9bb9c",
+      "review_refs": [
+        {
+          "line": 126,
+          "path": "packages/tracecat-benchmark/tracecat_benchmark/collector.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "packages/tracecat-benchmark/tracecat_benchmark/collector.py:126:28"
+    },
+    {
+      "decision": "skip",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,63}$",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage classified the test, benchmark, evaluation, or migration location as non-runtime product code.",
+      "reason_code": "inventory_scope_triage",
+      "regex_id": "a817235b174a5f579c3584bf9a8ae57e",
+      "review_refs": [
+        {
+          "line": 127,
+          "path": "packages/tracecat-benchmark/tracecat_benchmark/collector.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "packages/tracecat-benchmark/tracecat_benchmark/collector.py:127:20"
+    },
+    {
+      "decision": "skip",
+      "pattern": "^\\s*([0-9]+(?:\\.[0-9]+)?)\\s*([kKMGTPE]?i?B)\\s*$",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage classified the test, benchmark, evaluation, or migration location as non-runtime product code.",
+      "reason_code": "inventory_scope_triage",
+      "regex_id": "ba443a78cec1922928eae15f9eed0830",
+      "review_refs": [
+        {
+          "line": 128,
+          "path": "packages/tracecat-benchmark/tracecat_benchmark/collector.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "packages/tracecat-benchmark/tracecat_benchmark/collector.py:128:17"
+    },
+    {
+      "decision": "skip",
+      "pattern": "remaining connection slots are reserved|too many clients already",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage classified the test, benchmark, evaluation, or migration location as non-runtime product code.",
+      "reason_code": "inventory_scope_triage",
+      "regex_id": "572907f9cde0f54913656645a5b245b1",
+      "review_refs": [
+        {
+          "line": 179,
+          "path": "packages/tracecat-benchmark/tracecat_benchmark/collector.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "packages/tracecat-benchmark/tracecat_benchmark/collector.py:179:38"
+    },
+    {
+      "decision": "skip",
+      "pattern": "queuepool limit|connection pool.{0,80}(?:timeout|timed out)|pool timeout",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage classified the test, benchmark, evaluation, or migration location as non-runtime product code.",
+      "reason_code": "inventory_scope_triage",
+      "regex_id": "0add24de3ce64b61df3be533699736a0",
+      "review_refs": [
+        {
+          "line": 183,
+          "path": "packages/tracecat-benchmark/tracecat_benchmark/collector.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "packages/tracecat-benchmark/tracecat_benchmark/collector.py:183:34"
+    },
+    {
+      "decision": "skip",
+      "pattern": "canceling statement due to statement timeout",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage classified the test, benchmark, evaluation, or migration location as non-runtime product code.",
+      "reason_code": "inventory_scope_triage",
+      "regex_id": "4a96be9adc4957b86011eca2f49955b4",
+      "review_refs": [
+        {
+          "line": 188,
+          "path": "packages/tracecat-benchmark/tracecat_benchmark/collector.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "packages/tracecat-benchmark/tracecat_benchmark/collector.py:188:30"
+    },
+    {
+      "decision": "skip",
+      "pattern": "canceling statement due to lock timeout",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage classified the test, benchmark, evaluation, or migration location as non-runtime product code.",
+      "reason_code": "inventory_scope_triage",
+      "regex_id": "067204f754c6c896fff914b33f883156",
+      "review_refs": [
+        {
+          "line": 192,
+          "path": "packages/tracecat-benchmark/tracecat_benchmark/collector.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "packages/tracecat-benchmark/tracecat_benchmark/collector.py:192:25"
+    },
+    {
+      "decision": "skip",
+      "pattern": "deadlock detected",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage classified the test, benchmark, evaluation, or migration location as non-runtime product code.",
+      "reason_code": "inventory_scope_triage",
+      "regex_id": "6f378c5367497259b2a01c891c64a008",
+      "review_refs": [
+        {
+          "line": 196,
+          "path": "packages/tracecat-benchmark/tracecat_benchmark/collector.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "packages/tracecat-benchmark/tracecat_benchmark/collector.py:196:21"
+    },
+    {
+      "decision": "skip",
+      "pattern": "could not serialize access",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage classified the test, benchmark, evaluation, or migration location as non-runtime product code.",
+      "reason_code": "inventory_scope_triage",
+      "regex_id": "946efff14d12bbbaa305f4a83472e790",
+      "review_refs": [
+        {
+          "line": 197,
+          "path": "packages/tracecat-benchmark/tracecat_benchmark/collector.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "packages/tracecat-benchmark/tracecat_benchmark/collector.py:197:34"
+    },
+    {
+      "decision": "skip",
+      "pattern": "connection refused",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage classified the test, benchmark, evaluation, or migration location as non-runtime product code.",
+      "reason_code": "inventory_scope_triage",
+      "regex_id": "4fc0a0130ad09d68d64f85dd35807ac0",
+      "review_refs": [
+        {
+          "line": 200,
+          "path": "packages/tracecat-benchmark/tracecat_benchmark/collector.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "packages/tracecat-benchmark/tracecat_benchmark/collector.py:200:31"
+    },
+    {
+      "decision": "skip",
+      "pattern": "connectionreseterror|connection reset",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage classified the test, benchmark, evaluation, or migration location as non-runtime product code.",
+      "reason_code": "inventory_scope_triage",
+      "regex_id": "c40b3481ab2a75d8435dc80cd129b3c5",
+      "review_refs": [
+        {
+          "line": 201,
+          "path": "packages/tracecat-benchmark/tracecat_benchmark/collector.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "packages/tracecat-benchmark/tracecat_benchmark/collector.py:201:29"
+    },
+    {
+      "decision": "skip",
+      "pattern": "timeouterror|timed out",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage classified the test, benchmark, evaluation, or migration location as non-runtime product code.",
+      "reason_code": "inventory_scope_triage",
+      "regex_id": "f7c5d061965630ea4dc5c60f97110763",
+      "review_refs": [
+        {
+          "line": 204,
+          "path": "packages/tracecat-benchmark/tracecat_benchmark/collector.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "packages/tracecat-benchmark/tracecat_benchmark/collector.py:204:20"
+    },
+    {
+      "decision": "skip",
+      "pattern": "HTTP/\\d(?:\\.\\d)?[\" ]+5\\d\\d\\b|[\"']?status(?:_code)?[\"']?\\s*[:=]\\s*5\\d\\d\\b",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage classified the test, benchmark, evaluation, or migration location as non-runtime product code.",
+      "reason_code": "inventory_scope_triage",
+      "regex_id": "810ac7862a687674ddfbbf2bf0c4098d",
+      "review_refs": [
+        {
+          "line": 205,
+          "path": "packages/tracecat-benchmark/tracecat_benchmark/collector.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "packages/tracecat-benchmark/tracecat_benchmark/collector.py:205:21"
+    },
+    {
+      "decision": "skip",
+      "pattern": "The system has (\\d+) ",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage classified the test, benchmark, evaluation, or migration location as non-runtime product code.",
+      "reason_code": "inventory_scope_triage",
+      "regex_id": "4e52dd9b2d6675851c2bbb42d6cc1080",
+      "review_refs": [
+        {
+          "line": 661,
+          "path": "packages/tracecat-benchmark/tracecat_benchmark/collector.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "packages/tracecat-benchmark/tracecat_benchmark/collector.py:661:22"
+    },
+    {
+      "decision": "skip",
+      "pattern": "System-wide memory free percentage: (\\d+)%",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage classified the test, benchmark, evaluation, or migration location as non-runtime product code.",
+      "reason_code": "inventory_scope_triage",
+      "regex_id": "83922dddac51ded5f915af09e672c92c",
+      "review_refs": [
+        {
+          "line": 662,
+          "path": "packages/tracecat-benchmark/tracecat_benchmark/collector.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "packages/tracecat-benchmark/tracecat_benchmark/collector.py:662:21"
+    },
+    {
+      "decision": "skip",
+      "pattern": "_\\d+$",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage classified the test, benchmark, evaluation, or migration location as non-runtime product code.",
+      "reason_code": "inventory_scope_triage",
+      "regex_id": "2602c6209077268636ed1b7e77045e37",
+      "review_refs": [
+        {
+          "line": 696,
+          "path": "packages/tracecat-benchmark/tracecat_benchmark/collector.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "packages/tracecat-benchmark/tracecat_benchmark/collector.py:696:22"
+    },
+    {
+      "decision": "skip",
+      "pattern": "[a-f0-9]{64}",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage classified the test, benchmark, evaluation, or migration location as non-runtime product code.",
+      "reason_code": "inventory_scope_triage",
+      "regex_id": "7c4bd427d939d2cbe4847d4dbbc2235a",
+      "review_refs": [
+        {
+          "line": 1651,
+          "path": "packages/tracecat-benchmark/tracecat_benchmark/collector.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "packages/tracecat-benchmark/tracecat_benchmark/collector.py:1651:19"
+    },
+    {
+      "decision": "skip",
+      "pattern": "^\\s*API:\\s+(\\S+)(?:\\s+\\(internal:.*\\))?\\s*$",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage classified the test, benchmark, evaluation, or migration location as non-runtime product code.",
+      "reason_code": "inventory_scope_triage",
+      "regex_id": "4c163e3e6a882e961fe8d34d28d2f430",
+      "review_refs": [
+        {
+          "line": 1874,
+          "path": "packages/tracecat-benchmark/tracecat_benchmark/collector.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "packages/tracecat-benchmark/tracecat_benchmark/collector.py:1874:20"
+    },
+    {
+      "decision": "skip",
+      "pattern": "^\\s*(Worker metrics|Executor metrics|API DB pool metrics|Worker DB pool metrics|Executor DB pool metrics|PgDog metrics):\\s+(\\S+)\\s*$",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage classified the test, benchmark, evaluation, or migration location as non-runtime product code.",
+      "reason_code": "inventory_scope_triage",
+      "regex_id": "2d48b8a3e60fd808559052a38095a404",
+      "review_refs": [
+        {
+          "line": 1878,
+          "path": "packages/tracecat-benchmark/tracecat_benchmark/collector.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "packages/tracecat-benchmark/tracecat_benchmark/collector.py:1878:24"
+    },
+    {
+      "decision": "skip",
+      "pattern": "^\\s*(PostgreSQL|Temporal):\\s+(\\S+):(\\d+)\\s*$",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage classified the test, benchmark, evaluation, or migration location as non-runtime product code.",
+      "reason_code": "inventory_scope_triage",
+      "regex_id": "58292189c02ce2d23f61f28c5cd159a0",
+      "review_refs": [
+        {
+          "line": 1887,
+          "path": "packages/tracecat-benchmark/tracecat_benchmark/collector.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "packages/tracecat-benchmark/tracecat_benchmark/collector.py:1887:16"
+    },
+    {
+      "decision": "skip",
+      "pattern": "^TRACECAT__LOADTEST_[A-Z0-9_]+$",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage classified the test, benchmark, evaluation, or migration location as non-runtime product code.",
+      "reason_code": "inventory_scope_triage",
+      "regex_id": "63b90a0a5e79e3fca4043e884b2ca0ed",
+      "review_refs": [
+        {
+          "line": 73,
+          "path": "packages/tracecat-benchmark/tracecat_benchmark/matrix.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "packages/tracecat-benchmark/tracecat_benchmark/matrix.py:73:30"
+    },
+    {
+      "decision": "skip",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,63}$",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage classified the test, benchmark, evaluation, or migration location as non-runtime product code.",
+      "reason_code": "inventory_scope_triage",
+      "regex_id": "53555ffcabe5d067c3934c028152016a",
+      "review_refs": [
+        {
+          "line": 74,
+          "path": "packages/tracecat-benchmark/tracecat_benchmark/matrix.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "packages/tracecat-benchmark/tracecat_benchmark/matrix.py:74:20"
+    },
+    {
+      "decision": "skip",
+      "pattern": "^Auto-selected new cluster ([0-9]+)\\b",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage classified the test, benchmark, evaluation, or migration location as non-runtime product code.",
+      "reason_code": "inventory_scope_triage",
+      "regex_id": "fe8d7f90ab0bd161cb5f5e5377bb260c",
+      "review_refs": [
+        {
+          "line": 75,
+          "path": "packages/tracecat-benchmark/tracecat_benchmark/matrix.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "packages/tracecat-benchmark/tracecat_benchmark/matrix.py:75:27"
+    },
+    {
+      "decision": "skip",
+      "pattern": "^\\s*(API|PostgreSQL|Temporal|Worker metrics|Executor metrics|API DB pool metrics|Worker DB pool metrics|Executor DB pool metrics|PgDog metrics):\\s+(\\S+)",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage classified the test, benchmark, evaluation, or migration location as non-runtime product code.",
+      "reason_code": "inventory_scope_triage",
+      "regex_id": "b2ca698dae3b09d8ea6735634dfc7d0d",
+      "review_refs": [
+        {
+          "line": 927,
+          "path": "packages/tracecat-benchmark/tracecat_benchmark/matrix.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "packages/tracecat-benchmark/tracecat_benchmark/matrix.py:927:16"
+    },
+    {
+      "decision": "skip",
+      "pattern": "^[A-Za-z_][A-Za-z0-9_]*$",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage classified the test, benchmark, evaluation, or migration location as non-runtime product code.",
+      "reason_code": "inventory_scope_triage",
+      "regex_id": "27329f415b31755bca99e2848b758892",
+      "review_refs": [
+        {
+          "line": 38,
+          "path": "packages/tracecat-benchmark/tracecat_benchmark/provision_monitor.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "packages/tracecat-benchmark/tracecat_benchmark/provision_monitor.py:38:23"
+    },
+    {
+      "decision": "skip",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,63}$",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage classified the test, benchmark, evaluation, or migration location as non-runtime product code.",
+      "reason_code": "inventory_scope_triage",
+      "regex_id": "d0f19971ac75a7cee9d053f49a247735",
+      "review_refs": [
+        {
+          "line": 106,
+          "path": "packages/tracecat-benchmark/tracecat_benchmark/runner.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "packages/tracecat-benchmark/tracecat_benchmark/runner.py:106:20"
+    },
+    {
+      "decision": "skip",
+      "pattern": "sha256:[0-9a-f]{64}",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage classified the test, benchmark, evaluation, or migration location as non-runtime product code.",
+      "reason_code": "inventory_scope_triage",
+      "regex_id": "62b1303a325feaed8b65e66138e02b4f",
+      "review_refs": [
+        {
+          "line": 45,
+          "path": "packages/tracecat-benchmark/tracecat_benchmark/viewer.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "packages/tracecat-benchmark/tracecat_benchmark/viewer.py:45:19"
+    },
+    {
+      "decision": "skip",
+      "pattern": "matrix-[0-9]{8}T[0-9]{6}Z-[0-9a-f]+",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage classified the test, benchmark, evaluation, or migration location as non-runtime product code.",
+      "reason_code": "inventory_scope_triage",
+      "regex_id": "d671dae0f9f678ee14e1cf6bb81e8959",
+      "review_refs": [
+        {
+          "line": 46,
+          "path": "packages/tracecat-benchmark/tracecat_benchmark/viewer.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "packages/tracecat-benchmark/tracecat_benchmark/viewer.py:46:23"
+    },
+    {
+      "decision": "skip",
+      "pattern": "/api/runs/(?P<run_id>[^/]+)",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage classified the test, benchmark, evaluation, or migration location as non-runtime product code.",
+      "reason_code": "inventory_scope_triage",
+      "regex_id": "21adcf20d27bab85e715e83155b6b2f6",
+      "review_refs": [
+        {
+          "line": 47,
+          "path": "packages/tracecat-benchmark/tracecat_benchmark/viewer.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "packages/tracecat-benchmark/tracecat_benchmark/viewer.py:47:26"
+    },
+    {
+      "decision": "skip",
+      "pattern": "/api/runs/(?P<run_id>[^/]+)/timeseries",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage classified the test, benchmark, evaluation, or migration location as non-runtime product code.",
+      "reason_code": "inventory_scope_triage",
+      "regex_id": "bd8de37718829d5ce64666f2e7bbf967",
+      "review_refs": [
+        {
+          "line": 48,
+          "path": "packages/tracecat-benchmark/tracecat_benchmark/viewer.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "packages/tracecat-benchmark/tracecat_benchmark/viewer.py:48:30"
+    },
+    {
+      "decision": "skip",
+      "pattern": "/api/runs/(?P<run_id>[^/]+)/compose",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage classified the test, benchmark, evaluation, or migration location as non-runtime product code.",
+      "reason_code": "inventory_scope_triage",
+      "regex_id": "46520b743670a848edef32d8ec860474",
+      "review_refs": [
+        {
+          "line": 49,
+          "path": "packages/tracecat-benchmark/tracecat_benchmark/viewer.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "packages/tracecat-benchmark/tracecat_benchmark/viewer.py:49:27"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "[^A-Za-z0-9_.-]+",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage only; source behavior, callers, trust boundary, and sink had not yet been reviewed.",
+      "reason_code": "needs_source_context",
+      "regex_id": "8522721f7d7838b411cd3538b15861ee",
+      "review_refs": [
+        {
+          "line": 31,
+          "path": "packages/tracecat-ee/tracecat_ee/agent/artifacts/mount_only_provider.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "packages/tracecat-ee/tracecat_ee/agent/artifacts/mount_only_provider.py:31:24"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage only; source behavior, callers, trust boundary, and sink had not yet been reviewed.",
+      "reason_code": "needs_source_context",
+      "regex_id": "843889f1b167c77c581faf65c991b8af",
+      "review_refs": [
+        {
+          "line": 18,
+          "path": "packages/tracecat-registry/tracecat_registry/core/email.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "packages/tracecat-registry/tracecat_registry/core/email.py:18:21"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "^[a-z0-9][a-z0-9.-]*[a-z0-9]$",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage only; source behavior, callers, trust boundary, and sink had not yet been reviewed.",
+      "reason_code": "needs_source_context",
+      "regex_id": "4a4ed4cadf4aadee181fd919acc5b9b0",
+      "review_refs": [
+        {
+          "line": 29,
+          "path": "packages/tracecat-registry/tracecat_registry/integrations/amazon_s3.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "packages/tracecat-registry/tracecat_registry/integrations/amazon_s3.py:29:15"
+    },
+    {
+      "decision": "skip",
+      "pattern": "\\{.*\\}",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage classified the test, benchmark, evaluation, or migration location as non-runtime product code.",
+      "reason_code": "inventory_scope_triage",
+      "regex_id": "c6db6214befdb202afb096a21750c7f5",
+      "review_refs": [
+        {
+          "line": 239,
+          "path": "scripts/evals/tracecat_authoring/run_local.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "scripts/evals/tracecat_authoring/run_local.py:239:16"
+    },
+    {
+      "decision": "skip",
+      "pattern": "\"(cmd|command)\"\\s*:",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage classified the test, benchmark, evaluation, or migration location as non-runtime product code.",
+      "reason_code": "inventory_scope_triage",
+      "regex_id": "10b028c2b5f860c365ad343536678e0c",
+      "review_refs": [
+        {
+          "line": 1018,
+          "path": "scripts/evals/tracecat_authoring/run_local.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "scripts/evals/tracecat_authoring/run_local.py:1018:11"
+    },
+    {
+      "decision": "skip",
+      "pattern": "\"name\"\\s*:\\s*\"(Bash|Read|Grep|Glob|LS|exec_command)\"",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage classified the test, benchmark, evaluation, or migration location as non-runtime product code.",
+      "reason_code": "inventory_scope_triage",
+      "regex_id": "ccf0a938719f1a3adc37b5d749227118",
+      "review_refs": [
+        {
+          "line": 1018,
+          "path": "scripts/evals/tracecat_authoring/run_local.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "scripts/evals/tracecat_authoring/run_local.py:1018:54"
+    },
+    {
+      "decision": "skip",
+      "pattern": "(?<![A-Za-z0-9_.])(?:core|ai|tools)\\.[A-Za-z0-9_<>{}.*-]+(?:\\.[A-Za-z0-9_<>{}.*-]+)*",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage classified the test, benchmark, evaluation, or migration location as non-runtime product code.",
+      "reason_code": "inventory_scope_triage",
+      "regex_id": "b50631089d190c222469341f9b7a4436",
+      "review_refs": [
+        {
+          "line": 1895,
+          "path": "scripts/evals/tracecat_authoring/run_local.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "scripts/evals/tracecat_authoring/run_local.py:1895:14"
+    },
+    {
+      "decision": "skip",
+      "pattern": "## Registered Core and AI Actions\\n(?P<body>.*?)(?:\\n## |\\Z)",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage classified the test, benchmark, evaluation, or migration location as non-runtime product code.",
+      "reason_code": "inventory_scope_triage",
+      "regex_id": "1053ee267ec4cb5caad406713507f0a0",
+      "review_refs": [
+        {
+          "line": 1926,
+          "path": "scripts/evals/tracecat_authoring/run_local.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "scripts/evals/tracecat_authoring/run_local.py:1926:12"
+    },
+    {
+      "decision": "skip",
+      "pattern": "\\bupsert\\s*[:=]\\s*[Tt]rue\\b",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage classified the test, benchmark, evaluation, or migration location as non-runtime product code.",
+      "reason_code": "inventory_scope_triage",
+      "regex_id": "31c066c20d5a2d3fedf76d534bbaf0ee",
+      "review_refs": [
+        {
+          "line": 2042,
+          "path": "scripts/evals/tracecat_authoring/run_local.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "scripts/evals/tracecat_authoring/run_local.py:2042:21"
+    },
+    {
+      "decision": "skip",
+      "pattern": "(?i)(unique index|create_column_index|create_column_index|unique\\s*[:=]\\s*true)",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage classified the test, benchmark, evaluation, or migration location as non-runtime product code.",
+      "reason_code": "inventory_scope_triage",
+      "regex_id": "fcf65c5257476f30153c7a29cd1ffc58",
+      "review_refs": [
+        {
+          "line": 2043,
+          "path": "scripts/evals/tracecat_authoring/run_local.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "scripts/evals/tracecat_authoring/run_local.py:2043:27"
+    },
+    {
+      "decision": "skip",
+      "pattern": "(?i)(sk-[a-z0-9]{20,}|ghp_[a-z0-9]{20,}|xox[baprs]-[a-z0-9-]{20,})",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage classified the test, benchmark, evaluation, or migration location as non-runtime product code.",
+      "reason_code": "inventory_scope_triage",
+      "regex_id": "20c0557b85ce55336542b801539b37e4",
+      "review_refs": [
+        {
+          "line": 2092,
+          "path": "scripts/evals/tracecat_authoring/run_local.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "scripts/evals/tracecat_authoring/run_local.py:2092:21"
+    },
+    {
+      "decision": "skip",
+      "pattern": "\\b[A-Z0-9._%+-]+@([A-Z0-9.-]+\\.[A-Z]{2,})\\b",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage classified the test, benchmark, evaluation, or migration location as non-runtime product code.",
+      "reason_code": "inventory_scope_triage",
+      "regex_id": "8be6cbf878cdaae35c8626e3683838cf",
+      "review_refs": [
+        {
+          "line": 2095,
+          "path": "scripts/evals/tracecat_authoring/run_local.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "scripts/evals/tracecat_authoring/run_local.py:2095:20"
+    },
+    {
+      "decision": "skip",
+      "pattern": "^\\s*MCP:\\s+(\\S+)\\s*$",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage classified the test, benchmark, evaluation, or migration location as non-runtime product code.",
+      "reason_code": "inventory_scope_triage",
+      "regex_id": "f0b77031308ffcebfa6374e7d9395e59",
+      "review_refs": [
+        {
+          "line": 2407,
+          "path": "scripts/evals/tracecat_authoring/run_local.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "scripts/evals/tracecat_authoring/run_local.py:2407:12"
+    },
+    {
+      "decision": "skip",
+      "pattern": "^[a-f0-9]+$",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage classified the test, benchmark, evaluation, or migration location as non-runtime product code.",
+      "reason_code": "inventory_scope_triage",
+      "regex_id": "8a7d9d373c8a775dfa4a522b13bd413a",
+      "review_refs": [
+        {
+          "line": 810,
+          "path": "tests/registry/test_core_python.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "tests/registry/test_core_python.py:810:15"
+    },
+    {
+      "decision": "skip",
+      "pattern": "\\n*-{20,}\\n.*",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage classified the test, benchmark, evaluation, or migration location as non-runtime product code.",
+      "reason_code": "inventory_scope_triage",
+      "regex_id": "5bc4d1deb7c331ba63ede088c815c9a7",
+      "review_refs": [
+        {
+          "line": 337,
+          "path": "tests/temporal/test_workflows.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "tests/temporal/test_workflows.py:337:10"
+    },
+    {
+      "decision": "skip",
+      "pattern": "\\r\\n",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage classified the test, benchmark, evaluation, or migration location as non-runtime product code.",
+      "reason_code": "inventory_scope_triage",
+      "regex_id": "c3484218ad8e911621b603e1524ec496",
+      "review_refs": [
+        {
+          "line": 339,
+          "path": "tests/temporal/test_workflows.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "tests/temporal/test_workflows.py:339:10"
+    },
+    {
+      "decision": "skip",
+      "pattern": "\\n{2,}",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage classified the test, benchmark, evaluation, or migration location as non-runtime product code.",
+      "reason_code": "inventory_scope_triage",
+      "regex_id": "4692ea237dd5ce15eac78c3d8c8fb649",
+      "review_refs": [
+        {
+          "line": 340,
+          "path": "tests/temporal/test_workflows.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "tests/temporal/test_workflows.py:340:10"
+    },
+    {
+      "decision": "skip",
+      "pattern": "(http://[^/:]+):80(/|$)",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage classified the test, benchmark, evaluation, or migration location as non-runtime product code.",
+      "reason_code": "inventory_scope_triage",
+      "regex_id": "f091602da37ebaeac0252c3fbc956f05",
+      "review_refs": [
+        {
+          "line": 347,
+          "path": "tests/temporal/test_workflows.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "tests/temporal/test_workflows.py:347:10"
+    },
+    {
+      "decision": "skip",
+      "pattern": "(https://[^/:]+):443(/|$)",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage classified the test, benchmark, evaluation, or migration location as non-runtime product code.",
+      "reason_code": "inventory_scope_triage",
+      "regex_id": "de2be162feeb4103f9f0ca7e411fee37",
+      "review_refs": [
+        {
+          "line": 348,
+          "path": "tests/temporal/test_workflows.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "tests/temporal/test_workflows.py:348:10"
+    },
+    {
+      "decision": "skip",
+      "pattern": "s\\.items\\[(\\d+)\\]",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage classified the test, benchmark, evaluation, or migration location as non-runtime product code.",
+      "reason_code": "inventory_scope_triage",
+      "regex_id": "ac24e854c238aebc66c4a3f3b7d0c0f7",
+      "review_refs": [
+        {
+          "line": 291,
+          "path": "tests/unit/test_storage_collection.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "tests/unit/test_storage_collection.py:291:20"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "data:(?P<media_type>[^;]+);base64,(?P<data>.+)",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage only; source behavior, callers, trust boundary, and sink had not yet been reviewed.",
+      "reason_code": "needs_source_context",
+      "regex_id": "03e17ccd4c14f89fa23bf1e1d050ce6c",
+      "review_refs": [
+        {
+          "line": 476,
+          "path": "tracecat/agent/adapter/vercel.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "tracecat/agent/adapter/vercel.py:476:21"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "<@[^>]+>",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage only; source behavior, callers, trust boundary, and sink had not yet been reviewed.",
+      "reason_code": "needs_source_context",
+      "regex_id": "5d6d4978dbcd0d4b3c0a6bf16e6c1ad3",
+      "review_refs": [
+        {
+          "line": 42,
+          "path": "tracecat/agent/channels/handlers/slack.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "tracecat/agent/channels/handlers/slack.py:42:24"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "[\\ud800-\\udfff]",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage only; source behavior, callers, trust boundary, and sink had not yet been reviewed.",
+      "reason_code": "needs_source_context",
+      "regex_id": "d6819e049226ca9970bdae3327831b20",
+      "review_refs": [
+        {
+          "line": 38,
+          "path": "tracecat/agent/mcp/utils.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "tracecat/agent/mcp/utils.py:38:16"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "\\A[a-zA-Z0-9_-]{1,64}\\Z",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage only; source behavior, callers, trust boundary, and sink had not yet been reviewed.",
+      "reason_code": "needs_source_context",
+      "regex_id": "6b27c2d9a00a51a81b0dcbffbb0ff2f0",
+      "review_refs": [
+        {
+          "line": 84,
+          "path": "tracecat/agent/mcp/utils.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "tracecat/agent/mcp/utils.py:84:25"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "[^a-zA-Z0-9]",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage only; source behavior, callers, trust boundary, and sink had not yet been reviewed.",
+      "reason_code": "needs_source_context",
+      "regex_id": "42323d2c48c36370c9aec5d4bb7c9bff",
+      "review_refs": [
+        {
+          "line": 95,
+          "path": "tracecat/agent/runtime/claude_code/runtime.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "tracecat/agent/runtime/claude_code/runtime.py:95:33"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "^[A-Za-z_][A-Za-z0-9_]*$",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage only; source behavior, callers, trust boundary, and sink had not yet been reviewed.",
+      "reason_code": "needs_source_context",
+      "regex_id": "20d561ff6b649d7cccaaa3d78a4b04da",
+      "review_refs": [
+        {
+          "line": 46,
+          "path": "tracecat/agent/sandbox/config.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "tracecat/agent/sandbox/config.py:46:23"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "/v\\d+/?$",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage only; source behavior, callers, trust boundary, and sink had not yet been reviewed.",
+      "reason_code": "needs_source_context",
+      "regex_id": "d17b7c3cd6ea233d790234dbb137cbf3",
+      "review_refs": [
+        {
+          "line": 40,
+          "path": "tracecat/agent/sandbox/llm_proxy.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "tracecat/agent/sandbox/llm_proxy.py:40:33"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "^[a-z0-9:_.*-]+$",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage only; source behavior, callers, trust boundary, and sink had not yet been reviewed.",
+      "reason_code": "needs_source_context",
+      "regex_id": "0beaf519936fc85fed0927ff3f35c617",
+      "review_refs": [
+        {
+          "line": 18,
+          "path": "tracecat/authz/controls.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "tracecat/authz/controls.py:18:16"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "^(?:CASE-)?(\\d{1,10})$",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage only; source behavior, callers, trust boundary, and sink had not yet been reviewed.",
+      "reason_code": "needs_source_context",
+      "regex_id": "8b43ffb9f58aaf3bdef3a7db9eb010f0",
+      "review_refs": [
+        {
+          "line": 187,
+          "path": "tracecat/cases/service.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "tracecat/cases/service.py:187:19"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "at line (\\d+), column (\\d+)",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage only; source behavior, callers, trust boundary, and sink had not yet been reviewed.",
+      "reason_code": "needs_source_context",
+      "regex_id": "3072c725cb55d150cceadd4752545e41",
+      "review_refs": [
+        {
+          "line": 262,
+          "path": "tracecat/editor/router.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "tracecat/editor/router.py:262:24"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "^arn:aws(?:-[a-z0-9-]+)?:iam::\\d{12}:role/[\\w+=,.@\\-/]+$",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage only; source behavior, callers, trust boundary, and sink had not yet been reviewed.",
+      "reason_code": "needs_source_context",
+      "regex_id": "d9a7c524a1dcabb6d3279ca08ac988a6",
+      "review_refs": [
+        {
+          "line": 89,
+          "path": "tracecat/executor/secret_preprocessors.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "tracecat/executor/secret_preprocessors.py:89:24"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "\n    # Negative lookbehind - don't match if preceded by :, /, word char, or +\n    # (+ prevents matching after subaddress in emails like user+tag@domain.com)\n    # Note: @ is allowed so we can extract domains from emails like user@domain.com\n    (?<![:/\\w+])\n    # Domain part - match at least one label + dot followed by TLD\n    (?>                                  # Atomic group to prevent backtracking\n        (?>                              # Atomic group for the repeating label + dot sequence\n            (?:\n                xn--[a-zA-Z0-9]+         # Punycode (IDN) label\n                |                        # OR\n                [a-zA-Z0-9]              # Regular domain label\n                (?>[a-zA-Z0-9-]{0,61}    # Up to 61 alphanumeric or hyphen chars\n                [a-zA-Z0-9])?            # Ending with alphanumeric (optional group)\n            )\n            \\.                           # Followed by a dot\n        )+                               # One or more label + dot sequences\n\n        # TLD part - handle both regular and punycode TLDs\n        (?:\n            xn--[a-zA-Z0-9-]+            # Punycode TLD\n            |                            # OR\n            [a-zA-Z]{2,}                 # Regular TLD (at least 2 alpha chars)\n        )\n        # Optional additional TLDs (e.g., .co.uk)\n        (?:\\.\n            (?:\n                xn--[a-zA-Z0-9-]+        # Punycode TLD\n                |                        # OR\n                [a-zA-Z]{2,}             # Regular TLD\n            )\n        )*                               # Zero or more additional TLD components\n    )\n    # Negative lookahead - don't match if followed by :, /, word char, + or @\n    # (+ and @ prevent matching local parts of email addresses)\n    (?![:/\\w+@])\n",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage only; source behavior, callers, trust boundary, and sink had not yet been reviewed.",
+      "reason_code": "needs_source_context",
+      "regex_id": "ad54e40ce0fea2f9c8693a55a4095ac3",
+      "review_refs": [
+        {
+          "line": 17,
+          "path": "tracecat/expressions/ioc_extractors/domain.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "tracecat/expressions/ioc_extractors/domain.py:17:15"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "(?P<template>\\${{\\s*(?P<expr>.+?)\\s*}})",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage only; source behavior, callers, trust boundary, and sink had not yet been reviewed.",
+      "reason_code": "needs_source_context",
+      "regex_id": "47e12405bc9f989f43bbbd47f4a95263",
+      "review_refs": [
+        {
+          "line": 3,
+          "path": "tracecat/expressions/patterns.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "tracecat/expressions/patterns.py:3:18"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "^\\${{\\s*(?:(?!\\${{).)*?\\s*}}$",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage only; source behavior, callers, trust boundary, and sink had not yet been reviewed.",
+      "reason_code": "needs_source_context",
+      "regex_id": "5e89dbb41d6f5d8d84ab5939b18707a6",
+      "review_refs": [
+        {
+          "line": 8,
+          "path": "tracecat/expressions/patterns.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "tracecat/expressions/patterns.py:8:22"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "^git\\+ssh://(?P<user>[^/@:]+)@(?P<host>[^/:]+)(?::(?P<port>\\d+))?/(?P<path>[^/@]+?(?:/[^/@]+?)+?)(?:\\.git)?(?:@(?P<ref>[^@]+))?$",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage only; source behavior, callers, trust boundary, and sink had not yet been reviewed.",
+      "reason_code": "needs_source_context",
+      "regex_id": "8a5e79dad39ea66ae4c7d95abc5332a6",
+      "review_refs": [
+        {
+          "line": 3,
+          "path": "tracecat/git/constants.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "tracecat/git/constants.py:3:20"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "\\?P<[^>]+>",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage only; source behavior, callers, trust boundary, and sink had not yet been reviewed.",
+      "reason_code": "needs_source_context",
+      "regex_id": "728a7d68952a6864bbd9322056564dc2",
+      "review_refs": [
+        {
+          "line": 33,
+          "path": "tracecat/identifiers/workflow.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "tracecat/identifiers/workflow.py:33:28"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "(\\{[A-Za-z_][A-Za-z0-9_]*\\}|<[A-Za-z_][A-Za-z0-9_-]*>)",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage only; source behavior, callers, trust boundary, and sink had not yet been reviewed.",
+      "reason_code": "needs_source_context",
+      "regex_id": "0597f28705519b008620fa623f1a6d48",
+      "review_refs": [
+        {
+          "line": 65,
+          "path": "tracecat/integrations/catalog/loader.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "tracecat/integrations/catalog/loader.py:65:18"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "^[A-Za-z_][A-Za-z0-9_]*$",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage only; source behavior, callers, trust boundary, and sink had not yet been reviewed.",
+      "reason_code": "needs_source_context",
+      "regex_id": "280c0b240b92090a7bdb58b6a70cff57",
+      "review_refs": [
+        {
+          "line": 178,
+          "path": "tracecat/integrations/mcp_validation.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "tracecat/integrations/mcp_validation.py:178:11"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "^[a-zA-Z0-9_-]+$",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage only; source behavior, callers, trust boundary, and sink had not yet been reviewed.",
+      "reason_code": "needs_source_context",
+      "regex_id": "60bada10a610fde520e8e96c90887d71",
+      "review_refs": [
+        {
+          "line": 267,
+          "path": "tracecat/integrations/mcp_validation.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "tracecat/integrations/mcp_validation.py:267:11"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "(?i)\\b[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}\\b",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage only; source behavior, callers, trust boundary, and sink had not yet been reviewed.",
+      "reason_code": "needs_source_context",
+      "regex_id": "9d27eb11cd2945bc0f206f8caf0ef23c",
+      "review_refs": [
+        {
+          "line": 33,
+          "path": "tracecat/integrations/providers/microsoft/common.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "tracecat/integrations/providers/microsoft/common.py:33:15"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "(\\{[A-Za-z_][A-Za-z0-9_]*\\}|<[A-Za-z_][A-Za-z0-9_-]*>)",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage only; source behavior, callers, trust boundary, and sink had not yet been reviewed.",
+      "reason_code": "needs_source_context",
+      "regex_id": "f8195748806f4b0868ddbd2065d7670c",
+      "review_refs": [
+        {
+          "line": 221,
+          "path": "tracecat/integrations/service.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "tracecat/integrations/service.py:221:26"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "[^a-z0-9]+",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage only; source behavior, callers, trust boundary, and sink had not yet been reviewed.",
+      "reason_code": "needs_source_context",
+      "regex_id": "b329b7f046ff56ad95123eca7c8846b0",
+      "review_refs": [
+        {
+          "line": 1455,
+          "path": "tracecat/integrations/service.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "tracecat/integrations/service.py:1455:21"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "^(?:organization|org|organization_id|org_id):(?P<uuid>[0-9a-fA-F-]{36})$",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage only; source behavior, callers, trust boundary, and sink had not yet been reviewed.",
+      "reason_code": "needs_source_context",
+      "regex_id": "14516eb98a8afd6cb58f4e8ddedc85d5",
+      "review_refs": [
+        {
+          "line": 88,
+          "path": "tracecat/mcp/auth.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "tracecat/mcp/auth.py:88:20"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "^(?:workspace|workspace_id):(?P<uuid>[0-9a-fA-F-]{36})$",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage only; source behavior, callers, trust boundary, and sink had not yet been reviewed.",
+      "reason_code": "needs_source_context",
+      "regex_id": "e1eed14bfd472f45d9bf345758f2dd6c",
+      "review_refs": [
+        {
+          "line": 91,
+          "path": "tracecat/mcp/auth.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "tracecat/mcp/auth.py:91:17"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "^(?P<product>Mozilla|TracecatClient|curl|python-httpx|Claude-Code|Codex)/(?P<version>\\d{1,4}(?:\\.\\d{1,4}){0,3})\\b",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage only; source behavior, callers, trust boundary, and sink had not yet been reviewed.",
+      "reason_code": "needs_source_context",
+      "regex_id": "3696926a1ff0608b9881915f6ebcd665",
+      "review_refs": [
+        {
+          "line": 11,
+          "path": "tracecat/middleware/request.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "tracecat/middleware/request.py:11:28"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "\\\\([\\\\nrt])",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage only; source behavior, callers, trust boundary, and sink had not yet been reviewed.",
+      "reason_code": "needs_source_context",
+      "regex_id": "d7e663e2bc876885a5a0913084f3763d",
+      "review_refs": [
+        {
+          "line": 108,
+          "path": "tracecat/parse.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "tracecat/parse.py:108:11"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "[^a-zA-Z0-9_-]",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage only; source behavior, callers, trust boundary, and sink had not yet been reviewed.",
+      "reason_code": "needs_source_context",
+      "regex_id": "ecd0b04f93139c22396cfb5406b5c44f",
+      "review_refs": [
+        {
+          "line": 46,
+          "path": "tracecat/registry/artifact_keys.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "tracecat/registry/artifact_keys.py:46:11"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "_+",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage only; source behavior, callers, trust boundary, and sink had not yet been reviewed.",
+      "reason_code": "needs_source_context",
+      "regex_id": "c4067ab15061eebc608ecfe41a858b6c",
+      "review_refs": [
+        {
+          "line": 47,
+          "path": "tracecat/registry/artifact_keys.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "tracecat/registry/artifact_keys.py:47:11"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "[^a-zA-Z0-9]+",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage only; source behavior, callers, trust boundary, and sink had not yet been reviewed.",
+      "reason_code": "needs_source_context",
+      "regex_id": "80ec22f48e9470bfef379ace1ac62b0a",
+      "review_refs": [
+        {
+          "line": 1003,
+          "path": "tracecat/registry/repository.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "tracecat/registry/repository.py:1003:23"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "[^a-zA-Z0-9]+",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage only; source behavior, callers, trust boundary, and sink had not yet been reviewed.",
+      "reason_code": "needs_source_context",
+      "regex_id": "aee1f94bb0867ab43585b4318a322063",
+      "review_refs": [
+        {
+          "line": 1004,
+          "path": "tracecat/registry/repository.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "tracecat/registry/repository.py:1004:21"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "^(?P<major>\\d+)\\.(?P<minor>\\d+)\\.(?P<patch>\\d+)(?:-(?P<stage>alpha|a|beta|b|rc|dev|post)\\.(?P<number>\\d+)(?:-(?P<sub_stage>alpha|a|beta|b|rc|dev|post)\\.(?P<sub_number>\\d+))?)?$",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage only; source behavior, callers, trust boundary, and sink had not yet been reviewed.",
+      "reason_code": "needs_source_context",
+      "regex_id": "58f3377e632180e909a5789ff05a2223",
+      "review_refs": [
+        {
+          "line": 37,
+          "path": "tracecat/registry/sync/jobs.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "tracecat/registry/sync/jobs.py:37:23"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "^[A-Za-z_][A-Za-z0-9_]*$",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage only; source behavior, callers, trust boundary, and sink had not yet been reviewed.",
+      "reason_code": "needs_source_context",
+      "regex_id": "914d08c870f219be6f093e8caa0ab3dc",
+      "review_refs": [
+        {
+          "line": 71,
+          "path": "tracecat/sandbox/executor.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "tracecat/sandbox/executor.py:71:23"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "^[a-f0-9]+$",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage only; source behavior, callers, trust boundary, and sink had not yet been reviewed.",
+      "reason_code": "needs_source_context",
+      "regex_id": "22f7f2a4dd0026920e2889125088e236",
+      "review_refs": [
+        {
+          "line": 74,
+          "path": "tracecat/sandbox/executor.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "tracecat/sandbox/executor.py:74:21"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "\\bCLONE_NEWUSER\\b|clone_newuser",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage only; source behavior, callers, trust boundary, and sink had not yet been reviewed.",
+      "reason_code": "needs_source_context",
+      "regex_id": "dda993f15d42c33a625a9cf6f7210cb6",
+      "review_refs": [
+        {
+          "line": 88,
+          "path": "tracecat/sandbox/executor.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "tracecat/sandbox/executor.py:88:8"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "\\bOperation not permitted\\b|\\bEPERM\\b",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage only; source behavior, callers, trust boundary, and sink had not yet been reviewed.",
+      "reason_code": "needs_source_context",
+      "regex_id": "239200ae3b34c276c911a9614e7765ca",
+      "review_refs": [
+        {
+          "line": 93,
+          "path": "tracecat/sandbox/executor.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "tracecat/sandbox/executor.py:93:8"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "/dev/net/tun|TUN|tun",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage only; source behavior, callers, trust boundary, and sink had not yet been reviewed.",
+      "reason_code": "needs_source_context",
+      "regex_id": "28e2238f6eff1afc0d4724c30948d161",
+      "review_refs": [
+        {
+          "line": 99,
+          "path": "tracecat/sandbox/executor.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "tracecat/sandbox/executor.py:99:8"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "\\bhttps?://\\S+",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage only; source behavior, callers, trust boundary, and sink had not yet been reviewed.",
+      "reason_code": "needs_source_context",
+      "regex_id": "bed6aa218dd8c2fb0cc3d2975b4e10a1",
+      "review_refs": [
+        {
+          "line": 8,
+          "path": "tracecat/sanitization.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "tracecat/sanitization.py:8:15"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "^(https?://)[^/@]*@",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage only; source behavior, callers, trust boundary, and sink had not yet been reviewed.",
+      "reason_code": "needs_source_context",
+      "regex_id": "d2dac544074df06913017dea5a6f8a54",
+      "review_refs": [
+        {
+          "line": 9,
+          "path": "tracecat/sanitization.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "tracecat/sanitization.py:9:24"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "\\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}\\b",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage only; source behavior, callers, trust boundary, and sink had not yet been reviewed.",
+      "reason_code": "needs_source_context",
+      "regex_id": "27457de9333d6395fa0a7f031b851fa4",
+      "review_refs": [
+        {
+          "line": 10,
+          "path": "tracecat/sanitization.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "tracecat/sanitization.py:10:17"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "(?i)\\b(Bearer\\s+)[A-Za-z0-9._~+/=-]+",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage only; source behavior, callers, trust boundary, and sink had not yet been reviewed.",
+      "reason_code": "needs_source_context",
+      "regex_id": "f7cbc8ad34afde36785308dca9fc183f",
+      "review_refs": [
+        {
+          "line": 11,
+          "path": "tracecat/sanitization.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "tracecat/sanitization.py:11:24"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "(?im)\\b(Authorization\\s*:\\s*)[^\\r\\n]+",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage only; source behavior, callers, trust boundary, and sink had not yet been reviewed.",
+      "reason_code": "needs_source_context",
+      "regex_id": "9027ada9b43176c5487d417ee857cdcf",
+      "review_refs": [
+        {
+          "line": 12,
+          "path": "tracecat/sanitization.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "tracecat/sanitization.py:12:31"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "(?im)\\b((?:Set-)?Cookie\\s*:\\s*)[^\\r\\n]+",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage only; source behavior, callers, trust boundary, and sink had not yet been reviewed.",
+      "reason_code": "needs_source_context",
+      "regex_id": "5cddfc677f636453bf4438ef759437e5",
+      "review_refs": [
+        {
+          "line": 13,
+          "path": "tracecat/sanitization.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "tracecat/sanitization.py:13:24"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "(?im)(?P<prefix>(?P<key_quote>['\\\"]?)\\b(?:Authorization|(?:Set-)?Cookie)\\b(?P=key_quote)\\s*:\\s*)(?P<value>\\\"(?:\\\\.|[^\\\"\\\\\\r\\n])*\\\"|'(?:\\\\.|[^'\\\\\\r\\n])*')",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage only; source behavior, callers, trust boundary, and sink had not yet been reviewed.",
+      "reason_code": "needs_source_context",
+      "regex_id": "0f0ad3de551fe6ea5ef5685e047a7751",
+      "review_refs": [
+        {
+          "line": 14,
+          "path": "tracecat/sanitization.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "tracecat/sanitization.py:14:35"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "-----BEGIN (?P<label>[A-Z0-9][A-Z0-9 ._/-]{0,63})-----.*?-----END (?P=label)-----",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage only; source behavior, callers, trust boundary, and sink had not yet been reviewed.",
+      "reason_code": "needs_source_context",
+      "regex_id": "ebabfa5a0f8f5ab8fb9c305880878e73",
+      "review_refs": [
+        {
+          "line": 19,
+          "path": "tracecat/sanitization.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "tracecat/sanitization.py:19:21"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "\\beyJ[A-Za-z0-9_-]+\\.[A-Za-z0-9_-]+\\.[A-Za-z0-9_-]+\\b",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage only; source behavior, callers, trust boundary, and sink had not yet been reviewed.",
+      "reason_code": "needs_source_context",
+      "regex_id": "488595c232cc70d8bfab101499411cc4",
+      "review_refs": [
+        {
+          "line": 25,
+          "path": "tracecat/sanitization.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "tracecat/sanitization.py:25:15"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "(?i)(?P<prefix>['\\\"]?\\b(?:api[ _-]?key|access[ _-]?token|refresh[ _-]?token|id[ _-]?token|oauth[ _-]?token|client[ _-]?secret|private[ _-]?key|secret[ _-]?key|token|password|passwd|secret)\\b['\\\"]?\\s*[:=]\\s*)(?:(?P<double_quoted>\"(?:\\\\.|[^\"\\\\\\r\\n])*\")|(?P<single_quoted>'(?:\\\\.|[^'\\\\\\r\\n])*')|(?P<unquoted>[^\\s,;}\\]\\\"']+))",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage only; source behavior, callers, trust boundary, and sink had not yet been reviewed.",
+      "reason_code": "needs_source_context",
+      "regex_id": "3c4b78ac385335b374c02adb0c6abdeb",
+      "review_refs": [
+        {
+          "line": 26,
+          "path": "tracecat/sanitization.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "tracecat/sanitization.py:26:27"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "[?#].*$",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage only; source behavior, callers, trust boundary, and sink had not yet been reviewed.",
+      "reason_code": "needs_source_context",
+      "regex_id": "16f787f5e952ce27a41ece37bfef0666",
+      "review_refs": [
+        {
+          "line": 51,
+          "path": "tracecat/sanitization.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "tracecat/sanitization.py:51:15"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "::[A-Za-z_][\\w\\. ]*(\\[\\])?\\s*$",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage only; source behavior, callers, trust boundary, and sink had not yet been reviewed.",
+      "reason_code": "needs_source_context",
+      "regex_id": "e33105aab5c4cf79579436def52c01b5",
+      "review_refs": [
+        {
+          "line": 320,
+          "path": "tracecat/tables/common.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "tracecat/tables/common.py:320:26"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage only; source behavior, callers, trust boundary, and sink had not yet been reviewed.",
+      "reason_code": "needs_source_context",
+      "regex_id": "c1d1d6d2adfccca3b9f7d5215dfb428e",
+      "review_refs": [
+        {
+          "line": 17,
+          "path": "tracecat/tables/schemas.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "tracecat/tables/schemas.py:17:21"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "(?i)\\b(bearer)\\s+[A-Za-z0-9._~+/=-]+",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage only; source behavior, callers, trust boundary, and sink had not yet been reviewed.",
+      "reason_code": "needs_source_context",
+      "regex_id": "995bf9a9f9211ad4c1eb2377fff8a8c8",
+      "review_refs": [
+        {
+          "line": 80,
+          "path": "tracecat/workflow/executions/schemas.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "tracecat/workflow/executions/schemas.py:80:8"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "(?i)\\b(api[_-]?key|access[_-]?token|refresh[_-]?token|token|password|passwd|secret)=([^&\\s]+)",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage only; source behavior, callers, trust boundary, and sink had not yet been reviewed.",
+      "reason_code": "needs_source_context",
+      "regex_id": "bccba31a41ded55cbfd6d20dbdcf4e17",
+      "review_refs": [
+        {
+          "line": 84,
+          "path": "tracecat/workflow/executions/schemas.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "tracecat/workflow/executions/schemas.py:84:8"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "(?i)(authorization:\\s*(?:basic|bearer)\\s+)[^\\s,;]+",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage only; source behavior, callers, trust boundary, and sink had not yet been reviewed.",
+      "reason_code": "needs_source_context",
+      "regex_id": "a77eaca412155dd9836cacba1936ffde",
+      "review_refs": [
+        {
+          "line": 90,
+          "path": "tracecat/workflow/executions/schemas.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "tracecat/workflow/executions/schemas.py:90:8"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "(?i)(://[^/\\s:@]+:)([^@\\s/]+)@",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage only; source behavior, callers, trust boundary, and sink had not yet been reviewed.",
+      "reason_code": "needs_source_context",
+      "regex_id": "8fdbef654060a97513557bf483df71c8",
+      "review_refs": [
+        {
+          "line": 94,
+          "path": "tracecat/workflow/executions/schemas.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "tracecat/workflow/executions/schemas.py:94:8"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "[\\x00-\\x20\\x7f~^:?*\\[\\\\]",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage only; source behavior, callers, trust boundary, and sink had not yet been reviewed.",
+      "reason_code": "needs_source_context",
+      "regex_id": "b1ae5707150c8f025a4e2f80b0e5c1cb",
+      "review_refs": [
+        {
+          "line": 23,
+          "path": "tracecat/workflow/store/schemas.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "tracecat/workflow/store/schemas.py:23:28"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "[^A-Za-z0-9_.-]+",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage only; source behavior, callers, trust boundary, and sink had not yet been reviewed.",
+      "reason_code": "needs_source_context",
+      "regex_id": "908cc91aa9c4183a917ea88f174723e9",
+      "review_refs": [
+        {
+          "line": 936,
+          "path": "tracecat/workspace_sync/adapters/base.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "tracecat/workspace_sync/adapters/base.py:936:11"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "\\bVARS\\.([A-Za-z_][A-Za-z0-9_-]*)",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage only; source behavior, callers, trust boundary, and sink had not yet been reviewed.",
+      "reason_code": "needs_source_context",
+      "regex_id": "3090840b65849fa39ab0d72cddfac330",
+      "review_refs": [
+        {
+          "line": 2122,
+          "path": "tracecat/workspace_sync/service.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "tracecat/workspace_sync/service.py:2122:14"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "\\bSECRETS\\.([A-Za-z_][A-Za-z0-9_-]*)",
+      "product_question_asked": false,
+      "rationale": "Initial inventory triage only; source behavior, callers, trust boundary, and sink had not yet been reviewed.",
+      "reason_code": "needs_source_context",
+      "regex_id": "0fdd2c38808c360572cbfd8b6e28ae3c",
+      "review_refs": [
+        {
+          "line": 2124,
+          "path": "tracecat/workspace_sync/service.py",
+          "why": "Initial inventory-location triage."
+        }
+      ],
+      "site": "tracecat/workspace_sync/service.py:2124:17"
+    }
+  ],
+  "same_model_or_agent": true,
+  "schema_version": "1",
+  "scope": {
+    "complete_repository_review": false,
+    "inventory_member_site_count": 115,
+    "pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+    "repo_id": "TracecatHQ/tracecat",
+    "reviewed_site_count": 115
+  },
+  "second_pass": false
+}

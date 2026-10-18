@@ -1,0 +1,106 @@
+{
+  "cohort_id": "2026-09-12-calibration-20-r2",
+  "contract_provenance": {
+    "autonomous": 38,
+    "human": 7,
+    "machine_pair": 0
+  },
+  "counts": {
+    "accepted": 0,
+    "asked": 45,
+    "filed": 0,
+    "ground_truthed": 13,
+    "private_first": 0,
+    "sat": 13
+  },
+  "coverage": {
+    "attempted": 45,
+    "decided": 45,
+    "eligible": 45,
+    "not_attempted": 0,
+    "not_proven": 0,
+    "status_breakdown": {
+      "sat": 13,
+      "unsat": 32
+    },
+    "unresolved_statuses": {}
+  },
+  "disposition_breakdown": {
+    "not_applicable": 32,
+    "pending_product_triage": 13
+  },
+  "filing_interpretation": {
+    "accepted_is_not_third_party_remediation": true,
+    "accepted_statuses": [
+      "fixed_upstream"
+    ],
+    "filed_at_also_counts_as_filed": true,
+    "filed_plan_is_not_filed": true,
+    "filed_statuses": [
+      "filed",
+      "fixed_upstream",
+      "private_first"
+    ],
+    "private_first_is_filed": true,
+    "third_party_remediation_requires_separate_classification": true
+  },
+  "idiom_interpretation": {
+    "compiler_saturation_measured_elsewhere": true,
+    "product_conversion_checkpoint_is_not_compiler_saturation": true,
+    "zero_gt_to_filed_does_not_prove_idiom_exhaustion": true
+  },
+  "intervals": {
+    "method": "wilson_score_95_two_sided",
+    "target_width_meaning": "maximum interval width over all success counts at the target sample size; it describes worst-case precision, not this cohort's observed rate",
+    "targets": {
+      "100": {
+        "max_width": "0.192336939417",
+        "successes_at_max_width": 50
+      },
+      "50": {
+        "max_width": "0.267109713863",
+        "successes_at_max_width": 25
+      }
+    }
+  },
+  "manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+  "product_coverage_digest": "a9d6b8ea4cd3dc586ea81c33400d32d5e560506841be046719be03158c0ade9f",
+  "rates": {
+    "accepted_per_ground_truthed": "0",
+    "filed_per_ground_truthed": "0",
+    "ground_truthed_per_sat": "1",
+    "private_first_per_ground_truthed": "0",
+    "sat_per_asked": "0.288888888889"
+  },
+  "sample_sizes": {
+    "asked": 45,
+    "ground_truthed": 13,
+    "sat": 13,
+    "unit": "eligible product questions"
+  },
+  "schema_version": "3",
+  "target_status": {
+    "100": {
+      "observed": 45,
+      "reached": false,
+      "shortfall": 55,
+      "status": "sub_target",
+      "target": 100
+    },
+    "50": {
+      "observed": 45,
+      "reached": false,
+      "shortfall": 5,
+      "status": "sub_target",
+      "target": 50
+    }
+  },
+  "useful_gate_outcomes": {
+    "consumer_adopted_gates": 0,
+    "decided_contract_backed_proofs": 45,
+    "differential_cases": 1747618,
+    "local_runnable_gates": 22,
+    "product_engine_replays": 40,
+    "useful_regression_gates": 22
+  }
+}

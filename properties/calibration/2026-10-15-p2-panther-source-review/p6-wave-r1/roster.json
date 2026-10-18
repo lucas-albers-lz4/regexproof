@@ -1,0 +1,17 @@
+{
+  "cohort_id": "2026-09-12-calibration-20-r2",
+  "cohort_manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+  "coverage_digest": "6be794758dcb56560d8cfd6b0488669960a40c23f530a502d2d6934aecca101c",
+  "identities": [
+    {
+      "contract_sha256": "7aadd1106a944e0bb91143ea7b6b8b93f5c741b41b2944175ae0543fd90a8318",
+      "pin": "0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a",
+      "provenance": "agent_derived",
+      "question_id": "PA-panther-staged-secrets-file-excluded-from-review-prompt",
+      "repo_id": "panther-labs/panther-analysis",
+      "site": "panther-labs/panther-analysis@0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a:.scripts/claude_review.py:21:EXCLUDE_PATTERNS",
+      "url": "https://github.com/panther-labs/panther-analysis"
+    }
+  ],
+  "schema_version": "2"
+}

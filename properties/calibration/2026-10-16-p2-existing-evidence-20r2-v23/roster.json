@@ -1,0 +1,467 @@
+{
+  "cohort_id": "2026-09-12-calibration-20-r2",
+  "cohort_manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+  "coverage_digest": "7ce91f9ae1af04872b914cb78f40e6b4d835615b4133a3daecec3486a2d17038",
+  "identities": [
+    {
+      "contract_sha256": "ba9e12c17f7f6a06b6130089e59d91e3a3f50c62a1dcf6c204d87be2e6ffa2b3",
+      "pin": "efcf8e4c0087def553a737dc1c4eebda5d8a90cd",
+      "provenance": "agent_derived",
+      "question_id": "FC-forge-cli-sensitive-env-helper-redacts",
+      "repo_id": "Agenticstiger/forge-cli",
+      "site": "Agenticstiger/forge-cli@efcf8e4c0087def553a737dc1c4eebda5d8a90cd:fluid_build/build_runners/base.py:54:SENSITIVE_ENV_KEY_RE",
+      "url": "https://github.com/Agenticstiger/forge-cli"
+    },
+    {
+      "contract_sha256": "e95cbf07bae0da6a71803341d2c3e922111e50cd71669b2bfddc7f6cde2414c0",
+      "pin": "efcf8e4c0087def553a737dc1c4eebda5d8a90cd",
+      "provenance": "human",
+      "question_id": "FC-forge-cli-sensitive-env-key-covered",
+      "repo_id": "Agenticstiger/forge-cli",
+      "site": "Agenticstiger/forge-cli@efcf8e4c0087def553a737dc1c4eebda5d8a90cd:fluid_build/build_runners/base.py:54:SENSITIVE_ENV_KEY_RE",
+      "url": "https://github.com/Agenticstiger/forge-cli"
+    },
+    {
+      "contract_sha256": "53f5723430cf29a9afd03d12dee7c2a79b65ffe826648125f713c513204c717a",
+      "pin": "efcf8e4c0087def553a737dc1c4eebda5d8a90cd",
+      "provenance": "human",
+      "question_id": "FC-forge-cli-llm-userinfo-no-at",
+      "repo_id": "Agenticstiger/forge-cli",
+      "site": "Agenticstiger/forge-cli@efcf8e4c0087def553a737dc1c4eebda5d8a90cd:fluid_build/llm/providers.py:287:LlmConfig.redacted_endpoint",
+      "url": "https://github.com/Agenticstiger/forge-cli"
+    },
+    {
+      "contract_sha256": "f5c405d13a147a3fbfb080316477e1239f20a8369d9a947954633600e590f6e0",
+      "pin": "efcf8e4c0087def553a737dc1c4eebda5d8a90cd",
+      "provenance": "human",
+      "question_id": "FC-forge-cli-url-password-no-space",
+      "repo_id": "Agenticstiger/forge-cli",
+      "site": "Agenticstiger/forge-cli@efcf8e4c0087def553a737dc1c4eebda5d8a90cd:fluid_build/observability/secret_redactor.py:151:_URL_USERINFO_RE",
+      "url": "https://github.com/Agenticstiger/forge-cli"
+    },
+    {
+      "contract_sha256": "cc207c76c5d06241ecfc7768e8c4dec88ea725391cd4865bd28dc49cfeeb5561",
+      "pin": "efcf8e4c0087def553a737dc1c4eebda5d8a90cd",
+      "provenance": "human",
+      "question_id": "FC-forge-cli-jaas-escaped-quote-covered",
+      "repo_id": "Agenticstiger/forge-cli",
+      "site": "Agenticstiger/forge-cli@efcf8e4c0087def553a737dc1c4eebda5d8a90cd:fluid_build/observability/secret_redactor.py:218:_JAAS_CONFIG_RE",
+      "url": "https://github.com/Agenticstiger/forge-cli"
+    },
+    {
+      "contract_sha256": "bf9bf935466029118468ce361c4a9f36a6e5a4ca98f1b202b323f65340d3ae0c",
+      "pin": "efcf8e4c0087def553a737dc1c4eebda5d8a90cd",
+      "provenance": "human",
+      "question_id": "FC-forge-cli-dmm-value-no-semicolon",
+      "repo_id": "Agenticstiger/forge-cli",
+      "site": "Agenticstiger/forge-cli@efcf8e4c0087def553a737dc1c4eebda5d8a90cd:fluid_build/providers/datamesh_manager/datamesh_manager.py:88:_SECRET_ERROR_PATTERNS",
+      "url": "https://github.com/Agenticstiger/forge-cli"
+    },
+    {
+      "contract_sha256": "aac841ad61eca3ca7456f39a303a5a10e4ce4fca55def8fca9de57a227b3a347",
+      "pin": "65624396e263074bb8cb2e049f9a9ec6215ea5c1",
+      "provenance": "agent_derived",
+      "question_id": "LH-llm-honeypot-private-ip-rfc1918-redaction",
+      "repo_id": "Leviticus-Triage/llm-honeypot-intelligence",
+      "site": "Leviticus-Triage/llm-honeypot-intelligence@65624396e263074bb8cb2e049f9a9ec6215ea5c1:scripts/sync-to-github.sh:76:PRIVATE_IP_PATTERN",
+      "url": "https://github.com/Leviticus-Triage/llm-honeypot-intelligence"
+    },
+    {
+      "contract_sha256": "e7fd7ec708484187bd7151c34d04aadcdb225233815f28cfd4565afd9b9d7fa0",
+      "pin": "65624396e263074bb8cb2e049f9a9ec6215ea5c1",
+      "provenance": "agent_derived",
+      "question_id": "LH-llm-honeypot-tor-newnym-response-sequencing",
+      "repo_id": "Leviticus-Triage/llm-honeypot-intelligence",
+      "site": "Leviticus-Triage/llm-honeypot-intelligence@65624396e263074bb8cb2e049f9a9ec6215ea5c1:spiderfoot-toolbox/tor-gateway/rotate-tor.sh:34:250 OK",
+      "url": "https://github.com/Leviticus-Triage/llm-honeypot-intelligence"
+    },
+    {
+      "contract_sha256": "b48b75cf862d9882a7bc2a36746c77f11552777d91127c07d53d05fb76d53411",
+      "pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+      "provenance": "agent_derived",
+      "question_id": "TC-artifact-path-segment-safe-image",
+      "repo_id": "TracecatHQ/tracecat",
+      "site": "TracecatHQ/tracecat@c84d52528a489821f355fc63976fbc7783ae0ad5:packages/tracecat-ee/tracecat_ee/agent/artifacts/mount_only_provider.py:31:_SAFE_PATH_SEGMENT_RE",
+      "url": "https://github.com/TracecatHQ/tracecat"
+    },
+    {
+      "contract_sha256": "992095d408e11b9aad97f844d4b8a0f32e13ae6c546e917ac5cc21e8cd6e6271",
+      "pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+      "provenance": "agent_derived",
+      "question_id": "TC-mcp-env-key-accepts-terminal-lf",
+      "repo_id": "TracecatHQ/tracecat",
+      "site": "TracecatHQ/tracecat@c84d52528a489821f355fc63976fbc7783ae0ad5:tracecat/integrations/mcp_validation.py:178:re.match",
+      "url": "https://github.com/TracecatHQ/tracecat"
+    },
+    {
+      "contract_sha256": "9045868f6004efccb55e4e6cb0a14e5a7cc5fb805bd61442afa6c791454e7f8b",
+      "pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+      "provenance": "agent_derived",
+      "question_id": "TC-mcp-server-name-separators-excluded",
+      "repo_id": "TracecatHQ/tracecat",
+      "site": "TracecatHQ/tracecat@c84d52528a489821f355fc63976fbc7783ae0ad5:tracecat/integrations/mcp_validation.py:267:re.match",
+      "url": "https://github.com/TracecatHQ/tracecat"
+    },
+    {
+      "contract_sha256": "53e40f4edde4e27b36ea9aedb0ee0aa4473925c8737b0348a80c416e5398293f",
+      "pin": "ea3e83e24676a1678a9522141da29b636c9451ab",
+      "provenance": "agent_derived",
+      "question_id": "MC-malcontent-author-metadata-extra-markdown-link",
+      "repo_id": "chainguard-dev/malcontent",
+      "site": "chainguard-dev/malcontent@ea3e83e24676a1678a9522141da29b636c9451ab:pkg/report/report.go:117:authorWithURLRe",
+      "url": "https://github.com/chainguard-dev/malcontent"
+    },
+    {
+      "contract_sha256": "e3513639aae043c6e5a41b06f5d9c81773e125481a70aa5bfc9789d6d0c05fd3",
+      "pin": "ea3e83e24676a1678a9522141da29b636c9451ab",
+      "provenance": "agent_derived",
+      "question_id": "MC-malcontent-description-metadata-extra-markdown-link",
+      "repo_id": "chainguard-dev/malcontent",
+      "site": "chainguard-dev/malcontent@ea3e83e24676a1678a9522141da29b636c9451ab:pkg/report/report.go:118:threatHuntingKeywordRe",
+      "url": "https://github.com/chainguard-dev/malcontent"
+    },
+    {
+      "contract_sha256": "8bbd3e03670042f1da70c4843856c02fa390befa6a1bb0ded8ef5c857814f2c8",
+      "pin": "53ae43c5298a2426c6696147fdd75e2a4aef10e2",
+      "provenance": "human",
+      "question_id": "PY-doberman-windows-root-token",
+      "repo_id": "fu351/Doberman-Core",
+      "site": "fu351/Doberman-Core@53ae43c5298a2426c6696147fdd75e2a4aef10e2:src/doberman/engine/rules/commands.py:266:_WINDOWS_ROOT_RE",
+      "url": "https://github.com/fu351/Doberman-Core"
+    },
+    {
+      "contract_sha256": "b1d58ec79fa01a791700c89ce77c273a96d712a3881e6ccc3e4189951144d060",
+      "pin": "53ae43c5298a2426c6696147fdd75e2a4aef10e2",
+      "provenance": "human",
+      "question_id": "PY-doberman-disk-wipe-token",
+      "repo_id": "fu351/Doberman-Core",
+      "site": "fu351/Doberman-Core@53ae43c5298a2426c6696147fdd75e2a4aef10e2:src/doberman/engine/rules/commands.py:434:_DISK_WIPE",
+      "url": "https://github.com/fu351/Doberman-Core"
+    },
+    {
+      "contract_sha256": "db5d22f87290865e215e0732278b9cf7ad9667271e1845e68a028064c79e2c56",
+      "pin": "53ae43c5298a2426c6696147fdd75e2a4aef10e2",
+      "provenance": "agent_derived",
+      "question_id": "PY-doberman-secret-store-windows-miss",
+      "repo_id": "fu351/Doberman-Core",
+      "site": "fu351/Doberman-Core@53ae43c5298a2426c6696147fdd75e2a4aef10e2:src/doberman/engine/rules/secrets.py:223:_SECRET_PATH",
+      "url": "https://github.com/fu351/Doberman-Core"
+    },
+    {
+      "contract_sha256": "d8a26b05f10027b3eb8395d79b3c27a4a06a4f4e9fd006b6f78be9752022aafb",
+      "pin": "53ae43c5298a2426c6696147fdd75e2a4aef10e2",
+      "provenance": "agent_derived",
+      "question_id": "DB-codex-apply-patch-file-target-path",
+      "repo_id": "fu351/Doberman-Core",
+      "site": "fu351/Doberman-Core@53ae43c5298a2426c6696147fdd75e2a4aef10e2:src/doberman/hosthooks/codex.py:69:_APPLY_PATCH_FILE_RE",
+      "url": "https://github.com/fu351/Doberman-Core"
+    },
+    {
+      "contract_sha256": "9b4e12034ef2e5935a5aa8309d967f71b6c999daadb5093658eadf61cb61e740",
+      "pin": "53ae43c5298a2426c6696147fdd75e2a4aef10e2",
+      "provenance": "agent_derived",
+      "question_id": "DB-codex-apply-patch-move-target-path",
+      "repo_id": "fu351/Doberman-Core",
+      "site": "fu351/Doberman-Core@53ae43c5298a2426c6696147fdd75e2a4aef10e2:src/doberman/hosthooks/codex.py:70:_APPLY_PATCH_MOVE_RE",
+      "url": "https://github.com/fu351/Doberman-Core"
+    },
+    {
+      "contract_sha256": "88afe47c2654316e4774fd1c6300e5da6161c4af5df7d34e542e90cbd940de23",
+      "pin": "55aa7ef43a9c129beba90823cd8a4db10bb01211",
+      "provenance": "agent_derived",
+      "question_id": "RR-route-segment-allowed-alphabet",
+      "repo_id": "greydragon888/real-router",
+      "site": "greydragon888/real-router@55aa7ef43a9c129beba90823cd8a4db10bb01211:packages/route-utils/src/constants.ts:13:column-36",
+      "url": "https://github.com/greydragon888/real-router"
+    },
+    {
+      "contract_sha256": "84c56ece08e32906b07467c8556c61a3edf0b558af40b701edefa00a035a57be",
+      "pin": "55aa7ef43a9c129beba90823cd8a4db10bb01211",
+      "provenance": "agent_derived",
+      "question_id": "RR-navigation-param-control-characters-rejected",
+      "repo_id": "greydragon888/real-router",
+      "site": "greydragon888/real-router@55aa7ef43a9c129beba90823cd8a4db10bb01211:packages/validation-plugin/src/validators/navigation.ts:69:column-25",
+      "url": "https://github.com/greydragon888/real-router"
+    },
+    {
+      "contract_sha256": "08a1fa78ea3c703ce240028172737ad05419f1182d7a10bba041c0ddb9076820",
+      "pin": "01cd447ad3b1acfed7e0680596c2c74458a4cf06",
+      "provenance": "agent_derived",
+      "question_id": "AA-autoar-jsendpoint-assignment-capture-delimiter",
+      "repo_id": "h0tak88r/AutoAR",
+      "site": "h0tak88r/AutoAR@01cd447ad3b1acfed7e0680596c2c74458a4cf06:internal/scanner/jsendpoints/jsendpoints.go:181:BASE_URL",
+      "url": "https://github.com/h0tak88r/AutoAR"
+    },
+    {
+      "contract_sha256": "1e211fc1a5f6c20cc4d61517f33433096ba5d65bd8bcaaa6642ba348772d08da",
+      "pin": "01cd447ad3b1acfed7e0680596c2c74458a4cf06",
+      "provenance": "agent_derived",
+      "question_id": "AA-autoar-jsendpoint-loopback-script-src-fetch",
+      "repo_id": "h0tak88r/AutoAR",
+      "site": "h0tak88r/AutoAR@01cd447ad3b1acfed7e0680596c2c74458a4cf06:internal/scanner/jsendpoints/jsendpoints.go:22:scriptSrcRe",
+      "url": "https://github.com/h0tak88r/AutoAR"
+    },
+    {
+      "contract_sha256": "0f141a8d77e3d423034438f5aaad9907e223d2c829f489ef6312022254d21d6b",
+      "pin": "01cd447ad3b1acfed7e0680596c2c74458a4cf06",
+      "provenance": "agent_derived",
+      "question_id": "AA-autoar-phase-log-module-component-safe",
+      "repo_id": "h0tak88r/AutoAR",
+      "site": "h0tak88r/AutoAR@01cd447ad3b1acfed7e0680596c2c74458a4cf06:internal/utils/phase_logs.go:206:MustCompile",
+      "url": "https://github.com/h0tak88r/AutoAR"
+    },
+    {
+      "contract_sha256": "480327fa8a307a9310911fd45f9e0048fd049181a6fbc9588e60d4eb58096bb9",
+      "pin": "b31ddabecf4ed3209d37a2f5b29956120cd8f9ce",
+      "provenance": "agent_derived",
+      "question_id": "JE-json-editor-enum-string-html-text-codepoint-image",
+      "repo_id": "json-editor/json-editor",
+      "site": "json-editor/json-editor@b31ddabecf4ed3209d37a2f5b29956120cd8f9ce:src/editors/enum.js:123:column-24",
+      "url": "https://github.com/json-editor/json-editor"
+    },
+    {
+      "contract_sha256": "fc9955c606d0ee1258043ac8355015ede63a0e654a67c0ba71297a8294a45b37",
+      "pin": "e9fb233763160316989863b4739c4656133d45b0",
+      "provenance": "agent_derived",
+      "question_id": "ME-oauth2-pkce-s256-base64url",
+      "repo_id": "magiclabs/magic-js",
+      "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-ext/oauth2/src/crypto.ts:22:column-53",
+      "url": "https://github.com/magiclabs/magic-js"
+    },
+    {
+      "contract_sha256": "07e4e311f4f676b3b6adbfbecf2e2ab45b309d297a4cd969e4bede39c93de750",
+      "pin": "e9fb233763160316989863b4739c4656133d45b0",
+      "provenance": "agent_derived",
+      "question_id": "ME-oauth2-webauthn-base64url",
+      "repo_id": "magiclabs/magic-js",
+      "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-ext/oauth2/src/utils/base64.ts:4:column-26",
+      "url": "https://github.com/magiclabs/magic-js"
+    },
+    {
+      "contract_sha256": "1d09735ade9b5d438961b11c7a59793eb9ef56581aea77562968fd7a722e4a06",
+      "pin": "e9fb233763160316989863b4739c4656133d45b0",
+      "provenance": "agent_derived",
+      "question_id": "ME-passkey-base64url",
+      "repo_id": "magiclabs/magic-js",
+      "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-ext/passkey/src/utils/base64.ts:11:column-26",
+      "url": "https://github.com/magiclabs/magic-js"
+    },
+    {
+      "contract_sha256": "00224fc43e2c47dba1776258ebc618735a4ca049fabc1c5108c421013cbacd3c",
+      "pin": "e9fb233763160316989863b4739c4656133d45b0",
+      "provenance": "agent_derived",
+      "question_id": "ME-rn-bare-pkce-s256-base64url",
+      "repo_id": "magiclabs/magic-js",
+      "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-ext/react-native-bare-oauth/src/crypto.ts:25:column-53",
+      "url": "https://github.com/magiclabs/magic-js"
+    },
+    {
+      "contract_sha256": "323a23991ab50e0978632e69b6e4afb5951cc0c1858b08d1c24dff0b2b02ffa0",
+      "pin": "e9fb233763160316989863b4739c4656133d45b0",
+      "provenance": "agent_derived",
+      "question_id": "ME-rn-expo-pkce-s256-base64url",
+      "repo_id": "magiclabs/magic-js",
+      "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-ext/react-native-expo-oauth/src/crypto.ts:25:column-53",
+      "url": "https://github.com/magiclabs/magic-js"
+    },
+    {
+      "contract_sha256": "1ff71f9c38086d2fc023842782e618a6d2dcafcf5f98d0d0325451d322ad80be",
+      "pin": "e9fb233763160316989863b4739c4656133d45b0",
+      "provenance": "agent_derived",
+      "question_id": "ME-wallet-kit-base64url",
+      "repo_id": "magiclabs/magic-js",
+      "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-ext/wallet-kit/src/utils/base64.ts:11:column-26",
+      "url": "https://github.com/magiclabs/magic-js"
+    },
+    {
+      "contract_sha256": "494cbc6e8061b3c44ea15d48af39a0a566308d3b493712ff30e511d6dd2ed107",
+      "pin": "e9fb233763160316989863b4739c4656133d45b0",
+      "provenance": "agent_derived",
+      "question_id": "ME-webauthn-base64url",
+      "repo_id": "magiclabs/magic-js",
+      "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-ext/webauthn/src/utils/base64.ts:11:column-26",
+      "url": "https://github.com/magiclabs/magic-js"
+    },
+    {
+      "contract_sha256": "b6615df46cf810bfc7a8e83ba4352a373b1f72fdfbfd1f6aafdd21ca6d1c2245",
+      "pin": "e9fb233763160316989863b4739c4656133d45b0",
+      "provenance": "agent_derived",
+      "question_id": "ME-provider-webauthn-base64url",
+      "repo_id": "magiclabs/magic-js",
+      "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-sdk/provider/src/util/base64-json.ts:54:column-26",
+      "url": "https://github.com/magiclabs/magic-js"
+    },
+    {
+      "contract_sha256": "40cd17120597b424cde7a660f858e9d77538da09bdf84b9fbcaeda825d9b98de",
+      "pin": "e9fb233763160316989863b4739c4656133d45b0",
+      "provenance": "agent_derived",
+      "question_id": "ME-provider-dpop-base64url",
+      "repo_id": "magiclabs/magic-js",
+      "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-sdk/provider/src/util/web-crypto.ts:106:column-27",
+      "url": "https://github.com/magiclabs/magic-js"
+    },
+    {
+      "contract_sha256": "569f0d7217b959757d3ee84744ecbff612356727663078e73da9e3652c503a70",
+      "pin": "e9fb233763160316989863b4739c4656133d45b0",
+      "provenance": "agent_derived",
+      "question_id": "ME-rn-bare-dpop-base64url",
+      "repo_id": "magiclabs/magic-js",
+      "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-sdk/react-native-bare/src/native-crypto/utils/uint8.ts:71:column-24",
+      "url": "https://github.com/magiclabs/magic-js"
+    },
+    {
+      "contract_sha256": "0af6fb1556f832afec6a2d0f10f9cc1a21f3af32586ab15fdfc143cc60838967",
+      "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "provenance": "agent_derived",
+      "question_id": "AI-aidevops-brief-tid-capture",
+      "repo_id": "marcusquinn/aidevops",
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/hooks/brief-filename-guard.sh:105:t[0-9]+",
+      "url": "https://github.com/marcusquinn/aidevops"
+    },
+    {
+      "contract_sha256": "4374d2ea29f9ea6f729e9b2b0f5749338dc95544ab1c02f489d4d85ebb321d22",
+      "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "provenance": "agent_derived",
+      "question_id": "AI-aidevops-brief-tid-no-semicolon",
+      "repo_id": "marcusquinn/aidevops",
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/hooks/brief-filename-guard.sh:84:brief\\.md",
+      "url": "https://github.com/marcusquinn/aidevops"
+    },
+    {
+      "contract_sha256": "52591f32b47e65181ccbcf490d2a1fced28257ec96eb037dd7fbe61824058a37",
+      "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "provenance": "agent_derived",
+      "question_id": "AI-aidevops-cred-ident-no-semicolon",
+      "repo_id": "marcusquinn/aidevops",
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/hooks/credential-emission-pre-push.sh:103:remote_url",
+      "url": "https://github.com/marcusquinn/aidevops"
+    },
+    {
+      "contract_sha256": "b188de0e4219be565c2c68c84b024de9d3bc3588d5025a2629126729ea5ed345",
+      "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "provenance": "agent_derived",
+      "question_id": "AI-aidevops-scope-heading-no-semicolon",
+      "repo_id": "marcusquinn/aidevops",
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/hooks/scope-guard-pre-push.sh:137:Files",
+      "url": "https://github.com/marcusquinn/aidevops"
+    },
+    {
+      "contract_sha256": "c8d7d71b14f9d27e8fcbf3d7e1dda161c435bab47343fae27987da5652879436",
+      "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "provenance": "agent_derived",
+      "question_id": "AI-aidevops-gh-issue-digit-capture",
+      "repo_id": "marcusquinn/aidevops",
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/hooks/task-id-collision-guard.sh:378:#[0-9]+",
+      "url": "https://github.com/marcusquinn/aidevops"
+    },
+    {
+      "contract_sha256": "6b1ec16f352121c1f897145d16bb64eeeb5630fd5acb5b870e919574318340f5",
+      "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "provenance": "agent_derived",
+      "question_id": "AE-aidevops-predispatch-cited-file-traversal-read",
+      "repo_id": "marcusquinn/aidevops",
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pre-dispatch-validator-helper.sh:1878:column-46",
+      "url": "https://github.com/marcusquinn/aidevops"
+    },
+    {
+      "contract_sha256": "890a7d2f893708842fb1f0b09200be4a4e310e780bd952049a8d2262332b1e0d",
+      "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "provenance": "agent_derived",
+      "question_id": "AE-aidevops-predispatch-threshold-leading-zero-fail-open",
+      "repo_id": "marcusquinn/aidevops",
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pre-dispatch-validator-helper.sh:1879:column-51",
+      "url": "https://github.com/marcusquinn/aidevops"
+    },
+    {
+      "contract_sha256": "b56719d864c1b7d96db6bc38cc6f229bfbb3910f6655ed5410633bc09b42777a",
+      "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "provenance": "agent_derived",
+      "question_id": "AE-aidevops-webhook-secret-env-identifier",
+      "repo_id": "marcusquinn/aidevops",
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pulse-merge-webhook-receiver.sh:167:1",
+      "url": "https://github.com/marcusquinn/aidevops"
+    },
+    {
+      "contract_sha256": "61f93f6a581fdd24640478bdab7030293e06b1e8fea3beef79e2867d00e6ee3f",
+      "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "provenance": "agent_derived",
+      "question_id": "AE-aidevops-webhook-repository-action-token",
+      "repo_id": "marcusquinn/aidevops",
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pulse-merge-webhook-receiver.sh:197:1",
+      "url": "https://github.com/marcusquinn/aidevops"
+    },
+    {
+      "contract_sha256": "72f7cd1389a521b453384a381ff3ec9c24487f33ea38d6265b7676ddc1b2da44",
+      "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "provenance": "agent_derived",
+      "question_id": "AE-aidevops-webhook-check-sha-token",
+      "repo_id": "marcusquinn/aidevops",
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pulse-merge-webhook-receiver.sh:224:1",
+      "url": "https://github.com/marcusquinn/aidevops"
+    },
+    {
+      "contract_sha256": "fd488d77413860be91038e4167888981145a11e0b639a8dd33cdd08c1a08e9fc",
+      "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "provenance": "agent_derived",
+      "question_id": "AE-aidevops-webhook-process-pr-number",
+      "repo_id": "marcusquinn/aidevops",
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pulse-merge-webhook-receiver.sh:302:6",
+      "url": "https://github.com/marcusquinn/aidevops"
+    },
+    {
+      "contract_sha256": "81625627f63dbabf94e2ea02819148bda43d550bb77deea8d4e54b84665848a9",
+      "pin": "d4f01ba6202d50909d1977810d322259482e0b82",
+      "provenance": "agent_derived",
+      "question_id": "MY-mycelium-20r2-release-preflight-requires-64-hex",
+      "repo_id": "mycelium0/mycelium",
+      "site": "mycelium0/mycelium@d4f01ba6202d50909d1977810d322259482e0b82:scripts/verify-release.sh:60:sums_n",
+      "url": "https://github.com/mycelium0/mycelium"
+    },
+    {
+      "contract_sha256": "638cd5d8ac2bcbb72f33dc8090d6b87b9922ae3fd3200f61c215ea892149d6ce",
+      "pin": "889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8",
+      "provenance": "agent_derived",
+      "question_id": "IH-inhale-file-url-output-root-confinement",
+      "repo_id": "netspooky/inhale",
+      "site": "netspooky/inhale@889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8:iModules/rDownload.py:111:url",
+      "url": "https://github.com/netspooky/inhale"
+    },
+    {
+      "contract_sha256": "1c6a9e52deabba8c246092f93ee4c2e1333967ab7516f63da3006dfa6f2c1df2",
+      "pin": "889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8",
+      "provenance": "agent_derived",
+      "question_id": "IH-inhale-directory-url-output-root-confinement",
+      "repo_id": "netspooky/inhale",
+      "site": "netspooky/inhale@889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8:iModules/rDownload.py:129:url",
+      "url": "https://github.com/netspooky/inhale"
+    },
+    {
+      "contract_sha256": "b4498e6291105f692c8b281ee975f8a1b3e17c205ec2d5efbe17916790fe2e22",
+      "pin": "2f3fa5a506d6565fa68858b7963450567ddda114",
+      "provenance": "agent_derived",
+      "question_id": "AN-anax-orgname-denylist-validation",
+      "repo_id": "open-horizon/anax",
+      "site": "open-horizon/anax@2f3fa5a506d6565fa68858b7963450567ddda114:cli/cliutils/cliutils.go:2277:MatchString",
+      "url": "https://github.com/open-horizon/anax"
+    },
+    {
+      "contract_sha256": "7aadd1106a944e0bb91143ea7b6b8b93f5c741b41b2944175ae0543fd90a8318",
+      "pin": "0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a",
+      "provenance": "agent_derived",
+      "question_id": "PA-panther-staged-secrets-file-excluded-from-review-prompt",
+      "repo_id": "panther-labs/panther-analysis",
+      "site": "panther-labs/panther-analysis@0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a:.scripts/claude_review.py:21:EXCLUDE_PATTERNS",
+      "url": "https://github.com/panther-labs/panther-analysis"
+    },
+    {
+      "contract_sha256": "b3fd8a5fd9f203c22babfb9dabc8fcbc56a03cfcfc7e51e4692216632f40f09d",
+      "pin": "978def55c8e68cab3a50a7ee4725039da753f0a1",
+      "provenance": "agent_derived",
+      "question_id": "XC-xibo-csrf-cookie-capture-isolation",
+      "repo_id": "xibosignage/xibo-cms",
+      "site": "xibosignage/xibo-cms@978def55c8e68cab3a50a7ee4725039da753f0a1:frontend/src/pages/Administration/Applications/Authorize/AuthorizeApplication.tsx:42:38",
+      "url": "https://github.com/xibosignage/xibo-cms"
+    }
+  ],
+  "schema_version": "2"
+}

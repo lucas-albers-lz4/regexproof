@@ -119,7 +119,8 @@ def prop(
       - "property": a security invariant that must hold (expect_unsat=True).
       - "counterexample_finder": SAT is the finding (a real bug witness).
       - "mutation_guard": SAT proves the harness is sensitive (weakened
-        regex must flip UNSAT->SAT). Its witness is never replayed/reported.
+        regex must flip UNSAT->SAT). It is not reported as a finding; an
+        optional ground_truth callback can replay the weakened witness.
       - "bug_demo": SAT demonstrates a known bug by design (P4-nul).
       - "rule_diff": shape-5 gap query (R2 accepts something R1 misses).
     `family` groups properties that share a mutation guard (e.g. "P1").
@@ -127,9 +128,8 @@ def prop(
     substitution) — required for auto-generated scanner properties.
     `ground_truth`: optional callable `fn(witness: dict) -> bool` that runs
     the REAL implementation on a SAT witness and reports whether the model's
-    behavior reproduces. Required when --require-ground-truth is set and the
-    property is satisfiable — UNLESS kind is "mutation_guard" (sensitivity
-    probe, not a reportable counterexample).
+    behavior reproduces. Mutation guards are not reportable findings, but may
+    provide a callback to replay their weakened-policy witness.
     `input_domain`: the boundary's alphabet assumption — "ascii" (mirror
     classes like [a-z0-9_] are faithful because the real input is
     ASCII-constrained) or "unicode" (Python \\w\\d\\s\\b are Unicode-aware;
@@ -268,7 +268,7 @@ def run_one(name, entry, require_ground_truth=False):
         # Flip ok *before* printing PASS/FAIL so --require-ground-truth cannot
         # leave a PASS line on a refused/failed replay (#360).
         gt = entry.get("ground_truth")
-        if entry["kind"] == PropertyKind.MUTATION_GUARD.value:
+        if entry["kind"] == PropertyKind.MUTATION_GUARD.value and gt is None:
             result["ground_truth"] = "mutation-guard-sat-expected"
         elif gt is not None:
             reproduced = bool(gt(witness))
@@ -312,7 +312,10 @@ def validate_registry(registry=None):
     r"""Run the registration gates over every property that declares a source
     pattern (gates.validate_pattern: \p gate + D7 anchored/wrap checks via the
     Node/regexpp parser). Returns (failures: list[str], checked: int). Call
-    BEFORE running properties; the CLI does this by default."""
+    BEFORE running properties; the CLI does this by default. Anchored-definition
+    applies to full-string/legacy validator patterns. Search, match, exec, and
+    substitution patterns are syntax-checked but are not required to be
+    full-string anchored."""
     from regexproof.harness.gates import RegistrationError, validate_pattern
 
     registry = REGISTRY if registry is None else registry
@@ -323,10 +326,15 @@ def validate_registry(registry=None):
             continue
         checked += 1
         try:
+            call_kind = entry.get("call_kind")
+            uses_non_full_string_api = call_kind in {
+                "match", "search", "exec", "substitution"
+            }
             validate_pattern(
                 pat,
                 entry.get("pattern_flags") or "",
-                anchored=(not entry.get("search_wrapped"))
+                anchored=(not uses_non_full_string_api)
+                and (not entry.get("search_wrapped"))
                 and entry.get("kind") in ("property", "counterexample_finder"),
                 search_wrapped=bool(entry.get("search_wrapped")),
             )

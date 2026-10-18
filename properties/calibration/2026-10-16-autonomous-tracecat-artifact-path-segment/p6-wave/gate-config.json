@@ -1,0 +1,25 @@
+{
+  "command": [
+    "/home/lalbers/gitroot/regexproof/.venv/bin/python",
+    "/home/lalbers/gitroot/regexproof/scripts/tracecat-artifact-path-segment-regression-gate.py",
+    "--source-root",
+    "/tmp/tracecat-p2-review-20261016",
+    "--output",
+    "/home/lalbers/gitroot/regexproof/properties/calibration/2026-10-16-autonomous-tracecat-artifact-path-segment/p6-wave/product-gate.json",
+    "--skip-proof"
+  ],
+  "evidence": {
+    "differential_case_counts": {
+      "TC-artifact-path-segment-safe-image": 2467
+    },
+    "product_engine_replay_question_ids": [
+      "TC-artifact-path-segment-safe-image"
+    ]
+  },
+  "gate_id": "tracecat-mount-only-artifact-path-segment",
+  "question_ids": [
+    "TC-artifact-path-segment-safe-image"
+  ],
+  "schema_version": "1",
+  "timeout_seconds": 300
+}

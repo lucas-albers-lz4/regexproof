@@ -1,0 +1,59 @@
+{
+  "schema_version": "1",
+  "review_kind": "targeted_exact_pin_single_site",
+  "cohort_id": "2026-09-12-calibration-20-r2",
+  "repository_url": "https://github.com/greydragon888/real-router",
+  "pin": "55aa7ef43a9c129beba90823cd8a4db10bb01211",
+  "source_inventory": "properties/calibration/2026-10-15-p2-source-inventory-v3/sites.ndjson",
+  "site": "greydragon888/real-router@55aa7ef43a9c129beba90823cd8a4db10bb01211:packages/validation-plugin/src/validators/navigation.ts:69:column-25",
+  "regex_id": "1e31ed0154408e832cf456d8422b6e38",
+  "source_file_sha256": "619bbc25796534163c82de8f01dab1ab3fc38cd844a7a0742301dab0534173c6",
+  "pattern": "[\\u0000-\\u001F\\u007F]",
+  "call_kind": "search",
+  "review": {
+    "author": "Codex-P2-source-review",
+    "reviewer": "Codex-independent-source-review-pass",
+    "same_model": true,
+    "policy_version": "autonomous-contracts-v1"
+  },
+  "decision": "adopted",
+  "reason_code": "documented-validator-invariant",
+  "rationale": "The exact pinned file defines the C0/DEL class and applies it to each own string-valued param in assertValidParamValues. validateNavigateParams invokes that helper for object params before isParams; validationPlugin.ts registers this function as navigation.validateParams; the pinned functional test rejects a value containing U+0001. Comments/changelog explain the path-corruption behavior. This validates a narrow opt-in library invariant, not a remote security boundary.",
+  "review_refs": [
+    {
+      "path": "packages/validation-plugin/src/validators/navigation.ts",
+      "line": 69,
+      "why": "exact CONTROL_CHARS_RE declaration and source inventory anchor"
+    },
+    {
+      "path": "packages/validation-plugin/src/validators/navigation.ts",
+      "line": 76,
+      "why": "param-value contract comment and check in assertValidParamValues"
+    },
+    {
+      "path": "packages/validation-plugin/src/validators/navigation.ts",
+      "line": 107,
+      "why": "validateNavigateParams applies the value check to object params"
+    },
+    {
+      "path": "packages/validation-plugin/src/validationPlugin.ts",
+      "line": 278,
+      "why": "opt-in validation plugin wires validateNavigateParams as navigation.validateParams"
+    },
+    {
+      "path": "packages/validation-plugin/tests/functional/navigation.validation.test.ts",
+      "line": 431,
+      "why": "pinned functional test rejects U+0001 in a navigation parameter"
+    },
+    {
+      "path": "packages/validation-plugin/CHANGELOG.md",
+      "line": 418,
+      "why": "pinned changelog documents the path-corruption motivation and opt-in behavior"
+    }
+  ],
+  "limitations": [
+    "The cohort GO decision was based on scale, not a security-boundary classification.",
+    "No remote attacker-controlled input or security impact is established.",
+    "The proof does not cover start paths, route-generation behavior, or all navigation validation."
+  ]
+}

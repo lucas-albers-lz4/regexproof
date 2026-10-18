@@ -1,0 +1,17 @@
+{
+  "cohort_id": "2026-10-15-aidevops-node-secret-boundary-calibration",
+  "cohort_manifest_digest": "b7fa1896fc98e53f92a015692c50b2be491bc4d339f5e259f628633ff16f2ba3",
+  "coverage_digest": "a6f1e23548781de428baf476242499ae490f3ed3315a8c6cad6dfa04a3ecb5b4",
+  "identities": [
+    {
+      "contract_sha256": "cdd60d57219cab105836bbe5ebf985d761018637ad81a4c190d970cad706bd8b",
+      "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "provenance": "agent_derived",
+      "question_id": "AE-aidevops-secret-read-extension-coverage",
+      "repo_id": "marcusquinn/aidevops",
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/plugins/opencode-aidevops/quality-hooks-secret-read.mjs:8:28",
+      "url": "https://github.com/marcusquinn/aidevops"
+    }
+  ],
+  "schema_version": "2"
+}

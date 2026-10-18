@@ -1,0 +1,33 @@
+{
+  "adoption": {
+    "approved_on": "2026-10-16",
+    "authority": "standing_user_delegation",
+    "contract_sha256": "6b1ec16f352121c1f897145d16bb64eeeb5630fd5acb5b870e919574318340f5",
+    "evidence": [
+      "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/pre-dispatch-validator-helper.sh",
+      "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/pulse-dispatch-large-file-gate.sh",
+      "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/scripts/tests/test-pre-dispatch-validator-large-file.sh",
+      "properties/calibration/2026-10-16-autonomous-aidevops-predispatch-github-text-20r2/review-evidence.json",
+      "properties/calibration/2026-10-16-autonomous-aidevops-predispatch-github-text-20r2/replay-cited-file.json"
+    ],
+    "policy_version": "autonomous-contracts-v1",
+    "rationale": "The pinned large-file producer constructs the marker from its repo-relative lf_path; the helper states it re-measures the path against fresh HEAD, and its existing exact-source tests use repository paths. The 15-site source review selects only the path token grammar. An isolated exact-helper replay confirms ../oracle.txt is accepted and the line-count operation reads a fixture outside the clone. This adopts clone containment as the intended property and records the counterexample; it does not claim public disclosure or confirmed impact.",
+    "review": {
+      "author": "Codex-P7-source-review",
+      "reviewer": "Codex-independent-source-review-pass",
+      "same_model": true
+    },
+    "source_file": ".agents/scripts/pre-dispatch-validator-helper.sh",
+    "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+    "source_sha256": "b68445d5eaf510e820831422c6e064ac58bbdc4496483ad562df30786e3723b5",
+    "source_url": "https://github.com/marcusquinn/aidevops",
+    "status": "approved"
+  },
+  "declared_domain": "Exact source pin 8666b6c6c52472b5535aa295f2df593918152cb1, call kind `search`, GNU grep `-oE` using source pattern `cited_file=[^ >]+`, POSIX-shell command substitution, and an ASCII, nonempty path token without NUL or LF. The expected path is interpreted relative to `${SCRATCH_DIR}/repo/` by the pinned helper on the host POSIX filesystem. The formal query asks whether the accepted token language contains the concrete relative witness `../oracle.txt` (13 characters); the product replay runs the exact helper with isolated `gh` and `git` stubs and a regular file outside the clone. This is a counterexample domain, not a proof that every path is confined or an assertion about publication or impact.",
+  "guarantee": "For an issue-body marker routed to `large-file-simplification-gate`, the `cited_file` value used by the validator must resolve to a regular file inside the fresh clone before the validator reads it. The marker producer supplies a repository-relative `lf_path`, and the helper documents this check as a fresh read against repository HEAD. The captured path must therefore not reach a file outside the clone. This contract asks only about the cited-file path used by the large-file line-count check; it does not claim file contents are disclosed, that the count is published, or that an external impact has occurred.",
+  "input_source": "The issue `body` fetched by `gh api repos/<slug>/issues/<number> --jq ' .body // \"\" '` in `cmd_validate`. Public GitHub issue text is externally authored and is untrusted input. When the parsed generator is `large-file-simplification-gate`, the captured value is appended to `${SCRATCH_DIR}/repo/` and passed to filesystem existence and line-count operations.",
+  "provenance": "agent_derived",
+  "schema_version": "1",
+  "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pre-dispatch-validator-helper.sh:1878:column-46",
+  "trust": "untrusted-input"
+}

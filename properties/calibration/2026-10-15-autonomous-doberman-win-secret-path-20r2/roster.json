@@ -1,0 +1,17 @@
+{
+  "cohort_id": "2026-09-12-calibration-20-r2",
+  "cohort_manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+  "coverage_digest": "4a8002cd804533291dc608e94fbf3fecab66870955928b71c7411b7e57c657c7",
+  "identities": [
+    {
+      "contract_sha256": "db5d22f87290865e215e0732278b9cf7ad9667271e1845e68a028064c79e2c56",
+      "pin": "53ae43c5298a2426c6696147fdd75e2a4aef10e2",
+      "provenance": "agent_derived",
+      "question_id": "PY-doberman-secret-store-windows-miss",
+      "repo_id": "fu351/Doberman-Core",
+      "site": "fu351/Doberman-Core@53ae43c5298a2426c6696147fdd75e2a4aef10e2:src/doberman/engine/rules/secrets.py:223:_SECRET_PATH",
+      "url": "https://github.com/fu351/Doberman-Core"
+    }
+  ],
+  "schema_version": "2"
+}

@@ -1,0 +1,56 @@
+{
+  "adopted_contracts": 1,
+  "candidate_population_count": 1,
+  "close_generation": 1,
+  "cohort_id": "2026-09-12-calibration-20-r2",
+  "contract_sha256": "84c56ece08e32906b07467c8556c61a3edf0b558af40b701edefa00a035a57be",
+  "corpus": "real-router",
+  "distinct_product_questions": 1,
+  "downstream_outcomes": {
+    "consumer_adopted_gates": 0,
+    "external_reports_sent": 0,
+    "fixes": 0,
+    "ground_truthed_sat_witnesses": 0,
+    "maintainer_confirmations": 0,
+    "reachable_violations": 0,
+    "sat_candidates": 0,
+    "security_impact_confirmed": 0
+  },
+  "event_log_valid": true,
+  "ground_truth": "not_applicable",
+  "kind": "p6-prospective-singleton-wave-closeout",
+  "limitations": [
+    "Singleton targeted calibration; not a 15-reviewed/up-to-5-adopted P7 wave.",
+    "The GO decision is based on corpus scale; the security-boundary admission condition is false.",
+    "No remote attacker input, security impact, consumer adoption, or external outcome is established.",
+    "The third runner attempt preserved a gate interpreter failure; the frozen argv was made dependency-light and the final resume passed without repeating the product question."
+  ],
+  "local_gate": {
+    "differential_cases": 17014,
+    "id": "rr-navigation-control-validator-exact-pin",
+    "mismatches": 0,
+    "passed": true,
+    "product_engine": "v26.11.1"
+  },
+  "mutation_guard": "sat_and_reproduced",
+  "proof_outcome": "unsat",
+  "question_id": "RR-navigation-param-control-characters-rejected",
+  "queue_site_status": "contracted",
+  "queue_transition_replay": "properties/calibration/2026-10-16-p2-real-router-navigation-source-review/p6-wave/queue-transition-replay.json",
+  "reviewed_sites": 1,
+  "roster_sha256": "82d1f24763ae8c7d6e3ab4da4953f8e7e097bc41ca9df38479e1801948416bb9",
+  "runner": {
+    "failed_resumes_preserved": 3,
+    "final_run_phase_sum_seconds": 1.1065,
+    "final_status": "complete",
+    "product_solver_question_executions": 1,
+    "recorded_runs": 4,
+    "solver_retries": 0
+  },
+  "scheduler_selection": "navigation-param-control-calibration",
+  "schema_version": "1",
+  "site": "greydragon888/real-router@55aa7ef43a9c129beba90823cd8a4db10bb01211:packages/validation-plugin/src/validators/navigation.ts:69:column-25",
+  "source_pin": "55aa7ef43a9c129beba90823cd8a4db10bb01211",
+  "source_review_evidence_sha256": "0b37e2ad9b74fa693ca2d3213a454e1949ee1da9bb3ccba98341e47378061471",
+  "wave_id": "rr-nav-controls-p6-20261016"
+}

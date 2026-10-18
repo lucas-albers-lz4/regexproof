@@ -1,0 +1,30 @@
+{
+  "adoption": {
+    "approved_on": "2026-10-15",
+    "authority": "standing_user_delegation",
+    "contract_sha256": "b188de0e4219be565c2c68c84b024de9d3bc3588d5025a2629126729ea5ed345",
+    "evidence": [
+      "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/hooks/scope-guard-pre-push.sh",
+      "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/README.md"
+    ],
+    "policy_version": "autonomous-contracts-v1",
+    "rationale": "The pinned scope guard scans operator-authored brief lines for the Files Scope heading and fails closed when scope is absent. This source-bound revision preserves the previously reviewed heading alphabet guarantee and binds it to the frozen 20-r2 source.",
+    "review": {
+      "author": "codex-contract-author",
+      "reviewer": "codex-independent-review-pass",
+      "same_model": true
+    },
+    "source_file": ".agents/hooks/scope-guard-pre-push.sh",
+    "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+    "source_sha256": "9e0b9c250138acfa70d6c6392d869001df2b1cb5e2e149b05f2e75bdb8fdeec2",
+    "source_url": "https://github.com/marcusquinn/aidevops",
+    "status": "approved"
+  },
+  "declared_domain": "Files Scope heading alphabet [# \\tA-Za-z], single char, ASCII",
+  "guarantee": "Files Scope heading alphabet contains no semicolon (heading detect fail-closes the scope guard)",
+  "input_source": "operator-authored todo/tasks/tNNN-brief.md Files Scope heading",
+  "provenance": "agent_derived",
+  "schema_version": "1",
+  "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/hooks/scope-guard-pre-push.sh:137:Files",
+  "trust": "config"
+}

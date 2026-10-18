@@ -1,0 +1,70 @@
+{
+  "schema_version": "1",
+  "repository": "TracecatHQ/tracecat",
+  "source_pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+  "source_file": "packages/tracecat-registry/tracecat_registry/core/email.py",
+  "source_sha256": "e0c225bdf4e78ea073edcd437aa9c8482a44aff54835ac833fa4c57bbd6e74d0",
+  "runtime": "3.12.15",
+  "replay_method": "Compiled the exact SAFE_EMAIL_PATTERN assignment and _build_email_message AST nodes from the pinned source, then invoked the real CPython email.message.EmailMessage header implementation with text/plain cases.",
+  "cases": [
+    {
+      "case": "valid",
+      "outcome": "message_built",
+      "from_header": "safe@example.com",
+      "to_addresses": [
+        "to@example.com"
+      ],
+      "bcc_headers": []
+    },
+    {
+      "case": "sender_trailing_lf",
+      "outcome": "message_built",
+      "from_header": "safe@example.com",
+      "to_addresses": [
+        "to@example.com"
+      ],
+      "bcc_headers": []
+    },
+    {
+      "case": "recipient_trailing_lf",
+      "outcome": "message_built",
+      "from_header": "safe@example.com",
+      "to_addresses": [
+        "to@example.com"
+      ],
+      "bcc_headers": []
+    },
+    {
+      "case": "sender_trailing_cr",
+      "outcome": "raised",
+      "exception_type": "ValueError",
+      "message": "Invalid sender email address: safe@example.com\r"
+    },
+    {
+      "case": "recipient_trailing_cr",
+      "outcome": "raised",
+      "exception_type": "ValueError",
+      "message": "Invalid recipient email address: ['to@example.com\\r']"
+    },
+    {
+      "case": "sender_header_injection_lf",
+      "outcome": "raised",
+      "exception_type": "ValueError",
+      "message": "Header values may not contain linefeed or carriage return characters"
+    },
+    {
+      "case": "sender_header_injection_crlf",
+      "outcome": "raised",
+      "exception_type": "ValueError",
+      "message": "Header values may not contain linefeed or carriage return characters"
+    },
+    {
+      "case": "recipient_header_injection_crlf",
+      "outcome": "raised",
+      "exception_type": "ValueError",
+      "message": "Invalid recipient email address: ['to@example.com\\r\\nBcc: victim@example.com']"
+    }
+  ],
+  "smtp_order_evidence": "send_email_smtp calls _build_email_message before constructing smtplib.SMTP or SMTP_SSL; a builder exception occurs before any SMTP connection or send_message call.",
+  "conclusion": "Embedded sender/recipient header-injection line breaks do not produce a completed message: sender line breaks raise during header construction, and recipient injection fails the exact regex check before the builder returns. A single trailing LF is normalized by EmailMessage and the regex accepts it; trailing CR is rejected by the regex. Neither trailing-control case creates an extra header. This behavior is supplied by the composition with EmailMessage and call ordering, not by a regex-only security guarantee."
+}

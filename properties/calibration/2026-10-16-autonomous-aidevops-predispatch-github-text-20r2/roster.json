@@ -1,0 +1,17 @@
+{
+  "cohort_id": "2026-09-12-calibration-20-r2",
+  "cohort_manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+  "coverage_digest": "d1addbcd85881ec07157a9f69336a8890537a5756870fc1e1723f95e56ecc173",
+  "identities": [
+    {
+      "contract_sha256": "6b1ec16f352121c1f897145d16bb64eeeb5630fd5acb5b870e919574318340f5",
+      "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "provenance": "agent_derived",
+      "question_id": "AE-aidevops-predispatch-cited-file-traversal-read",
+      "repo_id": "marcusquinn/aidevops",
+      "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/scripts/pre-dispatch-validator-helper.sh:1878:column-46",
+      "url": "https://github.com/marcusquinn/aidevops"
+    }
+  ],
+  "schema_version": "2"
+}

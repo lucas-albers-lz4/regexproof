@@ -1,0 +1,16 @@
+[
+  {
+    "question_ids": [
+      "DB-codex-apply-patch-file-target-path"
+    ],
+    "reviewed": false,
+    "site": "fu351/Doberman-Core@53ae43c5298a2426c6696147fdd75e2a4aef10e2:src/doberman/hosthooks/codex.py:69:_APPLY_PATCH_FILE_RE"
+  },
+  {
+    "question_ids": [
+      "DB-codex-apply-patch-move-target-path"
+    ],
+    "reviewed": false,
+    "site": "fu351/Doberman-Core@53ae43c5298a2426c6696147fdd75e2a4aef10e2:src/doberman/hosthooks/codex.py:70:_APPLY_PATCH_MOVE_RE"
+  }
+]

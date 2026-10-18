@@ -1,0 +1,9 @@
+[
+  {
+    "site": "chainguard-dev/malcontent@ea3e83e24676a1678a9522141da29b636c9451ab:pkg/report/report.go:118:threatHuntingKeywordRe",
+    "reviewed": false,
+    "question_ids": [
+      "MC-malcontent-description-metadata-extra-markdown-link"
+    ]
+  }
+]

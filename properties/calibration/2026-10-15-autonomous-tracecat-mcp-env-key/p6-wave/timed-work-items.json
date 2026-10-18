@@ -1,0 +1,9 @@
+[
+  {
+    "question_ids": [
+      "TC-mcp-env-key-accepts-terminal-lf"
+    ],
+    "reviewed": false,
+    "site": "TracecatHQ/tracecat@c84d52528a489821f355fc63976fbc7783ae0ad5:tracecat/integrations/mcp_validation.py:178:re.match"
+  }
+]

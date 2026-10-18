@@ -1,0 +1,17 @@
+{
+  "cohort_id": "2026-09-12-calibration-20-r2",
+  "cohort_manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+  "coverage_digest": "07704aeba1646b58244624e62c3c85290da23074ce1621b493edbea1558903bf",
+  "identities": [
+    {
+      "contract_sha256": "480327fa8a307a9310911fd45f9e0048fd049181a6fbc9588e60d4eb58096bb9",
+      "pin": "b31ddabecf4ed3209d37a2f5b29956120cd8f9ce",
+      "provenance": "agent_derived",
+      "question_id": "JE-json-editor-enum-string-html-text-codepoint-image",
+      "repo_id": "json-editor/json-editor",
+      "site": "json-editor/json-editor@b31ddabecf4ed3209d37a2f5b29956120cd8f9ce:src/editors/enum.js:123:column-24",
+      "url": "https://github.com/json-editor/json-editor"
+    }
+  ],
+  "schema_version": "2"
+}

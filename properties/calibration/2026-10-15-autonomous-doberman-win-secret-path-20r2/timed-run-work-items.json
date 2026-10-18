@@ -1,0 +1,7 @@
+[
+  {
+    "site": "fu351/Doberman-Core@53ae43c5298a2426c6696147fdd75e2a4aef10e2:src/doberman/engine/rules/secrets.py:223:_SECRET_PATH",
+    "reviewed": false,
+    "question_ids": ["PY-doberman-secret-store-windows-miss"]
+  }
+]

@@ -1,0 +1,17 @@
+{
+  "cohort_id": "2026-09-12-calibration-20-r2",
+  "cohort_manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+  "coverage_digest": "b652d70ffd2c2e99a97f5f81520160d757ffd5bd3738923673b27b2bc445b264",
+  "identities": [
+    {
+      "contract_sha256": "9045868f6004efccb55e4e6cb0a14e5a7cc5fb805bd61442afa6c791454e7f8b",
+      "pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+      "provenance": "agent_derived",
+      "question_id": "TC-mcp-server-name-separators-excluded",
+      "repo_id": "TracecatHQ/tracecat",
+      "site": "TracecatHQ/tracecat@c84d52528a489821f355fc63976fbc7783ae0ad5:tracecat/integrations/mcp_validation.py:267:re.match",
+      "url": "https://github.com/TracecatHQ/tracecat"
+    }
+  ],
+  "schema_version": "2"
+}

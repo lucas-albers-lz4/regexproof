@@ -1,0 +1,119 @@
+{
+  "cohort": {
+    "cohort_id": "2026-09-12-calibration-20-r2",
+    "contract_sha256": "e3513639aae043c6e5a41b06f5d9c81773e125481a70aa5bfc9789d6d0c05fd3",
+    "manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+    "roster_sha256": "19a5e56cc0c00a95bb8c2fa9966e7256404dc0932bf568ee9675ea205305e63f"
+  },
+  "differential_fuzz": {
+    "command": "scripts/differential-fuzz.py --mirror-expr <search-language> --real-argv <pinned-Go-RE2-adapter>",
+    "inputs": 33209,
+    "mismatches": 0,
+    "seed": 20261015,
+    "stdout": "\n33209 inputs, 0 mismatches (seed=20261015)\n"
+  },
+  "downstream_disposition": {
+    "reason": "Raw Markdown contains the metadata-derived link and table delimiter; no downstream viewer or consumer impact is confirmed, and no report was sent.",
+    "status": "pending_product_triage"
+  },
+  "gate_id": "malcontent-description-markdown-extra-link-v1",
+  "interpretation": "The gate reproduces Markdown link and table-cell structure for this witness. It does not confirm a downstream consumer or security impact.",
+  "limitations": [
+    "One one-line ASCII description witness is replayed; no all-input guarantee is claimed.",
+    "No Markdown viewer is executed, so link handling by downstream consumers is unknown."
+  ],
+  "measurements": {
+    "consumer_adopted_gates": 0,
+    "differential_cases": 33209,
+    "external_reports_sent": 0,
+    "ground_truthed_witnesses": 1,
+    "local_runnable_gates": 1,
+    "maintainer_confirmations": 0,
+    "mutation_guard_passed": 1,
+    "product_questions_asked": 1,
+    "reachable_markdown_link_and_table_injection": 1,
+    "sat_candidates": 1,
+    "security_impact_confirmed": 0,
+    "third_party_fixes": 0
+  },
+  "observed_at": "2026-10-15T20:16:27+00:00",
+  "product_replay": {
+    "checkout_root": "/tmp/regexproof-pinned-sources/malcontent-ea3e83e24676a1678a9522141da29b636c9451ab",
+    "description": "references 'Benign' | [click](https://attacker.invalid)' tool",
+    "go_version": "go version go1.27.2 linux/amd64",
+    "input_sha256": "a34ff99a7a84482f88803c6d85563597e5631a8f56830ca7c22db6be9e1a3aaf",
+    "markdown": "## sample.bin [\ud83d\udd35 LOW]\n\n| RISK | KEY | DESCRIPTION | EVIDENCE |\n|:--|:--|:--|:--|\n| LOW | [default](https://github.com/chainguard-dev/malcontent/blob/main/rules/default#regexproof_description_metadata_replay) | references 'Benign' | [click](https://attacker.invalid)' tool | [regexproof-description-sentinel](https://github.com/search?q=regexproof-description-sentinel&type=code) |\n\n",
+    "renderer_source_file": "pkg/render/markdown.go",
+    "renderer_source_file_sha256": "77b3123a08f5a3e73f1cbe303278067cb05b8e5ee14643726824d26bce8f4035",
+    "replay_source_sha256": "23e178380495ad207b5deb2884b1a763043d16bab83f6863e352e76570b8ad3d",
+    "repository_url": "https://github.com/chainguard-dev/malcontent",
+    "rule_name": "regexproof_description_metadata_replay",
+    "source_file": "pkg/report/report.go",
+    "source_file_sha256": "bb3ab2bc50fb835f4add14d8c1f6b71140335313c016575bd55eef224fe690de",
+    "source_pin": "ea3e83e24676a1678a9522141da29b636c9451ab",
+    "yara_x_c_api_version": "1.19.0",
+    "yara_x_go_binding_version": "1.19.0"
+  },
+  "question_id": "MC-malcontent-description-metadata-extra-markdown-link",
+  "result_rows": [
+    {
+      "backend": "seq",
+      "call_kind": "search",
+      "domain": "The pinned threatHuntingKeywordRe search capture must not emit a raw Markdown link and table delimiter from third-party description metadata",
+      "engine_versions": {
+        "python": "3.14.8",
+        "z3": "5.0.0"
+      },
+      "expect_unsat": false,
+      "family": "MC-malcontent-description-markdown",
+      "ground_truth": "reproduced",
+      "input_domain": "ascii",
+      "kind": "counterexample_finder",
+      "name": "MC-malcontent-description-metadata-extra-markdown-link",
+      "not_proven": false,
+      "ok": true,
+      "product": true,
+      "result": "sat",
+      "schema_version": "1",
+      "state": "stock",
+      "wall_ms": 1.8,
+      "witness": {
+        "description_metadata": "Detection patterns for the tool 'Benign' | [click](https://attacker.invalid)' taken from the ThreatHunting-Keywords github project"
+      }
+    },
+    {
+      "backend": "seq",
+      "call_kind": "search",
+      "domain": "MUTATION GUARD: the broad tool-name capture admits the raw table-column delimiter and Markdown-link witness excluded by a delimiter-restricting baseline",
+      "engine_versions": {
+        "python": "3.14.8",
+        "z3": "5.0.0"
+      },
+      "expect_unsat": false,
+      "family": "MC-malcontent-description-markdown",
+      "ground_truth": "reproduced",
+      "input_domain": "ascii",
+      "kind": "mutation_guard",
+      "name": "MC-malcontent-description-capture-mutation-guard",
+      "not_proven": false,
+      "ok": true,
+      "product": false,
+      "result": "sat",
+      "schema_version": "1",
+      "state": "stock",
+      "wall_ms": 1.4,
+      "witness": {
+        "description_metadata": "Detection patterns for the tool 'Benign' | [click](https://attacker.invalid)' taken from the ThreatHunting-Keywords github project"
+      }
+    }
+  ],
+  "schema_version": "1",
+  "source": {
+    "file": "pkg/report/report.go",
+    "pin": "ea3e83e24676a1678a9522141da29b636c9451ab",
+    "repository_url": "https://github.com/chainguard-dev/malcontent",
+    "sha256": "bb3ab2bc50fb835f4add14d8c1f6b71140335313c016575bd55eef224fe690de",
+    "source_ref": "https://github.com/chainguard-dev/malcontent/blob/ea3e83e24676a1678a9522141da29b636c9451ab/pkg/report/report.go"
+  },
+  "status": "reproduced"
+}

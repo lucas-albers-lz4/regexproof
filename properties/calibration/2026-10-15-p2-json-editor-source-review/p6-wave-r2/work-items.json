@@ -1,0 +1,7 @@
+[
+  {
+    "site": "json-editor/json-editor@b31ddabecf4ed3209d37a2f5b29956120cd8f9ce:src/editors/enum.js:123:replace",
+    "reviewed": false,
+    "question_ids": ["JE-json-editor-enum-string-html-text-codepoint-image"]
+  }
+]

@@ -1,0 +1,29 @@
+{
+  "admission_decision_path": "properties/generated/real-router_gate_decision.json",
+  "admission_decision_sha256": "763b21b8b0e15abc073bc32cdb3879f366edf281db1eb006ba100bf4d5da9914",
+  "candidate": {
+    "call_kind": "search",
+    "pattern": "[\\u0000-\\u001F\\u007F]",
+    "pin": "55aa7ef43a9c129beba90823cd8a4db10bb01211",
+    "regex_id": "1e31ed0154408e832cf456d8422b6e38",
+    "repo_id": "greydragon888/real-router",
+    "site": "greydragon888/real-router@55aa7ef43a9c129beba90823cd8a4db10bb01211:packages/validation-plugin/src/validators/navigation.ts:69:column-25",
+    "source_file_sha256": "619bbc25796534163c82de8f01dab1ab3fc38cd844a7a0742301dab0534173c6",
+    "source_site_id": "5b31bb36575367c934241151cc3480fe93aaeb52f6e8cb949a12c2ce0e81f83c",
+    "url": "https://github.com/greydragon888/real-router"
+  },
+  "cohort_id": "2026-09-12-calibration-20-r2",
+  "cohort_manifest_sha256": "cfcfeaa19a37e8704adf84d8979e71a9887ced3a71030fc3572d96c1a8270a78",
+  "kind": "targeted-singleton-candidate-intake",
+  "limitations": [
+    "The GO admission decision is scale-based and its security-boundary condition is false.",
+    "This one-row set is a P6 integration calibration, not a 15-reviewed P7 wave or a prevalence sample."
+  ],
+  "question_history_path": "properties/calibration/2026-10-16-p2-real-router-navigation-source-review/question-history-before.json",
+  "question_history_sha256": "16ca6ec8dc81fe9236ab42a641eeb0cb0fe0345e5cfb23c0fe2d01af5fb33ac0",
+  "ranking": "Singleton queue rank 1 after targeted review; no general ranker score, randomization, eligible-population denominator, or allocation claim.",
+  "schema_version": "1",
+  "selection": "Targeted source review selected this documented validator site after consulting exact-pin implementation, plugin wiring, functional test, and changelog.",
+  "source_inventory_path": "properties/calibration/2026-10-15-p2-source-inventory-v3/sites.ndjson",
+  "source_inventory_sha256": "a4e1dfbbd84e2258089d1fd52694ff1e28f6c48cef1caa13fed306e82b1b212f"
+}

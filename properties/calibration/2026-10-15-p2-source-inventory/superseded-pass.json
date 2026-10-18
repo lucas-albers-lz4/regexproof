@@ -1,0 +1,25 @@
+{
+  "schema_version": "1",
+  "artifact_kind": "superseded-p2-source-inventory-pass",
+  "status": "superseded",
+  "cohort_id": "2026-09-12-calibration-20-r2",
+  "reason": "The first pass used the default hidden-path filter and omitted Aidevops .agents product sources.",
+  "first_pass": {
+    "source_sites": 10231,
+    "aidevops_source_sites": 820,
+    "inventory_json_sha256": "dad15406bcb9fae33ef50ec88677aca796c3ffbdcb3fa09a25133670f5903110",
+    "sites_ndjson_sha256": "a37ab000c78729b709aa7faab62f7cff10f66ca01e4e902be69d0a10e716ae14"
+  },
+  "detected_by": {
+    "repo_id": "marcusquinn/aidevops",
+    "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+    "evidence": "The exact-pin Aidevops conversion scan records 11,330 POSIX-shell sites, while the first source-inventory pass recorded only 820."
+  },
+  "replacement": {
+    "inventory_json": "inventory.json",
+    "inventory_json_sha256": "9d9c36714b8084cf37084fe60279524802a4e21689201b5e4628eea50359a717",
+    "sites_ndjson": "sites.ndjson",
+    "sites_ndjson_sha256": "a1996ab9b4a90314aa69b8476c913199bb0de6b4299ccd696035976b121799ff",
+    "source_sites": 20779
+  }
+}

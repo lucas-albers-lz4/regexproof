@@ -1,0 +1,1074 @@
+{
+  "attempts": [
+    {
+      "contract": {
+        "adoption": {
+          "approved_on": "2026-10-15",
+          "authority": "standing_user_delegation",
+          "contract_sha256": "1ff71f9c38086d2fc023842782e618a6d2dcafcf5f98d0d0325451d322ad80be",
+          "evidence": [
+            "https://github.com/magiclabs/magic-js/blob/e9fb233763160316989863b4739c4656133d45b0/packages/@magic-ext/wallet-kit/src/utils/base64.ts",
+            "https://www.rfc-editor.org/rfc/rfc4648#section-5",
+            "https://www.w3.org/TR/webauthn-3/#dom-publickeycredential-tojson",
+            "properties/calibration/2026-10-15-p2-magic-js-source-review/evidence.json regex_id=391688fc4ca696e393db3abe1344951b column=26"
+          ],
+          "policy_version": "autonomous-contracts-v1",
+          "rationale": "The exact Base64URL encoder feeds WebAuthn credential JSON fields such as rawId, authenticatorData, clientDataJSON, signatures, and attestationObject. The WebAuthn JSON conversion path names this representation, and RFC 4648 section 5 defines its URL-safe alphabet and optional omitted padding. The contract is limited to the encoder output; it does not claim authentication, decoder rejection of malformed input, or server-side credential validity.",
+          "review": {
+            "author": "codex-contract-author",
+            "reviewer": "codex-independent-review-pass",
+            "same_model": true
+          },
+          "source_file": "packages/@magic-ext/wallet-kit/src/utils/base64.ts",
+          "source_pin": "e9fb233763160316989863b4739c4656133d45b0",
+          "source_sha256": "b2307e07627a0ab69d0bb2107e0776356f8af913a9cfc3ff02533e32132e8bbc",
+          "source_url": "https://github.com/magiclabs/magic-js",
+          "status": "approved"
+        },
+        "declared_domain": "One Unicode codepoint passed through the exact encode replacement image with no length bound. Exact Node replay runs the source-authenticated replacement chain for every 0-, 1-, and 2-byte input plus seeded longer buffers.",
+        "guarantee": "For each binary WebAuthn credential response field serialized by the pinned Wallet Kit PublicKeyCredential.toJSON polyfill, the encoder emits the WebAuthn Base64URLString representation: URL-safe Base64 without padding.",
+        "input_source": "ArrayBuffer values from PublicKeyCredential.rawId and AuthenticatorResponse fields returned by the browser API.",
+        "provenance": "agent_derived",
+        "schema_version": "1",
+        "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-ext/wallet-kit/src/utils/base64.ts:11:column-26",
+        "trust": "untrusted-input"
+      },
+      "detail": null,
+      "domain": "One Unicode codepoint passed through the exact encode replacement image with no length bound. Exact Node replay runs the source-authenticated replacement chain for every 0-, 1-, and 2-byte input plus seeded longer buffers.",
+      "gate": {
+        "consumer_adopted": false,
+        "differential_cases": 67841,
+        "gate_id": "magic-js-base64url-output-image",
+        "local_gate_command": "/home/lalbers/gitroot/regexproof/.venv/bin/python scripts/magic-js-base64url-regression-gate.py --source-root /tmp/regexproof-pinned-sources/magic-js-e9fb233763160316989863b4739c4656133d45b0 --output properties/calibration/2026-10-15-p2-magic-js-source-review/p6-wave-r2/product-gate.json",
+        "local_gate_passed": true,
+        "mutation_guard_passed": true,
+        "product_engine_replayed": true,
+        "source_pin_verified": true
+      },
+      "kind": "property",
+      "pin": "e9fb233763160316989863b4739c4656133d45b0",
+      "question_id": "ME-wallet-kit-base64url",
+      "repo_id": "magiclabs/magic-js",
+      "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-ext/wallet-kit/src/utils/base64.ts:11:column-26",
+      "status": "unsat",
+      "synthesized": false,
+      "url": "https://github.com/magiclabs/magic-js"
+    },
+    {
+      "contract": {
+        "adoption": {
+          "approved_on": "2026-10-15",
+          "authority": "standing_user_delegation",
+          "contract_sha256": "494cbc6e8061b3c44ea15d48af39a0a566308d3b493712ff30e511d6dd2ed107",
+          "evidence": [
+            "https://github.com/magiclabs/magic-js/blob/e9fb233763160316989863b4739c4656133d45b0/packages/@magic-ext/webauthn/src/utils/base64.ts",
+            "https://www.rfc-editor.org/rfc/rfc4648#section-5",
+            "https://www.w3.org/TR/webauthn-3/#dom-publickeycredential-tojson",
+            "properties/calibration/2026-10-15-p2-magic-js-source-review/evidence.json regex_id=9d74cad7da31ec1d69bd83ae6d906dce column=26"
+          ],
+          "policy_version": "autonomous-contracts-v1",
+          "rationale": "The exact Base64URL encoder feeds WebAuthn credential JSON fields such as rawId, authenticatorData, clientDataJSON, signatures, and attestationObject. The WebAuthn JSON conversion path names this representation, and RFC 4648 section 5 defines its URL-safe alphabet and optional omitted padding. The contract is limited to the encoder output; it does not claim authentication, decoder rejection of malformed input, or server-side credential validity.",
+          "review": {
+            "author": "codex-contract-author",
+            "reviewer": "codex-independent-review-pass",
+            "same_model": true
+          },
+          "source_file": "packages/@magic-ext/webauthn/src/utils/base64.ts",
+          "source_pin": "e9fb233763160316989863b4739c4656133d45b0",
+          "source_sha256": "b2307e07627a0ab69d0bb2107e0776356f8af913a9cfc3ff02533e32132e8bbc",
+          "source_url": "https://github.com/magiclabs/magic-js",
+          "status": "approved"
+        },
+        "declared_domain": "One Unicode codepoint passed through the exact encode replacement image with no length bound. Exact Node replay runs the source-authenticated replacement chain for every 0-, 1-, and 2-byte input plus seeded longer buffers.",
+        "guarantee": "For each binary WebAuthn credential response field serialized by the pinned WebAuthn PublicKeyCredential.toJSON polyfill, the encoder emits the WebAuthn Base64URLString representation: URL-safe Base64 without padding.",
+        "input_source": "ArrayBuffer values from PublicKeyCredential.rawId and AuthenticatorResponse fields returned by the browser API.",
+        "provenance": "agent_derived",
+        "schema_version": "1",
+        "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-ext/webauthn/src/utils/base64.ts:11:column-26",
+        "trust": "untrusted-input"
+      },
+      "detail": null,
+      "domain": "One Unicode codepoint passed through the exact encode replacement image with no length bound. Exact Node replay runs the source-authenticated replacement chain for every 0-, 1-, and 2-byte input plus seeded longer buffers.",
+      "gate": {
+        "consumer_adopted": false,
+        "differential_cases": 67841,
+        "gate_id": "magic-js-base64url-output-image",
+        "local_gate_command": "/home/lalbers/gitroot/regexproof/.venv/bin/python scripts/magic-js-base64url-regression-gate.py --source-root /tmp/regexproof-pinned-sources/magic-js-e9fb233763160316989863b4739c4656133d45b0 --output properties/calibration/2026-10-15-p2-magic-js-source-review/p6-wave-r2/product-gate.json",
+        "local_gate_passed": true,
+        "mutation_guard_passed": true,
+        "product_engine_replayed": true,
+        "source_pin_verified": true
+      },
+      "kind": "property",
+      "pin": "e9fb233763160316989863b4739c4656133d45b0",
+      "question_id": "ME-webauthn-base64url",
+      "repo_id": "magiclabs/magic-js",
+      "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-ext/webauthn/src/utils/base64.ts:11:column-26",
+      "status": "unsat",
+      "synthesized": false,
+      "url": "https://github.com/magiclabs/magic-js"
+    },
+    {
+      "contract": {
+        "adoption": {
+          "approved_on": "2026-10-15",
+          "authority": "standing_user_delegation",
+          "contract_sha256": "b6615df46cf810bfc7a8e83ba4352a373b1f72fdfbfd1f6aafdd21ca6d1c2245",
+          "evidence": [
+            "https://github.com/magiclabs/magic-js/blob/e9fb233763160316989863b4739c4656133d45b0/packages/@magic-sdk/provider/src/util/base64-json.ts",
+            "https://www.rfc-editor.org/rfc/rfc4648#section-5",
+            "https://www.w3.org/TR/webauthn-3/#dom-publickeycredential-tojson",
+            "properties/calibration/2026-10-15-p2-magic-js-source-review/evidence.json regex_id=67d8a25db747c86892aa65a39d0cb68b column=26"
+          ],
+          "policy_version": "autonomous-contracts-v1",
+          "rationale": "The exact Base64URL encoder feeds WebAuthn credential JSON fields such as rawId, authenticatorData, clientDataJSON, signatures, and attestationObject. The WebAuthn JSON conversion path names this representation, and RFC 4648 section 5 defines its URL-safe alphabet and optional omitted padding. The contract is limited to the encoder output; it does not claim authentication, decoder rejection of malformed input, or server-side credential validity.",
+          "review": {
+            "author": "codex-contract-author",
+            "reviewer": "codex-independent-review-pass",
+            "same_model": true
+          },
+          "source_file": "packages/@magic-sdk/provider/src/util/base64-json.ts",
+          "source_pin": "e9fb233763160316989863b4739c4656133d45b0",
+          "source_sha256": "4d0836fa5938b3e627fcf3fba739f465e3f48354e70e4c94ce96c222d472269b",
+          "source_url": "https://github.com/magiclabs/magic-js",
+          "status": "approved"
+        },
+        "declared_domain": "One Unicode codepoint passed through the exact encode replacement image with no length bound. Exact Node replay runs the source-authenticated replacement chain for every 0-, 1-, and 2-byte input plus seeded longer buffers.",
+        "guarantee": "For each binary WebAuthn credential response field serialized by the pinned Provider PublicKeyCredential.toJSON polyfill, the encoder emits the WebAuthn Base64URLString representation: URL-safe Base64 without padding.",
+        "input_source": "ArrayBuffer values from PublicKeyCredential.rawId and AuthenticatorResponse fields returned by the browser API.",
+        "provenance": "agent_derived",
+        "schema_version": "1",
+        "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-sdk/provider/src/util/base64-json.ts:54:column-26",
+        "trust": "untrusted-input"
+      },
+      "detail": null,
+      "domain": "One Unicode codepoint passed through the exact encode replacement image with no length bound. Exact Node replay runs the source-authenticated replacement chain for every 0-, 1-, and 2-byte input plus seeded longer buffers.",
+      "gate": {
+        "consumer_adopted": false,
+        "differential_cases": 67841,
+        "gate_id": "magic-js-base64url-output-image",
+        "local_gate_command": "/home/lalbers/gitroot/regexproof/.venv/bin/python scripts/magic-js-base64url-regression-gate.py --source-root /tmp/regexproof-pinned-sources/magic-js-e9fb233763160316989863b4739c4656133d45b0 --output properties/calibration/2026-10-15-p2-magic-js-source-review/p6-wave-r2/product-gate.json",
+        "local_gate_passed": true,
+        "mutation_guard_passed": true,
+        "product_engine_replayed": true,
+        "source_pin_verified": true
+      },
+      "kind": "property",
+      "pin": "e9fb233763160316989863b4739c4656133d45b0",
+      "question_id": "ME-provider-webauthn-base64url",
+      "repo_id": "magiclabs/magic-js",
+      "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-sdk/provider/src/util/base64-json.ts:54:column-26",
+      "status": "unsat",
+      "synthesized": false,
+      "url": "https://github.com/magiclabs/magic-js"
+    },
+    {
+      "contract": {
+        "adoption": {
+          "approved_on": "2026-10-15",
+          "authority": "standing_user_delegation",
+          "contract_sha256": "40cd17120597b424cde7a660f858e9d77538da09bdf84b9fbcaeda825d9b98de",
+          "evidence": [
+            "https://github.com/magiclabs/magic-js/blob/e9fb233763160316989863b4739c4656133d45b0/packages/@magic-sdk/provider/src/util/web-crypto.ts",
+            "https://www.rfc-editor.org/rfc/rfc7515#section-7.1",
+            "https://www.rfc-editor.org/rfc/rfc9449",
+            "properties/calibration/2026-10-15-p2-magic-js-source-review/evidence.json regex_id=060e2b7aec4f211fcb52aa249cfa65d2 column=27"
+          ],
+          "policy_version": "autonomous-contracts-v1",
+          "rationale": "binToUrlBase64 creates each DPoP JWS compact component from the JSON header/claims bytes and Web Crypto signature bytes. The transformation removes padding and maps the two standard Base64 symbols to the URL-safe alphabet before dot-joining the three components. RFC 7515 requires these protected-header, payload, and signature components to use unpadded Base64URL. The contract covers this output mapping only; it does not claim DPoP claim validity, key custody, or server acceptance.",
+          "review": {
+            "author": "codex-contract-author",
+            "reviewer": "codex-independent-review-pass",
+            "same_model": true
+          },
+          "source_file": "packages/@magic-sdk/provider/src/util/web-crypto.ts",
+          "source_pin": "e9fb233763160316989863b4739c4656133d45b0",
+          "source_sha256": "e0c48f0e2f17326411a6de87e40fa5fe6d9e6c01424df3a4265b016e80f93d6a",
+          "source_url": "https://github.com/magiclabs/magic-js",
+          "status": "approved"
+        },
+        "declared_domain": "The reachable DPoP components are passed through the exact source replacement chain. The Z3 theorem is per input codepoint with no length bound; exact Node replay covers all one- and two-byte inputs, representative JSON text, and seeded byte buffers.",
+        "guarantee": "The pinned web-crypto DPoP helper encodes the protected header, claims, and signature as unpadded Base64URL before joining the JWS compact representation.",
+        "input_source": "Binary JSON header/claims and signature bytes generated by the pinned DPoP implementation and Web Crypto signing API.",
+        "provenance": "agent_derived",
+        "schema_version": "1",
+        "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-sdk/provider/src/util/web-crypto.ts:106:column-27",
+        "trust": "internal"
+      },
+      "detail": null,
+      "domain": "The reachable DPoP components are passed through the exact source replacement chain. The Z3 theorem is per input codepoint with no length bound; exact Node replay covers all one- and two-byte inputs, representative JSON text, and seeded byte buffers.",
+      "gate": {
+        "consumer_adopted": false,
+        "differential_cases": 67841,
+        "gate_id": "magic-js-base64url-output-image",
+        "local_gate_command": "/home/lalbers/gitroot/regexproof/.venv/bin/python scripts/magic-js-base64url-regression-gate.py --source-root /tmp/regexproof-pinned-sources/magic-js-e9fb233763160316989863b4739c4656133d45b0 --output properties/calibration/2026-10-15-p2-magic-js-source-review/p6-wave-r2/product-gate.json",
+        "local_gate_passed": true,
+        "mutation_guard_passed": true,
+        "product_engine_replayed": true,
+        "source_pin_verified": true
+      },
+      "kind": "property",
+      "pin": "e9fb233763160316989863b4739c4656133d45b0",
+      "question_id": "ME-provider-dpop-base64url",
+      "repo_id": "magiclabs/magic-js",
+      "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-sdk/provider/src/util/web-crypto.ts:106:column-27",
+      "status": "unsat",
+      "synthesized": false,
+      "url": "https://github.com/magiclabs/magic-js"
+    },
+    {
+      "contract": {
+        "adoption": {
+          "approved_on": "2026-10-15",
+          "authority": "standing_user_delegation",
+          "contract_sha256": "569f0d7217b959757d3ee84744ecbff612356727663078e73da9e3652c503a70",
+          "evidence": [
+            "https://github.com/magiclabs/magic-js/blob/e9fb233763160316989863b4739c4656133d45b0/packages/@magic-sdk/react-native-bare/src/native-crypto/utils/uint8.ts",
+            "https://www.rfc-editor.org/rfc/rfc7515#section-7.1",
+            "https://www.rfc-editor.org/rfc/rfc9449",
+            "properties/calibration/2026-10-15-p2-magic-js-source-review/evidence.json regex_id=53b9bb2ec809d82012a74705bd6d9c92 column=24"
+          ],
+          "policy_version": "autonomous-contracts-v1",
+          "rationale": "The helper encodes DPoP header, claims, and signature bytes into the compact proof string. Its source documentation names Base64Url and RFC 4648, and the surrounding signing code joins the three encoded components with dots. The contract covers the helper output alphabet and padding only; it does not establish key custody, DPoP claim validity, or proof acceptance by a server.",
+          "review": {
+            "author": "codex-contract-author",
+            "reviewer": "codex-independent-review-pass",
+            "same_model": true
+          },
+          "source_file": "packages/@magic-sdk/react-native-bare/src/native-crypto/utils/uint8.ts",
+          "source_pin": "e9fb233763160316989863b4739c4656133d45b0",
+          "source_sha256": "49e76dc6132fc7524736a41057712451bcd3c459647529b646631dc94e7828e1",
+          "source_url": "https://github.com/magiclabs/magic-js",
+          "status": "approved"
+        },
+        "declared_domain": "The reachable DPoP components are passed through the exact source replacement chain. The Z3 theorem is per input codepoint with no length bound; exact Node replay covers all one- and two-byte inputs, representative JSON text, and seeded byte buffers.",
+        "guarantee": "The pinned React Native bare DPoP helper encodes each header, claims, and signature component using unpadded Base64URL before joining the JWS compact representation.",
+        "input_source": "ASCII JSON text for the DPoP header/claims and signature bytes returned by the device crypto signing API.",
+        "provenance": "agent_derived",
+        "schema_version": "1",
+        "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-sdk/react-native-bare/src/native-crypto/utils/uint8.ts:71:column-24",
+        "trust": "internal"
+      },
+      "detail": null,
+      "domain": "The reachable DPoP components are passed through the exact source replacement chain. The Z3 theorem is per input codepoint with no length bound; exact Node replay covers all one- and two-byte inputs, representative JSON text, and seeded byte buffers.",
+      "gate": {
+        "consumer_adopted": false,
+        "differential_cases": 67841,
+        "gate_id": "magic-js-base64url-output-image",
+        "local_gate_command": "/home/lalbers/gitroot/regexproof/.venv/bin/python scripts/magic-js-base64url-regression-gate.py --source-root /tmp/regexproof-pinned-sources/magic-js-e9fb233763160316989863b4739c4656133d45b0 --output properties/calibration/2026-10-15-p2-magic-js-source-review/p6-wave-r2/product-gate.json",
+        "local_gate_passed": true,
+        "mutation_guard_passed": true,
+        "product_engine_replayed": true,
+        "source_pin_verified": true
+      },
+      "kind": "property",
+      "pin": "e9fb233763160316989863b4739c4656133d45b0",
+      "question_id": "ME-rn-bare-dpop-base64url",
+      "repo_id": "magiclabs/magic-js",
+      "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-sdk/react-native-bare/src/native-crypto/utils/uint8.ts:71:column-24",
+      "status": "unsat",
+      "synthesized": false,
+      "url": "https://github.com/magiclabs/magic-js"
+    }
+  ],
+  "cohort": {
+    "cohort_id": "2026-09-12-calibration-20-r2",
+    "manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+    "repos": [
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "ecma",
+        "pin": "b31ddabecf4ed3209d37a2f5b29956120cd8f9ce",
+        "repo_id": "json-editor/json-editor",
+        "score": 4902,
+        "sites": 1,
+        "url": "https://github.com/json-editor/json-editor"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "posix-shell",
+        "pin": "d4f01ba6202d50909d1977810d322259482e0b82",
+        "repo_id": "mycelium0/mycelium",
+        "score": 21,
+        "sites": 1,
+        "url": "https://github.com/mycelium0/mycelium"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "py_re",
+        "pin": "889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8",
+        "repo_id": "netspooky/inhale",
+        "score": 191,
+        "sites": 1,
+        "url": "https://github.com/netspooky/inhale"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "ecma",
+        "pin": "e9fb233763160316989863b4739c4656133d45b0",
+        "repo_id": "magiclabs/magic-js",
+        "score": 477,
+        "sites": 1,
+        "url": "https://github.com/magiclabs/magic-js"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "ecma",
+        "pin": "d4a39726cad8d8e27e4c0502d1843c3b4180ffbc",
+        "repo_id": "grcengineering/gigachad-grc",
+        "score": 154,
+        "sites": 1,
+        "url": "https://github.com/grcengineering/gigachad-grc"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "posix-shell",
+        "pin": "cea68022f477680f4bb502396c705fe14b3c412f",
+        "repo_id": "melodic-software/claude-code-plugins",
+        "score": 6,
+        "sites": 1,
+        "url": "https://github.com/melodic-software/claude-code-plugins"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "py_re",
+        "pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+        "repo_id": "TracecatHQ/tracecat",
+        "score": 60,
+        "sites": 144,
+        "url": "https://github.com/TracecatHQ/tracecat"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "py_re",
+        "pin": "efcf8e4c0087def553a737dc1c4eebda5d8a90cd",
+        "repo_id": "Agenticstiger/forge-cli",
+        "score": 45,
+        "sites": 447,
+        "url": "https://github.com/Agenticstiger/forge-cli"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "py_re",
+        "pin": "a9c0f06affc35e1f8e45bb77f835b92350c68a0b",
+        "repo_id": "airbnb/binaryalert",
+        "score": 45,
+        "sites": 8,
+        "url": "https://github.com/airbnb/binaryalert"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "ecma",
+        "pin": "978def55c8e68cab3a50a7ee4725039da753f0a1",
+        "repo_id": "xibosignage/xibo-cms",
+        "score": 61,
+        "sites": 1981,
+        "url": "https://github.com/xibosignage/xibo-cms"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "ecma",
+        "pin": "7ea3b445ee7d2ef8004d5ee77dab7544e1b8ef88",
+        "repo_id": "profbernardoj/everclaw-community-branches",
+        "score": 51,
+        "sites": 468,
+        "url": "https://github.com/profbernardoj/everclaw-community-branches"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "go_re",
+        "pin": "01cd447ad3b1acfed7e0680596c2c74458a4cf06",
+        "repo_id": "h0tak88r/AutoAR",
+        "score": 54,
+        "sites": 33,
+        "url": "https://github.com/h0tak88r/AutoAR"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "go_re",
+        "pin": "ea3e83e24676a1678a9522141da29b636c9451ab",
+        "repo_id": "chainguard-dev/malcontent",
+        "score": 52,
+        "sites": 15,
+        "url": "https://github.com/chainguard-dev/malcontent"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "go_re",
+        "pin": "2f3fa5a506d6565fa68858b7963450567ddda114",
+        "repo_id": "open-horizon/anax",
+        "score": 50,
+        "sites": 24,
+        "url": "https://github.com/open-horizon/anax"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "go_re",
+        "pin": "1cf40fcabd330a1fe4e8eb9493b15a99a392e17f",
+        "repo_id": "snyk/snyk-ls",
+        "score": 50,
+        "sites": 35,
+        "url": "https://github.com/snyk/snyk-ls"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "posix-shell",
+        "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+        "repo_id": "marcusquinn/aidevops",
+        "score": 55,
+        "sites": 11330,
+        "url": "https://github.com/marcusquinn/aidevops"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "posix-shell",
+        "pin": "65624396e263074bb8cb2e049f9a9ec6215ea5c1",
+        "repo_id": "Leviticus-Triage/llm-honeypot-intelligence",
+        "score": 34,
+        "sites": 16,
+        "url": "https://github.com/Leviticus-Triage/llm-honeypot-intelligence"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "py_re",
+        "pin": "0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a",
+        "repo_id": "panther-labs/panther-analysis",
+        "score": 56,
+        "sites": 57,
+        "url": "https://github.com/panther-labs/panther-analysis"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "py_re",
+        "pin": "53ae43c5298a2426c6696147fdd75e2a4aef10e2",
+        "repo_id": "fu351/Doberman-Core",
+        "score": 53,
+        "sites": 108,
+        "url": "https://github.com/fu351/Doberman-Core"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "ecma",
+        "pin": "55aa7ef43a9c129beba90823cd8a4db10bb01211",
+        "repo_id": "greydragon888/real-router",
+        "score": 48,
+        "sites": 2882,
+        "url": "https://github.com/greydragon888/real-router"
+      }
+    ],
+    "schema_version": "1"
+  },
+  "cohort_id": "2026-09-12-calibration-20-r2",
+  "manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+  "product_coverage_manifest": {
+    "cohort_id": "2026-09-12-calibration-20-r2",
+    "cohort_manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+    "coverage_digest": "c84cd6529a3fb8e2a7833867ef8ed91854d135ae90b78c15f2e51af330278459",
+    "identities": [
+      {
+        "contract_sha256": "1ff71f9c38086d2fc023842782e618a6d2dcafcf5f98d0d0325451d322ad80be",
+        "pin": "e9fb233763160316989863b4739c4656133d45b0",
+        "provenance": "agent_derived",
+        "question_id": "ME-wallet-kit-base64url",
+        "repo_id": "magiclabs/magic-js",
+        "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-ext/wallet-kit/src/utils/base64.ts:11:column-26",
+        "url": "https://github.com/magiclabs/magic-js"
+      },
+      {
+        "contract_sha256": "494cbc6e8061b3c44ea15d48af39a0a566308d3b493712ff30e511d6dd2ed107",
+        "pin": "e9fb233763160316989863b4739c4656133d45b0",
+        "provenance": "agent_derived",
+        "question_id": "ME-webauthn-base64url",
+        "repo_id": "magiclabs/magic-js",
+        "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-ext/webauthn/src/utils/base64.ts:11:column-26",
+        "url": "https://github.com/magiclabs/magic-js"
+      },
+      {
+        "contract_sha256": "b6615df46cf810bfc7a8e83ba4352a373b1f72fdfbfd1f6aafdd21ca6d1c2245",
+        "pin": "e9fb233763160316989863b4739c4656133d45b0",
+        "provenance": "agent_derived",
+        "question_id": "ME-provider-webauthn-base64url",
+        "repo_id": "magiclabs/magic-js",
+        "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-sdk/provider/src/util/base64-json.ts:54:column-26",
+        "url": "https://github.com/magiclabs/magic-js"
+      },
+      {
+        "contract_sha256": "40cd17120597b424cde7a660f858e9d77538da09bdf84b9fbcaeda825d9b98de",
+        "pin": "e9fb233763160316989863b4739c4656133d45b0",
+        "provenance": "agent_derived",
+        "question_id": "ME-provider-dpop-base64url",
+        "repo_id": "magiclabs/magic-js",
+        "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-sdk/provider/src/util/web-crypto.ts:106:column-27",
+        "url": "https://github.com/magiclabs/magic-js"
+      },
+      {
+        "contract_sha256": "569f0d7217b959757d3ee84744ecbff612356727663078e73da9e3652c503a70",
+        "pin": "e9fb233763160316989863b4739c4656133d45b0",
+        "provenance": "agent_derived",
+        "question_id": "ME-rn-bare-dpop-base64url",
+        "repo_id": "magiclabs/magic-js",
+        "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-sdk/react-native-bare/src/native-crypto/utils/uint8.ts:71:column-24",
+        "url": "https://github.com/magiclabs/magic-js"
+      }
+    ],
+    "schema_version": "2"
+  },
+  "rows": [
+    {
+      "canonical": {
+        "contract": {
+          "adoption": {
+            "approved_on": "2026-10-15",
+            "authority": "standing_user_delegation",
+            "contract_sha256": "1ff71f9c38086d2fc023842782e618a6d2dcafcf5f98d0d0325451d322ad80be",
+            "evidence": [
+              "https://github.com/magiclabs/magic-js/blob/e9fb233763160316989863b4739c4656133d45b0/packages/@magic-ext/wallet-kit/src/utils/base64.ts",
+              "https://www.rfc-editor.org/rfc/rfc4648#section-5",
+              "https://www.w3.org/TR/webauthn-3/#dom-publickeycredential-tojson",
+              "properties/calibration/2026-10-15-p2-magic-js-source-review/evidence.json regex_id=391688fc4ca696e393db3abe1344951b column=26"
+            ],
+            "policy_version": "autonomous-contracts-v1",
+            "rationale": "The exact Base64URL encoder feeds WebAuthn credential JSON fields such as rawId, authenticatorData, clientDataJSON, signatures, and attestationObject. The WebAuthn JSON conversion path names this representation, and RFC 4648 section 5 defines its URL-safe alphabet and optional omitted padding. The contract is limited to the encoder output; it does not claim authentication, decoder rejection of malformed input, or server-side credential validity.",
+            "review": {
+              "author": "codex-contract-author",
+              "reviewer": "codex-independent-review-pass",
+              "same_model": true
+            },
+            "source_file": "packages/@magic-ext/wallet-kit/src/utils/base64.ts",
+            "source_pin": "e9fb233763160316989863b4739c4656133d45b0",
+            "source_sha256": "b2307e07627a0ab69d0bb2107e0776356f8af913a9cfc3ff02533e32132e8bbc",
+            "source_url": "https://github.com/magiclabs/magic-js",
+            "status": "approved"
+          },
+          "declared_domain": "One Unicode codepoint passed through the exact encode replacement image with no length bound. Exact Node replay runs the source-authenticated replacement chain for every 0-, 1-, and 2-byte input plus seeded longer buffers.",
+          "guarantee": "For each binary WebAuthn credential response field serialized by the pinned Wallet Kit PublicKeyCredential.toJSON polyfill, the encoder emits the WebAuthn Base64URLString representation: URL-safe Base64 without padding.",
+          "input_source": "ArrayBuffer values from PublicKeyCredential.rawId and AuthenticatorResponse fields returned by the browser API.",
+          "provenance": "agent_derived",
+          "schema_version": "1",
+          "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-ext/wallet-kit/src/utils/base64.ts:11:column-26",
+          "trust": "untrusted-input"
+        },
+        "corpus": "magic-js",
+        "disclosure": null,
+        "domain": "One Unicode codepoint passed through the exact encode replacement image with no length bound. Exact Node replay runs the source-authenticated replacement chain for every 0-, 1-, and 2-byte input plus seeded longer buffers.",
+        "engine_versions": {
+          "python": "3.14.8",
+          "z3": "5.0.0"
+        },
+        "family": "ME-base64url-output-image",
+        "ground_truth": null,
+        "ground_truth_status": null,
+        "idiom_bucket": "base64url-output-image",
+        "kind": "property",
+        "name": "ME-wallet-kit-base64url",
+        "product_reportable": true,
+        "regex_id": "53f9fe0ac63dee358cc8997b45100ab1",
+        "result": "unsat",
+        "schema_version": "1",
+        "shape": 4,
+        "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-ext/wallet-kit/src/utils/base64.ts:11:column-26",
+        "synthesized": false,
+        "wave_id": "magic-js-base64url-p6-r2",
+        "witness": null
+      },
+      "contract": {
+        "adoption": {
+          "approved_on": "2026-10-15",
+          "authority": "standing_user_delegation",
+          "contract_sha256": "1ff71f9c38086d2fc023842782e618a6d2dcafcf5f98d0d0325451d322ad80be",
+          "evidence": [
+            "https://github.com/magiclabs/magic-js/blob/e9fb233763160316989863b4739c4656133d45b0/packages/@magic-ext/wallet-kit/src/utils/base64.ts",
+            "https://www.rfc-editor.org/rfc/rfc4648#section-5",
+            "https://www.w3.org/TR/webauthn-3/#dom-publickeycredential-tojson",
+            "properties/calibration/2026-10-15-p2-magic-js-source-review/evidence.json regex_id=391688fc4ca696e393db3abe1344951b column=26"
+          ],
+          "policy_version": "autonomous-contracts-v1",
+          "rationale": "The exact Base64URL encoder feeds WebAuthn credential JSON fields such as rawId, authenticatorData, clientDataJSON, signatures, and attestationObject. The WebAuthn JSON conversion path names this representation, and RFC 4648 section 5 defines its URL-safe alphabet and optional omitted padding. The contract is limited to the encoder output; it does not claim authentication, decoder rejection of malformed input, or server-side credential validity.",
+          "review": {
+            "author": "codex-contract-author",
+            "reviewer": "codex-independent-review-pass",
+            "same_model": true
+          },
+          "source_file": "packages/@magic-ext/wallet-kit/src/utils/base64.ts",
+          "source_pin": "e9fb233763160316989863b4739c4656133d45b0",
+          "source_sha256": "b2307e07627a0ab69d0bb2107e0776356f8af913a9cfc3ff02533e32132e8bbc",
+          "source_url": "https://github.com/magiclabs/magic-js",
+          "status": "approved"
+        },
+        "declared_domain": "One Unicode codepoint passed through the exact encode replacement image with no length bound. Exact Node replay runs the source-authenticated replacement chain for every 0-, 1-, and 2-byte input plus seeded longer buffers.",
+        "guarantee": "For each binary WebAuthn credential response field serialized by the pinned Wallet Kit PublicKeyCredential.toJSON polyfill, the encoder emits the WebAuthn Base64URLString representation: URL-safe Base64 without padding.",
+        "input_source": "ArrayBuffer values from PublicKeyCredential.rawId and AuthenticatorResponse fields returned by the browser API.",
+        "provenance": "agent_derived",
+        "schema_version": "1",
+        "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-ext/wallet-kit/src/utils/base64.ts:11:column-26",
+        "trust": "untrusted-input"
+      },
+      "disposition": {
+        "approval_escape": null,
+        "approval_ref": null,
+        "backfilled": false,
+        "disposition_date": null,
+        "filed_at": null,
+        "reason_code": "unsat_guarantee",
+        "resolved_at": null,
+        "status": "not_applicable"
+      },
+      "domain": "One Unicode codepoint passed through the exact encode replacement image with no length bound. Exact Node replay runs the source-authenticated replacement chain for every 0-, 1-, and 2-byte input plus seeded longer buffers.",
+      "ground_truth_status": "not_applicable",
+      "kind": "property",
+      "pin": "e9fb233763160316989863b4739c4656133d45b0",
+      "question_id": "ME-wallet-kit-base64url",
+      "repo_id": "magiclabs/magic-js",
+      "result": "unsat",
+      "schema_version": "1",
+      "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-ext/wallet-kit/src/utils/base64.ts:11:column-26",
+      "synthesized": false,
+      "url": "https://github.com/magiclabs/magic-js"
+    },
+    {
+      "canonical": {
+        "contract": {
+          "adoption": {
+            "approved_on": "2026-10-15",
+            "authority": "standing_user_delegation",
+            "contract_sha256": "494cbc6e8061b3c44ea15d48af39a0a566308d3b493712ff30e511d6dd2ed107",
+            "evidence": [
+              "https://github.com/magiclabs/magic-js/blob/e9fb233763160316989863b4739c4656133d45b0/packages/@magic-ext/webauthn/src/utils/base64.ts",
+              "https://www.rfc-editor.org/rfc/rfc4648#section-5",
+              "https://www.w3.org/TR/webauthn-3/#dom-publickeycredential-tojson",
+              "properties/calibration/2026-10-15-p2-magic-js-source-review/evidence.json regex_id=9d74cad7da31ec1d69bd83ae6d906dce column=26"
+            ],
+            "policy_version": "autonomous-contracts-v1",
+            "rationale": "The exact Base64URL encoder feeds WebAuthn credential JSON fields such as rawId, authenticatorData, clientDataJSON, signatures, and attestationObject. The WebAuthn JSON conversion path names this representation, and RFC 4648 section 5 defines its URL-safe alphabet and optional omitted padding. The contract is limited to the encoder output; it does not claim authentication, decoder rejection of malformed input, or server-side credential validity.",
+            "review": {
+              "author": "codex-contract-author",
+              "reviewer": "codex-independent-review-pass",
+              "same_model": true
+            },
+            "source_file": "packages/@magic-ext/webauthn/src/utils/base64.ts",
+            "source_pin": "e9fb233763160316989863b4739c4656133d45b0",
+            "source_sha256": "b2307e07627a0ab69d0bb2107e0776356f8af913a9cfc3ff02533e32132e8bbc",
+            "source_url": "https://github.com/magiclabs/magic-js",
+            "status": "approved"
+          },
+          "declared_domain": "One Unicode codepoint passed through the exact encode replacement image with no length bound. Exact Node replay runs the source-authenticated replacement chain for every 0-, 1-, and 2-byte input plus seeded longer buffers.",
+          "guarantee": "For each binary WebAuthn credential response field serialized by the pinned WebAuthn PublicKeyCredential.toJSON polyfill, the encoder emits the WebAuthn Base64URLString representation: URL-safe Base64 without padding.",
+          "input_source": "ArrayBuffer values from PublicKeyCredential.rawId and AuthenticatorResponse fields returned by the browser API.",
+          "provenance": "agent_derived",
+          "schema_version": "1",
+          "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-ext/webauthn/src/utils/base64.ts:11:column-26",
+          "trust": "untrusted-input"
+        },
+        "corpus": "magic-js",
+        "disclosure": null,
+        "domain": "One Unicode codepoint passed through the exact encode replacement image with no length bound. Exact Node replay runs the source-authenticated replacement chain for every 0-, 1-, and 2-byte input plus seeded longer buffers.",
+        "engine_versions": {
+          "python": "3.14.8",
+          "z3": "5.0.0"
+        },
+        "family": "ME-base64url-output-image",
+        "ground_truth": null,
+        "ground_truth_status": null,
+        "idiom_bucket": "base64url-output-image",
+        "kind": "property",
+        "name": "ME-webauthn-base64url",
+        "product_reportable": true,
+        "regex_id": "9ec0424671ece20e7b6d643afd6e5196",
+        "result": "unsat",
+        "schema_version": "1",
+        "shape": 4,
+        "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-ext/webauthn/src/utils/base64.ts:11:column-26",
+        "synthesized": false,
+        "wave_id": "magic-js-base64url-p6-r2",
+        "witness": null
+      },
+      "contract": {
+        "adoption": {
+          "approved_on": "2026-10-15",
+          "authority": "standing_user_delegation",
+          "contract_sha256": "494cbc6e8061b3c44ea15d48af39a0a566308d3b493712ff30e511d6dd2ed107",
+          "evidence": [
+            "https://github.com/magiclabs/magic-js/blob/e9fb233763160316989863b4739c4656133d45b0/packages/@magic-ext/webauthn/src/utils/base64.ts",
+            "https://www.rfc-editor.org/rfc/rfc4648#section-5",
+            "https://www.w3.org/TR/webauthn-3/#dom-publickeycredential-tojson",
+            "properties/calibration/2026-10-15-p2-magic-js-source-review/evidence.json regex_id=9d74cad7da31ec1d69bd83ae6d906dce column=26"
+          ],
+          "policy_version": "autonomous-contracts-v1",
+          "rationale": "The exact Base64URL encoder feeds WebAuthn credential JSON fields such as rawId, authenticatorData, clientDataJSON, signatures, and attestationObject. The WebAuthn JSON conversion path names this representation, and RFC 4648 section 5 defines its URL-safe alphabet and optional omitted padding. The contract is limited to the encoder output; it does not claim authentication, decoder rejection of malformed input, or server-side credential validity.",
+          "review": {
+            "author": "codex-contract-author",
+            "reviewer": "codex-independent-review-pass",
+            "same_model": true
+          },
+          "source_file": "packages/@magic-ext/webauthn/src/utils/base64.ts",
+          "source_pin": "e9fb233763160316989863b4739c4656133d45b0",
+          "source_sha256": "b2307e07627a0ab69d0bb2107e0776356f8af913a9cfc3ff02533e32132e8bbc",
+          "source_url": "https://github.com/magiclabs/magic-js",
+          "status": "approved"
+        },
+        "declared_domain": "One Unicode codepoint passed through the exact encode replacement image with no length bound. Exact Node replay runs the source-authenticated replacement chain for every 0-, 1-, and 2-byte input plus seeded longer buffers.",
+        "guarantee": "For each binary WebAuthn credential response field serialized by the pinned WebAuthn PublicKeyCredential.toJSON polyfill, the encoder emits the WebAuthn Base64URLString representation: URL-safe Base64 without padding.",
+        "input_source": "ArrayBuffer values from PublicKeyCredential.rawId and AuthenticatorResponse fields returned by the browser API.",
+        "provenance": "agent_derived",
+        "schema_version": "1",
+        "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-ext/webauthn/src/utils/base64.ts:11:column-26",
+        "trust": "untrusted-input"
+      },
+      "disposition": {
+        "approval_escape": null,
+        "approval_ref": null,
+        "backfilled": false,
+        "disposition_date": null,
+        "filed_at": null,
+        "reason_code": "unsat_guarantee",
+        "resolved_at": null,
+        "status": "not_applicable"
+      },
+      "domain": "One Unicode codepoint passed through the exact encode replacement image with no length bound. Exact Node replay runs the source-authenticated replacement chain for every 0-, 1-, and 2-byte input plus seeded longer buffers.",
+      "ground_truth_status": "not_applicable",
+      "kind": "property",
+      "pin": "e9fb233763160316989863b4739c4656133d45b0",
+      "question_id": "ME-webauthn-base64url",
+      "repo_id": "magiclabs/magic-js",
+      "result": "unsat",
+      "schema_version": "1",
+      "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-ext/webauthn/src/utils/base64.ts:11:column-26",
+      "synthesized": false,
+      "url": "https://github.com/magiclabs/magic-js"
+    },
+    {
+      "canonical": {
+        "contract": {
+          "adoption": {
+            "approved_on": "2026-10-15",
+            "authority": "standing_user_delegation",
+            "contract_sha256": "b6615df46cf810bfc7a8e83ba4352a373b1f72fdfbfd1f6aafdd21ca6d1c2245",
+            "evidence": [
+              "https://github.com/magiclabs/magic-js/blob/e9fb233763160316989863b4739c4656133d45b0/packages/@magic-sdk/provider/src/util/base64-json.ts",
+              "https://www.rfc-editor.org/rfc/rfc4648#section-5",
+              "https://www.w3.org/TR/webauthn-3/#dom-publickeycredential-tojson",
+              "properties/calibration/2026-10-15-p2-magic-js-source-review/evidence.json regex_id=67d8a25db747c86892aa65a39d0cb68b column=26"
+            ],
+            "policy_version": "autonomous-contracts-v1",
+            "rationale": "The exact Base64URL encoder feeds WebAuthn credential JSON fields such as rawId, authenticatorData, clientDataJSON, signatures, and attestationObject. The WebAuthn JSON conversion path names this representation, and RFC 4648 section 5 defines its URL-safe alphabet and optional omitted padding. The contract is limited to the encoder output; it does not claim authentication, decoder rejection of malformed input, or server-side credential validity.",
+            "review": {
+              "author": "codex-contract-author",
+              "reviewer": "codex-independent-review-pass",
+              "same_model": true
+            },
+            "source_file": "packages/@magic-sdk/provider/src/util/base64-json.ts",
+            "source_pin": "e9fb233763160316989863b4739c4656133d45b0",
+            "source_sha256": "4d0836fa5938b3e627fcf3fba739f465e3f48354e70e4c94ce96c222d472269b",
+            "source_url": "https://github.com/magiclabs/magic-js",
+            "status": "approved"
+          },
+          "declared_domain": "One Unicode codepoint passed through the exact encode replacement image with no length bound. Exact Node replay runs the source-authenticated replacement chain for every 0-, 1-, and 2-byte input plus seeded longer buffers.",
+          "guarantee": "For each binary WebAuthn credential response field serialized by the pinned Provider PublicKeyCredential.toJSON polyfill, the encoder emits the WebAuthn Base64URLString representation: URL-safe Base64 without padding.",
+          "input_source": "ArrayBuffer values from PublicKeyCredential.rawId and AuthenticatorResponse fields returned by the browser API.",
+          "provenance": "agent_derived",
+          "schema_version": "1",
+          "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-sdk/provider/src/util/base64-json.ts:54:column-26",
+          "trust": "untrusted-input"
+        },
+        "corpus": "magic-js",
+        "disclosure": null,
+        "domain": "One Unicode codepoint passed through the exact encode replacement image with no length bound. Exact Node replay runs the source-authenticated replacement chain for every 0-, 1-, and 2-byte input plus seeded longer buffers.",
+        "engine_versions": {
+          "python": "3.14.8",
+          "z3": "5.0.0"
+        },
+        "family": "ME-base64url-output-image",
+        "ground_truth": null,
+        "ground_truth_status": null,
+        "idiom_bucket": "base64url-output-image",
+        "kind": "property",
+        "name": "ME-provider-webauthn-base64url",
+        "product_reportable": true,
+        "regex_id": "2884e8ec14295cf32853114a34ebab35",
+        "result": "unsat",
+        "schema_version": "1",
+        "shape": 4,
+        "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-sdk/provider/src/util/base64-json.ts:54:column-26",
+        "synthesized": false,
+        "wave_id": "magic-js-base64url-p6-r2",
+        "witness": null
+      },
+      "contract": {
+        "adoption": {
+          "approved_on": "2026-10-15",
+          "authority": "standing_user_delegation",
+          "contract_sha256": "b6615df46cf810bfc7a8e83ba4352a373b1f72fdfbfd1f6aafdd21ca6d1c2245",
+          "evidence": [
+            "https://github.com/magiclabs/magic-js/blob/e9fb233763160316989863b4739c4656133d45b0/packages/@magic-sdk/provider/src/util/base64-json.ts",
+            "https://www.rfc-editor.org/rfc/rfc4648#section-5",
+            "https://www.w3.org/TR/webauthn-3/#dom-publickeycredential-tojson",
+            "properties/calibration/2026-10-15-p2-magic-js-source-review/evidence.json regex_id=67d8a25db747c86892aa65a39d0cb68b column=26"
+          ],
+          "policy_version": "autonomous-contracts-v1",
+          "rationale": "The exact Base64URL encoder feeds WebAuthn credential JSON fields such as rawId, authenticatorData, clientDataJSON, signatures, and attestationObject. The WebAuthn JSON conversion path names this representation, and RFC 4648 section 5 defines its URL-safe alphabet and optional omitted padding. The contract is limited to the encoder output; it does not claim authentication, decoder rejection of malformed input, or server-side credential validity.",
+          "review": {
+            "author": "codex-contract-author",
+            "reviewer": "codex-independent-review-pass",
+            "same_model": true
+          },
+          "source_file": "packages/@magic-sdk/provider/src/util/base64-json.ts",
+          "source_pin": "e9fb233763160316989863b4739c4656133d45b0",
+          "source_sha256": "4d0836fa5938b3e627fcf3fba739f465e3f48354e70e4c94ce96c222d472269b",
+          "source_url": "https://github.com/magiclabs/magic-js",
+          "status": "approved"
+        },
+        "declared_domain": "One Unicode codepoint passed through the exact encode replacement image with no length bound. Exact Node replay runs the source-authenticated replacement chain for every 0-, 1-, and 2-byte input plus seeded longer buffers.",
+        "guarantee": "For each binary WebAuthn credential response field serialized by the pinned Provider PublicKeyCredential.toJSON polyfill, the encoder emits the WebAuthn Base64URLString representation: URL-safe Base64 without padding.",
+        "input_source": "ArrayBuffer values from PublicKeyCredential.rawId and AuthenticatorResponse fields returned by the browser API.",
+        "provenance": "agent_derived",
+        "schema_version": "1",
+        "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-sdk/provider/src/util/base64-json.ts:54:column-26",
+        "trust": "untrusted-input"
+      },
+      "disposition": {
+        "approval_escape": null,
+        "approval_ref": null,
+        "backfilled": false,
+        "disposition_date": null,
+        "filed_at": null,
+        "reason_code": "unsat_guarantee",
+        "resolved_at": null,
+        "status": "not_applicable"
+      },
+      "domain": "One Unicode codepoint passed through the exact encode replacement image with no length bound. Exact Node replay runs the source-authenticated replacement chain for every 0-, 1-, and 2-byte input plus seeded longer buffers.",
+      "ground_truth_status": "not_applicable",
+      "kind": "property",
+      "pin": "e9fb233763160316989863b4739c4656133d45b0",
+      "question_id": "ME-provider-webauthn-base64url",
+      "repo_id": "magiclabs/magic-js",
+      "result": "unsat",
+      "schema_version": "1",
+      "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-sdk/provider/src/util/base64-json.ts:54:column-26",
+      "synthesized": false,
+      "url": "https://github.com/magiclabs/magic-js"
+    },
+    {
+      "canonical": {
+        "contract": {
+          "adoption": {
+            "approved_on": "2026-10-15",
+            "authority": "standing_user_delegation",
+            "contract_sha256": "40cd17120597b424cde7a660f858e9d77538da09bdf84b9fbcaeda825d9b98de",
+            "evidence": [
+              "https://github.com/magiclabs/magic-js/blob/e9fb233763160316989863b4739c4656133d45b0/packages/@magic-sdk/provider/src/util/web-crypto.ts",
+              "https://www.rfc-editor.org/rfc/rfc7515#section-7.1",
+              "https://www.rfc-editor.org/rfc/rfc9449",
+              "properties/calibration/2026-10-15-p2-magic-js-source-review/evidence.json regex_id=060e2b7aec4f211fcb52aa249cfa65d2 column=27"
+            ],
+            "policy_version": "autonomous-contracts-v1",
+            "rationale": "binToUrlBase64 creates each DPoP JWS compact component from the JSON header/claims bytes and Web Crypto signature bytes. The transformation removes padding and maps the two standard Base64 symbols to the URL-safe alphabet before dot-joining the three components. RFC 7515 requires these protected-header, payload, and signature components to use unpadded Base64URL. The contract covers this output mapping only; it does not claim DPoP claim validity, key custody, or server acceptance.",
+            "review": {
+              "author": "codex-contract-author",
+              "reviewer": "codex-independent-review-pass",
+              "same_model": true
+            },
+            "source_file": "packages/@magic-sdk/provider/src/util/web-crypto.ts",
+            "source_pin": "e9fb233763160316989863b4739c4656133d45b0",
+            "source_sha256": "e0c48f0e2f17326411a6de87e40fa5fe6d9e6c01424df3a4265b016e80f93d6a",
+            "source_url": "https://github.com/magiclabs/magic-js",
+            "status": "approved"
+          },
+          "declared_domain": "The reachable DPoP components are passed through the exact source replacement chain. The Z3 theorem is per input codepoint with no length bound; exact Node replay covers all one- and two-byte inputs, representative JSON text, and seeded byte buffers.",
+          "guarantee": "The pinned web-crypto DPoP helper encodes the protected header, claims, and signature as unpadded Base64URL before joining the JWS compact representation.",
+          "input_source": "Binary JSON header/claims and signature bytes generated by the pinned DPoP implementation and Web Crypto signing API.",
+          "provenance": "agent_derived",
+          "schema_version": "1",
+          "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-sdk/provider/src/util/web-crypto.ts:106:column-27",
+          "trust": "internal"
+        },
+        "corpus": "magic-js",
+        "disclosure": null,
+        "domain": "The reachable DPoP components are passed through the exact source replacement chain. The Z3 theorem is per input codepoint with no length bound; exact Node replay covers all one- and two-byte inputs, representative JSON text, and seeded byte buffers.",
+        "engine_versions": {
+          "python": "3.14.8",
+          "z3": "5.0.0"
+        },
+        "family": "ME-base64url-output-image",
+        "ground_truth": null,
+        "ground_truth_status": null,
+        "idiom_bucket": "base64url-output-image",
+        "kind": "property",
+        "name": "ME-provider-dpop-base64url",
+        "product_reportable": true,
+        "regex_id": "0ffee21dbccc7fad9cdeb3f28b79d113",
+        "result": "unsat",
+        "schema_version": "1",
+        "shape": 4,
+        "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-sdk/provider/src/util/web-crypto.ts:106:column-27",
+        "synthesized": false,
+        "wave_id": "magic-js-base64url-p6-r2",
+        "witness": null
+      },
+      "contract": {
+        "adoption": {
+          "approved_on": "2026-10-15",
+          "authority": "standing_user_delegation",
+          "contract_sha256": "40cd17120597b424cde7a660f858e9d77538da09bdf84b9fbcaeda825d9b98de",
+          "evidence": [
+            "https://github.com/magiclabs/magic-js/blob/e9fb233763160316989863b4739c4656133d45b0/packages/@magic-sdk/provider/src/util/web-crypto.ts",
+            "https://www.rfc-editor.org/rfc/rfc7515#section-7.1",
+            "https://www.rfc-editor.org/rfc/rfc9449",
+            "properties/calibration/2026-10-15-p2-magic-js-source-review/evidence.json regex_id=060e2b7aec4f211fcb52aa249cfa65d2 column=27"
+          ],
+          "policy_version": "autonomous-contracts-v1",
+          "rationale": "binToUrlBase64 creates each DPoP JWS compact component from the JSON header/claims bytes and Web Crypto signature bytes. The transformation removes padding and maps the two standard Base64 symbols to the URL-safe alphabet before dot-joining the three components. RFC 7515 requires these protected-header, payload, and signature components to use unpadded Base64URL. The contract covers this output mapping only; it does not claim DPoP claim validity, key custody, or server acceptance.",
+          "review": {
+            "author": "codex-contract-author",
+            "reviewer": "codex-independent-review-pass",
+            "same_model": true
+          },
+          "source_file": "packages/@magic-sdk/provider/src/util/web-crypto.ts",
+          "source_pin": "e9fb233763160316989863b4739c4656133d45b0",
+          "source_sha256": "e0c48f0e2f17326411a6de87e40fa5fe6d9e6c01424df3a4265b016e80f93d6a",
+          "source_url": "https://github.com/magiclabs/magic-js",
+          "status": "approved"
+        },
+        "declared_domain": "The reachable DPoP components are passed through the exact source replacement chain. The Z3 theorem is per input codepoint with no length bound; exact Node replay covers all one- and two-byte inputs, representative JSON text, and seeded byte buffers.",
+        "guarantee": "The pinned web-crypto DPoP helper encodes the protected header, claims, and signature as unpadded Base64URL before joining the JWS compact representation.",
+        "input_source": "Binary JSON header/claims and signature bytes generated by the pinned DPoP implementation and Web Crypto signing API.",
+        "provenance": "agent_derived",
+        "schema_version": "1",
+        "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-sdk/provider/src/util/web-crypto.ts:106:column-27",
+        "trust": "internal"
+      },
+      "disposition": {
+        "approval_escape": null,
+        "approval_ref": null,
+        "backfilled": false,
+        "disposition_date": null,
+        "filed_at": null,
+        "reason_code": "unsat_guarantee",
+        "resolved_at": null,
+        "status": "not_applicable"
+      },
+      "domain": "The reachable DPoP components are passed through the exact source replacement chain. The Z3 theorem is per input codepoint with no length bound; exact Node replay covers all one- and two-byte inputs, representative JSON text, and seeded byte buffers.",
+      "ground_truth_status": "not_applicable",
+      "kind": "property",
+      "pin": "e9fb233763160316989863b4739c4656133d45b0",
+      "question_id": "ME-provider-dpop-base64url",
+      "repo_id": "magiclabs/magic-js",
+      "result": "unsat",
+      "schema_version": "1",
+      "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-sdk/provider/src/util/web-crypto.ts:106:column-27",
+      "synthesized": false,
+      "url": "https://github.com/magiclabs/magic-js"
+    },
+    {
+      "canonical": {
+        "contract": {
+          "adoption": {
+            "approved_on": "2026-10-15",
+            "authority": "standing_user_delegation",
+            "contract_sha256": "569f0d7217b959757d3ee84744ecbff612356727663078e73da9e3652c503a70",
+            "evidence": [
+              "https://github.com/magiclabs/magic-js/blob/e9fb233763160316989863b4739c4656133d45b0/packages/@magic-sdk/react-native-bare/src/native-crypto/utils/uint8.ts",
+              "https://www.rfc-editor.org/rfc/rfc7515#section-7.1",
+              "https://www.rfc-editor.org/rfc/rfc9449",
+              "properties/calibration/2026-10-15-p2-magic-js-source-review/evidence.json regex_id=53b9bb2ec809d82012a74705bd6d9c92 column=24"
+            ],
+            "policy_version": "autonomous-contracts-v1",
+            "rationale": "The helper encodes DPoP header, claims, and signature bytes into the compact proof string. Its source documentation names Base64Url and RFC 4648, and the surrounding signing code joins the three encoded components with dots. The contract covers the helper output alphabet and padding only; it does not establish key custody, DPoP claim validity, or proof acceptance by a server.",
+            "review": {
+              "author": "codex-contract-author",
+              "reviewer": "codex-independent-review-pass",
+              "same_model": true
+            },
+            "source_file": "packages/@magic-sdk/react-native-bare/src/native-crypto/utils/uint8.ts",
+            "source_pin": "e9fb233763160316989863b4739c4656133d45b0",
+            "source_sha256": "49e76dc6132fc7524736a41057712451bcd3c459647529b646631dc94e7828e1",
+            "source_url": "https://github.com/magiclabs/magic-js",
+            "status": "approved"
+          },
+          "declared_domain": "The reachable DPoP components are passed through the exact source replacement chain. The Z3 theorem is per input codepoint with no length bound; exact Node replay covers all one- and two-byte inputs, representative JSON text, and seeded byte buffers.",
+          "guarantee": "The pinned React Native bare DPoP helper encodes each header, claims, and signature component using unpadded Base64URL before joining the JWS compact representation.",
+          "input_source": "ASCII JSON text for the DPoP header/claims and signature bytes returned by the device crypto signing API.",
+          "provenance": "agent_derived",
+          "schema_version": "1",
+          "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-sdk/react-native-bare/src/native-crypto/utils/uint8.ts:71:column-24",
+          "trust": "internal"
+        },
+        "corpus": "magic-js",
+        "disclosure": null,
+        "domain": "The reachable DPoP components are passed through the exact source replacement chain. The Z3 theorem is per input codepoint with no length bound; exact Node replay covers all one- and two-byte inputs, representative JSON text, and seeded byte buffers.",
+        "engine_versions": {
+          "python": "3.14.8",
+          "z3": "5.0.0"
+        },
+        "family": "ME-base64url-output-image",
+        "ground_truth": null,
+        "ground_truth_status": null,
+        "idiom_bucket": "base64url-output-image",
+        "kind": "property",
+        "name": "ME-rn-bare-dpop-base64url",
+        "product_reportable": true,
+        "regex_id": "e3fa6ccc56219eb7c882a2d4771844b9",
+        "result": "unsat",
+        "schema_version": "1",
+        "shape": 4,
+        "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-sdk/react-native-bare/src/native-crypto/utils/uint8.ts:71:column-24",
+        "synthesized": false,
+        "wave_id": "magic-js-base64url-p6-r2",
+        "witness": null
+      },
+      "contract": {
+        "adoption": {
+          "approved_on": "2026-10-15",
+          "authority": "standing_user_delegation",
+          "contract_sha256": "569f0d7217b959757d3ee84744ecbff612356727663078e73da9e3652c503a70",
+          "evidence": [
+            "https://github.com/magiclabs/magic-js/blob/e9fb233763160316989863b4739c4656133d45b0/packages/@magic-sdk/react-native-bare/src/native-crypto/utils/uint8.ts",
+            "https://www.rfc-editor.org/rfc/rfc7515#section-7.1",
+            "https://www.rfc-editor.org/rfc/rfc9449",
+            "properties/calibration/2026-10-15-p2-magic-js-source-review/evidence.json regex_id=53b9bb2ec809d82012a74705bd6d9c92 column=24"
+          ],
+          "policy_version": "autonomous-contracts-v1",
+          "rationale": "The helper encodes DPoP header, claims, and signature bytes into the compact proof string. Its source documentation names Base64Url and RFC 4648, and the surrounding signing code joins the three encoded components with dots. The contract covers the helper output alphabet and padding only; it does not establish key custody, DPoP claim validity, or proof acceptance by a server.",
+          "review": {
+            "author": "codex-contract-author",
+            "reviewer": "codex-independent-review-pass",
+            "same_model": true
+          },
+          "source_file": "packages/@magic-sdk/react-native-bare/src/native-crypto/utils/uint8.ts",
+          "source_pin": "e9fb233763160316989863b4739c4656133d45b0",
+          "source_sha256": "49e76dc6132fc7524736a41057712451bcd3c459647529b646631dc94e7828e1",
+          "source_url": "https://github.com/magiclabs/magic-js",
+          "status": "approved"
+        },
+        "declared_domain": "The reachable DPoP components are passed through the exact source replacement chain. The Z3 theorem is per input codepoint with no length bound; exact Node replay covers all one- and two-byte inputs, representative JSON text, and seeded byte buffers.",
+        "guarantee": "The pinned React Native bare DPoP helper encodes each header, claims, and signature component using unpadded Base64URL before joining the JWS compact representation.",
+        "input_source": "ASCII JSON text for the DPoP header/claims and signature bytes returned by the device crypto signing API.",
+        "provenance": "agent_derived",
+        "schema_version": "1",
+        "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-sdk/react-native-bare/src/native-crypto/utils/uint8.ts:71:column-24",
+        "trust": "internal"
+      },
+      "disposition": {
+        "approval_escape": null,
+        "approval_ref": null,
+        "backfilled": false,
+        "disposition_date": null,
+        "filed_at": null,
+        "reason_code": "unsat_guarantee",
+        "resolved_at": null,
+        "status": "not_applicable"
+      },
+      "domain": "The reachable DPoP components are passed through the exact source replacement chain. The Z3 theorem is per input codepoint with no length bound; exact Node replay covers all one- and two-byte inputs, representative JSON text, and seeded byte buffers.",
+      "ground_truth_status": "not_applicable",
+      "kind": "property",
+      "pin": "e9fb233763160316989863b4739c4656133d45b0",
+      "question_id": "ME-rn-bare-dpop-base64url",
+      "repo_id": "magiclabs/magic-js",
+      "result": "unsat",
+      "schema_version": "1",
+      "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-sdk/react-native-bare/src/native-crypto/utils/uint8.ts:71:column-24",
+      "synthesized": false,
+      "url": "https://github.com/magiclabs/magic-js"
+    }
+  ],
+  "schema_version": "3"
+}

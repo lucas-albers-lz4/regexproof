@@ -1,0 +1,649 @@
+{
+  "author": "codex-source-review",
+  "limitations": [
+    "Complete raw Go-regex site review for this cohort member only; unresolved target grammar/scope items are excluded from proof denominators.",
+    "No reachability or security-impact claim is made for parser/classifier rows marked skip.",
+    "The phase-log contract covers the module-derived filename component only; scanID and results-root containment are outside its scope."
+  ],
+  "observed_at": "2026-10-15T20:40:00Z",
+  "reviewer": "codex-independent-review-pass",
+  "reviews": [
+    {
+      "decision": "skip",
+      "pattern": "https?://[^\\s\"'<>]+",
+      "product_question_asked": false,
+      "rationale": "The regex extracts URL-shaped observations from scanner output; no security decision or escaping guarantee is enforced at this site.",
+      "reason_code": "crawler_output_extraction",
+      "regex_id": "a7eef536b3ec8f3338783f932c569a5d",
+      "review_refs": [
+        {
+          "line": 37,
+          "path": "internal/scanner/gospider/spider.go",
+          "why": "regex declaration and adjacent local use"
+        }
+      ],
+      "site": "internal/scanner/gospider/spider.go:37:0"
+    },
+    {
+      "decision": "adopted",
+      "pattern": "(?i)<script[^>]+src\\s*=\\s*[\"']([^\"'>\\s]+)[\"']",
+      "product_question_asked": true,
+      "rationale": "The already adopted contract asks whether untrusted HTML fetched from authorized live-host targets can induce an absolute loopback script request. Exact caller, collector, and local loopback replay are preserved in the scope-escape calibration.",
+      "reason_code": "existing_loopback_scope_contract",
+      "regex_id": "950e4d80c2d4335df9c5c996598ace0a",
+      "review_refs": [
+        {
+          "line": 22,
+          "path": "internal/scanner/jsendpoints/jsendpoints.go",
+          "why": "script URL matcher"
+        },
+        {
+          "line": 88,
+          "path": "internal/scanner/jsendpoints/jsendpoints.go",
+          "why": "absolute URL resolution and HTTP fetch"
+        },
+        {
+          "line": 108,
+          "path": "internal/scanner/subdomainmonitor/subdomainmonitor.go",
+          "why": "caller supplies live-host URLs"
+        }
+      ],
+      "site": "internal/scanner/jsendpoints/jsendpoints.go:22:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "[\"'\\x60](/(?:api|v\\d+|rest|rpc|graphql|gql|admin|auth|oauth|user|account|data|internal|service|app|mobile|web|backend|public|private|endpoint)[^\\s\"'\\x60?#]{0,200})",
+      "product_question_asked": false,
+      "rationale": "These patterns classify or extract candidate endpoints from fetched JavaScript and contribute scanner output; no product boundary or sanitizer guarantee is enforced at these sites.",
+      "reason_code": "endpoint_output_parser",
+      "regex_id": "dea46b2788bc330754bd48c268130c8f",
+      "review_refs": [
+        {
+          "line": 175,
+          "path": "internal/scanner/jsendpoints/jsendpoints.go",
+          "why": "endpoint extraction pattern"
+        },
+        {
+          "line": 220,
+          "path": "internal/scanner/jsendpoints/jsendpoints.go",
+          "why": "matches are emitted as observations"
+        }
+      ],
+      "site": "internal/scanner/jsendpoints/jsendpoints.go:175:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "[\"'\\x60](/[a-zA-Z0-9_-]{2,40}/[a-zA-Z0-9_/-]{2,120})[?#\"'\\x60\\s]",
+      "product_question_asked": false,
+      "rationale": "These patterns classify or extract candidate endpoints from fetched JavaScript and contribute scanner output; no product boundary or sanitizer guarantee is enforced at these sites.",
+      "reason_code": "endpoint_output_parser",
+      "regex_id": "30de42bcda52f52e93046cacdff032fb",
+      "review_refs": [
+        {
+          "line": 177,
+          "path": "internal/scanner/jsendpoints/jsendpoints.go",
+          "why": "endpoint extraction pattern"
+        },
+        {
+          "line": 220,
+          "path": "internal/scanner/jsendpoints/jsendpoints.go",
+          "why": "matches are emitted as observations"
+        }
+      ],
+      "site": "internal/scanner/jsendpoints/jsendpoints.go:177:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "(?:fetch|axios\\.(?:get|post|put|patch|delete|request)|XMLHttpRequest|\\.open)\\s*\\(\\s*[\"'\\x60]([^\"'\\x60\\s]{4,200})",
+      "product_question_asked": false,
+      "rationale": "These patterns classify or extract candidate endpoints from fetched JavaScript and contribute scanner output; no product boundary or sanitizer guarantee is enforced at these sites.",
+      "reason_code": "endpoint_output_parser",
+      "regex_id": "252a04964891ecb2581140d2cb7c60ee",
+      "review_refs": [
+        {
+          "line": 179,
+          "path": "internal/scanner/jsendpoints/jsendpoints.go",
+          "why": "endpoint extraction pattern"
+        },
+        {
+          "line": 220,
+          "path": "internal/scanner/jsendpoints/jsendpoints.go",
+          "why": "matches are emitted as observations"
+        }
+      ],
+      "site": "internal/scanner/jsendpoints/jsendpoints.go:179:0"
+    },
+    {
+      "decision": "adopted",
+      "pattern": "(?:url|href|endpoint|baseURL|apiUrl|apiBase|API_URL|BASE_URL)\\s*[:=]\\s*[\"'\\x60]([^\"'\\x60\\s]{4,200})",
+      "product_question_asked": true,
+      "rationale": "The already adopted narrow contract checks quote, backtick, and whitespace exclusion in one URL-assignment capture class; it does not claim endpoint validity or complete extraction.",
+      "reason_code": "existing_assignment_capture_contract",
+      "regex_id": "2adeb9478d35c366f385366d0a292c5d",
+      "review_refs": [
+        {
+          "line": 181,
+          "path": "internal/scanner/jsendpoints/jsendpoints.go",
+          "why": "URL-assignment capture used by endpoint extraction"
+        },
+        {
+          "line": 224,
+          "path": "internal/scanner/jsendpoints/jsendpoints.go",
+          "why": "capture is appended to scanner endpoint output"
+        }
+      ],
+      "site": "internal/scanner/jsendpoints/jsendpoints.go:181:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "(?:router|app|express|server)\\s*\\.\\s*(?:get|post|put|patch|delete|all|use)\\s*\\(\\s*[\"'\\x60](/[^\"'\\x60\\s]{1,200})",
+      "product_question_asked": false,
+      "rationale": "These patterns classify or extract candidate endpoints from fetched JavaScript and contribute scanner output; no product boundary or sanitizer guarantee is enforced at these sites.",
+      "reason_code": "endpoint_output_parser",
+      "regex_id": "7b12b56c1214ea60bfc33ae9b931d07c",
+      "review_refs": [
+        {
+          "line": 183,
+          "path": "internal/scanner/jsendpoints/jsendpoints.go",
+          "why": "endpoint extraction pattern"
+        },
+        {
+          "line": 220,
+          "path": "internal/scanner/jsendpoints/jsendpoints.go",
+          "why": "matches are emitted as observations"
+        }
+      ],
+      "site": "internal/scanner/jsendpoints/jsendpoints.go:183:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "(?is)<title[^>]*>([^<]{1,300})</title>",
+      "product_question_asked": false,
+      "rationale": "These patterns parse title/script/style/tag content and normalize suggestion text; they do not enforce a security boundary or claim safe HTML output.",
+      "reason_code": "html_suggestion_parser",
+      "regex_id": "df70cc186d5b24dc19fb924e9e92dd9e",
+      "review_refs": [
+        {
+          "line": 37,
+          "path": "internal/scanner/monitorsuggest/suggest.go",
+          "why": "regex declaration and adjacent local use"
+        }
+      ],
+      "site": "internal/scanner/monitorsuggest/suggest.go:37:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "(?is)<script[^>]*>.*?</script>",
+      "product_question_asked": false,
+      "rationale": "These patterns parse title/script/style/tag content and normalize suggestion text; they do not enforce a security boundary or claim safe HTML output.",
+      "reason_code": "html_suggestion_parser",
+      "regex_id": "5f939de6e5bad96d0097cd4dcdb32b0e",
+      "review_refs": [
+        {
+          "line": 38,
+          "path": "internal/scanner/monitorsuggest/suggest.go",
+          "why": "regex declaration and adjacent local use"
+        }
+      ],
+      "site": "internal/scanner/monitorsuggest/suggest.go:38:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "(?is)<style[^>]*>.*?</style>",
+      "product_question_asked": false,
+      "rationale": "These patterns parse title/script/style/tag content and normalize suggestion text; they do not enforce a security boundary or claim safe HTML output.",
+      "reason_code": "html_suggestion_parser",
+      "regex_id": "82221df4879869ed53c2956c505227f9",
+      "review_refs": [
+        {
+          "line": 39,
+          "path": "internal/scanner/monitorsuggest/suggest.go",
+          "why": "regex declaration and adjacent local use"
+        }
+      ],
+      "site": "internal/scanner/monitorsuggest/suggest.go:39:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "<[^>]+>",
+      "product_question_asked": false,
+      "rationale": "These patterns parse title/script/style/tag content and normalize suggestion text; they do not enforce a security boundary or claim safe HTML output.",
+      "reason_code": "html_suggestion_parser",
+      "regex_id": "7595f64fc827ba0243df9a1f14bc7737",
+      "review_refs": [
+        {
+          "line": 203,
+          "path": "internal/scanner/monitorsuggest/suggest.go",
+          "why": "regex declaration and adjacent local use"
+        }
+      ],
+      "site": "internal/scanner/monitorsuggest/suggest.go:203:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "\\s+",
+      "product_question_asked": false,
+      "rationale": "These patterns parse title/script/style/tag content and normalize suggestion text; they do not enforce a security boundary or claim safe HTML output.",
+      "reason_code": "html_suggestion_parser",
+      "regex_id": "ca2e8e2a463cbb1037b527be46a93440",
+      "review_refs": [
+        {
+          "line": 208,
+          "path": "internal/scanner/monitorsuggest/suggest.go",
+          "why": "regex declaration and adjacent local use"
+        }
+      ],
+      "site": "internal/scanner/monitorsuggest/suggest.go:208:0"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "^[a-zA-Z0-9.-]+(:[0-9]{1,5})?$",
+      "product_question_asked": false,
+      "rationale": "This host-only regex is one branch of sanitizeNucleiTarget, which controls lines passed to the Nuclei scanner. The accepted target grammar and source trust policy are not independently specified, so the current code is insufficient to state a complete security property.",
+      "reason_code": "nuclei_target_grammar_unsettled",
+      "regex_id": "9a50a2a954ce49b7577828f91229c595",
+      "review_refs": [
+        {
+          "line": 679,
+          "path": "internal/scanner/nuclei/nuclei.go",
+          "why": "target lines are read from a generated file"
+        },
+        {
+          "line": 714,
+          "path": "internal/scanner/nuclei/nuclei.go",
+          "why": "host-only regex declaration"
+        },
+        {
+          "line": 716,
+          "path": "internal/scanner/nuclei/nuclei.go",
+          "why": "regex participates in target acceptance"
+        }
+      ],
+      "site": "internal/scanner/nuclei/nuclei.go:714:0"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "^https?://",
+      "product_question_asked": false,
+      "rationale": "cleanURLs removes non-printable bytes and retains lines with an HTTP(S) prefix before the SQLMap path. Whether this defines an intended in-scope target boundary, and which upstream URL sources it must constrain, needs an independent scope contract.",
+      "reason_code": "sqlmap_target_scope_unsettled",
+      "regex_id": "4503e09e5c72e459185203a76aa22809",
+      "review_refs": [
+        {
+          "line": 111,
+          "path": "internal/scanner/sqlmap/sqlmap.go",
+          "why": "URL cleaning helper and filter"
+        },
+        {
+          "line": 120,
+          "path": "internal/scanner/sqlmap/sqlmap.go",
+          "why": "HTTP(S) prefix regex"
+        },
+        {
+          "line": 141,
+          "path": "internal/scanner/sqlmap/sqlmap.go",
+          "why": "cleaned URLs are consumed by scanner runner"
+        }
+      ],
+      "site": "internal/scanner/sqlmap/sqlmap.go:120:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "wp-content/themes/([^/]+)/",
+      "product_question_asked": false,
+      "rationale": "The regex extracts WordPress theme/plugin path labels from a fetched page for scanner reporting; it does not validate or sanitize a security-sensitive sink.",
+      "reason_code": "html_path_observation_parser",
+      "regex_id": "3da3a3738061c89b47ccbe45700b7eaf",
+      "review_refs": [
+        {
+          "line": 271,
+          "path": "internal/scanner/wp-confusion/confusion.go",
+          "why": "regex declaration and adjacent local use"
+        }
+      ],
+      "site": "internal/scanner/wp-confusion/confusion.go:271:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "wp-content/plugins/([^/]+)/",
+      "product_question_asked": false,
+      "rationale": "The regex extracts WordPress theme/plugin path labels from a fetched page for scanner reporting; it does not validate or sanitize a security-sensitive sink.",
+      "reason_code": "html_path_observation_parser",
+      "regex_id": "393183d96d330e442d4f6c9666167a98",
+      "review_refs": [
+        {
+          "line": 296,
+          "path": "internal/scanner/wp-confusion/confusion.go",
+          "why": "regex declaration and adjacent local use"
+        }
+      ],
+      "site": "internal/scanner/wp-confusion/confusion.go:296:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "ERROR",
+      "product_question_asked": false,
+      "rationale": "This pattern appears only in a Go test fixture and does not define a production input boundary.",
+      "reason_code": "test_fixture_only",
+      "regex_id": "3ab473ac0c1fb7f2d3a7afb99b151ade",
+      "review_refs": [
+        {
+          "line": 18,
+          "path": "internal/tools/gf/gf_test.go",
+          "why": "regex declaration and adjacent local use"
+        }
+      ],
+      "site": "internal/tools/gf/gf_test.go:18:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "FATAL",
+      "product_question_asked": false,
+      "rationale": "This pattern appears only in a Go test fixture and does not define a production input boundary.",
+      "reason_code": "test_fixture_only",
+      "regex_id": "ebe02cd0c5c195994cd1f28404cae52c",
+      "review_refs": [
+        {
+          "line": 18,
+          "path": "internal/tools/gf/gf_test.go",
+          "why": "regex declaration and adjacent local use"
+        }
+      ],
+      "site": "internal/tools/gf/gf_test.go:18:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "ERROR",
+      "product_question_asked": false,
+      "rationale": "This pattern appears only in a Go test fixture and does not define a production input boundary.",
+      "reason_code": "test_fixture_only",
+      "regex_id": "481cde8f139cf958bef8cd7d5dfd93e5",
+      "review_refs": [
+        {
+          "line": 25,
+          "path": "internal/tools/gf/gf_test.go",
+          "why": "regex declaration and adjacent local use"
+        }
+      ],
+      "site": "internal/tools/gf/gf_test.go:25:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "ERROR",
+      "product_question_asked": false,
+      "rationale": "This pattern appears only in a Go test fixture and does not define a production input boundary.",
+      "reason_code": "test_fixture_only",
+      "regex_id": "0ae64ea328531d964e0a7de082520754",
+      "review_refs": [
+        {
+          "line": 32,
+          "path": "internal/tools/gf/gf_test.go",
+          "why": "regex declaration and adjacent local use"
+        }
+      ],
+      "site": "internal/tools/gf/gf_test.go:32:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "DEBUG",
+      "product_question_asked": false,
+      "rationale": "This pattern appears only in a Go test fixture and does not define a production input boundary.",
+      "reason_code": "test_fixture_only",
+      "regex_id": "30fe5845069969306f40d713b1ad3c8f",
+      "review_refs": [
+        {
+          "line": 32,
+          "path": "internal/tools/gf/gf_test.go",
+          "why": "regex declaration and adjacent local use"
+        }
+      ],
+      "site": "internal/tools/gf/gf_test.go:32:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "WARNING",
+      "product_question_asked": false,
+      "rationale": "This pattern appears only in a Go test fixture and does not define a production input boundary.",
+      "reason_code": "test_fixture_only",
+      "regex_id": "6e04c2b9ebf204dc10208159ed208b65",
+      "review_refs": [
+        {
+          "line": 39,
+          "path": "internal/tools/gf/gf_test.go",
+          "why": "regex declaration and adjacent local use"
+        }
+      ],
+      "site": "internal/tools/gf/gf_test.go:39:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "ERROR",
+      "product_question_asked": false,
+      "rationale": "This pattern appears only in a Go test fixture and does not define a production input boundary.",
+      "reason_code": "test_fixture_only",
+      "regex_id": "a3c99e3009a268684ec3564a692b4e61",
+      "review_refs": [
+        {
+          "line": 39,
+          "path": "internal/tools/gf/gf_test.go",
+          "why": "regex declaration and adjacent local use"
+        }
+      ],
+      "site": "internal/tools/gf/gf_test.go:39:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": ".+",
+      "product_question_asked": false,
+      "rationale": "This pattern appears only in a Go test fixture and does not define a production input boundary.",
+      "reason_code": "test_fixture_only",
+      "regex_id": "f34de4a0bc62deb40f8361aed5c4f0a0",
+      "review_refs": [
+        {
+          "line": 46,
+          "path": "internal/tools/gf/gf_test.go",
+          "why": "regex declaration and adjacent local use"
+        }
+      ],
+      "site": "internal/tools/gf/gf_test.go:46:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": ".+",
+      "product_question_asked": false,
+      "rationale": "This pattern appears only in a Go test fixture and does not define a production input boundary.",
+      "reason_code": "test_fixture_only",
+      "regex_id": "702bff03efec06ffaf7d8a7aaf4fe5de",
+      "review_refs": [
+        {
+          "line": 50,
+          "path": "internal/tools/gf/gf_test.go",
+          "why": "regex declaration and adjacent local use"
+        }
+      ],
+      "site": "internal/tools/gf/gf_test.go:50:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "(?i)(?:src|srcdoc|formaction|dynsrc|standby|ng-include|ui-sref|href|data-main|data|onclick|onload|style|srcdoc|formaction|iframe|object|background|input|button|action|dynsrc|srcset|manifest|code|archive|classid|cite|codebase|longdesc|lowsrc|usemap|standby|ng-click|ng-src|ng-inlude|ui-sref|require|createElement|appendChild|innerHTML|getScript|XMLHttpRequest|fetch|import|onerror|WebSocket|ServiceWorker|SharedWorker|importScripts|eval)\\s*=\\s*[\"']([^\"']*\\.js(\\?[^\"']*)?)[\"']",
+      "product_question_asked": false,
+      "rationale": "This pattern extracts JavaScript references from scanner page content; it is an observation parser, and no independent output or fetch-scope guarantee is specified here.",
+      "reason_code": "script_reference_parser",
+      "regex_id": "fa5eebbf901aee85d4d96b21741ff64d",
+      "review_refs": [
+        {
+          "line": 89,
+          "path": "internal/tools/jsfinder/jsfinder.go",
+          "why": "regex declaration and adjacent local use"
+        }
+      ],
+      "site": "internal/tools/jsfinder/jsfinder.go:89:0"
+    },
+    {
+      "decision": "unresolved",
+      "pattern": "^https?://",
+      "product_question_asked": false,
+      "rationale": "The scheme-removal regex contributes to constructing outbound scanner URLs by substitution or URL parsing. Target authorization, input trust, and the required normalized URL language are not independently established at this call site.",
+      "reason_code": "misconfig_target_url_contract_unsettled",
+      "regex_id": "18fab914efa00b10637e9cbb452de272",
+      "review_refs": [
+        {
+          "line": 420,
+          "path": "internal/tools/misconfigmapper/misconfigmapper.go",
+          "why": "scheme-removal regex in target URL builder"
+        },
+        {
+          "line": 423,
+          "path": "internal/tools/misconfigmapper/misconfigmapper.go",
+          "why": "domain is substituted into service path"
+        },
+        {
+          "line": 430,
+          "path": "internal/tools/misconfigmapper/misconfigmapper.go",
+          "why": "normalized target URL is used by scan loop"
+        }
+      ],
+      "site": "internal/tools/misconfigmapper/misconfigmapper.go:420:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": ".*/login\\?a=11111.*",
+      "product_question_asked": false,
+      "rationale": "The pattern classifies an HTTP response header as a scanner finding; the vulnerability-signature oracle is not a security boundary contract for this regex site.",
+      "reason_code": "scanner_finding_classifier",
+      "regex_id": "0306e0008a7cd5f41c15d2918e598be6",
+      "review_refs": [
+        {
+          "line": 244,
+          "path": "internal/tools/next88/next88.go",
+          "why": "response signature expression"
+        },
+        {
+          "line": 230,
+          "path": "internal/tools/next88/next88.go",
+          "why": "classifier reads response fields"
+        }
+      ],
+      "site": "internal/tools/next88/next88.go:244:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "ghp_[A-Za-z0-9_]{36}",
+      "product_question_asked": false,
+      "rationale": "This pattern appears only in a Go test fixture and does not define a production input boundary.",
+      "reason_code": "test_fixture_only",
+      "regex_id": "82fcdcd9afbe58d362968d026cf0bc32",
+      "review_refs": [
+        {
+          "line": 11,
+          "path": "internal/utils/pattern_matcher_test.go",
+          "why": "regex declaration and adjacent local use"
+        }
+      ],
+      "site": "internal/utils/pattern_matcher_test.go:11:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "(?i)api[_-]?key\\s*[:=]\\s*[\"'][A-Za-z0-9+/=]{20,}[\"']",
+      "product_question_asked": false,
+      "rationale": "This pattern appears only in a Go test fixture and does not define a production input boundary.",
+      "reason_code": "test_fixture_only",
+      "regex_id": "930c576071a2addcba1d36500ce4f1fb",
+      "review_refs": [
+        {
+          "line": 12,
+          "path": "internal/utils/pattern_matcher_test.go",
+          "why": "regex declaration and adjacent local use"
+        }
+      ],
+      "site": "internal/utils/pattern_matcher_test.go:12:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "AKIA[0-9A-Z]{16}",
+      "product_question_asked": false,
+      "rationale": "This pattern appears only in a Go test fixture and does not define a production input boundary.",
+      "reason_code": "test_fixture_only",
+      "regex_id": "8e4e1726acedc56a6bfd30231eba85b5",
+      "review_refs": [
+        {
+          "line": 13,
+          "path": "internal/utils/pattern_matcher_test.go",
+          "why": "regex declaration and adjacent local use"
+        }
+      ],
+      "site": "internal/utils/pattern_matcher_test.go:13:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "AKIA[A-Z]{16,}",
+      "product_question_asked": false,
+      "rationale": "This pattern appears only in a Go test fixture and does not define a production input boundary.",
+      "reason_code": "test_fixture_only",
+      "regex_id": "993d4c12eee89e30adae588463340eab",
+      "review_refs": [
+        {
+          "line": 95,
+          "path": "internal/utils/pattern_matcher_test.go",
+          "why": "regex declaration and adjacent local use"
+        }
+      ],
+      "site": "internal/utils/pattern_matcher_test.go:95:0"
+    },
+    {
+      "decision": "adopted",
+      "pattern": "[^a-zA-Z0-9_-]+",
+      "product_question_asked": true,
+      "rationale": "The request module query reaches ReadPhaseLogFile, where sanitizePhaseKey creates the filename component before filepath.Join. The adopted claim is limited to this module-derived component: it contains no dot or path separator and cannot escape the phase-logs directory through that component. scanID, result-root containment, and sanitized-name collisions are outside scope.",
+      "reason_code": "phase_log_module_component_path_safety",
+      "regex_id": "3a3b41054975f175c3a3e91ffe2c7638",
+      "review_refs": [
+        {
+          "line": 113,
+          "path": "internal/api/scan_results_api.go",
+          "why": "request-controlled module query enters phase-log API"
+        },
+        {
+          "line": 133,
+          "path": "internal/api/scan_results_api.go",
+          "why": "module is passed into persisted-file fallback"
+        },
+        {
+          "line": 176,
+          "path": "internal/utils/phase_logs.go",
+          "why": "phase key is sanitized before file open"
+        },
+        {
+          "line": 206,
+          "path": "internal/utils/phase_logs.go",
+          "why": "sanitizer regex declaration"
+        },
+        {
+          "line": 17,
+          "path": "internal/utils/json_output.go",
+          "why": "scan-specific result-root composition is a separate input"
+        }
+      ],
+      "site": "internal/utils/phase_logs.go:206:0"
+    },
+    {
+      "decision": "skip",
+      "pattern": "^\\d+\\.\\d+\\.\\d+([-+].+)?$",
+      "product_question_asked": false,
+      "rationale": "This pattern appears only in a Go test fixture and does not define a production input boundary.",
+      "reason_code": "test_fixture_only",
+      "regex_id": "5fb3dd3accfbf6c7641a8ca88c73b217",
+      "review_refs": [
+        {
+          "line": 11,
+          "path": "internal/version/version_test.go",
+          "why": "regex declaration and adjacent local use"
+        }
+      ],
+      "site": "internal/version/version_test.go:11:0"
+    }
+  ],
+  "same_model_or_agent": true,
+  "schema_version": "1",
+  "second_pass": true
+}

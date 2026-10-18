@@ -1,0 +1,9 @@
+[
+  {
+    "question_ids": [
+      "TC-rbac-scope-nonstar-glob-metacharacters-excluded"
+    ],
+    "reviewed": false,
+    "site": "TracecatHQ/tracecat@c84d52528a489821f355fc63976fbc7783ae0ad5:tracecat/authz/controls.py:18:re.compile"
+  }
+]

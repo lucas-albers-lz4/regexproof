@@ -1,0 +1,30 @@
+{
+  "adoption": {
+    "approved_on": "2026-10-15",
+    "authority": "standing_user_delegation",
+    "contract_sha256": "c8d7d71b14f9d27e8fcbf3d7e1dda161c435bab47343fae27987da5652879436",
+    "evidence": [
+      "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/.agents/hooks/task-id-collision-guard.sh",
+      "https://github.com/marcusquinn/aidevops/blob/8666b6c6c52472b5535aa295f2df593918152cb1/README.md"
+    ],
+    "policy_version": "autonomous-contracts-v1",
+    "rationale": "The pinned commit-footer parser extracts issue digits before the gh issue view lookup. This source-bound revision preserves the previously reviewed finite-domain capture guarantee and binds it to the frozen 20-r2 source.",
+    "review": {
+      "author": "codex-contract-author",
+      "reviewer": "codex-independent-review-pass",
+      "same_model": true
+    },
+    "source_file": ".agents/hooks/task-id-collision-guard.sh",
+    "source_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+    "source_sha256": "91abddb42b622d2cc1ed280c51d82dad8c78299bb9fb47717ea0a053006d3934",
+    "source_url": "https://github.com/marcusquinn/aidevops",
+    "status": "approved"
+  },
+  "declared_domain": "digits [0-9]{1,8}, ASCII, BusyBox grep -oE | tr -d '#'",
+  "guarantee": "digit-only issue numbers are captured in full into gh issue view",
+  "input_source": "commit-message Resolves/Closes/Fixes/Ref/For #NNN footers",
+  "provenance": "agent_derived",
+  "schema_version": "1",
+  "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/hooks/task-id-collision-guard.sh:378:#[0-9]+",
+  "trust": "untrusted-input"
+}

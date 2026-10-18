@@ -1,0 +1,23 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "scripts/autoar-html-text-escape-regression-gate.py",
+    "--product-only",
+    "--output",
+    "properties/calibration/2026-10-15-autonomous-autoar-html-text-escape-20r2/p6-gate-report-r2.json"
+  ],
+  "evidence": {
+    "differential_case_counts": {
+      "AA-autoar-html-text-escape-codepoint-image": 68500
+    },
+    "product_engine_replay_question_ids": [
+      "AA-autoar-html-text-escape-codepoint-image"
+    ]
+  },
+  "gate_id": "autoar-html-text-escape-20r2",
+  "question_ids": [
+    "AA-autoar-html-text-escape-codepoint-image"
+  ],
+  "schema_version": "1",
+  "timeout_seconds": 120
+}

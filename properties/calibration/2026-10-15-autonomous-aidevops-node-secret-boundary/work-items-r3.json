@@ -1,0 +1,9 @@
+[
+  {
+    "question_ids": [
+      "AE-aidevops-secret-read-basename-coverage"
+    ],
+    "reviewed": false,
+    "site": "marcusquinn/aidevops@8666b6c6c52472b5535aa295f2df593918152cb1:.agents/plugins/opencode-aidevops/quality-hooks-secret-read.mjs:7:SECRET_BASENAME_RE"
+  }
+]

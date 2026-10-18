@@ -123,6 +123,27 @@ def test_ext_filter(tmp_path):
     assert dsa._norm_exts(None) is None
 
 
+def test_hidden_source_paths_are_opt_in_and_keep_fixed_skips(tmp_path):
+    hidden = tmp_path / ".agents" / "hooks"
+    hidden.mkdir(parents=True)
+    (hidden / "validator.py").write_text(
+        "import re\nre.search(r'^[^;]+$', value)\n", encoding="utf-8"
+    )
+    generated = tmp_path / ".git" / "objects"
+    generated.mkdir(parents=True)
+    (generated / "ignored.py").write_text(
+        "import re\nre.search(r'ignored', value)\n", encoding="utf-8"
+    )
+
+    default = dsa.extract_repo("t", str(tmp_path), dir_mode=True, exts={".py"})
+    expanded = dsa.extract_repo(
+        "t", str(tmp_path), dir_mode=True, exts={".py"}, include_hidden=True
+    )
+
+    assert default.records == []
+    assert [row["file"] for row in expanded.records] == [".agents/hooks/validator.py"]
+
+
 def test_max_file_bytes_guard(tmp_path):
     (tmp_path / "big.sh").write_bytes(b"#" * (dsa.MAX_FILE_BYTES + 1))
     (tmp_path / "small.sh").write_text("grep 'foo' f\n", encoding="utf-8")

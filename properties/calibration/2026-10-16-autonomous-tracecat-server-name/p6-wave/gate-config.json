@@ -1,0 +1,24 @@
+{
+  "schema_version": "1",
+  "gate_id": "tracecat-mcp-server-name-path-separator-exclusion",
+  "command": [
+    "/home/lalbers/gitroot/regexproof/.venv/bin/python",
+    "/home/lalbers/gitroot/regexproof/scripts/tracecat-mcp-server-name-regression-gate.py",
+    "--source-root",
+    "/tmp/regexproof-pinned-sources/tracecat-c84d52528a489821f355fc63976fbc7783ae0ad5",
+    "--output",
+    "/home/lalbers/gitroot/regexproof/properties/calibration/2026-10-16-autonomous-tracecat-server-name/p6-wave/product-gate.json"
+  ],
+  "question_ids": [
+    "TC-mcp-server-name-separators-excluded"
+  ],
+  "timeout_seconds": 300,
+  "evidence": {
+    "differential_case_counts": {
+      "TC-mcp-server-name-separators-excluded": 714
+    },
+    "product_engine_replay_question_ids": [
+      "TC-mcp-server-name-separators-excluded"
+    ]
+  }
+}

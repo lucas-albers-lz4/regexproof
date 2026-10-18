@@ -1,0 +1,37 @@
+{
+  "contract_sha256": "6dd7a201dab44fac9bb782c93d02229f081105d93511db5e66c8e6c407258bf9",
+  "differential_cases": 2227,
+  "family": "TC-tracecat-table-identifier",
+  "gate_id": "tracecat-table-identifier-quote-exclusion",
+  "limitations": "The contract covers newly submitted table and column names through the pinned create paths. It does not cover arbitrary internal callers, stored legacy names, SQL correctness beyond double-quote exclusion, authorization correctness, or deployed security impact.",
+  "mismatches": 0,
+  "model_observations": 64,
+  "mutation_id": "TC-table-identifier-quote-mutation",
+  "mutation_name": "a\"",
+  "mutation_reproduced": true,
+  "product_engine": "Pydantic 2.12.5 name fields rebuilt from exact pinned AST, exact service validate_identifier, and exact quote_identifier",
+  "property_id": "TC-table-identifier-double-quote-excluded",
+  "quote_identifier_example": "\"safe\"",
+  "repository": "https://github.com/TracecatHQ/tracecat",
+  "route_and_sink_shape": {
+    "internal_column_create_route_uses_schema_and_scope": true,
+    "internal_table_create_reconstructs_validated_schema": true,
+    "public_column_create_route_uses_schema_and_scope": true,
+    "public_table_create_route_uses_schema_and_scope": true,
+    "service_column_create_validates_name_and_quotes_column": true,
+    "service_table_create_validates_name": true
+  },
+  "schema_accepts_terminal_lf": true,
+  "schema_version": "1",
+  "service_accepts_terminal_lf": false,
+  "service_observations": 64,
+  "source_files": {
+    "tracecat/tables/internal_router.py": "9a13f65023219d73979d08ef98f87c98f24c5cd52d534978d5edb1bf99c983e5",
+    "tracecat/tables/router.py": "393762f572408b5af1380f6c8fffd823b395509730c9e68873e27085fdd9e9d9",
+    "tracecat/tables/schemas.py": "3cf61426a27e200640ad55406dc3f67ee7cd445b2cf70d73205e0709b594e881",
+    "tracecat/tables/service.py": "2e386f317af98f1d18f727be54ef4f641744656b95e18a50d4c941ca73ce5b95"
+  },
+  "source_pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+  "source_pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+  "terminal_lf_note": "The request model regex accepts a final line feed due Python '$' semantics, but the exact service validate_identifier rejects it before DDL. This is not a sink acceptance or SQL-injection finding at this pin."
+}

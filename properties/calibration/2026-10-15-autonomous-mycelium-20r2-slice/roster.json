@@ -1,0 +1,17 @@
+{
+  "cohort_id": "2026-09-12-calibration-20-r2",
+  "cohort_manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+  "coverage_digest": "98dc95c108a34f7790a3aedb82ef076e1fb16da351d828df80b8a8bd5e6cef96",
+  "identities": [
+    {
+      "contract_sha256": "06daf75a21a03113a274f7dd50ef86ab69a54cc06a97ca1aa2d4460935b0e579",
+      "pin": "d4f01ba6202d50909d1977810d322259482e0b82",
+      "provenance": "agent_derived",
+      "question_id": "MY-mycelium-20r2-release-preflight-requires-64-hex",
+      "repo_id": "mycelium0/mycelium",
+      "site": "mycelium0/mycelium@d4f01ba6202d50909d1977810d322259482e0b82:scripts/verify-release.sh:60:SHA256SUMS preflight",
+      "url": "https://github.com/mycelium0/mycelium"
+    }
+  ],
+  "schema_version": "2"
+}

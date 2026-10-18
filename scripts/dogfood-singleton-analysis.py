@@ -103,11 +103,13 @@ _SHELL_SHEBANGS = {"#!/bin/sh", "#!/bin/bash",
 RepoScan = namedtuple("RepoScan", "records per_file scanned_files oversized_files")
 
 
-def _filtered(rel: str) -> bool:
+def _filtered(rel: str, *, include_hidden: bool = False) -> bool:
     parts = Path(rel).parts
     if any(seg in SKIP_DIRS for seg in parts):
         return True
-    return any(part.startswith(".") and part != ".gitignore" for part in parts)
+    return not include_hidden and any(
+        part.startswith(".") and part != ".gitignore" for part in parts
+    )
 
 
 def _classify(rel: str, first_line: str, *, dir_mode: bool) -> str | None:
@@ -131,7 +133,8 @@ def _classify(rel: str, first_line: str, *, dir_mode: bool) -> str | None:
 
 
 def extract_repo(name: str, path: str, *, dir_mode: bool = False,
-                 exts: set[str] | None = None) -> RepoScan:
+                 exts: set[str] | None = None,
+                 include_hidden: bool = False) -> RepoScan:
     """Extract all regex-site records from one repo.
 
     dir_mode selects the full OpenWrt shell surface (*.sh, *.bash, *.init,
@@ -139,7 +142,8 @@ def extract_repo(name: str, path: str, *, dir_mode: bool = False,
     .sh only, as before.
     exts (normalized, dot-prefixed) restricts the walk to those suffixes and
     disables init.d/shebang sniffing.  Files larger than MAX_FILE_BYTES are
-    skipped (counted in oversized_files), never read.
+    skipped (counted in oversized_files), never read. include_hidden includes
+    dot-path source files while retaining the fixed generated/vendor skips.
     """
     records: list[dict] = []
     per_file: list[tuple[str, int]] = []
@@ -153,7 +157,7 @@ def extract_repo(name: str, path: str, *, dir_mode: bool = False,
         if not p.is_file():
             continue
         rel = str(p.relative_to(path))
-        if _filtered(rel):
+        if _filtered(rel, include_hidden=include_hidden):
             continue
         if exts is not None and p.suffix.lower() not in exts:
             continue

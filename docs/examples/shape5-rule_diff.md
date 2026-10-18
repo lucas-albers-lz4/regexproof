@@ -47,7 +47,7 @@ pilot registers, per admitted pair:
 ## Run
 
 ```bash
-# Encoding smoke (template shapes 1–5):
+# Encoding smoke (template shapes 1–6):
 python scripts/z3-property-template.py
 
 # Gitleaks independent-spec pilot:

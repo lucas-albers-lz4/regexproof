@@ -1,0 +1,191 @@
+{
+  "cohort_id": "2026-09-12-calibration-20-r2",
+  "disposition_source": {
+    "path": "docs/conversion-upstream.jsonl",
+    "sha256": "a6275be1fcbde0aa325001aea8af421202de6dd096f630ea06dfc73e66bb2ff8"
+  },
+  "groups": [
+    {
+      "classification": "false_positive_as_security_bypass",
+      "disposition_ids": [
+        "CU-015",
+        "CU-016"
+      ],
+      "evidence": [
+        "https://github.com/fu351/Doberman-Core/blob/53ae43c5298a2426c6696147fdd75e2a4aef10e2/src/doberman/engine/rules/commands.py#L266-L280",
+        "https://github.com/fu351/Doberman-Core/blob/53ae43c5298a2426c6696147fdd75e2a4aef10e2/src/doberman/engine/rules/commands.py#L434-L435",
+        "https://github.com/fu351/Doberman-Core/blob/53ae43c5298a2426c6696147fdd75e2a4aef10e2/src/doberman/engine/rules/commands.py#L536-L560"
+      ],
+      "external_outcome": "No report sent; prior private_first labels and dates were corrected in the curated disposition source.",
+      "group_id": "doberman-terminal-newline-denylist",
+      "question_ids": [
+        "PY-doberman-windows-root-token",
+        "PY-doberman-disk-wipe-token"
+      ],
+      "reason": "The Windows root helper strips surrounding whitespace before the regex. Both matching paths are deny-list checks whose true result contributes to BLOCK. The SATs establish regex membership, not a bypass.",
+      "refuted_claims": [
+        "A terminal LF reaches _WINDOWS_ROOT_RE unchanged after preprocessing.",
+        "A terminal-LF match of _DISK_WIPE lets a destructive command bypass classification."
+      ],
+      "security_impact": "none_demonstrated"
+    },
+    {
+      "classification": "reproduced_security_control_gap_candidate",
+      "disposition_ids": [
+        "CU-017"
+      ],
+      "evidence": [
+        "properties/calibration/2026-10-15-autonomous-doberman-win-secret-path-20r2/README.md",
+        "properties/calibration/2026-10-15-autonomous-doberman-win-secret-path-20r2/gate-report.json",
+        "https://github.com/fu351/Doberman-Core/blob/53ae43c5298a2426c6696147fdd75e2a4aef10e2/src/doberman/engine/rules/secrets.py#L223-L235"
+      ],
+      "external_outcome": "Private-first posture; no report sent, maintainer confirmation, or fix.",
+      "group_id": "doberman-windows-secret-store-coverage",
+      "next_evidence": "Verify native Windows path normalization and an end-to-end intercepted fs_read decision using a disposable path.",
+      "question_ids": [
+        "PY-doberman-secret-store-windows-miss"
+      ],
+      "reason": "The exact-pin gate reports PASS for Windows-shaped .npmrc/credentials targets and AUTH for slash-separated controls on Linux. Native Windows execution and a real secret read were not exercised.",
+      "security_impact": "plausible_not_confirmed"
+    },
+    {
+      "classification": "reproduced_cross_origin_loopback_fetch_candidate",
+      "disposition_ids": [
+        "CU-018"
+      ],
+      "evidence": [
+        "properties/calibration/2026-10-15-autonomous-autoar-jsendpoint-scope-escape-20r2/README.md",
+        "properties/calibration/2026-10-15-autonomous-autoar-jsendpoint-scope-escape-20r2/gate-report.json",
+        "https://github.com/h0tak88r/AutoAR/blob/01cd447ad3b1acfed7e0680596c2c74458a4cf06/internal/scanner/jsendpoints/jsendpoints.go#L21-L26"
+      ],
+      "external_outcome": "Private-first posture; no report sent, maintainer confirmation, or fix.",
+      "group_id": "autoar-cross-origin-loopback-js-fetch",
+      "next_evidence": "Review documented target/scope expectations and impact in a representative operator deployment.",
+      "question_ids": [
+        "AA-autoar-jsendpoint-loopback-script-src-fetch"
+      ],
+      "reason": "The pinned collector replay fetched a harmless JavaScript body from a second disposable 127.0.0.1 listener after receiving an absolute script URL from scanned-host HTML. It establishes a loopback request, not sensitive access or production impact.",
+      "security_impact": "plausible_not_confirmed"
+    },
+    {
+      "classification": "reproduced_markdown_structure_injection_candidate",
+      "disposition_ids": [
+        "CU-019",
+        "CU-020"
+      ],
+      "evidence": [
+        "properties/calibration/2026-10-15-autonomous-malcontent-author-markdown-20r2/README.md",
+        "properties/calibration/2026-10-15-autonomous-malcontent-author-markdown-20r2/product-replay.json",
+        "properties/calibration/2026-10-15-autonomous-malcontent-description-markdown-20r2/README.md",
+        "properties/calibration/2026-10-15-autonomous-malcontent-description-markdown-20r2/product-replay.json"
+      ],
+      "external_outcome": "Private-first posture; no report sent, maintainer confirmation, or fix.",
+      "group_id": "malcontent-third-party-metadata-markdown-rendering",
+      "next_evidence": "Identify a supported Markdown consumer and test whether it activates attacker-selected links or altered table structure.",
+      "question_ids": [
+        "MC-malcontent-author-metadata-extra-markdown-link",
+        "MC-malcontent-description-metadata-extra-markdown-link"
+      ],
+      "reason": "Two distinct third-party YARA metadata fields reach raw Markdown link/table output. Exact-pin replays show structure changes; no browser or downstream Markdown consumer was tested, so XSS or user impact is unproven.",
+      "security_impact": "not_confirmed"
+    },
+    {
+      "classification": "reproduced_redaction_coverage_candidate",
+      "disposition_ids": [],
+      "evidence": [
+        "properties/calibration/2026-10-15-p2-llm-honeypot-source-review/README.md",
+        "properties/calibration/2026-10-15-p2-llm-honeypot-source-review/product-replay.json",
+        "https://github.com/Leviticus-Triage/llm-honeypot-intelligence/blob/65624396e263074bb8cb2e049f9a9ec6215ea5c1/scripts/sync-to-github.sh"
+      ],
+      "external_outcome": "No report sent, maintainer confirmation, or fix.",
+      "group_id": "llm-honeypot-rfc1918-redaction-coverage",
+      "next_evidence": "Inspect only an authorized disposable/generated fixture and establish whether affected output is published or consumed.",
+      "question_ids": [
+        "LH-llm-honeypot-private-ip-rfc1918-redaction"
+      ],
+      "reason": "Exact pinned shell-function replay shows 10/8 and 172.16/12 IPv4 tokens pass unchanged through the generated-artifact redaction helper. No actual generated artifact was inspected or published.",
+      "security_impact": "plausible_not_confirmed"
+    },
+    {
+      "classification": "reproduced_success-reporting_candidate",
+      "disposition_ids": [],
+      "evidence": [
+        "properties/calibration/2026-10-15-p2-llm-honeypot-source-review/README.md",
+        "properties/calibration/2026-10-15-p2-llm-honeypot-source-review/product-replay.json",
+        "https://github.com/Leviticus-Triage/llm-honeypot-intelligence/blob/65624396e263074bb8cb2e049f9a9ec6215ea5c1/spiderfoot-toolbox/tor-gateway/rotate-tor.sh"
+      ],
+      "external_outcome": "No report sent, maintainer confirmation, or fix.",
+      "group_id": "llm-honeypot-tor-newnym-response-sequencing",
+      "next_evidence": "Confirm expected response handling with an isolated deployed-equivalent Tor-control fixture; do not infer scan/anonymity impact from the helper replay alone.",
+      "question_ids": [
+        "LH-llm-honeypot-tor-newnym-response-sequencing"
+      ],
+      "reason": "Exact pinned function replay shows an earlier AUTHENTICATE 250 OK can make the helper report success after a later SIGNAL NEWNYM 551 failure. No live Tor service or deployed rotation was exercised.",
+      "security_impact": "plausible_not_confirmed"
+    },
+    {
+      "classification": "reproduced_policy_mismatch_candidate",
+      "disposition_ids": [],
+      "evidence": [
+        "properties/calibration/2026-10-15-p2-panther-source-review/README.md",
+        "properties/calibration/2026-10-15-p2-panther-source-review/proof-report.ndjson",
+        "properties/calibration/2026-10-15-p2-panther-source-review/product-replay.json",
+        "https://github.com/panther-labs/panther-analysis/blob/0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a/.scripts/claude_review.py#L20-L55",
+        "https://github.com/panther-labs/panther-analysis/blob/0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a/.claude/commands/pr-review.md#L5-L8"
+      ],
+      "external_outcome": "No report sent, maintainer confirmation, or fix.",
+      "group_id": "panther-precommit-secret-path-policy-mismatch",
+      "next_evidence": "Confirm whether the repository intends the slash-command sensitive-path rule to govern the pre-commit helper, then maintain the local regression gate against that requirement.",
+      "question_ids": [
+        "PA-panther-staged-secrets-file-excluded-from-review-prompt"
+      ],
+      "reason": "A synthetic staged secrets.py is selected and its marker reaches the pre-commit prompt helper. The expectation comes from the separate slash-command review policy; that command is not wired to the pre-commit helper, so shared intent remains an inference. No real secret, Claude invocation, or external transmission was observed.",
+      "refuted_claims": [
+        "The pre-commit helper excludes every reviewable filename containing lower-case secrets.",
+        "The separate slash-command policy is directly executed by the pre-commit hook."
+      ],
+      "security_impact": "not_confirmed"
+    },
+    {
+      "classification": "reproduced_local_output_path_escape_candidate",
+      "disposition_ids": [],
+      "evidence": [
+        "properties/calibration/2026-10-15-p2-inhale-source-review/README.md",
+        "properties/calibration/2026-10-15-p2-inhale-source-review/proof-report.ndjson",
+        "properties/calibration/2026-10-15-p2-inhale-source-review/p6-wave-r1/product-replay-p6.json",
+        "https://github.com/netspooky/inhale/blob/889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8/README.md#L118-L130",
+        "https://github.com/netspooky/inhale/blob/889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8/iModules/rDownload.py#L106-L123",
+        "https://github.com/netspooky/inhale/blob/889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8/iModules/rDownload.py#L128-L135"
+      ],
+      "external_outcome": "No report sent, maintainer confirmation, or third-party fix.",
+      "group_id": "inhale-url-output-path-confinement",
+      "next_evidence": "Establish whether a supported deployment lets an untrusted party select the -u, -l, or -r URL, and whether a file written outside -o affects another product boundary. No real filesystem outside an isolated temporary fixture or deployment was tested.",
+      "question_ids": [
+        "IH-inhale-file-url-output-root-confinement",
+        "IH-inhale-directory-url-output-root-confinement"
+      ],
+      "reason": "The README documents -o OUTDIR as the location for scraped files. Exact-pin local replays show two traversal-shaped operator-supplied URLs cause the single-file and remote-directory helpers to write synthetic response bytes outside that configured directory while remaining inside disposable temporary fixtures. This establishes a reproducible local path-confinement gap for the concrete CLI inputs, but the URLs are operator-provided config and neither attacker control in a deployed caller nor downstream security impact is established.",
+      "security_impact": "not_confirmed"
+    }
+  ],
+  "interpretation": "The strict v9 report retains all eleven SAT questions as pending product triage. This overlay refutes two historical Doberman security-bypass claims and records nine candidate questions in seven issue families. The Inhale group reproduces output-root escapes for concrete operator-supplied URLs, but attacker control and downstream security impact remain unconfirmed. Confirmed impact, consumer adoption, external reports, maintainer confirmations, and fixes remain zero.",
+  "manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+  "method": "Retrospective impact review of the eleven strict v9 ground-truthed SAT questions using pinned callers, helper behavior, and exact local replay artifacts. This overlay does not rewrite the strict checkpoint or send an external report.",
+  "observed_at": "2026-10-15",
+  "schema_version": "1",
+  "source_checkpoint": {
+    "path": "properties/calibration/2026-10-15-p2-existing-evidence-20r2-v9/checkpoint.json",
+    "sha256": "20ea9ebf2efe388203b52417d57bf01ed7974e44912dec8cab2d008662c948d1"
+  },
+  "summary": {
+    "candidate_issue_groups": 7,
+    "confirmed_security_impacts": 0,
+    "consumer_adopted_gates": 0,
+    "external_reports_transmitted": 0,
+    "ground_truthed_sat_questions": 11,
+    "maintainer_confirmations": 0,
+    "potential_product_issues": 9,
+    "refuted_as_security_bypass": 2,
+    "third_party_fixes": 0
+  }
+}

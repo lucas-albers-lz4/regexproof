@@ -1,0 +1,25 @@
+{
+  "case_classes": {
+    "exhaustive_special_and_control_sequences": 2954,
+    "seeded_composed_strings": 2048,
+    "supplementary_scalar_values": 4,
+    "targeted_strings": 5,
+    "valid_bmp_scalar_values": 63488
+  },
+  "differential_cases": 68500,
+  "gate_id": "autoar-html-text-escape-20r2",
+  "mismatches": 0,
+  "mutation_id": "AA-autoar-html-text-escape-mutated-less-than-leaks",
+  "mutation_product_output": "<",
+  "mutation_witness": "<",
+  "node_version": "v26.11.1",
+  "product_engine": "Node.js ECMAScript RegExp / String.replace",
+  "property_id": "AA-autoar-html-text-escape-codepoint-image",
+  "raw_html_delimiter_outputs": 0,
+  "repository": "https://github.com/h0tak88r/AutoAR",
+  "schema_version": "1",
+  "scope": "HtmlEscapePage.esc output used in HTML text nodes; not an all-context XSS proof",
+  "source_file": "internal/api/ui/pages/html-escape.js",
+  "source_pin": "01cd447ad3b1acfed7e0680596c2c74458a4cf06",
+  "source_sha256": "8b3dd2cc810e7e5c0a88095ca04257a0755f0d22d2fa7d05f2e3479c1f70a900"
+}

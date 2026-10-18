@@ -1,0 +1,31 @@
+{
+  "adoption": {
+    "approved_on": "2026-10-15",
+    "authority": "standing_user_delegation",
+    "contract_sha256": "b4498e6291105f692c8b281ee975f8a1b3e17c205ec2d5efbe17916790fe2e22",
+    "evidence": [
+      "https://github.com/open-horizon/anax/blob/2f3fa5a506d6565fa68858b7963450567ddda114/cli/cliutils/cliutils.go",
+      "https://github.com/open-horizon/anax/blob/2f3fa5a506d6565fa68858b7963450567ddda114/cli/exchange/org.go",
+      "https://github.com/open-horizon/anax/blob/2f3fa5a506d6565fa68858b7963450567ddda114/cli/cliutils/cliutils_test.go"
+    ],
+    "policy_version": "autonomous-contracts-v1",
+    "rationale": "The pinned source comment and unit cases define the deny-list predicate. Both call sites check it before making an Exchange operation and terminate with a CLI input error when it matches. Scope is limited to those characters and those two commands.",
+    "review": {
+      "author": "codex-contract-author",
+      "reviewer": "codex-independent-review-pass",
+      "same_model": true
+    },
+    "source_file": "cli/cliutils/cliutils.go",
+    "source_pin": "2f3fa5a506d6565fa68858b7963450567ddda114",
+    "source_sha256": "19e98c2f753ff03e83aa442a21cd352f8926efdff20d44d3c111016d908509d0",
+    "source_url": "https://github.com/open-horizon/anax",
+    "status": "approved"
+  },
+  "declared_domain": "Formal projection: one ASCII code point tested against the literal deny-list class in the pinned Go regexp.MatchString call, with Go RE2 whitespace semantics. The product gate checks string-level MatchString behavior over all non-NUL ASCII bytes, representative control/string positions, Unicode samples, and deterministic random strings; no length bound is used. The claim covers only the listed rejected characters and the OrgCreate/OrgDel call sites.",
+  "guarantee": "ValidateOrg returns true for an organization string containing an underscore, comma, Go RE2 ASCII whitespace, question mark, or apostrophe. OrgCreate and OrgDel reject such input with CLI_INPUT_ERROR before their Exchange operation. This is a deny-list guarantee only; it does not define a complete allowed-name grammar or establish URL-path safety for other characters.",
+  "input_source": "The organization argument supplied to the hzn exchange org create or delete command and passed to cliutils.ValidateOrg.",
+  "provenance": "agent_derived",
+  "schema_version": "1",
+  "site": "open-horizon/anax@2f3fa5a506d6565fa68858b7963450567ddda114:cli/cliutils/cliutils.go:2277:MatchString",
+  "trust": "untrusted-input"
+}

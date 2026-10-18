@@ -1,0 +1,53 @@
+{
+  "cohort_id": "2026-09-12-calibration-20-r2",
+  "cohort_manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+  "coverage_digest": "c84cd6529a3fb8e2a7833867ef8ed91854d135ae90b78c15f2e51af330278459",
+  "identities": [
+    {
+      "contract_sha256": "1ff71f9c38086d2fc023842782e618a6d2dcafcf5f98d0d0325451d322ad80be",
+      "pin": "e9fb233763160316989863b4739c4656133d45b0",
+      "provenance": "agent_derived",
+      "question_id": "ME-wallet-kit-base64url",
+      "repo_id": "magiclabs/magic-js",
+      "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-ext/wallet-kit/src/utils/base64.ts:11:column-26",
+      "url": "https://github.com/magiclabs/magic-js"
+    },
+    {
+      "contract_sha256": "494cbc6e8061b3c44ea15d48af39a0a566308d3b493712ff30e511d6dd2ed107",
+      "pin": "e9fb233763160316989863b4739c4656133d45b0",
+      "provenance": "agent_derived",
+      "question_id": "ME-webauthn-base64url",
+      "repo_id": "magiclabs/magic-js",
+      "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-ext/webauthn/src/utils/base64.ts:11:column-26",
+      "url": "https://github.com/magiclabs/magic-js"
+    },
+    {
+      "contract_sha256": "b6615df46cf810bfc7a8e83ba4352a373b1f72fdfbfd1f6aafdd21ca6d1c2245",
+      "pin": "e9fb233763160316989863b4739c4656133d45b0",
+      "provenance": "agent_derived",
+      "question_id": "ME-provider-webauthn-base64url",
+      "repo_id": "magiclabs/magic-js",
+      "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-sdk/provider/src/util/base64-json.ts:54:column-26",
+      "url": "https://github.com/magiclabs/magic-js"
+    },
+    {
+      "contract_sha256": "40cd17120597b424cde7a660f858e9d77538da09bdf84b9fbcaeda825d9b98de",
+      "pin": "e9fb233763160316989863b4739c4656133d45b0",
+      "provenance": "agent_derived",
+      "question_id": "ME-provider-dpop-base64url",
+      "repo_id": "magiclabs/magic-js",
+      "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-sdk/provider/src/util/web-crypto.ts:106:column-27",
+      "url": "https://github.com/magiclabs/magic-js"
+    },
+    {
+      "contract_sha256": "569f0d7217b959757d3ee84744ecbff612356727663078e73da9e3652c503a70",
+      "pin": "e9fb233763160316989863b4739c4656133d45b0",
+      "provenance": "agent_derived",
+      "question_id": "ME-rn-bare-dpop-base64url",
+      "repo_id": "magiclabs/magic-js",
+      "site": "magiclabs/magic-js@e9fb233763160316989863b4739c4656133d45b0:packages/@magic-sdk/react-native-bare/src/native-crypto/utils/uint8.ts:71:column-24",
+      "url": "https://github.com/magiclabs/magic-js"
+    }
+  ],
+  "schema_version": "2"
+}

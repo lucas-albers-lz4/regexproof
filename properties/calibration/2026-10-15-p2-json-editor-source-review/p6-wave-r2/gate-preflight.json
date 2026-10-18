@@ -1,0 +1,25 @@
+{
+  "cases": 1116985,
+  "contract_sha256": "f7cba2da3c4b4a6a48529b436c2f6ef9feea52a4344f6e4df29688e0ee88e970",
+  "differential_case_counts": {
+    "JE-json-editor-enum-string-html-text-codepoint-image": 1116985
+  },
+  "firstMismatch": null,
+  "gate_id": "json-editor-enum-html-text-escape",
+  "mismatches": 0,
+  "mutation_guard_passed": true,
+  "mutation_guard_question_id": "JE-json-editor-enum-mutated-less-than-leaks",
+  "mutation_witness": "<",
+  "node_version": "v26.11.1",
+  "product_engine_replay_question_ids": [
+    "JE-json-editor-enum-string-html-text-codepoint-image"
+  ],
+  "question_ids": [
+    "JE-json-editor-enum-string-html-text-codepoint-image"
+  ],
+  "repository": "https://github.com/json-editor/json-editor",
+  "schema_version": "1",
+  "source_file": "src/editors/enum.js",
+  "source_file_sha256": "315aae54dbaf602bb25c08c064187805a3ac279a61aae8cd6d4d49eec0c44b14",
+  "source_pin": "b31ddabecf4ed3209d37a2f5b29956120cd8f9ce"
+}

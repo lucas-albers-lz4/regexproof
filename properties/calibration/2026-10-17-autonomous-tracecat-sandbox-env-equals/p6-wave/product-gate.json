@@ -1,0 +1,24 @@
+{
+  "accepted_cases": 165,
+  "contract_sha256": "13c0f6ebd6e7ed7ae00da4360253d1657109443d8371e67e64bf7ef754915ca7",
+  "differential_cases": 4232,
+  "equal_sign_mutation_reproduced": true,
+  "gate_id": "tracecat-sandbox-env-key-equals-exclusion",
+  "limitations": "The gate covers the pinned nsjail env-map and subprocess paths. It proves only that accepted names exclude '='; Python '$' accepts one final LF, which is explicitly outside full POSIX name conformance. It does not cover the unsafe PID fallback or claim a current security impact.",
+  "mismatches": 0,
+  "mutation_id": "TC-sandbox-env-key-equals-mutation",
+  "proof_ran": false,
+  "property_id": "TC-sandbox-env-key-excludes-equals",
+  "python_subprocess_rejects_equal_sign_key": true,
+  "repository": "https://github.com/TracecatHQ/tracecat",
+  "schema_version": "1",
+  "source_path": {
+    "action_nsjail_builder_validator_verified": true,
+    "both_subprocess_sinks_verified": true,
+    "run_python_nsjail_builder_validator_verified": true,
+    "run_python_user_env_source_verified": true
+  },
+  "source_pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+  "source_sha256": "ddc89fbeeecffff54574283bf4bea064a0af0579fcbb4ba2f3fcd0d8e6b1d6e2",
+  "terminal_lf_accepted": true
+}

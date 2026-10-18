@@ -1,0 +1,92 @@
+{
+  "artifact_kind": "p2-source-review-transport-followup",
+  "cohort_id": "2026-09-12-calibration-20-r2",
+  "manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+  "observed_at": "2026-10-15T20:38:39Z",
+  "original_review_sha256": "88d5c9ee6eb9988f4844523c145899a47b9f50ca4f94bb0651db5bf66d85f0ad",
+  "updated_review_sha256": "66d64f3d7fcbcc49aabd56416e07f7814fe4aa1b8de4fe2df050b8c7eaee1e3a",
+  "updated_source_review_evidence_sha256": "3863e57b416aa6dda3aa778e7af30d913397bcc80d73cf8fbbd2d696bd7f394e",
+  "repository": {
+    "repo_id": "open-horizon/anax",
+    "url": "https://github.com/open-horizon/anax",
+    "pin": "2f3fa5a506d6565fa68858b7963450567ddda114",
+    "go_mod_sha256": "e8bd535aacddbe4b7dd2661b6237123c73a2257702227cbe12863ab02e5f79a5"
+  },
+  "followup_question": "Can a raw network HTTP request reach either Anax Origin-header middleware with CR or LF embedded in Request.Header.Get(\"Origin\")?",
+  "decision": "skip",
+  "reason_code": "origin_crlf_excluded_by_pinned_go_http_parser",
+  "conclusion": "At the pinned Anax listener path and the Go 1.25.7 toolchain required by its go.mod, the standard HTTP parser does not place CR or LF bytes in parsed header values. It unfolds continuation lines into spaces, parses a CRLF-delimited next header as a separate field, and rejects a bare CR. The middleware regex's CR/LF branch is unreachable from raw network requests on this path; this does not establish behavior for an in-memory synthetic Request or a future nonstandard adapter.",
+  "reviewed_sites": [
+    {
+      "regex_id": "5188beea9c5a3e870619d490f2252c88",
+      "site": "agreementbot/api.go:325:0",
+      "pattern": "[\\r\\n]",
+      "source_sha256": "d564123712b9ca72ab223538c56f9485076f03de2586131a20d81e04a1fc54f1",
+      "handler_read_line": 331,
+      "response_header_sink_line": 342,
+      "prior_decision": "unresolved",
+      "current_decision": "skip"
+    },
+    {
+      "regex_id": "d64ef565e9b56278fe0581543a230652",
+      "site": "api/api.go:139:0",
+      "pattern": "[\\r\\n]",
+      "source_sha256": "2cb0afcb2f41c3e1f7cc829f1aae5936eb508aac907044b98c0ea2cc825ae9f7",
+      "handler_read_line": 148,
+      "response_header_sink_line": 159,
+      "prior_decision": "unresolved",
+      "current_decision": "skip"
+    }
+  ],
+  "ground_truth": {
+    "kind": "exact_toolchain_standard_library_source_and_raw_transport_replay",
+    "go_version": "go1.25.7 linux/amd64",
+    "command": "GOTOOLCHAIN=go1.25.7 go run properties/calibration/2026-10-15-p2-anax-source-review/origin-crlf-transport-replay.go",
+    "runner_source": "properties/calibration/2026-10-15-p2-anax-source-review/origin-crlf-transport-replay.go",
+    "runner_source_sha256": "d579a96190c5ab2a8f0c3bd2cd947599e019e2e4bf42e354ef168966e6b19489",
+    "output": "properties/calibration/2026-10-15-p2-anax-source-review/origin-crlf-transport-replay.jsonl",
+    "output_sha256": "48d5d0e0f4a83bd696a84e9cee6e30c45e861408f66f225d889047afe6a3cdd6",
+    "cases": 6,
+    "observations": {
+      "ordinary": "valid Origin reached the handler unchanged",
+      "obs_fold": "continuation reached the handler with a space in the Origin value and no CR/LF",
+      "separate_header_after_origin": "Origin remained unchanged; X-Injected was a separate field",
+      "bare_lf_inside_origin": "Origin ended before LF; X-Injected was a separate field",
+      "bare_cr_inside_origin": "HTTP 400; handler did not run",
+      "repeated_origin": "Header.Get returned the first value without CR/LF"
+    },
+    "go_standard_library_sources": [
+      {
+        "path": "src/net/http/server.go",
+        "line": 1041,
+        "sha256": "6fdef8d77c060b890e56d56f04fa1243fbf976a366aa5ef827496387a5493625",
+        "purpose": "HTTP server connection invokes the request parser"
+      },
+      {
+        "path": "src/net/http/request.go",
+        "line": 1079,
+        "sha256": "4a34a9e157a606a046d5b9f8f761c571c4762668fa351d92048515a595939c38",
+        "purpose": "request parsing delegates header parsing to textproto"
+      },
+      {
+        "path": "src/net/textproto/reader.go",
+        "lines": [135, 235, 515, 570, 711, 728],
+        "sha256": "99956bef292c0e69bbce0ebbe449261a7243f412cacee1f09d0f1c4c72c06477",
+        "purpose": "continuations are unfolded; parsed header value bytes are validated against VCHAR, SP, HTAB, and obs-text, excluding CR and LF"
+      }
+    ]
+  },
+  "limitations": [
+    "The replay targets both network listener parser paths with the pinned Anax source and Go 1.25.7; it does not claim that the local isValidInput closure could never receive synthetic in-memory requests if the code is later refactored.",
+    "This is a review disposition, not a product proof question, vulnerability finding, or consumer regression gate."
+  ],
+  "current_anax_review_totals": {
+    "raw_sites_reviewed": 26,
+    "skip": 15,
+    "unresolved": 10,
+    "adopted": 1,
+    "product_questions_asked": 1
+  },
+  "original_review_evidence_sha256": "ea233e04dc0526a881281ad48f8ddf1ca28d1f5fba07702144b5bb2f46c4ffa4",
+  "schema_version": "1"
+}

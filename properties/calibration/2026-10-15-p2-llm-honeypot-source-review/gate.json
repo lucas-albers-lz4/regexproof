@@ -1,0 +1,27 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "scripts/llm-honeypot-boundary-regression-gate.py",
+    "--source-root",
+    "/tmp/regexproof-pinned-sources/llm-honeypot-intelligence-65624396e263074bb8cb2e049f9a9ec6215ea5c1",
+    "--output",
+    "/home/lalbers/gitroot/regexproof/properties/calibration/2026-10-15-p2-llm-honeypot-source-review/product-replay-p6.json"
+  ],
+  "evidence": {
+    "differential_case_counts": {
+      "LH-llm-honeypot-private-ip-rfc1918-redaction": 65541,
+      "LH-llm-honeypot-tor-newnym-response-sequencing": 4
+    },
+    "product_engine_replay_question_ids": [
+      "LH-llm-honeypot-private-ip-rfc1918-redaction",
+      "LH-llm-honeypot-tor-newnym-response-sequencing"
+    ]
+  },
+  "gate_id": "llm-honeypot-exact-pin-shell-boundaries",
+  "question_ids": [
+    "LH-llm-honeypot-private-ip-rfc1918-redaction",
+    "LH-llm-honeypot-tor-newnym-response-sequencing"
+  ],
+  "schema_version": "1",
+  "timeout_seconds": 180
+}

@@ -1,0 +1,110 @@
+{
+  "bucket": "webhook-action-protocol-validation",
+  "cohort_id": "2026-09-12-calibration-20-r2",
+  "keep": [
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": ".agents/scripts/pulse-merge-webhook-receiver.sh",
+      "idiom_class": "unclassified",
+      "pattern": "^[0-9]+$",
+      "regex_id": "1454c65f603dc1523fe156ebb9006950",
+      "site": ".agents/scripts/pulse-merge-webhook-receiver.sh:136:1"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": ".agents/scripts/pulse-merge-webhook-receiver.sh",
+      "idiom_class": "unclassified",
+      "pattern": "^[0-9]+$",
+      "regex_id": "2257924cc63bf89d151fabf3e22e77f9",
+      "site": ".agents/scripts/pulse-merge-webhook-receiver.sh:147:1"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": ".agents/scripts/pulse-merge-webhook-receiver.sh",
+      "idiom_class": "unclassified",
+      "pattern": "^[0-9]+$",
+      "regex_id": "484b07d8fce3e935342cdf03e7a8a0a2",
+      "site": ".agents/scripts/pulse-merge-webhook-receiver.sh:149:1"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": ".agents/scripts/pulse-merge-webhook-receiver.sh",
+      "idiom_class": "unclassified",
+      "pattern": "^[A-Za-z_][A-Za-z0-9_]*$",
+      "regex_id": "81124d60d9486d93420cc2be400664d0",
+      "site": ".agents/scripts/pulse-merge-webhook-receiver.sh:167:1"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": ".agents/scripts/pulse-merge-webhook-receiver.sh",
+      "idiom_class": "unclassified",
+      "pattern": "^[A-Za-z_][A-Za-z0-9_]*$",
+      "regex_id": "36b8e5b02a910142562c180278b7aae5",
+      "site": ".agents/scripts/pulse-merge-webhook-receiver.sh:182:1"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": ".agents/scripts/pulse-merge-webhook-receiver.sh",
+      "idiom_class": "unclassified",
+      "pattern": "^[0-9]+$",
+      "regex_id": "d95f0ae2af66b143b297cf0880059f20",
+      "site": ".agents/scripts/pulse-merge-webhook-receiver.sh:189:1"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": ".agents/scripts/pulse-merge-webhook-receiver.sh",
+      "idiom_class": "unclassified",
+      "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$",
+      "regex_id": "5a7fd7c1c8fd9810475a78e11a0f5d0e",
+      "site": ".agents/scripts/pulse-merge-webhook-receiver.sh:197:1"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": ".agents/scripts/pulse-merge-webhook-receiver.sh",
+      "idiom_class": "unclassified",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]*$",
+      "regex_id": "cd0105596f7c5965b3d284b2e864b352",
+      "site": ".agents/scripts/pulse-merge-webhook-receiver.sh:198:1"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": ".agents/scripts/pulse-merge-webhook-receiver.sh",
+      "idiom_class": "unclassified",
+      "pattern": "^[A-Fa-f0-9]{40}$",
+      "regex_id": "ce3f8739086067661f9a956fbc95ebe3",
+      "site": ".agents/scripts/pulse-merge-webhook-receiver.sh:224:1"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": ".agents/scripts/pulse-merge-webhook-receiver.sh",
+      "idiom_class": "unclassified",
+      "pattern": "^[0-9]+$",
+      "regex_id": "8fb8db3a8d2a00b87172e6340d868915",
+      "site": ".agents/scripts/pulse-merge-webhook-receiver.sh:257:5"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": ".agents/scripts/pulse-merge-webhook-receiver.sh",
+      "idiom_class": "unclassified",
+      "pattern": "^[0-9]+$",
+      "regex_id": "b9dfec0e0db0d4a2679af29e4e83391a",
+      "site": ".agents/scripts/pulse-merge-webhook-receiver.sh:302:6"
+    }
+  ],
+  "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+  "repository_url": "https://github.com/marcusquinn/aidevops",
+  "schema_version": "1",
+  "selection_note": "Complete source-order census of all 11 POSIX-shell regex sites in pulse-merge-webhook-receiver.sh from corrected v5 inventory. This is not a randomized sample or representative-yield estimate. Ranks preserve source line/column order. Classification is unclassified pending review; no solver result informed selection.",
+  "source_inventory_sha256": "e2d6b921bc7f2910eab6ce6f6f63aa1e1832881a81823cd84ac70053e9e0af3a"
+}

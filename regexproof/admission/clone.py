@@ -2,9 +2,11 @@
 
 from __future__ import annotations
 
+import math
 import os
 import shutil
 import subprocess
+import time
 from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 from pathlib import Path
@@ -19,6 +21,20 @@ _DEFAULT_CLONE_TIMEOUT_SEC = 300
 
 class CloneError(RuntimeError):
     """Probe clone failed."""
+
+
+class CloneTimeoutError(CloneError):
+    """Retryable transport/checkout failure, never an admission decision."""
+
+    def __init__(self, phase: str, timeout_sec: float, elapsed_sec: float):
+        self.phase = phase
+        self.timeout_sec = timeout_sec
+        self.elapsed_sec = elapsed_sec
+        super().__init__(
+            f"git {phase} timed out after {elapsed_sec:.2f}s "
+            f"(per-command limit={timeout_sec:g}s); probe incomplete, "
+            "not NO-GO; retry with --clone-timeout-sec if appropriate"
+        )
 
 
 @dataclass(frozen=True)
@@ -101,12 +117,14 @@ def partial_clone(
     dest: Path,
     pin: str | None = None,
     max_disk_mb: int | None = 500,
+    timeout_sec: float = _DEFAULT_CLONE_TIMEOUT_SEC,
     run: RunFn | None = None,
 ) -> CloneResult:
     """Clone *url* with ``--filter=blob:none`` into *dest*; return resolved pins.
 
-    *dest* must not live under ``batch/corpora/``. Cleanup is the caller's
-    responsibility (see :func:`cleanup_clone`).
+    *dest* must not live under ``batch/corpora/``. Timeouts remove the partial
+    clone; otherwise cleanup is the caller's responsibility (see
+    :func:`cleanup_clone`).
 
     Note: with ``blob:none``, the on-disk check here only sees tree metadata.
     Callers that walk/read files should re-check via :func:`enforce_disk_budget`
@@ -116,9 +134,27 @@ def partial_clone(
     for the walk) and ``default_head`` (the default-branch HEAD at clone time,
     captured *before* ``git checkout --detach <pin>`` — this is ``pin_probed``
     for E3 stale-pin detection).
+
+    Each git command (clone, rev-parse, fetch, checkout) has its own
+    ``timeout_sec`` limit; this is not a deadline for the subsequent walk.
+    A timeout raises :class:`CloneTimeoutError` without producing probe facts.
     """
     validate_clone_url(url)
+    if not math.isfinite(timeout_sec) or timeout_sec <= 0:
+        raise CloneError("timeout_sec must be finite and positive")
     run_fn = run or _default_run
+
+    def run_phase(phase: str, command: Sequence[str]) -> subprocess.CompletedProcess[str]:
+        started = time.monotonic()
+        try:
+            return run_fn(command, timeout=timeout_sec)
+        except subprocess.TimeoutExpired as exc:
+            elapsed_sec = time.monotonic() - started
+            # The destination belongs to this attempt. Persistent callers (e.g.
+            # materialize-corpus) do not have the probe CLI's finally cleanup.
+            cleanup_clone(dest)
+            raise CloneTimeoutError(phase, timeout_sec, elapsed_sec) from exc
+
     dest = Path(dest)
     parts = dest.resolve().parts
     if any(
@@ -138,14 +174,14 @@ def partial_clone(
         url,
         str(dest),
     ]
-    proc = run_fn(argv)
+    proc = run_phase("clone", argv)
     if proc.returncode != 0:
         raise CloneError(
             f"git clone failed ({proc.returncode}): {proc.stderr or proc.stdout}"
         )
 
     # Capture the default-branch HEAD BEFORE any checkout — this is pin_probed.
-    head_rev = run_fn(["git", "-C", str(dest), "rev-parse", "HEAD"])
+    head_rev = run_phase("rev-parse", ["git", "-C", str(dest), "rev-parse", "HEAD"])
     if head_rev.returncode != 0:
         raise CloneError(
             f"rev-parse HEAD failed: {head_rev.stderr or head_rev.stdout}"
@@ -154,14 +190,14 @@ def partial_clone(
 
     if pin:
         # Fetch the pin explicitly — default-branch-only clones miss other SHAs.
-        fetch = run_fn(
-            ["git", "-C", str(dest), "fetch", "--filter=blob:none", "origin", pin]
+        fetch = run_phase(
+            "fetch", ["git", "-C", str(dest), "fetch", "--filter=blob:none", "origin", pin]
         )
         if fetch.returncode != 0:
             raise CloneError(
                 f"git fetch {pin} failed: {fetch.stderr or fetch.stdout}"
             )
-        co = run_fn(["git", "-C", str(dest), "checkout", "--detach", pin])
+        co = run_phase("checkout", ["git", "-C", str(dest), "checkout", "--detach", pin])
         if co.returncode != 0:
             raise CloneError(f"git checkout {pin} failed: {co.stderr or co.stdout}")
         resolved = pin

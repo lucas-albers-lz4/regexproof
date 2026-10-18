@@ -1,0 +1,24 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "scripts/panther-secret-path-regression-gate.py",
+    "--source-root",
+    "/tmp/regexproof-pinned-sources/panther-analysis-0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a",
+    "--output",
+    "/home/lalbers/gitroot/regexproof/properties/calibration/2026-10-15-p2-panther-source-review/p6-wave-r1/product-replay-p6.json"
+  ],
+  "evidence": {
+    "differential_case_counts": {
+      "PA-panther-staged-secrets-file-excluded-from-review-prompt": 9
+    },
+    "product_engine_replay_question_ids": [
+      "PA-panther-staged-secrets-file-excluded-from-review-prompt"
+    ]
+  },
+  "gate_id": "panther-precommit-secret-path-review-filter",
+  "question_ids": [
+    "PA-panther-staged-secrets-file-excluded-from-review-prompt"
+  ],
+  "schema_version": "1",
+  "timeout_seconds": 300
+}

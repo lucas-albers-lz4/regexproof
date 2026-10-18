@@ -1,0 +1,25 @@
+{
+  "command": [
+    "/home/lalbers/gitroot/regexproof/.venv/bin/python",
+    "/home/lalbers/gitroot/regexproof/scripts/tracecat-rbac-scope-pattern-regression-gate.py",
+    "--source-root",
+    "/tmp/tracecat-p2-review-20261016",
+    "--output",
+    "/home/lalbers/gitroot/regexproof/properties/calibration/2026-10-16-autonomous-tracecat-rbac-scope-pattern/p6-wave/product-gate.json",
+    "--skip-proof"
+  ],
+  "evidence": {
+    "differential_case_counts": {
+      "TC-rbac-scope-nonstar-glob-metacharacters-excluded": 2632
+    },
+    "product_engine_replay_question_ids": [
+      "TC-rbac-scope-nonstar-glob-metacharacters-excluded"
+    ]
+  },
+  "gate_id": "tracecat-rbac-scope-glob-alphabet",
+  "question_ids": [
+    "TC-rbac-scope-nonstar-glob-metacharacters-excluded"
+  ],
+  "schema_version": "1",
+  "timeout_seconds": 300
+}

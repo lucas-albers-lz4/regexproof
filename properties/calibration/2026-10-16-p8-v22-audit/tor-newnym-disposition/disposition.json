@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "artifact_kind": "p8-local-candidate-disposition",
+  "observed_at": "2026-10-16",
+  "group_id": "llm-honeypot-tor-newnym-response-sequencing",
+  "question_ids": ["LH-llm-honeypot-tor-newnym-response-sequencing"],
+  "repository": "Leviticus-Triage/llm-honeypot-intelligence",
+  "source_pin": "65624396e263074bb8cb2e049f9a9ec6215ea5c1",
+  "source_file": "spiderfoot-toolbox/tor-gateway/rotate-tor.sh",
+  "source_sha256": "0670c3cfcb76b47b0b91a000918afaa9ceea077d6c7b77c4f4a66f1c38522334",
+  "local_bug_status": "confirmed_false_success_on_newnym_error",
+  "reproduction": {
+    "transcript": "250 OK\r\n551 Internal error\r\n250 closing connection\r\n",
+    "source_behavior": "send_newnym returns success after grep finds the AUTHENTICATE 250 OK, despite the later SIGNAL NEWNYM 551 error; the main loop then logs SIGNAL NEWNYM ok and continues.",
+    "product_engine": "Exact pinned shell helper with local fake nc; no live ControlPort or network request.",
+    "existing_evidence": [
+      {
+        "path": "properties/calibration/2026-10-15-p2-llm-honeypot-source-review/product-replay.json",
+        "sha256": "d6b582e313ceee9cc2320a603396980ceba1a9e702a1fa14c5a12158865e8b9b"
+      },
+      {
+        "path": "properties/calibration/2026-10-15-p2-llm-honeypot-source-review/product-replay-p6.json",
+        "sha256": "d6b582e313ceee9cc2320a603396980ceba1a9e702a1fa14c5a12158865e8b9b"
+      },
+      {
+        "path": "properties/calibration/2026-10-15-p2-llm-honeypot-source-review/gate.json",
+        "sha256": "ef3342f6be3df8dd7b648696345e70cbe269a98f6ea3ab4342b96df6bd14e45e"
+      }
+    ]
+  },
+  "independent_requirement": {
+    "repository_sources": [
+      "spiderfoot-toolbox/tor-gateway/rotate-tor.sh:2",
+      "spiderfoot-toolbox/README.md:59-60"
+    ],
+    "protocol_references": [
+      "https://spec.torproject.org/control-spec/commands.html",
+      "https://spec.torproject.org/control-spec/replies.html"
+    ],
+    "summary": "Repository docs require periodic NEWNYM rotation and say scans stop if the rotator fails. The Tor spec defines 5yz as unsuccessful, 551 as an internal error that prevents fulfillment, and 250 as a positive completion reply."
+  },
+  "security_impact": "not_confirmed",
+  "security_impact_evidence": "No live Tor service, deployed scan, old-exit persistence, or sensitive traffic was exercised.",
+  "external_outcome": {
+    "report_sent": false,
+    "maintainer_confirmation": false,
+    "third_party_fix": false
+  },
+  "next_evidence": "A security-impact claim would require an authorized deployment-equivalent check showing a scan continues on the old exit after NEWNYM failure; do not infer this from the local response fixture."
+}

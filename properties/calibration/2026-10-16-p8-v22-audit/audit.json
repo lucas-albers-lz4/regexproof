@@ -1,0 +1,239 @@
+{
+  "artifact_kind": "p8-fresh-source-audit",
+  "census": {
+    "adopted_source_contracts": 4,
+    "formal_unsat_properties": 3,
+    "rows": 11,
+    "skipped": 6,
+    "unresolved": 1,
+    "whole_slug_inclusion": "timeout; not proven"
+  },
+  "cohort_id": "2026-09-12-calibration-20-r2",
+  "contract_scope_corrections": [
+    {
+      "corrected_contract": "contract-check-sha-regex-only.json",
+      "corrected_contract_sha256": "da66928f8df6ab7b4ccbd27c2e307dbd9a085e2562911e053010cb1231747ea0",
+      "historical_contract": "contract-check-sha.json",
+      "historical_contract_sha256": "72f7cd1389a521b453384a381ff3ec9c24487f33ea38d6265b7676ddc1b2da44",
+      "question_id": "AE-aidevops-webhook-check-sha-token",
+      "scope": "regex-language theorem only",
+      "site": ".agents/scripts/pulse-merge-webhook-receiver.sh:224:1"
+    },
+    {
+      "corrected_contract": "contract-process-pr-number-regex-only.json",
+      "corrected_contract_sha256": "b723accf2629d739af9497e5136139dbdaa3c9d3b38221ed7788c887979dec12",
+      "historical_contract": "contract-process-pr-number.json",
+      "historical_contract_sha256": "fd488d77413860be91038e4167888981145a11e0b639a8dd33cdd08c1a08e9fc",
+      "question_id": "AE-aidevops-webhook-process-pr-number",
+      "scope": "regex-language theorem only",
+      "site": ".agents/scripts/pulse-merge-webhook-receiver.sh:302:6"
+    }
+  ],
+  "frozen_checkpoint": {
+    "modified": false,
+    "note": "The frozen v22 snapshot retains historical contract text and digests. This audit overlay supersedes two Aidevops contract scopes; it does not rewrite v22 or issue a new aggregate checkpoint.",
+    "path": "properties/calibration/2026-10-16-p2-existing-evidence-20r2-v22/checkpoint.json",
+    "sha256": "ecbbf6ba284bea5454ca34cafd33470fdaa5dfc62db7034c4f0834b1cac0b249"
+  },
+  "gate": {
+    "bash_compiler_differential": 671,
+    "formal_unsat": 3,
+    "integrated_helper_cases": 48,
+    "local_gate_passed": true,
+    "mismatches": 0,
+    "mutation_replays": 4,
+    "path": "properties/calibration/2026-10-16-p8-v22-audit/aidevops-webhook-gate-report.json",
+    "sha256": "96e0e19349da7fa3f64fd5400d93c7a1a5d7e4ae044505dc831c205149ba8281",
+    "slug_inclusion": "not_proven",
+    "wall_seconds": 6.115017
+  },
+  "items": [
+    {
+      "fresh_review": {
+        "action": "retain skip",
+        "finding": "The pattern is applied to the local date command output before emitting a millisecond timestamp. No untrusted field reaches this check.",
+        "proof_outcome": "not applicable",
+        "review_status": "confirmed_skip"
+      },
+      "original_decision": "skipped",
+      "pattern": "^[0-9]+$",
+      "rank": 1,
+      "reason_code": "internal_runtime_value",
+      "regex_id": "1454c65f603dc1523fe156ebb9006950",
+      "site": ".agents/scripts/pulse-merge-webhook-receiver.sh:136:1"
+    },
+    {
+      "fresh_review": {
+        "action": "retain skip",
+        "finding": "The value comes from the receiver-local server-to-shell timing record, not from a request field; the security and protocol checks live in the authenticated server and the action parser.",
+        "proof_outcome": "not applicable",
+        "review_status": "confirmed_skip"
+      },
+      "original_decision": "skipped",
+      "pattern": "^[0-9]+$",
+      "rank": 2,
+      "reason_code": "internal_server_timestamp",
+      "regex_id": "2257924cc63bf89d151fabf3e22e77f9",
+      "site": ".agents/scripts/pulse-merge-webhook-receiver.sh:147:1"
+    },
+    {
+      "fresh_review": {
+        "action": "retain skip",
+        "finding": "The compared current time comes from the local clock helper. This is internal timing evidence, not a security-boundary input.",
+        "proof_outcome": "not applicable",
+        "review_status": "confirmed_skip"
+      },
+      "original_decision": "skipped",
+      "pattern": "^[0-9]+$",
+      "rank": 3,
+      "reason_code": "internal_runtime_timestamp",
+      "regex_id": "484b07d8fce3e935342cdf03e7a8a0a2",
+      "site": ".agents/scripts/pulse-merge-webhook-receiver.sh:149:1"
+    },
+    {
+      "fresh_review": {
+        "action": "retain",
+        "finding": "The configured name is checked against the Bash identifier ERE before indirect expansion; the proof covers the accepted regex language. Clear helper repeats the same check.",
+        "proof_outcome": "UNSAT; mutation replay reproduced",
+        "review_status": "confirmed_narrow_scope"
+      },
+      "original_decision": "adopted",
+      "pattern": "^[A-Za-z_][A-Za-z0-9_]*$",
+      "rank": 4,
+      "reason_code": "secret_env_identifier",
+      "regex_id": "81124d60d9486d93420cc2be400664d0",
+      "site": ".agents/scripts/pulse-merge-webhook-receiver.sh:167:1"
+    },
+    {
+      "fresh_review": {
+        "action": "retain skip",
+        "finding": "This is the second occurrence of the same environment-name guard in the clear helper. It is covered by the line-167 contract and gate rather than counted as another independent question.",
+        "proof_outcome": "not applicable",
+        "review_status": "confirmed_skip"
+      },
+      "original_decision": "skipped",
+      "pattern": "^[A-Za-z_][A-Za-z0-9_]*$",
+      "rank": 5,
+      "reason_code": "shared_contract_duplicate",
+      "regex_id": "36b8e5b02a910142562c180278b7aae5",
+      "site": ".agents/scripts/pulse-merge-webhook-receiver.sh:182:1"
+    },
+    {
+      "fresh_review": {
+        "action": "retain unresolved",
+        "finding": "The helper combines digits with Bash numeric comparison; leading-zero/octal semantics leave the config domain ambiguous.",
+        "proof_outcome": "not attempted as a product claim",
+        "review_status": "unresolved_as_recorded"
+      },
+      "original_decision": "unresolved",
+      "pattern": "^[0-9]+$",
+      "rank": 6,
+      "reason_code": "numeric_config_domain",
+      "regex_id": "d95f0ae2af66b143b297cf0880059f20",
+      "site": ".agents/scripts/pulse-merge-webhook-receiver.sh:189:1"
+    },
+    {
+      "fresh_review": {
+        "action": "retain timeout and do not claim proven inclusion",
+        "finding": "The full helper also checks owner first character and excludes repository names . and ..; the unbounded helper inclusion query timed out at 30 seconds. Finite helper comparisons are regression checks, not a substitute for the proof.",
+        "proof_outcome": "TIMEOUT; no full-helper UNSAT result",
+        "review_status": "source_contract_but_proof_unresolved"
+      },
+      "original_decision": "adopted",
+      "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$",
+      "rank": 7,
+      "reason_code": "webhook_slug_protocol_token",
+      "regex_id": "5a7fd7c1c8fd9810475a78e11a0f5d0e",
+      "site": ".agents/scripts/pulse-merge-webhook-receiver.sh:197:1"
+    },
+    {
+      "fresh_review": {
+        "action": "retain skip",
+        "finding": "This adjacent regex is a required subcheck of the line-197 repository-slug contract, not an independent product property.",
+        "proof_outcome": "not applicable",
+        "review_status": "confirmed_skip"
+      },
+      "original_decision": "skipped",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]*$",
+      "rank": 8,
+      "reason_code": "shared_slug_contract_duplicate",
+      "regex_id": "cd0105596f7c5965b3d284b2e864b352",
+      "site": ".agents/scripts/pulse-merge-webhook-receiver.sh:198:1"
+    },
+    {
+      "fresh_review": {
+        "action": "replace active contract with regex-only guarantee; preserve frozen v22 contract snapshot",
+        "finding": "The attached query proves only the SHA regex language. Prior guarantee also included slug acceptance and cache-invalidator reachability; those are separate source-reviewed/composed behavior.",
+        "proof_outcome": "UNSAT; mutation replay reproduced; 9 direct and finite integrated helper checks pass",
+        "review_status": "corrected_contract_scope"
+      },
+      "original_decision": "adopted",
+      "pattern": "^[A-Fa-f0-9]{40}$",
+      "rank": 9,
+      "reason_code": "webhook_sha_token",
+      "regex_id": "ce3f8739086067661f9a956fbc95ebe3",
+      "site": ".agents/scripts/pulse-merge-webhook-receiver.sh:224:1"
+    },
+    {
+      "fresh_review": {
+        "action": "retain skip",
+        "finding": "The action record is emitted by the pinned local Python server from its own receive timestamp. This line validates the local protocol record and is not an external-input boundary.",
+        "proof_outcome": "not applicable",
+        "review_status": "confirmed_skip"
+      },
+      "original_decision": "skipped",
+      "pattern": "^[0-9]+$",
+      "rank": 10,
+      "reason_code": "internal_action_timestamp",
+      "regex_id": "8fb8db3a8d2a00b87172e6340d868915",
+      "site": ".agents/scripts/pulse-merge-webhook-receiver.sh:257:5"
+    },
+    {
+      "fresh_review": {
+        "action": "replace active contract with regex-only guarantee; preserve frozen v22 contract snapshot",
+        "finding": "The attached query proves only that the PR regex accepts decimal digits. It does not encode the separate Bash -le 0 predicate, action-field parsing, or process_pr sink reachability.",
+        "proof_outcome": "UNSAT; mutation replay reproduced; 9 direct integrated PR cases pass",
+        "review_status": "corrected_contract_scope"
+      },
+      "original_decision": "adopted",
+      "pattern": "^[0-9]+$",
+      "rank": 11,
+      "reason_code": "webhook_pr_number_token",
+      "regex_id": "b9dfec0e0db0d4a2679af29e4e83391a",
+      "site": ".agents/scripts/pulse-merge-webhook-receiver.sh:302:6"
+    }
+  ],
+  "observed_at": "2026-10-16",
+  "p6_runner_preflight_failure": {
+    "counts_added": false,
+    "path": "properties/calibration/2026-10-16-p8-v22-audit/p6-scope-correction/preflight-failure.json",
+    "product_gate_started": false,
+    "reason": "canonical conversion emitter has no registered shape for the corrected Aidevops Bash language-inclusion question IDs",
+    "sha256": "c1d675a29c370fb0caf43f8ad6e9faa5aa6e86edea2c1fd3e78dcbefb4d14165",
+    "solver_questions_started": 0
+  },
+  "review_method": "Fresh source-order review of the complete 11-row POSIX-shell census; same model as original review, not an independent human gold label.",
+  "reviewer": {
+    "author": "Codex-P8-fresh-source-audit",
+    "same_model_as_original": true
+  },
+  "schema_version": "1",
+  "source": {
+    "path": ".agents/scripts/pulse-merge-webhook-receiver.sh",
+    "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+    "repository": "https://github.com/marcusquinn/aidevops",
+    "sha256": "6d882dac90c3f9deb1a0007c9a4216d70f365a4a34ffacd145eb04cc8ae3a325"
+  },
+  "summary": {
+    "confirmed_security_impacts": 0,
+    "corrected_contract_scopes": 2,
+    "external_reports": 0,
+    "maintainer_confirmations": 0,
+    "third_party_fixes": 0,
+    "v22_decided": 49,
+    "v22_questions": 50,
+    "v22_sat": 14,
+    "v22_timeouts": 1,
+    "v22_unsat": 35
+  }
+}

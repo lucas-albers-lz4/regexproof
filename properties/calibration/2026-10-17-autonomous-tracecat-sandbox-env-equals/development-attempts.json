@@ -1,0 +1,19 @@
+{
+  "schema_version": "1",
+  "question_id": "TC-sandbox-env-key-excludes-equals",
+  "contract_sha256": "13c0f6ebd6e7ed7ae00da4360253d1657109443d8371e67e64bf7ef754915ca7",
+  "source_pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+  "timestamp_captured": false,
+  "attempts": [
+    {
+      "phase": "pre-wave encoding iteration",
+      "property_encoding": "Whole-string InRe(key, Python-match-language) and Contains(key, '=')",
+      "property_result": "timeout",
+      "solver_timeout_ms": 30000,
+      "mutation_guard_result": "SAT witness TRACE=TOKEN; ground-truth callback failed because it read the wrong witness field name",
+      "product_question_added": false,
+      "resolution": "Replaced the expensive whole-string query with the documented shape-1 character-alphabet disjointness proof and corrected the callback to read the registered witness name. The final proof and mutation callback both pass in the P6 wave.",
+      "accounting_note": "This was a failed development iteration for the same unique contract question. The P2 retrospective checkpoint counts the final question outcome; this artifact preserves the failed encoding attempt separately. Exact wall-clock time and token use were not captured."
+    }
+  ]
+}

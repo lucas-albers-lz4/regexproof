@@ -1,0 +1,17 @@
+{
+  "cohort_id": "2026-09-12-calibration-20-r2",
+  "cohort_manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+  "coverage_digest": "bac42413c4c760d1630eee806753b3531e69b81a628c619b8dd5b2f59940ec74",
+  "identities": [
+    {
+      "contract_sha256": "d2ea2654e8f12284f6c8e27571db6f2c5f9aaefb8e6b0907bf9799fb3b032bd0",
+      "pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+      "provenance": "agent_derived",
+      "question_id": "TC-rbac-scope-nonstar-glob-metacharacters-excluded",
+      "repo_id": "TracecatHQ/tracecat",
+      "site": "TracecatHQ/tracecat@c84d52528a489821f355fc63976fbc7783ae0ad5:tracecat/authz/controls.py:18:re.compile",
+      "url": "https://github.com/TracecatHQ/tracecat"
+    }
+  ],
+  "schema_version": "2"
+}

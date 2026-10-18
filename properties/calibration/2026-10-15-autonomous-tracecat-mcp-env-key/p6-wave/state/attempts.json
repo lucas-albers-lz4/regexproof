@@ -1,0 +1,58 @@
+[
+  {
+    "contract": {
+      "adoption": {
+        "approved_on": "2026-10-15",
+        "authority": "standing_user_delegation",
+        "contract_sha256": "992095d408e11b9aad97f844d4b8a0f32e13ae6c546e917ac5cc21e8cd6e6271",
+        "evidence": [
+          "https://github.com/TracecatHQ/tracecat/blob/c84d52528a489821f355fc63976fbc7783ae0ad5/tracecat/integrations/mcp_validation.py",
+          "https://github.com/TracecatHQ/tracecat/blob/c84d52528a489821f355fc63976fbc7783ae0ad5/tracecat/integrations/schemas.py",
+          "https://github.com/TracecatHQ/tracecat/blob/c84d52528a489821f355fc63976fbc7783ae0ad5/tracecat/integrations/service.py",
+          "https://github.com/TracecatHQ/tracecat/blob/c84d52528a489821f355fc63976fbc7783ae0ad5/tracecat/agent/mcp/stdio_probe.py",
+          "https://github.com/TracecatHQ/tracecat/blob/c84d52528a489821f355fc63976fbc7783ae0ad5/docs/automations/integrations/mcp-integrations.mdx",
+          "properties/calibration/2026-10-15-p2-source-inventory-v3/sites.ndjson regex_id=280c0b240b92090a7bdb58b6a70cff57 column=11"
+        ],
+        "policy_version": "autonomous-contracts-v1",
+        "rationale": "The pinned validator comment and public validation error declare an exact ASCII name grammar. MCP stdio create/update paths invoke this validator before persistence; saved environment keys are decrypted and supplied to StdioTransport. The exact source accepts a final-line-feed witness outside its declared grammar. This is a reproduced config-validation gap; no command injection or security impact is claimed.",
+        "review": {
+          "author": "Codex-P2-source-review",
+          "reviewer": "Codex-independent-source-review-pass",
+          "same_model": true
+        },
+        "source_file": "tracecat/integrations/mcp_validation.py",
+        "source_pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+        "source_sha256": "41cf730ba1cb592cae684811bbb4d510961a0a441c156313a804b2593085f895",
+        "source_url": "https://github.com/TracecatHQ/tracecat",
+        "status": "approved"
+      },
+      "declared_domain": "ASCII strings of length 1 through 64 supplied as keys in an MCP stdio environment dictionary. Tracecat's validator comment and error text declare the complete accepted syntax [A-Za-z_][A-Za-z0-9_]*. The counterexample model mirrors CPython re.match with the pinned source's ^...$ anchors, including Python's final-newline behavior; it makes no claim about Unicode keys or arbitrary environment values.",
+      "guarantee": "Every MCP stdio environment key accepted by validate_mcp_env_key must match Tracecat's declared complete syntax [A-Za-z_][A-Za-z0-9_]*; a final line feed is outside that declared language and must be rejected.",
+      "input_source": "Workspace MCP stdio integration configuration: MCPStdioIntegrationCreate.stdio_env keys are validated by MCPIntegrationService.validate_stdio_server_config before the dictionary is encrypted and persisted, and saved keys are later passed as env to StdioTransport.",
+      "provenance": "agent_derived",
+      "schema_version": "1",
+      "site": "TracecatHQ/tracecat@c84d52528a489821f355fc63976fbc7783ae0ad5:tracecat/integrations/mcp_validation.py:178:re.match",
+      "trust": "config"
+    },
+    "detail": null,
+    "domain": "A string accepted as an MCP stdio env key must match Tracecat's complete declared ASCII name syntax; a terminal line feed is outside that grammar",
+    "gate": {
+      "consumer_adopted": false,
+      "differential_cases": 1442,
+      "gate_id": "tracecat-mcp-env-key-declared-grammar",
+      "local_gate_command": "/home/lalbers/gitroot/regexproof/.venv/bin/python /home/lalbers/gitroot/regexproof/scripts/tracecat-mcp-env-key-regression-gate.py --source-root /tmp/regexproof-pinned-sources/tracecat-c84d52528a489821f355fc63976fbc7783ae0ad5 --output /home/lalbers/gitroot/regexproof/properties/calibration/2026-10-15-autonomous-tracecat-mcp-env-key/p6-wave/product-gate.json",
+      "local_gate_passed": true,
+      "mutation_guard_passed": true,
+      "product_engine_replayed": true,
+      "source_pin_verified": true
+    },
+    "kind": "counterexample_finder",
+    "pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+    "question_id": "TC-mcp-env-key-accepts-terminal-lf",
+    "repo_id": "TracecatHQ/tracecat",
+    "site": "TracecatHQ/tracecat@c84d52528a489821f355fc63976fbc7783ae0ad5:tracecat/integrations/mcp_validation.py:178:re.match",
+    "status": "sat",
+    "synthesized": false,
+    "url": "https://github.com/TracecatHQ/tracecat"
+  }
+]

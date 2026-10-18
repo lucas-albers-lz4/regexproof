@@ -1,0 +1,73 @@
+{
+  "schema_version": "1",
+  "author": "Codex source-review pass",
+  "reviewer": "Codex second source-review pass",
+  "second_pass": true,
+  "same_model_or_agent": true,
+  "observed_at": "2026-10-15",
+  "limitations": [
+    "This is a complete raw-regex review only for netspooky/inhale at the frozen 20-r2 pin; it does not establish coverage for the other cohort members or complete P2.",
+    "Both adopted output-path questions use synthetic response bytes and exact pinned local helpers. No request is sent to a remote host, and no deployment impact is established.",
+    "The crawl link-prefix candidate remains unresolved because the repository does not state an independent same-origin guarantee for recursive links.",
+    "The frozen extractor labels the two compiled scheme patterns as call_kind=search; the pinned helper uses Pattern.sub at both save sites, and the adopted harness declares substitution semantics."
+  ],
+  "reviews": [
+    {
+      "regex_id": "793d9cf62ef5bd5830296296b46bd1b5",
+      "site": "iModules/rDownload.py:7:9",
+      "pattern": "^(([a-zA-Z_-]+)://([^/]+))(/.*)?$",
+      "decision": "unresolved",
+      "product_question_asked": false,
+      "reason_code": "independent_scope_contract_missing",
+      "rationale": "resolve_link uses this matcher to recognize absolute links and to reconstruct root-relative links. download_directory later tries to restrict recursive fetches with link.startswith(url), which permits an attacker-controlled hostname that merely shares the root URL prefix. Exact-helper replay reproduces the cross-origin fetch, but this repository does not state that recursive links must remain on the same origin; the observed prefix check alone is not an independent product guarantee. Preserve as unresolved and do not count a source contract or product question.",
+      "review_refs": [
+        {"path": "iModules/rDownload.py", "line": 7, "why": "compiled URL expression"},
+        {"path": "iModules/rDownload.py", "line": 23, "why": "resolve_link absolute and root-relative link handling"},
+        {"path": "iModules/rDownload.py", "line": 58, "why": "recursive download entry point"},
+        {"path": "iModules/rDownload.py", "line": 78, "why": "raw string-prefix scope filter before recursive fetch"},
+        {"path": "README.md", "line": 121, "why": "remote-directory CLI description; does not specify same-origin scope"}
+      ]
+    },
+    {
+      "regex_id": "8e241ad38e4223bdc815f79f71439f4f",
+      "site": "iModules/rDownload.py:111:10",
+      "pattern": "https?://",
+      "decision": "adopted",
+      "product_question_asked": true,
+      "reason_code": "documented_output_directory_confinement_candidate",
+      "rationale": "The README documents -o OUTDIR as the location where scraped files are stored, and the CLI routes -u and each URL from -l to getSingleFile. The helper strips only the URL scheme, concatenates the remainder to the configured path, then creates directories and writes response bytes. A concrete absolute URL containing two parent segments reaches the filesystem sink and resolves outside -o under the exact pinned helper. This is a reproduced output-path confinement candidate; it does not establish that an attacker supplied the URL or that a deployed run was affected.",
+      "review_refs": [
+        {"path": "README.md", "line": 120, "why": "remote-file input mode"},
+        {"path": "README.md", "line": 122, "why": "operator-provided URL-list mode"},
+        {"path": "README.md", "line": 130, "why": "documented specific output directory"},
+        {"path": "inhale.py", "line": 28, "why": "CLI declaration for -u, -l, and -o"},
+        {"path": "inhale.py", "line": 279, "why": "builds fpath as ./OUTDIR/ before calling the helper"},
+        {"path": "inhale.py", "line": 354, "why": "-u call path to getSingleFile"},
+        {"path": "inhale.py", "line": 382, "why": "-l call path to getSingleFile"},
+        {"path": "iModules/rDownload.py", "line": 111, "why": "scheme-only path rewrite used for the target"},
+        {"path": "iModules/rDownload.py", "line": 117, "why": "creates directories from the rewritten destination"},
+        {"path": "iModules/rDownload.py", "line": 118, "why": "writes response bytes to the rewritten destination"}
+      ]
+    },
+    {
+      "regex_id": "c4536b7fea814d78dfbbec2af4b7a994",
+      "site": "iModules/rDownload.py:129:10",
+      "pattern": "https?://",
+      "decision": "adopted",
+      "product_question_asked": true,
+      "reason_code": "documented_output_directory_confinement_candidate",
+      "rationale": "The README documents -o OUTDIR as the location where scraped files are stored, and the CLI routes -r to parseDir. The helper strips only the URL scheme, concatenates the remainder to the configured path, creates the target directory, and then invokes the downloader. A concrete remote-directory URL containing two parent segments escapes -o in the exact pinned helper before the downloader opens the local destination. This is a reproduced output-path confinement candidate; it does not establish that an attacker supplied the URL or that a deployed run was affected.",
+      "review_refs": [
+        {"path": "README.md", "line": 121, "why": "remote-directory input mode"},
+        {"path": "README.md", "line": 130, "why": "documented specific output directory"},
+        {"path": "inhale.py", "line": 29, "why": "CLI declaration for -r and -o"},
+        {"path": "inhale.py", "line": 279, "why": "builds fpath as ./OUTDIR/ before calling the helper"},
+        {"path": "inhale.py", "line": 406, "why": "-r call path to parseDir"},
+        {"path": "iModules/rDownload.py", "line": 129, "why": "scheme-only path rewrite used for the root target"},
+        {"path": "iModules/rDownload.py", "line": 132, "why": "creates directories from the rewritten destination"},
+        {"path": "iModules/rDownload.py", "line": 134, "why": "starts crawling with the rewritten local destination"},
+        {"path": "iModules/rDownload.py", "line": 76, "why": "writes a downloaded response to the target path"}
+      ]
+    }
+  ]
+}

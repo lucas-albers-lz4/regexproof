@@ -1,0 +1,381 @@
+{
+  "attempts": [
+    {
+      "contract": {
+        "adoption": {
+          "approved_on": "2026-10-16",
+          "authority": "standing_user_delegation",
+          "contract_sha256": "84c56ece08e32906b07467c8556c61a3edf0b558af40b701edefa00a035a57be",
+          "evidence": [
+            "https://github.com/greydragon888/real-router/blob/55aa7ef43a9c129beba90823cd8a4db10bb01211/packages/validation-plugin/src/validators/navigation.ts",
+            "https://github.com/greydragon888/real-router/blob/55aa7ef43a9c129beba90823cd8a4db10bb01211/packages/validation-plugin/src/validationPlugin.ts",
+            "https://github.com/greydragon888/real-router/blob/55aa7ef43a9c129beba90823cd8a4db10bb01211/packages/validation-plugin/tests/functional/navigation.validation.test.ts",
+            "https://github.com/greydragon888/real-router/blob/55aa7ef43a9c129beba90823cd8a4db10bb01211/packages/validation-plugin/CHANGELOG.md",
+            "properties/calibration/2026-10-16-p2-real-router-navigation-source-review/review-evidence.json"
+          ],
+          "policy_version": "autonomous-contracts-v1",
+          "rationale": "Pinned implementation, opt-in plugin wiring, functional regression test, changelog, and frozen source windows independently support this narrow validator guarantee; trust remains application caller config and no remote security impact is claimed.",
+          "review": {
+            "author": "Codex-P2-source-review",
+            "reviewer": "Codex-independent-source-review-pass",
+            "same_model": true
+          },
+          "source_file": "packages/validation-plugin/src/validators/navigation.ts",
+          "source_pin": "55aa7ef43a9c129beba90823cd8a4db10bb01211",
+          "source_sha256": "619bbc25796534163c82de8f01dab1ab3fc38cd844a7a0742301dab0534173c6",
+          "source_url": "https://github.com/greydragon888/real-router",
+          "status": "approved"
+        },
+        "declared_domain": "Formal domain: one ASCII code unit drawn from U+0000..U+001F or U+007F, proving that every such code unit is matched by the pinned regex. Product replay domain: plain objects with one own enumerable key whose string value is drawn from all one- and two-code-unit ASCII strings plus seeded longer, Unicode, C1, and ordinary examples. The guarantee depends on search semantics and the pinned helper's explicit regex check; it does not cover validateStartArgs, route generation, non-string values, or remote reachability.",
+        "guarantee": "For every own enumerable string-valued navigation parameter, validateNavigateParams throws TypeError if the value contains any ASCII C0 control code unit (U+0000 through U+001F) or DEL (U+007F), as detected by the exact pinned CONTROL_CHARS_RE search before the params object is accepted.",
+        "input_source": "String values in the params object supplied by an application caller to the opt-in validation plugin's validateNavigateParams callback. This is caller-provided configuration/API input; this contract makes no claim that a remote attacker controls it.",
+        "provenance": "agent_derived",
+        "schema_version": "1",
+        "site": "greydragon888/real-router@55aa7ef43a9c129beba90823cd8a4db10bb01211:packages/validation-plugin/src/validators/navigation.ts:69:column-25",
+        "trust": "config"
+      },
+      "detail": null,
+      "domain": "Every one-code-unit ASCII C0 or DEL character is matched by the exact pinned search regex used for string navigation parameter values",
+      "gate": {
+        "consumer_adopted": false,
+        "differential_cases": 17014,
+        "gate_id": "rr-navigation-control-validator-exact-pin",
+        "local_gate_command": "/home/linuxbrew/.linuxbrew/Cellar/python@3.14/3.14.8_2/bin/python3.14 /home/lalbers/gitroot/regexproof/scripts/real-router-navigation-control-regression-gate.py --source-root /tmp/regexproof-pinned-sources/real-router-55aa7ef43a9c129beba90823cd8a4db10bb01211 --output /home/lalbers/gitroot/regexproof/properties/calibration/2026-10-16-p2-real-router-navigation-source-review/p6-wave/product-gate.json",
+        "local_gate_passed": true,
+        "mutation_guard_passed": true,
+        "product_engine_replayed": true,
+        "source_pin_verified": true
+      },
+      "kind": "property",
+      "pin": "55aa7ef43a9c129beba90823cd8a4db10bb01211",
+      "question_id": "RR-navigation-param-control-characters-rejected",
+      "repo_id": "greydragon888/real-router",
+      "site": "greydragon888/real-router@55aa7ef43a9c129beba90823cd8a4db10bb01211:packages/validation-plugin/src/validators/navigation.ts:69:column-25",
+      "status": "unsat",
+      "synthesized": false,
+      "url": "https://github.com/greydragon888/real-router"
+    }
+  ],
+  "cohort": {
+    "cohort_id": "2026-09-12-calibration-20-r2",
+    "manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+    "repos": [
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "ecma",
+        "pin": "b31ddabecf4ed3209d37a2f5b29956120cd8f9ce",
+        "repo_id": "json-editor/json-editor",
+        "score": 4902,
+        "sites": 1,
+        "url": "https://github.com/json-editor/json-editor"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "posix-shell",
+        "pin": "d4f01ba6202d50909d1977810d322259482e0b82",
+        "repo_id": "mycelium0/mycelium",
+        "score": 21,
+        "sites": 1,
+        "url": "https://github.com/mycelium0/mycelium"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "py_re",
+        "pin": "889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8",
+        "repo_id": "netspooky/inhale",
+        "score": 191,
+        "sites": 1,
+        "url": "https://github.com/netspooky/inhale"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "ecma",
+        "pin": "e9fb233763160316989863b4739c4656133d45b0",
+        "repo_id": "magiclabs/magic-js",
+        "score": 477,
+        "sites": 1,
+        "url": "https://github.com/magiclabs/magic-js"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "ecma",
+        "pin": "d4a39726cad8d8e27e4c0502d1843c3b4180ffbc",
+        "repo_id": "grcengineering/gigachad-grc",
+        "score": 154,
+        "sites": 1,
+        "url": "https://github.com/grcengineering/gigachad-grc"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "posix-shell",
+        "pin": "cea68022f477680f4bb502396c705fe14b3c412f",
+        "repo_id": "melodic-software/claude-code-plugins",
+        "score": 6,
+        "sites": 1,
+        "url": "https://github.com/melodic-software/claude-code-plugins"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "py_re",
+        "pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+        "repo_id": "TracecatHQ/tracecat",
+        "score": 60,
+        "sites": 144,
+        "url": "https://github.com/TracecatHQ/tracecat"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "py_re",
+        "pin": "efcf8e4c0087def553a737dc1c4eebda5d8a90cd",
+        "repo_id": "Agenticstiger/forge-cli",
+        "score": 45,
+        "sites": 447,
+        "url": "https://github.com/Agenticstiger/forge-cli"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "py_re",
+        "pin": "a9c0f06affc35e1f8e45bb77f835b92350c68a0b",
+        "repo_id": "airbnb/binaryalert",
+        "score": 45,
+        "sites": 8,
+        "url": "https://github.com/airbnb/binaryalert"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "ecma",
+        "pin": "978def55c8e68cab3a50a7ee4725039da753f0a1",
+        "repo_id": "xibosignage/xibo-cms",
+        "score": 61,
+        "sites": 1981,
+        "url": "https://github.com/xibosignage/xibo-cms"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "ecma",
+        "pin": "7ea3b445ee7d2ef8004d5ee77dab7544e1b8ef88",
+        "repo_id": "profbernardoj/everclaw-community-branches",
+        "score": 51,
+        "sites": 468,
+        "url": "https://github.com/profbernardoj/everclaw-community-branches"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "go_re",
+        "pin": "01cd447ad3b1acfed7e0680596c2c74458a4cf06",
+        "repo_id": "h0tak88r/AutoAR",
+        "score": 54,
+        "sites": 33,
+        "url": "https://github.com/h0tak88r/AutoAR"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "go_re",
+        "pin": "ea3e83e24676a1678a9522141da29b636c9451ab",
+        "repo_id": "chainguard-dev/malcontent",
+        "score": 52,
+        "sites": 15,
+        "url": "https://github.com/chainguard-dev/malcontent"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "go_re",
+        "pin": "2f3fa5a506d6565fa68858b7963450567ddda114",
+        "repo_id": "open-horizon/anax",
+        "score": 50,
+        "sites": 24,
+        "url": "https://github.com/open-horizon/anax"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "go_re",
+        "pin": "1cf40fcabd330a1fe4e8eb9493b15a99a392e17f",
+        "repo_id": "snyk/snyk-ls",
+        "score": 50,
+        "sites": 35,
+        "url": "https://github.com/snyk/snyk-ls"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "posix-shell",
+        "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+        "repo_id": "marcusquinn/aidevops",
+        "score": 55,
+        "sites": 11330,
+        "url": "https://github.com/marcusquinn/aidevops"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "posix-shell",
+        "pin": "65624396e263074bb8cb2e049f9a9ec6215ea5c1",
+        "repo_id": "Leviticus-Triage/llm-honeypot-intelligence",
+        "score": 34,
+        "sites": 16,
+        "url": "https://github.com/Leviticus-Triage/llm-honeypot-intelligence"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "py_re",
+        "pin": "0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a",
+        "repo_id": "panther-labs/panther-analysis",
+        "score": 56,
+        "sites": 57,
+        "url": "https://github.com/panther-labs/panther-analysis"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "py_re",
+        "pin": "53ae43c5298a2426c6696147fdd75e2a4aef10e2",
+        "repo_id": "fu351/Doberman-Core",
+        "score": 53,
+        "sites": 108,
+        "url": "https://github.com/fu351/Doberman-Core"
+      },
+      {
+        "boundary_family": "boundary-candidate",
+        "dialect_family": "ecma",
+        "pin": "55aa7ef43a9c129beba90823cd8a4db10bb01211",
+        "repo_id": "greydragon888/real-router",
+        "score": 48,
+        "sites": 2882,
+        "url": "https://github.com/greydragon888/real-router"
+      }
+    ],
+    "schema_version": "1"
+  },
+  "cohort_id": "2026-09-12-calibration-20-r2",
+  "manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+  "product_coverage_manifest": {
+    "cohort_id": "2026-09-12-calibration-20-r2",
+    "cohort_manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+    "coverage_digest": "009ec87646db41ba33d09cd5447899931a93111b7edf5b341840b5a239b4703f",
+    "identities": [
+      {
+        "contract_sha256": "84c56ece08e32906b07467c8556c61a3edf0b558af40b701edefa00a035a57be",
+        "pin": "55aa7ef43a9c129beba90823cd8a4db10bb01211",
+        "provenance": "agent_derived",
+        "question_id": "RR-navigation-param-control-characters-rejected",
+        "repo_id": "greydragon888/real-router",
+        "site": "greydragon888/real-router@55aa7ef43a9c129beba90823cd8a4db10bb01211:packages/validation-plugin/src/validators/navigation.ts:69:column-25",
+        "url": "https://github.com/greydragon888/real-router"
+      }
+    ],
+    "schema_version": "2"
+  },
+  "rows": [
+    {
+      "canonical": {
+        "contract": {
+          "adoption": {
+            "approved_on": "2026-10-16",
+            "authority": "standing_user_delegation",
+            "contract_sha256": "84c56ece08e32906b07467c8556c61a3edf0b558af40b701edefa00a035a57be",
+            "evidence": [
+              "https://github.com/greydragon888/real-router/blob/55aa7ef43a9c129beba90823cd8a4db10bb01211/packages/validation-plugin/src/validators/navigation.ts",
+              "https://github.com/greydragon888/real-router/blob/55aa7ef43a9c129beba90823cd8a4db10bb01211/packages/validation-plugin/src/validationPlugin.ts",
+              "https://github.com/greydragon888/real-router/blob/55aa7ef43a9c129beba90823cd8a4db10bb01211/packages/validation-plugin/tests/functional/navigation.validation.test.ts",
+              "https://github.com/greydragon888/real-router/blob/55aa7ef43a9c129beba90823cd8a4db10bb01211/packages/validation-plugin/CHANGELOG.md",
+              "properties/calibration/2026-10-16-p2-real-router-navigation-source-review/review-evidence.json"
+            ],
+            "policy_version": "autonomous-contracts-v1",
+            "rationale": "Pinned implementation, opt-in plugin wiring, functional regression test, changelog, and frozen source windows independently support this narrow validator guarantee; trust remains application caller config and no remote security impact is claimed.",
+            "review": {
+              "author": "Codex-P2-source-review",
+              "reviewer": "Codex-independent-source-review-pass",
+              "same_model": true
+            },
+            "source_file": "packages/validation-plugin/src/validators/navigation.ts",
+            "source_pin": "55aa7ef43a9c129beba90823cd8a4db10bb01211",
+            "source_sha256": "619bbc25796534163c82de8f01dab1ab3fc38cd844a7a0742301dab0534173c6",
+            "source_url": "https://github.com/greydragon888/real-router",
+            "status": "approved"
+          },
+          "declared_domain": "Formal domain: one ASCII code unit drawn from U+0000..U+001F or U+007F, proving that every such code unit is matched by the pinned regex. Product replay domain: plain objects with one own enumerable key whose string value is drawn from all one- and two-code-unit ASCII strings plus seeded longer, Unicode, C1, and ordinary examples. The guarantee depends on search semantics and the pinned helper's explicit regex check; it does not cover validateStartArgs, route generation, non-string values, or remote reachability.",
+          "guarantee": "For every own enumerable string-valued navigation parameter, validateNavigateParams throws TypeError if the value contains any ASCII C0 control code unit (U+0000 through U+001F) or DEL (U+007F), as detected by the exact pinned CONTROL_CHARS_RE search before the params object is accepted.",
+          "input_source": "String values in the params object supplied by an application caller to the opt-in validation plugin's validateNavigateParams callback. This is caller-provided configuration/API input; this contract makes no claim that a remote attacker controls it.",
+          "provenance": "agent_derived",
+          "schema_version": "1",
+          "site": "greydragon888/real-router@55aa7ef43a9c129beba90823cd8a4db10bb01211:packages/validation-plugin/src/validators/navigation.ts:69:column-25",
+          "trust": "config"
+        },
+        "corpus": "real-router",
+        "disclosure": null,
+        "domain": "Every one-code-unit ASCII C0 or DEL character is matched by the exact pinned search regex used for string navigation parameter values",
+        "engine_versions": {
+          "python": "3.14.8",
+          "z3": "5.0.0"
+        },
+        "family": "RR-navigation-param-control-characters",
+        "ground_truth": null,
+        "ground_truth_status": null,
+        "idiom_bucket": "navigation-param-control-calibration",
+        "kind": "property",
+        "name": "RR-navigation-param-control-characters-rejected",
+        "product_reportable": true,
+        "regex_id": "e64096c8b59ba8d8b439919114a4f488",
+        "result": "unsat",
+        "schema_version": "1",
+        "shape": 1,
+        "site": "greydragon888/real-router@55aa7ef43a9c129beba90823cd8a4db10bb01211:packages/validation-plugin/src/validators/navigation.ts:69:column-25",
+        "synthesized": false,
+        "wave_id": "rr-nav-controls-p6-20261016",
+        "witness": null
+      },
+      "contract": {
+        "adoption": {
+          "approved_on": "2026-10-16",
+          "authority": "standing_user_delegation",
+          "contract_sha256": "84c56ece08e32906b07467c8556c61a3edf0b558af40b701edefa00a035a57be",
+          "evidence": [
+            "https://github.com/greydragon888/real-router/blob/55aa7ef43a9c129beba90823cd8a4db10bb01211/packages/validation-plugin/src/validators/navigation.ts",
+            "https://github.com/greydragon888/real-router/blob/55aa7ef43a9c129beba90823cd8a4db10bb01211/packages/validation-plugin/src/validationPlugin.ts",
+            "https://github.com/greydragon888/real-router/blob/55aa7ef43a9c129beba90823cd8a4db10bb01211/packages/validation-plugin/tests/functional/navigation.validation.test.ts",
+            "https://github.com/greydragon888/real-router/blob/55aa7ef43a9c129beba90823cd8a4db10bb01211/packages/validation-plugin/CHANGELOG.md",
+            "properties/calibration/2026-10-16-p2-real-router-navigation-source-review/review-evidence.json"
+          ],
+          "policy_version": "autonomous-contracts-v1",
+          "rationale": "Pinned implementation, opt-in plugin wiring, functional regression test, changelog, and frozen source windows independently support this narrow validator guarantee; trust remains application caller config and no remote security impact is claimed.",
+          "review": {
+            "author": "Codex-P2-source-review",
+            "reviewer": "Codex-independent-source-review-pass",
+            "same_model": true
+          },
+          "source_file": "packages/validation-plugin/src/validators/navigation.ts",
+          "source_pin": "55aa7ef43a9c129beba90823cd8a4db10bb01211",
+          "source_sha256": "619bbc25796534163c82de8f01dab1ab3fc38cd844a7a0742301dab0534173c6",
+          "source_url": "https://github.com/greydragon888/real-router",
+          "status": "approved"
+        },
+        "declared_domain": "Formal domain: one ASCII code unit drawn from U+0000..U+001F or U+007F, proving that every such code unit is matched by the pinned regex. Product replay domain: plain objects with one own enumerable key whose string value is drawn from all one- and two-code-unit ASCII strings plus seeded longer, Unicode, C1, and ordinary examples. The guarantee depends on search semantics and the pinned helper's explicit regex check; it does not cover validateStartArgs, route generation, non-string values, or remote reachability.",
+        "guarantee": "For every own enumerable string-valued navigation parameter, validateNavigateParams throws TypeError if the value contains any ASCII C0 control code unit (U+0000 through U+001F) or DEL (U+007F), as detected by the exact pinned CONTROL_CHARS_RE search before the params object is accepted.",
+        "input_source": "String values in the params object supplied by an application caller to the opt-in validation plugin's validateNavigateParams callback. This is caller-provided configuration/API input; this contract makes no claim that a remote attacker controls it.",
+        "provenance": "agent_derived",
+        "schema_version": "1",
+        "site": "greydragon888/real-router@55aa7ef43a9c129beba90823cd8a4db10bb01211:packages/validation-plugin/src/validators/navigation.ts:69:column-25",
+        "trust": "config"
+      },
+      "disposition": {
+        "approval_escape": null,
+        "approval_ref": null,
+        "backfilled": false,
+        "disposition_date": null,
+        "filed_at": null,
+        "reason_code": "unsat_guarantee",
+        "resolved_at": null,
+        "status": "not_applicable"
+      },
+      "domain": "Every one-code-unit ASCII C0 or DEL character is matched by the exact pinned search regex used for string navigation parameter values",
+      "ground_truth_status": "not_applicable",
+      "kind": "property",
+      "pin": "55aa7ef43a9c129beba90823cd8a4db10bb01211",
+      "question_id": "RR-navigation-param-control-characters-rejected",
+      "repo_id": "greydragon888/real-router",
+      "result": "unsat",
+      "schema_version": "1",
+      "site": "greydragon888/real-router@55aa7ef43a9c129beba90823cd8a4db10bb01211:packages/validation-plugin/src/validators/navigation.ts:69:column-25",
+      "synthesized": false,
+      "url": "https://github.com/greydragon888/real-router"
+    }
+  ],
+  "schema_version": "3"
+}

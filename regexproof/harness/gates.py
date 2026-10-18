@@ -11,7 +11,9 @@ pattern:
    never hand-rolled regex-on-regex). The gate applies the mechanical rules to
    the AST-derived structure report:
    - anchored-definition: single top-level alternative (no top-level
-     alternation), leading `^` AND trailing `$`. Known conservative
+     alternation), leading `^` AND trailing `$`, for fullmatch and legacy
+     unspecified-call patterns. Search, match, exec, and substitution patterns
+     receive syntax / `\\p` checks without this validator-only rule. Known conservative
      false-positive: `^a$|^b$` fails even though every branch is anchored —
      rewrite as `^(?:a|b)$` (documented).
    - wrap-validity: every top-level alternative starts with `.*` AND ends with

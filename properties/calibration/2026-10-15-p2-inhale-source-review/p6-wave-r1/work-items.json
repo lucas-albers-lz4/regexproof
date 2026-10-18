@@ -1,0 +1,16 @@
+[
+  {
+    "question_ids": [
+      "IH-inhale-file-url-output-root-confinement"
+    ],
+    "reviewed": false,
+    "site": "netspooky/inhale@889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8:iModules/rDownload.py:111:url"
+  },
+  {
+    "question_ids": [
+      "IH-inhale-directory-url-output-root-confinement"
+    ],
+    "reviewed": false,
+    "site": "netspooky/inhale@889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8:iModules/rDownload.py:129:url"
+  }
+]
