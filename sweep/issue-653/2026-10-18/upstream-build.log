@@ -1,0 +1,17 @@
+3.23.1
+Pass_Regex :
+forall {specParameters : Parameters},
+Regex -> list Node.RegexContextLayer -> Prop
+
+Pass_Regex is not universe polymorphic
+Pass_Regex may only be eliminated to produce values whose type is SProp or Prop.
+Arguments Pass_Regex {specParameters} _ _%_list_scope
+Expands to: Inductive Warblre.props.EarlyErrors.Pass_Regex
+Declared in library Warblre.props.EarlyErrors, line 63, characters 12-22
+compilePattern_success:
+  forall {specParameters : Parameters} (r : Regex) (rer : RegExpRecord),
+  StaticSemantics.countLeftCapturingParensWithin r nil =
+  RegExpRecord.capturingGroupsCount rer ->
+  Pass_Regex r nil ->
+  exists m : list Character -> Numeric.non_neg_integer -> MatchResult,
+    Semantics.compilePattern r rer = Success m

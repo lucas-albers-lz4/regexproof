@@ -1,0 +1,42 @@
+{
+  "Warblre": {
+    "revision": "87af3ccaea96015d4104c0b2d9de758fa8d9ee87",
+    "tree": "d376470faa0209a5bf96730b9d67ef7d73c3c362",
+    "files": {
+      "README.md": "075c34dae411e0cd2a7106f4141d85427af12027aa37016b07392a29c45b1035",
+      "dune-project": "9eac7fa7c602b08ff4e5a98f8a24daf7466caad55c354414a02648e4155eabd3",
+      "mechanization/spec/Parameters.v": "49fa3e5d1263fd83d3d16fbbb6688ac7901d4b310596f7b7f8ef3262c5f08a59",
+      "mechanization/spec/API.v": "64d9a01ad4c6fe3d46d45b712092d437a1b05963387f31277c3075484912290f",
+      "mechanization/spec/Inst.v": "dd8919a74a3a4e70571e5dab268b59cabdab8eeca739e30018e324d3c4ac3224",
+      "engines/js/Parser.ml": "e5bb04c520419c9d9eecf878ec41ace9b68673e1af9d16c885fa4245d20918d8",
+      "engines/js/JsEngineParameters.ml": "d1e88eb576b84d281d6b75fab9fcba638daa75e1f481584996ee0dc710940a4f",
+      "doc/Differences.md": "ef4a49501296d770a6aa81b5ea12e83664b021af50e8a0d1bc358c0e58ebabee",
+      "examples/rocq_proof/Example.v": "425563112fff348428b6c683d2b896e79d6ffcb1293d76c763e20eaf7f343a68"
+    }
+  },
+  "Dune": {
+    "revision": "6f6eee69eda59e355bae2ca4e3ad1af678271883",
+    "tree": "1b5a084902e2a47c4c34526660e584ed98225a3b",
+    "files": {
+      "dune-project": "04a3344ecb25c06a8d7d82f472f7bf73703b00b08524f42fa827063338f43b01",
+      "boot/bootstrap.ml": "d3d3c5b76150d1391ba920086f71f18434f98fc953ef9bc5071cfcce74d653a5"
+    }
+  },
+  "container": {
+    "repository": "rocq/rocq-prover",
+    "queried_tag": "9.1.1",
+    "digest": "sha256:9a1e969649a3cc3c6f310d5be5a842e2187384560337c6c0807aba9f8565efba",
+    "image_id": "sha256:68c2b82465b98676f9272ce9a90e959e69f455dda0bf0696a03dbe40857b8980",
+    "architecture": "amd64",
+    "os": "linux",
+    "digest_source": "https://hub.docker.com/v2/repositories/rocq/rocq-prover/tags?page_size=100",
+    "trust": "registry content digest binds published image bytes, not independently reproducible container/compiler build or signed publisher attestation"
+  },
+  "specification": {
+    "edition": "ECMA-262 14th (2023)",
+    "canonicalize": "https://tc39.es/ecma262/2023/multipage/text-processing.html#sec-runtime-semantics-canonicalize-ch",
+    "section": "22.2.2.7.3 steps 5-10",
+    "concrete_unicode_tables": "not installed or proved; abstract uppercase-UTF16-output function in research sublemma",
+    "note": "Warblre JsUtf16Character delegates to runtime toUpperCase; unicode SimpleFold 15.1 is a different /u engine, not a justification for this non-/u goal"
+  }
+}
