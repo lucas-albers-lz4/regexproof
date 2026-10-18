@@ -1,0 +1,25 @@
+{
+  "argv": [
+    "/tmp/regexproof-571-noodler-v1.8.0/z3-noodler",
+    "/tmp/regexproof-571-feasibility/sweep/issue-571/2026-10-18/v1.8.0/property-escape-letter.smt2"
+  ],
+  "timeout_seconds": 8.0,
+  "elapsed_ms": 16.196,
+  "returncode": 0,
+  "timed_out": false,
+  "classification": "unsat",
+  "stdout": "unsat\n",
+  "stderr": "",
+  "case": "property-escape-letter",
+  "runner_sha256": "bd61d5603e8773f49cfa47f2f37225acabcbeaf02619844ca9d22078a0779d7b",
+  "noodler_sha256": "4a39a2b9e9066a8bfbe8b5363a85de82e43e27688b7dff456f4cd577bb47bab6",
+  "noodler_trusted_binary_mapping": {
+    "label": "Noodler 1.8.0 verified release asset",
+    "version": "Z3 version 5.1.0 - 64 bit - build hashcode 06e5c132a1a59fb61eaf4e5f7094860b5aec7c21 - mata hashcode d28368a6957a1606162aea3fbe77345f6e1e13d5"
+  },
+  "smt_path": "/tmp/regexproof-571-feasibility/sweep/issue-571/2026-10-18/v1.8.0/property-escape-letter.smt2",
+  "smt_sha256": "82ad817225e209a64903639c7997dd3c32085683e8b114b51426bbe91c2fc612",
+  "fixed_input": "A",
+  "pattern_or_control_source": "(^|[^A-Za-z0-9_])(ACCEPT|ALLOW|PASS|DROP|REJECT|DENY|BLOCK)([^A-Za-z0-9_]|$)",
+  "interpretation_limit": "API/parser or solver diagnostic only; no theorem or product-property inference"
+}

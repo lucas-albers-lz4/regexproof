@@ -1,0 +1,5 @@
+(set-logic QF_SLIA)
+(declare-const s String)
+(assert (str.in_re s (re.from_ecma2020 '(^|[^A-Za-z0-9_])(ACCEPT|ALLOW|PASS|DROP|REJECT|DENY|BLOCK)([^A-Za-z0-9_]|$)')))
+(assert (= s "ACCEPT"))
+(check-sat)

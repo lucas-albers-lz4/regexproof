@@ -1,0 +1,8 @@
+{
+  "control": "wrong binary path under original declared pin",
+  "returncode": 1,
+  "stderr": "Noodler binary pin or path changed: 8a63c98320173f79e263115e10cefc170155e47d1fd4b5a70e4429d2699cae28\n",
+  "previous_result_unchanged": true,
+  "previous_result_sha256": "dd361e45a66b7f700d19977a666c70ee00f3577bdd7a8db3a2ac27ae365c0dd1",
+  "formal_proof": false
+}

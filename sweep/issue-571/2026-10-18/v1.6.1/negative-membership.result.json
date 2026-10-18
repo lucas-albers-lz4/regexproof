@@ -1,0 +1,25 @@
+{
+  "argv": [
+    "/tmp/noodler/z3-noodler-ubuntu-24.04-x86_64-shared",
+    "/tmp/regexproof-571-feasibility/sweep/issue-571/2026-10-18/v1.6.1/negative-membership.smt2"
+  ],
+  "timeout_seconds": 8.0,
+  "elapsed_ms": 1481.78,
+  "returncode": 0,
+  "timed_out": false,
+  "classification": "unsat",
+  "stdout": "unsat\n",
+  "stderr": "",
+  "case": "negative-membership",
+  "runner_sha256": "bd61d5603e8773f49cfa47f2f37225acabcbeaf02619844ca9d22078a0779d7b",
+  "noodler_sha256": "22b19f123d3e7f54e10fdc46af3f91de23d89148c9a259eb072bc9e12f083464",
+  "noodler_trusted_binary_mapping": {
+    "label": "Noodler 1.6.1 issue-comment baseline",
+    "version": "Z3 version 4.16.0 - 64 bit - build hashcode dcce9d2d129e1ecc101946ef257aa7ed246dfe61 - mata hashcode 8db4279ce9910b2c12589fabffebf8265a75b558"
+  },
+  "smt_path": "/tmp/regexproof-571-feasibility/sweep/issue-571/2026-10-18/v1.6.1/negative-membership.smt2",
+  "smt_sha256": "66a1cd807dfcfad7b80a6385974adef630a3b94ccae7e15e3ae080ce17aca8b0",
+  "fixed_input": "ACCEPT",
+  "pattern_or_control_source": "(^|[^A-Za-z0-9_])(ACCEPT|ALLOW|PASS|DROP|REJECT|DENY|BLOCK)([^A-Za-z0-9_]|$)",
+  "interpretation_limit": "API/parser or solver diagnostic only; no theorem or product-property inference"
+}

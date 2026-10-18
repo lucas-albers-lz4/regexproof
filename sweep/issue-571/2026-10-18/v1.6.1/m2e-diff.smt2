@@ -1,0 +1,5 @@
+(set-logic QF_SLIA)
+(declare-const s String)
+(assert (str.in_re s (re.from_ecma2020 '(^|[^A-Za-z0-9_])(([Aa][Cc][Cc][Ee][Pp][Tt]|[Aa][Ll][Ll][Oo][Ww]|[Pp][Aa][Ss][Ss]|[Dd][Rr][Oo][Pp]|[Rr][Ee][Jj][Ee][Cc][Tt]|[Dd][Ee][Nn][Yy]|[Bb][Ll][Oo][Cc][Kk]))([^A-Za-z0-9_]|$)')))
+(assert (not (str.in_re s (re.from_ecma2020 '(^|[^A-Za-z0-9_])(ACCEPT|ALLOW|PASS|DROP|REJECT|DENY|BLOCK)([^A-Za-z0-9_]|$)'))))
+(check-sat)
