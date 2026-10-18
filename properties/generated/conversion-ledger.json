@@ -30,19 +30,19 @@
     },
     {
       "corpus": "aidevops",
-      "properties_asked": 5,
-      "properties_sat": 0,
-      "properties_unsat": 5,
-      "sat_ground_truthed": 0,
-      "sat_unique_sites": 0,
+      "properties_asked": 10,
+      "properties_sat": 2,
+      "properties_unsat": 8,
+      "sat_ground_truthed": 2,
+      "sat_unique_sites": 2,
       "scanner_rows": 4839,
       "security_tool": false
     },
     {
       "corpus": "forge-cli",
-      "properties_asked": 5,
+      "properties_asked": 6,
       "properties_sat": 0,
-      "properties_unsat": 5,
+      "properties_unsat": 6,
       "sat_ground_truthed": 0,
       "sat_unique_sites": 0,
       "scanner_rows": 84,
@@ -57,6 +57,16 @@
       "sat_unique_sites": 1,
       "scanner_rows": 410,
       "security_tool": false
+    },
+    {
+      "corpus": "Doberman-Core",
+      "properties_asked": 3,
+      "properties_sat": 3,
+      "properties_unsat": 0,
+      "sat_ground_truthed": 3,
+      "sat_unique_sites": 3,
+      "scanner_rows": 11,
+      "security_tool": true
     },
     {
       "corpus": "claude-code-plugins",
@@ -89,16 +99,6 @@
       "security_tool": false
     },
     {
-      "corpus": "Doberman-Core",
-      "properties_asked": 2,
-      "properties_sat": 2,
-      "properties_unsat": 0,
-      "sat_ground_truthed": 2,
-      "sat_unique_sites": 2,
-      "scanner_rows": 11,
-      "security_tool": true
-    },
-    {
       "corpus": "dogfood_shell",
       "properties_asked": 2,
       "properties_sat": 0,
@@ -106,6 +106,16 @@
       "sat_ground_truthed": 0,
       "sat_unique_sites": 0,
       "scanner_rows": 0,
+      "security_tool": false
+    },
+    {
+      "corpus": "real-router",
+      "properties_asked": 1,
+      "properties_sat": 0,
+      "properties_unsat": 1,
+      "sat_ground_truthed": 0,
+      "sat_unique_sites": 0,
+      "scanner_rows": 246,
       "security_tool": false
     }
   ],
@@ -117,29 +127,32 @@
     "batch_summary_findings": 14678,
     "batch_triage_rows": 53182,
     "classification_rows": 13052,
+    "conversion_properties_autonomous": 8,
+    "conversion_properties_human": 38,
+    "conversion_properties_machine_pair": 0,
     "disclosed_private_first": 1147,
     "disclosed_public_ok": 0,
-    "existence_proofs": 3,
-    "false_positives_filed": 7,
+    "existence_proofs": 7,
+    "false_positives_filed": 9,
     "mutation_guards": 644,
     "other_rows": 0,
     "planned_stubs": 338,
     "pr_dry_run_findings": 14678,
     "pr_dry_run_private_first": 1287,
     "pr_dry_runs": 88,
-    "properties_asked": 41,
-    "properties_asked_distinct": 41,
+    "properties_asked": 49,
+    "properties_asked_distinct": 49,
     "properties_asked_synthesized": 644,
-    "properties_sat": 8,
-    "properties_sat_distinct": 8,
+    "properties_sat": 11,
+    "properties_sat_distinct": 11,
     "properties_sat_synthesized": 28,
-    "properties_unsat": 32,
+    "properties_unsat": 37,
     "redos_rows": 0,
     "rule_diff_report_sat": 10,
     "rule_diff_report_sat_gt": 10,
-    "sat_ground_truthed": 8,
-    "sat_unique_sites": 6,
-    "scanner_ndjson_files": 96,
+    "sat_ground_truthed": 11,
+    "sat_unique_sites": 9,
+    "scanner_ndjson_files": 98,
     "scanner_rows": 14678,
     "scanner_rule_diff_sat": 0,
     "sites_encodable": 96030,
@@ -165,6 +178,56 @@
     "closed rows only — never censored + closed mixed in a plain median."
   ],
   "per_wave": [
+    {
+      "accepted": 0,
+      "corpora": [
+        "aidevops"
+      ],
+      "filed": 1,
+      "idiom_bucket": "pre-dispatch-github-text",
+      "properties_asked": 1,
+      "properties_sat": 1,
+      "sat_ground_truthed": 1,
+      "shape_counts": {
+        "3": 1
+      },
+      "shape_mix": {
+        "shape_3": 1.0
+      },
+      "wave_id": "aidevops-predispatch-20r2-20261016-r1"
+    },
+    {
+      "accepted": 0,
+      "corpora": [
+        "aidevops"
+      ],
+      "filed": 0,
+      "idiom_bucket": "webhook-action-protocol-validation",
+      "properties_asked": 3,
+      "properties_sat": 0,
+      "sat_ground_truthed": 0,
+      "shape_counts": {},
+      "shape_mix": {},
+      "wave_id": "aidevops-webhook-action-protocol-20r2-20261016-r1"
+    },
+    {
+      "accepted": 0,
+      "corpora": [
+        "aidevops"
+      ],
+      "filed": 1,
+      "idiom_bucket": "pre-dispatch-github-text",
+      "properties_asked": 1,
+      "properties_sat": 1,
+      "sat_ground_truthed": 1,
+      "shape_counts": {
+        "3": 1
+      },
+      "shape_mix": {
+        "shape_3": 1.0
+      },
+      "wave_id": "aidevops_predispatch_threshold_residual_20r2"
+    },
     {
       "accepted": 0,
       "corpora": [
@@ -208,7 +271,21 @@
       "corpora": [
         "Doberman-Core"
       ],
-      "filed": 2,
+      "filed": 1,
+      "idiom_bucket": "windows-secret-store-path",
+      "properties_asked": 1,
+      "properties_sat": 1,
+      "sat_ground_truthed": 1,
+      "shape_counts": {},
+      "shape_mix": {},
+      "wave_id": "doberman_secret_path_20r2_r1"
+    },
+    {
+      "accepted": 0,
+      "corpora": [
+        "Doberman-Core"
+      ],
+      "filed": 0,
       "idiom_bucket": "command-execution",
       "properties_asked": 2,
       "properties_sat": 2,
@@ -238,6 +315,24 @@
         "shape_3": 1.0
       },
       "wave_id": "dogfood_shell_w1"
+    },
+    {
+      "accepted": 0,
+      "corpora": [
+        "forge-cli"
+      ],
+      "filed": 0,
+      "idiom_bucket": "secret-redaction",
+      "properties_asked": 1,
+      "properties_sat": 0,
+      "sat_ground_truthed": 0,
+      "shape_counts": {
+        "4": 1
+      },
+      "shape_mix": {
+        "shape_4": 1.0
+      },
+      "wave_id": "forge-cli_helper_image"
     },
     {
       "accepted": 0,
@@ -360,20 +455,38 @@
         "shape_4": 0.25
       },
       "wave_id": "openwrt_packages_w3"
+    },
+    {
+      "accepted": 0,
+      "corpora": [
+        "real-router"
+      ],
+      "filed": 0,
+      "idiom_bucket": "navigation-param-control-calibration",
+      "properties_asked": 1,
+      "properties_sat": 0,
+      "sat_ground_truthed": 0,
+      "shape_counts": {
+        "1": 1
+      },
+      "shape_mix": {
+        "shape_1": 1.0
+      },
+      "wave_id": "rr-nav-controls-p6-20261016"
     }
   ],
   "queue_health": {
-    "artifacts_present": false,
+    "artifacts_present": true,
     "claimed": 0,
-    "contracted": 0,
+    "contracted": 1,
     "emitted": 0,
-    "median_age_days": null,
-    "note": "Phase C queue artifacts not yet shipped",
+    "median_age_days": 0.0,
+    "note": "",
     "skipped": 0
   },
   "rates": {
     "accepted_per_extracted": 7e-06,
-    "accepted_per_gt": 0.125,
+    "accepted_per_gt": 0.090909,
     "encodable_fraction": 0.643581,
     "encodable_fraction_all_inventories": 0.641931,
     "encodable_fraction_excluding_yara": 0.647679,
@@ -381,9 +494,9 @@
     "fullword_share_of_unencodable": 0.56891,
     "gt_per_sat": 1.0,
     "pipeline_accepted_per_extracted": 7e-06,
-    "pipeline_accepted_per_gt": 0.125,
-    "property_asked_per_encodable": 0.000427,
-    "sat_per_property_asked": 0.195122,
+    "pipeline_accepted_per_gt": 0.090909,
+    "property_asked_per_encodable": 0.00051,
+    "sat_per_property_asked": 0.22449,
     "yara_share_of_unencodable": 0.584805
   },
   "rule_diff_reports": {
@@ -411,10 +524,10 @@
   },
   "schema_version": "1",
   "security_tool_split": {
-    "properties_asked_in_tools": 10,
-    "properties_asked_not_tools": 31,
-    "properties_sat_in_tools": 4,
-    "properties_sat_not_tools": 4
+    "properties_asked_in_tools": 12,
+    "properties_asked_not_tools": 37,
+    "properties_sat_in_tools": 5,
+    "properties_sat_not_tools": 6
   },
   "shape_mix_by_corpus": {
     "Doberman-Core": {
@@ -422,7 +535,7 @@
     },
     "aidevops": {
       "shape_1": 3,
-      "shape_3": 2
+      "shape_3": 4
     },
     "claude-code-plugins": {
       "shape_1": 3
@@ -432,7 +545,8 @@
     },
     "forge-cli": {
       "shape_1": 3,
-      "shape_2": 2
+      "shape_2": 2,
+      "shape_4": 1
     },
     "mycelium": {
       "shape_1": 3
@@ -445,6 +559,9 @@
       "shape_1": 6,
       "shape_3": 6,
       "shape_4": 2
+    },
+    "real-router": {
+      "shape_1": 1
     }
   },
   "starvation": {
@@ -476,14 +593,14 @@
   },
   "upstream": {
     "accepted_upstream": 1,
-    "existence_proofs": 3,
-    "false_positive": 7,
+    "existence_proofs": 7,
+    "false_positive": 9,
     "filed_plan": 1,
     "fixed_upstream": 1,
-    "language_membership": 15,
+    "language_membership": 21,
     "out_of_scope_redos": 1,
-    "private_first": 2,
-    "rows": 16,
+    "private_first": 6,
+    "rows": 22,
     "third_party_public": 0,
     "wont_file": 4
   },
@@ -591,11 +708,53 @@
       "id": "CU-015",
       "kind": "counterexample_finder",
       "language_membership": true,
-      "status": "private_first"
+      "status": "false_positive"
     },
     {
       "corpus": "Doberman-Core",
       "id": "CU-016",
+      "kind": "counterexample_finder",
+      "language_membership": true,
+      "status": "false_positive"
+    },
+    {
+      "corpus": "Doberman-Core",
+      "id": "CU-017",
+      "kind": "bug_demo",
+      "language_membership": true,
+      "status": "private_first"
+    },
+    {
+      "corpus": "AutoAR",
+      "id": "CU-018",
+      "kind": "counterexample_finder",
+      "language_membership": true,
+      "status": "private_first"
+    },
+    {
+      "corpus": "malcontent",
+      "id": "CU-019",
+      "kind": "counterexample_finder",
+      "language_membership": true,
+      "status": "private_first"
+    },
+    {
+      "corpus": "malcontent",
+      "id": "CU-020",
+      "kind": "counterexample_finder",
+      "language_membership": true,
+      "status": "private_first"
+    },
+    {
+      "corpus": "aidevops",
+      "id": "CU-021",
+      "kind": "counterexample_finder",
+      "language_membership": true,
+      "status": "private_first"
+    },
+    {
+      "corpus": "aidevops",
+      "id": "CU-022",
       "kind": "counterexample_finder",
       "language_membership": true,
       "status": "private_first"
