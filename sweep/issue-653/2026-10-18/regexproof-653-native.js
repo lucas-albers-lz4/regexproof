@@ -76,7 +76,7 @@ const sourceInventory = [
 		lines: {
 			classifySpec: '9-21',
 			nonFirewallRegex: '137-144',
-			normalization: '174-184',
+			normalization: '196-209',
 			consumerGuard: '389-410',
 			callers: '592-620',
 			exports: '669-704'

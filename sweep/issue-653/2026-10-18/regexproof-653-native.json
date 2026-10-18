@@ -37,7 +37,7 @@
     "unicodeVersion": "17.0",
     "icuVersion": "78.3",
     "v8Version": "14.6.202.34-node.37",
-    "scriptSha256": "e1ad90ce3e40bf62bd94dd1efd59c3d02881229181f34f2e8b56c270546e3484"
+    "scriptSha256": "ef71b1ea47f0f0a76e35353739ecfdfb151c8f9d058a092db4a7fce94832f589"
   },
   "regex": {
     "name": "NON_FIREWALL_PREFIX",
@@ -78,7 +78,7 @@
       "lines": {
         "classifySpec": "9-21",
         "nonFirewallRegex": "137-144",
-        "normalization": "174-184",
+        "normalization": "196-209",
         "consumerGuard": "389-410",
         "callers": "592-620",
         "exports": "669-704"
