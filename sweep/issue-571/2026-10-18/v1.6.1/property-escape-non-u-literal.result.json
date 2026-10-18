@@ -1,0 +1,28 @@
+{
+  "argv": [
+    "/tmp/noodler/z3-noodler-ubuntu-24.04-x86_64-shared",
+    "/tmp/regexproof-571-feasibility/sweep/issue-571/2026-10-18/v1.6.1/property-escape-non-u-literal.smt2"
+  ],
+  "timeout_seconds": 8.0,
+  "elapsed_ms": 15.068,
+  "returncode": 0,
+  "timed_out": false,
+  "classification": "sat",
+  "stdout": "sat\n",
+  "stderr": "",
+  "case": "property-escape-non-u-literal",
+  "runner_sha256": "028a1b7e5a80be54f012b5f51e4c21ec41b83f7412896d6a4f2f776925beb4ac",
+  "noodler_sha256": "22b19f123d3e7f54e10fdc46af3f91de23d89148c9a259eb072bc9e12f083464",
+  "noodler_trusted_binary_mapping": {
+    "label": "Noodler 1.6.1 issue-comment baseline",
+    "version": "Z3 version 4.16.0 - 64 bit - build hashcode dcce9d2d129e1ecc101946ef257aa7ed246dfe61 - mata hashcode 8db4279ce9910b2c12589fabffebf8265a75b558"
+  },
+  "smt_path": "/tmp/regexproof-571-feasibility/sweep/issue-571/2026-10-18/v1.6.1/property-escape-non-u-literal.smt2",
+  "smt_sha256": "10fb458d350e90dab596a6159631cd72d1c0484b8d06c3a25ddeef416c1575a5",
+  "fixed_input": "p{L}",
+  "query_patterns": [
+    "^\\p{L}$"
+  ],
+  "frozen_action_source": "(^|[^A-Za-z0-9_])(ACCEPT|ALLOW|PASS|DROP|REJECT|DENY|BLOCK)([^A-Za-z0-9_]|$)",
+  "interpretation_limit": "API/parser or solver diagnostic only; no theorem or product-property inference"
+}

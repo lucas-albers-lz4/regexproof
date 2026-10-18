@@ -1,0 +1,15 @@
+{
+  "node": "v26.11.1",
+  "path": "/tmp/fwlive-1322-e-review-fixes/core/fwlive-log.js",
+  "file_sha256": "52983d7c0a629de4ee23a13873e5ac54cf7d08dfaf03383614fceb59a4d1da12",
+  "pattern": "(^|[^A-Za-z0-9_])(ACCEPT|ALLOW|PASS|DROP|REJECT|DENY|BLOCK)([^A-Za-z0-9_]|$)",
+  "flags": "i",
+  "observations": {
+    "ACCEPT": true,
+    "aCcEpT": true,
+    "accept": true,
+    "x aCcEpT!": true
+  },
+  "netfilterPattern": "(IN|OUT|SRC|DST|PROTO|SPT|DPT|LEN|MAC|TYPE|CODE|TTL|TOS|PREC|DF)=",
+  "netfilterFlags": ""
+}

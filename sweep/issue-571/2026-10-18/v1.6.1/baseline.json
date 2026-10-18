@@ -1,0 +1,70 @@
+{
+  "scope": "bounded backend diagnostics only; no harness, policy, or product changes",
+  "runner_path": "/tmp/regexproof-571-feasibility/sweep/issue-571/2026-10-18/probe.py",
+  "runner_sha256": "028a1b7e5a80be54f012b5f51e4c21ec41b83f7412896d6a4f2f776925beb4ac",
+  "fwlive_repo": "/tmp/fwlive-1322-e-review-fixes",
+  "fwlive_head": "924e27967d9138817a77b11109c6bc0cff6a2d5e",
+  "source_path": "/tmp/fwlive-1322-e-review-fixes/core/fwlive-log.js",
+  "source_basename": "fwlive-log.js",
+  "source_relative_path": "core/fwlive-log.js",
+  "source_sha256": "52983d7c0a629de4ee23a13873e5ac54cf7d08dfaf03383614fceb59a4d1da12",
+  "source_git_blob": "cc77bc663fc1bae0b2cb473eca2f10b2eedc2079",
+  "source_last_changed_commit": "8a1228fa92572a05344004574ce088ac9b347864",
+  "source_last_changed_commit_blob": "cc77bc663fc1bae0b2cb473eca2f10b2eedc2079",
+  "regexproof_repo": "/tmp/regexproof-571-feasibility",
+  "regexproof_head": "43d4e8b6c33c3e5dc4e9660e7d2c1ba65de14012",
+  "node_version": "v26.11.1",
+  "action_regex_source": "(^|[^A-Za-z0-9_])(ACCEPT|ALLOW|PASS|DROP|REJECT|DENY|BLOCK)([^A-Za-z0-9_]|$)",
+  "action_regex_flags_in_node": "i",
+  "action_words_extracted_from_source": [
+    "ACCEPT",
+    "ALLOW",
+    "PASS",
+    "DROP",
+    "REJECT",
+    "DENY",
+    "BLOCK"
+  ],
+  "action_node_observations": {
+    "ACCEPT": true,
+    "aCcEpT": true,
+    "accept": true,
+    "x aCcEpT!": true
+  },
+  "current_netfilter_regex_source": "(IN|OUT|SRC|DST|PROTO|SPT|DPT|LEN|MAC|TYPE|CODE|TTL|TOS|PREC|DF)=",
+  "current_netfilter_regex_flags": "",
+  "finite_node_diagnostic": {
+    "script_path": "/tmp/regexproof-571-feasibility/sweep/issue-571/2026-10-18/issue571-diagnostic.js",
+    "script_sha256": "22bc08c8a59bc857da24fdae8a9359abec25ae9e0a8fa28d76b0cc55b0200072",
+    "kind": "finite-real-engine-diagnostic",
+    "product": false,
+    "formal_proof": false,
+    "row_count": 28,
+    "all_rows_ok": true
+  },
+  "noodler_binary": "/tmp/noodler/z3-noodler-ubuntu-24.04-x86_64-shared",
+  "noodler_binary_sha256": "22b19f123d3e7f54e10fdc46af3f91de23d89148c9a259eb072bc9e12f083464",
+  "noodler_expected_sha256": "22b19f123d3e7f54e10fdc46af3f91de23d89148c9a259eb072bc9e12f083464",
+  "noodler_trusted_binary_mapping": {
+    "label": "Noodler 1.6.1 issue-comment baseline",
+    "version": "Z3 version 4.16.0 - 64 bit - build hashcode dcce9d2d129e1ecc101946ef257aa7ed246dfe61 - mata hashcode 8db4279ce9910b2c12589fabffebf8265a75b558"
+  },
+  "noodler_version_result": {
+    "argv": [
+      "/tmp/noodler/z3-noodler-ubuntu-24.04-x86_64-shared",
+      "-version"
+    ],
+    "timeout_seconds": 8.0,
+    "elapsed_ms": 2.553,
+    "returncode": 0,
+    "timed_out": false,
+    "classification": "zero_exit_without_verdict",
+    "stdout": "Z3 version 4.16.0 - 64 bit - build hashcode dcce9d2d129e1ecc101946ef257aa7ed246dfe61 - mata hashcode 8db4279ce9910b2c12589fabffebf8265a75b558\n",
+    "stderr": ""
+  },
+  "timeout_seconds_per_process_max": 8.0,
+  "invocation_seconds_max": 20.0,
+  "core_dumps": "disabled for child processes",
+  "artifacts": "text and JSON only; generated beneath PROBE_DIR",
+  "control_note": "Historical negation crash control is separate from current ACTION_RE and establishes no current product property."
+}
