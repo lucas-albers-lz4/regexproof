@@ -41,6 +41,13 @@
         "max_wall_s": 600,
         "redos_wall_s": 120
     },
+    "Hachi": {
+        "max_disk_mb": 500,
+        "max_mem_mb": 2048,
+        "max_patterns": 5000,
+        "max_wall_s": 600,
+        "redos_wall_s": 120
+    },
     "Hazer": {
         "max_disk_mb": 500,
         "max_mem_mb": 2048,
