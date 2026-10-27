@@ -69,6 +69,13 @@
         "max_wall_s": 900,
         "redos_wall_s": 180
     },
+    "Inboxscanner": {
+        "max_disk_mb": 2000,
+        "max_mem_mb": 6144,
+        "max_patterns": 60000,
+        "max_wall_s": 1800,
+        "redos_wall_s": 360
+    },
     "JARVIS": {
         "max_disk_mb": 500,
         "max_mem_mb": 2048,

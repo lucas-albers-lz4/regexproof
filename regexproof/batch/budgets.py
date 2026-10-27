@@ -82,6 +82,13 @@ BUDGET_HEAVY_50K: Budget = {
     "max_mem_mb": 4096,
     "max_disk_mb": 1000,
 }
+BUDGET_HEAVY_60K: Budget = {
+    "max_patterns": 60000,
+    "max_wall_s": 1800,
+    "redos_wall_s": 360,
+    "max_mem_mb": 6144,
+    "max_disk_mb": 2000,
+}
 BUDGET_TESTDATA_LIGHT: Budget = {
     "max_patterns": 5000,
     "max_wall_s": 300,
@@ -100,6 +107,7 @@ BUDGET_PRESETS: dict[str, Budget] = {
     "light": BUDGET_LIGHT,
     "heavy_30k": BUDGET_HEAVY_30K,
     "heavy_50k": BUDGET_HEAVY_50K,
+    "heavy_60k": BUDGET_HEAVY_60K,
     "testdata_light": BUDGET_TESTDATA_LIGHT,
 }
 

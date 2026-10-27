@@ -84,6 +84,7 @@ SECURITY_TOOL_CORPORA = frozenset(
         "SentinelX",
         "NetDefender",
         "AegisMind",
+        "Inboxscanner",
     }
 )
 
