@@ -73,3 +73,27 @@ def test_row_from_run_rejects_placeholder_engine_versions():
     }
     with pytest.raises(SystemExit, match="missing engine_versions"):
         mod.row_from_run(name, entry, result, corpus="openwrt_packages")
+
+
+def test_row_context_override_assigns_helper_image_wave():
+    """#648: the reclassified property lands in its own wave, not wave 1."""
+    mod = _load_emit_module()
+    wave, bucket, overridden = mod.resolve_row_context(
+        "FC-forge-cli-sensitive-env-helper-redacts",
+        "forge-cli_w1",
+        "secret-redaction",
+    )
+    assert (wave, bucket) == ("forge-cli_helper_image", "helper-image")
+    assert overridden is True
+
+
+def test_row_context_override_does_not_leak_to_sibling_properties():
+    """A later forge-cli wave must keep the CLI defaults for every other row."""
+    mod = _load_emit_module()
+    wave, bucket, overridden = mod.resolve_row_context(
+        "FC-forge-cli-url-password-no-space",
+        "forge-cli_w2",
+        "secret-redaction",
+    )
+    assert (wave, bucket) == ("forge-cli_w2", "secret-redaction")
+    assert overridden is False

@@ -1,19 +1,17 @@
 """Forge CLI secret-redaction conversion properties.
 
-Wave 1 covers five human-adopted contracts from
-``sweep/forge-cli-conversion/plan.md`` at pin ``PIN``. The helper-image
-follow-up adds regression replay for ``_render_command_for_log``; it adds no
-product contract or conversion row until a person adopts the finite guarantee.
-PRODUCT and MATCH are independently specified; aliasing them is
-Concat-identity and is not a countable property.
+The original wave-1 slice had five human-adopted contracts at pin ``PIN``.
+The sensitive-env contract is now tracked in the helper-image wave: its
+existing shape-2 query checks policy-key inclusion, while pinned renderer tests
+establish the bounded output image. No duplicate solver property is added.
+PRODUCT and MATCH are independently specified; aliasing them is Concat-identity
+and is not a countable property.
 
 Three slots are length-independent shape-1 alphabets taken from the pinned
-Python classes (new alphabets, not hostname / JSON / IPv4). Wave 1 also has two
-coverage inclusions: an escaped-quote JAAS product grammar against
-``_JAAS_CONFIG_RE`` and the documented sensitive-key forms against
-``SENSITIVE_ENV_KEY_RE``. The helper-image follow-up exercises the renderer
-against the pinned source.
-The unencodable LLM query ``[^&]+`` at
+Python classes (new alphabets, not hostname / JSON / IPv4). The other two
+coverage queries are an escaped-quote JAAS product grammar against
+``_JAAS_CONFIG_RE`` and documented sensitive-key forms against
+``SENSITIVE_ENV_KEY_RE``. The unencodable LLM query ``[^&]+`` at
 ``providers.py:280`` is skipped; the adopted LLM site is the encodable
 userinfo substitution at ``:287``.
 """
@@ -255,9 +253,9 @@ def forge_cli_jaas_escaped_quote_covered():
 
 
 @prop(
-    "FC-forge-cli-sensitive-env-key-covered",
-    "documented ASCII sensitive-key forms are accepted by "
-    "SENSITIVE_ENV_KEY_RE (key len 1..32)",
+    "FC-forge-cli-sensitive-env-helper-redacts",
+    "solver subclaim: documented ASCII sensitive-key forms are accepted by "
+    "SENSITIVE_ENV_KEY_RE (key len 1..32); pinned helper output is tested separately",
     expect_unsat=True,
     kind="property",
     family=FAMILY,
@@ -265,16 +263,32 @@ def forge_cli_jaas_escaped_quote_covered():
     call_kind="search",
     contract=_contract(
         SITE_ENV,
-        "documented sensitive-key forms are accepted by SENSITIVE_ENV_KEY_RE "
-        "before _render_command_for_log",
-        "operator/provider configuration rendered by _render_command_for_log",
+        "for the exact enumerated argv fixtures, _render_command_for_log "
+        "redacts every documented sensitive env value as <redacted> and does "
+        "not emit CLEAR_SENTINEL",
+        "provider/operator dbt command argv rendered for logging",
         "config",
-        "exact ASCII policy-key literals (case-insensitive), len 1..32",
+        "pinned forge-cli revision; all 5,680 ASCII case assignments of the "
+        "documented key forms after both -e and --env with CLEAR_SENTINEL, plus "
+        "ordinary/near-miss keys, empty and delimiter-containing values, "
+        "repeated entries, mixed case, substring matches, and terminal/embedded "
+        "newlines; expected images derive from the documented KEY=<redacted> "
+        "form (never from the regex mirror), with hand-labeled edge fixtures",
     ),
 )
-def forge_cli_sensitive_env_key_covered():
+def forge_cli_sensitive_env_helper_redacts():
     s = String("s")
     return [InRe(s, ENV_PRODUCT), Length(s) <= 32], Not(InRe(s, ENV_MATCH))
+
+
+def _env_api_mutation_ground_truth(witness: dict[str, str]) -> bool:
+    """Replay an API-key mutation witness through the pinned renderer."""
+    key = witness.get("s")
+    if not key or key.lower() not in ENV_API_POLICY_KEYS:
+        return False
+    from regexproof.groundtruth.forge_cli_replay import redaction_mutation_reproduces
+
+    return redaction_mutation_reproduces(key, ENV_WEAKENED_PATTERN)
 
 
 @prop(
@@ -285,6 +299,7 @@ def forge_cli_sensitive_env_key_covered():
     kind="mutation_guard",
     family=FAMILY,
     input_domain="ascii",
+    ground_truth=_env_api_mutation_ground_truth,
 )
 def forge_cli_mutated_sensitive_env_api_key():
     s = String("s")
