@@ -61,18 +61,24 @@ a throughput result.
 
 For each wave, rank 15 sites within one unused idiom bucket, read their source
 context, and record a stopwatch outcome for every reviewed site, including
-skips. A human adopts at most five contracts with named sinks, then the
-operator encodes the cheapest valid shape, runs the real product engine,
-grounds SAT witnesses, and emits the conversion rows. Report:
+skips. An authorized reviewer adopts at most five contracts with named sinks
+under [`CONTRACTS.md`](CONTRACTS.md), then the operator encodes the cheapest
+valid shape, runs the real product engine, grounds SAT witnesses, and emits
+the conversion rows. Standing repository authority lets agents adopt
+supported contracts without a second prompt; report agent review effort
+separately from human review effort. Report:
 
 - reviewed sites and skip reasons;
-- human-adopted contracts and contracts per active review hour;
+- adopted contracts and contracts per active review hour, identifying human
+  or agent review effort without mixing the two;
 - properties asked → SAT → ground-truthed → filed/private-first → accepted;
 - any claims that source replay or engine comparison refuted.
 
 Use [`CLUSTER-CONVERSION.md`](CLUSTER-CONVERSION.md) and
-[`metrics-operator-minutes.md`](metrics-operator-minutes.md). The stopwatch is
-for a human's active review; agents must not invent or backfill human minutes.
+[`metrics-operator-minutes.md`](metrics-operator-minutes.md). The existing
+review-minutes artifact measures human review only. Agent review time must not
+be relabeled as human minutes; report it separately in the wave close-out
+until the artifact records reviewer type.
 
 ### 4. Continue the staged calibration, with product coverage in parallel
 
@@ -81,9 +87,12 @@ the completed 20-r2 manifest and adding ten eligible independent repositories
 from the current admitted pool. Freeze its digest before cloning or observing.
 In parallel, derive the independent product-coverage manifest for the frozen
 cohort and work toward the existing first checkpoint of 50 human product
-properties (100 is the preferred target). Product rows must be human-adopted,
-ground-truthed as required, and bound to the exact cohort pins. Do not treat
-the 30-repository run as evidence of product success by itself.
+properties (100 is the preferred target). Those rows must be ground-truthed as
+required and bound to exact cohort pins. The frozen-cohort checkpoint remains
+limited to its original human-provenance rows; delegated agent adoption
+contributes to the ordinary conversion ledger but does not change that
+historical calibration denominator. Do not treat the 30-repository run as
+evidence of product success by itself.
 
 ## Weekly decision rule
 
@@ -98,7 +107,8 @@ At the end of each week, use one of these actions:
 | At least 50 human product properties plus PR4 checkpoint | Review the asked→SAT→ground-truth→filing→acceptance funnel and decide whether to expand toward 100, retarget, or stop. |
 
 The existing numerical thresholds are retained; this plan introduces no new
-success threshold. Human input is needed when adopting a proposed guarantee,
-setting a different product-success bar, or making a disclosure decision.
-Those choices do not block queue processing, source inventory, candidate
-preparation, or recording actual review time.
+success threshold. The standing repository authority covers evidence-backed
+contract adoption; a different product-success bar or external disclosure
+still needs its appropriate explicit decision. Those choices do not block
+queue processing, source inventory, candidate preparation, or recording actual
+review time.

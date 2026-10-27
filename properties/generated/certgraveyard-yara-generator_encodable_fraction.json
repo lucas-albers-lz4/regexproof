@@ -1,0 +1,37 @@
+{
+  "budget": {
+    "max_disk_mb": 500,
+    "max_mem_mb": 2048,
+    "max_patterns": 5000,
+    "max_wall_s": 900,
+    "redos_wall_s": 180
+  },
+  "budget_breaches": null,
+  "commit": "d965ff32860bef8010f7eb1e7df7b9ea1762d2d4",
+  "compiler_fingerprint": "35ea1f238a9e",
+  "complete_run": true,
+  "corpus_pin": "d965ff32860bef8010f7eb1e7df7b9ea1762d2d4",
+  "decision": "go",
+  "decision_rule": "go iff encodable/sample_size >= 0.3",
+  "dialect": "py_re",
+  "encodable": 3,
+  "engine_versions": {
+    "python": "3.12.15",
+    "z3": "5.0.0"
+  },
+  "extractor_schema_version": "2",
+  "fraction": 1.0,
+  "go_no_go_threshold": 0.3,
+  "id_formula": "v2-domain-optional-ascii-default",
+  "inventory_path": "properties/generated/certgraveyard-yara-generator-inventory.ndjson",
+  "path": "batch/corpora/certgraveyard-yara-generator/rules",
+  "pilot": "certgraveyard-yara-generator",
+  "reasons": {
+    "ok": 3
+  },
+  "sample_size": 3,
+  "schema_version": "1",
+  "scope": "full_corpus",
+  "unclassified_parse_errors": 0,
+  "wall_s": 0.037
+}

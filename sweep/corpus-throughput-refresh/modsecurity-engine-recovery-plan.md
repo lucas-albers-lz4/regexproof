@@ -1,4 +1,11 @@
-# Three-hour follow-up: resolve the ModSecurity product-engine gate
+# Historical plan: ModSecurity product-engine recovery
+
+**Status:** superseded on 2026-10-09. The user directly approved the exact
+narrow contract recorded in
+[`wordpress_modsecurity_ruleset_contract_candidate.json`](../../properties/generated/wordpress_modsecurity_ruleset_contract_candidate.json).
+The remaining historical-engine limitation does not block its adoption or
+the next corpus intake. The technical recovery outcome below remains useful
+context and does not change the adopted contract's narrow scope.
 
 **Candidate:** `Rev3rseSecurity/wordpress-modsecurity-ruleset`
 
@@ -9,21 +16,23 @@ sites were measured and the documented `HEAD /?author=1` request was blocked
 on a pinned, maintained alternate ModSecurity image. The historical CI image
 tag, `owasp/modsecurity:v3-ubuntu-nginx`, did not resolve during the first
 trial. The alternate image is corroboration, not product-engine ground truth.
-The narrow rule 22200029 contract remains `agent_derived`; human adoption or
-rejection is still required. See
+At the time this plan was written, the narrow rule 22200029 contract remained
+`agent_derived` and awaited a user decision. The current adoption record is in
+the candidate artifact. See
 [`modsecurity-triage-trial-closeout.md`](modsecurity-triage-trial-closeout.md).
 
-## Objective
+## Original objective (superseded)
 
 Use up to three hours of active work to recover the exact historical test
 runtime or establish that the available evidence cannot recover it. If
 recovered, replay the documented CI behavior against that runtime and make
-the narrow contract candidate reproducible. If not, leave a precise human
-decision packet and stop this cluster. Do not open another candidate cluster
-while the ModSecurity human gate remains pending.
+the narrow contract candidate reproducible. Otherwise, the plan was to leave
+a decision packet and pause this cluster until the then-pending user decision
+was resolved. That decision is now recorded above, so this pause no longer
+applies.
 
-This is engine recovery and evidence close-out, not contract adoption, a new
-corpus wave, or permission to file or disclose a security finding.
+This plan was for engine recovery and evidence close-out. It does not change
+the separate disclosure gate or authorize public filing.
 
 ## Work blocks
 
@@ -70,22 +79,22 @@ corpus wave, or permission to file or disclose a security finding.
 - Clean up the isolated containers and network; retain commands, versions,
   statuses, audit excerpts, and hashes needed to reproduce the run.
 
-### 2:25–3:00 — close the technical gate and hand off the human decision
+### 2:25–3:00 — close the technical gate and record the decision packet
 
 - Update the close-out with actual active minutes, recovery attempts, runtime
   identity, request results, and any refuted assumptions. Do not backfill
   timings for earlier work.
-- Keep the contract candidate `agent_derived` unless a human adopts its
-  exact guarantee. Do not add a product property row or conversion count
-  from the alternate engine alone.
+- Keep the contract candidate's `agent_derived` provenance and record adoption
+  separately. Do not add a product property row or conversion count from the
+  alternate engine alone.
 - If the historical runtime is recovered and the narrow behavior reproduces,
-  prepare the exact contract adoption packet for review. If not, state the
-  remaining engine limitation and present the existing narrow candidate for
-  human adoption/rejection based on the available source evidence.
-- Keep rank 3 and later candidates held until this human gate is resolved.
-  After the active cluster closes, the next intake screen is the rank-5
-  YARA candidate `tjnel/certgraveyard_yara` at the pin in the parent plan;
-  rank 3 (`AvalZ/modsecurity-cli`) remains deferred as a likely wrapper.
+  record the additional evidence. If not, preserve the engine limitation and
+  keep the candidate's claim narrow.
+- Rank 3 was held pending the user decision at the time. That hold has now
+  been lifted; intake decisions still use the current corpus plan.
+  This original plan named rank 5 `tjnel/certgraveyard_yara` as the next intake;
+  that intake is now closed out in the parent plan. Rank 3
+  (`AvalZ/modsecurity-cli`) remains deferred as a likely wrapper.
 
 ## Stop conditions and completion evidence
 
@@ -99,12 +108,13 @@ The block is complete when the close-out states one of these outcomes:
 1. Historical runtime recovered and the documented behavior replayed with
    versions, immutable inputs, and audit evidence; or
 2. Historical runtime not recoverable, search paths and evidence recorded,
-   alternate-engine limits preserved, and the human contract decision packet
-   ready.
+   alternate-engine limits preserved, and the then-pending user decision
+   packet ready.
 
 Do not claim a vulnerability or product proof from corpus fraction, generic
-scanner output, or a mirror-only result. The remaining human gate decides
-whether the narrow, documented request guarantee is adopted or rejected.
+scanner output, or a mirror-only result. The historical user decision gate is
+resolved by the adoption record linked above. The alternate-engine limitation
+remains part of the evidence record.
 
 ## Recorded outcome (2026-10-09)
 
@@ -112,6 +122,7 @@ Outcome 2: the original image tag has no current registry manifest, its image
 builder is archived, and the source available for a rebuild does not pin the
 base image or OS packages. The archived Dockerfile history does not identify
 the digest behind `v3-ubuntu-nginx`. The bounded recovery check took 4 active
-minutes; evidence and the remaining human contract gate are in the
+minutes; the recovery evidence and alternate-engine limits are in the
 [trial close-out](modsecurity-triage-trial-closeout.md#historical-runtime-recovery-check).
-Keep rank 3 and later held until the human gate closes.
+At the time of this recorded outcome, rank 3 and later remained held pending
+the contract decision. That hold was later lifted as stated above.

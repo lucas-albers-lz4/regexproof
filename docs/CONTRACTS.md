@@ -2,7 +2,7 @@
 
 A counted UNSAT or SAT is not a product result without a **contract**.
 
-How to pick *which* sites get a `human` contract, per distinct corpus
+How to pick *which* sites get an approved contract, per distinct corpus
 cluster (cap 5 per idiom slice, rank 15, no taint engine):
 [`CLUSTER-CONVERSION.md`](CLUSTER-CONVERSION.md). First wave:
 [`sweep/openwrt-conversion/plan.md`](../sweep/openwrt-conversion/plan.md).
@@ -11,26 +11,73 @@ cluster (cap 5 per idiom slice, rank 15, no taint engine):
 
 Schema: `regexproof/schemas/property_contract.schema.json`.
 
-Required fields: `site`, `guarantee`, `input_source`, `trust`
-(`untrusted-input` | `config` | `internal`), `declared_domain`, `provenance`.
+Required fields: `schema_version` (`"1"`), `site`, `guarantee`, `input_source`,
+`trust` (`untrusted-input` | `config` | `internal`), `declared_domain`, and
+`provenance`. Agent-authored contracts can also carry an optional `adoption`
+record; see the standing-authority section below.
 
 ## Provenance (#496)
 
-| Value | Scale? | Meaning |
+| Value | Batch-scale? | Meaning |
 |---|---|---|
-| `human` | no | A person named the guarantee. Required for the general case. |
+| `human` | no | A person authored the guarantee; historical human-authored contracts are adopted implicitly. |
 | `version_diff` | yes | Same rule id, adjacent tags. Machine-derivable. |
 | `cross_engine` | yes | Same rule text, two engines, with `family_contract`. |
-| `agent_derived` | no | An agent invented the question. Treat as smoke unless a human adopts it. |
+| `agent_derived` | no | An agent authored the guarantee. By itself it is a proposal and remains smoke; it becomes adopted only with a valid `adoption` record. |
 
 Batch-scale generators may run only for `version_diff` and `cross_engine`.
-Sibling-family pairing is not a provenance (#469).
+Sibling-family pairing is not a provenance (#469). Provenance records how the
+guarantee was authored or derived; adoption records the authority that approved
+an agent-authored guarantee. Keep those facts separate.
+
+## Standing user delegation (2026-10-09)
+
+The repository owner has authorized agents working in this repository to
+create and approve contracts without another approval prompt. A recommendation
+that satisfies the evidence criteria below is the approval; do not stop for a
+routine confirmation. This is a standing repository instruction, not a claim
+that the agent is a human author.
+
+For an approved agent-authored contract, retain `provenance: "agent_derived"`
+and add an `adoption` object:
+
+```json
+{
+  "status": "approved",
+  "authority": "standing_user_delegation",
+  "approved_on": "YYYY-MM-DD",
+  "rationale": "Why this exact guarantee is useful and supported.",
+  "evidence": ["source file and exact repository pin", "replay or test evidence"]
+}
+```
+
+`authority` may instead be `direct_user_approval` when the user approved that
+specific guarantee in the conversation. The schema requires an approval date,
+non-empty rationale, and at least one evidence reference. An agent may approve
+a contract only after reading the surrounding source and checking that the
+guarantee, input source, trust class, and declared domain are specific and
+supported. Narrow the domain to what the evidence supports. If the source does
+not support a useful claim, leave the draft unadopted or record a no-go instead
+of manufacturing a contract.
+
+The harness and conversion ledger count an `agent_derived` contract only when
+this adoption record is valid. Adoption does not prove that the mirror matches
+the product engine: SAT witnesses still require ground truth, and UNSAT/TIMEOUT
+semantics, engine versions, domain limits, and mutation guards remain separate
+requirements. The frozen saturation calibration and PR4 checkpoint continue
+to count only their original human-provenance cohort; delegated adoption does
+not change that historical denominator.
+
+This authority does not approve public disclosure, upstream filing, or messages
+to third parties. Security-tool findings remain `private_first`; follow
+[`SECURITY.md`](../SECURITY.md) for any external filing.
 
 ## Harness (#476)
 
-UNSAT without contract + declared domain is not reportable product
+UNSAT without an adopted contract + declared domain is not reportable product
 (`product: false` on the harness NDJSON record). `--require-contract` makes
-that a hard failure. Mutation guards remain hygiene. Registry P1–P6 carry
+that a hard failure. An agent-authored contract must carry the approved
+adoption record above. Mutation guards remain hygiene. Registry P1–P6 carry
 human contracts so their UNSAT stays countable.
 
 ## Synthesis (#479)
@@ -46,8 +93,8 @@ on the extractor record. Do not invent a dataflow engine here.
 
 ## Shape 3 generator (#478)
 
-Deferred. No non-tautological search-shaped question exists without a human
-contract. Do not ship “does this miss a space?”.
+Deferred. No non-tautological search-shaped question exists without an adopted
+product contract. Do not ship “does this miss a space?”.
 
 ## Shape 5 in batch (#477)
 

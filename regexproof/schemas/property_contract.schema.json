@@ -13,6 +13,16 @@
     "declared_domain",
     "provenance"
   ],
+  "allOf": [
+    {
+      "if": { "required": ["adoption"] },
+      "then": {
+        "properties": {
+          "provenance": { "const": "agent_derived" }
+        }
+      }
+    }
+  ],
   "properties": {
     "schema_version": { "type": "string", "const": "1" },
     "site": { "type": "string", "minLength": 1 },
@@ -26,6 +36,29 @@
     "provenance": {
       "type": "string",
       "enum": ["human", "version_diff", "cross_engine", "agent_derived"]
+    },
+    "adoption": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "authority", "approved_on", "rationale", "evidence"],
+      "properties": {
+        "status": { "type": "string", "const": "approved" },
+        "authority": {
+          "type": "string",
+          "enum": ["direct_user_approval", "standing_user_delegation"]
+        },
+        "approved_on": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+        },
+        "rationale": { "type": "string", "minLength": 1, "pattern": "\\S" },
+        "evidence": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1, "pattern": "\\S" }
+        }
+      }
     },
     "family_contract": { "type": "object", "additionalProperties": true }
   }

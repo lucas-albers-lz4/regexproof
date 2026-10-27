@@ -7,9 +7,11 @@ reconnaissance, and complete serial probe→gate cycles for as many
 source-native clusters as fit. Do not forecast a fixed number of completed
 clusters: a GO path includes inventory and conversion close-out, while a
 NO-GO path may close faster. The documented 5–7 gated repositories per week
-remains an operating target, not a measured 12-hour rate. Human gate
-decisions, post-GO Smith work, and contract adoption are contingent on their
-own gates. Intake volume alone is not a throughput result.
+remains an operating target, not a measured 12-hour rate. For this
+user-directed autonomous execution, make evidence-backed admission decisions
+using the documented gates; contract adoption follows
+[`docs/CONTRACTS.md`](../../docs/CONTRACTS.md). External disclosure and filing
+remain separate gates. Intake volume alone is not a throughput result.
 
 **As of:** 2026-10-09 02:18 UTC. The manual daily-mine dispatch completed
 successfully, and its committed artifacts are validated below.
@@ -82,8 +84,8 @@ themselves establish trust boundaries or named sinks. Use it for bounded
 Gate-1 source-context reconnaissance, not as a promised 15-site/5-contract
 wave. Record all 12 keep/drop outcomes. If fewer than 15 viable survivor sites
 exist, record the population shortfall and do not claim a full conversion
-wave. Product rows still require human adoption, actual active-review timings,
-and the full conversion close-out. Continue this cluster only; do not reopen
+wave. Product rows still require adopted contracts, accurate reviewer-type
+reporting, and the full conversion close-out. Continue this cluster only; do not reopen
 its closed `control-failclosed` sites or mix in another repo/cluster until the
 slice has a documented close-out.
 
@@ -160,41 +162,39 @@ sets it to 0, and [CI](https://github.com/Rev3rseSecurity/wordpress-modsecurity-
 expects HTTP 403. Rule 22200039 is another possible blocked-URI property for
 the load-scripts DoS pattern, but should be treated separately. Rule 22200040's
 `wp-cron.php` pattern may be overly broad and is not a contract candidate
-without more evidence. The user selected `triage-trial` on Oct 9; the
-human-authored [`wordpress_modsecurity_ruleset_gate_decision.json`](../../properties/generated/wordpress_modsecurity_ruleset_gate_decision.json)
-records condition 2, its source evidence, and the escape-hatch basis. This
-starts a bounded Smith/property spike, not contract adoption. The trial work
-measured 21/21 root product sites encodable and source-grounded every
+without more evidence. The user selected `triage-trial` on Oct 9; the gate
+decision records condition 2, its source evidence, and the escape-hatch basis.
+This starts a bounded Smith/property spike, not contract adoption. The trial
+work measured 21/21 root product sites encodable and source-grounded every
 generic batch flag. Rule 22200029 blocked the CI-shaped HEAD request with a
 phase-1 audit event on a pinned alternate ModSecurity engine; the repository's
-historical CI image could not be resolved. The exact CI-shaped contract is
-available as an `agent_derived` draft only. The trial close-out records the
+historical CI image could not be resolved. The user approved the exact narrow
+contract on Oct 9, recorded in
+[`wordpress_modsecurity_ruleset_contract_candidate.json`](../../properties/generated/wordpress_modsecurity_ruleset_contract_candidate.json);
+its historical-engine limitation remains. The trial close-out records the
 full findings and replay limits in
 [`modsecurity-triage-trial-closeout.md`](modsecurity-triage-trial-closeout.md).
-Keep the candidate at `triage-trial` and hold rank 3 pending the human contract
-decision and any exact historical-engine recovery. The next bounded
-autonomous task is the three-hour historical-runtime recovery/close-out plan
-in [`modsecurity-engine-recovery-plan.md`](modsecurity-engine-recovery-plan.md);
-it does not open another candidate while this gate is pending. After the
-human gate closes, rank 5 `tjnel/certgraveyard_yara` is the next strong YARA
-intake option; rank 3 remains deferred.
+The next intake, `tjnel/certgraveyard_yara`, is closed out in
+[`certgraveyard-yara-intake-plan.md`](certgraveyard-yara-intake-plan.md): the
+YARA files have no regex literals, so the only trial surface is the narrow
+Python generator slice. Rank 3 remains deferred.
 
 ## Score-v1 ranked screening snapshot
 
 Ranked from the refreshed admitted ledger (`score-v1`, top 15); screen notes
 are source/metadata checks except for the exact-pin probes of ranks 1 and 2.
-Keep this order as the provisional queue and process serially. `tjnel` is the
-next strong YARA option after the rank-2 gate closes; its rule files match a
-supported extractor, with a larger and more recent recorded tree than the
-other top-ranked YARA options.
+Keep this order as the provisional queue and process serially. This is a
+screening snapshot; the exact-pin `tjnel` result in the previous section
+supersedes the original prediction that its YARA rules would yield regex
+sites.
 
 | Rank / score | Repository @ pin | Query; language / size | Screen result |
 |---|---|---|---|
 | 1 / 96 | `iosifache/semgrep-rules-manager` @ `6b62771efadf16f8e7112d6918029c768cefba81` | `filename:semgrep.yml OR filename:semgrep.yaml`; Python / 1,288 | NO-GO filed per user gate; internal ID-rewrite substitution, no contract candidate. |
-| 2 / 91 | `Rev3rseSecurity/wordpress-modsecurity-ruleset` @ `6bdd250e3b121f79c9b06ea48231cdada8e9dac9` | `filename:crs-setup.conf OR filename:REQUEST-942-APPLICATION-ATTACK-SQLI.conf`; Dockerfile / 26 | Probe and Smith inventory complete: 23 admission sites / 21 product sites, all 21 encodable; 22200029 replayed on a pinned alternate engine; human contract decision pending. |
+| 2 / 91 | `Rev3rseSecurity/wordpress-modsecurity-ruleset` @ `6bdd250e3b121f79c9b06ea48231cdada8e9dac9` | `filename:crs-setup.conf OR filename:REQUEST-942-APPLICATION-ATTACK-SQLI.conf`; Dockerfile / 26 | Probe and Smith inventory complete: 23 admission sites / 21 product sites, all 21 encodable; 22200029 replayed on a pinned alternate engine; narrow contract approved, historical CI engine unresolved. |
 | 3 / 89 | `AvalZ/modsecurity-cli` @ `8ae8455ec58c65a8b204a1c6a40065b39fc67b73` | `filename:crs-setup.conf OR filename:REQUEST-942-APPLICATION-ATTACK-SQLI.conf`; Python / 59 | Likely a small wrapper rather than dense rule corpus; defer. |
 | 4 / 89 | `RustyNoob-619/YARA` @ `0539dbed04026979ba00e140cfca6951b602890b` | `path:rules extension:yar OR extension:yara`; YARA / 845 | Direct supported YARA input, but smaller recorded tree than rank 5. |
-| 5 / 89 | `tjnel/certgraveyard_yara` @ `cac568463861fdf80386a50958951cc06b3e9bbb` | `path:rules extension:yar OR extension:yara`; YARA / 15,374 | Strong follow-up: direct supported YARA files, larger tree, pushed Aug 2026. |
+| 5 / 89 | `tjnel/certgraveyard_yara` @ `cac568463861fdf80386a50958951cc06b3e9bbb` | `path:rules extension:yar OR extension:yara`; YARA / 15,374 | Initially looked like a large YARA candidate; exact-pin follow-up found zero YARA regex literals and only three Python regex sites. See the scoped close-out. |
 | 6 / 87 | `evild3ad/yara` @ `2f00826a4ee35323a10abbc788a6bbe6308f1215` | `filename:index.yar`; YARA / 652 | Supported direct input, lower expected yield. |
 | 7 / 86 | `rakeshf/wordpress-yara` @ `3c2f25ad7f5951fae27742314b369b01060f0edf` | `path:rules extension:yar OR extension:yara`; YARA / 89 | Supported, but very small tree. |
 | 8 / 85 | `Raspirus/yara-rules` @ `7a30e8d1ca0fcb3ba605a4bd18fae44fd6bf387a` | `path:rules extension:yar OR extension:yara`; YARA / 5,936 | Good fallback: direct rules and recent push (Aug 2026), smaller than rank 5. |
@@ -235,8 +235,8 @@ site inventory; probe outcomes and gate evidence decide advancement.
 4. **2–4 hours — close the Mycelium `scripts-bootstrap` reconnaissance.**
    The exact-pin review of all 12 sites is complete; see the
    [`mycelium-scripts-bootstrap-closeout.md`](mycelium-scripts-bootstrap-closeout.md).
-   No site supports a defensible contract, so no human adoption request or
-   product row is due.
+   No site supports a defensible contract, so no adoption or product row is
+   due.
    This is a reconnaissance close-out, not a completed conversion wave. It
    closes the deferred slice without reopening `control-failclosed`.
 5. **4–10 hours — serial candidate-cluster cycles.** Determine each source-
@@ -249,14 +249,17 @@ site inventory; probe outcomes and gate evidence decide advancement.
    `files_walked`, extracted regex sites and per-file sites, dialect counts,
    predicted buckets, construct/flag counts, extractor errors, and
    `security_boundary`. Have a subagent review evidence for the active cluster
-   only. Apply documented auto-NO-GO rules; present GO/triage recommendations
-   for human decisions and do not label a pending draft as gated. On GO or
+   only. Apply documented admission rules and, under this task's autonomous
+   authorization, make a supported GO/triage/NO-GO decision without waiting
+   for routine approval; do not label a pending draft as gated. On GO or
    chosen triage, run the post-gate Smith inventory/compile. Before opening a
    conversion wave, rank up to 15 survivors from one unused idiom bucket and
-   read 50–150 source lines around every site. Record a human review outcome
-   and actual active-review time for every site, including skips. If fewer
-   than 15 sites are available, record the population and do not claim a full
-   15-site wave. A human adopts at most five contracts with named sinks.
+   read 50–150 source lines around every site. Record reviewer type, outcome,
+   and active time for every site, including skips; do not put agent time in
+   the human-only review-minutes artifact. If fewer than 15 sites are
+   available, record the population and do not claim a full 15-site wave.
+   Adopt at most five contracts with named sinks under
+   [`docs/CONTRACTS.md`](../../docs/CONTRACTS.md).
    Spike each property in a throwaway script first, then encode the cheapest
    valid shapes. Every shipped family needs a mutation guard. Run the harness
    with `--all --require-contract --require-ground-truth`; TIMEOUT/`unknown`
@@ -274,9 +277,9 @@ site inventory; probe outcomes and gate evidence decide advancement.
    extractor set, not proof the repository has no regexes. Record explicit
    clone/disk-budget and extractor errors; defer full tree-size and
    unsupported-language findings to calibration/Smith scans. Do not count
-   post-GO Smith extraction/compile as part of probe output. If a human
-   gate/adoption decision is pending, hold the active cluster and continue
-   only work that does not open another one.
+   post-GO Smith extraction/compile as part of probe output. If evidence for
+   an admission or contract decision is insufficient, record the blocker and
+   continue only work that does not open another cluster.
 6. **10–11.5 hours — reconcile throughput artifacts.** Verify the gate-label
    hash against the candidate ledger, inspect queue state separately, and
    verify the regenerated conversion ledger. Update pipeline status and record
@@ -289,7 +292,7 @@ site inventory; probe outcomes and gate evidence decide advancement.
    digest/order. Report exact counts and remaining blockers; make no product
    efficacy claim from ingestion alone.
 
-## Stop and human gates
+## Stop conditions and approval boundaries
 
 - Stop a candidate on pin drift, incomplete probe, zero registered sites,
   explicit clone/disk-budget failure, duplicate/fork status, or unresolved
@@ -298,11 +301,12 @@ site inventory; probe outcomes and gate evidence decide advancement.
   output alone.
 - Do not change mine cap, score-v1, or allocator weights. Do not publish,
   disclose, or file an upstream finding as part of this work.
-- Queue refresh, ranking, probing, and gate recommendations require no new
-  human decision. GO/triage decisions are usually human-authored; request those
-  decisions with the exact probe drafts. Human input is also required to adopt
-  product contracts, change the 50-property first checkpoint / 100 preferred
-  product bar, or authorize disclosure. Do not invent human review minutes.
+- The user authorized autonomous backlog work, and the repository owner
+  separately delegated evidence-backed contract adoption in
+  [`docs/CONTRACTS.md`](../../docs/CONTRACTS.md). Apply those authorities
+  without asking for routine approval. Changing the 50-property first
+  checkpoint / 100 preferred product bar or authorizing external disclosure
+  remains outside this delegation. Do not invent human review minutes.
 - Do not freeze a 30-repository manifest unless ten additions qualify from
   evidence committed at the starting revision, before any checkout or
   observation in this work package. Do not use new mine/probe output to fill

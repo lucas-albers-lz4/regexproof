@@ -22,6 +22,7 @@ SECURITY_TOOL_CORPORA = frozenset(
         "semgrep_rules",
         "semgrep-semgrep",
         "yara_rules",
+        "certgraveyard-yara-generator",
         "spamassassin",
         "noseyparker",
         "shhgit",

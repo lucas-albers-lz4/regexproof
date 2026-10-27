@@ -46,7 +46,7 @@ def _load_ranker():
 def validate_stub(row: dict) -> None:
     """Validate one stub row against the queue-stub schema. A stub with
     contract semantics (guarantee/input_source/trust/declared_domain) is
-    REJECTED — those are human-adoption fields, not stub fields."""
+    REJECTED — those are adoption-record fields, not stub fields."""
     import jsonschema
 
     schema = json.loads(STUB_SCHEMA.read_text(encoding="utf-8"))
@@ -58,7 +58,7 @@ def validate_stub(row: dict) -> None:
         if banned in row:
             raise SystemExit(
                 f"stub emitter: stub carries contract field {banned!r} — "
-                "contract semantics are human-adoption only"
+                "contract fields belong in an adopted property contract"
             )
 
 
@@ -88,7 +88,7 @@ def main(argv: list[str] | None = None) -> int:
 
     ranker = _load_ranker()
     records = ranker.load_ndjson(args.ndjson)
-    # Conversion rows are human-adopted candidate sites — the pattern-based
+    # Conversion rows are adopted contract candidate sites — the pattern-based
     # scanner drops do not apply (Luna r1 fold #1: the documented input must
     # not produce an empty queue). rank_sites keeps path/test-name drops.
     result = ranker.rank_sites(records, vocab=ranker.DEFAULT_VOCAB, limit=15)

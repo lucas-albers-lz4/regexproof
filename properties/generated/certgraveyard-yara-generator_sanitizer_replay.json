@@ -1,0 +1,22 @@
+{
+  "corpus": "tjnel/certgraveyard_yara",
+  "distinct_input_strings": 10276,
+  "generated_names_checked": 62154,
+  "input_cases": 10359,
+  "limits": [
+    "Differential replay of the pinned Python implementation; not an SMT proof.",
+    "Checks identifier and filename components only; metadata escaping is out of scope.",
+    "No length bound is claimed."
+  ],
+  "mutation_guard": {
+    "mutated_output": "/",
+    "mutation": "allow '/' through the first sanitizer character class",
+    "result": "pass",
+    "witness": "/"
+  },
+  "pin": "d965ff32860bef8010f7eb1e7df7b9ea1762d2d4",
+  "result": "pass",
+  "sanitized_components_checked": 93231,
+  "schema_version": "1",
+  "site": "src/cert_graveyard_yara/generator.py:79,81:sanitize_name"
+}

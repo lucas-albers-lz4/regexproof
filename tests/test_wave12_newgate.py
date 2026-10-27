@@ -86,6 +86,8 @@ def test_file_colon_pattern_split(tmp_path: Path):
     assert "mutation_guard" in text
     assert "ALPHABET_CHARS" in text
     assert "InRe(s, ALPHABET)" in text
+    assert '"provenance": "agent_derived"' in text
+    assert "do not relabel agent-authored guarantees as ``human``" in text
     assert "shell=True" not in text
     assert (out / "fuzz.py").is_file()
     assert (out / "ci.yml").is_file()
@@ -96,6 +98,10 @@ def test_file_colon_pattern_split(tmp_path: Path):
     assert "github.workspace" in ci
     assert "ref:" in ci
     assert "pip install" in ci and "-e ./regexproof-src" in ci
+    readme = (out / "README.md").read_text(encoding="utf-8")
+    assert "follow the host repository's contract-adoption policy" in readme
+    assert "standing adoption record in `docs/CONTRACTS.md`" in readme
+    assert "change that to `human`" not in readme
     fuzz = (out / "fuzz.py").read_text(encoding="utf-8")
     assert "differential-fuzz.py" in fuzz
     assert "shell=False" in fuzz

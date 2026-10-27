@@ -13,11 +13,12 @@ _MAIN_BASELINE: dict[str, dict] = json.loads(_BASELINE_PATH.read_text(encoding="
 
 
 def test_every_manifest_budget_matches_main_baseline():
-    """Equivalence: post-preset budgets must equal pre-refactor main literals."""
-    assert set(CORPUS_MANIFESTS) == set(_MAIN_BASELINE)
-    for name, meta in CORPUS_MANIFESTS.items():
+    """Existing manifests retain pre-refactor literals; later entries are additive."""
+    assert set(_MAIN_BASELINE) <= set(CORPUS_MANIFESTS)
+    for name, baseline in _MAIN_BASELINE.items():
+        meta = CORPUS_MANIFESTS[name]
         current = dict(meta.get("budget") or {})
-        expected = dict(_MAIN_BASELINE[name])
+        expected = dict(baseline)
         assert current == expected, name
 
 

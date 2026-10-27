@@ -43,6 +43,17 @@ Shape-5 `rule_diff` still needs an independent spec or a
 `version_diff` / `cross_engine` pair with a `family_contract` — sibling-family
 pairing is not a contract.
 
+**Standing contract authority:** the repository owner has delegated contract
+creation and approval to agents working in this repository. An agent may adopt
+a well-evidenced contract without pausing for another user confirmation; a
+recommendation grounded in the source and the documented criteria is the
+approval. Preserve `provenance: "agent_derived"` for agent-authored guarantees
+and attach the approved `adoption` record described in
+[`docs/CONTRACTS.md`](docs/CONTRACTS.md). This authority covers contract
+adoption and product-property counting only. It does not establish a solver
+result, replace ground-truth replay, or authorize external disclosure or
+filing.
+
 Phase 0 search-semantics inventory of the ten SAT candidates that looked like
 third-party findings: none are public filings — see [`docs/why.md`](docs/why.md)
 for the live conversion narrative and the [`docs/conversion-upstream.jsonl`](docs/conversion-upstream.jsonl)
@@ -216,7 +227,7 @@ every finding against the surrounding code before filing, and report what you
 - Consumer adoption (one regex → a CI gate): [`docs/NEWGATE.md`](docs/NEWGATE.md)
   — `python -m regexproof.newgate FILE PATTERN` / `regexproof newgate …`; not a second corpus funnel
 - Cluster conversion (OpenWrt, OpenClaw, …): [`docs/CLUSTER-CONVERSION.md`](docs/CLUSTER-CONVERSION.md)
-  — rank 15 / write ≤5 human contracts **per idiom slice** (close-out is
+  — rank 15 / write ≤5 adopted contracts **per idiom slice** (close-out is
   the deny-list; later waves reuse emit + product-engine checker). First
   application [`sweep/openwrt-conversion/plan.md`](sweep/openwrt-conversion/plan.md);
   packages waves 1–3 close-outs under `properties/generated/openwrt_packages_conversion_wave*.md`

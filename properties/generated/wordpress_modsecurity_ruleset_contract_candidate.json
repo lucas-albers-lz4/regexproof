@@ -5,5 +5,16 @@
   "input_source": "Untrusted HTTP request target as exposed to ModSecurity through REQUEST_URI; the pinned CI probe sends HEAD requests with curl -I.",
   "trust": "untrusted-input",
   "declared_domain": "HEAD request with exact ASCII origin-form target /?author=[0-9]+, where [0-9]+ means one or more ASCII digits and there are no additional query parameters, alternate path, case variation, or percent-encoded characters. Gate setting: tx.wprs_allow_user_enumeration=0; SecRuleEngine On; phase-1 test SecDefaultAction uses deny,status:403. Alternate-engine replay only until the historical CI base image can be pinned.",
-  "provenance": "agent_derived"
+  "provenance": "agent_derived",
+  "adoption": {
+    "status": "approved",
+    "authority": "direct_user_approval",
+    "approved_on": "2026-10-09",
+    "rationale": "The repo's CI test defines this exact request guarantee, and the alternate-engine replay corroborates it. The guarantee remains limited to the stated domain because the historical CI engine could not be recovered.",
+    "evidence": [
+      "Rev3rseSecurity/wordpress-modsecurity-ruleset@6bdd250e3b121f79c9b06ea48231cdada8e9dac9 (pinned CI test source)",
+      "sweep/corpus-throughput-refresh/modsecurity-triage-trial-closeout.md (alternate-engine replay and historical-image limitation)",
+      "User approved the exact narrow guarantee on 2026-10-09"
+    ]
+  }
 }

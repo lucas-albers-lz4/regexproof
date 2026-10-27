@@ -510,21 +510,26 @@ def load_upstream(path: Path | None = None) -> list[dict[str, Any]]:
 
 
 def counts_as_conversion_asked(rec: dict[str, Any]) -> bool:
-    """Conversion-wave rows count only when product_reportable + human.
+    """Count product-reportable rows with a human or recorded delegated adoption.
 
-    Kind alone would count smoke (agent_derived / incomplete contract).
+    Conversion rows exclude shape-5 ``rule_diff`` queries, which have their own
+    family-contract gate and counting path. Kind alone would count smoke
+    (unadopted agent_derived / incomplete contract).
     """
-    from regexproof.harness.contract import product_reportable
+    from regexproof.harness.contract import contract_is_adopted, product_reportable
 
     if rec.get("synthesized"):
         return False
+    if rec.get("kind") not in {"property", "counterexample_finder", "bug_demo"}:
+        return False
     contract = rec.get("contract")
-    if not isinstance(contract, dict) or str(contract.get("provenance") or "") != "human":
+    if not contract_is_adopted(contract):
         return False
     return product_reportable(
         {
             "kind": rec.get("kind"),
             "domain": rec.get("domain"),
+            "site": rec.get("site"),
             "contract": contract,
         }
     )

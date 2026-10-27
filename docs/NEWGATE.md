@@ -84,9 +84,13 @@ Ground-truth replay for SAT witnesses runs Python `re` on `ch*n` for
 Differential fuzz compares the **full** mirror language to Python `re`
 via `helpers/python/match.py`.
 
-Contracts are `provenance: agent_derived` until you read the surrounding
-code and adopt them as `human` ([`CONTRACTS.md`](CONTRACTS.md)). UNSAT
-is not product without that.
+The emitter leaves contracts as `provenance: agent_derived` because it has not
+read the surrounding source or approved the proposed guarantee. After that
+review, an agent working in regexproof may adopt a supported contract under
+the standing authority in [`CONTRACTS.md`](CONTRACTS.md), recording the
+required `adoption` object and retaining `agent_derived` provenance. In a
+separate consumer repository, follow that repository's own agent instructions.
+UNSAT is not product without an adopted contract.
 
 ## Fail-closed
 

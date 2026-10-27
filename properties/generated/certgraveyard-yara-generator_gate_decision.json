@@ -1,0 +1,52 @@
+{
+  "candidate_url": "https://github.com/tjnel/certgraveyard_yara",
+  "conditions": [
+    {
+      "evidence": "No first-seen construct or dialect: Python re is already supported; the exact-pin source inventory checks assignment-form (= /) and condition-form (matches /) YARA regex literals and finds none.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "generator.py:79,81 sanitize CSV-derived Malware, Issuer Short, and Serial fields before interpolation into rule identifiers and generated filenames; see the adopted narrow contract candidate.",
+      "id": "security-boundary",
+      "met": true
+    },
+    {
+      "evidence": "Only 3 probed Python regex sites, below the 1,000-site condition; YARA corpus saturation is not applicable to this Python source slice.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "certgraveyard-yara-generator",
+  "corpus_pin": "d965ff32860bef8010f7eb1e7df7b9ea1762d2d4",
+  "decision": "triage-trial",
+  "decision_basis": "escape_hatch",
+  "decision_date": "2026-10-09",
+  "escape_hatch_applied": true,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "py_re": 3
+    },
+    "flags": {},
+    "pin": "d965ff32860bef8010f7eb1e7df7b9ea1762d2d4",
+    "pin_mined": "d965ff32860bef8010f7eb1e7df7b9ea1762d2d4",
+    "pin_probed": "d965ff32860bef8010f7eb1e7df7b9ea1762d2d4",
+    "predicted_buckets": {},
+    "regex_sites": 3,
+    "regex_sites_per_file": {
+      "src/cert_graveyard_yara/changelog.py": 1,
+      "src/cert_graveyard_yara/generator.py": 2
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Security-boundary triage trial for the Python generator source slice only. At this exact pin the probe found three Python regex sites, including the sanitizer that maps untrusted CSV values into YARA identifiers and filenames; the changelog pattern is internal. The complete source inventory checks assignment-form (= /) and condition-form (matches /) YARA regex literals and finds none among the 2,889 rule files. This is neither a new dialect nor a large under-saturated corpus, so the escape hatch admits only the Python source slice and makes no YARA-rule corpus coverage claim.",
+  "related": {
+    "agent_authority": "user-directed autonomous backlog work",
+    "contract": "properties/generated/certgraveyard-yara-generator_contract_candidate.json",
+    "scope": "src/**/*.py via python_dir/py_re only",
+    "yara_rule_files": 2889,
+    "yara_rule_regex_sites": 0
+  },
+  "schema_version": "1"
+}
