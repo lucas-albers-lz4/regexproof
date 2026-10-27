@@ -1,0 +1,40 @@
+{
+  "budget": {
+    "max_disk_mb": 500,
+    "max_mem_mb": 2048,
+    "max_patterns": 5000,
+    "max_wall_s": 600,
+    "redos_wall_s": 120
+  },
+  "budget_breaches": null,
+  "commit": "73e083e22f020ffa18ca5f09321ea19c4f7c4da4",
+  "compiler_fingerprint": "35ea1f238a9e",
+  "complete_run": true,
+  "corpus_pin": "73e083e22f020ffa18ca5f09321ea19c4f7c4da4",
+  "decision": "go",
+  "decision_rule": "go iff encodable/sample_size >= 0.3",
+  "dialect": "yara",
+  "encodable": 2995,
+  "engine_versions": {
+    "python": "3.13.5",
+    "z3": "5.0.0"
+  },
+  "extractor_schema_version": "2",
+  "fraction": 0.9702,
+  "go_no_go_threshold": 0.3,
+  "id_formula": "v2-domain-optional-ascii-default",
+  "inventory_path": "properties/generated/Hachi-inventory.ndjson",
+  "path": "batch/corpora/Hachi/rules",
+  "pilot": "Hachi",
+  "reasons": {
+    "fullword-boundary": 62,
+    "ok": 2995,
+    "pattern-too-long": 1,
+    "wide-non-literal": 29
+  },
+  "sample_size": 3087,
+  "schema_version": "1",
+  "scope": "full_corpus",
+  "unclassified_parse_errors": 0,
+  "wall_s": 28.503
+}

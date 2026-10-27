@@ -9,8 +9,9 @@ import multiprocessing
 import platform
 import sys
 import time
+from collections.abc import Mapping
 from dataclasses import dataclass
-from pathlib import Path
+from pathlib import Path, PureWindowsPath
 from typing import Any
 
 import jsonschema
@@ -456,6 +457,23 @@ def _run_and_record_shape5(
     }
 
 
+def _admission_gate_path(
+    corpus: str, meta: Mapping[str, Any], out_dir: Path
+) -> Path:
+    """Resolve a manifest's gate artifact name without allowing path traversal."""
+    filename = meta.get("gate_decision_file")
+    if filename is None:
+        filename = f"{corpus}_gate_decision.json"
+    if (
+        not isinstance(filename, str)
+        or filename in {"", ".", ".."}
+        or Path(filename).name != filename
+        or PureWindowsPath(filename).name != filename
+    ):
+        raise ValueError(f"invalid gate_decision_file for {corpus}: {filename!r}")
+    return out_dir / filename
+
+
 def resolve_corpus_path(corpus: str, meta: dict[str, Any]) -> dict[str, Any]:
     """Apply sample fallback / measure_scope path policy before extract (#196)."""
     meta = dict(meta)
@@ -491,7 +509,9 @@ def resolve_corpus_path(corpus: str, meta: dict[str, Any]) -> dict[str, Any]:
                 )
                 meta["path"] = sample
                 meta["measure_scope"] = "sample"
-            elif (ROOT / "properties" / "generated" / f"{corpus}_gate_decision.json").exists():
+            elif _admission_gate_path(
+                corpus, meta, ROOT / "properties" / "generated"
+            ).exists():
                 # ADMITTED corpus, no tree AND no sample: FAIL CLOSED — a
                 # 0-site run would read 'go' against an empty tree (luna
                 # #276 -r3 finding #1: the dogfood_shell seam; the sample
@@ -687,10 +707,11 @@ def check_admission_gates(
 
     The corpus admission gate (sweep/corpus-admission-gate.md): every
     rule_corpus / validator corpus in CORPUS_MANIFESTS must have a
-    ``<corpus>_gate_decision.json`` at ``out_dir`` (default
-    ``properties/generated``), valid against ``gate_decision.schema.json``,
-    with decision in ``go`` / ``triage-trial``. Testdata and inventory-only
-    corpora are pipeline inputs, not scanned repos, so they are exempt.
+    gate decision file at ``out_dir`` (default ``properties/generated``),
+    named ``<corpus>_gate_decision.json`` unless the manifest explicitly sets
+    ``gate_decision_file``. The JSON must validate against
+    ``gate_decision.schema.json`` and have decision in ``go`` / ``triage-trial``.
+    Testdata and inventory-only corpora are exempt.
 
     Missing or invalid artifacts hard-fail (never silent): a corpus with no
     admission record is not a corpus we are allowed to run.
@@ -706,7 +727,11 @@ def check_admission_gates(
             continue
         if meta.get("corpus_type") in ("testdata", "inventory_only"):
             continue
-        path = out_dir / f"{name}_gate_decision.json"
+        try:
+            path = _admission_gate_path(name, meta, out_dir)
+        except ValueError as exc:
+            violations.append(f"{name}: {exc}")
+            continue
         if not path.exists():
             violations.append(
                 f"{name}: admission decision missing ({path.name}); "
