@@ -1,0 +1,18 @@
+{
+  "additional_surface_outside_probe_scope": {
+    "pcre": 6,
+    "posix-shell": 4,
+    "py_re": 12
+  },
+  "candidate_url": "https://github.com/ag-michael/Inboxscanner",
+  "corpus": "Inboxscanner",
+  "corpus_pin": "cafc3dcc92557192204c0479450731a3e7528388",
+  "reason": "30,553/51,250 (59.62%) encode in the exact 1,860-file YARA allowlist derived from the pinned gate inventory; complete deterministic run, zero unclassified parse errors. The initial no-determinism pass took 210.223s; the deterministic pass took 66.763s. Batch produced 189 private-first findings. No product security property is claimed.",
+  "regex_sites": 51250,
+  "schema_version": "1",
+  "sites_by_bucket": {
+    "yara": 51250
+  },
+  "smith_decision": "go",
+  "supersedes": "go"
+}
