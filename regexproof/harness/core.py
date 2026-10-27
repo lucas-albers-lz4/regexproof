@@ -242,6 +242,7 @@ def run_one(name, entry, require_ground_truth=False):
     result["result"] = SolveResult.UNSAT.value if r == unsat else SolveResult.SAT.value
     result["ok"] = (r == unsat) == entry["expect_unsat"]
     result.setdefault("state", "stock")  # §10 state; fallback markers survive
+    guard_replayed = False
     tag = "UNSAT (property HOLDS)" if r == unsat else "SAT (counterexample)"
     if r == sat:
         m = s.model()
@@ -269,7 +270,18 @@ def run_one(name, entry, require_ground_truth=False):
         # leave a PASS line on a refused/failed replay (#360).
         gt = entry.get("ground_truth")
         if entry["kind"] == PropertyKind.MUTATION_GUARD.value:
-            result["ground_truth"] = "mutation-guard-sat-expected"
+            # A registered guard callback replays the exact witness against the
+            # real implementation (#648). Guards without one keep the historical
+            # sensitivity label: expected SAT is not a finding, so
+            # --require-ground-truth must not refuse it retroactively.
+            if gt is None:
+                result["ground_truth"] = "mutation-guard-sat-expected"
+            elif bool(gt(witness)):
+                result["ground_truth"] = "mutation-guard-sat-expected"
+                guard_replayed = True
+            else:
+                result["ground_truth"] = "failed"
+                result["ok"] = False
         elif gt is not None:
             reproduced = bool(gt(witness))
             result["ground_truth"] = "reproduced" if reproduced else "failed"
@@ -287,6 +299,11 @@ def run_one(name, entry, require_ground_truth=False):
             print(f"    witness: {wname} = {wval!r}")
     if result.get("ground_truth") == "mutation-guard-sat-expected":
         print("    mutation guard: SAT expected (harness-sensitivity probe, not a finding)")
+        if guard_replayed:
+            print(
+                "    mutation guard replay: exact witness reproduced against the "
+                "pinned implementation"
+            )
     elif result.get("ground_truth") == "reproduced":
         print("    ground-truth: REPRODUCED")
     elif result.get("ground_truth") == "failed":

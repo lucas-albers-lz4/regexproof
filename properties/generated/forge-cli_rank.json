@@ -116,6 +116,6 @@
     "FC-forge-cli-dmm-value-no-semicolon",
     "FC-forge-cli-llm-userinfo-no-at",
     "FC-forge-cli-jaas-escaped-quote-covered",
-    "FC-forge-cli-sensitive-env-key-covered"
+    "FC-forge-cli-sensitive-env-helper-redacts"
   ]
 }

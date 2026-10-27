@@ -95,6 +95,9 @@ _CONTRACT_BASE = {
     "normalize(x) carries no trailing strip-class char (ASCII single-line, "
     "len 0..8, no NUL/LF; sed s/[[:space:]:]*$//)",
     expect_unsat=True,
+    # This repeated SubString unrolling can be starved by the full xdist
+    # suite; keep the full proof and fail closed, but allow a bounded 2 min.
+    timeout_ms=120_000,
     kind="property",
     family=FAMILY,
     input_domain="ascii",

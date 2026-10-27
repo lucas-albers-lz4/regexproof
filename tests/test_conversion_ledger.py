@@ -403,7 +403,11 @@ def test_ci_golden_regenerates_and_drift_checks_ledger():
         "dogfood_shell_w1",
         "doberman_w1",
         "forge-cli_w1",
+        "forge-cli_helper_image",
     }
+    assert pw["forge-cli_w1"]["properties_asked"] == 4
+    assert pw["forge-cli_helper_image"]["properties_asked"] == 1
+    assert pw["forge-cli_helper_image"]["idiom_bucket"] == "helper-image"
     for w in pw.values():
         assert w["properties_asked"] >= w["properties_sat"]
         assert w["properties_sat"] >= w["sat_ground_truthed"]

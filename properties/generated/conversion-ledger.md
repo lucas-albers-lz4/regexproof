@@ -83,7 +83,8 @@ asked → SAT → GT → filed → accepted per `(wave_id, idiom_bucket)`.
 | claude-code-plugins_w1 | plugin-hook-guards | 3 | 0 | 0 | **0** | 0 | **n/a** |
 | doberman_w1 | command-execution | 2 | 2 | 2 | **2** | 0 | **1.0000** |
 | dogfood_shell_w1 | normalize-fixpoint | 2 | 0 | 0 | **0** | 0 | **n/a** |
-| forge-cli_w1 | secret-redaction | 5 | 0 | 0 | **0** | 0 | **n/a** |
+| forge-cli_helper_image | helper-image | 1 | 0 | 0 | **0** | 0 | **n/a** |
+| forge-cli_w1 | secret-redaction | 4 | 0 | 0 | **0** | 0 | **n/a** |
 | mycelium_w1 | control-failclosed | 3 | 0 | 0 | **0** | 0 | **n/a** |
 | openwrt_luci_w1 | form-validator-alphabets | 4 | 1 | 1 | **0** | 0 | **0.0000** |
 | openwrt_packages_w1 | validator-charsets-and-captures | 5 | 1 | 1 | **0** | 0 | **0.0000** |
@@ -116,7 +117,8 @@ Share of asked properties per shape, per wave (conversion rows).
 | claude-code-plugins_w1 | plugin-hook-guards | 3 | shape 1: 1.0000 |
 | doberman_w1 | command-execution | 2 | shape 2: 1.0000 |
 | dogfood_shell_w1 | normalize-fixpoint | 2 | shape 3: 1.0000 |
-| forge-cli_w1 | secret-redaction | 5 | shape 1: 0.6000, shape 2: 0.4000 |
+| forge-cli_helper_image | helper-image | 1 | shape 2: 1.0000 |
+| forge-cli_w1 | secret-redaction | 4 | shape 1: 0.7500, shape 2: 0.2500 |
 | mycelium_w1 | control-failclosed | 3 | shape 1: 1.0000 |
 | openwrt_luci_w1 | form-validator-alphabets | 4 | shape 1: 0.7500, shape 3: 0.2500 |
 | openwrt_packages_w1 | validator-charsets-and-captures | 5 | shape 1: 0.6000, shape 3: 0.4000 |

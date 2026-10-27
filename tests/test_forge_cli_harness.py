@@ -34,12 +34,13 @@ from regexproof.schemas import load_schema
 
 FAMILY = "FC-forge-cli"
 ROOT = Path(__file__).resolve().parents[1]
+HELPER_PROPERTY = "FC-forge-cli-sensitive-env-helper-redacts"
 PRODUCT_NAMES = (
     "FC-forge-cli-url-password-no-space",
     "FC-forge-cli-dmm-value-no-semicolon",
     "FC-forge-cli-llm-userinfo-no-at",
     "FC-forge-cli-jaas-escaped-quote-covered",
-    "FC-forge-cli-sensitive-env-key-covered",
+    HELPER_PROPERTY,
 )
 
 
@@ -57,7 +58,12 @@ def test_forge_cli_product_contracts_are_registered():
     assert REGISTRY["FC-forge-cli-llm-userinfo-no-at"]["contract"]["site"].endswith(
         "providers.py:287:LlmConfig.redacted_endpoint"
     )
-    assert "FC-forge-cli-sensitive-env-helper-redacts" not in REGISTRY
+    assert HELPER_PROPERTY in REGISTRY
+    assert "FC-forge-cli-sensitive-env-key-covered" not in REGISTRY
+    helper_contract = REGISTRY[HELPER_PROPERTY]["contract"]
+    assert "redacts every documented sensitive env value" in helper_contract["guarantee"]
+    assert "5,680 ASCII case assignments" in helper_contract["declared_domain"]
+    assert "CLEAR_SENTINEL" in helper_contract["declared_domain"]
 
 
 def test_forge_cli_properties_hold_and_mutation_guard_flips():
@@ -70,20 +76,36 @@ def test_forge_cli_properties_hold_and_mutation_guard_flips():
         )
         assert result["not_proven"] is False
         if REGISTRY[name]["kind"] == "mutation_guard":
-            if REGISTRY[name]["ground_truth"] is None:
-                assert result["ground_truth"] == "mutation-guard-sat-expected"
-                if name == "FC-forge-cli-mutated-sensitive-env-api-key":
-                    from regexproof.groundtruth.forge_cli_replay import (
-                        redaction_mutation_reproduces,
-                    )
+            assert result["ground_truth"] == "mutation-guard-sat-expected"
+            if name == "FC-forge-cli-mutated-sensitive-env-api-key":
+                callback = REGISTRY[name]["ground_truth"]
+                assert callable(callback)
+                assert callback(result["witness"]) is True
 
-                    assert result["witness"]["s"].lower() in ENV_API_POLICY_KEYS
-                    assert redaction_mutation_reproduces(
-                        result["witness"]["s"], ENV_WEAKENED_PATTERN
-                    )
-            else:
-                assert result["ground_truth"] == "reproduced"
-                assert result["witness"]["s"].lower() in ENV_API_POLICY_KEYS
+
+def test_mutation_guard_replay_is_enforced_by_the_runner():
+    """A registered guard callback must run under --require-ground-truth (#648).
+
+    Without this, the callback is decoration: the guard branch would label the
+    witness before reaching the callback and a non-reproducing replay would
+    still pass the gate.
+    """
+    name = "FC-forge-cli-mutated-sensitive-env-api-key"
+    entry = dict(REGISTRY[name])
+    calls: list[dict] = []
+
+    def failing_replay(witness):
+        calls.append(witness)
+        return False
+
+    entry["ground_truth"] = failing_replay
+    result = run_one(name, entry, require_ground_truth=True)
+
+    assert calls, "runner did not invoke the registered replay callback"
+    assert result["result"] == "sat"
+    assert result["ground_truth"] == "failed"
+    assert result["ok"] is False
+    assert REGISTRY[name]["ground_truth"] is not failing_replay
 
 
 def test_forge_cli_family_has_mutation_coverage():
@@ -247,8 +269,12 @@ def test_committed_conversion_rows_match_registry():
         jsonschema.validate(instance=row, schema=schema)
         assert row["family"] == FAMILY
         assert row["corpus"] == "forge-cli"
-        assert row["wave_id"] == "forge-cli_w1"
-        assert row["idiom_bucket"] == "secret-redaction"
+        if row["name"] == HELPER_PROPERTY:
+            assert row["wave_id"] == "forge-cli_helper_image"
+            assert row["idiom_bucket"] == "helper-image"
+        else:
+            assert row["wave_id"] == "forge-cli_w1"
+            assert row["idiom_bucket"] == "secret-redaction"
         assert row["product_reportable"] is True
         assert row["result"] == "unsat"
         assert row["ground_truth_status"] is None
@@ -266,9 +292,24 @@ def test_wave_closeout_records_scope_and_next_step():
     assert "0 SAT" in text
     assert "providers.py:280" in text
     assert "Concat-identity" in text
-    assert "#648 helper-image replay" in text
+    assert "#648 adopted helper-image contract" in text
+    assert "forge-cli_helper_image" in text
+    assert "No duplicate solver property is registered" in text
     assert "all 5,680 ASCII case assignments" in text
     assert "shape 2 proves only" in text
     assert "does not prove the renderer's output image" in text
-    assert "exact-witness mutation replay" in text
+    assert "`ground_truth` callback" in text
+    assert "fails the property when replay returns false" in text
+    assert "shape-4" in text
     assert "no claim is made for arbitrary values" in text.lower()
+
+
+def test_rank_asked_names_match_the_registry():
+    """A property rename must not leave a stale name in the rank artifact."""
+    rank = json.loads(
+        (ROOT / "properties" / "generated" / "forge-cli_rank.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    stale = [name for name in rank["asked_names"] if name not in REGISTRY]
+    assert stale == [], stale
