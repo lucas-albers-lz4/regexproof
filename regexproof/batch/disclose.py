@@ -73,6 +73,11 @@ SECURITY_TOOL_CORPORA = frozenset(
         "yarasigs",
         "panther-labs-panther-analysis",
         "gadievron-raptor",
+        # Issue #619 phase 1: admitted detector corpora stay private-first.
+        "Yara-Rules",
+        "lw-yara",
+        "bernstein",
+        "lyrie-ai",
     }
 )
 

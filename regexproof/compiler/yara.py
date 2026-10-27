@@ -5,6 +5,38 @@ from __future__ import annotations
 from regexproof.compiler.base import CompileResult, composite_meta
 
 
+def _has_named_backreference(pattern: str) -> bool:
+    """Find Python-style named backrefs outside escapes and character classes."""
+    i = 0
+    in_class = False
+    class_first = False
+    while i < len(pattern):
+        ch = pattern[i]
+        if ch == "\\":
+            i += 2
+            if in_class:
+                class_first = False
+            continue
+        if in_class:
+            if ch == "]" and not class_first:
+                in_class = False
+            elif class_first and ch == "^":
+                pass
+            else:
+                class_first = False
+            i += 1
+            continue
+        if ch == "[":
+            in_class = True
+            class_first = True
+            i += 1
+            continue
+        if pattern.startswith("(?P=", i):
+            return True
+        i += 1
+    return False
+
+
 def compile_yara(
     pattern: str,
     *,
@@ -24,6 +56,17 @@ def compile_yara(
         return CompileResult(
             mirror=None,
             unencodable_reason="fullword-boundary",
+            dialect="yara",
+            call_kind=call_kind,
+            flags=flags,
+            pattern=pattern,
+            declared_domain=domain,
+        )
+
+    if _has_named_backreference(pattern):
+        return CompileResult(
+            mirror=None,
+            unencodable_reason="backref",
             dialect="yara",
             call_kind=call_kind,
             flags=flags,

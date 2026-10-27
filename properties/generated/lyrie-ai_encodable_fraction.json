@@ -1,0 +1,44 @@
+{
+  "budget": {
+    "max_disk_mb": 500,
+    "max_mem_mb": 2048,
+    "max_patterns": 5000,
+    "max_wall_s": 900,
+    "redos_wall_s": 180
+  },
+  "budget_breaches": null,
+  "commit": "96048f6727c01760850e5ef5e1526c8cb9061db8",
+  "compiler_fingerprint": "35ea1f238a9e",
+  "complete_run": true,
+  "corpus_pin": "96048f6727c01760850e5ef5e1526c8cb9061db8",
+  "decision": "go",
+  "decision_rule": "go iff encodable/sample_size >= 0.3",
+  "dialect": "ecma",
+  "encodable": 913,
+  "engine_versions": {
+    "python": "3.13.18",
+    "z3": "5.0.0"
+  },
+  "extractor_schema_version": "2",
+  "fraction": 0.5746,
+  "go_no_go_threshold": 0.3,
+  "id_formula": "v2-domain-optional-ascii-default",
+  "inventory_path": "properties/generated/lyrie-ai-inventory.ndjson",
+  "path": "batch/corpora/lyrie-ai/rules",
+  "pilot": "lyrie-ai",
+  "reasons": {
+    "composite-pattern": 27,
+    "internal-anchor": 1,
+    "m-flag": 5,
+    "negated-shorthand": 4,
+    "ok": 913,
+    "per-alternative-anchor": 40,
+    "stateful": 594,
+    "word-boundary": 5
+  },
+  "sample_size": 1589,
+  "schema_version": "1",
+  "scope": "full_corpus",
+  "unclassified_parse_errors": 0,
+  "wall_s": 28.901
+}

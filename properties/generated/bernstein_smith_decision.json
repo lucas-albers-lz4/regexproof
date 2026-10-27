@@ -1,0 +1,17 @@
+{
+  "additional_surface_outside_probe_scope": {
+    "ecma": 455,
+    "posix-shell": 27
+  },
+  "candidate_url": "https://github.com/sipyourdrink-ltd/bernstein",
+  "corpus": "bernstein",
+  "corpus_pin": "be3b073da9bb44e4c4bb35faed634380d5a9936f",
+  "reason": "549/1002 (54.79%) encode in the pinned Python production-source slice; complete run and zero unclassified parse errors. The ECMA and shell probe surfaces are outside this measured slice.",
+  "regex_sites": 1002,
+  "schema_version": "1",
+  "sites_by_bucket": {
+    "py_re": 1002
+  },
+  "smith_decision": "go",
+  "supersedes": "go"
+}
