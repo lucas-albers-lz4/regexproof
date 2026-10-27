@@ -1,0 +1,40 @@
+{
+  "budget": {
+    "max_disk_mb": 500,
+    "max_mem_mb": 2048,
+    "max_patterns": 5000,
+    "max_wall_s": 600,
+    "redos_wall_s": 120
+  },
+  "budget_breaches": null,
+  "commit": "efd3cdaecae091357087fea6ecffded2eb6dba85",
+  "compiler_fingerprint": "35ea1f238a9e",
+  "complete_run": true,
+  "corpus_pin": "efd3cdaecae091357087fea6ecffded2eb6dba85",
+  "decision": "go",
+  "decision_rule": "go iff encodable/sample_size >= 0.3",
+  "dialect": "yara",
+  "encodable": 1410,
+  "engine_versions": {
+    "python": "3.13.18",
+    "z3": "5.0.0"
+  },
+  "extractor_schema_version": "2",
+  "fraction": 0.3209,
+  "go_no_go_threshold": 0.3,
+  "id_formula": "v2-domain-optional-ascii-default",
+  "inventory_path": "properties/generated/lw-yara-inventory.ndjson",
+  "path": "batch/corpora/lw-yara/rules",
+  "pilot": "lw-yara",
+  "reasons": {
+    "backref": 1,
+    "fullword-boundary": 2981,
+    "ok": 1410,
+    "pattern-too-long": 2
+  },
+  "sample_size": 4394,
+  "schema_version": "1",
+  "scope": "full_corpus",
+  "unclassified_parse_errors": 0,
+  "wall_s": 16.642
+}

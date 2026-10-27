@@ -86,6 +86,32 @@ class TestYaraExtractor:
         _validate(recs)
 
 
+class TestYaraCompilerRejectMarkers:
+    def test_named_backreference_is_classified_as_backref(self):
+        from regexproof.compiler import compile_pattern
+
+        pattern = r"(?P<var>[a-zA-Z_][a-zA-Z0-9_]*)\s*=\s*(?P=var)"
+        result = compile_pattern(pattern, "", "yara", "search")
+        assert not result.encodable
+        assert result.unencodable_reason == "backref"
+
+    @pytest.mark.parametrize(
+        "pattern, expected",
+        [
+            (r"(?P=name)", True),
+            (r"\(\?P=name\)", False),
+            (r"[(?P=name)]", False),
+            (r"[](?P=name)]", False),
+        ],
+    )
+    def test_named_backreference_marker_ignores_literals_and_classes(
+        self, pattern, expected
+    ):
+        from regexproof.compiler.yara import _has_named_backreference
+
+        assert _has_named_backreference(pattern) is expected
+
+
 class TestRegexIdDomain:
     def test_default_domain_unchanged(self):
         """Default domain (ascii) should produce same ID as v1 (no domain)."""

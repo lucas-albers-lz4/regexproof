@@ -1,0 +1,18 @@
+{
+  "additional_surface_outside_probe_scope": {
+    "posix-shell": 2,
+    "py_re": 123,
+    "yara": 198
+  },
+  "candidate_url": "https://github.com/OTT-Cybersecurity-LLC/lyrie-ai",
+  "corpus": "lyrie-ai",
+  "corpus_pin": "96048f6727c01760850e5ef5e1526c8cb9061db8",
+  "reason": "913/1589 (57.46%) encode in the pinned ECMA production-source slice; complete run and zero unclassified parse errors. Python, shell, and YARA probe surfaces are outside this measured slice.",
+  "regex_sites": 1589,
+  "schema_version": "1",
+  "sites_by_bucket": {
+    "ecma": 1589
+  },
+  "smith_decision": "go",
+  "supersedes": "go"
+}

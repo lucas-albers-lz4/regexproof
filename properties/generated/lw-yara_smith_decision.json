@@ -1,0 +1,14 @@
+{
+  "additional_surface_outside_probe_scope": {},
+  "candidate_url": "https://github.com/Hestat/lw-yara",
+  "corpus": "lw-yara",
+  "corpus_pin": "efd3cdaecae091357087fea6ecffded2eb6dba85",
+  "reason": "1410/4394 (32.09%) encode; 2981 require fullword-boundary, two exceed the pattern length cap, and one named-backreference site is classified as backref. Complete run; zero unclassified parse errors. Compiler coverage only.",
+  "regex_sites": 4394,
+  "schema_version": "1",
+  "sites_by_bucket": {
+    "yara": 4394
+  },
+  "smith_decision": "go",
+  "supersedes": "go"
+}

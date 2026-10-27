@@ -1,0 +1,14 @@
+{
+  "additional_surface_outside_probe_scope": {},
+  "candidate_url": "https://github.com/The-DFIR-Report/Yara-Rules",
+  "corpus": "Yara-Rules",
+  "corpus_pin": "9034e24193b38aad1fbc0912ace3683eb5728a92",
+  "reason": "681/3565 (19.10%) encode in the current YARA mirror subset, below the 0.30 admission threshold; 2884 sites require fullword-boundary support. Compiler coverage only.",
+  "regex_sites": 3565,
+  "schema_version": "1",
+  "sites_by_bucket": {
+    "yara": 3565
+  },
+  "smith_decision": "no-go",
+  "supersedes": "go"
+}
