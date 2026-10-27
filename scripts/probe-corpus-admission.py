@@ -19,6 +19,7 @@ if str(ROOT) not in sys.path:
 
 from regexproof.admission.clone import (  # noqa: E402  # ROOT bootstrap above
     CloneError,
+    _DEFAULT_CLONE_TIMEOUT_SEC,
     cleanup_clone,
     enforce_disk_budget,
     partial_clone,
@@ -35,6 +36,16 @@ def _legacy_pointer() -> None:
             "(scripts/probe-corpus-admission.py remains a thin wrapper)",
             file=sys.stderr,
         )
+
+
+def _positive_seconds(value: str) -> int:
+    try:
+        seconds = int(value)
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError("must be a positive integer number of seconds") from exc
+    if seconds <= 0:
+        raise argparse.ArgumentTypeError("must be a positive integer number of seconds")
+    return seconds
 
 
 def _is_url(s: str) -> bool:
@@ -92,6 +103,12 @@ def main(argv: list[str] | None = None) -> int:
         default=None,
         help="Injectable temp root for clones (tests)",
     )
+    ap.add_argument(
+        "--clone-timeout-sec",
+        type=_positive_seconds,
+        default=_DEFAULT_CLONE_TIMEOUT_SEC,
+        help="Per git-command timeout for URL probes (default: 300s); not a walk deadline",
+    )
     ap.add_argument("--repo-name", default=None, help="Override corpus/repo name")
     ap.add_argument("--url", default="", help="candidate_url to record in the draft")
     ap.add_argument(
@@ -119,7 +136,8 @@ def main(argv: list[str] | None = None) -> int:
             base = args.clone_root or Path(tempfile.mkdtemp(prefix="regexproof-probe-"))
             clone_dir = base / "repo"
             result = partial_clone(
-                target, dest=clone_dir, pin=args.pin, max_disk_mb=args.max_disk_mb
+                target, dest=clone_dir, pin=args.pin, max_disk_mb=args.max_disk_mb,
+                timeout_sec=args.clone_timeout_sec,
             )
             root = clone_dir
             cand_url = args.url or target
