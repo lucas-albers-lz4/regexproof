@@ -1,0 +1,28 @@
+{
+  "argv": [
+    "/tmp/regexproof-571-noodler-v1.8.0/z3-noodler",
+    "/tmp/regexproof-571-feasibility/sweep/issue-571/2026-10-18/v1.8.0/inline-i-flag.smt2"
+  ],
+  "timeout_seconds": 8.0,
+  "elapsed_ms": 16.853,
+  "returncode": 0,
+  "timed_out": false,
+  "classification": "unknown",
+  "stdout": "unknown\n",
+  "stderr": "",
+  "case": "inline-i-flag",
+  "runner_sha256": "028a1b7e5a80be54f012b5f51e4c21ec41b83f7412896d6a4f2f776925beb4ac",
+  "noodler_sha256": "4a39a2b9e9066a8bfbe8b5363a85de82e43e27688b7dff456f4cd577bb47bab6",
+  "noodler_trusted_binary_mapping": {
+    "label": "Noodler 1.8.0 verified release asset",
+    "version": "Z3 version 5.1.0 - 64 bit - build hashcode 06e5c132a1a59fb61eaf4e5f7094860b5aec7c21 - mata hashcode d28368a6957a1606162aea3fbe77345f6e1e13d5"
+  },
+  "smt_path": "/tmp/regexproof-571-feasibility/sweep/issue-571/2026-10-18/v1.8.0/inline-i-flag.smt2",
+  "smt_sha256": "9d7ea690427aebad5cb9f712f5b7a1b00779a44d42168ef8e1b53b81a2ea41a8",
+  "fixed_input": "aCcEpT",
+  "query_patterns": [
+    "(?i)ACCEPT"
+  ],
+  "frozen_action_source": "(^|[^A-Za-z0-9_])(ACCEPT|ALLOW|PASS|DROP|REJECT|DENY|BLOCK)([^A-Za-z0-9_]|$)",
+  "interpretation_limit": "API/parser or solver diagnostic only; no theorem or product-property inference"
+}

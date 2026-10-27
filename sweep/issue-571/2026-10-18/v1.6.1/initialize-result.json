@@ -1,0 +1,35 @@
+{
+  "node_run": {
+    "argv": [
+      "node",
+      "-e",
+      "const fs=require('fs'),crypto=require('crypto');\nconst p=process.argv[1],m=require(p),b=fs.readFileSync(p),r=m.ACTION_RE,n=m.NETFILTER_KV_GLUE;\nif(!(r instanceof RegExp)||!(n instanceof RegExp))throw new Error('regex export missing');\nconst values=['ACCEPT','aCcEpT','accept','x aCcEpT!'];\nconsole.log(JSON.stringify({node:process.version,path:p,file_sha256:crypto.createHash('sha256').update(b).digest('hex'),pattern:r.source,flags:r.flags,observations:Object.fromEntries(values.map(s=>[s,r.test(s)])),netfilterPattern:n.source,netfilterFlags:n.flags}));",
+      "/tmp/fwlive-1322-e-review-fixes/core/fwlive-log.js"
+    ],
+    "timeout_seconds": 8.0,
+    "elapsed_ms": 30.274,
+    "returncode": 0,
+    "timed_out": false,
+    "classification": "zero_exit_without_verdict",
+    "stdout": "{\"node\":\"v26.11.1\",\"path\":\"/tmp/fwlive-1322-e-review-fixes/core/fwlive-log.js\",\"file_sha256\":\"52983d7c0a629de4ee23a13873e5ac54cf7d08dfaf03383614fceb59a4d1da12\",\"pattern\":\"(^|[^A-Za-z0-9_])(ACCEPT|ALLOW|PASS|DROP|REJECT|DENY|BLOCK)([^A-Za-z0-9_]|$)\",\"flags\":\"i\",\"observations\":{\"ACCEPT\":true,\"aCcEpT\":true,\"accept\":true,\"x aCcEpT!\":true},\"netfilterPattern\":\"(IN|OUT|SRC|DST|PROTO|SPT|DPT|LEN|MAC|TYPE|CODE|TTL|TOS|PREC|DF)=\",\"netfilterFlags\":\"\"}\n",
+    "stderr": ""
+  },
+  "version_run": {
+    "argv": [
+      "/tmp/noodler/z3-noodler-ubuntu-24.04-x86_64-shared",
+      "-version"
+    ],
+    "timeout_seconds": 8.0,
+    "elapsed_ms": 2.553,
+    "returncode": 0,
+    "timed_out": false,
+    "classification": "zero_exit_without_verdict",
+    "stdout": "Z3 version 4.16.0 - 64 bit - build hashcode dcce9d2d129e1ecc101946ef257aa7ed246dfe61 - mata hashcode 8db4279ce9910b2c12589fabffebf8265a75b558\n",
+    "stderr": ""
+  },
+  "finite_node_diagnostic_run": {
+    "returncode": 0,
+    "elapsed_ms": 33.993,
+    "classification": "zero_exit_without_verdict"
+  }
+}

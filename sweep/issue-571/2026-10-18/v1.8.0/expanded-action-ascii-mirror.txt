@@ -1,0 +1,1 @@
+(^|[^A-Za-z0-9_])(([Aa][Cc][Cc][Ee][Pp][Tt]|[Aa][Ll][Ll][Oo][Ww]|[Pp][Aa][Ss][Ss]|[Dd][Rr][Oo][Pp]|[Rr][Ee][Jj][Ee][Cc][Tt]|[Dd][Ee][Nn][Yy]|[Bb][Ll][Oo][Cc][Kk]))([^A-Za-z0-9_]|$)

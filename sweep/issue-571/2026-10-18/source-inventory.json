@@ -1,0 +1,247 @@
+{
+  "product": false,
+  "formal_proof": false,
+  "purpose": "finite native observations and source inventory; no solver witnesses",
+  "source_sha256": "52983d7c0a629de4ee23a13873e5ac54cf7d08dfaf03383614fceb59a4d1da12",
+  "node": "v26.11.1",
+  "patterns": {
+    "ACTION_RE": {
+      "source": "(^|[^A-Za-z0-9_])(ACCEPT|ALLOW|PASS|DROP|REJECT|DENY|BLOCK)([^A-Za-z0-9_]|$)",
+      "flags": "i"
+    },
+    "DENY_ACTION": {
+      "source": "(^|[^A-Za-z0-9_])(DROP|REJECT|DENY|BLOCK)([^A-Za-z0-9_]|$)",
+      "flags": "i"
+    },
+    "NON_FIREWALL_PREFIX": {
+      "source": "^(dnsmasq|procd|ubusd|netifd|odhcpd|logd|dropbear|uhttpd|hostapd|wpad)([^A-Za-z0-9_-]|$)",
+      "flags": "i"
+    },
+    "FIREWALL_HINT": {
+      "source": "(^|[^A-Za-z0-9_])(fw4|nft|iptables|kernel|firewall)([^A-Za-z0-9_]|$)",
+      "flags": "i"
+    },
+    "DENY_ACTION_UNDERSCORE": {
+      "source": "(?:^|[^A-Za-z0-9])(?:DROP|REJECT|DENY|BLOCK)(?:[^A-Za-z0-9]|$)",
+      "flags": "i"
+    }
+  },
+  "tcp": {
+    "exported": false,
+    "sourceLiteral": "const TCP_FLAG_TAIL = /(?:^|\\s)((?:SYN|ACK|FIN|RST|PSH|URG|ECE|CWR)(?:\\s+(?:SYN|ACK|FIN|RST|PSH|URG|ECE|CWR))*)(?:\\s+OPT\\s+\\([^)]*\\))?\\s*$/i;",
+    "consumer": "parseFlags after stripKvSpans, except KV override"
+  },
+  "actionObservations": [
+    {
+      "input": "ACCEPT",
+      "utf16": [
+        65,
+        67,
+        67,
+        69,
+        80,
+        84
+      ],
+      "match": {
+        "index": 0,
+        "captures": [
+          "ACCEPT",
+          "",
+          "ACCEPT",
+          ""
+        ]
+      }
+    },
+    {
+      "input": "aCcEpT",
+      "utf16": [
+        97,
+        67,
+        99,
+        69,
+        112,
+        84
+      ],
+      "match": {
+        "index": 0,
+        "captures": [
+          "aCcEpT",
+          "",
+          "aCcEpT",
+          ""
+        ]
+      }
+    },
+    {
+      "input": "DROP ACCEPT",
+      "utf16": [
+        68,
+        82,
+        79,
+        80,
+        32,
+        65,
+        67,
+        67,
+        69,
+        80,
+        84
+      ],
+      "match": {
+        "index": 0,
+        "captures": [
+          "DROP ",
+          "",
+          "DROP",
+          " "
+        ]
+      }
+    },
+    {
+      "input": "\u0000aCcEpT\u0000",
+      "utf16": [
+        0,
+        97,
+        67,
+        99,
+        69,
+        112,
+        84,
+        0
+      ],
+      "match": {
+        "index": 0,
+        "captures": [
+          "\u0000aCcEpT\u0000",
+          "\u0000",
+          "aCcEpT",
+          "\u0000"
+        ]
+      }
+    },
+    {
+      "input": "\ud800aCcEpT\udfff",
+      "utf16": [
+        55296,
+        97,
+        67,
+        99,
+        69,
+        112,
+        84,
+        57343
+      ],
+      "match": {
+        "index": 0,
+        "captures": [
+          "\ud800aCcEpT\udfff",
+          "\ud800",
+          "aCcEpT",
+          "\udfff"
+        ]
+      }
+    },
+    {
+      "input": "ſaCcEpT",
+      "utf16": [
+        383,
+        97,
+        67,
+        99,
+        69,
+        112,
+        84
+      ],
+      "match": {
+        "index": 0,
+        "captures": [
+          "ſaCcEpT",
+          "ſ",
+          "aCcEpT",
+          ""
+        ]
+      }
+    },
+    {
+      "input": "aCcEpT_suffix",
+      "utf16": [
+        97,
+        67,
+        99,
+        69,
+        112,
+        84,
+        95,
+        115,
+        117,
+        102,
+        102,
+        105,
+        120
+      ],
+      "match": null
+    },
+    {
+      "input": "x aCcEpT!",
+      "utf16": [
+        120,
+        32,
+        97,
+        67,
+        99,
+        69,
+        112,
+        84,
+        33
+      ],
+      "match": {
+        "index": 1,
+        "captures": [
+          " aCcEpT!",
+          " ",
+          "aCcEpT",
+          "!"
+        ]
+      }
+    }
+  ],
+  "flagConsumerObservations": [
+    {
+      "input": "sYn eCe cWr",
+      "result": "SYN,ECE,CWR"
+    },
+    {
+      "input": "sYn eCe cWr",
+      "result": "SYN,ECE,CWR"
+    },
+    {
+      "input": "sYn window=1",
+      "result": ""
+    },
+    {
+      "input": "ſsYn",
+      "result": ""
+    }
+  ],
+  "capabilityControls": {
+    "propertyEscapeNonU": {
+      "source": "^\\p{L}$",
+      "flags": "",
+      "letter": false,
+      "literal": true
+    },
+    "propertyEscapeU": {
+      "source": "^\\p{L}$",
+      "flags": "u",
+      "letter": true,
+      "literal": false
+    },
+    "nonUDotAstral": {
+      "source": "^.$",
+      "flags": "",
+      "input": "😀",
+      "utf16Length": 2,
+      "accepted": false
+    }
+  }
+}

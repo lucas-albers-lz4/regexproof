@@ -1,0 +1,257 @@
+{
+  "evidence_kind": "bounded research diagnostics; no product proof or solver-generated application witness",
+  "product": false,
+  "formal_proof": false,
+  "versions": {
+    "v1.6.1": {
+      "binary_sha256": "22b19f123d3e7f54e10fdc46af3f91de23d89148c9a259eb072bc9e12f083464",
+      "source_sha256": "52983d7c0a629de4ee23a13873e5ac54cf7d08dfaf03383614fceb59a4d1da12",
+      "runner_sha256": "028a1b7e5a80be54f012b5f51e4c21ec41b83f7412896d6a4f2f776925beb4ac",
+      "cases": {
+        "ascii-mirror-mixed": {
+          "classification": "sat",
+          "returncode": 0,
+          "timed_out": false,
+          "smt_sha256": "172ca538bcb1cf1cd29e5d965a556a62ed737a0cbf9c818f05757fcc06b2007c",
+          "query_patterns": [
+            "(^|[^A-Za-z0-9_])(([Aa][Cc][Cc][Ee][Pp][Tt]|[Aa][Ll][Ll][Oo][Ww]|[Pp][Aa][Ss][Ss]|[Dd][Rr][Oo][Pp]|[Rr][Ee][Jj][Ee][Cc][Tt]|[Dd][Ee][Nn][Yy]|[Bb][Ll][Oo][Cc][Kk]))([^A-Za-z0-9_]|$)"
+          ]
+        },
+        "flags-second-argument": {
+          "classification": "nonzero_backend_or_parser_error",
+          "returncode": 1,
+          "timed_out": false,
+          "smt_sha256": "55cb28f6794a856255827af205b19f13bcab1cd43495026fe977cf13c7c5adf2",
+          "query_patterns": [
+            "(^|[^A-Za-z0-9_])(ACCEPT|ALLOW|PASS|DROP|REJECT|DENY|BLOCK)([^A-Za-z0-9_]|$)"
+          ]
+        },
+        "historical-negation-crash-control": {
+          "classification": "crash_signal_6",
+          "returncode": -6,
+          "timed_out": false,
+          "smt_sha256": "4978cb3c65a8b858b2bdc2500181d2f524dd86f95d2a5ebb05e8e490d9b9f7a9",
+          "query_patterns": [
+            ".*([^\\s])(?=(IN|OUT|SRC|DST|PROTO|SPT|DPT|LEN|MAC|TYPE|CODE|TTL|TOS|PREC|DF)=).*"
+          ]
+        },
+        "inline-i-flag": {
+          "classification": "unknown",
+          "returncode": 0,
+          "timed_out": false,
+          "smt_sha256": "9d7ea690427aebad5cb9f712f5b7a1b00779a44d42168ef8e1b53b81a2ea41a8",
+          "query_patterns": [
+            "(?i)ACCEPT"
+          ]
+        },
+        "m2e-diff": {
+          "classification": "timeout_not_proven",
+          "returncode": -9,
+          "timed_out": true,
+          "smt_sha256": "d649b65d6e09e9c1748ab27402c77048ad063213653f4e6cf0fc6be136bc856c",
+          "query_patterns": [
+            "(^|[^A-Za-z0-9_])(([Aa][Cc][Cc][Ee][Pp][Tt]|[Aa][Ll][Ll][Oo][Ww]|[Pp][Aa][Ss][Ss]|[Dd][Rr][Oo][Pp]|[Rr][Ee][Jj][Ee][Cc][Tt]|[Dd][Ee][Nn][Yy]|[Bb][Ll][Oo][Cc][Kk]))([^A-Za-z0-9_]|$)",
+            "(^|[^A-Za-z0-9_])(ACCEPT|ALLOW|PASS|DROP|REJECT|DENY|BLOCK)([^A-Za-z0-9_]|$)"
+          ]
+        },
+        "negative-membership-unconstrained": {
+          "classification": "timeout_not_proven",
+          "returncode": -9,
+          "timed_out": true,
+          "smt_sha256": "6e66e64319c4fdc2d603b4c71fb2a31d1e5630b250e985bdc078a9c9d5fd99d1",
+          "query_patterns": [
+            "(^|[^A-Za-z0-9_])(ACCEPT|ALLOW|PASS|DROP|REJECT|DENY|BLOCK)([^A-Za-z0-9_]|$)"
+          ]
+        },
+        "negative-membership": {
+          "classification": "unsat",
+          "returncode": 0,
+          "timed_out": false,
+          "smt_sha256": "66a1cd807dfcfad7b80a6385974adef630a3b94ccae7e15e3ae080ce17aca8b0",
+          "query_patterns": [
+            "(^|[^A-Za-z0-9_])(ACCEPT|ALLOW|PASS|DROP|REJECT|DENY|BLOCK)([^A-Za-z0-9_]|$)"
+          ]
+        },
+        "non-u-dot-astral": {
+          "classification": "unsat",
+          "returncode": 0,
+          "timed_out": false,
+          "smt_sha256": "015affaffa11c838827c4b57d0634ca8b4d967715091ad2975b8777e06fbf319",
+          "query_patterns": [
+            "^.$"
+          ]
+        },
+        "property-escape-letter": {
+          "classification": "unsat",
+          "returncode": 0,
+          "timed_out": false,
+          "smt_sha256": "82ad817225e209a64903639c7997dd3c32085683e8b114b51426bbe91c2fc612",
+          "query_patterns": [
+            "^\\p{L}$"
+          ]
+        },
+        "property-escape-non-u-literal": {
+          "classification": "sat",
+          "returncode": 0,
+          "timed_out": false,
+          "smt_sha256": "10fb458d350e90dab596a6159631cd72d1c0484b8d06c3a25ddeef416c1575a5",
+          "query_patterns": [
+            "^\\p{L}$"
+          ]
+        },
+        "property-escape-u-argument": {
+          "classification": "nonzero_backend_or_parser_error",
+          "returncode": 1,
+          "timed_out": false,
+          "smt_sha256": "e1937f096ad252bb3c1b2595d174b8aba5cb6d84a3e8b0735f12cef107d39ce3",
+          "query_patterns": [
+            "^\\p{L}$"
+          ]
+        },
+        "source-mixed": {
+          "classification": "unsat",
+          "returncode": 0,
+          "timed_out": false,
+          "smt_sha256": "bfaaa356fcc0265baf5a8a0e57a8cfa4deab7e1d8b4a6a98ec0c71467b5183b1",
+          "query_patterns": [
+            "(^|[^A-Za-z0-9_])(ACCEPT|ALLOW|PASS|DROP|REJECT|DENY|BLOCK)([^A-Za-z0-9_]|$)"
+          ]
+        },
+        "source-upper": {
+          "classification": "sat",
+          "returncode": 0,
+          "timed_out": false,
+          "smt_sha256": "ef125a6ab81fd33624a973a4c6e7a904d132480d8a3a3b91c2b4df04ab96c1f6",
+          "query_patterns": [
+            "(^|[^A-Za-z0-9_])(ACCEPT|ALLOW|PASS|DROP|REJECT|DENY|BLOCK)([^A-Za-z0-9_]|$)"
+          ]
+        }
+      }
+    },
+    "v1.8.0": {
+      "binary_sha256": "4a39a2b9e9066a8bfbe8b5363a85de82e43e27688b7dff456f4cd577bb47bab6",
+      "source_sha256": "52983d7c0a629de4ee23a13873e5ac54cf7d08dfaf03383614fceb59a4d1da12",
+      "runner_sha256": "028a1b7e5a80be54f012b5f51e4c21ec41b83f7412896d6a4f2f776925beb4ac",
+      "cases": {
+        "ascii-mirror-mixed": {
+          "classification": "crash_signal_6",
+          "returncode": -6,
+          "timed_out": false,
+          "smt_sha256": "172ca538bcb1cf1cd29e5d965a556a62ed737a0cbf9c818f05757fcc06b2007c",
+          "query_patterns": [
+            "(^|[^A-Za-z0-9_])(([Aa][Cc][Cc][Ee][Pp][Tt]|[Aa][Ll][Ll][Oo][Ww]|[Pp][Aa][Ss][Ss]|[Dd][Rr][Oo][Pp]|[Rr][Ee][Jj][Ee][Cc][Tt]|[Dd][Ee][Nn][Yy]|[Bb][Ll][Oo][Cc][Kk]))([^A-Za-z0-9_]|$)"
+          ]
+        },
+        "flags-second-argument": {
+          "classification": "nonzero_backend_or_parser_error",
+          "returncode": 1,
+          "timed_out": false,
+          "smt_sha256": "55cb28f6794a856255827af205b19f13bcab1cd43495026fe977cf13c7c5adf2",
+          "query_patterns": [
+            "(^|[^A-Za-z0-9_])(ACCEPT|ALLOW|PASS|DROP|REJECT|DENY|BLOCK)([^A-Za-z0-9_]|$)"
+          ]
+        },
+        "historical-negation-crash-control": {
+          "classification": "crash_signal_6",
+          "returncode": -6,
+          "timed_out": false,
+          "smt_sha256": "4978cb3c65a8b858b2bdc2500181d2f524dd86f95d2a5ebb05e8e490d9b9f7a9",
+          "query_patterns": [
+            ".*([^\\s])(?=(IN|OUT|SRC|DST|PROTO|SPT|DPT|LEN|MAC|TYPE|CODE|TTL|TOS|PREC|DF)=).*"
+          ]
+        },
+        "inline-i-flag": {
+          "classification": "unknown",
+          "returncode": 0,
+          "timed_out": false,
+          "smt_sha256": "9d7ea690427aebad5cb9f712f5b7a1b00779a44d42168ef8e1b53b81a2ea41a8",
+          "query_patterns": [
+            "(?i)ACCEPT"
+          ]
+        },
+        "m2e-diff": {
+          "classification": "sat",
+          "returncode": 0,
+          "timed_out": false,
+          "smt_sha256": "d649b65d6e09e9c1748ab27402c77048ad063213653f4e6cf0fc6be136bc856c",
+          "query_patterns": [
+            "(^|[^A-Za-z0-9_])(([Aa][Cc][Cc][Ee][Pp][Tt]|[Aa][Ll][Ll][Oo][Ww]|[Pp][Aa][Ss][Ss]|[Dd][Rr][Oo][Pp]|[Rr][Ee][Jj][Ee][Cc][Tt]|[Dd][Ee][Nn][Yy]|[Bb][Ll][Oo][Cc][Kk]))([^A-Za-z0-9_]|$)",
+            "(^|[^A-Za-z0-9_])(ACCEPT|ALLOW|PASS|DROP|REJECT|DENY|BLOCK)([^A-Za-z0-9_]|$)"
+          ]
+        },
+        "negative-membership-unconstrained": {
+          "classification": "sat",
+          "returncode": 0,
+          "timed_out": false,
+          "smt_sha256": "6e66e64319c4fdc2d603b4c71fb2a31d1e5630b250e985bdc078a9c9d5fd99d1",
+          "query_patterns": [
+            "(^|[^A-Za-z0-9_])(ACCEPT|ALLOW|PASS|DROP|REJECT|DENY|BLOCK)([^A-Za-z0-9_]|$)"
+          ]
+        },
+        "negative-membership": {
+          "classification": "unsat",
+          "returncode": 0,
+          "timed_out": false,
+          "smt_sha256": "66a1cd807dfcfad7b80a6385974adef630a3b94ccae7e15e3ae080ce17aca8b0",
+          "query_patterns": [
+            "(^|[^A-Za-z0-9_])(ACCEPT|ALLOW|PASS|DROP|REJECT|DENY|BLOCK)([^A-Za-z0-9_]|$)"
+          ]
+        },
+        "non-u-dot-astral": {
+          "classification": "unsat",
+          "returncode": 0,
+          "timed_out": false,
+          "smt_sha256": "015affaffa11c838827c4b57d0634ca8b4d967715091ad2975b8777e06fbf319",
+          "query_patterns": [
+            "^.$"
+          ]
+        },
+        "property-escape-letter": {
+          "classification": "unsat",
+          "returncode": 0,
+          "timed_out": false,
+          "smt_sha256": "82ad817225e209a64903639c7997dd3c32085683e8b114b51426bbe91c2fc612",
+          "query_patterns": [
+            "^\\p{L}$"
+          ]
+        },
+        "property-escape-non-u-literal": {
+          "classification": "sat",
+          "returncode": 0,
+          "timed_out": false,
+          "smt_sha256": "10fb458d350e90dab596a6159631cd72d1c0484b8d06c3a25ddeef416c1575a5",
+          "query_patterns": [
+            "^\\p{L}$"
+          ]
+        },
+        "property-escape-u-argument": {
+          "classification": "nonzero_backend_or_parser_error",
+          "returncode": 1,
+          "timed_out": false,
+          "smt_sha256": "e1937f096ad252bb3c1b2595d174b8aba5cb6d84a3e8b0735f12cef107d39ce3",
+          "query_patterns": [
+            "^\\p{L}$"
+          ]
+        },
+        "source-mixed": {
+          "classification": "unsat",
+          "returncode": 0,
+          "timed_out": false,
+          "smt_sha256": "bfaaa356fcc0265baf5a8a0e57a8cfa4deab7e1d8b4a6a98ec0c71467b5183b1",
+          "query_patterns": [
+            "(^|[^A-Za-z0-9_])(ACCEPT|ALLOW|PASS|DROP|REJECT|DENY|BLOCK)([^A-Za-z0-9_]|$)"
+          ]
+        },
+        "source-upper": {
+          "classification": "crash_signal_6",
+          "returncode": -6,
+          "timed_out": false,
+          "smt_sha256": "ef125a6ab81fd33624a973a4c6e7a904d132480d8a3a3b91c2b4df04ab96c1f6",
+          "query_patterns": [
+            "(^|[^A-Za-z0-9_])(ACCEPT|ALLOW|PASS|DROP|REJECT|DENY|BLOCK)([^A-Za-z0-9_]|$)"
+          ]
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,26 @@
+The Rocq Prover, version 9.1.1
+compiled with OCaml 4.14.2
+3.21.1
+# Packages matching: installed
+# Name               # Version
+base-bigarray        base
+base-threads         base
+base-unix            base
+conf-gmp             5
+conf-linux-libc-dev  0
+conf-pkg-config      5
+coqide-server        9.1.1
+dune                 3.21.1
+num                  1.5-1
+ocaml                4.14.2
+ocaml-config         2
+ocaml-option-flambda 1
+ocaml-variants       4.14.2+options
+ocamlfind            1.9.6
+opam-depext          1.2.3
+rocq-bignums         9.0.0+rocq9.1
+rocq-core            9.1.1
+rocq-runtime         9.1.1
+rocq-stdlib          9.0.0
+zarith               1.14
+4.14.2

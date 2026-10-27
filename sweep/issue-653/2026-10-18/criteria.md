@@ -1,0 +1,14 @@
+# Precommitted feasibility criteria
+
+Start: 2026-10-18 17:24 UTC. Initial active research limit: two hours; conservative wall-clock stop 19:24 UTC. Review/CI waiting is outside research time. Regexproof baseline ed9ede48afd1ca8ee869b31d7ab6422651e86b8a. Foundation candidate: Warblre 87af3ccaea96015d4104c0b2d9de758fa8d9ee87 (current upstream HEAD confirmed at start).
+
+Evaluate issue #653's existing criteria: pinned build and upstream example; refreshed source/spec/flags/call-site inventory; checked source-to-AST bridge; concrete non-/u UTF-16 and canonicalization parameters; kernel-checked application matching fact including mixed case and hyphen boundary; reviewed go/partial/no-go disposition. The first theorem boundary is input to NON_FIREWALL_PREFIX, not raw-log preprocessing or the full classifier. No silent ASCII restriction or mirror substitution. Errors, unbuilt dependencies, axioms and unproved correspondence remain explicit gaps. No harness registration, production pins, U9 or fwlive behavior changes.
+
+Run finite native probes and intended mutation controls as diagnostic evidence, separately from kernel proofs. Build and print assumptions for the upstream proof and any application development. A manually written AST or digest alone is not an as-written theorem. Retain exact commands, statuses, versions, hashes and failures; do not commit downloaded binaries or build trees.
+
+Initial measurements/report reached PARTIAL at 17:36 UTC, within the two-hour
+ceiling. This is an early feasibility checkpoint, not a timeout and not evidence
+that the remaining proof bridges are impossible within any fixed duration.
+Toolchain execution and limited facts succeeded; the source/parser and concrete
+semantic correspondence still require new proof development. Subsequent PR
+review/CI completion is follow-through, not additional proof scope.

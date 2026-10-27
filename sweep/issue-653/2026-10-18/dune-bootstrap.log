@@ -1,0 +1,21 @@
+ocamllex -q -o boot/pps.ml boot/pps.mll
+ocaml unix.cma /tmp/.duneboot549da9main -j 4
+cd _boot && /home/rocq/.opam/4.14.2+flambda/bin/ocamlopt.opt -c -g -I +threads lev_stubs.c
+src/lev/src/lev_stubs.c:190:13: warning: "callback" is deprecated: use "caml_callback" instead
+src/lev/src/lev_stubs.c:195:13: warning: "callback" is deprecated: use "caml_callback" instead
+src/lev/src/lev_stubs.c: In function 'lev_io_cb':
+src/lev/src/lev_stubs.c:333:13: warning: "callback" is deprecated: use "caml_callback" instead
+src/lev/src/lev_stubs.c: In function 'lev_io_create':
+src/lev/src/lev_stubs.c:383:13: warning: "callback" is deprecated: use "caml_callback" instead
+src/lev/src/lev_stubs.c:386:13: warning: "callback" is deprecated: use "caml_callback" instead
+src/lev/src/lev_stubs.c: In function 'lev_io_destroy':
+src/lev/src/lev_stubs.c:403:13: warning: "callback" is deprecated: use "caml_callback" instead
+src/lev/src/lev_stubs.c: In function 'lev_stat_cb':
+src/lev/src/lev_stubs.c:675:13: warning: "callback" is deprecated: use "caml_callback" instead
+src/lev/src/lev_stubs.c: In function 'lev_stat_create':
+src/lev/src/lev_stubs.c:688:13: warning: "callback" is deprecated: use "caml_callback" instead
+src/lev/src/lev_stubs.c:691:13: warning: "callback" is deprecated: use "caml_callback" instead
+src/lev/src/lev_stubs.c: In function 'lev_stat_destroy':
+src/lev/src/lev_stubs.c:769:13: warning: "callback" is deprecated: use "caml_callback" instead
+cd _boot && /home/rocq/.opam/4.14.2+flambda/bin/ocamlopt.opt -c -g -I +threads ev.c
+src/lev/vendor/ev.c:2152:31: warning: 'ev_default_loop_ptr' initialized and declared 'extern'

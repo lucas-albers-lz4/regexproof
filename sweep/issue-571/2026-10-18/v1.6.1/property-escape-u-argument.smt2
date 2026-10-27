@@ -1,0 +1,5 @@
+(set-logic QF_SLIA)
+(declare-const s String)
+(assert (str.in_re s (re.from_ecma2020 '^\p{L}$' "u")))
+(assert (= s "A"))
+(check-sat)

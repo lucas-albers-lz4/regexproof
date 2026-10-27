@@ -1,0 +1,228 @@
+{
+  "issue": 571,
+  "evidence_kind": "finite-real-engine-diagnostic",
+  "product": false,
+  "formal_proof": false,
+  "domain": "only the listed finite strings; includes non-ASCII boundary and whitespace probes",
+  "engine": "v26.11.1",
+  "source": "/tmp/fwlive-1322-e-review-fixes/core/fwlive-log.js",
+  "source_sha256": "52983d7c0a629de4ee23a13873e5ac54cf7d08dfaf03383614fceb59a4d1da12",
+  "patterns": {
+    "ACTION_RE": {
+      "source": "(^|[^A-Za-z0-9_])(ACCEPT|ALLOW|PASS|DROP|REJECT|DENY|BLOCK)([^A-Za-z0-9_]|$)",
+      "flags": "i"
+    },
+    "DENY_ACTION": {
+      "source": "(^|[^A-Za-z0-9_])(DROP|REJECT|DENY|BLOCK)([^A-Za-z0-9_]|$)",
+      "flags": "i"
+    },
+    "NON_FIREWALL_PREFIX": {
+      "source": "^(dnsmasq|procd|ubusd|netifd|odhcpd|logd|dropbear|uhttpd|hostapd|wpad)([^A-Za-z0-9_-]|$)",
+      "flags": "i"
+    },
+    "FIREWALL_HINT": {
+      "source": "(^|[^A-Za-z0-9_])(fw4|nft|iptables|kernel|firewall)([^A-Za-z0-9_]|$)",
+      "flags": "i"
+    }
+  },
+  "tcp_flag_route": "parseFlags(input, {}) real consumer; no KV override",
+  "rows": [
+    {
+      "site": "ACTION_RE",
+      "input": "aCcEpT",
+      "expected": true,
+      "observed": true,
+      "ok": true
+    },
+    {
+      "site": "ACTION_RE",
+      "input": "x aCcEpT y",
+      "expected": true,
+      "observed": true,
+      "ok": true
+    },
+    {
+      "site": "ACTION_RE",
+      "input": "XaCcEpTY",
+      "expected": false,
+      "observed": false,
+      "ok": true
+    },
+    {
+      "site": "ACTION_RE",
+      "input": "_aCcEpT_",
+      "expected": false,
+      "observed": false,
+      "ok": true
+    },
+    {
+      "site": "ACTION_RE",
+      "input": "ſPASS",
+      "expected": true,
+      "observed": true,
+      "ok": true
+    },
+    {
+      "site": "DENY_ACTION",
+      "input": "DrOp",
+      "expected": true,
+      "observed": true,
+      "ok": true
+    },
+    {
+      "site": "DENY_ACTION",
+      "input": "aCcEpT",
+      "expected": false,
+      "observed": false,
+      "ok": true
+    },
+    {
+      "site": "DENY_ACTION",
+      "input": "XDrOpY",
+      "expected": false,
+      "observed": false,
+      "ok": true
+    },
+    {
+      "site": "DENY_ACTION",
+      "input": "reject_from_wan",
+      "expected": false,
+      "observed": false,
+      "ok": true
+    },
+    {
+      "site": "NON_FIREWALL_PREFIX",
+      "input": "DnSmAsQ[123]:",
+      "expected": true,
+      "observed": true,
+      "ok": true
+    },
+    {
+      "site": "NON_FIREWALL_PREFIX",
+      "input": "DnSmAsQ",
+      "expected": true,
+      "observed": true,
+      "ok": true
+    },
+    {
+      "site": "NON_FIREWALL_PREFIX",
+      "input": "x DnSmAsQ:",
+      "expected": false,
+      "observed": false,
+      "ok": true
+    },
+    {
+      "site": "NON_FIREWALL_PREFIX",
+      "input": "wPaD-drop",
+      "expected": false,
+      "observed": false,
+      "ok": true
+    },
+    {
+      "site": "NON_FIREWALL_PREFIX",
+      "input": "wPaD:",
+      "expected": true,
+      "observed": true,
+      "ok": true
+    },
+    {
+      "site": "FIREWALL_HINT",
+      "input": "FiReWaLl:",
+      "expected": true,
+      "observed": true,
+      "ok": true
+    },
+    {
+      "site": "FIREWALL_HINT",
+      "input": "XFiReWaLlY",
+      "expected": false,
+      "observed": false,
+      "ok": true
+    },
+    {
+      "site": "FIREWALL_HINT",
+      "input": "_KeRnEl_",
+      "expected": false,
+      "observed": false,
+      "ok": true
+    },
+    {
+      "site": "TCP_FLAG_TAIL via parseFlags",
+      "input": "sYn aCk",
+      "expected": "SYN,ACK",
+      "observed": "SYN,ACK",
+      "ok": true
+    },
+    {
+      "site": "TCP_FLAG_TAIL via parseFlags",
+      "input": "sYn eCe cWr",
+      "expected": "SYN,ECE,CWR",
+      "observed": "SYN,ECE,CWR",
+      "ok": true
+    },
+    {
+      "site": "TCP_FLAG_TAIL via parseFlags",
+      "input": "sYn aCk WINDOW=1 RES=0x00",
+      "expected": "SYN,ACK",
+      "observed": "SYN,ACK",
+      "ok": true
+    },
+    {
+      "site": "TCP_FLAG_TAIL via parseFlags",
+      "input": "sYn window=1",
+      "expected": "",
+      "observed": "",
+      "ok": true
+    },
+    {
+      "site": "TCP_FLAG_TAIL via parseFlags",
+      "input": "sYn aCk",
+      "expected": "SYN,ACK",
+      "observed": "SYN,ACK",
+      "ok": true
+    },
+    {
+      "site": "TCP_FLAG_TAIL via parseFlags",
+      "input": "sYn aCk",
+      "expected": "SYN,ACK",
+      "observed": "SYN,ACK",
+      "ok": true
+    },
+    {
+      "site": "TCP_FLAG_TAIL via parseFlags",
+      "input": "XsYn",
+      "expected": "",
+      "observed": "",
+      "ok": true
+    },
+    {
+      "site": "TCP_FLAG_TAIL via parseFlags",
+      "input": "_sYn",
+      "expected": "",
+      "observed": "",
+      "ok": true
+    },
+    {
+      "site": "TCP_FLAG_TAIL via parseFlags",
+      "input": "ſsYn",
+      "expected": "",
+      "observed": "",
+      "ok": true
+    },
+    {
+      "site": "TCP_FLAG_TAIL via parseFlags",
+      "input": "sYnACK",
+      "expected": "",
+      "observed": "",
+      "ok": true
+    },
+    {
+      "site": "TCP_FLAG_TAIL via parseFlags",
+      "input": "sYn\n",
+      "expected": "SYN",
+      "observed": "SYN",
+      "ok": true
+    }
+  ],
+  "ok": true
+}

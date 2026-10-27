@@ -1,0 +1,35 @@
+{
+  "node_run": {
+    "argv": [
+      "node",
+      "-e",
+      "const fs=require('fs'),crypto=require('crypto');\nconst p=process.argv[1],m=require(p),b=fs.readFileSync(p),r=m.ACTION_RE,n=m.NETFILTER_KV_GLUE;\nif(!(r instanceof RegExp)||!(n instanceof RegExp))throw new Error('regex export missing');\nconst values=['ACCEPT','aCcEpT','accept','x aCcEpT!'];\nconsole.log(JSON.stringify({node:process.version,path:p,file_sha256:crypto.createHash('sha256').update(b).digest('hex'),pattern:r.source,flags:r.flags,observations:Object.fromEntries(values.map(s=>[s,r.test(s)])),netfilterPattern:n.source,netfilterFlags:n.flags}));",
+      "/tmp/fwlive-1322-e-review-fixes/core/fwlive-log.js"
+    ],
+    "timeout_seconds": 8.0,
+    "elapsed_ms": 31.407,
+    "returncode": 0,
+    "timed_out": false,
+    "classification": "zero_exit_without_verdict",
+    "stdout": "{\"node\":\"v26.11.1\",\"path\":\"/tmp/fwlive-1322-e-review-fixes/core/fwlive-log.js\",\"file_sha256\":\"52983d7c0a629de4ee23a13873e5ac54cf7d08dfaf03383614fceb59a4d1da12\",\"pattern\":\"(^|[^A-Za-z0-9_])(ACCEPT|ALLOW|PASS|DROP|REJECT|DENY|BLOCK)([^A-Za-z0-9_]|$)\",\"flags\":\"i\",\"observations\":{\"ACCEPT\":true,\"aCcEpT\":true,\"accept\":true,\"x aCcEpT!\":true},\"netfilterPattern\":\"(IN|OUT|SRC|DST|PROTO|SPT|DPT|LEN|MAC|TYPE|CODE|TTL|TOS|PREC|DF)=\",\"netfilterFlags\":\"\"}\n",
+    "stderr": ""
+  },
+  "version_run": {
+    "argv": [
+      "/tmp/regexproof-571-noodler-v1.8.0/z3-noodler",
+      "-version"
+    ],
+    "timeout_seconds": 8.0,
+    "elapsed_ms": 2.608,
+    "returncode": 0,
+    "timed_out": false,
+    "classification": "zero_exit_without_verdict",
+    "stdout": "Z3 version 5.1.0 - 64 bit - build hashcode 06e5c132a1a59fb61eaf4e5f7094860b5aec7c21 - mata hashcode d28368a6957a1606162aea3fbe77345f6e1e13d5\n",
+    "stderr": ""
+  },
+  "finite_node_diagnostic_run": {
+    "returncode": 0,
+    "elapsed_ms": 33.441,
+    "classification": "zero_exit_without_verdict"
+  }
+}

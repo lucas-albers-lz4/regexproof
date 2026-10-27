@@ -1,0 +1,28 @@
+{
+  "argv": [
+    "/tmp/noodler/z3-noodler-ubuntu-24.04-x86_64-shared",
+    "/tmp/regexproof-571-feasibility/sweep/issue-571/2026-10-18/v1.6.1/ascii-mirror-mixed.smt2"
+  ],
+  "timeout_seconds": 8.0,
+  "elapsed_ms": 21.105,
+  "returncode": 0,
+  "timed_out": false,
+  "classification": "sat",
+  "stdout": "sat\n",
+  "stderr": "",
+  "case": "ascii-mirror-mixed",
+  "runner_sha256": "028a1b7e5a80be54f012b5f51e4c21ec41b83f7412896d6a4f2f776925beb4ac",
+  "noodler_sha256": "22b19f123d3e7f54e10fdc46af3f91de23d89148c9a259eb072bc9e12f083464",
+  "noodler_trusted_binary_mapping": {
+    "label": "Noodler 1.6.1 issue-comment baseline",
+    "version": "Z3 version 4.16.0 - 64 bit - build hashcode dcce9d2d129e1ecc101946ef257aa7ed246dfe61 - mata hashcode 8db4279ce9910b2c12589fabffebf8265a75b558"
+  },
+  "smt_path": "/tmp/regexproof-571-feasibility/sweep/issue-571/2026-10-18/v1.6.1/ascii-mirror-mixed.smt2",
+  "smt_sha256": "172ca538bcb1cf1cd29e5d965a556a62ed737a0cbf9c818f05757fcc06b2007c",
+  "fixed_input": "aCcEpT",
+  "query_patterns": [
+    "(^|[^A-Za-z0-9_])(([Aa][Cc][Cc][Ee][Pp][Tt]|[Aa][Ll][Ll][Oo][Ww]|[Pp][Aa][Ss][Ss]|[Dd][Rr][Oo][Pp]|[Rr][Ee][Jj][Ee][Cc][Tt]|[Dd][Ee][Nn][Yy]|[Bb][Ll][Oo][Cc][Kk]))([^A-Za-z0-9_]|$)"
+  ],
+  "frozen_action_source": "(^|[^A-Za-z0-9_])(ACCEPT|ALLOW|PASS|DROP|REJECT|DENY|BLOCK)([^A-Za-z0-9_]|$)",
+  "interpretation_limit": "ASCII case-expanded mirror control; not the source regex with /i"
+}
