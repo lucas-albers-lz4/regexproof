@@ -58,12 +58,36 @@ SHAPE = {
     "FC-forge-cli-dmm-value-no-semicolon": 1,
     "FC-forge-cli-llm-userinfo-no-at": 1,
     "FC-forge-cli-jaas-escaped-quote-covered": 2,
-    "FC-forge-cli-sensitive-env-key-covered": 2,
+    "FC-forge-cli-sensitive-env-helper-redacts": 2,
     "DF-dogfood-shell-normalize-fixpoint": 3,
     "DF-dogfood-shell-normalize-idempotent": 3,
     "PY-doberman-windows-root-token": 2,
     "PY-doberman-disk-wipe-token": 2,
 }
+
+# One reclassified property keeps its existing solver subclaim but belongs to a
+# dedicated wave/bucket in the conversion ledger. Per-property, not per-family:
+# a later forge-cli wave must not inherit this assignment silently.
+ROW_CONTEXT_OVERRIDES = {
+    "FC-forge-cli-sensitive-env-helper-redacts": (
+        "forge-cli_helper_image",
+        "helper-image",
+    ),
+}
+
+
+def resolve_row_context(
+    name: str, default_wave_id: str | None, default_idiom_bucket: str | None
+) -> tuple[str | None, str | None, bool]:
+    """Resolve one row's (wave, bucket) and whether an override applied."""
+    override = ROW_CONTEXT_OVERRIDES.get(name)
+    if override is None:
+        return default_wave_id, default_idiom_bucket, False
+    wave_id, idiom_bucket = override
+    return wave_id, idiom_bucket, (wave_id, idiom_bucket) != (
+        default_wave_id,
+        default_idiom_bucket,
+    )
 
 
 def _regex_id(name: str) -> str:
@@ -158,13 +182,21 @@ def main(argv: list[str] | None = None) -> int:
                 f"error: {name} harness run failed "
                 f"(result={res.get('result')!r} ground_truth={res.get('ground_truth')!r})"
             )
+        row_wave_id, row_idiom_bucket, overridden = resolve_row_context(
+            name, args.wave_id, args.idiom_bucket
+        )
+        if overridden:
+            print(
+                f"note: {name} -> {row_wave_id}/{row_idiom_bucket} "
+                "(per-property ROW_CONTEXT_OVERRIDES)"
+            )
         rec = row_from_run(
             name,
             entry,
             res,
             args.corpus,
-            wave_id=args.wave_id,
-            idiom_bucket=args.idiom_bucket,
+            wave_id=row_wave_id,
+            idiom_bucket=row_idiom_bucket,
         )
         if not rec["product_reportable"]:
             raise SystemExit(f"error: {name} is not product_reportable")

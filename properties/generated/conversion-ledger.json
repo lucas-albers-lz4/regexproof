@@ -245,17 +245,35 @@
         "forge-cli"
       ],
       "filed": 0,
+      "idiom_bucket": "helper-image",
+      "properties_asked": 1,
+      "properties_sat": 0,
+      "sat_ground_truthed": 0,
+      "shape_counts": {
+        "2": 1
+      },
+      "shape_mix": {
+        "shape_2": 1.0
+      },
+      "wave_id": "forge-cli_helper_image"
+    },
+    {
+      "accepted": 0,
+      "corpora": [
+        "forge-cli"
+      ],
+      "filed": 0,
       "idiom_bucket": "secret-redaction",
-      "properties_asked": 5,
+      "properties_asked": 4,
       "properties_sat": 0,
       "sat_ground_truthed": 0,
       "shape_counts": {
         "1": 3,
-        "2": 2
+        "2": 1
       },
       "shape_mix": {
-        "shape_1": 0.6,
-        "shape_2": 0.4
+        "shape_1": 0.75,
+        "shape_2": 0.25
       },
       "wave_id": "forge-cli_w1"
     },
