@@ -77,6 +77,13 @@ def assert_job(job: str, cfg: dict) -> list[str]:
         z3v = _z3_version()
         if not z3v.startswith(cfg["z3"]["version_prefix"]):
             errors.append(f"z3 {z3v} does not start with {cfg['z3']['version_prefix']}")
+    elif job == "golden-repro":
+        expected = py.get("golden_repro_version")
+        actual = platform.python_version()
+        if not expected:
+            errors.append("python.golden_repro_version is not configured")
+        elif actual != expected:
+            errors.append(f"python {actual} != golden repro pin {expected}")
     elif job == "golden":
         if mm not in py["minors"]:
             errors.append(f"python {mm} not in golden minors {py['minors']}")
@@ -196,12 +203,21 @@ def assert_job(job: str, cfg: dict) -> list[str]:
             f"ci/toolchain.toml python.minors {py['minors']} != "
             f"ci/python-matrix.toml {matrix.get('minors')}"
         )
+    if matrix.get("repro_version") != py.get("golden_repro_version"):
+        errors.append(
+            "ci/toolchain.toml python.golden_repro_version does not match "
+            "ci/python-matrix.toml repro_version"
+        )
     return errors
 
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--job", required=True, choices=("proof", "golden", "redos"))
+    ap.add_argument(
+        "--job",
+        required=True,
+        choices=("proof", "golden", "golden-repro", "redos"),
+    )
     ap.add_argument(
         "--config",
         type=Path,

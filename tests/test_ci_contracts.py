@@ -179,6 +179,8 @@ def test_toolchain_config_loads_and_matrix_aligned():
     assert matrix["scheduled_minors"] == ["3.12"]
     assert set(matrix["pr_minors"]) <= set(matrix["minors"])
     assert set(matrix["scheduled_minors"]) <= set(matrix["minors"])
+    assert tool["python"]["golden_repro_version"] == matrix["repro_version"]
+    assert ".".join(matrix["repro_version"].split(".")[:2]) in matrix["minors"]
     assert tool["pcre2"]["status"] == "required"
     assert tool["yara"]["status"] == "required"
     assert tool["perl"]["status"] == "required"
@@ -186,6 +188,26 @@ def test_toolchain_config_loads_and_matrix_aligned():
     subset = tomllib.loads((ROOT / "ci" / "property-subset.toml").read_text())
     assert subset["families"] == ["P1", "P2", "P3", "P4"]
     assert subset["rule_diff_family"].startswith("RD-")
+
+
+def test_golden_repro_toolchain_rejects_python_patch_drift(monkeypatch):
+    import importlib.util
+    import tomllib
+
+    path = ROOT / "scripts" / "ci-assert-toolchain.py"
+    spec = importlib.util.spec_from_file_location("ci_assert_toolchain", path)
+    module = importlib.util.module_from_spec(spec)
+    assert spec.loader is not None
+    spec.loader.exec_module(module)
+    cfg = tomllib.loads((ROOT / "ci" / "toolchain.toml").read_text())
+    expected = cfg["python"]["golden_repro_version"]
+
+    monkeypatch.setattr(module.platform, "python_version", lambda: expected)
+    assert module.assert_job("golden-repro", cfg) == []
+
+    monkeypatch.setattr(module.platform, "python_version", lambda: "3.13.16")
+    errors = module.assert_job("golden-repro", cfg)
+    assert any("!= golden repro pin" in error for error in errors)
 
 
 def test_ci_assert_toolchain_proof_job():
