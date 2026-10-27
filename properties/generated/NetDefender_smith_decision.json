@@ -1,0 +1,16 @@
+{
+  "additional_surface_outside_probe_scope": {
+    "py_re": 1
+  },
+  "candidate_url": "https://github.com/nipunsw1999/NetDefender",
+  "corpus": "NetDefender",
+  "corpus_pin": "88a81e76b19354f4e09fe47f153335da279458d4",
+  "reason": "14,136/24,310 (58.15%) encode in the pinned YARA tree; complete deterministic run, zero unclassified parse errors, 98 private-first batch findings. The single Python probe site is outside the YARA scope. No product security property is claimed.",
+  "regex_sites": 24310,
+  "schema_version": "1",
+  "sites_by_bucket": {
+    "yara": 24310
+  },
+  "smith_decision": "go",
+  "supersedes": "go"
+}

@@ -1,0 +1,17 @@
+{
+  "additional_surface_outside_probe_scope": {
+    "ecma": 87,
+    "py_re": 5
+  },
+  "candidate_url": "https://github.com/cristianzsh/freki",
+  "corpus": "freki",
+  "corpus_pin": "08d593d447d27dc0794d0db68256fb1d6aecb607",
+  "reason": "6,187/11,190 (55.29%) encode in the pinned YARA tree; complete deterministic run, zero unclassified parse errors. Security-tool findings remain private-first.",
+  "regex_sites": 11190,
+  "schema_version": "1",
+  "sites_by_bucket": {
+    "yara": 11190
+  },
+  "smith_decision": "go",
+  "supersedes": "go"
+}

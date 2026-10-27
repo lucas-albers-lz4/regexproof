@@ -6,11 +6,11 @@
         "bad-range": 23,
         "composite-pattern": 4158,
         "empty-class": 29,
-        "fullword-boundary": 37218,
+        "fullword-boundary": 80943,
         "gnu-extension": 235,
         "gnu-word-boundary": 9,
         "inline-flag": 91,
-        "internal-anchor": 1146,
+        "internal-anchor": 1149,
         "lookaround": 771,
         "m-flag": 612,
         "multi-match": 414,
@@ -18,26 +18,31 @@
         "negated-shorthand": 441,
         "parse-error": 181,
         "parse-error:PatternError": 58,
-        "pattern-too-long": 303,
-        "per-alternative-anchor": 656,
-        "repeat-count": 15,
+        "pattern-too-long": 377,
+        "per-alternative-anchor": 662,
+        "repeat-count": 17,
+        "s-flag": 1,
         "stateful": 5317,
         "u-flag": 1838,
         "unclosed-class": 12,
         "unclosed-group": 29,
         "unicode-not-literal": 399,
-        "unsupported-modifier:base64": 190,
-        "unsupported-modifier:xor": 6,
+        "unsupported-escape": 6,
+        "unsupported-modifier:FIX,FPS,Microsoft,files,with": 2,
+        "unsupported-modifier:FPs,prone,to": 1,
+        "unsupported-modifier:base64": 220,
+        "unsupported-modifier:more": 1,
+        "unsupported-modifier:xor": 16,
         "unsupported-syntax": 39,
         "unsupported:ATOMIC_GROUP": 276,
         "unsupported:FAILURE": 7,
         "unsupported:POSSESSIVE_REPEAT": 466,
         "v-flag": 90,
-        "wide-non-literal": 629,
-        "word-boundary": 1655
+        "wide-non-literal": 1420,
+        "word-boundary": 1661
       },
-      "rows": 57737,
-      "sites_weighted": 173211.0
+      "rows": 102395,
+      "sites_weighted": 307185.0
     },
     "no-go": {
       "reasons": {
@@ -90,24 +95,24 @@
   },
   "provenance": {
     "gate_decision_count": 871,
-    "input_file_count": 94,
-    "triage_inputs_hash": "d7769ea6c574ea1a"
+    "input_file_count": 99,
+    "triage_inputs_hash": "90c00aa34c25a5f3"
   },
   "rows": [
     {
       "per_corpus": {
-        "go": 111654.0,
+        "go": 242829.0,
         "triage-trial": 1146.0
       },
       "per_corpus_raw": {
-        "go": 37218,
+        "go": 80943,
         "triage-trial": 573
       },
       "per_dialect": {
-        "yara": 37791
+        "yara": 81516
       },
-      "sites_unlocked": 37791,
-      "sites_weighted": 112800.0,
+      "sites_unlocked": 81516,
+      "sites_weighted": 243975.0,
       "unencodable_reason": "fullword-boundary"
     },
     {
@@ -165,12 +170,12 @@
     },
     {
       "per_corpus": {
-        "go": 4965.0,
+        "go": 4983.0,
         "no-go": 22.0,
         "triage-trial": 322.0
       },
       "per_corpus_raw": {
-        "go": 1655,
+        "go": 1661,
         "no-go": 22,
         "triage-trial": 161
       },
@@ -179,28 +184,45 @@
         "pcre": 21,
         "py_re": 1695,
         "re2": 6,
-        "yara": 1
+        "yara": 7
       },
-      "sites_unlocked": 1838,
-      "sites_weighted": 5309.0,
+      "sites_unlocked": 1844,
+      "sites_weighted": 5327.0,
       "unencodable_reason": "word-boundary"
     },
     {
       "per_corpus": {
-        "go": 3438.0,
+        "go": 4260.0,
+        "triage-trial": 188.0
+      },
+      "per_corpus_raw": {
+        "go": 1420,
+        "triage-trial": 94
+      },
+      "per_dialect": {
+        "yara": 1514
+      },
+      "sites_unlocked": 1514,
+      "sites_weighted": 4448.0,
+      "unencodable_reason": "wide-non-literal"
+    },
+    {
+      "per_corpus": {
+        "go": 3447.0,
         "triage-trial": 78.0
       },
       "per_corpus_raw": {
-        "go": 1146,
+        "go": 1149,
         "triage-trial": 39
       },
       "per_dialect": {
         "ecma": 10,
         "pcre": 1,
-        "posix-shell": 1174
+        "posix-shell": 1174,
+        "yara": 3
       },
-      "sites_unlocked": 1185,
-      "sites_weighted": 3516.0,
+      "sites_unlocked": 1188,
+      "sites_weighted": 3525.0,
       "unencodable_reason": "internal-anchor"
     },
     {
@@ -224,28 +246,12 @@
     },
     {
       "per_corpus": {
-        "go": 1887.0,
-        "triage-trial": 188.0
-      },
-      "per_corpus_raw": {
-        "go": 629,
-        "triage-trial": 94
-      },
-      "per_dialect": {
-        "yara": 723
-      },
-      "sites_unlocked": 723,
-      "sites_weighted": 2075.0,
-      "unencodable_reason": "wide-non-literal"
-    },
-    {
-      "per_corpus": {
-        "go": 1968.0,
+        "go": 1986.0,
         "no-go": 4.0,
         "triage-trial": 92.0
       },
       "per_corpus_raw": {
-        "go": 656,
+        "go": 662,
         "no-go": 4,
         "triage-trial": 46
       },
@@ -254,10 +260,10 @@
         "posix-shell": 271,
         "py_re": 116,
         "re2": 3,
-        "yara": 2
+        "yara": 8
       },
-      "sites_unlocked": 706,
-      "sites_weighted": 2064.0,
+      "sites_unlocked": 712,
+      "sites_weighted": 2082.0,
       "unencodable_reason": "per-alternative-anchor"
     },
     {
@@ -373,12 +379,12 @@
     },
     {
       "per_corpus": {
-        "go": 909.0,
+        "go": 1131.0,
         "no-go": 9.0,
         "triage-trial": 24.0
       },
       "per_corpus_raw": {
-        "go": 303,
+        "go": 377,
         "no-go": 9,
         "triage-trial": 12
       },
@@ -388,10 +394,10 @@
         "posix-shell": 4,
         "py_re": 194,
         "re2": 4,
-        "yara": 29
+        "yara": 103
       },
-      "sites_unlocked": 324,
-      "sites_weighted": 942.0,
+      "sites_unlocked": 398,
+      "sites_weighted": 1164.0,
       "unencodable_reason": "pattern-too-long"
     },
     {
@@ -426,18 +432,18 @@
     },
     {
       "per_corpus": {
-        "go": 570.0,
+        "go": 660.0,
         "triage-trial": 6.0
       },
       "per_corpus_raw": {
-        "go": 190,
+        "go": 220,
         "triage-trial": 3
       },
       "per_dialect": {
-        "yara": 193
+        "yara": 223
       },
-      "sites_unlocked": 193,
-      "sites_weighted": 576.0,
+      "sites_unlocked": 223,
+      "sites_weighted": 666.0,
       "unencodable_reason": "unsupported-modifier:base64"
     },
     {
@@ -594,17 +600,31 @@
     },
     {
       "per_corpus": {
-        "go": 45.0
+        "go": 51.0
       },
       "per_corpus_raw": {
-        "go": 15
+        "go": 17
       },
       "per_dialect": {
-        "yara": 15
+        "yara": 17
       },
-      "sites_unlocked": 15,
-      "sites_weighted": 45.0,
+      "sites_unlocked": 17,
+      "sites_weighted": 51.0,
       "unencodable_reason": "repeat-count"
+    },
+    {
+      "per_corpus": {
+        "go": 48.0
+      },
+      "per_corpus_raw": {
+        "go": 16
+      },
+      "per_dialect": {
+        "yara": 16
+      },
+      "sites_unlocked": 16,
+      "sites_weighted": 48.0,
+      "unencodable_reason": "unsupported-modifier:xor"
     },
     {
       "per_corpus": {
@@ -660,7 +680,21 @@
       },
       "sites_unlocked": 6,
       "sites_weighted": 18.0,
-      "unencodable_reason": "unsupported-modifier:xor"
+      "unencodable_reason": "unsupported-escape"
+    },
+    {
+      "per_corpus": {
+        "go": 6.0
+      },
+      "per_corpus_raw": {
+        "go": 2
+      },
+      "per_dialect": {
+        "yara": 2
+      },
+      "sites_unlocked": 2,
+      "sites_weighted": 6.0,
+      "unencodable_reason": "unsupported-modifier:FIX,FPS,Microsoft,files,with"
     },
     {
       "per_corpus": {
@@ -675,11 +709,53 @@
       "sites_unlocked": 2,
       "sites_weighted": 4.0,
       "unencodable_reason": "unsupported-modifier:base64,base64wide"
+    },
+    {
+      "per_corpus": {
+        "go": 3.0
+      },
+      "per_corpus_raw": {
+        "go": 1
+      },
+      "per_dialect": {
+        "yara": 1
+      },
+      "sites_unlocked": 1,
+      "sites_weighted": 3.0,
+      "unencodable_reason": "s-flag"
+    },
+    {
+      "per_corpus": {
+        "go": 3.0
+      },
+      "per_corpus_raw": {
+        "go": 1
+      },
+      "per_dialect": {
+        "yara": 1
+      },
+      "sites_unlocked": 1,
+      "sites_weighted": 3.0,
+      "unencodable_reason": "unsupported-modifier:FPs,prone,to"
+    },
+    {
+      "per_corpus": {
+        "go": 3.0
+      },
+      "per_corpus_raw": {
+        "go": 1
+      },
+      "per_dialect": {
+        "yara": 1
+      },
+      "sites_unlocked": 1,
+      "sites_weighted": 3.0,
+      "unencodable_reason": "unsupported-modifier:more"
     }
   ],
   "schema_version": "1",
-  "total_rows": 60271,
-  "total_weighted": 177744.0,
+  "total_rows": 104929,
+  "total_weighted": 311718.0,
   "unknown_reason_rows": 8,
   "weights": {
     "go": 3,

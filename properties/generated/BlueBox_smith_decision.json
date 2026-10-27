@@ -1,0 +1,18 @@
+{
+  "additional_surface_outside_probe_scope": {
+    "ecma": 1357,
+    "posix-shell": 4,
+    "py_re": 5
+  },
+  "candidate_url": "https://github.com/svdwi/BlueBox",
+  "corpus": "BlueBox",
+  "corpus_pin": "ff1563bc6e297247e30bb1509cf9c4f7385ac5af",
+  "reason": "11,502/17,525 (65.63%) encode in the pinned YARA path; complete deterministic run, zero unclassified parse errors, 71 private-first batch findings. One 2.74 MB PEiD signature file exceeds the standard extractor limit; it contains no YARA regex assignments and contributes no regex sites. No product security property is claimed.",
+  "regex_sites": 17525,
+  "schema_version": "1",
+  "sites_by_bucket": {
+    "yara": 17525
+  },
+  "smith_decision": "go",
+  "supersedes": "go"
+}

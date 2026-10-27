@@ -1,0 +1,42 @@
+{
+  "budget": {
+    "max_disk_mb": 1000,
+    "max_mem_mb": 4096,
+    "max_patterns": 30000,
+    "max_wall_s": 1200,
+    "redos_wall_s": 240
+  },
+  "budget_breaches": null,
+  "commit": "08d593d447d27dc0794d0db68256fb1d6aecb607",
+  "compiler_fingerprint": "35ea1f238a9e",
+  "complete_run": true,
+  "corpus_pin": "08d593d447d27dc0794d0db68256fb1d6aecb607",
+  "decision": "go",
+  "decision_rule": "go iff encodable/sample_size >= 0.3",
+  "dialect": "yara",
+  "encodable": 6187,
+  "engine_versions": {
+    "python": "3.13.18",
+    "z3": "5.0.0"
+  },
+  "extractor_schema_version": "2",
+  "fraction": 0.5529,
+  "go_no_go_threshold": 0.3,
+  "id_formula": "v2-domain-optional-ascii-default",
+  "inventory_path": "properties/generated/freki-inventory.ndjson",
+  "path": "batch/corpora/freki/rules/freki/app/core/yara_rules",
+  "pilot": "freki",
+  "reasons": {
+    "fullword-boundary": 4892,
+    "ok": 6187,
+    "pattern-too-long": 2,
+    "per-alternative-anchor": 1,
+    "unsupported-escape": 1,
+    "wide-non-literal": 107
+  },
+  "sample_size": 11190,
+  "schema_version": "1",
+  "scope": "full_corpus",
+  "unclassified_parse_errors": 0,
+  "wall_s": 54.299
+}

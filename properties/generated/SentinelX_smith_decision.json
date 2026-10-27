@@ -1,0 +1,16 @@
+{
+  "additional_surface_outside_probe_scope": {
+    "posix-shell": 4
+  },
+  "candidate_url": "https://github.com/jaytiwari05/SentinelX",
+  "corpus": "SentinelX",
+  "corpus_pin": "9168547df5232067ac68eb9413f7248f89ccf8c1",
+  "reason": "13,117/21,287 (61.62%) encode in the pinned YARA tree; complete deterministic run, zero unclassified parse errors, 86 private-first batch findings. One 2.74 MB generated PEiD signature file exceeds the extractor limit; it has no YARA regex assignments and contributes no regex sites. No product security property is claimed.",
+  "regex_sites": 21287,
+  "schema_version": "1",
+  "sites_by_bucket": {
+    "yara": 21287
+  },
+  "smith_decision": "go",
+  "supersedes": "go"
+}

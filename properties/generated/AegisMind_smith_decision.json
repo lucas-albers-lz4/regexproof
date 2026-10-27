@@ -1,0 +1,16 @@
+{
+  "additional_surface_outside_probe_scope": {
+    "ecma": 238
+  },
+  "candidate_url": "https://github.com/Thinking-builder/AegisMind",
+  "corpus": "AegisMind",
+  "corpus_pin": "cbb0b153216a4464c927bb3b84cb609fc8a41867",
+  "reason": "23,021/38,309 (60.09%) encode in the pinned yara_rules tree; complete deterministic run, zero unclassified parse errors, 155 private-first batch findings. One 2.74 MB generated PEiD signature file exceeds the extractor limit; it has no YARA regex assignments and contributes no regex sites. No product security property is claimed.",
+  "regex_sites": 38309,
+  "schema_version": "1",
+  "sites_by_bucket": {
+    "yara": 38309
+  },
+  "smith_decision": "go",
+  "supersedes": "go"
+}
