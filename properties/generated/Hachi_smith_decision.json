@@ -1,0 +1,16 @@
+{
+  "additional_surface_outside_probe_scope": {
+    "py_re": 2
+  },
+  "candidate_url": "https://github.com/Kart1keya/Hachi",
+  "corpus": "Hachi",
+  "corpus_pin": "73e083e22f020ffa18ca5f09321ea19c4f7c4da4",
+  "reason": "YARA compiler coverage only: 2995/3087 = 0.9702 encodable at the pinned revision; complete run, zero unclassified parse errors, and no budget breach. The 92 non-encodable YARA patterns are explicitly triaged (62 fullword-boundary, 29 wide-non-literal, 1 pattern-too-long). Admission evidence records 828 novel patterns among 1154 (28% overlap). Security-tool outputs remain private_first. The 2 py_re sites are outside this YARA-only measurement; no product contract or finding is claimed.",
+  "regex_sites": 3087,
+  "schema_version": "1",
+  "sites_by_bucket": {
+    "yara": 3087
+  },
+  "smith_decision": "go",
+  "supersedes": "go"
+}

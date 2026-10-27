@@ -116,7 +116,7 @@ class _CorpusManifestCore(TypedDict):
 
 
 class CorpusManifest(_CorpusManifestCore, total=False):
-    """Typed manifest row — optional glob/files/measure_scope per Grok G5."""
+    """Typed manifest row — optional scope fields and gate artifact override."""
 
     budget: Budget
     glob: str
@@ -126,6 +126,7 @@ class CorpusManifest(_CorpusManifestCore, total=False):
     full_path: Path
     declared_semantics: str
     commit: str
+    gate_decision_file: str
 
 
 def budget_as_dict(budget: Budget) -> dict[str, Any]:

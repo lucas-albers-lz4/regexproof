@@ -6,7 +6,7 @@
         "bad-range": 23,
         "composite-pattern": 4037,
         "empty-class": 29,
-        "fullword-boundary": 31291,
+        "fullword-boundary": 31353,
         "gnu-extension": 235,
         "gnu-word-boundary": 9,
         "inline-flag": 91,
@@ -18,7 +18,7 @@
         "negated-shorthand": 420,
         "parse-error": 181,
         "parse-error:PatternError": 58,
-        "pattern-too-long": 298,
+        "pattern-too-long": 299,
         "per-alternative-anchor": 599,
         "repeat-count": 15,
         "stateful": 4723,
@@ -33,11 +33,11 @@
         "unsupported:FAILURE": 7,
         "unsupported:POSSESSIVE_REPEAT": 466,
         "v-flag": 90,
-        "wide-non-literal": 600,
+        "wide-non-literal": 629,
         "word-boundary": 1473
       },
-      "rows": 50648,
-      "sites_weighted": 151944.0
+      "rows": 50740,
+      "sites_weighted": 152220.0
     },
     "no-go": {
       "reasons": {
@@ -90,24 +90,24 @@
   },
   "provenance": {
     "gate_decision_count": 871,
-    "input_file_count": 89,
-    "triage_inputs_hash": "5cb7637fbda7d7ac"
+    "input_file_count": 90,
+    "triage_inputs_hash": "5b7e74587664cc0c"
   },
   "rows": [
     {
       "per_corpus": {
-        "go": 93873.0,
+        "go": 94059.0,
         "triage-trial": 1146.0
       },
       "per_corpus_raw": {
-        "go": 31291,
+        "go": 31353,
         "triage-trial": 573
       },
       "per_dialect": {
-        "yara": 31864
+        "yara": 31926
       },
-      "sites_unlocked": 31864,
-      "sites_weighted": 95019.0,
+      "sites_unlocked": 31926,
+      "sites_weighted": 95205.0,
       "unencodable_reason": "fullword-boundary"
     },
     {
@@ -224,18 +224,18 @@
     },
     {
       "per_corpus": {
-        "go": 1800.0,
+        "go": 1887.0,
         "triage-trial": 188.0
       },
       "per_corpus_raw": {
-        "go": 600,
+        "go": 629,
         "triage-trial": 94
       },
       "per_dialect": {
-        "yara": 694
+        "yara": 723
       },
-      "sites_unlocked": 694,
-      "sites_weighted": 1988.0,
+      "sites_unlocked": 723,
+      "sites_weighted": 2075.0,
       "unencodable_reason": "wide-non-literal"
     },
     {
@@ -372,12 +372,12 @@
     },
     {
       "per_corpus": {
-        "go": 894.0,
+        "go": 897.0,
         "no-go": 9.0,
         "triage-trial": 24.0
       },
       "per_corpus_raw": {
-        "go": 298,
+        "go": 299,
         "no-go": 9,
         "triage-trial": 12
       },
@@ -387,10 +387,10 @@
         "posix-shell": 4,
         "py_re": 192,
         "re2": 4,
-        "yara": 26
+        "yara": 27
       },
-      "sites_unlocked": 319,
-      "sites_weighted": 927.0,
+      "sites_unlocked": 320,
+      "sites_weighted": 930.0,
       "unencodable_reason": "pattern-too-long"
     },
     {
@@ -677,8 +677,8 @@
     }
   ],
   "schema_version": "1",
-  "total_rows": 53182,
-  "total_weighted": 156477.0,
+  "total_rows": 53274,
+  "total_weighted": 156753.0,
   "unknown_reason_rows": 8,
   "weights": {
     "go": 3,

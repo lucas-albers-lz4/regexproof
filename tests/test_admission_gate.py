@@ -7,7 +7,11 @@ from pathlib import Path
 
 import pytest
 
-from regexproof.batch.runner import CORPUS_MANIFESTS, check_admission_gates
+from regexproof.batch.runner import (
+    CORPUS_MANIFESTS,
+    _admission_gate_path,
+    check_admission_gates,
+)
 from regexproof.schemas import gate_decision_schema
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -51,6 +55,10 @@ def _enforced_corpora() -> list[str]:
     ]
 
 
+def _gate_path(name: str, out_dir: Path = GENERATED) -> Path:
+    return _admission_gate_path(name, CORPUS_MANIFESTS[name], out_dir)
+
+
 def test_every_enforced_corpus_has_a_committed_decision(tmp_path):
     """Backfill invariant: no rule corpus lacks an admission record.
 
@@ -59,25 +67,26 @@ def test_every_enforced_corpus_has_a_committed_decision(tmp_path):
     has a decision — the run-time gate blocks batch runs of it.
     """
     schema = gate_decision_schema()
-    for name in _enforced_corpora():
-        committed = GENERATED / f"{name}_gate_decision.json"
+    committed_by_name = {
+        name: _gate_path(name)
+        for name in _enforced_corpora()
+    }
+    for name, committed in committed_by_name.items():
         assert committed.exists(), (
             f"{name} lacks a committed gate decision; run the admission probe "
-            "and commit properties/generated/<name>_gate_decision.json"
+            "and commit its manifest's properties/generated gate artifact"
         )
         data = json.loads(committed.read_text(encoding="utf-8"))
         __import__("jsonschema").validate(instance=data, schema=schema)
-    # Sandbox copy for the enforcement check itself.
-    for name in _enforced_corpora():
-        committed = GENERATED / f"{name}_gate_decision.json"
-        (tmp_path / committed.name).write_bytes(committed.read_bytes())
+    # Sandbox copy for the enforcement check itself, preserving manifest-specific
+    # filenames (for example the owner-prefixed Hachi admission artifact).
+    for name, committed in committed_by_name.items():
+        _gate_path(name, tmp_path).write_bytes(committed.read_bytes())
     # Enforcement sees only runnable corpora: drop the no-go ones.
     runnable = [
         name
         for name in _enforced_corpora()
-        if json.loads((tmp_path / f"{name}_gate_decision.json").read_text()).get(
-            "decision"
-        )
+        if json.loads(_gate_path(name, tmp_path).read_text()).get("decision")
         in ("go", "triage-trial")
     ]
     assert check_admission_gates(runnable, out_dir=tmp_path) == []
@@ -86,8 +95,7 @@ def test_every_enforced_corpus_has_a_committed_decision(tmp_path):
 def test_committed_decisions_validate_against_schema():
     schema = gate_decision_schema()
     for name in _enforced_corpora():
-        p = GENERATED / f"{name}_gate_decision.json"
-        data = json.loads(p.read_text(encoding="utf-8"))
+        data = json.loads(_gate_path(name).read_text(encoding="utf-8"))
         # jsonschema raises on violation
         __import__("jsonschema").validate(instance=data, schema=schema)
 

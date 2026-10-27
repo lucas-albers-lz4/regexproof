@@ -46,6 +46,7 @@ SECURITY_TOOL_CORPORA = frozenset(
         "binaryalert",
         "detekt",
         "100DaysOfYARA",
+        "Hachi",
         "mcp-for-splunk",
         "DataCon2020",
         "OctopusBeak",

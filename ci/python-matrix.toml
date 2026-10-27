@@ -4,3 +4,5 @@
 minors = ["3.12", "3.13"]
 pr_minors = ["3.13"]
 scheduled_minors = ["3.12"]
+# Two-run repro compares serialized engine_versions, so this lane uses an exact pin.
+repro_version = "3.13.17"

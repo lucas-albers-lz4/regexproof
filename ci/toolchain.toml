@@ -6,6 +6,8 @@
 minors = ["3.12", "3.13"]
 proof = "3.13"
 redos = "3.13"
+# Repro outputs embed platform.python_version(), so compare only one exact runtime.
+golden_repro_version = "3.13.17"
 
 [z3]
 # pip pin: requirements.txt / pyproject.toml
