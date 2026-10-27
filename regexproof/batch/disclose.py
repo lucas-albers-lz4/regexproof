@@ -78,6 +78,12 @@ SECURITY_TOOL_CORPORA = frozenset(
         "lw-yara",
         "bernstein",
         "lyrie-ai",
+        # Issue #619 phase 3: malware and detection corpora remain private-first.
+        "freki",
+        "BlueBox",
+        "SentinelX",
+        "NetDefender",
+        "AegisMind",
     }
 )
 

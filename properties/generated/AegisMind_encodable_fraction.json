@@ -1,0 +1,51 @@
+{
+  "budget": {
+    "max_disk_mb": 1000,
+    "max_mem_mb": 4096,
+    "max_patterns": 50000,
+    "max_wall_s": 1200,
+    "redos_wall_s": 240
+  },
+  "budget_breaches": null,
+  "commit": "cbb0b153216a4464c927bb3b84cb609fc8a41867",
+  "compiler_fingerprint": "35ea1f238a9e",
+  "complete_run": true,
+  "corpus_pin": "cbb0b153216a4464c927bb3b84cb609fc8a41867",
+  "decision": "go",
+  "decision_rule": "go iff encodable/sample_size >= 0.3",
+  "dialect": "yara",
+  "encodable": 23021,
+  "engine_versions": {
+    "python": "3.13.18",
+    "z3": "5.0.0"
+  },
+  "extractor_schema_version": "2",
+  "fraction": 0.6009,
+  "go_no_go_threshold": 0.3,
+  "id_formula": "v2-domain-optional-ascii-default",
+  "inventory_path": "properties/generated/AegisMind-inventory.ndjson",
+  "path": "batch/corpora/AegisMind/rules/yara_rules",
+  "pilot": "AegisMind",
+  "reasons": {
+    "fullword-boundary": 15007,
+    "internal-anchor": 3,
+    "ok": 23021,
+    "pattern-too-long": 22,
+    "per-alternative-anchor": 1,
+    "repeat-count": 2,
+    "s-flag": 1,
+    "unsupported-escape": 1,
+    "unsupported-modifier:FIX,FPS,Microsoft,files,with": 2,
+    "unsupported-modifier:FPs,prone,to": 1,
+    "unsupported-modifier:base64": 30,
+    "unsupported-modifier:more": 1,
+    "unsupported-modifier:xor": 10,
+    "wide-non-literal": 201,
+    "word-boundary": 6
+  },
+  "sample_size": 38309,
+  "schema_version": "1",
+  "scope": "full_corpus",
+  "unclassified_parse_errors": 0,
+  "wall_s": 140.071
+}

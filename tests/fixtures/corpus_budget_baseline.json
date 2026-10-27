@@ -13,6 +13,13 @@
         "max_wall_s": 600,
         "redos_wall_s": 120
     },
+    "AegisMind": {
+        "max_disk_mb": 1000,
+        "max_mem_mb": 4096,
+        "max_patterns": 50000,
+        "max_wall_s": 1200,
+        "redos_wall_s": 240
+    },
     "Antivirus": {
         "max_disk_mb": 1000,
         "max_mem_mb": 4096,
@@ -26,6 +33,13 @@
         "max_patterns": 5000,
         "max_wall_s": 600,
         "redos_wall_s": 120
+    },
+    "BlueBox": {
+        "max_disk_mb": 1000,
+        "max_mem_mb": 4096,
+        "max_patterns": 30000,
+        "max_wall_s": 1200,
+        "redos_wall_s": 240
     },
     "DataCon2020": {
         "max_disk_mb": 500,
@@ -62,6 +76,13 @@
         "max_wall_s": 900,
         "redos_wall_s": 180
     },
+    "NetDefender": {
+        "max_disk_mb": 1000,
+        "max_mem_mb": 4096,
+        "max_patterns": 30000,
+        "max_wall_s": 1200,
+        "redos_wall_s": 240
+    },
     "OctopusBeak": {
         "max_disk_mb": 1000,
         "max_mem_mb": 2048,
@@ -84,6 +105,13 @@
         "redos_wall_s": 180
     },
     "SMAT": {
+        "max_disk_mb": 1000,
+        "max_mem_mb": 4096,
+        "max_patterns": 30000,
+        "max_wall_s": 1200,
+        "redos_wall_s": 240
+    },
+    "SentinelX": {
         "max_disk_mb": 1000,
         "max_mem_mb": 4096,
         "max_patterns": 30000,
@@ -275,6 +303,13 @@
         "max_patterns": 5000,
         "max_wall_s": 900,
         "redos_wall_s": 180
+    },
+    "freki": {
+        "max_disk_mb": 1000,
+        "max_mem_mb": 4096,
+        "max_patterns": 30000,
+        "max_wall_s": 1200,
+        "redos_wall_s": 240
     },
     "gadievron-raptor": {
         "max_disk_mb": 500,

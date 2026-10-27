@@ -5957,8 +5957,6 @@ CORPUS_MANIFESTS: dict[str, CorpusManifest] = {
         "budget": budget_as_dict(BUDGET_LUCI_DISK),
     },
 
-
-
     # Issue #619 Phase 1: small, source-backed admits; private-first.
     "Yara-Rules": {
         "corpus_type": "rule_corpus",
@@ -6517,6 +6515,83 @@ CORPUS_MANIFESTS: dict[str, CorpusManifest] = {
         "gate_decision_file": "OTT-Cybersecurity-LLC-lyrie-ai_gate_decision.json",
         "budget": budget_as_dict(BUDGET_RULE_DEFAULT),
     },
+    # Issue #619 phase 3: scoped pinned YARA corpora; compiler coverage only.
+    "freki": {
+        "corpus_type": "rule_corpus",
+        # Smith #404: only freki/app/core/yara_rules is in this YARA slice.
+        "path": ROOT / "batch" / "corpora" / "freki" / "rules" / "freki" / "app" / "core" / "yara_rules",
+        "glob": "**/*.yar,**/*.yara",
+        "dialect": "yara",
+        "extractor": "yara",
+        "repo": "cristianzsh/freki",
+        "security_tool": True,
+        "lift_inline": False,
+        "corpus_pin": "08d593d447d27dc0794d0db68256fb1d6aecb607",
+        "commit": "08d593d447d27dc0794d0db68256fb1d6aecb607",
+        "gate_decision_file": "cristianzsh-freki_gate_decision.json",
+        "budget": budget_as_dict(BUDGET_HEAVY_30K),
+    },
+    "BlueBox": {
+        "corpus_type": "rule_corpus",
+        # Smith #416: YARA files under App/yarascripts/YaraScan/rules.
+        "path": ROOT / "batch" / "corpora" / "BlueBox" / "rules" / "App" / "yarascripts" / "YaraScan" / "rules",
+        "glob": "**/*.yar,**/*.yara",
+        "dialect": "yara",
+        "extractor": "yara",
+        "repo": "svdwi/BlueBox",
+        "security_tool": True,
+        "lift_inline": False,
+        "corpus_pin": "ff1563bc6e297247e30bb1509cf9c4f7385ac5af",
+        "commit": "ff1563bc6e297247e30bb1509cf9c4f7385ac5af",
+        "gate_decision_file": "svdwi-BlueBox_gate_decision.json",
+        "budget": budget_as_dict(BUDGET_HEAVY_30K),
+    },
+    "SentinelX": {
+        "corpus_type": "rule_corpus",
+        # Smith #406: pinned YARA and shell probe; measure the YARA tree only.
+        "path": ROOT / "batch" / "corpora" / "SentinelX" / "rules",
+        "glob": "**/*.yar,**/*.yara",
+        "dialect": "yara",
+        "extractor": "yara",
+        "repo": "jaytiwari05/SentinelX",
+        "security_tool": True,
+        "lift_inline": False,
+        "corpus_pin": "9168547df5232067ac68eb9413f7248f89ccf8c1",
+        "commit": "9168547df5232067ac68eb9413f7248f89ccf8c1",
+        "gate_decision_file": "jaytiwari05-SentinelX_gate_decision.json",
+        "budget": budget_as_dict(BUDGET_HEAVY_30K),
+    },
+    "NetDefender": {
+        "corpus_type": "rule_corpus",
+        # Smith #420: measure the pinned YARA tree; the one Python site is out of scope.
+        "path": ROOT / "batch" / "corpora" / "NetDefender" / "rules",
+        "glob": "**/*.yar,**/*.yara",
+        "dialect": "yara",
+        "extractor": "yara",
+        "repo": "nipunsw1999/NetDefender",
+        "security_tool": True,
+        "lift_inline": False,
+        "corpus_pin": "88a81e76b19354f4e09fe47f153335da279458d4",
+        "commit": "88a81e76b19354f4e09fe47f153335da279458d4",
+        "gate_decision_file": "nipunsw1999-NetDefender_gate_decision.json",
+        "budget": budget_as_dict(BUDGET_HEAVY_30K),
+    },
+    "AegisMind": {
+        "corpus_type": "rule_corpus",
+        # Smith #403: only the pinned yara_rules/ tree is in this YARA slice.
+        "path": ROOT / "batch" / "corpora" / "AegisMind" / "rules" / "yara_rules",
+        "glob": "**/*.yar,**/*.yara",
+        "dialect": "yara",
+        "extractor": "yara",
+        "repo": "Thinking-builder/AegisMind",
+        "security_tool": True,
+        "lift_inline": False,
+        "corpus_pin": "cbb0b153216a4464c927bb3b84cb609fc8a41867",
+        "commit": "cbb0b153216a4464c927bb3b84cb609fc8a41867",
+        "gate_decision_file": "Thinking-builder-AegisMind_gate_decision.json",
+        "budget": budget_as_dict(BUDGET_HEAVY_50K),
+    },
+
 }
 
 WAVE_CORPORA = frozenset({

@@ -37,6 +37,36 @@ def _has_named_backreference(pattern: str) -> bool:
     return False
 
 
+def _has_unsupported_upper_v_escape(pattern: str) -> bool:
+    """Find PCRE ``\\V`` outside escapes and classes; RE2 cannot mirror it."""
+    i = 0
+    in_class = False
+    class_first = False
+    while i < len(pattern):
+        ch = pattern[i]
+        if ch == "\\":
+            if not in_class and i + 1 < len(pattern) and pattern[i + 1] == "V":
+                return True
+            i += 2
+            if in_class:
+                class_first = False
+            continue
+        if in_class:
+            if ch == "]" and not class_first:
+                in_class = False
+            elif class_first and ch == "^":
+                pass
+            else:
+                class_first = False
+            i += 1
+            continue
+        if ch == "[":
+            in_class = True
+            class_first = True
+        i += 1
+    return False
+
+
 def compile_yara(
     pattern: str,
     *,
@@ -67,6 +97,17 @@ def compile_yara(
         return CompileResult(
             mirror=None,
             unencodable_reason="backref",
+            dialect="yara",
+            call_kind=call_kind,
+            flags=flags,
+            pattern=pattern,
+            declared_domain=domain,
+        )
+
+    if _has_unsupported_upper_v_escape(pattern):
+        return CompileResult(
+            mirror=None,
+            unencodable_reason="unsupported-escape",
             dialect="yara",
             call_kind=call_kind,
             flags=flags,
