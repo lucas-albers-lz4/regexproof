@@ -1258,6 +1258,21 @@ CORPUS_MANIFESTS: dict[str, CorpusManifest] = {
         "commit": "50c8516ecb73db2a7b44e0bf42a99b0eaf94155d",
         "budget": budget_as_dict(BUDGET_PATROL),
     },
+    "Hachi": {
+        "corpus_type": "rule_corpus",
+        # Kart1keya/Hachi @ 73e083e: 3,087 pinned YARA sites (Smith #417).
+        "path": ROOT / "batch" / "corpora" / "Hachi" / "rules",
+        "glob": "**/*.yar,**/*.yara",
+        "dialect": "yara",
+        "extractor": "yara",
+        "repo": "Kart1keya/Hachi",
+        "security_tool": True,
+        "lift_inline": False,
+        "corpus_pin": "73e083e22f020ffa18ca5f09321ea19c4f7c4da4",
+        "commit": "73e083e22f020ffa18ca5f09321ea19c4f7c4da4",
+        "gate_decision_file": "Kart1keya-Hachi_gate_decision.json",
+        "budget": budget_as_dict(BUDGET_PATROL),
+    },
     "weissman-cybersecurity": {
         "corpus_type": "rule_corpus",
         # Materialize: ln -sfn /tmp/t-weissman batch/corpora/weissman-cybersecurity/rules
