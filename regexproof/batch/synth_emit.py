@@ -18,8 +18,23 @@ class SynthesisResult:
     executed_questions: set[str]
 
 
-def _engine_versions() -> dict[str, str]:
-    return {"python": platform.python_version(), "z3": z3.get_version_string()}
+def _engine_versions(
+    row: dict[str, Any], replay_versions: dict[str, str] | None = None
+) -> dict[str, str]:
+    versions = {"python": platform.python_version(), "z3": z3.get_version_string()}
+    for source in (row.get("engine_versions") or {}, replay_versions or {}):
+        for engine, version in source.items():
+            engine, version = str(engine), str(version)
+            if not version:
+                continue
+            previous = versions.get(engine)
+            if previous is not None and previous != version:
+                raise ValueError(
+                    f"conflicting {engine} engine versions in synthesized finding: "
+                    f"{previous!r} vs {version!r}"
+                )
+            versions[engine] = version
+    return versions
 
 
 def _property_row(
@@ -33,6 +48,7 @@ def _property_row(
     witness: str | None,
     domain_note: str,
     ground_truth_status: str | None,
+    replay_engine_versions: dict[str, str] | None = None,
 ) -> dict[str, Any]:
     regex_id = str(row["regex_id"])
     family = f"synth:{corpus}:{regex_id}"
@@ -51,7 +67,7 @@ def _property_row(
         "witness": witness,
         "ground_truth_status": ground_truth_status,
         "wall_ms": 0,
-        "engine_versions": _engine_versions(),
+        "engine_versions": _engine_versions(row, replay_engine_versions),
         "site": row.get("site") or "",
         "pattern": row.get("pattern") or "",
         "dialect": row.get("dialect") or "",
@@ -97,7 +113,7 @@ def _guard_row(
         "witness": witness,
         "ground_truth_status": "mutation-guard-sat-expected",
         "wall_ms": 0,
-        "engine_versions": _engine_versions(),
+        "engine_versions": _engine_versions(row),
         "site": row.get("site") or "",
         "pattern": row.get("pattern") or "",
         "dialect": row.get("dialect") or "",
