@@ -137,6 +137,36 @@ def test_context_guards():
     assert patterns("echo 'x\\'; grep 'foo' f") == ["foo"]  # POSIX single-quote
 
 
+def test_grep_argument_handles_posix_quote_concatenation():
+    # The common `'<prefix>'\\''<suffix>'` idiom passes one argument with a
+    # literal apostrophe to grep; the extractor must keep the full ERE.
+    src = r'''grep -E '^config[[:space:]]+["'\'']' file'''
+    assert patterns(src) == ['^config[[:space:]]+["\']']
+
+
+def test_double_quoted_grep_argument_handles_escaped_quotes():
+    # Inside double quotes, `\"` is a literal quote in the argument. The
+    # nested `grep` text belongs to this pattern and must not become a second
+    # extractor hit.
+    src = r'''grep -n "grep -oE '\"\[0-9a-f\]{32}\"'" file'''
+    recs = extract(src)
+    expected = r"""grep -oE '"\[0-9a-f\]{32}"'"""
+    assert [r["pattern"] for r in recs] == [expected]
+
+
+def test_double_quoted_grep_argument_decodes_shell_escaped_dollar():
+    # `\$` survives as a literal dollar in the shell argument; the remaining
+    # regex metacharacter semantics are left to the BRE/ERE compiler.
+    src = r'''grep -qE "^if ! ${fn} \"\\\$OUT\"" "$SRC"'''
+    assert patterns(src) == [r'^if ! ${fn} "\$OUT"']
+
+
+def test_command_with_multiline_regex_word_is_not_partially_extracted():
+    # The command scanner is line-local; a shell continuation is unsupported
+    # and must not produce a truncated pattern from the first line.
+    assert extract("grep -E 'foo'\\\n 'bar' file") == []
+
+
 # --- record contract --------------------------------------------------------
 
 def test_column_is_line_relative():

@@ -44,14 +44,13 @@ import re
 
 from regexproof.extractors.record import make_record
 
-# --- scanner regexes (frozen at P1, PR #259) --------------------------------
+# --- scanner regexes (P1 forms; shell words decoded by _read_shell_word) -----
 
-_SHELL_CMD = re.compile(
+_SHELL_CMD_PREFIX = re.compile(
     r"(?<![A-Za-z0-9_\-])(?P<cmd>grep|egrep|fgrep|sed|awk)"  # shell token
     r"(?P<flags>(?:[ \t]+-[A-Za-z][A-Za-z0-9]*)*)"  # flag runs incl. separate flags
     r"[ \t]+(?P<e>-e[ \t]+|--regexp=[ \t]*)?"
-    r"(?P<q>['\"])(?P<pat>.*?)(?P=q)"
-    r"(?P<tail>(?:[ \t]+-[A-Za-z][A-Za-z0-9]*)*)"  # TRAILING flags (luna -r7 #1)
+    r"(?P<q>['\"])"
 )
 _SHELL_BASH = re.compile(
     r"\[\[[ \t]+(?:\"[^\"]*\"|'[^']*'|[^ \t'\"]+)[ \t]+=~[ \t]+"
@@ -126,7 +125,71 @@ def _sed_addr(pat: str) -> str | None:
         i += 1
     return None  # unterminated — GNU sed and busybox reject it
 
+
+def _read_shell_word(src: str, start: int) -> tuple[str, int] | None:
+    """Read one shell word starting at a quote and return its literal value.
+
+    Regex arguments often contain quote concatenation (``'a'\\''b'``) and
+    escaped quotes inside double quotes. A quote-pair regex truncates these
+    valid words, turning complete expressions into bogus parse errors. This
+    small lexer handles adjacent quoted/unquoted fragments and POSIX
+    backslash rules. It intentionally stops at a newline, matching the
+    scanner's line-local command model. Parameter/command expansion is kept
+    as source text.
+    """
+    if start >= len(src) or src[start] not in "'\"":
+        return None
+    out: list[str] = []
+    quote: str | None = None
+    i = start
+    while i < len(src) and src[i] != "\n":
+        c = src[i]
+        if quote == "'":
+            if c == "'":
+                quote = None
+            else:
+                out.append(c)
+            i += 1
+            continue
+        if quote == '"':
+            if c == '"':
+                quote = None
+                i += 1
+                continue
+            if c == "\\" and i + 1 < len(src) and src[i + 1] != "\n":
+                nxt = src[i + 1]
+                if nxt in '$`"\\':
+                    out.append(nxt)
+                else:
+                    out.extend((c, nxt))
+                i += 2
+                continue
+            out.append(c)
+            i += 1
+            continue
+
+        # Unquoted part of the same shell word, including adjacent quoted
+        # fragments and the POSIX '\'' single-quote idiom.
+        if c in " \t;&|()<>\n":
+            break
+        if c in "'\"":
+            quote = c
+            i += 1
+            continue
+        if c == "\\":
+            if i + 1 >= len(src) or src[i + 1] == "\n":
+                return None  # trailing escape / unsupported line continuation
+            out.append(src[i + 1])
+            i += 2
+            continue
+        out.append(c)
+        i += 1
+    if quote is not None:
+        return None
+    return "".join(out), i
+
 _FLAG_TOKEN = re.compile(r"-([A-Za-z][A-Za-z0-9]*)")
+_TRAILING_FLAGS = re.compile(r"(?:[ \t]+-[A-Za-z][A-Za-z0-9]*)*")
 
 _HEREDOC_OPEN = re.compile(
     r"<<-?\s*(?:'([A-Za-z0-9_.-]+)'|\"([A-Za-z0-9_.-]+)\"|\\?([A-Za-z0-9_.-]+))")
@@ -369,7 +432,8 @@ def extract_shell_posix(
     ``dialect`` is REQUIRED by the registry wrapper (``dialect_kw=True``);
     callers pass ``"posix-shell"``.  ``column`` is the line-relative match
     offset (``match.start() - line_start``), feeding ``site`` = ``file:line:column``
-    and the ``regex_id``.
+    and the ``regex_id``. Quoted grep/sed/awk arguments are decoded as shell
+    words, including adjacent quote segments and double-quote escapes.
     """
     nl = [m.start() for m in re.finditer("\n", src)]
     hits: list[tuple[int, dict]] = []
@@ -396,12 +460,24 @@ def extract_shell_posix(
         )
         hits.append((pos, rec))
 
-    for m in _SHELL_CMD.finditer(scan_src):
-        cmd, pat = m.group("cmd"), m.group("pat")
+    skip_until = -1
+    for m in _SHELL_CMD_PREFIX.finditer(scan_src):
+        if m.start() < skip_until:
+            continue  # don't reinterpret command-like text inside an argument
+        word = _read_shell_word(scan_src, m.end("q") - 1)
+        if word is None:
+            continue
+        pat, word_end = word
         if not pat:
             continue
+        tail = _TRAILING_FLAGS.match(scan_src, word_end)
+        tail_text = tail.group(0) if tail else ""
+        cmd = m.group("cmd")
         letters = (_flag_letters(m.group("flags"))
-                   + _flag_letters(m.group("tail")))
+                   + _flag_letters(tail_text))
+        end = tail.end() if tail else word_end
+        skip_until = end
+        snippet = src[m.start():end]
         if cmd in ("grep", "egrep", "fgrep"):
             if "P" in letters:
                 continue  # grep -P = PCRE-in-shell — documented false
@@ -412,8 +488,7 @@ def extract_shell_posix(
             flags = "i" if "i" in letters else ""
             shell_flags = {"syntax": "ere" if mode == "extended" else "bre",
                            "grep_mode": mode}
-            add(m.start(), pat, flags, shell_flags, "search",
-                src[m.start():m.end()])
+            add(m.start(), pat, flags, shell_flags, "search", snippet)
         elif cmd == "sed":
             # -E/-r switch sed to ERE (GNU sed 4.x + busybox both support
             # -E; the mirror must match the executing engine, cumulative
@@ -424,14 +499,14 @@ def extract_shell_posix(
             if search is not None:
                 add(m.start(), search, "",
                     {"syntax": sed_syntax, "grep_mode": "basic"},
-                    "substitution", src[m.start():m.end()])
+                    "substitution", snippet)
                 continue
             addr = _sed_addr(pat)
             if not addr:
                 continue  # numeric address / range — not a regex
             add(m.start(), addr, "",
                 {"syntax": sed_syntax, "grep_mode": "basic"},
-                "search", src[m.start():m.end()])
+                "search", snippet)
         else:  # awk
             if "F" in letters:
                 # -F 'ERE' — the quoted arg is the field-separator regex
@@ -444,7 +519,7 @@ def extract_shell_posix(
             else:
                 continue  # awk program text is not a regex literal
             add(m.start(), pat, "", {"syntax": "ere", "grep_mode": None},
-                "search", src[m.start():m.end()])
+                "search", snippet)
 
     for m in _SHELL_AWK_F.finditer(scan_src):
         add(m.start(), m.group("pat"), "", {"syntax": "ere", "grep_mode": None},
