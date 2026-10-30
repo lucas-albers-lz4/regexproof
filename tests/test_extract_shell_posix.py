@@ -154,11 +154,73 @@ def test_double_quoted_grep_argument_handles_escaped_quotes():
     assert [r["pattern"] for r in recs] == [expected]
 
 
-def test_double_quoted_grep_argument_decodes_shell_escaped_dollar():
-    # `\$` survives as a literal dollar in the shell argument; the remaining
-    # regex metacharacter semantics are left to the BRE/ERE compiler.
-    src = r'''grep -qE "^if ! ${fn} \"\\\$OUT\"" "$SRC"'''
-    assert patterns(src) == [r'^if ! ${fn} "\$OUT"']
+def test_double_quoted_escaped_dollar_is_static():
+    # `\$` survives as a literal dollar in the shell argument; it is not a
+    # shell expansion and the regex compiler receives the resulting pattern.
+    recs = extract(r'''grep -qE "^\$OUT" file''')
+    assert [r["pattern"] for r in recs] == ["^$OUT"]
+    assert recs[0].get("unencodable_reason") is None
+
+
+@pytest.mark.parametrize(
+    "src",
+    [
+        r'''grep -E "[${char}]" file''',
+        r'''grep -E "[a-z${extra}]" file''',
+        r'''grep -E "[${var}]*" file''',
+        r'''grep -E "[`printf x`]" file''',
+        r'''grep -E "$((1 + 2))" file''',
+        r'''grep -E $'[[:digit:]]' file''',
+        r'''grep -E 'prefix'*.txt''',
+        r'''grep -E 'prefix'{a,b}''',
+    ],
+)
+def test_shell_expansion_patterns_fail_closed(src):
+    recs = extract(src)
+    assert len(recs) == 1
+    assert recs[0]["unencodable_reason"] == "dynamic-shell-expansion"
+
+
+def test_single_quoted_parameter_syntax_is_static():
+    rec = extract("grep -E '[${char}]' file")[0]
+    assert rec["pattern"] == "[${char}]"
+    assert rec.get("unencodable_reason") is None
+
+
+def test_escaped_backtick_and_glob_suffix_are_static():
+    backtick = extract(r'''grep -E "a\`b" file''')[0]
+    assert backtick["pattern"] == "a`b"
+    assert backtick.get("unencodable_reason") is None
+    glob = extract(r'''grep -E 'prefix'\*.txt file''')[0]
+    assert glob["pattern"] == "prefix*.txt"
+    assert glob.get("unencodable_reason") is None
+
+
+def test_command_substitution_patterns_are_dynamic_but_nested_regexes_are_seen():
+    recs = extract(r'''grep -E "$(grep -E 'foo' file)" file''')
+    assert [r["pattern"] for r in recs] == ["$(grep -E 'foo' file)", "foo"]
+    assert recs[0]["unencodable_reason"] == "dynamic-shell-expansion"
+    assert recs[1].get("unencodable_reason") is None
+
+
+def test_backtick_substitution_patterns_are_dynamic_but_nested_regexes_are_seen():
+    recs = extract(r'''grep -E "`grep -E 'foo' file`" file''')
+    assert [r["pattern"] for r in recs] == ["`grep -E 'foo' file`", "foo"]
+    assert recs[0]["unencodable_reason"] == "dynamic-shell-expansion"
+    assert recs[1].get("unencodable_reason") is None
+
+
+@pytest.mark.parametrize(
+    "src",
+    [
+        r'''awk -F "${sep}" '{print}' file''',
+        r'''awk -F"${sep}" '{print}' file''',
+    ],
+)
+def test_awk_field_separator_expansion_fails_closed(src):
+    recs = extract(src)
+    assert len(recs) == 1
+    assert recs[0]["unencodable_reason"] == "dynamic-shell-expansion"
 
 
 def test_command_with_multiline_regex_word_is_not_partially_extracted():

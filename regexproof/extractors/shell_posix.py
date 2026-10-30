@@ -41,6 +41,7 @@ from __future__ import annotations
 
 import bisect
 import re
+from dataclasses import dataclass
 
 from regexproof.extractors.record import make_record
 
@@ -50,13 +51,13 @@ _SHELL_CMD_PREFIX = re.compile(
     r"(?<![A-Za-z0-9_\-])(?P<cmd>grep|egrep|fgrep|sed|awk)"  # shell token
     r"(?P<flags>(?:[ \t]+-[A-Za-z][A-Za-z0-9]*)*)"  # flag runs incl. separate flags
     r"[ \t]+(?P<e>-e[ \t]+|--regexp=[ \t]*)?"
-    r"(?P<q>['\"])"
+    r"(?P<ansi>\$)?(?P<q>['\"])"
 )
 _SHELL_BASH = re.compile(
     r"\[\[[ \t]+(?:\"[^\"]*\"|'[^']*'|[^ \t'\"]+)[ \t]+=~[ \t]+"
     r"(?P<pat>[^ \t'\"]+)[ \t]*\]\]"
 )
-_SHELL_AWK_F = re.compile(r"(?<![A-Za-z0-9_\-])awk[ \t]+-F(?P<q>['\"])(?P<pat>.*?)(?P=q)")
+_SHELL_AWK_F_PREFIX = re.compile(r"(?<![A-Za-z0-9_\-])awk[ \t]+-F(?P<q>['\"])")
 
 def _sed_search(pat: str) -> str | None:
     """Search part of an ``s///`` substitution, honoring ``\\``-escaped
@@ -126,22 +127,229 @@ def _sed_addr(pat: str) -> str | None:
     return None  # unterminated — GNU sed and busybox reject it
 
 
-def _read_shell_word(src: str, start: int) -> tuple[str, int] | None:
-    """Read one shell word starting at a quote and return its literal value.
+@dataclass(frozen=True)
+class _ShellWord:
+    value: str
+    end: int
+    unencodable_reason: str | None = None
+    has_command_expansion: bool = False
+
+
+def _skip_shell_command_substitution(src: str, start: int) -> int | None:
+    """Return the end of a balanced ``$(...)`` or ``$((...))`` expansion."""
+    arithmetic = src.startswith("$((", start)
+    i = start + (3 if arithmetic else 2)
+    depth = 2 if arithmetic else 1
+    quote: str | None = None
+    while i < len(src) and src[i] != "\n":
+        c = src[i]
+        if quote == "'":
+            if c == "'":
+                quote = None
+            i += 1
+            continue
+        if quote == '"':
+            if c == '"':
+                quote = None
+                i += 1
+            elif c == "\\" and i + 1 < len(src):
+                i += 2
+            elif c == "`":
+                end = _skip_shell_backtick(src, i)
+                if end is None:
+                    return None
+                i = end
+            elif src.startswith("$(", i):
+                end = _skip_shell_command_substitution(src, i)
+                if end is None:
+                    return None
+                i = end
+            else:
+                i += 1
+            continue
+        if c == "\\" and i + 1 < len(src):
+            i += 2
+        elif c == "'" or c == '"':
+            quote = c
+            i += 1
+        elif c == "`":
+            end = _skip_shell_backtick(src, i)
+            if end is None:
+                return None
+            i = end
+        elif src.startswith("$(", i):
+            end = _skip_shell_command_substitution(src, i)
+            if end is None:
+                return None
+            i = end
+        elif c == "(":
+            depth += 1
+            i += 1
+        elif c == ")":
+            depth -= 1
+            i += 1
+            if depth == 0:
+                return i
+        else:
+            i += 1
+    return None
+
+
+def _skip_shell_backtick(src: str, start: int) -> int | None:
+    """Return the end of a balanced legacy backtick command substitution."""
+    i = start + 1
+    quote: str | None = None
+    while i < len(src) and src[i] != "\n":
+        c = src[i]
+        if quote == "'":
+            if c == "'":
+                quote = None
+            i += 1
+        elif quote == '"':
+            if c == '"':
+                quote = None
+                i += 1
+            elif c == "\\" and i + 1 < len(src):
+                i += 2
+            elif c == "`":
+                end = _skip_shell_backtick(src, i)
+                if end is None:
+                    return None
+                i = end
+            elif src.startswith("$(", i):
+                end = _skip_shell_command_substitution(src, i)
+                if end is None:
+                    return None
+                i = end
+            else:
+                i += 1
+        elif c == "\\" and i + 1 < len(src):
+            i += 2
+        elif c == "'" or c == '"':
+            quote = c
+            i += 1
+        elif c == "`":
+            return i + 1
+        elif src.startswith("$(", i):
+            end = _skip_shell_command_substitution(src, i)
+            if end is None:
+                return None
+            i = end
+        else:
+            i += 1
+    return None
+
+
+def _skip_shell_expansion(src: str, start: int) -> tuple[int, bool] | None:
+    """Consume one unescaped parameter or command expansion after ``$``."""
+    if src.startswith("$(", start):
+        end = _skip_shell_command_substitution(src, start)
+        return (end, True) if end is not None else None
+    if start + 1 >= len(src):
+        return start + 1, False
+    nxt = src[start + 1]
+    if nxt in "'\"":
+        # Bash ANSI-C quotes ($'...') and localized quotes ($"...") alter
+        # the shell word; keep the whole fragment opaque and reject it.
+        i = start + 2
+        while i < len(src) and src[i] != "\n":
+            if src[i] == "\\" and i + 1 < len(src):
+                i += 2
+            elif src[i] == nxt:
+                return i + 1, False
+            else:
+                i += 1
+        return None
+    if nxt == "{":
+        depth = 1
+        quote: str | None = None
+        i = start + 2
+        has_command = False
+        while i < len(src) and src[i] != "\n":
+            c = src[i]
+            if quote == "'":
+                if c == "'":
+                    quote = None
+                i += 1
+            elif quote == '"':
+                if c == '"':
+                    quote = None
+                    i += 1
+                elif c == "\\" and i + 1 < len(src):
+                    i += 2
+                elif c == "`":
+                    end = _skip_shell_backtick(src, i)
+                    if end is None:
+                        return None
+                    has_command = True
+                    i = end
+                elif src.startswith("$(", i):
+                    end = _skip_shell_command_substitution(src, i)
+                    if end is None:
+                        return None
+                    has_command = True
+                    i = end
+                else:
+                    i += 1
+            elif c == "\\" and i + 1 < len(src):
+                i += 2
+            elif c == "'" or c == '"':
+                quote = c
+                i += 1
+            elif c == "`":
+                end = _skip_shell_backtick(src, i)
+                if end is None:
+                    return None
+                has_command = True
+                i = end
+            elif src.startswith("$(", i):
+                end = _skip_shell_command_substitution(src, i)
+                if end is None:
+                    return None
+                has_command = True
+                i = end
+            elif c == "{":
+                depth += 1
+                i += 1
+            elif c == "}":
+                depth -= 1
+                i += 1
+                if depth == 0:
+                    return i, has_command
+            else:
+                i += 1
+        return None
+    if nxt in "0123456789#?$!*@-":
+        return start + 2, False
+    if nxt.isalpha() or nxt == "_":
+        i = start + 2
+        while i < len(src) and (src[i].isalnum() or src[i] == "_"):
+            i += 1
+        return i, False
+    # A dollar not followed by shell parameter syntax is literal.
+    return start + 1, False
+
+
+def _read_shell_word(src: str, start: int) -> _ShellWord | None:
+    """Read a quoted shell word and record whether its value is dynamic.
 
     Regex arguments often contain quote concatenation (``'a'\\''b'``) and
     escaped quotes inside double quotes. A quote-pair regex truncates these
     valid words, turning complete expressions into bogus parse errors. This
     small lexer handles adjacent quoted/unquoted fragments and POSIX
     backslash rules. It intentionally stops at a newline, matching the
-    scanner's line-local command model. Parameter/command expansion is kept
-    as source text.
+    scanner's line-local command model. Unescaped parameter/command
+    expansions and unquoted glob/brace expansion are tagged dynamic so they
+    cannot be compiled as a fixed regex. Escaped dollars/backticks and
+    single-quoted expansions remain literal.
     """
     if start >= len(src) or src[start] not in "'\"":
         return None
     out: list[str] = []
     quote: str | None = None
     i = start
+    dynamic = False
+    has_command_expansion = False
     while i < len(src) and src[i] != "\n":
         c = src[i]
         if quote == "'":
@@ -164,6 +372,26 @@ def _read_shell_word(src: str, start: int) -> tuple[str, int] | None:
                     out.extend((c, nxt))
                 i += 2
                 continue
+            if c == "$":
+                expansion = _skip_shell_expansion(src, i)
+                if expansion is None:
+                    return None
+                end, command = expansion
+                if end > i + 1:
+                    dynamic = True
+                    has_command_expansion |= command
+                    out.append(src[i:end])
+                    i = end
+                    continue
+            if c == "`":
+                end = _skip_shell_backtick(src, i)
+                if end is None:
+                    return None
+                dynamic = True
+                has_command_expansion = True
+                out.append(src[i:end])
+                i = end
+                continue
             out.append(c)
             i += 1
             continue
@@ -176,17 +404,44 @@ def _read_shell_word(src: str, start: int) -> tuple[str, int] | None:
             quote = c
             i += 1
             continue
+        if c == "$":
+            expansion = _skip_shell_expansion(src, i)
+            if expansion is None:
+                return None
+            end, command = expansion
+            if end > i + 1:
+                dynamic = True
+                has_command_expansion |= command
+                out.append(src[i:end])
+                i = end
+                continue
+        if c == "`":
+            end = _skip_shell_backtick(src, i)
+            if end is None:
+                return None
+            dynamic = True
+            has_command_expansion = True
+            out.append(src[i:end])
+            i = end
+            continue
         if c == "\\":
             if i + 1 >= len(src) or src[i + 1] == "\n":
                 return None  # trailing escape / unsupported line continuation
             out.append(src[i + 1])
             i += 2
             continue
+        if c in "*?[]{}~":
+            dynamic = True
         out.append(c)
         i += 1
     if quote is not None:
         return None
-    return "".join(out), i
+    return _ShellWord(
+        "".join(out),
+        i,
+        "dynamic-shell-expansion" if dynamic else None,
+        has_command_expansion,
+    )
 
 _FLAG_TOKEN = re.compile(r"-([A-Za-z][A-Za-z0-9]*)")
 _TRAILING_FLAGS = re.compile(r"(?:[ \t]+-[A-Za-z][A-Za-z0-9]*)*")
@@ -440,7 +695,8 @@ def extract_shell_posix(
     scan_src = _blank_heredoc_bodies(src)  # bodies are DATA, not code (#7)
 
     def add(pos: int, pat: str, flags: str, shell_flags: dict,
-            call_kind: str, snippet: str) -> None:
+            call_kind: str, snippet: str,
+            unencodable_reason: str | None = None) -> None:
         if _in_comment_or_string(src, pos):
             return  # inside a comment or quoted string — not a real site
         if not pat or len(pat) < 2:
@@ -457,6 +713,7 @@ def extract_shell_posix(
             column=pos - line_start,
             context_snippet=snippet[:500],
             extra_fields={"shell_flags": shell_flags},
+            unencodable_reason=unencodable_reason,
         )
         hits.append((pos, rec))
 
@@ -467,7 +724,8 @@ def extract_shell_posix(
         word = _read_shell_word(scan_src, m.end("q") - 1)
         if word is None:
             continue
-        pat, word_end = word
+        pat = word.value
+        word_end = word.end
         if not pat:
             continue
         tail = _TRAILING_FLAGS.match(scan_src, word_end)
@@ -476,7 +734,13 @@ def extract_shell_posix(
         letters = (_flag_letters(m.group("flags"))
                    + _flag_letters(tail_text))
         end = tail.end() if tail else word_end
-        skip_until = end
+        # Commands inside `$(...)` or backticks are live shell code and may
+        # contain their own regex sites; other command-like text belongs to
+        # this pattern word and must not be reconsidered.
+        skip_until = m.start() if word.has_command_expansion else end
+        dynamic_reason = word.unencodable_reason or (
+            "dynamic-shell-expansion" if m.group("ansi") else None
+        )
         snippet = src[m.start():end]
         if cmd in ("grep", "egrep", "fgrep"):
             if "P" in letters:
@@ -488,7 +752,8 @@ def extract_shell_posix(
             flags = "i" if "i" in letters else ""
             shell_flags = {"syntax": "ere" if mode == "extended" else "bre",
                            "grep_mode": mode}
-            add(m.start(), pat, flags, shell_flags, "search", snippet)
+            add(m.start(), pat, flags, shell_flags, "search", snippet,
+                dynamic_reason)
         elif cmd == "sed":
             # -E/-r switch sed to ERE (GNU sed 4.x + busybox both support
             # -E; the mirror must match the executing engine, cumulative
@@ -499,14 +764,14 @@ def extract_shell_posix(
             if search is not None:
                 add(m.start(), search, "",
                     {"syntax": sed_syntax, "grep_mode": "basic"},
-                    "substitution", snippet)
+                    "substitution", snippet, dynamic_reason)
                 continue
             addr = _sed_addr(pat)
             if not addr:
                 continue  # numeric address / range — not a regex
             add(m.start(), addr, "",
                 {"syntax": sed_syntax, "grep_mode": "basic"},
-                "search", snippet)
+                "search", snippet, dynamic_reason)
         else:  # awk
             if "F" in letters:
                 # -F 'ERE' — the quoted arg is the field-separator regex
@@ -519,11 +784,21 @@ def extract_shell_posix(
             else:
                 continue  # awk program text is not a regex literal
             add(m.start(), pat, "", {"syntax": "ere", "grep_mode": None},
-                "search", snippet)
+                "search", snippet, dynamic_reason)
 
-    for m in _SHELL_AWK_F.finditer(scan_src):
-        add(m.start(), m.group("pat"), "", {"syntax": "ere", "grep_mode": None},
-            "search", src[m.start():m.end()])
+    for m in _SHELL_AWK_F_PREFIX.finditer(scan_src):
+        word = _read_shell_word(scan_src, m.end("q") - 1)
+        if word is None or not word.value:
+            continue
+        add(
+            m.start(),
+            word.value,
+            "",
+            {"syntax": "ere", "grep_mode": None},
+            "search",
+            src[m.start() : word.end],
+            word.unencodable_reason,
+        )
 
     for m in _SHELL_BASH.finditer(scan_src):
         add(m.start(), m.group("pat"), "", {"syntax": "bash_ksh",
