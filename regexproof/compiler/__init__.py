@@ -29,7 +29,8 @@ def compiler_source_fingerprint() -> str:
         digest.update(b"\0")
         digest.update(contents.encode("utf-8"))
         digest.update(b"\0")
-    java_helpers = base.parents[2] / "helpers" / "java"
+    # base is <repo>/regexproof/compiler; parents[1] is the repository root.
+    java_helpers = base.parents[1] / "helpers" / "java"
     for source in sorted(java_helpers.glob("*")):
         if not source.is_file():
             continue

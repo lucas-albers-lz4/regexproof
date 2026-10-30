@@ -96,6 +96,21 @@ def test_compiler_version_tracks_source_contents(tmp_path: Path):
     assert compiler_source_fingerprint() == before
 
 
+def test_compiler_version_tracks_java_helper_source():
+    before = compiler_source_fingerprint()
+    compiler_dir = Path(compiler_source_fingerprint.__globals__["__file__"]).resolve().parent
+    helper_dir = compiler_dir.parents[1] / "helpers" / "java"
+    extra = helper_dir / "_fingerprint_probe_sentinel"
+    assert not extra.exists()
+    try:
+        extra.write_text("helper source fingerprint probe\n", encoding="utf-8")
+        after = compiler_source_fingerprint()
+        assert after != before, "fingerprint must include Java helper sources"
+    finally:
+        extra.unlink(missing_ok=True)
+    assert compiler_source_fingerprint() == before
+
+
 def test_spawn_workers_return_same_sorted_rows_and_mirrors(tmp_path: Path):
     records = [
         _record("c", "^[c]+$"),
