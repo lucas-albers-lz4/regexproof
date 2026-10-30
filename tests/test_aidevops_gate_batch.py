@@ -92,5 +92,14 @@ def test_aidevops_smith_decision_reconciles_with_measured_fraction():
     assert smith["smith_decision"] == "go"
     assert smith["regex_sites"] == fraction["sample_size"] == 11330
     assert smith["sites_by_bucket"] == {"posix-shell": 11330}
-    assert "unclassified" in smith["reason"]
+    assert smith["measurement_status"] == "historical_pre_615_shell_extractor"
+    assert "Historical" in smith["reason"]
+    assert "not current acceptance or issue-closure evidence" in smith["reason"]
+    assert fraction["scope"] == "full_corpus"
+    assert fraction["complete_run"] is True
+    assert fraction["budget_breaches"] is None
+    assert fraction["encodable"] == 10212
+    assert fraction["fraction"] == 0.9013
     assert fraction["unclassified_parse_errors"] == 63
+    assert f"{fraction['encodable']:,}/{fraction['sample_size']:,}" in smith["reason"]
+    assert f"{fraction['fraction']:.4f}" in smith["reason"]
