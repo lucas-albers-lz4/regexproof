@@ -34,6 +34,11 @@ def test_cache_key_length_prefix_blocks_ambiguous_splits():
     first = mirror_cache_key("a", "bc", "re2", "fullmatch", "ascii", None, "v", "z")
     second = mirror_cache_key("ab", "c", "re2", "fullmatch", "ascii", None, "v", "z")
     assert first != second
+    assert mirror_cache_key(
+        "x", "", "java", "fullmatch", "ascii", None, "v", "z", engine_version="17.0"
+    ) != mirror_cache_key(
+        "x", "", "java", "fullmatch", "ascii", None, "v", "z", engine_version="21.0"
+    )
     # Dict ordering is not part of shell flag identity.
     assert mirror_cache_key(
         "x", "", "posix-shell", "search", "ascii", {"grep_mode": "basic", "syntax": "bre"}, "v", "z"

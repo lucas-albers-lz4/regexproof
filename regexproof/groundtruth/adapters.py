@@ -69,10 +69,11 @@ semantics; single-session framing is the designed protocol for all dialects).
 
 from __future__ import annotations
 
+import json
 import subprocess
 import sys
 import tempfile
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from enum import StrEnum
 from pathlib import Path
 
@@ -138,6 +139,7 @@ class ReplayResult:
 
     verdict: ReplayVerdict
     detail: str = ""
+    engine_versions: dict[str, str] = field(default_factory=dict)
 
     @property
     def accepted(self) -> bool:
@@ -350,7 +352,10 @@ def _parse_batch_lines(stdout: str, n: int) -> list[ReplayVerdict] | None:
 
 def _broadcast(result: ReplayResult, n: int) -> list[ReplayResult]:
     """Replicate one ReplayResult across all witnesses of a failed batch."""
-    return [ReplayResult(result.verdict, result.detail) for _ in range(n)]
+    return [
+        ReplayResult(result.verdict, result.detail, dict(result.engine_versions))
+        for _ in range(n)
+    ]
 
 
 # ---------------------------------------------------------------------------
@@ -514,12 +519,24 @@ def _java_replay(pattern, flags, call_kind, witness, *, timeout_s: float):
     )
     if isinstance(proc, ReplayResult):
         return proc
-    return _rc_result(
+    result = _rc_result(
         proc,
         compile_error=_COMPILE_ERROR_RC,
         unavailable=_UNAVAILABLE_RC,
         label="java/PatternRunner",
     )
+    try:
+        record = json.loads(proc.stdout.strip() or "{}")
+    except json.JSONDecodeError:
+        record = {}
+    version = record.get("version")
+    if version:
+        return ReplayResult(
+            result.verdict,
+            result.detail,
+            engine_versions={"java": str(version)},
+        )
+    return result
 
 
 # ---------------------------------------------------------------------------

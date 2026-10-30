@@ -4,6 +4,10 @@ import java.util.regex.Pattern;
 
 /** Tiny ground-truth runner for the JDK's java.util.regex.Pattern engine. */
 public final class PatternRunner {
+  private static String javaVersion() {
+    return System.getProperty("java.vendor") + " " + Runtime.version().toString();
+  }
+
   private static String json(String value) {
     StringBuilder escaped = new StringBuilder("\"");
     for (int i = 0; i < value.length(); i++) {
@@ -53,13 +57,14 @@ public final class PatternRunner {
     } catch (IllegalArgumentException error) {
       System.out.println("{\"ok\":false,\"unencodable_reason\":\"parse-error\",\"error\":"
           + json(error.getMessage() == null ? "invalid pattern" : error.getMessage())
-          + ",\"helper\":\"java-pattern\"}");
+          + ",\"helper\":\"java-pattern\",\"version\":"
+          + json(javaVersion()) + "}");
       System.exit("parse".equals(mode) ? 1 : 2);
       return;
     }
     if ("parse".equals(mode)) {
       System.out.println("{\"ok\":true,\"helper\":\"java-pattern\",\"version\":"
-          + json(Runtime.version().toString()) + "}");
+          + json(javaVersion()) + "}");
       return;
     }
     if (!"match".equals(mode)) {
@@ -78,6 +83,9 @@ public final class PatternRunner {
         System.exit(2);
         return;
     }
+    System.out.println("{\"ok\":true,\"matched\":" + matched
+        + ",\"helper\":\"java-pattern\",\"version\":"
+        + json(javaVersion()) + "}");
     System.exit(matched ? 0 : 1);
   }
 }

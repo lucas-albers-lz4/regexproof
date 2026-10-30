@@ -41,6 +41,19 @@ from regexproof.z3_pin import assert_z3_pinned  # noqa: E402
 OUT = ROOT / "properties" / "generated"
 
 
+def _engine_versions_for_rows(rows: list[dict[str, Any]]) -> dict[str, str]:
+    versions = {"python": platform.python_version(), "z3": z3.get_version_string()}
+    for row in rows:
+        for engine, version in (row.get("engine_versions") or {}).items():
+            previous = versions.get(engine)
+            if previous is not None and previous != version:
+                raise SystemExit(
+                    f"mixed {engine} versions in one measurement: {previous!r} vs {version!r}"
+                )
+            versions[engine] = str(version)
+    return versions
+
+
 def _disk_usage_mb(path: Path) -> float:
     """Estimate disk usage of path tree in MB (best-effort)."""
     try:
@@ -260,23 +273,20 @@ def measure(corpus: str, *, assert_determinism: bool = False) -> dict:
     OUT.mkdir(parents=True, exist_ok=True)
     with inv_path.open("w", encoding="utf-8") as fh:
         for c in rows:
-            fh.write(
-                json.dumps(
-                    {
-                        "regex_id": c.get("regex_id"),
-                        "site": c.get("site"),
-                        "pattern": c.get("pattern"),
-                        "flags": c.get("flags") or "",
-                        "dialect": c.get("dialect"),
-                        "call_kind": c.get("call_kind"),
-                        "encodable": bool(c.get("encodable")),
-                        "compile_reason": c.get("compile_reason"),
-                        "corpus": corpus,
-                    },
-                    sort_keys=True,
-                )
-                + "\n"
-            )
+            inventory_row = {
+                "regex_id": c.get("regex_id"),
+                "site": c.get("site"),
+                "pattern": c.get("pattern"),
+                "flags": c.get("flags") or "",
+                "dialect": c.get("dialect"),
+                "call_kind": c.get("call_kind"),
+                "encodable": bool(c.get("encodable")),
+                "compile_reason": c.get("compile_reason"),
+                "corpus": corpus,
+            }
+            if c.get("engine_versions"):
+                inventory_row["engine_versions"] = c["engine_versions"]
+            fh.write(json.dumps(inventory_row, sort_keys=True) + "\n")
 
     compiler_commit = (
         hashlib.sha1(
@@ -307,10 +317,7 @@ def measure(corpus: str, *, assert_determinism: bool = False) -> dict:
         "inventory_path": str(inv_path.relative_to(ROOT)),
         "id_formula": REGEX_ID_FORMULA_VERSION,
         "extractor_schema_version": EXTRACTOR_SCHEMA_VERSION,
-        "engine_versions": {
-            "python": platform.python_version(),
-            "z3": z3.get_version_string(),
-        },
+        "engine_versions": _engine_versions_for_rows(rows),
         "path": str(path.relative_to(ROOT)) if path.is_relative_to(ROOT) else str(path),
     }
     # Expected-vs-actual file gate stats (Wave-3 P5 testdata / test262-style).

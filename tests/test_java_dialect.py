@@ -8,6 +8,7 @@ import sys
 import pytest
 import z3
 
+from regexproof.batch.compile_records import compile_records
 from regexproof.compiler import compile_pattern
 from regexproof.compiler.java import HELPER, replay_argv
 from regexproof.groundtruth.adapters import ReplayVerdict
@@ -25,6 +26,30 @@ def test_java_dialect_is_registered_and_compiles_subset():
     assert result.encodable
     assert result.dialect == "java"
     assert result.declared_domain == "ascii"
+    assert result.meta["engine_versions"]["java"]
+
+
+def test_java_compile_records_preserve_engine_version(tmp_path):
+    records = [
+        {
+            "regex_id": "a" * 32,
+            "pattern": "a+",
+            "flags": "",
+            "dialect": "java",
+            "call_kind": "fullmatch",
+            "domain": "ascii",
+        }
+    ]
+    rows = compile_records(
+        records,
+        lift_inline=False,
+        corpus_slug="java-fixture",
+        jobs=1,
+        cache_dir=tmp_path,
+    )
+    row, mirror, meta = rows[0]
+    assert mirror is not None
+    assert row["engine_versions"]["java"] == meta["engine_versions"]["java"]
 
 
 def test_java_rejects_known_semantic_gaps():
@@ -74,6 +99,8 @@ def test_java_helper_parses_and_replays_with_jdk():
     )
     assert parse.returncode == 0, parse.stdout + parse.stderr
     assert '"helper":"java-pattern"' in parse.stdout
+    parsed = __import__("json").loads(parse.stdout)
+    assert parsed["version"]
 
     replay = subprocess.run(
         replay_argv(r"(?i:foo)", "", "fullmatch"),
@@ -97,6 +124,7 @@ def test_java_helper_parses_and_replays_with_jdk():
 
     gt = ground_truth_replay(r"(?i:foo)", "", "java", "fullmatch", "FoO")
     assert gt.verdict is ReplayVerdict.ACCEPTED
+    assert "17." in gt.engine_versions["java"]
     invalid = ground_truth_replay("[", "", "java", "search", "foo")
     assert invalid.verdict is ReplayVerdict.ENGINE_ERROR
 

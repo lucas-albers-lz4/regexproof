@@ -6,6 +6,7 @@ import json
 import re
 import subprocess
 import sys
+from functools import lru_cache
 from pathlib import Path
 
 from regexproof.compiler.base import (
@@ -82,6 +83,13 @@ def _parse_with_helper(pattern: str, flags: str) -> dict:
         return {"ok": False, "unencodable_reason": "parse-error", "helper": "java-pattern"}
 
 
+@lru_cache(maxsize=1)
+def java_engine_version() -> str:
+    """Return the exact JDK identity, or a stable missing-helper marker."""
+    gate = _parse_with_helper("a", "")
+    return str(gate.get("version") or "unavailable")
+
+
 def _raise_from_gate(gate: dict) -> None:
     if gate.get("ok") is not False:
         return
@@ -107,6 +115,14 @@ def compile_java(
     def fold(ch: str):
         return python_fold_closure(ch, ascii_only=True)
 
+    engine_versions: dict[str, str] = {}
+
+    def helper_gate(value: str, value_flags: str) -> dict:
+        gate = _parse_with_helper(value, value_flags)
+        if gate.get("version"):
+            engine_versions["java"] = str(gate["version"])
+        return gate
+
     spec = DialectSpec(
         dialect="java",
         declared_domain="ascii",
@@ -117,12 +133,18 @@ def compile_java(
         allow_ascii_word_boundary=True,
         local_reject_fn=_java_reject,
         flag_reject_fn=flag_reject,
-        helper_gate_fn=_parse_with_helper,
+        helper_gate_fn=helper_gate,
         raise_from_gate_fn=_raise_from_gate,
         fold_fn=fold,
         case_fold_fn=fold,
     )
-    return compile_dialect_template(pattern, flags, call_kind, spec=spec, max_length=max_length)
+    result = compile_dialect_template(
+        pattern, flags, call_kind, spec=spec, max_length=max_length
+    )
+    if engine_versions:
+        result.meta = result.meta or {}
+        result.meta["engine_versions"] = engine_versions
+    return result
 
 
 def replay_argv(pattern: str, flags: str, call_kind: str = "search") -> list[str]:

@@ -40,8 +40,10 @@ def run(mode: str, pattern: str, flags: str = "", call_kind: str = "search") -> 
     except subprocess.TimeoutExpired:
         print(json.dumps({"ok": False, "unencodable_reason": "timeout", "helper": "java-pattern"}))
         return 3
-    if mode == "parse":
-        print(proc.stdout.strip() or json.dumps({
+    if proc.stdout.strip():
+        print(proc.stdout.strip())
+    elif mode == "parse":
+        print(json.dumps({
             "ok": False,
             "unencodable_reason": "parse-error",
             "error": proc.stderr.strip(),

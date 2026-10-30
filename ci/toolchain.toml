@@ -21,6 +21,11 @@ major = 22
 # setup-go version used in golden (go-re2 helper)
 version = "1.22"
 
+[java]
+# JDK used for java.util.regex.Pattern parsing and ground-truth replay.
+distribution = "temurin"
+major = 17
+
 [pcre2]
 # Golden job installs pcre2-utils (Wave 2 mirror-fidelity surfaces).
 status = "required"
