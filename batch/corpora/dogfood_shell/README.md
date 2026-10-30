@@ -19,8 +19,11 @@ URL and commit, byte count, and SHA-256. [`licenses.json`](licenses.json) and
 
 All four repository pins are recorded for provenance, including happycow;
 that repository contributed zero shell files accepted by the shell filter, so
-no happycow source files are copied into this corpus. The included files come
-from usrmanage and fwlive (Apache License 2.0) and hermes-agent (MIT License).
+no happycow source files are copied into this corpus. Included files come
+from usrmanage and fwlive (Apache License 2.0), hermes-agent (MIT License),
+and the ast-grep optional skill (MIT License, copyright Yeongyu Kim). Each
+applicable upstream license text is preserved, including the nested ast-grep
+license for its two included shell scripts.
 
 To reproduce the source snapshot from the pin record, fetch each listed commit,
 run `git archive <commit>`, preserve its repository name as the top-level
@@ -42,7 +45,7 @@ zero parse errors, `complete_run=true`, no budget breaches, and passes the
 [`properties/generated/dogfood_shell_encodable_fraction.json`](../../../properties/generated/dogfood_shell_encodable_fraction.json)
 and its deterministic inventory at
 [`properties/generated/dogfood_shell-inventory.ndjson`](../../../properties/generated/dogfood_shell-inventory.ndjson).
-The report records Python 3.12.13, Z3 5.0.0, compiler fingerprint
+The report records Python 3.13.16, Z3 5.0.0, compiler fingerprint
 `35ea1f238a9e`, and the source-pin digest. The CI job reruns this measurement
 on Linux against the checked-in snapshot.
 

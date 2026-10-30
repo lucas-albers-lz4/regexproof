@@ -62,6 +62,14 @@ def test_dogfood_shell_licenses_are_preserved():
         assert len(data) == row["bytes"]
         assert hashlib.sha256(data).hexdigest() == row["sha256"]
     assert "zero shell files" in manifest["note"]
+    ast_grep = next(
+        row for row in manifest["files"]
+        if row.get("applies_to_prefix")
+        == "hermes-agent/optional-skills/software-development/ast-grep/"
+    )
+    assert "Yeongyu Kim" in (
+        CORPUS_ROOT / "licenses" / ast_grep["file"]
+    ).read_text(encoding="utf-8")
 
 
 def test_dogfood_shell_measurement_and_smith_decision_are_recorded():
