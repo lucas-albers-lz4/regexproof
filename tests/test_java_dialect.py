@@ -36,6 +36,34 @@ def test_java_rejects_known_semantic_gaps():
     assert compile_pattern("foo", "m", "java").unencodable_reason == "java-flag"
 
 
+@pytest.mark.parametrize(
+    ("pattern", "accepted", "rejected"),
+    [
+        (r"[a[b]]", {"a", "b"}, {"]", "e", "q", "_"}),
+        (r"[a-d[m-p]]", {"a", "b", "c", "d", "m", "n", "o", "p"}, {"]", "e", "q", "_"}),
+        (r"[\d[a-z]]", {"0", "7", "a", "z", "e", "q"}, {"]", "_"}),
+    ],
+)
+def test_java_nested_character_class_union_is_rejected_with_jvm_examples(
+    pattern, accepted, rejected
+):
+    compiled = compile_pattern(pattern, dialect="java", call_kind="fullmatch")
+    assert compiled.unencodable_reason == "nested-class"
+
+    # The real Java engine treats nested classes as union; these values make
+    # the original parser/mirror discrepancy explicit in the regression.
+    for value in accepted | rejected:
+        proc = subprocess.run(
+            replay_argv(pattern, "", "fullmatch"),
+            input=value,
+            capture_output=True,
+            text=True,
+            check=False,
+            timeout=30,
+        )
+        assert proc.returncode == (0 if value in accepted else 1), (pattern, value)
+
+
 def test_java_helper_parses_and_replays_with_jdk():
     parse = subprocess.run(
         [sys.executable, str(HELPER), "parse", r"(?i:foo)", ""],

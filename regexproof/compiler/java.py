@@ -47,6 +47,10 @@ def _java_reject(pattern: str) -> str | None:
             i += 2
             continue
         if ch == "[":
+            if in_class:
+                # Java nests character classes as unions; the shared simple
+                # parser treats the inner '[' as a literal instead.
+                return "nested-class"
             in_class = True
         elif ch == "]":
             in_class = False
