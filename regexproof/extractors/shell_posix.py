@@ -135,11 +135,14 @@ class _ShellWord:
     has_command_expansion: bool = False
 
 
-def _skip_shell_command_substitution(src: str, start: int) -> int | None:
+def _skip_shell_command_substitution(
+    src: str, start: int
+) -> tuple[int, bool] | None:
     """Return the end of a balanced ``$(...)`` or ``$((...))`` expansion."""
     arithmetic = src.startswith("$((", start)
     i = start + (3 if arithmetic else 2)
     depth = 2 if arithmetic else 1
+    has_command = not arithmetic
     quote: str | None = None
     while i < len(src) and src[i] != "\n":
         c = src[i]
@@ -158,11 +161,14 @@ def _skip_shell_command_substitution(src: str, start: int) -> int | None:
                 end = _skip_shell_backtick(src, i)
                 if end is None:
                     return None
+                has_command = True
                 i = end
             elif src.startswith("$(", i):
-                end = _skip_shell_command_substitution(src, i)
-                if end is None:
+                nested = _skip_shell_command_substitution(src, i)
+                if nested is None:
                     return None
+                end, nested_command = nested
+                has_command |= nested_command
                 i = end
             else:
                 i += 1
@@ -176,11 +182,14 @@ def _skip_shell_command_substitution(src: str, start: int) -> int | None:
             end = _skip_shell_backtick(src, i)
             if end is None:
                 return None
+            has_command = True
             i = end
         elif src.startswith("$(", i):
-            end = _skip_shell_command_substitution(src, i)
-            if end is None:
+            nested = _skip_shell_command_substitution(src, i)
+            if nested is None:
                 return None
+            end, nested_command = nested
+            has_command |= nested_command
             i = end
         elif c == "(":
             depth += 1
@@ -189,7 +198,7 @@ def _skip_shell_command_substitution(src: str, start: int) -> int | None:
             depth -= 1
             i += 1
             if depth == 0:
-                return i
+                return i, has_command
         else:
             i += 1
     return None
@@ -217,9 +226,10 @@ def _skip_shell_backtick(src: str, start: int) -> int | None:
                     return None
                 i = end
             elif src.startswith("$(", i):
-                end = _skip_shell_command_substitution(src, i)
-                if end is None:
+                nested = _skip_shell_command_substitution(src, i)
+                if nested is None:
                     return None
+                end, _ = nested
                 i = end
             else:
                 i += 1
@@ -231,9 +241,10 @@ def _skip_shell_backtick(src: str, start: int) -> int | None:
         elif c == "`":
             return i + 1
         elif src.startswith("$(", i):
-            end = _skip_shell_command_substitution(src, i)
-            if end is None:
+            nested = _skip_shell_command_substitution(src, i)
+            if nested is None:
                 return None
+            end, _ = nested
             i = end
         else:
             i += 1
@@ -243,8 +254,7 @@ def _skip_shell_backtick(src: str, start: int) -> int | None:
 def _skip_shell_expansion(src: str, start: int) -> tuple[int, bool] | None:
     """Consume one unescaped parameter or command expansion after ``$``."""
     if src.startswith("$(", start):
-        end = _skip_shell_command_substitution(src, start)
-        return (end, True) if end is not None else None
+        return _skip_shell_command_substitution(src, start)
     if start + 1 >= len(src):
         return start + 1, False
     nxt = src[start + 1]
@@ -284,10 +294,11 @@ def _skip_shell_expansion(src: str, start: int) -> tuple[int, bool] | None:
                     has_command = True
                     i = end
                 elif src.startswith("$(", i):
-                    end = _skip_shell_command_substitution(src, i)
-                    if end is None:
+                    nested = _skip_shell_command_substitution(src, i)
+                    if nested is None:
                         return None
-                    has_command = True
+                    end, nested_command = nested
+                    has_command |= nested_command
                     i = end
                 else:
                     i += 1
@@ -303,10 +314,11 @@ def _skip_shell_expansion(src: str, start: int) -> tuple[int, bool] | None:
                 has_command = True
                 i = end
             elif src.startswith("$(", i):
-                end = _skip_shell_command_substitution(src, i)
-                if end is None:
+                nested = _skip_shell_command_substitution(src, i)
+                if nested is None:
                     return None
-                has_command = True
+                end, nested_command = nested
+                has_command |= nested_command
                 i = end
             elif c == "{":
                 depth += 1
@@ -398,6 +410,16 @@ def _read_shell_word(src: str, start: int) -> _ShellWord | None:
 
         # Unquoted part of the same shell word, including adjacent quoted
         # fragments and the POSIX '\'' single-quote idiom.
+        if c in "<>" and i + 1 < len(src) and src[i + 1] == "(":
+            process_sub = _skip_shell_command_substitution(src, i)
+            if process_sub is None:
+                return None
+            end, _ = process_sub
+            dynamic = True
+            has_command_expansion = True
+            out.append(src[i:end])
+            i = end
+            continue
         if c in " \t;&|()<>\n":
             break
         if c in "'\"":
@@ -442,6 +464,31 @@ def _read_shell_word(src: str, start: int) -> _ShellWord | None:
         "dynamic-shell-expansion" if dynamic else None,
         has_command_expansion,
     )
+
+
+def _unquoted_shell_expansion(pattern: str) -> bool:
+    """Whether a Bash/Ksh unquoted regex token contains shell expansion."""
+    i = 0
+    while i < len(pattern):
+        c = pattern[i]
+        if c == "\\" and i + 1 < len(pattern):
+            i += 2
+            continue
+        if c == "$":
+            expansion = _skip_shell_expansion(pattern, i)
+            if expansion is None:
+                return True
+            end, _ = expansion
+            if end > i + 1:
+                return True
+        elif c == chr(96):
+            if _skip_shell_backtick(pattern, i) is None:
+                return True
+            return True
+        elif c in "<>" and i + 1 < len(pattern) and pattern[i + 1] == "(":
+            return True
+        i += 1
+    return False
 
 _FLAG_TOKEN = re.compile(r"-([A-Za-z][A-Za-z0-9]*)")
 _TRAILING_FLAGS = re.compile(r"(?:[ \t]+-[A-Za-z][A-Za-z0-9]*)*")
@@ -626,6 +673,10 @@ def _in_comment_or_string(src: str, pos: int) -> bool:
             elif c == ")":
                 _, saved, _ = frames.pop()  # restore outer quote context
                 quote = saved
+            elif c in "<>" and i + 1 < pos and src[i + 1] == "(":
+                frames.append(("sub", quote, 0))
+                quote = None
+                i += 1
             elif c == "$" and i + 1 < pos and src[i + 1] == "(":
                 if i + 2 < pos and src[i + 2] == "(":
                     frames.append(("arith", quote, 0))
@@ -656,6 +707,10 @@ def _in_comment_or_string(src: str, pos: int) -> bool:
         elif c == "`":
             frames.append(("bt", quote, 0))
             quote = None
+        elif c in "<>" and i + 1 < pos and src[i + 1] == "(":
+            frames.append(("sub", quote, 0))
+            quote = None
+            i += 1
         elif c == "#" and (i == line_start or src[i - 1] in " \t;|&(){}"):
             return True
         i += 1
@@ -801,9 +856,11 @@ def extract_shell_posix(
         )
 
     for m in _SHELL_BASH.finditer(scan_src):
+        pat = m.group("pat")
         add(m.start(), m.group("pat"), "", {"syntax": "bash_ksh",
                                             "grep_mode": None},
-            "search", src[m.start():m.end()])
+            "search", src[m.start():m.end()],
+            "dynamic-shell-expansion" if _unquoted_shell_expansion(pat) else None)
 
     hits.sort(key=lambda h: h[0])
     return [r for _, r in hits]

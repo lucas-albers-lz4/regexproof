@@ -210,6 +210,41 @@ def test_backtick_substitution_patterns_are_dynamic_but_nested_regexes_are_seen(
     assert recs[1].get("unencodable_reason") is None
 
 
+@pytest.mark.parametrize("operator", ["<", ">"])
+def test_process_substitution_suffix_is_not_truncated(operator):
+    src = f"grep -E 'foo'{operator}(printf bar)"
+    recs = extract(src)
+    assert len(recs) == 1
+    assert recs[0]["unencodable_reason"] == "dynamic-shell-expansion"
+
+
+def test_process_substitution_still_exposes_nested_regexes():
+    recs = extract("grep -E 'foo'<(grep -E 'bar' file)")
+    assert [r["pattern"] for r in recs] == ["foo<(grep -E 'bar' file)", "bar"]
+    assert recs[0]["unencodable_reason"] == "dynamic-shell-expansion"
+    assert recs[1].get("unencodable_reason") is None
+
+
+@pytest.mark.parametrize(
+    "rhs",
+    [
+        r"[${char}]",
+        r"$(printfx)",
+        r"$(($n+1))",
+        r"[`printfx`]",
+    ],
+)
+def test_bash_regex_rhs_expansions_fail_closed(rhs):
+    rec = extract(f'[[ "$value" =~ {rhs} ]]')[0]
+    assert rec["unencodable_reason"] == "dynamic-shell-expansion"
+
+
+def test_bash_regex_rhs_escaped_dollar_is_static():
+    rec = extract(r'[[ "$value" =~ [\${char}] ]]')[0]
+    assert rec["pattern"] == r"[\${char}]"
+    assert rec.get("unencodable_reason") is None
+
+
 @pytest.mark.parametrize(
     "src",
     [
