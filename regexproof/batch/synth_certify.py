@@ -23,8 +23,12 @@ from regexproof.compiler.simple_parse import (
     parse_pattern,
 )
 
-KNOWN_DIALECTS = frozenset({"py_re", "ecma", "re2", "pcre", "perl", "yara", "posix-shell"})
-REPLAYABLE_MATCH_DIALECTS = frozenset({"py_re", "ecma", "re2", "pcre", "perl"})
+KNOWN_DIALECTS = frozenset(
+    {"py_re", "ecma", "re2", "pcre", "java", "perl", "yara", "posix-shell"}
+)
+REPLAYABLE_MATCH_DIALECTS = frozenset(
+    {"py_re", "ecma", "re2", "pcre", "java", "perl"}
+)
 SKIP_BUCKETS = (
     "synth_skipped_no_gt_adapter",
     "synth_skipped_unanchored_search",

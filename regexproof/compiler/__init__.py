@@ -77,6 +77,12 @@ def _compile_dialect(
         return compile_pcre(
             pattern, flags=flags, call_kind=call_kind, max_length=max_length
         )
+    if dialect == "java":
+        from regexproof.compiler.java import compile_java
+
+        return compile_java(
+            pattern, flags=flags, call_kind=call_kind, max_length=max_length
+        )
     if dialect == "posix-shell":
         # Entry-only normalize: compile_pattern normalized BEFORE the hooks;
         # this branch compiles the already-normalized text directly and

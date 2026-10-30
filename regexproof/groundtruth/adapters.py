@@ -77,6 +77,7 @@ from enum import StrEnum
 from pathlib import Path
 
 from regexproof.compiler.re2 import replay_argv as _re2_replay_argv
+from regexproof.compiler.java import replay_argv as _java_replay_argv
 
 _ROOT = Path(__file__).resolve().parents[2]
 
@@ -84,6 +85,7 @@ _ECMA_MATCH = _ROOT / "helpers" / "ecma" / "match.mjs"
 _PY_MATCH = _ROOT / "helpers" / "python" / "match.py"
 _PCRE2_MATCH = _ROOT / "helpers" / "pcre2" / "match.py"
 _PERL_MATCH = _ROOT / "helpers" / "perl" / "match.py"
+_JAVA_MATCH = _ROOT / "helpers" / "java" / "match.py"
 _YARA_MATCH = _ROOT / "helpers" / "yara" / "match.py"
 
 # Helper exit-code contract (documented above): 2 = engine/compile error,
@@ -501,6 +503,26 @@ def _helper_match_replay(
 
 
 # ---------------------------------------------------------------------------
+# java — helpers/java uses the JDK's Pattern directly and honors call_kind.
+# ---------------------------------------------------------------------------
+def _java_replay(pattern, flags, call_kind, witness, *, timeout_s: float):
+    proc = _subprocess_verdict(
+        _java_replay_argv(pattern, flags or "", call_kind),
+        data=witness.encode("utf-8"),
+        text=False,
+        timeout_s=timeout_s,
+    )
+    if isinstance(proc, ReplayResult):
+        return proc
+    return _rc_result(
+        proc,
+        compile_error=_COMPILE_ERROR_RC,
+        unavailable=_UNAVAILABLE_RC,
+        label="java/PatternRunner",
+    )
+
+
+# ---------------------------------------------------------------------------
 # pcre / perl — helpers/*/match.py, stdin search runners
 # ---------------------------------------------------------------------------
 def _pcre_replay(pattern, flags, call_kind, witness, *, timeout_s: float):
@@ -569,6 +591,7 @@ _DISPATCH = {
     "py_re": _py_re_replay,
     "ecma": _ecma_replay,
     "re2": _re2_replay,
+    "java": _java_replay,
     "pcre": _pcre_replay,
     "perl": _perl_replay,
     "yara": _yara_replay,

@@ -63,6 +63,7 @@ DIALECTS = frozenset(
         "ecma",
         "re2",
         "pcre",
+        "java",
         "yara",
         "perl",
         "posix-shell",
