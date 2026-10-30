@@ -50,6 +50,7 @@ Implementation: `regexproof/compiler/fold.py`. Closures, not pair lists.
 | `re2` | `re2_fold_closure` | İ/ı do **not** fold into `[i]`; residual `x` → `x-flag-unstripped`, `s` → `s-flag` (fail-closed; strip `(?x)` at extract via `strip_verbose_x`) |
 | `ecma` (non-`u`) | `js_nonsu_fold_closure` | **ß** does not expand to `SS` (no multi-char folds) |
 | `pcre` (encodable subset) | ASCII-style fold when `i` set | Same discipline as ASCII py-re for the subset |
+| `java` (initial ASCII subset) | ASCII-style fold when `i` set | Real JDK `Pattern` parse/replay gate; Unicode properties, class intersection, Java-only escapes, unsupported flags, and `$` are rejected |
 | `perl` (encodable subset) | ASCII-style fold when `i` set | POSIX `[[:alpha:]]` etc. rewritten; `\K` stripped; lookarounds / `(?{` / `\g{` / `\p{` / `\Q` rejected — see `PERL_REJECT_MARKERS` |
 | `yara` | `re2_fold_closure` when `nocase`→`i` | Ascii-domain compile delegates to `compile_re2`; wide domain is NUL-interleaved literals (non-literals reject) |
 | `posix-shell` | ASCII-style fold when `i` set (routes through the pcre path, P2b) | BRE/ERE syntax selector travels in the record `shell_flags` (`syntax`/`grep_mode`); BRE backslash-metas `\+ \? \|` are GNU/busybox quantifiers; ERE backslash-metas are literals — see `regexproof/compiler/posix_shell.py` |
@@ -99,13 +100,16 @@ witnesses. Mirror the `call_kind` the code actually uses. See
 Negated `@rx` / selectors are **never** silent-positive. Per-dialect policy
 table: [`docs/NEGATION.md`](NEGATION.md) / `regexproof.batch.negation_policy`.
 
-## Java inventory → PCRE approximation (Wave 4 / #133)
+## Java dialect and prior PCRE approximation (Wave 4 / #133)
 
-Java `Pattern.compile` sites are counted as dialect label `java` on the P1
-probe path (no `validate_dialect`). They are **not** a `DIALECTS` compiler
-entry in this wave. Graduation compiles the **encodable subset** as `pcre`
-via `helpers/pcre2`, with an explicit `java→pcre` approximation note (see
-[`sweep/corpus-wave4/java-features.md`](../sweep/corpus-wave4/java-features.md)).
+Java `Pattern.compile` sites remain counted as dialect label `java` on the P1
+probe path. The native `java` compiler currently accepts a deliberately narrow
+ASCII subset and validates it against `java.util.regex.Pattern` via
+`helpers/java`; it does not change existing records tagged `approximation:
+java→pcre`. `$` is rejected because Java accepts a match before either CR or
+LF while the shared lowerer only models the LF case. The corpus-wave-4 survey
+records the earlier pcre approximation and its boundaries:
+[`sweep/corpus-wave4/java-features.md`](../sweep/corpus-wave4/java-features.md).
 Extracted sites use `call_kind=fullmatch` to mirror
 `Pattern.matcher(value).matches()` (HtmlPolicyBuilder attribute policies).
 Unicode `\p{…}`, `\Q…\E` quote escapes, truncated/unbalanced literals, and

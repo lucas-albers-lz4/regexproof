@@ -299,6 +299,15 @@ def _finalize_corpus_artifacts(
         },
         "cache_hit_rate": float(cache_stats.get("hit_rate", 0.0)),
     }
+    java_versions = {
+        str((row.get("engine_versions") or {}).get("java"))
+        for row in rows
+        if (row.get("engine_versions") or {}).get("java")
+    }
+    if java_versions:
+        if len(java_versions) != 1:
+            raise SystemExit(f"mixed Java engine versions in batch: {sorted(java_versions)}")
+        summary["engine"]["java"] = next(iter(java_versions))
     if synthesis is not None:
         summary["synthesis"] = synthesis.stats
     atomic_write_text(

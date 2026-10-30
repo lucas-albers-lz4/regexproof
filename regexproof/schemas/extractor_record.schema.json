@@ -25,7 +25,7 @@
     "flags": { "type": "string" },
     "dialect": {
       "type": "string",
-      "enum": ["py_re", "ecma", "re2", "pcre", "yara", "rust_regex", "perl",
+      "enum": ["py_re", "ecma", "re2", "pcre", "java", "yara", "rust_regex", "perl",
                "posix-shell"]
     },
     "call_kind": {

@@ -59,6 +59,7 @@ def mirror_cache_key(
     compiler_version: str,
     z3_version: str,
     max_length: int | None = None,
+    engine_version: str | None = None,
 ) -> str:
     """Hash the complete post-normalization compile-input tuple."""
     encoded = canonical_length_prefixed(
@@ -72,6 +73,7 @@ def mirror_cache_key(
             compiler_version,
             z3_version,
             max_length,
+            engine_version,
         )
     )
     return hashlib.sha256(encoded).hexdigest()
