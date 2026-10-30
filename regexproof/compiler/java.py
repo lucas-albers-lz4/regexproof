@@ -38,6 +38,10 @@ def _java_reject(pattern: str) -> str | None:
             if i + 1 >= len(pattern):
                 return "parse-error"
             escape = pattern[i + 1]
+            if in_class and escape == "b":
+                # Java uses ``\b`` as backspace inside a class; the shared
+                # parser represents it as a zero-width boundary.
+                return "java-escape"
             if escape not in "dDsSwWbntrx" and escape not in r"\.^$*+?()[]{}|-":
                 return "java-escape"
             i += 2

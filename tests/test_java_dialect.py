@@ -32,6 +32,7 @@ def test_java_rejects_known_semantic_gaps():
     intersection = compile_pattern(r"[a-z&&[^aeiou]]", dialect="java")
     assert intersection.unencodable_reason == "class-intersection"
     assert compile_pattern(r"\p{L}+", dialect="java").unencodable_reason == "java-escape"
+    assert compile_pattern(r"[\b]", dialect="java").unencodable_reason == "java-escape"
     assert compile_pattern("foo", "m", "java").unencodable_reason == "java-flag"
 
 
