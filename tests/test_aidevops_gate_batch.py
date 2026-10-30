@@ -96,6 +96,9 @@ def test_aidevops_smith_decision_reconciles_with_measured_fraction():
     assert "Historical" in smith["reason"]
     assert "not current acceptance or issue-closure evidence" in smith["reason"]
     assert fraction["scope"] == "full_corpus"
+    assert fraction["measurement_status"] == "historical_pre_615_shell_extractor"
+    assert "predates the #615 shell extractor expansion guard" in fraction["measurement_note"]
+    assert "not issue-closure evidence" in fraction["measurement_note"]
     assert fraction["complete_run"] is True
     assert fraction["budget_breaches"] is None
     assert fraction["encodable"] == 10212
