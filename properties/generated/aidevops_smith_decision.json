@@ -1,0 +1,17 @@
+{
+  "additional_surface_outside_probe_scope": {
+    "ecma": 1042,
+    "py_re": 508
+  },
+  "candidate_url": "https://github.com/marcusquinn/aidevops",
+  "corpus": "aidevops",
+  "corpus_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+  "reason": "GO for continued local conversion mining: exact pin measured 10,212/11,330 shell sites encodable (0.9013); 63 parse-error rows remain unclassified and must be triaged before any saturation claim.",
+  "regex_sites": 11330,
+  "schema_version": "1",
+  "sites_by_bucket": {
+    "posix-shell": 11330
+  },
+  "smith_decision": "go",
+  "supersedes": "go"
+}

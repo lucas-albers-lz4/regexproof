@@ -10,7 +10,7 @@ import jsonschema
 
 from regexproof.batch.manifests import CORPUS_MANIFESTS, WAVE_CORPORA
 from regexproof.batch.runner import check_admission_gates
-from regexproof.schemas import gate_decision_schema
+from regexproof.schemas import gate_decision_schema, smith_decision_schema
 
 ROOT = Path(__file__).resolve().parents[1]
 GENERATED = ROOT / "properties" / "generated"
@@ -79,3 +79,18 @@ def test_aidevops_batch_summary_reconciles_with_probe():
     assert delta <= 0.10, f"extracted={extracted} probe={probe_n} delta={delta}"
     assert summary["complete_run"] is True
     assert summary["encodable"] / extracted >= 0.30
+
+
+def test_aidevops_smith_decision_reconciles_with_measured_fraction():
+    smith_path = GENERATED / "aidevops_smith_decision.json"
+    fraction_path = GENERATED / "aidevops_encodable_fraction.json"
+    smith = json.loads(smith_path.read_text(encoding="utf-8"))
+    fraction = json.loads(fraction_path.read_text(encoding="utf-8"))
+
+    jsonschema.validate(instance=smith, schema=smith_decision_schema())
+    assert smith["corpus_pin"] == CORPUS_MANIFESTS["aidevops"]["corpus_pin"]
+    assert smith["smith_decision"] == "go"
+    assert smith["regex_sites"] == fraction["sample_size"] == 11330
+    assert smith["sites_by_bucket"] == {"posix-shell": 11330}
+    assert "unclassified" in smith["reason"]
+    assert fraction["unclassified_parse_errors"] == 63
