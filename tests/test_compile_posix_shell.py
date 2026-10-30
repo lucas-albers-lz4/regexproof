@@ -92,6 +92,25 @@ def test_batch_backref_row_not_abort():
     assert rows[0]["compile_reason"] == "backref"
 
 
+def test_dynamic_shell_expansion_row_never_compiles_as_static(tmp_path):
+    rec = extract_shell_posix(
+        'grep -E "[${char}]" file',
+        repo="t",
+        file="dynamic.sh",
+        dialect="posix-shell",
+    )[0]
+    rows = compile_records(
+        [rec],
+        lift_inline=False,
+        corpus_slug="t",
+        cache_dir=tmp_path / "mirror-cache",
+    )
+    row, mirror, meta = rows[0]
+    assert row["encodable"] is False
+    assert row["compile_reason"] == "dynamic-shell-expansion"
+    assert mirror is None and meta is None
+
+
 def test_gnu_word_boundary_rejected():
     for pat in (r"foo\<", r"\>bar", r"a\<b"):
         with pytest.raises(Unencodable) as ei:
