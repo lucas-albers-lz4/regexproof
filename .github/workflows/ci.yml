@@ -175,6 +175,19 @@ jobs:
         run: python scripts/ci-assert-toolchain.py --job proof
       - name: Remeasure the full pinned shell snapshot
         run: python scripts/measure-corpus-fraction.py --corpus dogfood_shell --assert-determinism
+      - name: Regenerate aggregate conversion ledger on Linux
+        run: python scripts/conversion-ledger.py
+      - name: Publish generated Linux ledger artifacts
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: dogfood-shell-conversion-ledger-linux
+          path: |
+            properties/generated/conversion-ledger.json
+            properties/generated/conversion-ledger.md
+          if-no-files-found: error
+          retention-days: 3
+      - name: Require committed conversion ledger to match
+        run: git diff --exit-code -- properties/generated/conversion-ledger.json properties/generated/conversion-ledger.md
       - name: Verify source provenance and recorded measurement
         run: pytest -q tests/test_dogfood_shell_corpus.py
 
