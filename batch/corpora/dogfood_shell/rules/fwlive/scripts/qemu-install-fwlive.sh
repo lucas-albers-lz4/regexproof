@@ -1,0 +1,283 @@
+#!/usr/bin/env bash
+# Install luci-app-fwlive on a running QEMU OpenWrt guest (hostfwd SSH).
+#
+#   ./scripts/qemu-install-fwlive.sh
+#   ./scripts/qemu-install-fwlive.sh out/x86_64/24.10.8/fwlive/luci-app-fwlive_*.ipk
+#   ./scripts/qemu-install-fwlive.sh --artifact-only out/x86_64/24.10.8/fwlive/luci-app-fwlive_*.ipk
+#
+# Prereqs: guest reachable at ssh -p 2222 root@127.0.0.1 (run-openwrt-*-qemu.sh).
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+OPENWRT_HOST="${OPENWRT_HOST:-127.0.0.1}"
+OPENWRT_SSH_PORT="${OPENWRT_SSH_PORT:-2222}"
+OPENWRT_USER="${OPENWRT_USER:-root}"
+IPK=""
+ARTIFACT_ONLY=0
+SSH_OPTS=(-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null)
+FWLIVE_VERSION="${OWRT_FWLIVE_VERSION:-}"
+
+while [[ $# -gt 0 ]]; do
+	case "$1" in
+		--artifact-only) ARTIFACT_ONLY=1; shift ;;
+		-h|--help)
+			sed -n '1,9p' "$0"
+			echo '  --artifact-only  install only the package (force-reinstall; verify installed payload and RPC)'
+			exit 0
+			;;
+		--)
+			shift
+			[[ $# -eq 1 && -z "$IPK" ]] || { echo 'expected one package path after --' >&2; exit 1; }
+			IPK="$1"
+			shift
+			;;
+		-*) echo "unknown option: $1" >&2; exit 1 ;;
+		*) [[ -z "$IPK" ]] || { echo 'expected only one package path' >&2; exit 1; }; IPK="$1"; shift ;;
+	esac
+done
+
+if [[ -z "$IPK" ]]; then
+	shopt -s nullglob
+	_pkg_globs() {
+		local base="$1"
+		printf '%s/luci-app-fwlive_*.ipk %s/luci-app-fwlive-*.apk %s/luci-app-fwlive_*.apk' "$base" "$base" "$base"
+	}
+	if [[ -n "$FWLIVE_VERSION" ]]; then
+		shopt -s nullglob
+		# Prefer guest arch when known (x86 QEMU lab vs armsr SDK default).
+		arch_order=(x86_64 aarch64_generic)
+		if [[ "${OWRT_FWLIVE_ARCH:-}" == aarch64_generic ]]; then
+			arch_order=(aarch64_generic x86_64)
+		fi
+		for arch in "${arch_order[@]}"; do
+			base="$ROOT/out/${arch}/${FWLIVE_VERSION}/fwlive"
+			# shellcheck disable=SC2086
+			candidates+=( $(_pkg_globs "$base") )
+		done
+		shopt -u nullglob
+	else
+		shopt -s nullglob
+		for ver in 25.12.5 24.10.8 24.10 23.05.5 23.05 snapshot; do
+			for arch in x86_64 aarch64_generic; do
+				base="$ROOT/out/${arch}/${ver}/fwlive"
+				# shellcheck disable=SC2086
+				candidates+=( $(_pkg_globs "$base") )
+			done
+		done
+		shopt -u nullglob
+	fi
+	shopt -u nullglob
+	[[ ${#candidates[@]} -ge 1 ]] || {
+		echo "No package found (.ipk/.apk). Build first:" >&2
+		echo "  ./scripts/docker-sdk.sh build --target x86-64 --version 24.10" >&2
+		echo "  ./scripts/docker-sdk.sh build --target armsr-armv8 --version 24.10" >&2
+		echo "  ./scripts/docker-sdk.sh build --target armsr-armv8 --version 23.05" >&2
+		exit 1
+	}
+	chosen=""
+	if [[ -n "${OWRT_FWLIVE_ARCH:-}" ]]; then
+		for c in "${candidates[@]}"; do
+			if [[ "$c" == *"/${OWRT_FWLIVE_ARCH}/"* ]]; then
+				chosen="$c"
+				break
+			fi
+		done
+	fi
+	IPK="${chosen:-$(ls -t "${candidates[@]}" 2>/dev/null | head -1)}"
+fi
+[[ -f "$IPK" ]] || { echo "ipk not found: $IPK" >&2; exit 1; }
+
+ARCH="$(ssh -p "$OPENWRT_SSH_PORT" "${SSH_OPTS[@]}" "${OPENWRT_USER}@${OPENWRT_HOST}" 'uname -m')"
+case "$ARCH" in
+	x86_64) want='x86_64' ;;
+	aarch64) want='aarch64_generic' ;;
+	*) echo "unsupported guest arch: $ARCH" >&2; exit 1 ;;
+esac
+if [[ "$IPK" != *"$want"* && "$IPK" != *"all.ipk"* && "$IPK" != *"all.apk"* ]]; then
+	echo "warn: package path may not match guest arch ($ARCH): $IPK" >&2
+fi
+
+pkg_ext="${IPK##*.}"
+REMOTE="/tmp/luci-app-fwlive.${pkg_ext}"
+echo "Installing $IPK → ${OPENWRT_USER}@${OPENWRT_HOST}:${OPENWRT_SSH_PORT}"
+
+# Dropbear has no sftp-server; prefer legacy scp, fall back to ssh stdin.
+if scp -O -P "$OPENWRT_SSH_PORT" "${SSH_OPTS[@]}" "$IPK" \
+	"${OPENWRT_USER}@${OPENWRT_HOST}:${REMOTE}" 2>/dev/null; then
+	:
+else
+	ssh -p "$OPENWRT_SSH_PORT" "${SSH_OPTS[@]}" "${OPENWRT_USER}@${OPENWRT_HOST}" \
+		"cat > ${REMOTE}" < "$IPK"
+fi
+# Keep installed helpers intact: opkg prerm sources fwlive-logging.sh during
+# same-version removal/reinstall. The package manager replaces owned files.
+if [[ "$pkg_ext" == apk ]] || ssh -p "$OPENWRT_SSH_PORT" "${SSH_OPTS[@]}" "${OPENWRT_USER}@${OPENWRT_HOST}" \
+	'command -v apk >/dev/null'; then
+	_apk_flags='--allow-untrusted'
+	[[ "$ARTIFACT_ONLY" -eq 1 ]] && _apk_flags='--allow-untrusted --force-reinstall'
+	ssh -p "$OPENWRT_SSH_PORT" "${SSH_OPTS[@]}" "${OPENWRT_USER}@${OPENWRT_HOST}" \
+		"apk add ${_apk_flags} ${REMOTE} && rm -f ${REMOTE}"
+else
+	_opkg_flags=''
+	[[ "$ARTIFACT_ONLY" -eq 1 ]] && _opkg_flags='--force-reinstall '
+	ssh -p "$OPENWRT_SSH_PORT" "${SSH_OPTS[@]}" "${OPENWRT_USER}@${OPENWRT_HOST}" \
+		"opkg install ${_opkg_flags}${REMOTE} && rm -f ${REMOTE}"
+fi
+
+if [[ "$ARTIFACT_ONLY" -eq 1 ]]; then
+	# Verify package-owned entry points before reporting success. Remove only a
+	# retired source-sync module, after the manager has finished its transition.
+	ssh -p "$OPENWRT_SSH_PORT" "${SSH_OPTS[@]}" "${OPENWRT_USER}@${OPENWRT_HOST}" '
+		set -e
+		test -x /usr/libexec/rpcd/fwlive
+		test -f /usr/libexec/fwlive-logging.sh
+		test -f /usr/libexec/fwlive-adaptive-cap.sh
+		test -x /usr/libexec/fwlive-log-filter.sh
+		test -s /usr/libexec/fwlive-is-firewall-event.sh
+		test -s /usr/libexec/fwlive-is-firewall-event.awk
+		test -s /www/luci-static/resources/view/status/fwlive.js
+		test -s /www/luci-static/resources/fwlive/log.js
+		test -s /usr/share/rpcd/acl.d/luci-app-fwlive.json
+		test -s /usr/share/luci/menu.d/luci-app-fwlive.json
+		rm -f /www/luci-static/resources/fwlive/parser.js
+		/etc/init.d/rpcd restart
+	'
+	if [[ "$pkg_ext" == ipk ]]; then
+		# Derive identity from the supplied artifact, never from the source tree.
+		VERIFY_WORK="$(mktemp -d)"
+		trap 'rm -rf "$VERIFY_WORK"' EXIT
+		extract_ipk_member() {
+			local member="$1" dest="$2"
+			tar -xOf "$IPK" "./$member" > "$dest" 2>/dev/null ||
+				tar -xOf "$IPK" "$member" > "$dest" 2>/dev/null ||
+				ar p "$IPK" "$member" > "$dest"
+		}
+		extract_ipk_member data.tar.gz "$VERIFY_WORK/data.tar.gz"
+		extract_ipk_member control.tar.gz "$VERIFY_WORK/control.tar.gz"
+		tar -xOf "$VERIFY_WORK/control.tar.gz" ./control > "$VERIFY_WORK/control" 2>/dev/null ||
+			tar -xOf "$VERIFY_WORK/control.tar.gz" control > "$VERIFY_WORK/control"
+		expected_version="$(sed -n 's/^Version: //p' "$VERIFY_WORK/control")"
+		[[ "$expected_version" =~ ^[A-Za-z0-9.+_~:-]+$ ]] || { echo 'invalid artifact Version' >&2; exit 1; }
+		installed_status="$(ssh -p "$OPENWRT_SSH_PORT" "${SSH_OPTS[@]}" "${OPENWRT_USER}@${OPENWRT_HOST}" 'opkg status luci-app-fwlive')"
+		grep -Fxq "Version: $expected_version" <<< "$installed_status"
+		grep -Eq '^Status: install (ok|user) installed$' <<< "$installed_status"
+		tar -tzf "$VERIFY_WORK/data.tar.gz" > "$VERIFY_WORK/entries"
+		: > "$VERIFY_WORK/manifest"
+		while IFS= read -r entry; do
+			[[ "$entry" != */ ]] || continue
+			file="${entry#./}"
+			[[ "$file" =~ ^(lib|usr|www)/[A-Za-z0-9_./-]+$ && "$file" != *'..'* ]] 				|| { echo "unsupported payload path: $entry" >&2; exit 1; }
+			hash="$(tar -xzOf "$VERIFY_WORK/data.tar.gz" "$entry" | sha256sum)"
+			printf '%s  /%s\n' "${hash%% *}" "$file" >> "$VERIFY_WORK/manifest"
+		done < "$VERIFY_WORK/entries"
+		[[ -s "$VERIFY_WORK/manifest" ]] || { echo 'empty artifact payload' >&2; exit 1; }
+		ssh -p "$OPENWRT_SSH_PORT" "${SSH_OPTS[@]}" "${OPENWRT_USER}@${OPENWRT_HOST}" 			'sha256sum -c -' < "$VERIFY_WORK/manifest"
+	else
+		# APK lifecycle is separate; its manager verifies package membership.
+		ssh -p "$OPENWRT_SSH_PORT" "${SSH_OPTS[@]}" "${OPENWRT_USER}@${OPENWRT_HOST}" 			'apk info -e luci-app-fwlive'
+	fi
+	# Stock rpcd re-registers plugins asynchronously following restart.
+	ssh -p "$OPENWRT_SSH_PORT" "${SSH_OPTS[@]}" "${OPENWRT_USER}@${OPENWRT_HOST}" '
+		for attempt in 1 2 3 4 5; do
+			if ubus -v list fwlive 2>/dev/null | grep -q "poll"; then exit 0; fi
+			sleep 1
+		done
+		echo "fwlive RPC did not register after install" >&2
+		exit 1
+	'
+fi
+
+if [[ "$ARTIFACT_ONLY" -eq 0 ]]; then
+	FWLIVE_PKG="$ROOT/openwrt-feed/luci-app-fwlive"
+	FWLIVE_DIR="$FWLIVE_PKG/htdocs/luci-static/resources"
+	RPCD_BIN="$FWLIVE_PKG/root/usr/libexec/rpcd/fwlive"
+	LIBEXEC_LOGGING="$FWLIVE_PKG/root/usr/libexec/fwlive-logging.sh"
+	LIBEXEC_ADAPTIVE="$FWLIVE_PKG/root/usr/libexec/fwlive-adaptive-cap.sh"
+	LIBEXEC_FILTER="$FWLIVE_PKG/root/usr/libexec/fwlive-log-filter.sh"
+	LIBEXEC_ISFW="$FWLIVE_PKG/root/usr/libexec/fwlive-is-firewall-event.sh"
+	LIBEXEC_ISFW_AWK="$FWLIVE_PKG/root/usr/libexec/fwlive-is-firewall-event.awk"
+	ACL_JSON="$FWLIVE_PKG/root/usr/share/rpcd/acl.d/luci-app-fwlive.json"
+	MENU_JSON="$FWLIVE_PKG/root/usr/share/luci/menu.d/luci-app-fwlive.json"
+fi
+if [[ "$ARTIFACT_ONLY" -eq 0 && -f "$FWLIVE_DIR/view/status/fwlive.js" ]]; then
+	echo "Syncing dev JS from feed (may be ahead of .ipk)..."
+	ssh -p "$OPENWRT_SSH_PORT" "${SSH_OPTS[@]}" "${OPENWRT_USER}@${OPENWRT_HOST}" \
+		"mkdir -p /www/luci-static/resources/view/status /www/luci-static/resources/fwlive"
+	ssh -p "$OPENWRT_SSH_PORT" "${SSH_OPTS[@]}" "${OPENWRT_USER}@${OPENWRT_HOST}" \
+		"cat > /www/luci-static/resources/view/status/fwlive.js" \
+		< "$FWLIVE_DIR/view/status/fwlive.js"
+	shopt -s nullglob
+	for js in "$FWLIVE_DIR"/fwlive/*.js; do
+		base=$(basename "$js")
+		echo "  sync fwlive/${base}"
+		ssh -p "$OPENWRT_SSH_PORT" "${SSH_OPTS[@]}" "${OPENWRT_USER}@${OPENWRT_HOST}" \
+			"cat > /www/luci-static/resources/fwlive/${base}" \
+			< "$js"
+	done
+	shopt -u nullglob
+	ssh -p "$OPENWRT_SSH_PORT" "${SSH_OPTS[@]}" "${OPENWRT_USER}@${OPENWRT_HOST}" \
+		"rm -f /www/luci-static/resources/fwlive/parser.js"
+fi
+if [[ "$ARTIFACT_ONLY" -eq 0 && -f "$RPCD_BIN" ]]; then
+	echo "Syncing rpcd fwlive plugin + ACL..."
+	# Keep package-manager maintainer scripts from the artifact. Overwriting the
+	# hook here would make uninstall smokes validate the source tree, not the IPK/APK.
+	ssh -p "$OPENWRT_SSH_PORT" "${SSH_OPTS[@]}" "${OPENWRT_USER}@${OPENWRT_HOST}" \
+		"mkdir -p /usr/libexec/rpcd /usr/libexec /usr/share/rpcd/acl.d"
+	ssh -p "$OPENWRT_SSH_PORT" "${SSH_OPTS[@]}" "${OPENWRT_USER}@${OPENWRT_HOST}" \
+		"cat > /usr/libexec/rpcd/fwlive && chmod +x /usr/libexec/rpcd/fwlive" \
+		< "$RPCD_BIN"
+	if [[ -f "$LIBEXEC_LOGGING" ]]; then
+		ssh -p "$OPENWRT_SSH_PORT" "${SSH_OPTS[@]}" "${OPENWRT_USER}@${OPENWRT_HOST}" \
+			"cat > /usr/libexec/fwlive-logging.sh && chmod +x /usr/libexec/fwlive-logging.sh" \
+			< "$LIBEXEC_LOGGING"
+	fi
+	if [[ -f "$LIBEXEC_ADAPTIVE" ]]; then
+		echo "Syncing fwlive-adaptive-cap.sh (#306)..."
+		ssh -p "$OPENWRT_SSH_PORT" "${SSH_OPTS[@]}" "${OPENWRT_USER}@${OPENWRT_HOST}" \
+			"cat > /usr/libexec/fwlive-adaptive-cap.sh && chmod 644 /usr/libexec/fwlive-adaptive-cap.sh" \
+			< "$LIBEXEC_ADAPTIVE"
+	fi
+	if [[ -f "$LIBEXEC_FILTER" ]]; then
+		ssh -p "$OPENWRT_SSH_PORT" "${SSH_OPTS[@]}" "${OPENWRT_USER}@${OPENWRT_HOST}" \
+			"cat > /usr/libexec/fwlive-log-filter.sh && chmod +x /usr/libexec/fwlive-log-filter.sh" \
+			< "$LIBEXEC_FILTER"
+	fi
+	if [[ -f "$LIBEXEC_ISFW" ]]; then
+		ssh -p "$OPENWRT_SSH_PORT" "${SSH_OPTS[@]}" "${OPENWRT_USER}@${OPENWRT_HOST}" \
+			"cat > /usr/libexec/fwlive-is-firewall-event.sh" \
+			< "$LIBEXEC_ISFW"
+	fi
+	if [[ -f "$LIBEXEC_ISFW_AWK" ]]; then
+		ssh -p "$OPENWRT_SSH_PORT" "${SSH_OPTS[@]}" "${OPENWRT_USER}@${OPENWRT_HOST}" \
+			"cat > /usr/libexec/fwlive-is-firewall-event.awk && chmod 644 /usr/libexec/fwlive-is-firewall-event.awk" \
+			< "$LIBEXEC_ISFW_AWK"
+	else
+		# A previous run may have installed the asset; leaving it behind would
+		# let checks run against a stale classifier and mask the
+		# classifier_missing fail-closed path (CodeRabbit #322).
+		ssh -p "$OPENWRT_SSH_PORT" "${SSH_OPTS[@]}" "${OPENWRT_USER}@${OPENWRT_HOST}" \
+			"rm -f /usr/libexec/fwlive-is-firewall-event.awk"
+	fi
+	if [[ -f "$ACL_JSON" ]]; then
+		ssh -p "$OPENWRT_SSH_PORT" "${SSH_OPTS[@]}" "${OPENWRT_USER}@${OPENWRT_HOST}" \
+			"cat > /usr/share/rpcd/acl.d/luci-app-fwlive.json" \
+			< "$ACL_JSON"
+	fi
+	ssh -p "$OPENWRT_SSH_PORT" "${SSH_OPTS[@]}" "${OPENWRT_USER}@${OPENWRT_HOST}" \
+		"/etc/init.d/rpcd restart"
+fi
+if [[ "$ARTIFACT_ONLY" -eq 0 && -f "$MENU_JSON" ]]; then
+	echo "Syncing LuCI menu entry..."
+	ssh -p "$OPENWRT_SSH_PORT" "${SSH_OPTS[@]}" "${OPENWRT_USER}@${OPENWRT_HOST}" \
+		"cat > /usr/share/luci/menu.d/luci-app-fwlive.json" < "$MENU_JSON"
+	ssh -p "$OPENWRT_SSH_PORT" "${SSH_OPTS[@]}" "${OPENWRT_USER}@${OPENWRT_HOST}" \
+		"rm -f /tmp/luci-indexcache; /etc/init.d/uhttpd restart"
+fi
+
+echo ""
+echo "Open: http://localhost:8080/cgi-bin/luci/admin/status/fwlive"
+echo "Ping log test (slirp: host→guest ICMP often fails; generate on guest):"
+echo "  ./scripts/fwlive-nft-ping-log.sh add --ssh"
+echo "  ssh -p ${OPENWRT_SSH_PORT} root@${OPENWRT_HOST} 'ping -c 5 127.0.0.1'"
+echo "  ./scripts/fwlive-ubus-read.sh --lines 20"

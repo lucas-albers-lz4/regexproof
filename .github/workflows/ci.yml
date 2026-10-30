@@ -158,6 +158,26 @@ jobs:
       - name: CI contract tests (NDJSON / json-legacy)
         run: pytest -q tests/test_ci_contracts.py
 
+  dogfood_shell_corpus:
+    name: dogfood_shell materialized wave
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: "3.13"
+      - name: Install package and pinned solver
+        run: pip install -e ".[dev]"
+      - name: Assert toolchain pins
+        run: python scripts/ci-assert-toolchain.py --job golden
+      - name: Remeasure the full pinned shell snapshot
+        run: python scripts/measure-corpus-fraction.py --corpus dogfood_shell --assert-determinism
+      - name: Verify source provenance and recorded measurement
+        run: pytest -q tests/test_dogfood_shell_corpus.py
+
   golden_tests:
     name: Golden tests (Python ${{ matrix.python-version }})
     needs: matrix

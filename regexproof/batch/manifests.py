@@ -3608,17 +3608,11 @@ CORPUS_MANIFESTS: dict[str, CorpusManifest] = {
     },
     "dogfood_shell": {
         "corpus_type": "rule_corpus",
-        # Materialize: ln -sfn <merged dogfooding tree> batch/corpora/dogfood_shell/rules
-        # The dogfooding universe (usrmanage / fwlive / happycow /
-        # hermes-agent-fork) at the P1-frozen pins (dogfooding_novelty_2026-08-12.json).
-        # Registration-only this wave (the #149 automation pipeline is separate);
-        # the batch run + merged-tree materialization are follow-on.
-        # NOTE (cumulative review finding #10): NOT in WAVE_CORPORA — the
-        # empty-root fail-closed only guards wave corpora, so a follow-on
-        # batch run MUST NOT start until the merged tree is materialized at
-        # this path (a 0-site silent pass would read 'go' against an empty
-        # tree). Materialize + add to WAVE_CORPORA together.
+        # Frozen shell-only snapshot from the four source commits in
+        # batch/corpora/dogfood_shell/source-pins.json. source-files.json
+        # binds every materialized script byte-for-byte to its source commit.
         "path": ROOT / "batch" / "corpora" / "dogfood_shell" / "rules",
+        "corpus_pin": "sha256:7b5a176215b6719362357f9570739ec763e209c8b900b1fef8c5b8a9830bc6d5",
         "dialect": "posix-shell",
         "extractor": "shell_posix",
         "repo": "dogfooding (usrmanage/fwlive/happycow/hermes-agent-fork)",
@@ -8508,5 +8502,6 @@ WAVE_CORPORA = frozenset({
     "openmed",
     "malzoo",
     "yarasigs",
+    "dogfood_shell",
 })
 

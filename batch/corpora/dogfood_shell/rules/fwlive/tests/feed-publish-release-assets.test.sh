@@ -1,0 +1,423 @@
+#!/usr/bin/env bash
+# Guard: GitHub Release assets need unique basenames (one ipk per OpenWrt line).
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+# shellcheck source=scripts/lib/feed-publish.sh
+source "${ROOT}/scripts/lib/feed-publish.sh"
+
+assert_eq() {
+	local got="$1" want="$2" msg="$3"
+	if [[ "$got" != "$want" ]]; then
+		echo "FAIL: $msg (got '$got', want '$want')" >&2
+		exit 1
+	fi
+}
+
+assert_eq "$(feed_publish_feed_dir 24.10)" "24.10" "line alias feed dir"
+assert_eq "$(feed_publish_feed_dir 24.10.8)" "24.10" "pinned patch feed dir"
+assert_eq "$(feed_publish_feed_dir 24.10.9)" "24.10" "off-pin patch still maps to line"
+assert_eq "$(feed_publish_release_key 24.10.9)" "24.10" "off-pin release key"
+assert_eq "$(feed_publish_release_key 25.12.5)" "25.12" "apk line release key"
+if feed_publish_feed_dir 99.99 >/dev/null 2>&1; then
+	echo "FAIL: unmapped feed dir should fail closed" >&2
+	exit 1
+fi
+if feed_publish_feed_dir 24.10.foo >/dev/null 2>&1; then
+	echo "FAIL: non-numeric patch must not map to a feed dir" >&2
+	exit 1
+fi
+if feed_publish_release_key 24.10.foo >/dev/null 2>&1; then
+	echo "FAIL: non-numeric release key should fail closed" >&2
+	exit 1
+fi
+
+assert_eq "$(feed_publish_release_asset_basename \
+	"${ROOT}/out/x86_64/23.05.5/fwlive/luci-app-fwlive_0.1.16_all.ipk")" \
+	"luci-app-fwlive_0.1.16_23.05_all.ipk" \
+	"23.05 ipk suffix"
+
+assert_eq "$(feed_publish_release_asset_basename \
+	"${ROOT}/out/x86_64/25.12.5/fwlive/luci-app-fwlive-0.1.16-r1.apk")" \
+	"luci-app-fwlive-0.1.16-r1.apk" \
+	"apk unchanged"
+
+fixture="$(mktemp -d)"
+staging="$(mktemp -d)"
+trap 'rm -rf "$fixture" "$staging"' EXIT
+export FEED_PUBLISH_ROOT="$fixture"
+mkdir -p "${fixture}/out/x86_64"/{23.05.5,24.10.8,25.12.5}/fwlive
+for cell in 23.05.5 24.10.8; do
+	echo ipk > "${fixture}/out/x86_64/${cell}/fwlive/luci-app-fwlive_0.1.16_all.ipk"
+	for lang in de ru zh-cn; do
+		locale_version=0.1.16
+		if [[ "$cell" == "23.05.5" && "$lang" == "de" ]]; then
+			locale_version=261018.05377
+		fi
+		echo "i18n-${lang}" > "${fixture}/out/x86_64/${cell}/fwlive/luci-i18n-fwlive-${lang}_${locale_version}_all.ipk"
+	done
+done
+for lang in de ru zh-cn; do
+	echo "apk-i18n-${lang}" > "${fixture}/out/x86_64/25.12.5/fwlive/luci-i18n-fwlive-${lang}-0.261018.05377-r1.apk"
+done
+echo apk25 > "${fixture}/out/x86_64/25.12.5/fwlive/luci-app-fwlive-0.1.16-r1.apk"
+export FWLIVE_PKG_VERSION=0.1.16
+feed_publish_stage_release_assets "$staging"
+test -f "$staging/luci-app-fwlive_0.1.16_23.05_all.ipk"
+test -f "$staging/luci-app-fwlive_0.1.16_24.10_all.ipk"
+test -f "$staging/luci-i18n-fwlive-de_261018.05377_23.05_all.ipk"
+test -f "$staging/luci-app-fwlive-0.1.16-r1.apk"
+staged_count="$(find "$staging" -mindepth 1 -maxdepth 1 -type f | wc -l)"
+assert_eq "$staged_count" "12" "active matrix stages app+i18n for 23.05, 24.10, and 25.12"
+
+# Partial locale set must abort before copying the app (#1271).
+partial_fixture="$(mktemp -d)"
+partial_staging="$(mktemp -d)"
+partial_err="$(mktemp)"
+mkdir -p "${partial_fixture}/out/x86_64/23.05.5/fwlive"
+echo app-only > "${partial_fixture}/out/x86_64/23.05.5/fwlive/luci-app-fwlive_0.1.16_all.ipk"
+FEED_PUBLISH_ROOT="$partial_fixture" FWLIVE_PKG_VERSION=0.1.16 \
+	feed_publish_stage_release_assets "$partial_staging" 2>"$partial_err" && {
+	echo "FAIL: partial i18n must abort release asset staging" >&2
+	exit 1
+}
+partial_count="$(find "$partial_staging" -mindepth 1 -maxdepth 1 -type f 2>/dev/null | wc -l)"
+assert_eq "$partial_count" "0" "partial i18n must not stage any release asset"
+grep -q 'incomplete i18n set' "$partial_err" || {
+	echo "FAIL: partial i18n abort must name incomplete set" >&2
+	exit 1
+}
+opkg_partial="${partial_fixture}/opkg-staging"
+if FEED_PUBLISH_ROOT="$partial_fixture" FWLIVE_PKG_VERSION=0.1.16 \
+	feed_publish_stage_opkg 23.05 "$opkg_partial" 2>"$partial_err"; then
+	echo "FAIL: partial i18n must abort opkg feed staging" >&2
+	exit 1
+fi
+if [[ -e "${opkg_partial}/23.05/luci-app-fwlive_0.1.16_all.ipk" ]]; then
+	echo "FAIL: partial i18n must not copy the app ipk into the feed cell" >&2
+	exit 1
+fi
+rm -rf "$partial_fixture" "$partial_staging"
+rm -f "$partial_err"
+
+# Guard #144: manifest records ONE SDK image digest per target×version cell.
+# Docker is mocked so the test is hermetic (RepoDigests source + the
+# empty-RepoDigests → @sha256:<image ID> fallback path + abort path).
+mock_bin="${fixture}/mock-bin"
+mkdir -p "$mock_bin"
+cat > "$mock_bin/docker" <<'EOF'
+#!/usr/bin/env bash
+set -euo pipefail
+image="${!#}"
+case "${1:-}" in
+	pull)
+		# sdk_matrix_pull always re-resolves via `docker pull`.
+		[[ -n "${MOCK_PULL_LOG:-}" ]] && echo "pull $image" >> "$MOCK_PULL_LOG"
+		[[ "${MOCK_PULL_FAIL:-0}" != "1" ]] || exit 1
+		exit 0
+		;;
+	image)
+		case "${2:-}" in
+			pull)
+				# Record the pull so tests can assert the pull path ran.
+				[[ -n "${MOCK_PULL_LOG:-}" ]] && echo "pull $image" >> "$MOCK_PULL_LOG"
+				# MOCK_PULL_FAIL=1 simulates a failed pull — the production
+				# code must abort (sdk_matrix_pull || return 1), not fall
+				# through to a misleading inspect.
+				[[ "${MOCK_PULL_FAIL:-0}" != "1" ]] || exit 1
+				exit 0
+				;;
+			inspect)
+				# Bare existence check (no --format): MOCK_IMAGE_ABSENT=1
+				# simulates the image not being present → pull fires.
+				if [[ "${3:-}" == "--format" ]]; then
+					case "$4" in
+						*RepoDigests*)
+							[[ "${MOCK_REPO_DIGESTS:-1}" != "0" ]] || exit 1
+							# Emit ALL RepoDigests in the SAME order docker
+							# would (multiple registries). The production code
+							# must select the one matching the image's repo
+							# (ghcr.io/openwrt/sdk), NOT RepoDigests[0] — the
+							# decoy (ghcrXio) sorts first on some docker
+							# versions, and a plain [0] pick would take it.
+							# MOCK_MULTI_REPO=1 emits the decoy FIRST.
+							if [[ "${MOCK_MULTI_REPO:-0}" == "1" ]]; then
+								printf 'ghcrXio/openwrt/sdk@sha256:%s\n' "$(printf '%s' "decoy-$image" | sha256sum | awk '{print $1}')"
+								printf '%s@sha256:%s\n' "${image%%:*}" "$(printf '%s' "$image" | sha256sum | awk '{print $1}')"
+							else
+								printf '%s@sha256:%s\n' "${image%%:*}" "$(printf '%s' "$image" | sha256sum | awk '{print $1}')"
+							fi
+							exit 0
+							;;
+						*)
+							# .Id path — MOCK_NO_ID=1 simulates an unresolvable image.
+							[[ "${MOCK_NO_ID:-0}" != "1" ]] || exit 1
+							printf 'sha256:%s\n' "$(printf '%s' "$image" | sha256sum | awk '{print $1}')"
+							exit 0
+							;;
+					esac
+				fi
+				[[ "${MOCK_IMAGE_ABSENT:-0}" != "1" ]] || exit 1
+				exit 0
+				;;
+		esac
+		;;
+esac
+exit 0
+EOF
+chmod +x "$mock_bin/docker"
+PATH="$mock_bin:$PATH"
+
+export SDK_MATRIX_DIGEST_CACHE_DIR="${fixture}/sdk-digests"
+mkdir -p "$SDK_MATRIX_DIGEST_CACHE_DIR"
+
+mkdir -p "${fixture}/manifest-staging" "${fixture}/fallback-staging" "${fixture}/abort-staging" "${fixture}/pull-staging" "${fixture}/pullfail-staging" "${fixture}/multi-staging"
+# Assert the pull path always runs (no skip when the tag exists locally).
+pull_log="$(mktemp)"
+export MOCK_PULL_LOG="$pull_log"
+feed_publish_write_manifest "${fixture}/pull-staging" test-tag
+grep -q '^pull ghcr.io/openwrt/sdk:' "$pull_log" || { echo "FAIL: sdk_matrix_pull not called"; exit 1; }
+# Cold pin-cache: sdk_image stays the mutable tag; digest is a separate field.
+grep -q '"sdk_image": "ghcr.io/openwrt/sdk:x86-64-23.05.5"' "${fixture}/pull-staging/manifest.json" \
+	|| { echo "FAIL: cold-cache sdk_image must be the tag, not the digest ref"; exit 1; }
+grep -q '"sdk_image": "ghcr.io/openwrt/sdk@sha256:' "${fixture}/pull-staging/manifest.json" \
+	&& { echo "FAIL: sdk_image must not be a digest ref"; exit 1; }
+# Pin cache: a second manifest write must not re-pull a possibly moved tag.
+: > "$pull_log"
+feed_publish_write_manifest "${fixture}/manifest-staging" test-tag
+if grep -q '^pull ' "$pull_log"; then
+	echo "FAIL: pin cache should avoid a second pull" >&2
+	exit 1
+fi
+test -f "${fixture}/manifest-staging/manifest.json"
+grep -q '"openwrt": "23.05"' "${fixture}/manifest-staging/manifest.json"
+grep -q '"sha256":' "${fixture}/manifest-staging/manifest.json"
+grep -q '"sdk_image": "ghcr.io/openwrt/sdk:x86-64-23.05.5"' "${fixture}/manifest-staging/manifest.json"
+grep -q '"sdk_digest": "ghcr.io/openwrt/sdk@sha256:' "${fixture}/manifest-staging/manifest.json"
+command -v node >/dev/null 2>&1 && node -e '
+	const fs = require("fs");
+	const m = JSON.parse(fs.readFileSync(process.argv[1], "utf8"));
+	if (!Array.isArray(m.packages) || m.packages.length !== 3) process.exit(1);
+	const lines = m.packages.map((p) => p.openwrt).sort().join(",");
+	if (lines !== "23.05,24.10,25.12") process.exit(1);
+	for (const p of m.packages) {
+		if (!/^ghcr\.io\/openwrt\/sdk@sha256:[0-9a-f]{64}$/.test(p.sdk_digest || "")) process.exit(1);
+		if (!/^[0-9a-f]{64}$/.test(p.feeds_lock_sha256 || "")) process.exit(1);
+		if (!p.feeds || !/^[0-9a-f]{40}$/.test(p.feeds.base || "") ||
+			!/^[0-9a-f]{40}$/.test(p.feeds.packages || "") ||
+			!/^[0-9a-f]{40}$/.test(p.feeds.luci || "")) process.exit(1);
+		if (!Array.isArray(p.artifacts) || p.artifacts.length !== 4) process.exit(1);
+	}
+' "${fixture}/manifest-staging/manifest.json"
+
+# Multi-registry RepoDigests: the production code must select the digest
+# matching ghcr.io/openwrt/sdk, NOT RepoDigests[0] (the ghcrXio decoy is
+# emitted FIRST, like docker sometimes orders multiple registries).
+rm -rf "${SDK_MATRIX_DIGEST_CACHE_DIR:?}"/*
+mkdir -p "$SDK_MATRIX_DIGEST_CACHE_DIR"
+mkdir -p "${fixture}/multi-staging"
+export MOCK_MULTI_REPO=1
+feed_publish_write_manifest "${fixture}/multi-staging" test-tag
+grep -q '"sdk_digest": "ghcr.io/openwrt/sdk@sha256:' "${fixture}/multi-staging/manifest.json" \
+	|| { echo "FAIL: multi-registry manifest must select the ghcr.io digest, not the decoy"; exit 1; }
+grep -q 'ghcrXio' "${fixture}/multi-staging/manifest.json" \
+	&& { echo "FAIL: decoy digest must NOT appear in the manifest"; exit 1; }
+unset MOCK_MULTI_REPO
+echo "multi-registry digest selection OK"
+
+# Failed pull must abort (sdk_matrix_pull || return 1) — a failed pull
+# followed by a successful inspect would record a digest for an image that
+# was never pulled (luna fold 2026-08-10).
+rm -rf "${SDK_MATRIX_DIGEST_CACHE_DIR:?}"/*
+mkdir -p "$SDK_MATRIX_DIGEST_CACHE_DIR"
+pullfail_warn="$(mktemp)"
+export MOCK_IMAGE_ABSENT=1 MOCK_PULL_FAIL=1
+if feed_publish_write_manifest "${fixture}/pullfail-staging" test-tag 2>"$pullfail_warn"; then
+	echo "FAIL: manifest generation must abort when the SDK pull fails" >&2
+	exit 1
+fi
+unset MOCK_IMAGE_ABSENT MOCK_PULL_FAIL
+echo "pull-failure abort OK"
+
+# Empty RepoDigests → fallback to @sha256:<image ID> with a documented warning.
+rm -rf "${SDK_MATRIX_DIGEST_CACHE_DIR:?}"/*
+mkdir -p "$SDK_MATRIX_DIGEST_CACHE_DIR"
+fallback_warn="$(mktemp)"
+export MOCK_REPO_DIGESTS=0
+feed_publish_write_manifest "${fixture}/fallback-staging" test-tag 2>"$fallback_warn"
+grep -q '"sdk_digest": "@sha256:' "${fixture}/fallback-staging/manifest.json"
+grep -qi 'has no .*RepoDigest' "$fallback_warn"
+command -v node >/dev/null 2>&1 && node -e '
+	const fs = require("fs");
+	const m = JSON.parse(fs.readFileSync(process.argv[1], "utf8"));
+	for (const p of m.packages) {
+		if (!/^@sha256:[0-9a-f]{64}$/.test(p.sdk_digest || "")) process.exit(1);
+	}
+' "${fixture}/fallback-staging/manifest.json"
+export MOCK_REPO_DIGESTS=1
+
+# Neither RepoDigests nor .Id resolvable → manifest generation must FAIL
+# (no empty digest recorded silently; luna fold 2026-08-10).
+rm -rf "${SDK_MATRIX_DIGEST_CACHE_DIR:?}"/*
+mkdir -p "$SDK_MATRIX_DIGEST_CACHE_DIR"
+abort_warn="$(mktemp)"
+export MOCK_REPO_DIGESTS=0 MOCK_NO_ID=1
+if feed_publish_write_manifest "${fixture}/abort-staging" test-tag 2>"$abort_warn"; then
+	echo "FAIL: manifest generation must abort when no digest source exists" >&2
+	exit 1
+fi
+grep -qi 'cannot resolve SDK image digest' "$abort_warn" || {
+	echo "FAIL: abort must report the unresolvable digest" >&2
+	exit 1
+}
+if [[ -s "${fixture}/abort-staging/manifest.json" ]] && \
+   grep -q '"sdk_digest": ""' "${fixture}/abort-staging/manifest.json"; then
+	echo "FAIL: abort path must not record an empty digest" >&2
+	exit 1
+fi
+unset MOCK_REPO_DIGESTS MOCK_NO_ID
+
+# Release notes body = CHANGELOG section (generate-notes lists only merged PRs
+# in the tag range → near-empty bodies for direct-commit ranges, v0.1.40).
+notes_fix="${fixture}/notes-repo"
+mkdir -p "$notes_fix"
+cat > "$notes_fix/CHANGELOG.md" <<'EOF'
+# Changelog
+
+## [Unreleased]
+
+## [v9.9.9] — 2026-09-11
+
+### Fixed
+- Synthetic fix (#000)
+
+### Added
+- Synthetic addition
+
+## [v9.9.8] — 2026-09-01
+
+### Fixed
+- Older section must not leak
+EOF
+FEED_PUBLISH_ROOT="$notes_fix" feed_publish_release_notes_file "${fixture}/notes.md" v9.9.9 ||
+	{ echo "FAIL: notes helper must succeed for a known version" >&2; exit 1; }
+grep -q "Synthetic fix" "${fixture}/notes.md" ||
+	{ echo "FAIL: notes must carry the version section" >&2; exit 1; }
+grep -q "Older section must not leak" "${fixture}/notes.md" &&
+	{ echo "FAIL: notes must stop at the next heading" >&2; exit 1; }
+grep -q "## \[v9.9.8\]" "${fixture}/notes.md" &&
+	{ echo "FAIL: next heading leaked" >&2; exit 1; }
+# Non-repo root → no previous tag resolvable: version-line fallback footer,
+# never a bogus compare range.
+grep -q "PKG_VERSION 9.9.9" "${fixture}/notes.md" ||
+	{ echo "FAIL: fallback version footer missing" >&2; exit 1; }
+grep -q "Full Changelog" "${fixture}/notes.md" &&
+	{ echo "FAIL: compare footer must not appear without tags" >&2; exit 1; }
+# Real git root with tags → previous-tag compare footer.
+git_fix="${fixture}/git-repo"
+mkdir -p "$git_fix"
+cp "$notes_fix/CHANGELOG.md" "$git_fix/CHANGELOG.md"
+git -C "$git_fix" init -q
+git -C "$git_fix" -c user.name=t -c user.email=t@t add CHANGELOG.md
+git -C "$git_fix" -c user.name=t -c user.email=t@t commit -qm x
+git -C "$git_fix" tag v9.9.8
+git -C "$git_fix" tag v9.9.9
+FEED_PUBLISH_ROOT="$git_fix" feed_publish_release_notes_file "${fixture}/notes-git.md" v9.9.9 ||
+	{ echo "FAIL: notes helper must succeed in a tagged repo" >&2; exit 1; }
+grep -q "compare/v9\.9\.8\.\.\.v9\.9\.9" "${fixture}/notes-git.md" ||
+	{ echo "FAIL: compare footer missing in tagged repo" >&2; exit 1; }
+# Unknown version → non-zero (caller falls back to --generate-notes)
+FEED_PUBLISH_ROOT="$notes_fix" feed_publish_release_notes_file "${fixture}/none.md" v9.9.7 &&
+	{ echo "FAIL: unknown version must return non-zero" >&2; exit 1; }
+# Malformed tag → non-zero before touching the changelog
+FEED_PUBLISH_ROOT="$notes_fix" feed_publish_release_notes_file "${fixture}/bad.md" 'v9.9.9; rm' &&
+	{ echo "FAIL: malformed tag must return non-zero" >&2; exit 1; }
+
+# Integrity failure (sdk_matrix_feeds_ready exit 2) must refuse host-sign.
+integrity_staging="${fixture}/integrity-staging"
+integrity_err="$(mktemp)"
+integrity_called="${fixture}/integrity-called"
+: >"$integrity_called"
+export OPKG_FEED_SECRET_KEY="${fixture}/opkg-secret.key"
+printf 'untrusted comment: test\nRWTEST\n' >"$OPKG_FEED_SECRET_KEY"
+sdk_matrix_feeds_ready() {
+	echo "probe: feed HEAD/pin mismatch" >&2
+	return 2
+}
+feed_publish_stage_opkg_sdk() {
+	echo sdk >>"$integrity_called"
+	return 0
+}
+feed_publish_stage_opkg_host() {
+	echo host >>"$integrity_called"
+	return 0
+}
+if feed_publish_stage_opkg 23.05 "$integrity_staging" 2>"$integrity_err"; then
+	echo "FAIL: integrity failure must abort opkg staging" >&2
+	exit 1
+fi
+grep -q 'refusing host-sign fallback' "$integrity_err" || {
+	echo "FAIL: integrity abort must name the host-sign refusal" >&2
+	exit 1
+}
+if grep -qE '^(sdk|host)$' "$integrity_called"; then
+	echo "FAIL: integrity failure must not call SDK or host sign" >&2
+	exit 1
+fi
+if [[ -e "${integrity_staging}/23.05/Packages.sig" ]]; then
+	echo "FAIL: integrity failure must not write Packages.sig" >&2
+	exit 1
+fi
+echo "integrity-failure host-sign refusal OK"
+
+# SDK sign failure must abort even when the caller uses `if` (errexit off).
+sdkfail_staging="${fixture}/sdkfail-staging"
+sdkfail_called="${fixture}/sdkfail-called"
+: >"$sdkfail_called"
+sdk_matrix_feeds_ready() { return 0; }
+feed_publish_stage_opkg_sdk() {
+	echo sdk >>"$sdkfail_called"
+	return 1
+}
+feed_publish_stage_opkg_host() {
+	echo host >>"$sdkfail_called"
+	return 0
+}
+if feed_publish_stage_opkg 23.05 "$sdkfail_staging" 2>/dev/null; then
+	echo "FAIL: SDK sign failure must abort opkg staging" >&2
+	exit 1
+fi
+grep -qx sdk "$sdkfail_called" || {
+	echo "FAIL: SDK sign path must be attempted" >&2
+	exit 1
+}
+if grep -qx host "$sdkfail_called"; then
+	echo "FAIL: SDK sign failure must not fall back to host-sign" >&2
+	exit 1
+fi
+echo "SDK sign failure abort OK"
+
+# APK integrity failure (exit 2) must not be reported as a missing SDK build.
+apk_staging="${fixture}/apk-integrity-staging"
+apk_err="$(mktemp)"
+sdk_matrix_feeds_ready() {
+	echo "probe: feed HEAD/pin mismatch" >&2
+	return 2
+}
+export APK_FEED_SECRET_KEY="${fixture}/apk-secret.rsa"
+printf 'dummy-apk-key\n' >"$APK_FEED_SECRET_KEY"
+if feed_publish_stage_apk 25.12 "$apk_staging" 2>"$apk_err"; then
+	echo "FAIL: integrity failure must abort apk staging" >&2
+	exit 1
+fi
+grep -q 'refusing apk staging' "$apk_err" || {
+	echo "FAIL: apk integrity abort must name the refusal" >&2
+	exit 1
+}
+if grep -q 'run docker-sdk.sh build' "$apk_err"; then
+	echo "FAIL: apk integrity failure must not look like a missing build" >&2
+	exit 1
+fi
+echo "apk integrity-failure messaging OK"
+
+echo "feed-publish release asset tests passed"

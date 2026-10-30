@@ -1,0 +1,2236 @@
+#!/usr/bin/env bash
+# Unit tests for fwlive-logging.sh helpers (no UCI/firewall required).
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+LOGGING_SH="$ROOT/openwrt-feed/luci-app-fwlive/root/usr/libexec/fwlive-logging.sh"
+RPCD="$ROOT/openwrt-feed/luci-app-fwlive/root/usr/libexec/rpcd/fwlive"
+
+die() { echo "fwlive-logging test FAIL: $*" >&2; exit 1; }
+ok() { echo "fwlive-logging test OK: $*"; }
+skips=0
+skip() {
+	echo "SKIP: $*" >&2
+	skips=$((skips + 1))
+}
+
+. "$LOGGING_SH"
+
+KEEP_D="$ROOT/openwrt-feed/luci-app-fwlive/root/lib/upgrade/keep.d/luci-app-fwlive"
+[ -f "$KEEP_D" ] || die "keep.d luci-app-fwlive missing"
+grep -qx '/etc/fwlive/' "$KEEP_D" || die "keep.d must list /etc/fwlive/"
+ok "sysupgrade keep.d lists /etc/fwlive/"
+
+type json_escape >/dev/null 2>&1 || die "json_escape must be defined after sourcing logging.sh"
+got=$(printf 'a\n\nb' | json_escape)
+[ "$got" = "$(printf 'a\\n\\nb')" ] || die "json_escape must keep blank lines, got: $got"
+ok "json_escape keeps blank lines"
+
+got=$(wan_log_error_json '"wan"' lock_failed)
+[ "$got" = '{"ok":false,"changed":false,"wan_zone":"wan","error":"lock_failed"}' ] || die "wan_log_error_json shape, got: $got"
+ok "wan_log_error_json output shape"
+
+WAN_LOG_BASELINE_FILE="${FWLIVE_WAN_LOG_BASELINE_FILE:-$(mktemp)}"
+export WAN_LOG_BASELINE_FILE
+rm -f "$WAN_LOG_BASELINE_FILE"
+
+run_logging_selftest || die "run_logging_selftest"
+ok "filter log bit logic"
+
+out=$(build_logging_status_json)
+case "$out" in
+	*'"wan_log":'*) ;;
+	*) die "logging_status JSON missing wan_log: $out" ;;
+esac
+case "$out" in
+	*'"blockers":'*) ;;
+	*) die "logging_status JSON missing blockers: $out" ;;
+esac
+case "$out" in
+	*'"warnings":'*) ;;
+	*) die "logging_status JSON missing warnings: $out" ;;
+esac
+case "$out" in
+	*'"weak_device":true'*|*'"weak_device":false'*) ;;
+	*) die "logging_status expected strong host weak_device=false: $out" ;;
+esac
+ok "build_logging_status_json shape"
+
+# #378: legacy iptables detection is diagnostic-only and reads both procfs
+# table-name files from fixtureable paths. LuCI surfaces the warning in the
+# backend label; it must not alter readiness or the enable gate. Empty fixture
+# files stay exported so later build_logging_status_json calls do not probe
+# host procfs.
+json_array_field() {
+	_src=$1
+	_key=$2
+	_rest=${_src#*"\"${_key}\":["}
+	[ "$_rest" != "$_src" ] || return 1
+	printf '%s' "${_rest%%]*}"
+}
+
+json_ready_field() {
+	case "$1" in
+		*'"ready":true'*) printf 'true' ;;
+		*'"ready":false'*) printf 'false' ;;
+		*) printf '' ;;
+	esac
+}
+
+assert_legacy_warning_state() {
+	_out=$1
+	_expect=$2
+	_why=$3
+	_warnings=$(json_array_field "$_out" warnings) || die "$_why: missing warnings array: $_out"
+	_blockers=$(json_array_field "$_out" blockers) || die "$_why: missing blockers array: $_out"
+	case "$_blockers" in
+		*legacy_iptables_detected*) die "$_why: must not appear in blockers: $_out" ;;
+	esac
+	if [ "$_expect" = present ]; then
+		case "$_warnings" in
+			*legacy_iptables_detected*) ;;
+			*) die "$_why: missing from warnings: $_out" ;;
+		esac
+	else
+		case "$_warnings" in
+			*legacy_iptables_detected*) die "$_why: must not warn: $_out" ;;
+		esac
+	fi
+}
+
+assert_ready_unchanged() {
+	_out=$1
+	_why=$2
+	_ready=$(json_ready_field "$_out")
+	[ -n "$_ready" ] || die "$_why: missing ready: $_out"
+	[ "$_ready" = "$LEGACY_READY_BASELINE" ] || \
+		die "$_why: ready changed from $LEGACY_READY_BASELINE to $_ready: $_out"
+}
+
+LEGACY_WORK=$(mktemp -d)
+cleanup_legacy_tables() { rm -rf "${LEGACY_WORK:-}"; }
+trap cleanup_legacy_tables EXIT
+LEGACY_IPV4="$LEGACY_WORK/ip_tables_names"
+LEGACY_IPV6="$LEGACY_WORK/ip6_tables_names"
+export FWLIVE_IP_TABLES_NAMES_PATH="$LEGACY_IPV4"
+export FWLIVE_IP6_TABLES_NAMES_PATH="$LEGACY_IPV6"
+rm -f "$LEGACY_IPV4" "$LEGACY_IPV6"
+out=$(build_logging_status_json)
+assert_legacy_warning_state "$out" absent "missing legacy table files"
+: >"$LEGACY_IPV4"
+: >"$LEGACY_IPV6"
+out=$(build_logging_status_json)
+assert_legacy_warning_state "$out" absent "empty legacy table files"
+LEGACY_READY_BASELINE=$(json_ready_field "$out")
+[ -n "$LEGACY_READY_BASELINE" ] || die "empty legacy table files: missing ready: $out"
+printf ' \t \n\n' >"$LEGACY_IPV4"
+out=$(build_logging_status_json)
+assert_legacy_warning_state "$out" absent "whitespace-only legacy table file"
+assert_ready_unchanged "$out" "whitespace-only legacy table file"
+printf 'filter\n' >"$LEGACY_IPV4"
+out=$(build_logging_status_json)
+assert_legacy_warning_state "$out" present "IPv4 legacy table"
+assert_ready_unchanged "$out" "IPv4 legacy table"
+: >"$LEGACY_IPV4"
+printf 'filter\n' >"$LEGACY_IPV6"
+out=$(build_logging_status_json)
+assert_legacy_warning_state "$out" present "IPv6 legacy table"
+assert_ready_unchanged "$out" "IPv6 legacy table"
+: >"$LEGACY_IPV6"
+printf '\nfilter\n' >"$LEGACY_IPV4"
+out=$(build_logging_status_json)
+assert_legacy_warning_state "$out" present "blank-first-line legacy table"
+assert_ready_unchanged "$out" "blank-first-line legacy table"
+printf 'filter\n' >"$LEGACY_IPV4"
+printf 'nat\n' >"$LEGACY_IPV6"
+out=$(build_logging_status_json)
+assert_legacy_warning_state "$out" present "both-populated legacy tables"
+assert_ready_unchanged "$out" "both-populated legacy tables"
+# Leave empty files exported so later exact warnings pins stay host-independent.
+: >"$LEGACY_IPV4"
+: >"$LEGACY_IPV6"
+ok "legacy iptables warning uses fixtureable table-name probes"
+
+# #371: nf_log readiness is backend-aware and family-aware.  The IPv4 family
+# is required by the supported WAN product path; IPv6 readiness is effective
+# only when the independent if_inet6 probe says the IPv6 stack is present.
+NF_LOG_IPV4_SAVED="$NF_LOG_IPV4"
+NF_LOG_IPV6_SAVED="$NF_LOG_IPV6"
+NF_LOG_IPV6_AVAILABLE_SAVED="$NF_LOG_IPV6_AVAILABLE_PATH"
+WAN_LOG_LOCK_FILE_SAVED="$WAN_LOG_LOCK_FILE"
+if [ "${FWLIVE_IPV6_AVAILABLE_PATH+x}" = x ]; then
+	FWLIVE_IPV6_AVAILABLE_SAVED_SET=1
+	FWLIVE_IPV6_AVAILABLE_SAVED="$FWLIVE_IPV6_AVAILABLE_PATH"
+else
+	FWLIVE_IPV6_AVAILABLE_SAVED_SET=0
+fi
+if [ "${FWLIVE_WAN_LOG_LOCK_FILE+x}" = x ]; then
+	FWLIVE_WAN_LOG_LOCK_SAVED_SET=1
+	FWLIVE_WAN_LOG_LOCK_SAVED="$FWLIVE_WAN_LOG_LOCK_FILE"
+else
+	FWLIVE_WAN_LOG_LOCK_SAVED_SET=0
+fi
+NF_LOG_WORK=$(mktemp -d)
+cleanup_nf_log_fixtures() { rm -rf "$NF_LOG_WORK"; }
+cleanup_logging_test_fixtures() { rm -rf "$NF_LOG_WORK" "${LEGACY_WORK:-}"; }
+trap cleanup_logging_test_fixtures EXIT
+NF_LOG_IPV4="$NF_LOG_WORK/nf-log-4"
+NF_LOG_IPV6="$NF_LOG_WORK/nf-log-6"
+FWLIVE_IPV6_AVAILABLE_PATH="$NF_LOG_WORK/if-inet6"
+FWLIVE_WAN_LOG_LOCK_FILE="$NF_LOG_WORK/logging.lock"
+FWLIVE_WAN_LOG_GENERATION_FILE="$NF_LOG_WORK/wan-log-generation"
+WAN_LOG_LOCK_FILE="$FWLIVE_WAN_LOG_LOCK_FILE"
+WAN_LOG_GENERATION_FILE="$FWLIVE_WAN_LOG_GENERATION_FILE"
+export FWLIVE_WAN_LOG_GENERATION_FILE
+acquire_wan_log_lock() { return 0; }
+release_wan_log_lock() { return 0; }
+
+assert_nf_log_backend_missing() {
+	_path="$1"
+	_why="$2"
+	if read_nf_log_backend "$_path"; then
+		die "$_why: $_path"
+	fi
+}
+
+for _nf_log_path in "$NF_LOG_IPV4" "$NF_LOG_IPV6"; do
+	rm -f "$_nf_log_path"
+	assert_nf_log_backend_missing "$_nf_log_path" \
+		"missing nf_log backend must be unavailable"
+	: >"$_nf_log_path"
+	assert_nf_log_backend_missing "$_nf_log_path" \
+		"empty nf_log backend must be unavailable"
+	printf 'NONE\n' >"$_nf_log_path"
+	assert_nf_log_backend_missing "$_nf_log_path" \
+		"uppercase NONE must be unavailable"
+	printf 'none\n' >"$_nf_log_path"
+	assert_nf_log_backend_missing "$_nf_log_path" \
+		"lowercase none must be unavailable"
+	printf ' NONE \t\n' >"$_nf_log_path"
+	assert_nf_log_backend_missing "$_nf_log_path" \
+		"whitespace-padded NONE must be unavailable"
+	printf 'nf_log_ipv4\n' >"$_nf_log_path"
+	read_nf_log_backend "$_nf_log_path" \
+		|| die "real nf_log backend must be available: $_nf_log_path"
+done
+ok "#371 backend matrix covers both nf_log paths"
+
+rm -f "$FWLIVE_IPV6_AVAILABLE_PATH"
+if nf_log_family_available ipv6; then
+	die "missing IPv6 availability probe must mean IPv6 is unavailable"
+fi
+: >"$FWLIVE_IPV6_AVAILABLE_PATH"
+if nf_log_family_available ipv6; then
+	die "empty IPv6 availability probe must mean IPv6 is unavailable"
+fi
+printf '00000000000000000000000000000001 01 80 lo\n' >"$FWLIVE_IPV6_AVAILABLE_PATH"
+nf_log_family_available ipv6 \
+	|| die "populated IPv6 availability probe must mean IPv6 is present"
+nf_log_family_available ipv4 \
+	|| die "supported WAN path must require IPv4"
+ok "#371 family availability uses independent IPv6 probe"
+
+# Shared UCI + lock stubs: enable must not touch /etc/fwlive. log=1 makes a
+# passed nf_log gate return ok:true/changed:false without a UCI commit.
+uci() {
+	case "$*" in
+		'-q show firewall')
+			printf "firewall.@zone[0]=zone\nfirewall.@zone[0].name='wan'\n"
+			;;
+		'-q get firewall.@zone[0]')
+			printf 'zone\n'
+			;;
+		'-q get firewall.@zone[0].log')
+			printf '%s\n' "${FWLIVE_TEST_LOG_VALUE:-1}"
+			;;
+		'-q get firewall.@zone[0].log_limit')
+			printf '10\n'
+			;;
+		*) return 1 ;;
+	esac
+}
+
+# #832 / #455 / #606: drive leading-zero UCI values through wan_zone_log_value
+# after the stub exists (the loop above the stub was a no-op).
+for FWLIVE_TEST_LOG_VALUE in 08 010 0 011; do
+	out=$(build_logging_status_json)
+	case "$FWLIVE_TEST_LOG_VALUE" in
+		011)
+			case "$out" in
+				*'"wan_log":true'*) ;;
+				*) die "leading-zero log value $FWLIVE_TEST_LOG_VALUE must set wan_log true: $out" ;;
+			esac
+			;;
+		*)
+			case "$out" in
+				*'"wan_log":false'*) ;;
+				*) die "leading-zero log value $FWLIVE_TEST_LOG_VALUE must set wan_log false: $out" ;;
+			esac
+			;;
+	esac
+done
+unset FWLIVE_TEST_LOG_VALUE
+ok "leading-zero log values keep logging_status JSON valid (#832)"
+
+assert_enable_ok() {
+	_why="$1"
+	out=$(enable_wan_logging)
+	case "$out" in
+		*'"ok":true'*) ;;
+		*) die "$_why enable: $out" ;;
+	esac
+	case "$out" in
+		*'"error":"nf_log_missing"'*) die "$_why must not be nf_log_missing: $out" ;;
+	esac
+}
+
+assert_enable_nf_log_missing() {
+	_why="$1"
+	out=$(enable_wan_logging)
+	case "$out" in
+		*'"error":"nf_log_missing"'*) ;;
+		*) die "$_why enable: $out" ;;
+	esac
+}
+
+# IPv4 is always required. Drive status/blockers/ready and enable from each
+# backend sentinel while the IPv6 stack is absent.
+rm -f "$FWLIVE_IPV6_AVAILABLE_PATH"
+printf 'NONE\n' >"$NF_LOG_IPV6"
+for _ipv4_case in missing empty NONE none; do
+	case "$_ipv4_case" in
+		missing) rm -f "$NF_LOG_IPV4" ;;
+		empty) : >"$NF_LOG_IPV4" ;;
+		NONE) printf 'NONE\n' >"$NF_LOG_IPV4" ;;
+		none) printf 'none\n' >"$NF_LOG_IPV4" ;;
+	esac
+	out=$(build_logging_status_json)
+	case "$out" in
+		*'"nf_log_ipv4":false'*'"ready":false'*'"nf_log_ipv4_missing"'*) ;;
+		*) die "IPv4 $_ipv4_case status must block: $out" ;;
+	esac
+	assert_enable_nf_log_missing "IPv4 $_ipv4_case"
+done
+printf 'nf_log_ipv4\n' >"$NF_LOG_IPV4"
+out=$(build_logging_status_json)
+case "$out" in
+	*'"nf_log_ipv4":true'*'"nf_log_ipv6":true'*'"ready":true'*) ;;
+	*) die "IPv4-ready/IPv6-absent status must be ready: $out" ;;
+esac
+case "$out" in
+	*'"nf_log_ipv6_missing"'*) die "absent IPv6 must not block status: $out" ;;
+esac
+assert_enable_ok "IPv4-ready/IPv6-absent"
+ok "#371 IPv4 backend matrix gates status and enable"
+
+printf '00000000000000000000000000000001 01 80 lo\n' >"$FWLIVE_IPV6_AVAILABLE_PATH"
+printf 'NONE\n' >"$NF_LOG_IPV6"
+out=$(build_logging_status_json)
+case "$out" in
+	*'"nf_log_ipv6":false'*'"ready":false'*'"nf_log_ipv6_missing"'*) ;;
+	*) die "present IPv6 with NONE must block status: $out" ;;
+esac
+assert_enable_nf_log_missing "present IPv6 with NONE"
+
+printf 'nf_log_ipv6\n' >"$NF_LOG_IPV6"
+out=$(build_logging_status_json)
+case "$out" in
+	*'"nf_log_ipv4":true'*'"nf_log_ipv6":true'*'"ready":true'*) ;;
+	*) die "both families ready status must be ready: $out" ;;
+esac
+	case "$out" in
+		*'"nf_log_ipv4_missing"'*|*'"nf_log_ipv6_missing"'*)
+			die "both families ready must not set nf_log blockers: $out"
+			;;
+	esac
+assert_enable_ok "both families ready"
+ok "#371 effective IPv4/IPv6 readiness gates status and enable"
+
+unset -f uci acquire_wan_log_lock release_wan_log_lock
+unset -f assert_nf_log_backend_missing assert_enable_ok assert_enable_nf_log_missing
+cleanup_nf_log_fixtures
+trap cleanup_legacy_tables EXIT
+NF_LOG_IPV4="$NF_LOG_IPV4_SAVED"
+NF_LOG_IPV6="$NF_LOG_IPV6_SAVED"
+NF_LOG_IPV6_AVAILABLE_PATH="$NF_LOG_IPV6_AVAILABLE_SAVED"
+WAN_LOG_LOCK_FILE="$WAN_LOG_LOCK_FILE_SAVED"
+if [ "$FWLIVE_IPV6_AVAILABLE_SAVED_SET" = 1 ]; then
+	FWLIVE_IPV6_AVAILABLE_PATH="$FWLIVE_IPV6_AVAILABLE_SAVED"
+else
+	unset FWLIVE_IPV6_AVAILABLE_PATH
+fi
+if [ "$FWLIVE_WAN_LOG_LOCK_SAVED_SET" = 1 ]; then
+	FWLIVE_WAN_LOG_LOCK_FILE="$FWLIVE_WAN_LOG_LOCK_SAVED"
+else
+	unset FWLIVE_WAN_LOG_LOCK_FILE
+fi
+NF_LOG_STATE_COMPUTED=0
+
+# #306 Layer 3: procfs-based weak-device detection. Keep the product path
+# read-only; fixture paths exercise both sides of the settled threshold.
+WEAK_WORK=$(mktemp -d)
+WEAK_MEMINFO="$WEAK_WORK/weak-meminfo"
+WEAK_CPUINFO="$WEAK_WORK/weak-cpuinfo"
+printf 'MemTotal:       131072 kB\n' >"$WEAK_MEMINFO"
+printf 'processor\t: 0\nprocessor\t: 1\n' >"$WEAK_CPUINFO"
+FWLIVE_MEMINFO_PATH="$WEAK_MEMINFO" FWLIVE_CPUINFO_PATH="$WEAK_CPUINFO" \
+	out=$(build_logging_status_json)
+case "$out" in
+	*'"weak_device":true'*) ;;
+	*) die "logging_status expected low-memory weak_device=true: $out" ;;
+esac
+printf 'MemTotal:       1048576 kB\n' >"$WEAK_MEMINFO"
+printf 'processor\t: 0\n' >"$WEAK_CPUINFO"
+FWLIVE_MEMINFO_PATH="$WEAK_MEMINFO" FWLIVE_CPUINFO_PATH="$WEAK_CPUINFO" \
+	out=$(build_logging_status_json)
+case "$out" in
+	*'"weak_device":true'*) ;;
+	*) die "logging_status expected single-core weak_device=true: $out" ;;
+esac
+FWLIVE_MEMINFO_PATH="$WEAK_WORK/missing-meminfo" FWLIVE_CPUINFO_PATH="$WEAK_WORK/missing-cpuinfo" \
+	out=$(build_logging_status_json)
+case "$out" in
+	*'"weak_device":false'*) ;;
+	*) die "logging_status expected missing procfs weak_device=false: $out" ;;
+esac
+printf 'MemTotal:       malformed kB\n' >"$WEAK_MEMINFO"
+printf 'processor\t: 0\nprocessor\t: 1\n' >"$WEAK_CPUINFO"
+FWLIVE_MEMINFO_PATH="$WEAK_MEMINFO" FWLIVE_CPUINFO_PATH="$WEAK_CPUINFO" \
+	out=$(build_logging_status_json)
+case "$out" in
+	*'"weak_device":false'*) ;;
+	*) die "logging_status expected malformed MemTotal weak_device=false: $out" ;;
+esac
+rm -rf "$WEAK_WORK"
+unset FWLIVE_MEMINFO_PATH FWLIVE_CPUINFO_PATH
+ok "weak-device procfs detection"
+
+# restore_wan_zone_log: empty previous => delete; non-empty => set + commit
+UCI_LOG=()
+RESTORE_STAGED=''
+uci() {
+	UCI_LOG+=("$*")
+	case "$*" in
+		'-q changes firewall') printf '%s' "$RESTORE_STAGED" ;;
+		'-q delete firewall.@zone[0].log') RESTORE_STAGED='-firewall.@zone[0].log' ;;
+		'-q set firewall.@zone[1].log=3') RESTORE_STAGED="firewall.@zone[1].log='3'" ;;
+		'commit firewall') RESTORE_STAGED='' ;;
+	esac
+	return 0
+}
+UCI_LOG=()
+restore_wan_zone_log '@zone[0]' ''
+joined="${UCI_LOG[*]}"
+case "$joined" in
+	*'-q delete firewall.@zone[0].log'*'commit firewall'*) ;;
+	*) die "restore empty previous expected delete+commit, got: $joined" ;;
+esac
+UCI_LOG=()
+restore_wan_zone_log '@zone[1]' '3'
+joined="${UCI_LOG[*]}"
+case "$joined" in
+	*'-q set firewall.@zone[1].log=3'*'commit firewall'*) ;;
+	*) die "restore value expected set+commit, got: $joined" ;;
+esac
+committed='caller-value'
+restore_wan_zone_log '@zone[0]' ''
+[ "$committed" = 'caller-value' ] || die "restore must not clobber caller committed (got '$committed')"
+unset -f uci
+ok "restore_wan_zone_log stubs"
+
+# Reload rollback must preserve ambiguous same-option staging in both forms.
+for restore_target in 2 ''; do
+	UCI_LOG=()
+	ROLLBACK_RACE_STAGED=''
+	uci() {
+		UCI_LOG+=("$*")
+		case "$*" in
+			'-q changes firewall') printf '%s\n' "$ROLLBACK_RACE_STAGED" ;;
+			'-q get firewall.@zone[0].log') printf '1\n' ;;
+			'-q set firewall.@zone[0].log=2')
+				ROLLBACK_RACE_STAGED="firewall.@zone[0].log='2'
+firewall.@zone[0].log='9'"
+				;;
+			'-q delete firewall.@zone[0].log')
+				ROLLBACK_RACE_STAGED="-firewall.@zone[0].log
+firewall.@zone[0].log='9'"
+				;;
+			'commit firewall') die "ambiguous same-option rollback must not commit" ;;
+			'-q revert firewall.@zone[0].log') die "ambiguous same-option rollback must not revert" ;;
+		esac
+		return 0
+	}
+	if restore_wan_zone_log '@zone[0]' "$restore_target"; then
+		die "ambiguous same-option rollback target '$restore_target' must fail closed"
+	fi
+	case "$ROLLBACK_RACE_STAGED" in
+		*"log='9'"*) ;;
+		*) die "same-option rollback race did not preserve competing delta: $ROLLBACK_RACE_STAGED" ;;
+	esac
+	unset -f uci
+done
+ok "restore_wan_zone_log preserves ambiguous same-option set/delete races"
+
+for list_race in add del; do
+	UCI_LOG=()
+	ROLLBACK_RACE_STAGED=''
+	if [ "$list_race" = add ]; then
+		restore_target=2
+	else
+		restore_target=''
+	fi
+	uci() {
+		UCI_LOG+=("$*")
+		case "$*" in
+			'-q changes firewall') printf '%s\n' "$ROLLBACK_RACE_STAGED" ;;
+			'-q get firewall.@zone[0].log') printf '1\n' ;;
+			'-q set firewall.@zone[0].log=2')
+				ROLLBACK_RACE_STAGED="firewall.@zone[0].log='2'
+firewall.@zone[0].log+='9'"
+				;;
+			'-q delete firewall.@zone[0].log')
+				ROLLBACK_RACE_STAGED="-firewall.@zone[0].log
+firewall.@zone[0].log-='1'"
+				;;
+			'commit firewall') die "same-option list rollback must not commit" ;;
+			'-q revert firewall.@zone[0].log') die "same-option list rollback must not revert" ;;
+		esac
+		return 0
+	}
+	if restore_wan_zone_log '@zone[0]' "$restore_target"; then
+		die "same-option list rollback ($list_race) must fail closed"
+	fi
+	case "$ROLLBACK_RACE_STAGED" in
+		*'log+='*|*'log-='*) ;;
+		*) die "same-option list rollback did not preserve list delta: $ROLLBACK_RACE_STAGED" ;;
+	esac
+	unset -f uci
+done
+ok "restore_wan_zone_log preserves same-option add_list/del_list races"
+
+# restore_wan_zone_log: commit failure must return non-zero and revert our
+# own orphaned rollback staging (issue #503).
+UCI_LOG=()
+STAGED_FLAG=$(mktemp)
+printf '0\n' >"$STAGED_FLAG"
+uci() {
+	UCI_LOG+=("$*")
+	case "$*" in
+		'-q changes firewall')
+			# Persist across command-substitution subshells: after
+			# our rollback delta is staged, changes lists only it.
+			if [ "$(cat "$STAGED_FLAG")" = 1 ]; then
+				printf '%s\n' 'firewall.@zone[0].log='
+			fi
+			return 0
+			;;
+		'-q delete firewall.@zone[0].log')
+			printf '1\n' >"$STAGED_FLAG"
+			return 0
+			;;
+		'commit firewall') return 1 ;;
+		'-q revert firewall.@zone[0].log')
+			printf '0\n' >"$STAGED_FLAG"
+			return 0
+			;;
+		*) return 0 ;;
+	esac
+}
+generation_before=$(cat "$WAN_LOG_GENERATION_FILE")
+if restore_wan_zone_log '@zone[0]' ''; then
+	die "restore_wan_zone_log expected non-zero when commit fails"
+fi
+[ "$(cat "$WAN_LOG_GENERATION_FILE")" = "$((generation_before + 1))" ] \
+	|| die "#1126 failed restore commit must retain its generation advance"
+joined="${UCI_LOG[*]}"
+rm -f "$STAGED_FLAG"
+case "$joined" in
+	*'commit firewall'*) ;;
+	*) die "restore commit-failure case expected commit attempt, got: $joined" ;;
+esac
+case "$joined" in
+	*'-q revert firewall.@zone[0].log'*) ;;
+	*) die "restore commit-failure must revert only the WAN log option, got: $joined" ;;
+esac
+unset -f uci
+ok "restore_wan_zone_log returns failure when commit fails"
+
+# UCI's CLI can return zero while its internal option-scoped revert fails.
+# Confirm cleanup from a fresh changes read rather than trusting the status.
+REVERT_STAGED_FILE=$(mktemp)
+printf "firewall.@zone[0].log='2'\n" >"$REVERT_STAGED_FILE"
+uci() {
+	case "$*" in
+		'-q changes firewall') cat "$REVERT_STAGED_FILE" ;;
+		'-q revert firewall.@zone[0].log') return 0 ;;
+		*) return 0 ;;
+	esac
+}
+if wan_log_revert_staged_option_if_ours '@zone[0]' 2 "$(cat "$REVERT_STAGED_FILE")"; then
+	rm -f "$REVERT_STAGED_FILE"
+	die "zero-exit no-op UCI revert must not be reported as successful cleanup"
+fi
+[ "$(cat "$REVERT_STAGED_FILE")" = "firewall.@zone[0].log='2'" ] \
+	|| die "failed no-op revert must preserve the staged delta"
+rm -f "$REVERT_STAGED_FILE"
+unset -f uci
+ok "option-scoped revert verifies UCI cleanup after zero exit"
+
+# A same-option list writer racing after the caller's snapshot must be caught
+# by the helper's fresh pre-revert read, before `uci revert` can erase it.
+REVERT_STAGED_FILE=$(mktemp)
+printf "firewall.@zone[0].log='3'\nfirewall.@zone[0].log+='9'\n" >"$REVERT_STAGED_FILE"
+REVERT_CALLED=0
+uci() {
+	case "$*" in
+		'-q changes firewall') cat "$REVERT_STAGED_FILE" ;;
+		'-q revert firewall.@zone[0].log') REVERT_CALLED=1 ;;
+		*) return 0 ;;
+	esac
+}
+if wan_log_revert_staged_option_if_ours '@zone[0]' 3 "firewall.@zone[0].log='3'"; then
+	rm -f "$REVERT_STAGED_FILE"
+	die "a competitor added before cleanup must block option-scoped revert"
+fi
+[ "$REVERT_CALLED" = 0 ] \
+	|| die "fresh pre-revert check did not block destructive UCI revert"
+grep -Fq "firewall.@zone[0].log+='9'" "$REVERT_STAGED_FILE" \
+	|| die "pre-revert race check discarded a same-option list delta"
+rm -f "$REVERT_STAGED_FILE"
+unset -f uci
+ok "option-scoped revert detects a same-option change before cleanup"
+
+# restore_wan_zone_log: staging set/delete failure must return non-zero
+# without committing a no-op (issue #618).
+UCI_LOG=()
+uci() {
+	UCI_LOG+=("$*")
+	case "$*" in
+		'-q delete firewall.@zone[0].log') return 1 ;;
+		'commit firewall') die "restore must not commit when delete staging failed" ;;
+		*) return 0 ;;
+	esac
+}
+if restore_wan_zone_log '@zone[0]' ''; then
+	die "restore_wan_zone_log expected non-zero when delete staging fails"
+fi
+joined="${UCI_LOG[*]}"
+case "$joined" in
+	*'commit firewall'*) die "restore delete-staging-failure must not commit, got: $joined" ;;
+esac
+unset -f uci
+ok "restore_wan_zone_log returns failure when delete staging fails"
+
+UCI_LOG=()
+uci() {
+	UCI_LOG+=("$*")
+	case "$*" in
+		'-q set firewall.@zone[1].log=3') return 1 ;;
+		'commit firewall') die "restore must not commit when set staging failed" ;;
+		*) return 0 ;;
+	esac
+}
+if restore_wan_zone_log '@zone[1]' '3'; then
+	die "restore_wan_zone_log expected non-zero when set staging fails"
+fi
+joined="${UCI_LOG[*]}"
+case "$joined" in
+	*'commit firewall'*) die "restore set-staging-failure must not commit, got: $joined" ;;
+esac
+unset -f uci
+ok "restore_wan_zone_log returns failure when set staging fails"
+
+# find_wan_zone_section: named zone + anonymous zone (issue #168)
+uci() {
+	case "$*" in
+		'-q show firewall')
+			cat <<'EOF'
+firewall.wan=zone
+firewall.wan.name='wan'
+firewall.wan.network='wan'
+firewall.@zone[1]=zone
+firewall.@zone[1].name='lan'
+EOF
+			;;
+		'-q get firewall.wan')
+			printf 'zone\n'
+			;;
+		*) return 1 ;;
+	esac
+}
+got=$(find_wan_zone_section)
+[ "$got" = "wan" ] || die "named wan zone expected 'wan', got '$got'"
+ok "find_wan_zone_section named zone"
+
+uci() {
+	case "$*" in
+		'-q show firewall')
+			cat <<'EOF'
+firewall.@zone[0]=zone
+firewall.@zone[0].name='wan'
+firewall.@zone[1]=zone
+firewall.@zone[1].name='lan'
+EOF
+			;;
+		'-q get firewall.@zone[0]')
+			printf 'zone\n'
+			;;
+		*) return 1 ;;
+	esac
+}
+got=$(find_wan_zone_section)
+[ "$got" = "@zone[0]" ] || die "anonymous wan zone expected @zone[0], got '$got'"
+ok "find_wan_zone_section anonymous zone"
+
+# cwd containing @zone0 must not pathname-expand firewall.@zone[0] (#743).
+uci() {
+	case "$*" in
+		'-q show firewall')
+			printf "firewall.@zone[0]=zone\nfirewall.@zone[0].name='wan'\n"
+			;;
+		'-q get firewall.@zone[0].name') printf 'wan\n' ;;
+		'-q get firewall.@zone[0]') printf 'zone\n' ;;
+		'-q get firewall.@zone[0].network') printf 'wan\n' ;;
+		*) return 1 ;;
+	esac
+}
+_glob_dir=$(mktemp -d)
+: >"$_glob_dir/@zone0"
+_glob_cwd=$(pwd)
+cd "$_glob_dir"
+got=$(find_wan_zone_section)
+cd "$_glob_cwd"
+rm -rf "$_glob_dir"
+unset _glob_dir _glob_cwd
+[ "$got" = "@zone[0]" ] || die "cwd @zone0 must not glob-expand WAN zone, got '$got'"
+ok "find_wan_zone_section ignores cwd glob @zone0"
+
+# Non-zone name=wan before a real zone must not abort lookup.
+uci() {
+	case "$*" in
+		'-q show firewall')
+			cat <<'EOF'
+firewall.fwd=zone
+firewall.fwd.name='wan'
+firewall.@zone[0]=zone
+firewall.@zone[0].name='wan'
+EOF
+			;;
+		'-q get firewall.fwd')
+			printf 'forwarding\n'
+			;;
+		'-q get firewall.@zone[0]')
+			printf 'zone\n'
+			;;
+		*) return 1 ;;
+	esac
+}
+got=$(find_wan_zone_section)
+[ "$got" = "@zone[0]" ] || die "skip non-zone name=wan expected @zone[0], got '$got'"
+ok "find_wan_zone_section skips non-zone name=wan"
+
+# uci -q get miss must not abort WAN discovery under set -e (#291 C3).
+uci() {
+	case "$*" in
+		'-q show firewall')
+			cat <<'EOF'
+firewall.gone=zone
+firewall.gone.name='wan'
+firewall.@zone[0]=zone
+firewall.@zone[0].name='wan'
+EOF
+			;;
+		'-q get firewall.gone')
+			return 1
+			;;
+		'-q get firewall.@zone[0]')
+			printf 'zone\n'
+			;;
+		*) return 1 ;;
+	esac
+}
+got=$(find_wan_zone_section)
+[ "$got" = "@zone[0]" ] || die "uci get miss must continue, expected @zone[0], got '$got'"
+ok "find_wan_zone_section continues after uci get miss"
+
+# #373: WAN-zone identity is the union of the exact name=wan match and
+# effective network membership in wan/wan6. `uci get` normalizes scalar and
+# list network options, so the production helper consumes one token stream.
+uci() {
+	case "$*" in
+		'-q show firewall')
+			cat <<'EOF'
+firewall.@zone[0]=zone
+firewall.@zone[0].name='internet'
+firewall.@zone[0].network='wan'
+firewall.@zone[0].network='wan6'
+EOF
+			;;
+		'-q get firewall.@zone[0].name') printf 'internet\n' ;;
+		'-q get firewall.@zone[0]') printf 'zone\n' ;;
+		'-q get firewall.@zone[0].network') printf 'wan wan6\n' ;;
+		*) return 1 ;;
+	esac
+}
+got=$(find_wan_zone_section)
+[ "$got" = "@zone[0]" ] || die "renamed scalar/list WAN network must resolve, got '$got'"
+ok "find_wan_zone_section renamed zone with scalar/list WAN networks"
+
+uci() {
+	case "$*" in
+		'-q show firewall')
+			printf "firewall.@zone[0]=zone\nfirewall.@zone[0].name='WAN'\n"
+			;;
+		'-q get firewall.@zone[0].name') printf 'WAN\n' ;;
+		'-q get firewall.@zone[0]') printf 'zone\n' ;;
+		'-q get firewall.@zone[0].network') printf 'wan\n' ;;
+		*) return 1 ;;
+	esac
+}
+got=$(find_wan_zone_section)
+[ "$got" = "@zone[0]" ] || die "uppercase renamed zone with WAN network must resolve, got '$got'"
+ok "find_wan_zone_section matches WAN network independently of name"
+
+uci() {
+	case "$*" in
+		'-q show firewall')
+			printf "firewall.@zone[0]=zone\nfirewall.@zone[0].name='wan'\n"
+			;;
+		'-q get firewall.@zone[0].name') printf 'wan\n' ;;
+		'-q get firewall.@zone[0]') printf 'zone\n' ;;
+		'-q get firewall.@zone[0].network') printf 'lan\n' ;;
+		*) return 1 ;;
+	esac
+}
+got=$(find_wan_zone_section)
+[ "$got" = "@zone[0]" ] || die "name=wan must resolve despite non-WAN network, got '$got'"
+ok "find_wan_zone_section preserves exact name=wan match"
+
+uci() {
+	case "$*" in
+		'-q show firewall')
+			printf "firewall.@zone[0]=zone\nfirewall.@zone[0].name='wan'\n"
+			;;
+		'-q get firewall.@zone[0].name') printf 'wan\n' ;;
+		'-q get firewall.@zone[0]') printf 'zone\n' ;;
+		'-q get firewall.@zone[0].network') return 1 ;;
+		*) return 1 ;;
+	esac
+}
+got=$(find_wan_zone_section)
+[ "$got" = "@zone[0]" ] || die "name=wan with omitted network must resolve, got '$got'"
+ok "find_wan_zone_section defaults omitted network to zone name"
+
+uci() {
+	case "$*" in
+		'-q show firewall')
+			printf "firewall.@zone[0]=zone\nfirewall.@zone[0].name='wan6'\n"
+			;;
+		'-q get firewall.@zone[0].name') printf 'wan6\n' ;;
+		'-q get firewall.@zone[0]') printf 'zone\n' ;;
+		'-q get firewall.@zone[0].network') return 1 ;;
+		*) return 1 ;;
+	esac
+}
+got=$(find_wan_zone_section)
+[ "$got" = "@zone[0]" ] || die "name=wan6 with omitted network must resolve, got '$got'"
+ok "find_wan_zone_section defaults omitted network to a wan6 section name"
+
+uci() {
+	case "$*" in
+		'-q show firewall')
+			printf "firewall.wan=zone\n"
+			;;
+		'-q get firewall.wan.name') return 1 ;;
+		'-q get firewall.wan') printf 'zone\n' ;;
+		'-q get firewall.wan.network') return 1 ;;
+		*) return 1 ;;
+	esac
+}
+got=$(find_wan_zone_section)
+[ "$got" = "wan" ] || die "named wan section with omitted name/network must resolve, got '$got'"
+ok "find_wan_zone_section defaults omitted name and network to section id"
+
+uci() {
+	case "$*" in
+		'-q show firewall')
+			printf "firewall.@zone[0]=zone\nfirewall.@zone[0].name='first'\nfirewall.@zone[1]=zone\nfirewall.@zone[1].name='second'\n"
+			;;
+		'-q get firewall.@zone[0].name') printf 'first\n' ;;
+		'-q get firewall.@zone[1].name') printf 'second\n' ;;
+		'-q get firewall.@zone[0]'|'-q get firewall.@zone[1]') printf 'zone\n' ;;
+		'-q get firewall.@zone[0].network'|'-q get firewall.@zone[1].network') printf 'wan\n' ;;
+		*) return 1 ;;
+	esac
+}
+got=$(find_wan_zone_section)
+[ "$got" = "@zone[0]" ] || die "duplicate WAN matches must keep first config order, got '$got'"
+ok "find_wan_zone_section keeps first matching zone"
+
+uci() {
+	case "$*" in
+		'-q show firewall')
+			printf "firewall.internet=zone\nfirewall.internet.name='internet\"edge'\nfirewall.internet.network='mywan'\n"
+			;;
+		'-q get firewall.internet.name') printf 'internet"edge\n' ;;
+		'-q get firewall.internet') printf 'zone\n' ;;
+		'-q get firewall.internet.network') printf 'mywan\n' ;;
+		*) return 1 ;;
+	esac
+}
+find_wan_zone_section_state
+[ -z "$WAN_ZONE_FOUND" ] || die "fully renamed network must remain no_wan_zone, got '$WAN_ZONE_FOUND'"
+case "$WAN_ZONE_DIAGNOSTIC_JSON" in
+	'"internet\"edge"') ;;
+	*) die "no_wan diagnostic must list discovered zone name, got [$WAN_ZONE_DIAGNOSTIC_JSON]" ;;
+esac
+check_nf_log_ipv4() { return 0; }
+check_nf_log_ipv6() { return 0; }
+out=$(build_logging_status_json)
+case "$out" in
+	*'"wan_zone":null'*'"wan_zone_candidates":["internet\"edge"]'*) ;;
+	*) die "logging_status must expose no-WAN candidates, got: $out" ;;
+esac
+unset -f check_nf_log_ipv4 check_nf_log_ipv6
+out=$(enable_wan_logging)
+case "$out" in
+	*'"error":"no_wan_zone"'*'"wan_zone_candidates":["internet\"edge"]'*) ;;
+	*) die "no_wan_zone response must list discovered zones, got: $out" ;;
+esac
+out=$(disable_wan_logging)
+case "$out" in
+	*'"error":"no_wan_zone"'*'"wan_zone_candidates":["internet\"edge"]'*) ;;
+	*) die "disable no_wan_zone response must list discovered zones, got: $out" ;;
+esac
+ok "no_wan_zone diagnostic lists fully renamed zones"
+unset -f uci
+
+# firewall_changes_pending + enable refuse (issue #168)
+PENDING_STAGED=1
+UCI_COMMITTED=0
+uci() {
+	case "$*" in
+		'-q changes firewall')
+			[ "$PENDING_STAGED" = 1 ] && printf "firewall.@rule[0].name='staged'\n"
+			;;
+		'-q show firewall')
+			printf "firewall.@zone[0]=zone\nfirewall.@zone[0].name='wan'\n"
+			;;
+		'-q get firewall.@zone[0]')
+			printf 'zone\n'
+			;;
+		'-q get firewall.@zone[0].log')
+			printf ''
+			;;
+		'set firewall.@zone[0].log='*)
+			die "uci set must not run when changes pending"
+			;;
+		'commit firewall')
+			UCI_COMMITTED=1
+			;;
+		*) return 0 ;;
+	esac
+}
+check_nf_log_ipv4() { return 0; }
+check_nf_log_ipv6() { return 0; }
+acquire_wan_log_lock() { return 0; }
+release_wan_log_lock() { return 0; }
+out=$(enable_wan_logging)
+case "$out" in
+	*'"error":"firewall_changes_pending"'*) ;;
+	*) die "enable with pending expected firewall_changes_pending, got: $out" ;;
+esac
+[ "$UCI_COMMITTED" = "0" ] || die "pending enable must not commit"
+ok "enable refuses when firewall changes pending"
+
+# restore refuses when pending (does not commit staged delta)
+UCI_LOG=()
+uci() {
+	UCI_LOG+=("$*")
+	case "$*" in
+		'-q changes firewall') printf "firewall.@rule[0]=rule\n" ;;
+		*) return 0 ;;
+	esac
+}
+restore_wan_zone_log '@zone[0]' '' || true
+joined="${UCI_LOG[*]}"
+case "$joined" in
+	*'commit firewall'*) die "restore must not commit while pending: $joined" ;;
+esac
+ok "restore_wan_zone_log skips commit when pending"
+unset -f uci check_nf_log_ipv4 check_nf_log_ipv6 acquire_wan_log_lock release_wan_log_lock
+
+
+# --- issue #191: TOCTOU between the pending check and `uci commit firewall` --
+# UCI staging is global per config file: a non-cooperating writer can stage a
+# delta AFTER the toggle's early firewall_changes_pending check but BEFORE the
+# commit. The commit gate must re-check at the last moment, abort (fail
+# closed), never publish the foreign delta, and never touch the staging area.
+#
+# Driver models real uci semantics with shell functions:
+#   - `changes` is clean on the FIRST call (early check passes) and reports a
+#     foreign delta on every later call (the commit-gate re-check) in
+#     late_foreign mode — so the pre-#191 code, which has no re-check, sails
+#     straight through and commits;
+#   - set/delete stage into STAGED_LOG; only a successful commit publishes it
+#     to CURRENT_LOG, so post-commit read-backs reflect committed state;
+#   - in late_foreign mode any `commit firewall` is a hard FAIL (the foreign
+#     delta must never be committed);
+#   - in verify_mismatch mode reads always disagree with what we wrote, to
+#     drive the post-commit verification error (firewall_commit_raced).
+OUT=''
+UCI_CALLS=''
+UCI_COMMITS=0
+STAGED_LOG='__unset__'
+LOGGER_MSGS=''
+CHANGES_CALLS=0
+
+# State that must survive subshells (firewall_changes_pending captures uci
+# output via $(), and OUT capture runs the toggle in a subshell) is
+# file-backed: the changes-call counter (the late_foreign discriminator) and
+# the toggle stdout.
+FWLIVE_TMP=$(mktemp -d)
+trap 'rm -rf "$FWLIVE_TMP" "${LEGACY_WORK:-}"' EXIT
+FWLIVE_WAN_LOG_GENERATION_FILE="$FWLIVE_TMP/wan-log-generation"
+WAN_LOG_GENERATION_FILE="$FWLIVE_WAN_LOG_GENERATION_FILE"
+export FWLIVE_WAN_LOG_GENERATION_FILE
+CHANGES_FILE="$FWLIVE_TMP/changes.count"
+READ_FILE="$FWLIVE_TMP/reads.count"
+OUT_FILE="$FWLIVE_TMP/out"
+
+drive_toggle() {
+	op="$1"
+	mode="$2"
+	OUT=''
+	UCI_CALLS=''
+	UCI_COMMITS=0
+	STAGED_LOG='__unset__'
+	STAGED_PENDING=0
+	LOGGER_MSGS=''
+	CHANGES_CALLS=0
+	LOCK_CALLS=0
+	REVERTED=0
+	RELOADS=0
+	printf '0\n' > "$CHANGES_FILE"
+	printf '0\n' > "$READ_FILE"
+	CURRENT_LOG="$FWLIVE_CURRENT_LOG"
+	uci() {
+		UCI_CALLS="$UCI_CALLS|$*"
+		case "$*" in
+			'-q changes firewall')
+				CHANGES_CALLS=$((CHANGES_CALLS + 1))
+				_n=0
+				[ -f "$CHANGES_FILE" ] && _n=$(cat "$CHANGES_FILE" 2>/dev/null || printf '0')
+				_n=$((_n + 1))
+				printf '%s\n' "$_n" > "$CHANGES_FILE"
+				case "$mode" in
+					late_foreign)
+						# foreign delta visible from the second changes call on
+						[ "$_n" -ge 2 ] && printf "firewall.@rule[9].name='foreign'\n" ;;
+					post_stage_foreign)
+						# Foreign delta appears after our option is staged and
+						# remains visible after option-scoped revert.
+						[ "$_n" -ge 3 ] && printf "firewall.@rule[9].name='foreign'\n"
+						;;
+					post_stage_log_limit_foreign)
+						# Same window, but foreign touches log_limit — must not
+						# be mistaken for our log= delta (substring trap).
+						[ "$_n" -ge 3 ] && printf "firewall.@zone[0].log_limit='10/minute'\n"
+						;;
+					post_stage_same_option_foreign)
+						[ "$_n" -ge 3 ] && printf "firewall.@rule[9].name='foreign'\n"
+						;;
+					post_stage_duplicate_log)
+						[ "$_n" -ge 3 ] && printf "firewall.@zone[0].log='9'\n"
+						;;
+					post_stage_same_option_list_add)
+						[ "$_n" -ge 3 ] && printf "firewall.@zone[0].log+='9'\n"
+						;;
+					post_stage_same_option_list_del)
+						[ "$_n" -ge 3 ] && printf "firewall.@zone[0].log-='9'\n"
+						;;
+					commit_fail_foreign)
+						# clean through pre-stage + post-stage gates (calls 1-3
+						# on enable: early + pre-stage + post-stage); foreign
+						# appears only when the failure path re-queries
+						[ "$_n" -ge 4 ] && printf "firewall.@rule[9].name='foreign'\n" ;;
+					rollback_post_stage_foreign)
+						# Rollback pre-check is call 4; expose the foreign delta
+						# only after rollback stages its restore (call 5).
+						[ "$_n" -ge 5 ] && printf "firewall.@rule[9].name='foreign'\n" ;;
+				esac
+				# Real `uci -q changes` also lists OUR staged delta once staged.
+				if [ "$STAGED_PENDING" = 1 ]; then
+					printf "firewall.@zone[0].log='%s'\n" "$STAGED_LOG"
+					case "$mode" in
+						post_stage_same_option_foreign|post_stage_duplicate_log)
+							[ "$_n" -lt 3 ] || printf "firewall.@zone[0].log='9'\n"
+							;;
+					esac
+				fi
+				;;
+			'-q show firewall')
+				printf "firewall.@zone[0]=zone\nfirewall.@zone[0].name='wan'\n"
+				;;
+			'-q show firewall.@zone[0]')
+				[ "$mode" != drop_show_fail ] || return 1
+				printf "firewall.@zone[0]=zone\nfirewall.@zone[0].name='wan'\n"
+				;;
+			'-q get firewall.@zone[0]')
+				printf 'zone\n'
+				;;
+			'-q get firewall.@zone[0].log')
+				if [ "$mode" = verify_mismatch ]; then
+					# Decision read (1st) returns the real current value so the
+					# toggle computes a change; the post-commit verify read
+					# (2nd+) returns a mismatching value to drive the warning.
+					_rc=0
+					[ -f "$READ_FILE" ] && _rc=$(cat "$READ_FILE" 2>/dev/null || printf '0')
+					_rc=$((_rc + 1))
+					printf '%s\n' "$_rc" > "$READ_FILE"
+					if [ "$_rc" -ge 2 ]; then
+						printf '9\n'
+					else
+						printf '%s\n' "$FWLIVE_CURRENT_LOG"
+					fi
+				elif [ -n "$CURRENT_LOG" ]; then
+					printf '%s\n' "$CURRENT_LOG"
+				fi
+				;;
+			'set firewall.@zone[0].log='*|'-q set firewall.@zone[0].log='*)
+				[ "$mode" = uci_set_fail ] && return 1
+				[ "$mode" = rollback_uci_set_fail ] && [ "$UCI_COMMITS" -ge 1 ] && return 1
+				STAGED_LOG="${2#*=}"
+				[ "${2:-}" = set ] && STAGED_LOG="${3#*=}"
+				STAGED_PENDING=1
+				;;
+			'delete firewall.@zone[0].log'|'-q delete firewall.@zone[0].log')
+				[ "$mode" = uci_delete_fail ] && return 1
+				[ "$mode" = rollback_uci_delete_fail ] && [ "$UCI_COMMITS" -ge 1 ] && return 1
+				if [ -z "$CURRENT_LOG" ]; then
+					STAGED_LOG='__unset__'
+				else
+					STAGED_LOG=''
+				fi
+				STAGED_PENDING=1
+				[ -z "$CURRENT_LOG" ] && STAGED_PENDING=0
+				;;
+			'commit firewall')
+				case "$mode" in
+					late_foreign|post_stage_foreign|post_stage_log_limit_foreign)
+						die "#191: uci commit issued while a foreign delta was staged" ;;
+					rollback_post_stage_foreign)
+						[ "$UCI_COMMITS" -ge 1 ] && die "#457: rollback commit issued while a foreign delta was staged" ;;
+					rollback_uci_delete_fail|rollback_uci_set_fail)
+						[ "$UCI_COMMITS" -ge 1 ] && die "#618: restore must not commit when staging failed" ;;
+					commit_fail_foreign|commit_fail_ours|commit_fail_revert)
+						# commit fails; the caller decides whether to revert
+						return 1 ;;
+				esac
+				UCI_COMMITS=$((UCI_COMMITS + 1))
+				CURRENT_LOG="$STAGED_LOG"
+				STAGED_PENDING=0
+				;;
+			'-q revert firewall.@zone[0].log')
+				[ "$mode" != commit_fail_revert ] || return 1
+				REVERTED=1
+				STAGED_LOG='__unset__'
+				STAGED_PENDING=0
+				;;
+			*) return 0 ;;
+		esac
+		return 0
+	}
+	check_nf_log_ipv4() { return 0; }
+	check_nf_log_ipv6() { return 0; }
+	acquire_wan_log_lock() {
+		LOCK_CALLS=$((LOCK_CALLS + 1))
+		[ "$mode" != drop_lock_fail ] || [ "$LOCK_CALLS" -lt 2 ]
+	}
+	release_wan_log_lock() { return 0; }
+	reload_firewall() {
+		RELOADS=$((RELOADS + 1))
+		case "$mode" in
+			reload_fail|rollback_post_stage_foreign|rollback_uci_delete_fail|rollback_uci_set_fail)
+				return 1 ;;
+			generation_mismatch)
+				_generation=$(cat "$WAN_LOG_GENERATION_FILE")
+				printf '%s\n' "$((_generation + 1))" > "$WAN_LOG_GENERATION_FILE"
+				;;
+			operator_stage_during_reload)
+				STAGED_LOG='6'
+				STAGED_PENDING=1
+				;;
+		esac
+		return 0
+	}
+	logger() { LOGGER_MSGS="$LOGGER_MSGS|$*"; }
+	if [ "$op" = enable ]; then
+		enable_wan_logging > "$OUT_FILE"
+	elif [ "$op" = disable ]; then
+		disable_wan_logging > "$OUT_FILE"
+	else
+		# shellcheck disable=SC2034 # Read by report_wan_log_after_commit.
+		WAN_LOG_COMMIT_GENERATION=$(wan_log_generation_read)
+		report_wan_log_after_commit 0 '"wan"' '@zone[0]' '' '1' \
+			'test reload failure' 'test reload success' "$mode" > "$OUT_FILE"
+	fi
+	if [ "$mode" = post_stage_foreign ]; then
+		REMAINS_STAGED=$(uci -q changes firewall)
+	fi
+	OUT=$(cat "$OUT_FILE")
+	unset -f uci check_nf_log_ipv4 check_nf_log_ipv6 \
+		acquire_wan_log_lock release_wan_log_lock reload_firewall logger
+}
+
+assert_no_commit_no_stage() {
+	label="$1"
+	[ "$UCI_COMMITS" -eq 0 ] || die "#191 $label: foreign staged delta got committed ($UCI_COMMITS commit calls)"
+	case "$UCI_CALLS" in
+		*'set firewall.'*|*'delete firewall.'*) die "#191 $label: log bit staged before abort: $UCI_CALLS" ;;
+	esac
+	case "$LOGGER_MSGS" in
+		*'aborted at commit gate'*) ;;
+		*) die "#191 $label: abort not reported via logger: $LOGGER_MSGS" ;;
+	esac
+}
+
+# Revision tracking is a precondition for safe commits. An unsafe runtime
+# path must fail before staging, and state-setting no-ops still count as later
+# intent so an in-flight failed reload cannot roll them back.
+printf 'file' > "$FWLIVE_TMP/not-a-dir"
+FWLIVE_WAN_LOG_GENERATION_FILE="$FWLIVE_TMP/not-a-dir/generation"
+WAN_LOG_GENERATION_FILE="$FWLIVE_WAN_LOG_GENERATION_FILE"
+FWLIVE_CURRENT_LOG=''
+drive_toggle enable happy
+case "$OUT" in
+	*'"error":"rollback_tracking_failed"'*) ;;
+	*) die "unsafe generation path must fail closed, got: $OUT" ;;
+esac
+[ "$UCI_COMMITS" -eq 0 ] || die "unsafe generation path must not commit"
+[ "$STAGED_LOG" = '__unset__' ] || die "unsafe generation path must not stage"
+ok "WAN log change fails closed before UCI staging when generation tracking is unsafe"
+
+FWLIVE_WAN_LOG_GENERATION_FILE="$FWLIVE_TMP/wan-log-generation"
+WAN_LOG_GENERATION_FILE="$FWLIVE_WAN_LOG_GENERATION_FILE"
+rm -f "$WAN_LOG_GENERATION_FILE"
+FWLIVE_CURRENT_LOG='1'
+drive_toggle enable happy
+case "$OUT" in
+	'{"ok":true,"changed":false,'*) ;;
+	*) die "already-on enable should remain a no-op, got: $OUT" ;;
+esac
+[ "$(cat "$WAN_LOG_GENERATION_FILE")" = 1 ] \
+	|| die "already-on enable must advance generation"
+[ "$UCI_COMMITS" -eq 0 ] || die "already-on enable must not commit"
+ok "already-on enable advances intent generation without changing UCI"
+
+FWLIVE_CURRENT_LOG='2'
+drive_toggle disable happy
+case "$OUT" in
+	'{"ok":true,"changed":false,'*) ;;
+	*) die "already-off disable should remain a no-op, got: $OUT" ;;
+esac
+[ "$(cat "$WAN_LOG_GENERATION_FILE")" = 2 ] \
+	|| die "already-off disable must advance generation"
+[ "$UCI_COMMITS" -eq 0 ] || die "already-off disable must not commit"
+ok "already-off disable advances intent generation without changing UCI"
+
+# #1165/#1168: an already-off request with a leftover marker retries the
+# firewall reload; cleanup is conditional on a successful reload and on the
+# generation, lock, and UCI checks still identifying this disable request.
+printf '2' > "$WAN_LOG_BASELINE_FILE"
+FWLIVE_CURRENT_LOG=''
+drive_toggle disable happy
+case "$OUT" in
+	*'"ok":true'*'"changed":false'*) ;;
+	*) die "already-off disable with baseline should succeed after retry reload, got: $OUT" ;;
+esac
+[ "$RELOADS" -eq 1 ] || die "already-off baseline retry must reload once, got $RELOADS"
+[ ! -f "$WAN_LOG_BASELINE_FILE" ] || die "successful already-off retry must retire baseline"
+ok "already-off disable reloads before retiring the baseline"
+
+printf '2' > "$WAN_LOG_BASELINE_FILE"
+FWLIVE_CURRENT_LOG=''
+drive_toggle disable reload_fail
+case "$OUT" in
+	*'"error":"firewall_reload_failed"'*) ;;
+	*) die "already-off reload failure should be surfaced, got: $OUT" ;;
+esac
+[ -f "$WAN_LOG_BASELINE_FILE" ] || die "failed already-off reload must keep baseline"
+ok "already-off disable keeps baseline and reports reload failure"
+
+printf '2' > "$WAN_LOG_BASELINE_FILE"
+FWLIVE_CURRENT_LOG=''
+drive_toggle disable late_foreign
+case "$OUT" in
+	*'"error":"firewall_changes_pending"'*) ;;
+	*) die "already-off retry with late pending changes should abort, got: $OUT" ;;
+esac
+[ "$RELOADS" -eq 0 ] || die "pending already-off retry must not reload"
+[ -f "$WAN_LOG_BASELINE_FILE" ] || die "pending already-off retry must keep baseline"
+ok "already-off retry aborts on pending firewall changes"
+
+printf '2' > "$WAN_LOG_BASELINE_FILE"
+FWLIVE_CURRENT_LOG=''
+drive_toggle disable generation_mismatch
+case "$OUT" in
+	*'"ok":true'*'"changed":false'*) ;;
+	*) die "generation-raced already-off retry should remain successful, got: $OUT" ;;
+esac
+[ -f "$WAN_LOG_BASELINE_FILE" ] || die "generation mismatch during retry must keep baseline"
+ok "already-off retry keeps baseline after a concurrent fwlive generation"
+
+printf '2' > "$WAN_LOG_BASELINE_FILE"
+FWLIVE_CURRENT_LOG=''
+drive_toggle disable drop_show_fail
+[ -f "$WAN_LOG_BASELINE_FILE" ] || die "unreadable zone UCI must keep baseline"
+ok "baseline cleanup keeps marker when zone UCI is unreadable"
+
+printf '2' > "$WAN_LOG_BASELINE_FILE"
+FWLIVE_CURRENT_LOG=''
+drive_toggle disable drop_lock_fail
+[ -f "$WAN_LOG_BASELINE_FILE" ] || die "cleanup lock failure must keep baseline"
+ok "baseline cleanup keeps marker when the cleanup lock is unavailable"
+
+# A normal disable reload failure rolls UCI back and keeps uninstall recovery.
+printf '2' > "$WAN_LOG_BASELINE_FILE"
+FWLIVE_CURRENT_LOG='3'
+drive_toggle disable reload_fail
+case "$OUT" in
+	*'"error":"firewall_reload_failed"'*) ;;
+	*) die "disable reload failure should be surfaced, got: $OUT" ;;
+esac
+[ "$CURRENT_LOG" = '3' ] || die "failed disable reload should roll UCI back to 3, got '$CURRENT_LOG'"
+[ -f "$WAN_LOG_BASELINE_FILE" ] || die "failed disable reload must keep baseline"
+ok "disable reload failure rolls UCI back and preserves baseline"
+
+# A raced commit still reloads and retires the marker only when generation is
+# unchanged, then reports the race so the operator can inspect committed UCI.
+printf '2' > "$WAN_LOG_BASELINE_FILE"
+FWLIVE_CURRENT_LOG='1'
+drive_toggle disable verify_mismatch
+case "$OUT" in
+	*'"error":"firewall_commit_raced"'*) ;;
+	*) die "raced disable commit should be reported, got: $OUT" ;;
+esac
+[ "$RELOADS" -eq 1 ] || die "raced disable commit must reload once"
+[ ! -f "$WAN_LOG_BASELINE_FILE" ] || die "successful raced disable reload should retire baseline"
+ok "raced disable commit retires baseline after successful reload"
+
+# #1177: the raced-commit reporting function must drop the baseline for its
+# positional zone even when a stale global `zone` names something else.
+printf '42\n' > "$WAN_LOG_GENERATION_FILE"
+WAN_LOG_COMMIT_GENERATION=42
+printf '2' > "$WAN_LOG_BASELINE_FILE"
+zone='stale-global-zone'
+DROP_ZONE_SEEN=''
+uci() {
+	DROP_ZONE_SEEN="$3"
+	[ "$*" = '-q show firewall.positional-zone' ]
+}
+reload_firewall() { return 0; }
+acquire_wan_log_lock() { return 0; }
+release_wan_log_lock() { return 0; }
+logger() { :; }
+report_wan_log_after_commit 2 '"positional-zone"' 'positional-zone' \
+	'previous' 'committed' 'failure' 'success' 1 > "$OUT_FILE"
+OUT=$(cat "$OUT_FILE")
+case "$OUT" in
+	*'"error":"firewall_commit_raced"'*) ;;
+	*) die "#1177 positional-zone raced commit should be reported, got: $OUT" ;;
+esac
+[ "$DROP_ZONE_SEEN" = 'firewall.positional-zone' ] \
+	|| die "#1177 baseline cleanup used '$DROP_ZONE_SEEN', expected positional zone"
+[ ! -f "$WAN_LOG_BASELINE_FILE" ] \
+	|| die "#1177 positional-zone raced cleanup must retire the baseline"
+unset -f uci reload_firewall acquire_wan_log_lock release_wan_log_lock logger
+ok "#1177 raced commit drops baseline using positional zone, not global zone"
+
+# A non-fwlive operator edit staged during reload does not bump the generation.
+# Retiring the stale marker must not commit or discard that foreign staging.
+printf '2' > "$WAN_LOG_BASELINE_FILE"
+FWLIVE_CURRENT_LOG='3'
+drive_toggle disable operator_stage_during_reload
+case "$OUT" in
+	*'"ok":true'*'"changed":true'*) ;;
+	*) die "disable with staged operator edit during reload should succeed, got: $OUT" ;;
+esac
+[ "$CURRENT_LOG" = '2' ] || die "disable committed over staged operator edit: '$CURRENT_LOG'"
+[ "$STAGED_PENDING" = 1 ] && [ "$STAGED_LOG" = '6' ] \
+	|| die "operator staging was discarded: pending=$STAGED_PENDING log='$STAGED_LOG'"
+[ ! -f "$WAN_LOG_BASELINE_FILE" ] || die "stale baseline should be retired after staged operator edit"
+ok "disable cleanup retires stale baseline and preserves staged operator mask"
+
+# Full host sequence: enable creates the marker, then successful disable drops it.
+rm -f "$WAN_LOG_BASELINE_FILE"
+FWLIVE_CURRENT_LOG=''
+drive_toggle enable happy
+[ -f "$WAN_LOG_BASELINE_FILE" ] || die "enable must create the baseline marker"
+FWLIVE_CURRENT_LOG='1'
+drive_toggle disable happy
+case "$OUT" in
+	*'"ok":true'*'"changed":true'*) ;;
+	*) die "enable-then-disable should succeed, got: $OUT" ;;
+esac
+[ ! -f "$WAN_LOG_BASELINE_FILE" ] || die "enable-then-disable must retire the baseline"
+ok "enable followed by disable retires the uninstall baseline"
+
+# A trailing argument whose value is 0 must not authorize baseline deletion.
+printf '2' > "$WAN_LOG_BASELINE_FILE"
+FWLIVE_CURRENT_LOG=''
+drive_toggle report 0
+case "$OUT" in
+	*'"ok":true'*'"changed":true'*) ;;
+	*) die "report with zero cleanup sentinel should reload successfully, got: $OUT" ;;
+esac
+[ -f "$WAN_LOG_BASELINE_FILE" ] || die "zero cleanup sentinel must not retire baseline"
+ok "baseline retirement requires the explicit sentinel value 1"
+
+FWLIVE_CURRENT_LOG=''
+drive_toggle enable late_foreign
+case "$OUT" in
+	*'"error":"firewall_changes_pending"'*) ;;
+	*) die "#191 enable/late-foreign: expected error firewall_changes_pending, got: $OUT" ;;
+esac
+assert_no_commit_no_stage "enable/late-foreign"
+ok "#191 enable aborts on foreign delta staged at commit time (no commit, no staging)"
+
+FWLIVE_CURRENT_LOG='1'
+drive_toggle disable late_foreign
+case "$OUT" in
+	*'"error":"firewall_changes_pending"'*) ;;
+	*) die "#191 disable/late-foreign: expected error firewall_changes_pending, got: $OUT" ;;
+esac
+assert_no_commit_no_stage "disable/late-foreign"
+ok "#191 disable aborts on foreign delta staged at commit time (no commit, no delete)"
+
+FWLIVE_CURRENT_LOG=''
+drive_toggle enable post_stage_foreign
+case "$OUT" in
+	*'firewall_changes_pending'*) ;;
+	*) die "#191 enable/post-stage-foreign: expected error firewall_changes_pending, got: $OUT" ;;
+esac
+[ "$UCI_COMMITS" -eq 0 ] || die "#191 enable/post-stage-foreign: foreign delta got committed"
+case "$UCI_CALLS" in
+	*'set firewall.'*) ;;
+	*) die "#191 enable/post-stage-foreign: expected our log bit to stage before abort: $UCI_CALLS" ;;
+esac
+case "$LOGGER_MSGS" in
+	*'aborted after stage'*) ;;
+	*) die "#191 enable/post-stage-foreign: missing after-stage abort log: $LOGGER_MSGS" ;;
+esac
+[ "$STAGED_LOG" = '__unset__' ] || die "#191 enable/post-stage-foreign: our delta should be undone (STAGED_LOG=$STAGED_LOG)"
+case "$REMAINS_STAGED" in
+	*"firewall.@rule[9].name='foreign'"*) ;;
+	*) die "#1199 option-scoped revert discarded the staged foreign rule: $REMAINS_STAGED" ;;
+esac
+case "$REMAINS_STAGED" in
+	*'firewall.@zone[0].log='*) die "#1199 option-scoped revert left our log delta staged: $REMAINS_STAGED" ;;
+esac
+ok "#191 enable aborts on foreign delta staged after our set (undo ours, no commit)"
+
+FWLIVE_CURRENT_LOG='1'
+drive_toggle disable post_stage_foreign
+case "$OUT" in
+	*'firewall_changes_pending'*) ;;
+	*) die "#191 disable/post-stage-foreign: expected error firewall_changes_pending, got: $OUT" ;;
+esac
+[ "$UCI_COMMITS" -eq 0 ] || die "#191 disable/post-stage-foreign: foreign delta got committed"
+[ "$STAGED_LOG" = '__unset__' ] || die "#191 disable/post-stage-foreign: our delta should be undone (STAGED_LOG=$STAGED_LOG)"
+ok "#191 disable aborts on foreign delta staged after our delete (undo ours, no commit)"
+
+FWLIVE_CURRENT_LOG=''
+drive_toggle enable post_stage_log_limit_foreign
+case "$OUT" in
+	*'firewall_changes_pending'*) ;;
+	*) die "#191 enable/post-stage-log_limit: expected error firewall_changes_pending, got: $OUT" ;;
+esac
+[ "$UCI_COMMITS" -eq 0 ] || die "#191 enable/post-stage-log_limit: foreign log_limit delta got committed"
+[ "$STAGED_LOG" = '__unset__' ] || die "#191 enable/post-stage-log_limit: our delta should be undone (STAGED_LOG=$STAGED_LOG)"
+ok "#191 enable aborts on foreign log_limit staged after our set (exact log= match)"
+
+FWLIVE_CURRENT_LOG=''
+drive_toggle enable post_stage_same_option_foreign
+case "$OUT" in
+	*'firewall_changes_pending'*) ;;
+	*) die "#1199 same-option race: expected firewall_changes_pending, got: $OUT" ;;
+esac
+[ "$UCI_COMMITS" -eq 0 ] || die "#1199 same-option race must not commit"
+[ "$STAGED_PENDING" = 1 ] || die "#1199 ambiguous same-option staging must be preserved"
+[ "${REVERTED:-0}" = 0 ] || die "#1199 ambiguous same-option staging was reverted"
+case "$LOGGER_MSGS" in
+	*'left staged log option'*) ;;
+	*) die "#1199 same-option race must log why staging was preserved: $LOGGER_MSGS" ;;
+esac
+ok "#1199 ambiguous same-option edits are preserved instead of reverted"
+
+FWLIVE_CURRENT_LOG=''
+drive_toggle enable post_stage_duplicate_log
+case "$OUT" in
+	*'firewall_changes_pending'*) ;;
+	*) die "#1199 duplicate same-option race: expected firewall_changes_pending, got: $OUT" ;;
+esac
+[ "$UCI_COMMITS" -eq 0 ] || die "#1199 duplicate same-option race must not commit"
+[ "$STAGED_PENDING" = 1 ] || die "#1199 duplicate same-option deltas must be preserved"
+[ "${REVERTED:-0}" = 0 ] || die "#1199 duplicate same-option deltas were reverted"
+ok "#1199 rejects multiple staged WAN log deltas without another foreign option"
+
+FWLIVE_CURRENT_LOG=''
+drive_toggle enable post_stage_same_option_list_add
+case "$OUT" in
+	*'firewall_changes_pending'*) ;;
+	*) die "#1221 same-option add_list: expected firewall_changes_pending, got: $OUT" ;;
+esac
+[ "$UCI_COMMITS" -eq 0 ] || die "#1221 same-option add_list delta must not be committed"
+[ "$STAGED_PENDING" = 1 ] && [ "${REVERTED:-0}" = 0 ] \
+	|| die "#1221 add_list competitor must remain staged, calls: $UCI_CALLS"
+ok "#1221 same-option add_list delta is preserved"
+
+FWLIVE_CURRENT_LOG='1'
+drive_toggle disable post_stage_same_option_list_del
+case "$OUT" in
+	*'firewall_changes_pending'*) ;;
+	*) die "#1221 same-option del_list: expected firewall_changes_pending, got: $OUT" ;;
+esac
+[ "$UCI_COMMITS" -eq 0 ] || die "#1221 same-option del_list delta must not be committed"
+[ "$STAGED_PENDING" = 1 ] && [ "${REVERTED:-0}" = 0 ] \
+	|| die "#1221 del_list competitor must remain staged, calls: $UCI_CALLS"
+ok "#1221 same-option del_list delta is preserved"
+
+printf '2' > "$WAN_LOG_BASELINE_FILE"
+FWLIVE_CURRENT_LOG=''
+drive_toggle enable verify_mismatch
+case "$OUT" in
+	*'"ok":false'*'"changed":false'*'"error":"firewall_commit_raced"'*) ;;
+	*) die "#191 enable/verify-mismatch: expected ok:false changed:false firewall_commit_raced, got: $OUT" ;;
+esac
+[ "$UCI_COMMITS" -eq 1 ] || die "#191 enable/verify-mismatch: expected exactly one commit, got $UCI_COMMITS"
+[ "$RELOADS" -eq 1 ] || die "#191 enable/verify-mismatch: raced commit must still reload, got $RELOADS"
+[ "$STAGED_LOG" = '1' ] || die "#191 enable/verify-mismatch: expected log=1 staged, got '$STAGED_LOG'"
+[ -f "$WAN_LOG_BASELINE_FILE" ] || die "#191 enable/verify-mismatch: raced commit must preserve baseline"
+[ "$(cat "$WAN_LOG_BASELINE_FILE")" = '2' ] || die "#191 enable/verify-mismatch: raced commit changed baseline"
+case "$LOGGER_MSGS" in
+	*'verify FAILED'*) ;;
+	*) die "#191 enable/verify-mismatch: missing loud post-commit warning: $LOGGER_MSGS" ;;
+esac
+ok "#191 post-commit verify mismatch reports firewall_commit_raced, keeps the commit and baseline, still reloads"
+
+FWLIVE_CURRENT_LOG='3'
+drive_toggle disable verify_mismatch
+case "$OUT" in
+	*'"ok":false'*'"changed":false'*'"error":"firewall_commit_raced"'*) ;;
+	*) die "#191 disable/verify-mismatch: expected ok:false changed:false firewall_commit_raced, got: $OUT" ;;
+esac
+[ "$UCI_COMMITS" -eq 1 ] || die "#191 disable/verify-mismatch: expected exactly one commit, got $UCI_COMMITS"
+[ "$RELOADS" -eq 1 ] || die "#191 disable/verify-mismatch: raced commit must still reload, got $RELOADS"
+# clear value for current='3' is 3 & ~1 = 2 (set), not a delete — delete only
+# happens when the cleared bit value is 0 (current '1').
+[ "$STAGED_LOG" = '2' ] || die "#191 disable/verify-mismatch: expected log=2 staged, got '$STAGED_LOG'"
+case "$LOGGER_MSGS" in
+	*'verify FAILED'*) ;;
+	*) die "#191 disable/verify-mismatch: missing loud post-commit warning: $LOGGER_MSGS" ;;
+esac
+ok "#191 post-commit verify mismatch on disable reports firewall_commit_raced, keeps the commit"
+
+FWLIVE_CURRENT_LOG=''
+drive_toggle enable happy
+case "$OUT" in
+	'{"ok":true,"changed":true,'*) ;;
+	*) die "#191 happy enable: expected ok:true changed:true, got: $OUT" ;;
+esac
+[ "$UCI_COMMITS" -eq 1 ] || die "#191 happy enable: expected exactly one commit, got $UCI_COMMITS"
+[ "$STAGED_LOG" = '1' ] || die "#191 happy enable: expected log=1 staged+committed, got '$STAGED_LOG'"
+case "$LOGGER_MSGS" in
+	*'verify FAILED'*) die "#191 happy enable: spurious verify warning: $LOGGER_MSGS" ;;
+esac
+ok "#191 happy-path enable still stages + commits the log bit (verify passes)"
+
+FWLIVE_CURRENT_LOG='1'
+drive_toggle disable happy
+case "$OUT" in
+	'{"ok":true,"changed":true,'*) ;;
+	*) die "#191 happy disable: expected ok:true changed:true, got: $OUT" ;;
+esac
+[ "$UCI_COMMITS" -eq 1 ] || die "#191 happy disable: expected exactly one commit, got $UCI_COMMITS"
+[ -z "$STAGED_LOG" ] || die "#191 happy disable: expected option deleted, staged '$STAGED_LOG'"
+case "$LOGGER_MSGS" in
+	*'verify FAILED'*) die "#191 happy disable: spurious verify warning: $LOGGER_MSGS" ;;
+esac
+ok "#191 happy-path disable still deletes + commits (verify passes)"
+
+# --- issue #457: rollback has the same post-stage foreign-delta guard --
+# A failed reload releases the toggle lock before re-acquiring it for the
+# rollback. A foreign delta can therefore appear after rollback stages its
+# restore, and must cause the rollback to undo only its own staging without a
+# second commit.
+FWLIVE_CURRENT_LOG=''
+generation_before=$(cat "$WAN_LOG_GENERATION_FILE")
+drive_toggle enable rollback_post_stage_foreign
+case "$OUT" in
+	*'"error":"firewall_reload_failed"'*) ;;
+	*) die "#457 rollback/post-stage-foreign: expected reload failure, got: $OUT" ;;
+esac
+[ "$UCI_COMMITS" -eq 1 ] || die "#457 rollback/post-stage-foreign: rollback must not commit ($UCI_COMMITS)"
+[ "$STAGED_LOG" = '__unset__' ] || die "#457 rollback/post-stage-foreign: rollback must undo its staging, got '$STAGED_LOG'"
+case "$LOGGER_MSGS" in
+	*'rollback skipped after stage'*) ;;
+	*) die "#457 rollback/post-stage-foreign: missing guard log: $LOGGER_MSGS" ;;
+esac
+[ "$(cat "$WAN_LOG_GENERATION_FILE")" = "$((generation_before + 2))" ] \
+	|| die "#1126 restore staging refusal must follow its generation advance"
+ok "#457/#1126 rollback aborts on foreign delta after advancing restore generation"
+
+# --- issue #618: rollback staging failure is not a successful restore ---
+# Failed uci set/delete in restore_wan_zone_log must return non-zero so the
+# caller logs rollback skip, not "reverted UCI WAN log". JSON stays
+# firewall_reload_failed.
+FWLIVE_CURRENT_LOG=''
+generation_before=$(cat "$WAN_LOG_GENERATION_FILE")
+drive_toggle enable rollback_uci_delete_fail
+case "$OUT" in
+	*'"error":"firewall_reload_failed"'*) ;;
+	*) die "#618 enable/rollback-delete-fail: expected firewall_reload_failed, got: $OUT" ;;
+esac
+[ "$UCI_COMMITS" -eq 1 ] || die "#618 enable/rollback-delete-fail: restore must not commit ($UCI_COMMITS)"
+case "$LOGGER_MSGS" in
+	*'reverted UCI WAN log'*) die "#618 enable/rollback-delete-fail: success rollback log: $LOGGER_MSGS" ;;
+esac
+case "$LOGGER_MSGS" in
+	*'rollback skipped (pending changes or restore failed)'*) ;;
+	*) die "#618 enable/rollback-delete-fail: missing restore-failure skip log: $LOGGER_MSGS" ;;
+esac
+[ "$(cat "$WAN_LOG_GENERATION_FILE")" = "$((generation_before + 2))" ] \
+	|| die "#1126 failed restore delete must follow its generation advance"
+ok "#618/#1126 failed restore delete is not success and retains restore generation"
+
+FWLIVE_CURRENT_LOG='1'
+generation_before=$(cat "$WAN_LOG_GENERATION_FILE")
+drive_toggle disable rollback_uci_set_fail
+case "$OUT" in
+	*'"error":"firewall_reload_failed"'*) ;;
+	*) die "#618 disable/rollback-set-fail: expected firewall_reload_failed, got: $OUT" ;;
+esac
+[ "$UCI_COMMITS" -eq 1 ] || die "#618 disable/rollback-set-fail: restore must not commit ($UCI_COMMITS)"
+case "$LOGGER_MSGS" in
+	*'reverted UCI WAN log'*) die "#618 disable/rollback-set-fail: success rollback log: $LOGGER_MSGS" ;;
+esac
+case "$LOGGER_MSGS" in
+	*'rollback skipped (pending changes or restore failed)'*) ;;
+	*) die "#618 disable/rollback-set-fail: missing restore-failure skip log: $LOGGER_MSGS" ;;
+esac
+[ "$(cat "$WAN_LOG_GENERATION_FILE")" = "$((generation_before + 2))" ] \
+	|| die "#1126 failed restore set must follow its generation advance"
+ok "#618/#1126 failed restore set is not success and retains restore generation"
+
+# --- commit-failure paths (#191, CodeRabbit/luna fold) ---
+# Commit fails with an unrelated foreign delta: revert only our uniquely
+# identifiable log option and preserve the other writer's staged change.
+FWLIVE_CURRENT_LOG=''
+generation_before=$(cat "$WAN_LOG_GENERATION_FILE")
+drive_toggle enable commit_fail_foreign
+case "$OUT" in
+	*'"error":"uci_commit_failed"'*) ;;
+	*) die "#191 enable/commit-fail-foreign: expected error uci_commit_failed, got: $OUT" ;;
+esac
+[ "${REVERTED:-0}" = "1" ] || die "#191 enable/commit-fail-foreign: owned log option was not reverted"
+case "$UCI_CALLS" in
+	*'revert firewall.@zone[0].log'*) ;;
+	*) die "#191 enable/commit-fail-foreign: missing option-scoped revert: $UCI_CALLS" ;;
+esac
+case "$UCI_CALLS" in
+	*'revert firewall|'*) die "#191 enable/commit-fail-foreign: config-wide revert used: $UCI_CALLS" ;;
+esac
+case "$LOGGER_MSGS" in
+	*'ambiguous staged log option'*) die "#191 enable/commit-fail-foreign: unrelated foreign option made log delta ambiguous: $LOGGER_MSGS" ;;
+esac
+[ "$(cat "$WAN_LOG_GENERATION_FILE")" = "$((generation_before + 1))" ] \
+	|| die "#1126 failed commit must retain its generation advance"
+ok "#191/#1126 commit failure reverts only the owned log option and preserves unrelated staging"
+
+# Commit fails with ONLY our own delta staged: revert it so a later toggle is
+# not stuck on firewall_changes_pending from our orphaned write.
+FWLIVE_CURRENT_LOG=''
+generation_before=$(cat "$WAN_LOG_GENERATION_FILE")
+drive_toggle enable commit_fail_ours
+case "$OUT" in
+	*'"error":"uci_commit_failed"'*) ;;
+	*) die "#191 enable/commit-fail-ours: expected error uci_commit_failed, got: $OUT" ;;
+esac
+[ "${REVERTED:-0}" = "1" ] || die "#191 enable/commit-fail-ours: our own orphaned delta was not reverted"
+case "$LOGGER_MSGS" in
+	*'not reverting'*) die "#191 enable/commit-fail-ours: spurious not-reverting warning: $LOGGER_MSGS" ;;
+esac
+[ "$(cat "$WAN_LOG_GENERATION_FILE")" = "$((generation_before + 1))" ] \
+	|| die "#1126 failed commit must retain its generation advance"
+ok "#191/#1126 commit failure reverts owned staging but retains intent generation"
+
+generation_before=$(cat "$WAN_LOG_GENERATION_FILE")
+drive_toggle enable commit_fail_revert
+case "$OUT" in
+	*'"error":"uci_commit_failed"'*) ;;
+	*) die "#1199 revert failure: expected uci_commit_failed, got: $OUT" ;;
+esac
+[ "$UCI_COMMITS" -eq 0 ] || die "#1199 failed commit must not be counted as committed"
+[ "${REVERTED:-0}" = 0 ] || die "#1199 failed option revert was reported as successful"
+[ "$STAGED_PENDING" = 1 ] || die "#1199 failed option revert should leave staging visible"
+case "$LOGGER_MSGS" in
+	*'option-scoped revert failed'*) ;;
+	*) die "#1199 failed UCI revert must be logged: $LOGGER_MSGS" ;;
+esac
+[ "$(cat "$WAN_LOG_GENERATION_FILE")" = "$((generation_before + 1))" ] \
+	|| die "#1199 failed cleanup must not roll back the intent generation"
+ok "#1199 logs and preserves state when option-scoped revert fails"
+
+FWLIVE_CURRENT_LOG=''
+generation_before=$(cat "$WAN_LOG_GENERATION_FILE")
+drive_toggle enable uci_set_fail
+case "$OUT" in
+	*'"error":"uci_set_failed"'*) ;;
+	*) die "enable/uci-set-fail: expected error uci_set_failed, got: $OUT" ;;
+esac
+[ "$UCI_COMMITS" -eq 0 ] || die "#191 enable/uci-set-fail: must not commit"
+[ "$STAGED_LOG" = '__unset__' ] || die "#191 enable/uci-set-fail: failed set left staging: $STAGED_LOG"
+[ "$(cat "$WAN_LOG_GENERATION_FILE")" = "$((generation_before + 1))" ] \
+	|| die "#1126 failed set must retain its generation advance"
+ok "#191/#1126 uci set failure leaves no partial staging but records intent generation"
+
+FWLIVE_CURRENT_LOG='1'
+generation_before=$(cat "$WAN_LOG_GENERATION_FILE")
+drive_toggle disable uci_delete_fail
+case "$OUT" in
+	*'"error":"uci_delete_failed"'*) ;;
+	*) die "disable/uci-delete-fail: expected error uci_delete_failed, got: $OUT" ;;
+esac
+[ "$UCI_COMMITS" -eq 0 ] || die "#191 disable/uci-delete-fail: must not commit"
+[ "$STAGED_LOG" = '__unset__' ] || die "#191 disable/uci-delete-fail: failed delete left staging: $STAGED_LOG"
+[ "$(cat "$WAN_LOG_GENERATION_FILE")" = "$((generation_before + 1))" ] \
+	|| die "#1126 failed delete must retain its generation advance"
+ok "#191/#1126 uci delete failure leaves no staging but records intent generation"
+
+# WAN log baseline snapshot + restore (uninstall prerm)
+BASELINE_WORK=$(mktemp -d)
+WAN_LOG_BASELINE_FILE="$BASELINE_WORK/wan-log-baseline"
+export WAN_LOG_BASELINE_FILE
+WAN_ZONE_LOG=''
+WAN_ZONE_LOG_STAGED=0
+uci() {
+	case "$1" in
+		set)
+			_wan_log_key='firewall.@zone[0].log='
+			if [ "${2#"$_wan_log_key"}" != "$2" ]; then
+				WAN_ZONE_LOG="${2#"$_wan_log_key"}"
+			fi
+			WAN_ZONE_LOG_STAGED=1
+			unset _wan_log_key
+			return 0
+			;;
+		delete)
+			[ "$2" = 'firewall.@zone[0].log' ] && WAN_ZONE_LOG=''
+			WAN_ZONE_LOG_STAGED=1
+			return 0
+			;;
+		commit)
+			WAN_ZONE_LOG_STAGED=0
+			return 0
+			;;
+	esac
+	case "$1 $2" in
+		'-q show')
+			printf "firewall.@zone[0]=zone\nfirewall.@zone[0].name='wan'\n"
+			;;
+		'-q get')
+			if [ "$3" = 'firewall.@zone[0]' ]; then
+				printf 'zone\n'
+			elif [ "$3" = 'firewall.@zone[0].log' ]; then
+				printf '%s' "$WAN_ZONE_LOG"
+			fi
+			;;
+		'-q changes')
+			if [ "$WAN_ZONE_LOG_STAGED" = 1 ]; then
+				printf "firewall.@zone[0].log='%s'\n" "$WAN_ZONE_LOG"
+			fi
+			;;
+		'-q delete')
+			[ "$3" = 'firewall.@zone[0].log' ] && WAN_ZONE_LOG=''
+			WAN_ZONE_LOG_STAGED=1
+			;;
+		'-q set')
+			_wan_log_key='firewall.@zone[0].log='
+			if [ "${3#"$_wan_log_key"}" != "$3" ]; then
+				WAN_ZONE_LOG="${3#"$_wan_log_key"}"
+			fi
+			WAN_ZONE_LOG_STAGED=1
+			unset _wan_log_key
+			;;
+		'commit firewall')
+			WAN_ZONE_LOG_STAGED=0
+			return 0
+			;;
+		*) return 0 ;;
+	esac
+}
+reload_firewall() { return 0; }
+mkdir() { command mkdir "$@"; }
+acquire_wan_log_lock() { return 0; }
+release_wan_log_lock() { return 0; }
+
+WAN_ZONE_LOG=''
+maybe_snapshot_wan_log_baseline '@zone[0]' || die "snapshot failed"
+[ -f "$WAN_LOG_BASELINE_FILE" ] || die "baseline file missing after snapshot"
+baseline=$(cat "$WAN_LOG_BASELINE_FILE")
+[ -z "$baseline" ] || die "empty baseline expected, got '$baseline'"
+
+WAN_ZONE_LOG='2'
+maybe_snapshot_wan_log_baseline '@zone[0]' || die "second snapshot call failed"
+baseline=$(cat "$WAN_LOG_BASELINE_FILE")
+[ -z "$baseline" ] || die "baseline must not be overwritten (want empty, got '$baseline')"
+
+WAN_ZONE_LOG='1'
+restore_wan_log_baseline || die "restore failed"
+[ ! -f "$WAN_LOG_BASELINE_FILE" ] || die "baseline file must be removed after restore"
+[ -z "$WAN_ZONE_LOG" ] || die "restore empty baseline expected delete, got '$WAN_ZONE_LOG'"
+ok "restore_wan_log_baseline clears unset baseline"
+
+WAN_ZONE_LOG='3'
+printf '2' >"$WAN_LOG_BASELINE_FILE"
+restore_wan_log_baseline || die "restore numeric baseline failed"
+[ "$WAN_ZONE_LOG" = "2" ] || die "restore expected log=2, got '$WAN_ZONE_LOG'"
+ok "restore_wan_log_baseline sets saved value"
+
+WAN_ZONE_LOG='1'
+restore_wan_log_baseline || die "restore no-op failed"
+[ "$WAN_ZONE_LOG" = "1" ] || die "missing baseline must not change UCI, got '$WAN_ZONE_LOG'"
+ok "restore_wan_log_baseline no-op when baseline absent"
+
+WAN_ZONE_LOG=''
+printf '' >"$WAN_LOG_BASELINE_FILE"
+restore_wan_log_baseline || die "restore already-at-baseline failed"
+[ ! -f "$WAN_LOG_BASELINE_FILE" ] || die "baseline file should be removed when already at target"
+ok "restore_wan_log_baseline no-op when UCI already matches baseline"
+
+# #935: already-on enable still snapshots best-effort (skip-if-exists).
+compute_nf_log_state() {
+	NF_LOG_IPV4_READY=true
+	NF_LOG_IPV6_READY=true
+	NF_LOG_STATE_COMPUTED=1
+}
+firewall_changes_pending() { return 1; }
+rm -f "$WAN_LOG_BASELINE_FILE"
+WAN_ZONE_LOG='1'
+enable_wan_logging >"$BASELINE_WORK/already-on.out"
+out=$(cat "$BASELINE_WORK/already-on.out")
+case "$out" in
+	*'"ok":true'*'"changed":false'*) ;;
+	*) die "#935 already-on enable: expected ok:true/changed:false, got: $out" ;;
+esac
+[ -f "$WAN_LOG_BASELINE_FILE" ] || die "#935 already-on enable must snapshot a missing baseline"
+[ -z "$(cat "$WAN_LOG_BASELINE_FILE")" ] || die "#935 already-on snapshot must reconstruct unset, not the on-value"
+ok "already-on enable snapshots a missing WAN log baseline"
+
+WAN_ZONE_LOG='1'
+restore_wan_log_baseline || die "#935 restore of reconstructed empty baseline failed"
+[ -z "$WAN_ZONE_LOG" ] || die "#935 uninstall restore must clear the already-on bit, got '$WAN_ZONE_LOG'"
+ok "already-on empty snapshot lets uninstall turn logging off"
+
+# Already-on logging may include unrelated mask bits; preserve them on uninstall.
+rm -f "$WAN_LOG_BASELINE_FILE"
+WAN_ZONE_LOG='3'
+enable_wan_logging >"$BASELINE_WORK/already-on-multibit.out"
+out=$(cat "$BASELINE_WORK/already-on-multibit.out")
+case "$out" in
+	*'"ok":true'*'"changed":false'*) ;;
+	*) die "#1165 already-on multibit enable: expected ok:true/changed:false, got: $out" ;;
+esac
+baseline=$(cat "$WAN_LOG_BASELINE_FILE")
+[ "$baseline" = "2" ] || die "#1165 baseline must preserve non-owned bit 1, got '$baseline'"
+WAN_ZONE_LOG='3'
+restore_wan_log_baseline || die "#1165 restore of reconstructed multibit baseline failed"
+[ "$WAN_ZONE_LOG" = "2" ] || die "#1165 uninstall must preserve unrelated log bit 1, got '$WAN_ZONE_LOG'"
+ok "already-on multi-bit snapshot preserves unrelated logging on uninstall"
+
+printf '1' >"$WAN_LOG_BASELINE_FILE"
+WAN_ZONE_LOG='3'
+enable_wan_logging >"$BASELINE_WORK/already-on-skip.out"
+out=$(cat "$BASELINE_WORK/already-on-skip.out")
+case "$out" in
+	*'"ok":true'*'"changed":false'*) ;;
+	*) die "#935 already-on skip-if-exists: expected ok:true/changed:false, got: $out" ;;
+esac
+[ "$(cat "$WAN_LOG_BASELINE_FILE")" = "1" ] || die "#935 already-on enable must keep an existing baseline"
+ok "already-on enable keeps an existing baseline"
+
+SYMLINK_ON=$(mktemp -d)
+WAN_LOG_BASELINE_FILE="$SYMLINK_ON/wan-log-baseline"
+ln -s /etc/passwd "$WAN_LOG_BASELINE_FILE"
+WAN_ZONE_LOG='1'
+enable_wan_logging >"$BASELINE_WORK/already-on-fail.out"
+out=$(cat "$BASELINE_WORK/already-on-fail.out")
+case "$out" in
+	*'"ok":true'*'"changed":false'*) ;;
+	*) die "#935 already-on snapshot failure must stay ok:true/changed:false, got: $out" ;;
+esac
+case "$out" in
+	*baseline_snapshot_failed*) die "#935 already-on snapshot failure must not set baseline_snapshot_failed: $out" ;;
+esac
+[ -L "$WAN_LOG_BASELINE_FILE" ] || die "#935 already-on snapshot failure must not replace the symlink"
+ok "already-on enable treats snapshot failure as best-effort"
+WAN_LOG_BASELINE_FILE="$BASELINE_WORK/wan-log-baseline"
+export WAN_LOG_BASELINE_FILE
+rm -rf "$SYMLINK_ON"
+# Leave compute_nf_log_state stubbed ready; later tests in this file do not
+# require a missing-backend path.
+firewall_changes_pending() { return 1; }
+
+# #500 option 1: disable with a pre-existing/foreign log bit and no prior
+# enable must not snapshot. Uninstall restore must not put that bit back.
+# Run in this shell (not `$()`) so the uci stub's WAN_ZONE_LOG mutation is
+# visible to restore.
+rm -f "$WAN_LOG_BASELINE_FILE"
+WAN_ZONE_LOG='1'
+disable_wan_logging >"$BASELINE_WORK/disable.out"
+out=$(cat "$BASELINE_WORK/disable.out")
+case "$out" in
+	*'"ok":true'*'"changed":true'*) ;;
+	*) die "#500 disable with no baseline: expected ok:true/changed:true, got: $out" ;;
+esac
+[ ! -f "$WAN_LOG_BASELINE_FILE" ] || die "#500 disable without prior enable must not write baseline"
+[ -z "$WAN_ZONE_LOG" ] || die "#500 disable must clear log bit, got '$WAN_ZONE_LOG'"
+restore_wan_log_baseline || die "#500 restore with no baseline failed"
+[ -z "$WAN_ZONE_LOG" ] || die "#500 restore must not put foreign log bit back, got '$WAN_ZONE_LOG'"
+ok "disable_wan_logging does not snapshot a pre-existing/foreign log bit"
+
+# #663: post-restore reload failure must keep the recovery marker and
+# return nonzero so a later run can retry (including already-at-baseline).
+WAN_ZONE_LOG='3'
+printf '2' >"$WAN_LOG_BASELINE_FILE"
+reload_firewall() { return 1; }
+if restore_wan_log_baseline; then
+	die "#663 restore expected non-zero when reload fails after commit"
+fi
+[ -f "$WAN_LOG_BASELINE_FILE" ] || die "#663 baseline must remain when reload fails after commit"
+[ "$WAN_ZONE_LOG" = "2" ] || die "#663 UCI should be restored even if reload fails, got '$WAN_ZONE_LOG'"
+ok "restore_wan_log_baseline keeps baseline when post-commit reload fails"
+
+# A retry when UCI already matches the baseline must not reload over another
+# writer's staged firewall changes.
+WAN_ZONE_LOG='2'
+printf '2' >"$WAN_LOG_BASELINE_FILE"
+firewall_changes_pending() { return 0; }
+reload_firewall() { die "#663 retry must not reload while firewall changes are pending"; }
+if restore_wan_log_baseline; then
+	die "#663 retry expected non-zero when firewall changes are pending"
+fi
+[ -f "$WAN_LOG_BASELINE_FILE" ] || die "#663 pending retry must keep baseline marker"
+ok "restore_wan_log_baseline skips pending retry reload"
+firewall_changes_pending() { return 1; }
+reload_firewall() { return 1; }
+
+WAN_ZONE_LOG='2'
+if restore_wan_log_baseline; then
+	die "#663 already-at-baseline restore expected non-zero when reload fails"
+fi
+[ -f "$WAN_LOG_BASELINE_FILE" ] || die "#663 baseline must remain when already-at-baseline reload fails"
+[ "$WAN_ZONE_LOG" = "2" ] || die "#663 already-at-baseline must not change UCI, got '$WAN_ZONE_LOG'"
+ok "restore_wan_log_baseline keeps baseline when already-at-baseline reload fails"
+reload_firewall() { return 0; }
+
+WAN_ZONE_LOG='3'
+printf '2' >"$WAN_LOG_BASELINE_FILE"
+reload_firewall() {
+	WAN_ZONE_LOG='1'
+	return 0
+}
+if restore_wan_log_baseline; then
+	die "#663 restore expected non-zero when UCI raced during reload"
+fi
+[ -f "$WAN_LOG_BASELINE_FILE" ] || die "#663 baseline must remain when post-reload UCI raced"
+[ "$WAN_ZONE_LOG" = "1" ] || die "#663 raced UCI must be left alone, got '$WAN_ZONE_LOG'"
+ok "restore_wan_log_baseline keeps baseline when post-reload UCI raced"
+reload_firewall() { return 0; }
+
+# #1278: a failed baseline READ must not treat empty as originally-unset.
+# Seed a valid nonempty marker and a committed mask, then fail only cat.
+WAN_ZONE_LOG='3'
+printf '2' >"$WAN_LOG_BASELINE_FILE"
+cat() {
+	if [ "$1" = "$WAN_LOG_BASELINE_FILE" ]; then
+		return 1
+	fi
+	command cat "$@"
+}
+if restore_wan_log_baseline; then
+	die "#1278 restore expected non-zero when baseline read fails"
+fi
+unset -f cat
+[ -f "$WAN_LOG_BASELINE_FILE" ] || die "#1278 failed read must keep the marker"
+[ "$(cat "$WAN_LOG_BASELINE_FILE")" = "2" ] || die "#1278 marker contents must be unchanged"
+[ "$WAN_ZONE_LOG" = "3" ] || die "#1278 failed read must not mutate UCI, got '$WAN_ZONE_LOG'"
+ok "#1278 failed baseline read keeps marker and does not delete WAN log"
+
+if [ "$(id -u)" -ne 0 ]; then
+	READONLY_WORK=$(mktemp -d)
+	WAN_LOG_BASELINE_FILE="$READONLY_WORK/wan-log-baseline"
+	export WAN_LOG_BASELINE_FILE
+	chmod 0555 "$READONLY_WORK"
+	WAN_ZONE_LOG=''
+	if maybe_snapshot_wan_log_baseline '@zone[0]'; then
+		die "read-only baseline directory must fail closed"
+	fi
+	[ ! -e "$WAN_LOG_BASELINE_FILE" ] || die "read-only baseline directory left a partial file"
+	chmod 0755 "$READONLY_WORK"
+	rm -rf "$READONLY_WORK"
+	ok "read-only baseline directory fails closed"
+else
+	skip "read-only baseline directory under root"
+fi
+
+# #1240: a write that fails after open/truncate must drop the 0-byte marker
+# so the next call re-snapshots. The read-only-directory case fails at open
+# and never creates the file. ulimit -f 0 lets open succeed, then write hits
+# EFBIG once SIGXFSZ is ignored (otherwise the shell is killed before rm).
+WRITEFAIL_WORK=$(mktemp -d)
+WAN_LOG_BASELINE_FILE="$WRITEFAIL_WORK/wan-log-baseline"
+export WAN_LOG_BASELINE_FILE
+WAN_ZONE_LOG='2'
+writefail_rc=0
+(
+	ulimit -f 0
+	trap '' XFSZ
+	maybe_snapshot_wan_log_baseline '@zone[0]'
+) || writefail_rc=$?
+[ "$writefail_rc" -ne 0 ] || die "#1240 post-open write failure must fail closed"
+[ ! -e "$WAN_LOG_BASELINE_FILE" ] || die "#1240 post-open write failure must drop the truncated marker"
+maybe_snapshot_wan_log_baseline '@zone[0]' || die "#1240 retry after dropped marker must snapshot"
+[ "$(cat "$WAN_LOG_BASELINE_FILE")" = '2' ] \
+	|| die "#1240 retry expected baseline '2', got '$(cat "$WAN_LOG_BASELINE_FILE")'"
+ok "#1240 post-open write failure drops truncated baseline and re-snapshots"
+rm -rf "$WRITEFAIL_WORK"
+
+SYMLINK_WORK=$(mktemp -d)
+WAN_LOG_BASELINE_FILE="$SYMLINK_WORK/wan-log-baseline"
+export WAN_LOG_BASELINE_FILE
+ln -s /etc/passwd "$WAN_LOG_BASELINE_FILE"
+WAN_ZONE_LOG='1'
+if maybe_snapshot_wan_log_baseline '@zone[0]'; then
+	die "symlinked baseline path must fail closed"
+fi
+[ -L "$WAN_LOG_BASELINE_FILE" ] || die "symlinked baseline path must remain a symlink"
+ok "symlinked baseline path fails closed"
+rm -rf "$SYMLINK_WORK"
+SYMLINK_DIR=$(mktemp -d)
+ln -s "$SYMLINK_DIR" "${SYMLINK_DIR}-link"
+WAN_LOG_BASELINE_FILE="${SYMLINK_DIR}-link/wan-log-baseline"
+export WAN_LOG_BASELINE_FILE
+WAN_ZONE_LOG='1'
+if maybe_snapshot_wan_log_baseline '@zone[0]'; then
+	die "symlinked baseline directory must fail closed"
+fi
+[ ! -e "$WAN_LOG_BASELINE_FILE" ] || die "symlinked baseline directory must not receive a file"
+ok "symlinked baseline directory fails closed"
+rm -rf "$SYMLINK_DIR" "${SYMLINK_DIR}-link"
+
+rm -rf "$BASELINE_WORK"
+unset WAN_LOG_BASELINE_FILE WAN_ZONE_LOG BASELINE_WORK
+unset -f uci reload_firewall mkdir acquire_wan_log_lock release_wan_log_lock
+
+# --- @zone[N] vs cfgXXXX in uci changes (issue #239) ---
+# find_wan_zone_section returns @zone[0]; stock uci often reports staged lines as
+# firewall.cfg03dc81.log='1'. wan_log_foreign_staged_lines must treat both as ours.
+ZONE_MISMATCH_WORK=$(mktemp -d)
+WAN_LOG_BASELINE_FILE="$ZONE_MISMATCH_WORK/wan-log-baseline"
+printf '' >"$WAN_LOG_BASELINE_FILE"
+PENDING_STAGED=0
+CURRENT_LOG=''
+uci() {
+	case "$*" in
+		'-q changes firewall')
+			[ "$PENDING_STAGED" = 1 ] && printf "firewall.cfg03dc81.log='1'\n"
+			;;
+		'-q show firewall')
+			printf "firewall.@zone[0]=zone\nfirewall.@zone[0].name='wan'\n"
+			;;
+		'-q -X show firewall.@zone[0]'|'-q -X show firewall.cfg03dc81')
+			printf "firewall.cfg03dc81=zone\n"
+			;;
+		'-q get firewall.@zone[0]')
+			printf 'zone\n'
+			;;
+		'-q get firewall.@zone[0].name')
+			printf 'wan\n'
+			;;
+		'-q get firewall.@zone[0].log')
+			printf '%s' "$CURRENT_LOG"
+			;;
+		'-q get firewall.cfg03dc81')
+			printf 'zone\n'
+			;;
+		'-q get firewall.cfg03dc81.name')
+			printf 'wan\n'
+			;;
+		'set firewall.@zone[0].log='*)
+			PENDING_STAGED=1
+			;;
+		'commit firewall')
+			CURRENT_LOG='1'
+			PENDING_STAGED=0
+			;;
+		*) return 0 ;;
+	esac
+}
+check_nf_log_ipv4() { return 0; }
+check_nf_log_ipv6() { return 0; }
+acquire_wan_log_lock() { return 0; }
+release_wan_log_lock() { return 0; }
+reload_firewall() { return 0; }
+logger() { return 0; }
+out=$(enable_wan_logging)
+case "$out" in
+	*'"ok":true'*'"changed":true'*) ok "enable succeeds when uci changes resolves zone to cfg id" ;;
+	*) die "expected ok:true/changed:true when zone is @zone[0] but changes use cfg id, got: $out" ;;
+esac
+rm -rf "$ZONE_MISMATCH_WORK"
+unset WAN_LOG_BASELINE_FILE PENDING_STAGED CURRENT_LOG ZONE_MISMATCH_WORK
+unset -f uci check_nf_log_ipv4 check_nf_log_ipv6 acquire_wan_log_lock release_wan_log_lock reload_firewall logger
+
+# --- #239 staged-line helpers (unit coverage for openwrt/luci#8992 round 4) ---
+got=$(wan_log_staged_line_section "firewall.cfg03dc81.log='1'")
+[ "$got" = "cfg03dc81" ] || die "staged_line_section set form: expected cfg03dc81 got '$got'"
+got=$(wan_log_staged_line_section '-firewall.@zone[1].log')
+[ "$got" = "@zone[1]" ] || die "staged_line_section delete form: expected @zone[1] got '$got'"
+got=$(wan_log_staged_line_section '- firewall.cfg03dc81.log')
+[ "$got" = "cfg03dc81" ] || die "staged_line_section spaced delete form: expected cfg03dc81 got '$got'"
+got=$(wan_log_staged_line_section "firewall.cfg03dc81.log+='9'")
+[ "$got" = "cfg03dc81" ] || die "staged_line_section list-add form: expected cfg03dc81 got '$got'"
+got=$(wan_log_staged_line_section "firewall.cfg03dc81.log-='9'")
+[ "$got" = "cfg03dc81" ] || die "staged_line_section list-delete form: expected cfg03dc81 got '$got'"
+# Near-miss: .log_limit / .log_* must not match log set/list/delete forms (#257).
+got=$(wan_log_staged_line_section "firewall.@zone[1].log_limit='10'")
+[ -z "$got" ] || die "staged_line_section log_limit near-miss: expected empty got '$got'"
+got=$(wan_log_staged_line_section "firewall.@zone[1].log_extra='1'")
+[ -z "$got" ] || die "staged_line_section log_extra near-miss: expected empty got '$got'"
+ok "wan_log_staged_line_section parses all uci changes forms"
+
+uci() {
+	case "$*" in
+		'-q -X show firewall.@zone[1]'|'-q -X show firewall.cfg03dc81')
+			printf "firewall.cfg03dc81=zone\n"
+			;;
+		'-q -X show firewall.cfg01aaaa')
+			printf "firewall.cfg01aaaa=zone\n"
+			;;
+		'-q get firewall.@zone[1].name'|'-q get firewall.cfg03dc81.name')
+			printf 'wan\n'
+			;;
+		'-q get firewall.@zone[1]'|'-q get firewall.cfg03dc81')
+			printf 'zone\n'
+			;;
+		'-q get firewall.cfg01aaaa.name')
+			printf 'lan\n'
+			;;
+		'-q get firewall.cfg01aaaa')
+			printf 'zone\n'
+			;;
+		*) return 1 ;;
+	esac
+}
+_staged="firewall.cfg03dc81.log='1'
+firewall.cfg01aaaa.log='1'
+firewall.@rule[3].target='REJECT'"
+_ids=$(wan_log_staged_zone_ids '@zone[1]' "$_staged")
+case "$_ids" in
+	*'@zone[1]'*|*'cfg03dc81'*) ;;
+	*) die "staged_zone_ids expected both WAN ids, got: $_ids" ;;
+esac
+case "$_ids" in
+	*cfg01aaaa*) die "staged_zone_ids must not include lan cfg id: $_ids" ;;
+esac
+_foreign=$(wan_log_foreign_staged_lines '@zone[1]' "$_staged")
+case "$_foreign" in
+	*'firewall.cfg01aaaa.log'*) ;;
+	*) die "foreign_staged_lines expected lan log line, got: $_foreign" ;;
+esac
+case "$_foreign" in
+	*'@rule[3].target'*) ;;
+	*) die "foreign_staged_lines expected rule target line, got: $_foreign" ;;
+esac
+case "$_foreign" in
+	*cfg03dc81*|*'@zone[1].log'*) die "foreign_staged_lines must not flag our WAN log lines: $_foreign" ;;
+esac
+_ours=$(wan_log_count_our_staged_lines '@zone[1]' "$_staged")
+[ "$_ours" = "1" ] || die "count_our_staged_lines expected 1, got '$_ours'"
+_target_delta="firewall.cfg03dc81.log='3'"
+wan_log_staged_option_matches_target '@zone[1]' 3 "$_target_delta" \
+	|| die "single expected UCI log delta was not recognized"
+wan_log_staged_option_matches_target '@zone[1]' '' '-firewall.cfg03dc81.log' \
+	|| die "single expected UCI log deletion was not recognized"
+_competing_delta="$_target_delta
+firewall.cfg03dc81.log='9'"
+wan_log_staged_option_matches_target '@zone[1]' 3 "$_competing_delta" \
+	&& die "competing same-option deltas must be treated as ambiguous"
+for _list_delta in "firewall.cfg03dc81.log+='9'" "firewall.cfg03dc81.log-='9'"; do
+	_list_changes="$_target_delta
+$_list_delta"
+	[ "$(wan_log_count_our_staged_lines '@zone[1]' "$_list_changes")" = 2 ] \
+		|| die "list edit must count as a competing same-option delta: $_list_delta"
+	wan_log_staged_option_matches_target '@zone[1]' 3 "$_list_changes" \
+		&& die "same-option list edits must be treated as ambiguous: $_list_delta"
+	_foreign=$(wan_log_foreign_staged_lines '@zone[1]' "$_list_changes")
+	case "$_foreign" in
+		*"$_list_delta"*) ;;
+		*) die "same-option list edit must be retained as foreign: $_foreign" ;;
+	esac
+done
+unset -f uci
+ok "wan_log staged-line helpers classify foreign and exact-owned log deltas"
+
+# B-1: duplicate name=wan zones must NOT be treated as the same section.
+# Stub name/type probes too so a class-match revert would fail this test (Grok).
+uci() {
+	case "$*" in
+		'-q -X show firewall.@zone[0]')
+			printf "firewall.cfgWAN1=zone\n"
+			;;
+		'-q -X show firewall.cfgWAN1')
+			printf "firewall.cfgWAN1=zone\n"
+			;;
+		'-q -X show firewall.cfgDUP')
+			printf "firewall.cfgDUP=zone\n"
+			;;
+		'-q get firewall.@zone[0].name'|'-q get firewall.cfgWAN1.name'|'-q get firewall.cfgDUP.name')
+			printf 'wan\n'
+			;;
+		'-q get firewall.@zone[0]'|'-q get firewall.cfgWAN1'|'-q get firewall.cfgDUP')
+			printf 'zone\n'
+			;;
+		*) return 1 ;;
+	esac
+}
+wan_firewall_zone_same '@zone[0]' 'cfgWAN1' \
+	|| die "B-1: @zone[0] and its cfg id must still match"
+wan_firewall_zone_same '@zone[0]' 'cfgDUP' \
+	&& die "B-1: duplicate wan cfgDUP must NOT match @zone[0]"
+_staged_dup="firewall.cfgWAN1.log='1'
+firewall.cfgDUP.log='0'"
+_foreign_dup=$(wan_log_foreign_staged_lines '@zone[0]' "$_staged_dup")
+case "$_foreign_dup" in
+	*'firewall.cfgDUP.log'*) ;;
+	*) die "B-1: foreign_staged_lines must keep duplicate wan .log as foreign, got: $_foreign_dup" ;;
+esac
+case "$_foreign_dup" in
+	*cfgWAN1*) die "B-1: our cfgWAN1.log must not be foreign: $_foreign_dup" ;;
+esac
+unset -f uci
+ok "B-1 duplicate wan zones stay distinct for commit-scope"
+
+# rpcd __selftest (including jshn poll-cap) is owned by
+# tests/fwlive-rpcd-security.test.js — do not re-add a bare sh "$RPCD"
+# __selftest here; that treats skip: as success (#536).
+
+if [ "$skips" -gt 0 ]; then
+	echo "SUMMARY: fwlive-logging tests passed; $skips SKIPPED" >&2
+	if [[ "${FWLIVE_TEST_REQUIRE_ZERO_SKIPS:-}" != "0" && ( "${FWLIVE_TEST_REQUIRE_ZERO_SKIPS:-}" == "1" || "${CI:-}" == "true" ) ]]; then
+		die "$skips SKIPPED (set FWLIVE_TEST_REQUIRE_ZERO_SKIPS=0 to allow host skips)"
+	fi
+fi
+echo "fwlive-logging tests passed"

@@ -1,0 +1,1826 @@
+{
+  "files": [
+    {
+      "bytes": 14535,
+      "path": "fwlive/openwrt-feed/luci-app-fwlive/root/usr/libexec/fwlive-adaptive-cap.sh",
+      "sha256": "f89aaa3615473bf194f67a91fac060055e6597f6952001f2d893f5b7fcff3102",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 1188,
+      "path": "fwlive/openwrt-feed/luci-app-fwlive/root/usr/libexec/fwlive-is-firewall-event.sh",
+      "sha256": "f002065b1bbbc224d5a75cb51d375d985ed50ee47f714f32c2132e75fb228a9f",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 3926,
+      "path": "fwlive/openwrt-feed/luci-app-fwlive/root/usr/libexec/fwlive-log-filter.sh",
+      "sha256": "d2c5f0d5e1c375efe268e2acc4adee12526362201510477f1be5258184f9f9cf",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 51142,
+      "path": "fwlive/openwrt-feed/luci-app-fwlive/root/usr/libexec/fwlive-logging.sh",
+      "sha256": "0d9d3cb06a1baa0cd2151da2bbf8f7f6e688396e2d7b552ca5607aa7976eff19",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 50505,
+      "path": "fwlive/openwrt-feed/luci-app-fwlive/root/usr/libexec/rpcd/fwlive",
+      "sha256": "958d4c946abbb757bede85ba5c15a908d5510b9859a04f5e4d711bf8b6a7ac16",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 5480,
+      "path": "fwlive/scripts/agent-build-and-deploy.sh",
+      "sha256": "a630d8d8f06d9eadd5381a12f030185276149a3fdd8b7aaad0cf32eadd7052f6",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 290,
+      "path": "fwlive/scripts/ci-formal-paths.sh",
+      "sha256": "c24fab5abddd722ecde0d4cb24ed158551be17ca478a228de15c98e6aa278037",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 292,
+      "path": "fwlive/scripts/ci-packaging-paths.sh",
+      "sha256": "4b71bb9e08c2968f111f7ca5b627ae372b31b44eabd02e07c194e0912cb6d99c",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 2950,
+      "path": "fwlive/scripts/docker-rootfs-x86-bootstrap.sh",
+      "sha256": "3e9d1a0fb24cf213691786c4040be38090227a04706f9644509e34ff36d88059",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 2087,
+      "path": "fwlive/scripts/docker-rootfs-x86-install-fwlive.sh",
+      "sha256": "f84c436026203e25bd27b5b301cbb6f7f48f59424ce8dd73bd725bce1e41a926",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 143,
+      "path": "fwlive/scripts/docker-sdk-official-copy-out.sh",
+      "sha256": "f7298ad3adb8f49a02f0eb5a2230fec7288756f0a7c9d1fe5f3f145153178cb1",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 139,
+      "path": "fwlive/scripts/docker-sdk-official-make.sh",
+      "sha256": "7d57f7344539ddd01a10391b58d7b59f27c5d2245cbcee922da372fb3b3a26d9",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 140,
+      "path": "fwlive/scripts/docker-sdk-official-setup-feeds.sh",
+      "sha256": "949d0d3a256aaf18ed5bfe41f2e6ac996eee0f906b1c66f6c6838b2f97b7f460",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 4177,
+      "path": "fwlive/scripts/docker-sdk.sh",
+      "sha256": "7e7a2801c8848f4f3aae27e22714a2ef2e1b0ec3f1bc2ff84149a524651f8ca5",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 5545,
+      "path": "fwlive/scripts/download-openwrt-armsr-armv8.sh",
+      "sha256": "354f3b351f920b1c83038c954bf3ffdd74416610ab2ada2e3e6c9e2f5e188102",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 4529,
+      "path": "fwlive/scripts/download-openwrt-x86-64.sh",
+      "sha256": "6dd2add5bd1105977f5051a2b2d766d13a218e188619d08946954e0bdbffd0e6",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 3523,
+      "path": "fwlive/scripts/ensure-busybox-awk.sh",
+      "sha256": "ab94a2c785bd60eaca7a2d12c353fab3c4b34cf7ac9a361606b53aa191857c66",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 9836,
+      "path": "fwlive/scripts/fork-census.sh",
+      "sha256": "d3881968d31ffc6fe8e225b53eb0f578d4ea4826f914033234ba7d4edb6bab20",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 3421,
+      "path": "fwlive/scripts/formal-induction.sh",
+      "sha256": "bb269f486752d9fb8a4a4ec6385f6d366f5d1d24f303a4665ee568bf0b0db3fc",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 2640,
+      "path": "fwlive/scripts/formal-quint.sh",
+      "sha256": "6c4db9886b021668562e2f654a548b955ecb27c7df45e56922cf2b612bb87045",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 5518,
+      "path": "fwlive/scripts/formal-rollback-trace-replay.sh",
+      "sha256": "8a8ee5e67715f6922189ae09883c920bb7bea55d041327b728a9456e7a1b49a7",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 9396,
+      "path": "fwlive/scripts/formal-tlc.sh",
+      "sha256": "8f5f8265b6de0b97884af76ee90f272e910284eb56e3e53f9a86199b75004890",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 775,
+      "path": "fwlive/scripts/fwlive-ast-grep.sh",
+      "sha256": "5478e5012b56eaafd234c1bea0c5f2e3513338342136e742383f9c8231106051",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 3366,
+      "path": "fwlive/scripts/fwlive-iptables-ping-log.sh",
+      "sha256": "da679d17a1dae14de344fdeb02ff6cffad45010815917ef3bb0bfc37074b6530",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 3009,
+      "path": "fwlive/scripts/fwlive-linkcheck.sh",
+      "sha256": "96cbaf7613b1444f324ce7fcb25c32c7884a160a7fd5c8405b209fd6d90b7e72",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 2935,
+      "path": "fwlive/scripts/fwlive-nft-ping-log.sh",
+      "sha256": "b8da1ad21e330e44aa3b06d665d2758da5b299daafae33b97145a7d48a47c442",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 579,
+      "path": "fwlive/scripts/fwlive-rules-ubus.sh",
+      "sha256": "b2f28a3407cad7cbbc8455e65e6f6159419fa3ddda9f1d69580b65e2602da2d3",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 2353,
+      "path": "fwlive/scripts/fwlive-shellcheck.sh",
+      "sha256": "de24abf316e9acf762dddcddb182082110cacced3433f76a6fbb2883815acc12",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 14837,
+      "path": "fwlive/scripts/fwlive-test.sh",
+      "sha256": "6482b5f7273808920bc8eea3474fb0c17f38841bd0093ee9f52b112007ff184c",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 1666,
+      "path": "fwlive/scripts/fwlive-ubus-read.sh",
+      "sha256": "99a6b930a03d5eaad03b15eb83b6fe3b3176744186b4f27115867bb14ac425ce",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 1021,
+      "path": "fwlive/scripts/gen-all.sh",
+      "sha256": "1d02f7bd8f21dab9c9075e7b7779c3bffb343545f836617e5b9b9cd35afb6b36",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 1275,
+      "path": "fwlive/scripts/gen-logread-fixture.sh",
+      "sha256": "2ee56938ae331b8bf5ae742b01e665e9359d4c4aeb6874eddf84c66f6ba7b569",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 2007,
+      "path": "fwlive/scripts/get-sdk.sh",
+      "sha256": "886112c1186ff5281798c58a147c611bdfc1148571c4f1a11fefa7c997fa30f8",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 6696,
+      "path": "fwlive/scripts/guard-feed-deploy.sh",
+      "sha256": "44e8accd96c10746f8f548c65b97be5c7eb8e2159fa51b2fc018ac957296071a",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 4831,
+      "path": "fwlive/scripts/install-host-jshn.sh",
+      "sha256": "99b9898439bbf316f5d49b1458d0473fc244de8a422d92cf63bcb818b48173dc",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 156,
+      "path": "fwlive/scripts/lab-down.sh",
+      "sha256": "b6f9ea0c199773738fea10a47b57e733f2839c0092dca950b7759c8132313481",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 220,
+      "path": "fwlive/scripts/lab-up.sh",
+      "sha256": "a460bd7487cf41c8d17f9f7f9a14e3d9005a7f38f7101d35e9d5275aee41b2a5",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 9339,
+      "path": "fwlive/scripts/lib/feed-index-version.sh",
+      "sha256": "fa94c43dfd1f6bb7a3ef3d579f4ecd3209fbdf91e290be49ea55215b7485fbdf",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 5240,
+      "path": "fwlive/scripts/lib/feed-keys.sh",
+      "sha256": "8ba85749ae85798efeac2c9c2e944d018fc6151142dcd3fec9472d50124e8db3",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 32631,
+      "path": "fwlive/scripts/lib/feed-publish.sh",
+      "sha256": "5ae86fb047bdf8974e102aae2f85724d646af2a24650d0bf1f24ab1a7213e8c8",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 6559,
+      "path": "fwlive/scripts/lib/feeds-lock.sh",
+      "sha256": "47af67d40465fc644d109c148dd0abef3127c85e1a3d933c9458e22a65125d82",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 5024,
+      "path": "fwlive/scripts/lib/formal-ci-paths.sh",
+      "sha256": "ac32a50b26c01e56f52c27fec39071fc670ebe433083fcf1b17500c843dc3293",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 2645,
+      "path": "fwlive/scripts/lib/fwlive-spdx-pot-gates.sh",
+      "sha256": "02bab259f9c34c9194763ec3176a44bd54ec4a1e336632ec976fc17b4dec95ad",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 2029,
+      "path": "fwlive/scripts/lib/fwlive-test-busybox-awk.sh",
+      "sha256": "dedac0d82442eab23e98b6b60333d652c946bbf98bd3da1938b9e15f528caf9a",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 3292,
+      "path": "fwlive/scripts/lib/packaging-ci-paths.sh",
+      "sha256": "420d26e42e302db098feba91ec2f8290db38cb770c005594a8d9769b42c7cba9",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 9871,
+      "path": "fwlive/scripts/lib/qemu-forwarding-slo-net.sh",
+      "sha256": "160344151813f30d30e5695baee4e3ea773cadf3eec78ac78af9fe836fc71aea",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 10639,
+      "path": "fwlive/scripts/lib/qemu-lab-net.sh",
+      "sha256": "a1ad1cc8700320e6bd82df388d57a3e8dff4a5d6228f7e108919da1768d0a621",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 2862,
+      "path": "fwlive/scripts/lib/sdk-apk.sh",
+      "sha256": "92aa6e85fede83aaa1bc4b0cb9f63ab789b3857b16fafc5a7ab012d675218054",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 30132,
+      "path": "fwlive/scripts/lib/sdk-matrix.sh",
+      "sha256": "50bd42a60cb23cdd8780b8677565bbf4ea6652c893b8a18157a11c5842f5813e",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 9395,
+      "path": "fwlive/scripts/lib/validate-matrix.sh",
+      "sha256": "36195097d9f1ef6fba5aa0f6197a7480e33e02758302e973379b191533560f4b",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 12783,
+      "path": "fwlive/scripts/memory-census.sh",
+      "sha256": "beb25ae4a287a937026b14afaac10047d8e9d7d536cb6dc7f745f02e11ef047b",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 1398,
+      "path": "fwlive/scripts/normalize-pot-paths.sh",
+      "sha256": "7101bb9d5c787ca2d7e9c1787e62889836cf78739465b0411c04788ae2d0c321",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 2231,
+      "path": "fwlive/scripts/publish-packages.sh",
+      "sha256": "73bc196b023daa7b075f2735b8fa965be4164d95b3ce0a58c50510deec047213",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 10139,
+      "path": "fwlive/scripts/qemu-acl-session-smoke.sh",
+      "sha256": "8d66e20797c80031712786a910f560ddbd48c6ddc4801e519ac2fb9f163e1014",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 16740,
+      "path": "fwlive/scripts/qemu-adaptive-flood.sh",
+      "sha256": "a27bf6f09be11df4efcd24dfae2d1d7d733188dedcebedeb71ff7fa19da04068",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 5871,
+      "path": "fwlive/scripts/qemu-budget-split.sh",
+      "sha256": "2f6e41464503384562c6a22cd92d011bb3c5e4764d085b3bfb8791a4dcd9266c",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 1880,
+      "path": "fwlive/scripts/qemu-chip-invert-smoke.sh",
+      "sha256": "668aac653879f79990574c0e89aa7a7b87212b5f0d33cb24392570f4f3a11a5d",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 12004,
+      "path": "fwlive/scripts/qemu-forwarding-slo-guest.sh",
+      "sha256": "77da3ed3f97282b94654b82c226fcf552eacffd6d8a675106cc1eab816507d4c",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 1325,
+      "path": "fwlive/scripts/qemu-forwarding-slo-net.sh",
+      "sha256": "c42ec79e454cf97f6771b2e206a0571de6682d1e1d25e8595f9b3ff3a237b764",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 15770,
+      "path": "fwlive/scripts/qemu-forwarding-slo-run.sh",
+      "sha256": "182a4520e13ead6f1c877690a15f151a0de8f7a7ef95ba95eccb77859b0c1a75",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 6066,
+      "path": "fwlive/scripts/qemu-forwarding-slo-snapshot.sh",
+      "sha256": "38d9d48690ca3300168cdb8cf6cbecfcb767629fe3a1b6903eacd9222f11468f",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 14189,
+      "path": "fwlive/scripts/qemu-forwarding-slo-traffic.sh",
+      "sha256": "3872893f4cadadce3e8c64f89548214580b4bda37b1a4cae89ca073412d9f9a0",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 6356,
+      "path": "fwlive/scripts/qemu-i18n-spotcheck.sh",
+      "sha256": "57b10b4212ea5148d508279764f41b6ebab449f2a5e4708fc35e8b457e4d0898",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 8211,
+      "path": "fwlive/scripts/qemu-install-from-feed.sh",
+      "sha256": "150188f068372977d9f1958a1cb82e9ebdccaecd12940d2d6bf145d1b68852ee",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 12520,
+      "path": "fwlive/scripts/qemu-install-fwlive.sh",
+      "sha256": "97f12163a23859a92be1ac61ac23e5a030e7b41b91bdbba665438085d66910d6",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 5835,
+      "path": "fwlive/scripts/qemu-lab-prepare-image.sh",
+      "sha256": "a195b7d03e2961a24d149362c432882a3d388dd5695dfa84323a9071741ec9e8",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 516,
+      "path": "fwlive/scripts/qemu-layer2-performance.sh",
+      "sha256": "3a18ce15c01292f44c70d58306237c3f4c3fb27a64c6bfb82d017ea70f44e9d9",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 8758,
+      "path": "fwlive/scripts/qemu-logging-uninstall-smoke.sh",
+      "sha256": "3447c78f64e258aa31bc71bd257bc8b06eaebd55af2afc5191cda235e555035e",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 3200,
+      "path": "fwlive/scripts/qemu-playwright-lab-smoke.sh",
+      "sha256": "8d2d7bae3f436b2e062fd52f36648c2d60f2e22e0fd201be750b220749c97b4b",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 1382,
+      "path": "fwlive/scripts/qemu-proto-ui-smoke.sh",
+      "sha256": "7b77513e4d2df48db7d92bd5761228030675e4464b91ab82d32adecb9928282a",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 5093,
+      "path": "fwlive/scripts/qemu-reload-revert-smoke.sh",
+      "sha256": "270c3cf688297c8a744c3acf31ec0880729b8e0feac86cec52a8cd9ac820e196",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 1894,
+      "path": "fwlive/scripts/qemu-reset-wan-logging.sh",
+      "sha256": "9fc96d0d1f1b7eef41ff39820f529045529877037ae83c0a0df48b41df6fc417",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 9985,
+      "path": "fwlive/scripts/qemu-security-gaps-smoke.sh",
+      "sha256": "3950b3822db4d616afeb6442483266e40793326a5ebad960a3b1557fe0536081",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 9587,
+      "path": "fwlive/scripts/qemu-smoke-fwlive.sh",
+      "sha256": "b9755068f25474b720beb8f56a314a7a6c348bf32f6a2b6928134af6cf330d35",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 1102,
+      "path": "fwlive/scripts/qemu-smoke-matrix.sh",
+      "sha256": "173cced0002ce9fed1b99640a0d3b28374405ba00c5c7ac11beb2562433ba99f",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 5189,
+      "path": "fwlive/scripts/qemu-theme-tint-smoke.sh",
+      "sha256": "962f11d0dc97e55dfaecab57f04a716b01d0e594d2478e8ee563ef4d5d469c27",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 5328,
+      "path": "fwlive/scripts/qemu-uci-stage-revert-smoke.sh",
+      "sha256": "98675407f00b6043dde311b852688af3e47ac299e946dc9a09a53800179aaefa",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 1938,
+      "path": "fwlive/scripts/qemu-ui-reliability-smoke.sh",
+      "sha256": "a8fa6bb54d88e5cc6fb58a38dc75f5be4bee742f5cb344d99c87508791d3dc38",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 5126,
+      "path": "fwlive/scripts/qemu-wait-guest.sh",
+      "sha256": "94223c4a42b3d427e91fbc40a7657925f8cc51dd489d8bc5de00602e6b4584de",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 5729,
+      "path": "fwlive/scripts/run-openwrt-armsr-armv8-qemu.sh",
+      "sha256": "74f9fc6564edce37ba6dcc52894f8b513f62abf8ef3208e9d18015bbd554ebef",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 1966,
+      "path": "fwlive/scripts/run-openwrt-x86-experiment.sh",
+      "sha256": "ae1372e46647ae1627184b1c38a00b8fd8f89e847a8ea87aa02d5c20e1199048",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 5929,
+      "path": "fwlive/scripts/run-openwrt-x86-qemu.sh",
+      "sha256": "b494e16466fc85c3049a70b2c2cec4de4d90e5b79b2a29bd073e71c00c6b2d93",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 41262,
+      "path": "fwlive/scripts/upstream-cut.sh",
+      "sha256": "42aa0600fb51b220fd9260582f8a98f30660e2a79d5d0cf2cc21f7c7b310dd57",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 3188,
+      "path": "fwlive/scripts/validate-baseline.sh",
+      "sha256": "47a78a5d135ead4e964dee3661e5245abee09b92738e754f846c257ac52a3133",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 4015,
+      "path": "fwlive/scripts/validate-feed-keys.sh",
+      "sha256": "dfaff4ab1210b5db6a033aeaa5379cbe2ee6cbed918734917b4bf07b389ecc97",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 2158,
+      "path": "fwlive/scripts/validate-feed-smoke.sh",
+      "sha256": "a63ea3eea2b67f1a20f4c58e02cc725c62925e85cd2acfc92ba0ce63245e47c1",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 194,
+      "path": "fwlive/scripts/validate-openwrt-23.05.sh",
+      "sha256": "a28f4f763646a081081285b0edb0de397cc1430256763e7c98a3feda0c965169",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 194,
+      "path": "fwlive/scripts/validate-openwrt-24.10.sh",
+      "sha256": "c50b2846404e710d72f08bc26a962ba5148be6e8b59bfe9256fcb634e973de0f",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 4677,
+      "path": "fwlive/scripts/validate-openwrt-all.sh",
+      "sha256": "498ad032e1e3a527c817f2bac99f2c1a6812b185737767e7693a23a3deaf5de3",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 2377,
+      "path": "fwlive/scripts/validate-openwrt.sh",
+      "sha256": "4dd337c34647a71115f2c76ba3111719d46bb39852575ba0b3ba5f506590c7a2",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 3701,
+      "path": "fwlive/scripts/verify-reproducible-build.sh",
+      "sha256": "d4c855cd6378e8717c272e97a9ab6399c08b9578aef66be748fe0aebd545f82b",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 1809,
+      "path": "fwlive/scripts/wait-feed-pages.sh",
+      "sha256": "4bff03bec6ed9abe7237bb85aa6cf2fc71da4f308ffab2158dc22063db91efba",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 1419,
+      "path": "fwlive/tests/agent-build-and-deploy-ipk.test.sh",
+      "sha256": "362902b0d161125b77afcee54840df44e51b3dbd48b638415f1bc693f394d381",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 1637,
+      "path": "fwlive/tests/ci-workflow-pins.test.sh",
+      "sha256": "d1ff2c386c309e5ef0df29997bf82ccbb238a389d1e0f7ce2776e9f8b7bb65ce",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 15632,
+      "path": "fwlive/tests/feed-index-version.test.sh",
+      "sha256": "be2a1a3bd6a04a877781eb78c3c21a995c388ddd78fdf55dfc753451e0cbec89",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 5337,
+      "path": "fwlive/tests/feed-keys-mode.test.sh",
+      "sha256": "2883aea5703eef105acef060921f243b0bf017afe685d53e35e6f243df6c0998",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 13561,
+      "path": "fwlive/tests/feed-publish-copy-keys.test.sh",
+      "sha256": "5f766e20d01a3b58e47e7980647ebcc4b3ba51da65261eaaa3d0714176c457e4",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 6682,
+      "path": "fwlive/tests/feed-publish-find-artifact.test.sh",
+      "sha256": "665467611451bc0b0795342de9af6c7bdc910d4a3779e8311b0cfa930e20bbe8",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 3775,
+      "path": "fwlive/tests/feed-publish-host-mkhash.test.sh",
+      "sha256": "3ce615a8cad82404593d85a2b9141d6eb69033e219bb441b7fe05ca4ae214221",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 17305,
+      "path": "fwlive/tests/feed-publish-release-assets.test.sh",
+      "sha256": "ea920fa4a306b990ec32a2af007f6cf32372167e227d8d8ba378a7b814549291",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 5757,
+      "path": "fwlive/tests/feed-publish-staging-guard.test.sh",
+      "sha256": "3cb55ff28e4ed5d4104471e2ffa9259782f56e142c04ebf76dba0f313733a123",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 4662,
+      "path": "fwlive/tests/feed-sdk-wave15.test.sh",
+      "sha256": "8abc2c6b657b9d818107f368b353d746e1f218fb9ee0d12dc02c80b17a32054f",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 7937,
+      "path": "fwlive/tests/feeds-lock-pins.test.sh",
+      "sha256": "6277569d1ea7588ade26c98619d26c172fabea0173b0ab0fc3e37cad300eb391",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 3370,
+      "path": "fwlive/tests/fetch-pin-gate.test.sh",
+      "sha256": "930bd35c0e971e0d134c4c510ce995c04211719688d6bf236efd976f8918cab5",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 7983,
+      "path": "fwlive/tests/formal-ci-paths.test.sh",
+      "sha256": "014fb49b7c216a58d7b0c4328d1cfeceb9fc68553a78b922b3b2fe50b6133f2a",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 1222,
+      "path": "fwlive/tests/formal-rollback-trace-count.test.sh",
+      "sha256": "c3b21adffeea74be4264ddbb3a529587f81a1714274a60afd1c1ff2d18812914",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 5268,
+      "path": "fwlive/tests/formal-rollback-trace-expanded.test.sh",
+      "sha256": "967c2bd6a2645d9733812bc02bbfb73ea1621bc8ae5dab50954fec61ccfbf982",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 4270,
+      "path": "fwlive/tests/formal-rollback-trace-pilot.test.sh",
+      "sha256": "123aeadacba58b7e067824e7818e5279cb5bf48bbe2ead93e6a2a4445a73a80d",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 13277,
+      "path": "fwlive/tests/formal-tlc-tooling.test.sh",
+      "sha256": "6d7996aa3cf5cedb81aaebe6b665aaf19e31ad585b224a460e517533e7908381",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 30728,
+      "path": "fwlive/tests/fwlive-adaptive-cap.test.sh",
+      "sha256": "0f1fb0def14c3ededfcbd7cf36131a1510587bcae5105b9c93b5a58135fa95f5",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 6534,
+      "path": "fwlive/tests/fwlive-adaptive-trajectory.test.sh",
+      "sha256": "55d2635bae70e06c390704d28a7255d229cc7c834b5d1e32a00e8b8cb1105e41",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 3765,
+      "path": "fwlive/tests/fwlive-ast-grep-rules.test.sh",
+      "sha256": "cfc87c6dd3fc55179c745e23b17ee9f74bb2c2a181e7af4d2fd014ca7ae9eb84",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 2652,
+      "path": "fwlive/tests/fwlive-eslint-amd-wrap.test.sh",
+      "sha256": "53dfef0cc0e7e660e7d454448031a7126f86d6c6af551a899ef396fbed455465",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 2161,
+      "path": "fwlive/tests/fwlive-eslint-core.test.sh",
+      "sha256": "02b9b6c5b7c9a6fbdee7059533cd83ec73c5f718da9c29f9599b75638b5c6eb9",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 4945,
+      "path": "fwlive/tests/fwlive-generation-limit.test.sh",
+      "sha256": "b8d9e1f94ad8f4186dadd88750d782db1071ab9244455820ffa0d33b83aa4a17",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 178,
+      "path": "fwlive/tests/fwlive-ipk-payload.test.sh",
+      "sha256": "35ba17e7f088a57ffc5597b9cc18e675f4ac3fdf11709a5719f7ee770308a70b",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 968,
+      "path": "fwlive/tests/fwlive-linkcheck-anchor.test.sh",
+      "sha256": "381b40994028f3259558ce0fd6bfd1e730fce04e09102ff2d69104b56226bd92",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 3063,
+      "path": "fwlive/tests/fwlive-linkcheck-external.test.sh",
+      "sha256": "c130d97d77b20cd32a30b070ccc3711b1e07bc39d23bacbfc1989f97f9021476",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 25809,
+      "path": "fwlive/tests/fwlive-logging-lock.test.sh",
+      "sha256": "96de624f5b423ca1bd2fbcadc75b8a117e2a0cc26be725505a1671a486d1fb4c",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 84614,
+      "path": "fwlive/tests/fwlive-logging.test.sh",
+      "sha256": "b7fb0fa0e64667963580a94c12e24ce5352a4c368f7c65e43d997a5b24c6bcee",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 22464,
+      "path": "fwlive/tests/fwlive-package-lifecycle.test.sh",
+      "sha256": "8e57e2d6871cc824b2f34257dca11bc422f80b9f28039d4a427f2423553dee16",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 1083,
+      "path": "fwlive/tests/fwlive-package-payload-apk-host.test.sh",
+      "sha256": "467ce385e1c053fa0fb5328d87d98ba84d8ec77f139fed43581f36727020fb47",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 6482,
+      "path": "fwlive/tests/fwlive-package-payload.test.sh",
+      "sha256": "6532e8e490a2a17d8f96fb95770bc15f393119f8688d6b0d13ac65505314154a",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 8377,
+      "path": "fwlive/tests/fwlive-ping-log-helpers.test.sh",
+      "sha256": "e895b2bfa97e803bb999b6d0884caab674bf579fde0fa10a01ae8e92b2fae2b0",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 11491,
+      "path": "fwlive/tests/fwlive-rollback-trace-capture.sh",
+      "sha256": "4ae628590a5e791750e81b12ef584a7bc017c909b15eaab1df2e00615b3bd1f1",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 3310,
+      "path": "fwlive/tests/fwlive-shellcheck-tabs.test.sh",
+      "sha256": "1091385dfdd1e6024bc8b71466e1bff9d2dc864bb9aa3ed97d451cc7836b1339",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 4895,
+      "path": "fwlive/tests/fwlive-spdx-pot-gates.test.sh",
+      "sha256": "a7b20c75de92533f06df7feaa721132db03284cc38a03bcf1e234842c4f91ac0",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 8055,
+      "path": "fwlive/tests/fwlive-test-busybox-awk.test.sh",
+      "sha256": "60022ca8a7bc17a991d85c08650cc8e111151d68e7906b29d90979b0c0f6d368",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 19922,
+      "path": "fwlive/tests/fwlive-upstream-cut-gate-contract.test.sh",
+      "sha256": "ea6e274fc5063cdc34fa0c4e1dc900cd722185d7f0a98b219efae79d3849b7d9",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 1229,
+      "path": "fwlive/tests/fwlive-upstream-cut-mode.test.sh",
+      "sha256": "4d09250788924b3fced4904b1ce8e73329ce949757ff524f7abbbf4ffcbbc44e",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 59903,
+      "path": "fwlive/tests/fwlive-upstream-cut.test.sh",
+      "sha256": "08c26796fb2532a7c3d3c2fccb4b2562c2c87ee4eaf3f4f91941c3731693db83",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 8325,
+      "path": "fwlive/tests/guard-feed-deploy.test.sh",
+      "sha256": "9a1f965ce8a469a3b4a6ca967cc56f8e10ece85b3b368da4e53c0e0d0c72fe4a",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 1949,
+      "path": "fwlive/tests/install-host-jshn.test.sh",
+      "sha256": "84488ca98f6f831db8feb6a2938432854a2ba6642ac767b2f656738cfad8ff14",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 1504,
+      "path": "fwlive/tests/minimal-build-sdk-deploy-glob.test.sh",
+      "sha256": "100e0bca708ed484babe0befaae6ef4ed8733f158d3adce008ee4b09ada27573",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 5931,
+      "path": "fwlive/tests/packaging-ci-paths.test.sh",
+      "sha256": "3bd74d86800996fe19145c3c8cffcff8e6930ce526f7ccc5d83b438e30d05350",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 1935,
+      "path": "fwlive/tests/pin-sites.test.sh",
+      "sha256": "70df0a4002a514e2a425148292bf8a48cc0ad98ec423fbdf92d20e3fc34e9d1f",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 1870,
+      "path": "fwlive/tests/qemu-acl-session-harness.test.sh",
+      "sha256": "342eb2997a4bd62a9ec3490188b4e7e90bdfd42c63ae17986e189a9f8231934b",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 6765,
+      "path": "fwlive/tests/qemu-forwarding-slo-harness.test.sh",
+      "sha256": "87fbe15e0cbc27658ab27229a0a4e239e273619fc091d52b91112833f66aa5ba",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 5031,
+      "path": "fwlive/tests/qemu-forwarding-slo-net.test.sh",
+      "sha256": "fb7cee29b027f72d1fd9d7880a53cc86594b506d0a386684a76ff83be6372602",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 8645,
+      "path": "fwlive/tests/qemu-forwarding-slo-runner-failure.test.sh",
+      "sha256": "4742b7302a9bdae6c952d324dd14001c182acd8591d976a53c9fabfa859f7ae2",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 8358,
+      "path": "fwlive/tests/qemu-forwarding-slo-traffic.test.sh",
+      "sha256": "2fe5cfd9596f4cb5cba5bb6ef2bc6e7ebd70d6aa210b45bf8a42005d0d42752e",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 4884,
+      "path": "fwlive/tests/qemu-install-artifact-mode.test.sh",
+      "sha256": "dc467289ba349db985c85a2fb216132f64990f234408ec85caf060cb885b6148",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 19659,
+      "path": "fwlive/tests/qemu-install-from-feed.test.sh",
+      "sha256": "5245f5d3287ff416a23bda6c2c8db7801756bbe9b09815039cce0bf2d3c8f310",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 3270,
+      "path": "fwlive/tests/qemu-lab-ports.test.sh",
+      "sha256": "99486a8cfd11bae384fd5885e90ec3566ceecf94a9dd1d88e9ab7f27c6a0e026",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 3953,
+      "path": "fwlive/tests/qemu-lab-prepare-image.test.sh",
+      "sha256": "62bc5f52a1cc1b528d79eae58f1c75d9a23d64c77a41cd947033ccf1228bfe8e",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 20433,
+      "path": "fwlive/tests/qemu-lifecycle.test.sh",
+      "sha256": "c9404f431f115225eaa9e19b9cf1afce29044c920563e60b67f37498b2733468",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 8570,
+      "path": "fwlive/tests/qemu-logging-uninstall-smoke.test.sh",
+      "sha256": "4d9c6957e4c5556e19c159990f3be6e9d2deaef535c27a6f46134d52abd37605",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 2472,
+      "path": "fwlive/tests/qemu-reset-wan-logging.test.sh",
+      "sha256": "512f058a28ff5f08ea95b42135ac71aad885e74ccbae1fc68a85ffec7c6ab6a5",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 10160,
+      "path": "fwlive/tests/qemu-security-gaps-smoke.test.sh",
+      "sha256": "3e34dc0bd3d35f858b5e67dde212cb9597563c11ae3bc48b1fa3001f31c828eb",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 9039,
+      "path": "fwlive/tests/qemu-smoke-log-pipeline.test.sh",
+      "sha256": "560fe8ae7b6520ffa9e124acbc1e7a6421bfd7364e2e8bc8ae17446e9648dd1d",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 1978,
+      "path": "fwlive/tests/qemu-uci-stage-revert-smoke.test.sh",
+      "sha256": "7292db96c1e7400d4c77bbfe17bfd934a393debb6e83290a0e23b8998de79bbf",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 9635,
+      "path": "fwlive/tests/qemu-wait-guest-feed-smoke.test.sh",
+      "sha256": "21005a78a0f1f727fa6487ebf199a300365fcb145522e0f8bdfb658e070b6cd9",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 8689,
+      "path": "fwlive/tests/readme-feed-install-snippet.test.sh",
+      "sha256": "eddc579074cbd6c0c01695636d8fb08c29cacd3ee96fe7b056379d01e9061645",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 3596,
+      "path": "fwlive/tests/sdk-apk.test.sh",
+      "sha256": "21c81532fd2beb3ecbd134d9e4e7fbef199f2450f1d609cbfd8e8cd5918aeecc",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 25438,
+      "path": "fwlive/tests/sdk-matrix-cache-owner.test.sh",
+      "sha256": "14f893cc4fe9f9f3025d85ad0cac11f8fa2c652221ae5a143b9366b1360fbb7a",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 6196,
+      "path": "fwlive/tests/sdk-matrix-copy-out.test.sh",
+      "sha256": "04d760fb822fd8c8851780ba5514c9e7adcc423a696d61feea052b1c42a0b1e3",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 6672,
+      "path": "fwlive/tests/sdk-matrix-digests.test.sh",
+      "sha256": "bce3ea81905072e280616540db324be7382d445fc41cb8683651d70a4132d070",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 663,
+      "path": "fwlive/tests/sdk-matrix-package-format.test.sh",
+      "sha256": "fefb7146fcc8e244e9d7fe67437d33df7ad6f600a68171ab8df322a37fa8c62e",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 2396,
+      "path": "fwlive/tests/sdk-matrix-release-labels.test.sh",
+      "sha256": "4cead3c996740f59df135bdd243fb33e872a060a3f6225fcc7754885f6179b3e",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 2445,
+      "path": "fwlive/tests/sdk-matrix-release-line-parity.test.sh",
+      "sha256": "ed5e85529ca5286a958e2f3e7b03f64941e5e2ca1f8cb18702a400d95a4b5186",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 3725,
+      "path": "fwlive/tests/validate-feed-keys-mode.test.sh",
+      "sha256": "ae4f5460242d4764a92bbbc5976551b2053947ae35cd0bc2fc2dce5090ca7854",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 5886,
+      "path": "fwlive/tests/validate-matrix-artifact.test.sh",
+      "sha256": "5e894319c9eb868136c167e5d631f46a7a7458ca78bec7276dc86a9e4ed0d00f",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 7601,
+      "path": "fwlive/tests/verify-reproducible-target-arch.test.sh",
+      "sha256": "927e6a5fca2f5c4fb08728e8033edee5ecb65c19e7fe64b137f32037bdb536ec",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 3954,
+      "path": "fwlive/tests/wait-feed-pages.test.sh",
+      "sha256": "59850ff4eac1475691ea1738f231abb6e14ecb2da64353ae0f5e3123895ee839",
+      "source_commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "source_url": "https://github.com/lucas-albers-lz4/fwlive.git"
+    },
+    {
+      "bytes": 2971,
+      "path": "hermes-agent/datagen-config-examples/run_browser_tasks.sh",
+      "sha256": "832f9675e5779194cfa6d9d280cbafc473542644378b235800e7f02094667d4a",
+      "source_commit": "c69b6471e677d7ff23b5cef0cbc2924e900b6453",
+      "source_url": "https://github.com/lucas-albers-lz4/hermes-agent.git"
+    },
+    {
+      "bytes": 1123,
+      "path": "hermes-agent/docker/entrypoint-dispatch.sh",
+      "sha256": "d6f8e569fd2bfbf8d1f45619243681b9a1390c5bd3c9c584532692893b1d4fcd",
+      "source_commit": "c69b6471e677d7ff23b5cef0cbc2924e900b6453",
+      "source_url": "https://github.com/lucas-albers-lz4/hermes-agent.git"
+    },
+    {
+      "bytes": 1723,
+      "path": "hermes-agent/docker/entrypoint.sh",
+      "sha256": "6b158947ab0083de092058835f91ba5b94cea88eeaedc3bc6d891c69ec8b088a",
+      "source_commit": "c69b6471e677d7ff23b5cef0cbc2924e900b6453",
+      "source_url": "https://github.com/lucas-albers-lz4/hermes-agent.git"
+    },
+    {
+      "bytes": 3711,
+      "path": "hermes-agent/docker/hermes-exec-shim.sh",
+      "sha256": "57637e73c8db76aa84a38e4a2edb1b155bfd86a2e89a8d4c38c4546ee1175985",
+      "source_commit": "c69b6471e677d7ff23b5cef0cbc2924e900b6453",
+      "source_url": "https://github.com/lucas-albers-lz4/hermes-agent.git"
+    },
+    {
+      "bytes": 3518,
+      "path": "hermes-agent/docker/main-wrapper.sh",
+      "sha256": "d01d7ece5198f79496cf8ce64552665699995f0bf2cabbac78205b6b1779fb9b",
+      "source_commit": "c69b6471e677d7ff23b5cef0cbc2924e900b6453",
+      "source_url": "https://github.com/lucas-albers-lz4/hermes-agent.git"
+    },
+    {
+      "bytes": 30081,
+      "path": "hermes-agent/docker/stage2-hook.sh",
+      "sha256": "1fc8921844e288e46f5db634c7d4130c17d35cb0f657a7a5f2aab3421d61a6c9",
+      "source_commit": "c69b6471e677d7ff23b5cef0cbc2924e900b6453",
+      "source_url": "https://github.com/lucas-albers-lz4/hermes-agent.git"
+    },
+    {
+      "bytes": 2733,
+      "path": "hermes-agent/docker/tini-shim.sh",
+      "sha256": "c69e6b6004cabe7fbd18594c0db83a16482b1551109d7dc7490363d85a4d0a6e",
+      "source_commit": "c69b6471e677d7ff23b5cef0cbc2924e900b6453",
+      "source_url": "https://github.com/lucas-albers-lz4/hermes-agent.git"
+    },
+    {
+      "bytes": 635,
+      "path": "hermes-agent/native/fts5_cjk/build.sh",
+      "sha256": "fed26cb860b755e9b6055658e3f1f89d3ca6d0634321ea76c2d391aed2cb9b4c",
+      "source_commit": "c69b6471e677d7ff23b5cef0cbc2924e900b6453",
+      "source_url": "https://github.com/lucas-albers-lz4/hermes-agent.git"
+    },
+    {
+      "bytes": 5174,
+      "path": "hermes-agent/optional-skills/creative/hyperframes/scripts/setup.sh",
+      "sha256": "1f3055877c05b88403ac59496a8ee318009f990d9398ba540732d32fee786c1a",
+      "source_commit": "c69b6471e677d7ff23b5cef0cbc2924e900b6453",
+      "source_url": "https://github.com/lucas-albers-lz4/hermes-agent.git"
+    },
+    {
+      "bytes": 8286,
+      "path": "hermes-agent/optional-skills/creative/kanban-video-orchestrator/assets/setup.sh.tmpl",
+      "sha256": "793b546117904e27961619b06cc28a58f96e9acf59431eb28f24d53495f0a625",
+      "source_commit": "c69b6471e677d7ff23b5cef0cbc2924e900b6453",
+      "source_url": "https://github.com/lucas-albers-lz4/hermes-agent.git"
+    },
+    {
+      "bytes": 13830,
+      "path": "hermes-agent/optional-skills/productivity/here-now/scripts/drive.sh",
+      "sha256": "c170402e9060623af450932983b39bd56c4fdb0359eb5702f0e178369bc33d39",
+      "source_commit": "c69b6471e677d7ff23b5cef0cbc2924e900b6453",
+      "source_url": "https://github.com/lucas-albers-lz4/hermes-agent.git"
+    },
+    {
+      "bytes": 15546,
+      "path": "hermes-agent/optional-skills/productivity/here-now/scripts/publish.sh",
+      "sha256": "98a617c54c95a29bb447efb876cf7d621f7456947905cd2a4051f324881916a7",
+      "source_commit": "c69b6471e677d7ff23b5cef0cbc2924e900b6453",
+      "source_url": "https://github.com/lucas-albers-lz4/hermes-agent.git"
+    },
+    {
+      "bytes": 621,
+      "path": "hermes-agent/optional-skills/research/duckduckgo-search/scripts/duckduckgo.sh",
+      "sha256": "6d99105ef17cdacc9864de4cbcd16a2675596561f34600083a922f7d3ec5ac4c",
+      "source_commit": "c69b6471e677d7ff23b5cef0cbc2924e900b6453",
+      "source_url": "https://github.com/lucas-albers-lz4/hermes-agent.git"
+    },
+    {
+      "bytes": 524,
+      "path": "hermes-agent/optional-skills/research/searxng-search/scripts/searxng.sh",
+      "sha256": "b69239cb0a9ae07b3fd16ccf05ec00e820ed060e6afcb127951c883b086d2e39",
+      "source_commit": "c69b6471e677d7ff23b5cef0cbc2924e900b6453",
+      "source_url": "https://github.com/lucas-albers-lz4/hermes-agent.git"
+    },
+    {
+      "bytes": 3930,
+      "path": "hermes-agent/optional-skills/security/web-pentest/scripts/recon-scan.sh",
+      "sha256": "6fa445fb98965db33d1de1a2c64e9dff0c1ae744d40b02d319348c80ed08bcbe",
+      "source_commit": "c69b6471e677d7ff23b5cef0cbc2924e900b6453",
+      "source_url": "https://github.com/lucas-albers-lz4/hermes-agent.git"
+    },
+    {
+      "bytes": 7581,
+      "path": "hermes-agent/optional-skills/software-development/ast-grep/install.sh",
+      "sha256": "ac2abfc4e4b5991c6aed09babd6fd1e6b87663a036949c65540542d4f6b0faa1",
+      "source_commit": "c69b6471e677d7ff23b5cef0cbc2924e900b6453",
+      "source_url": "https://github.com/lucas-albers-lz4/hermes-agent.git"
+    },
+    {
+      "bytes": 7765,
+      "path": "hermes-agent/optional-skills/software-development/ast-grep/tests/smoke.sh",
+      "sha256": "cfe8e08d19922d88bcc09b50797afb0eb86be569e3eb13d08f7473e736f3a2b0",
+      "source_commit": "c69b6471e677d7ff23b5cef0cbc2924e900b6453",
+      "source_url": "https://github.com/lucas-albers-lz4/hermes-agent.git"
+    },
+    {
+      "bytes": 469,
+      "path": "hermes-agent/scripts/capture-cage-terminal.sh",
+      "sha256": "4c2ea44f9aae653b21e2bbbb10fbaa50890a67cc62e5cd3fc09bc85f05301d41",
+      "source_commit": "c69b6471e677d7ff23b5cef0cbc2924e900b6453",
+      "source_url": "https://github.com/lucas-albers-lz4/hermes-agent.git"
+    },
+    {
+      "bytes": 25842,
+      "path": "hermes-agent/scripts/desktop-update/posix.sh",
+      "sha256": "5b73817847dcc5d98294b371f887e8d3b0b86547bd9b9673c4ae46f6f963901d",
+      "source_commit": "c69b6471e677d7ff23b5cef0cbc2924e900b6453",
+      "source_url": "https://github.com/lucas-albers-lz4/hermes-agent.git"
+    },
+    {
+      "bytes": 9212,
+      "path": "hermes-agent/scripts/desktop-update/repro.sh",
+      "sha256": "5c30765e3c52f534c2e949b463d4df6befcb488c45f28c2a37ef82ff8759e232",
+      "source_commit": "c69b6471e677d7ff23b5cef0cbc2924e900b6453",
+      "source_url": "https://github.com/lucas-albers-lz4/hermes-agent.git"
+    },
+    {
+      "bytes": 23950,
+      "path": "hermes-agent/scripts/dev-sandbox.sh",
+      "sha256": "e924f6fdd1046f621b1e4bf005fe621d6ec343c8d5a7ad6843c63d576e9086d3",
+      "source_commit": "c69b6471e677d7ff23b5cef0cbc2924e900b6453",
+      "source_url": "https://github.com/lucas-albers-lz4/hermes-agent.git"
+    },
+    {
+      "bytes": 152116,
+      "path": "hermes-agent/scripts/install.sh",
+      "sha256": "0582d9b1562efcb6e0ac62f4451021667830b830a72ce7d91eaea9fee8b6c09b",
+      "source_commit": "c69b6471e677d7ff23b5cef0cbc2924e900b6453",
+      "source_url": "https://github.com/lucas-albers-lz4/hermes-agent.git"
+    },
+    {
+      "bytes": 1070,
+      "path": "hermes-agent/scripts/kill_modal.sh",
+      "sha256": "be4869d9cdd9ea7efc9ea47e86da750ae3036bee178b2a0a73ae3c9e62e24a26",
+      "source_commit": "c69b6471e677d7ff23b5cef0cbc2924e900b6453",
+      "source_url": "https://github.com/lucas-albers-lz4/hermes-agent.git"
+    },
+    {
+      "bytes": 17168,
+      "path": "hermes-agent/scripts/lib/node-bootstrap.sh",
+      "sha256": "b8a3342786a6b21dedef199aa1d43fea96c818e18d9204970f755a59db6d36f1",
+      "source_commit": "c69b6471e677d7ff23b5cef0cbc2924e900b6453",
+      "source_url": "https://github.com/lucas-albers-lz4/hermes-agent.git"
+    },
+    {
+      "bytes": 9010,
+      "path": "hermes-agent/scripts/run_tests.sh",
+      "sha256": "9ef635bcee1f879d31f37b4eeccab6e203283036d38ed0bf4e249efcd7d0469e",
+      "source_commit": "c69b6471e677d7ff23b5cef0cbc2924e900b6453",
+      "source_url": "https://github.com/lucas-albers-lz4/hermes-agent.git"
+    },
+    {
+      "bytes": 4323,
+      "path": "hermes-agent/scripts/sandbox/pick-release-tags.sh",
+      "sha256": "346db2d1f4a0516ab963abec7168ab5d688f51a10f5e974173cfef55b67b0278",
+      "source_commit": "c69b6471e677d7ff23b5cef0cbc2924e900b6453",
+      "source_url": "https://github.com/lucas-albers-lz4/hermes-agent.git"
+    },
+    {
+      "bytes": 671,
+      "path": "hermes-agent/scripts/sandbox/ssh-shim.sh",
+      "sha256": "f165a070e65990277e1c6c3f65a28b6d035d6826ac91866c978c55adccff5e8a",
+      "source_commit": "c69b6471e677d7ff23b5cef0cbc2924e900b6453",
+      "source_url": "https://github.com/lucas-albers-lz4/hermes-agent.git"
+    },
+    {
+      "bytes": 10553,
+      "path": "hermes-agent/scripts/sandbox/stage2-run.sh",
+      "sha256": "c4cde75146b32c87a480868fdf93c44d042ee07c84229170c8e7e866f408c08f",
+      "source_commit": "c69b6471e677d7ff23b5cef0cbc2924e900b6453",
+      "source_url": "https://github.com/lucas-albers-lz4/hermes-agent.git"
+    },
+    {
+      "bytes": 1448,
+      "path": "hermes-agent/scripts/toolperf_abeval/run_all.sh",
+      "sha256": "0a912ea8910b41b821546a60be29b4f598242ac272d918a8a4f69eb115e94f71",
+      "source_commit": "c69b6471e677d7ff23b5cef0cbc2924e900b6453",
+      "source_url": "https://github.com/lucas-albers-lz4/hermes-agent.git"
+    },
+    {
+      "bytes": 18189,
+      "path": "hermes-agent/setup-hermes.sh",
+      "sha256": "56bfeabbe3bbce34b6133f403aed669405b9314256809dbc75f22591feb0e8b2",
+      "source_commit": "c69b6471e677d7ff23b5cef0cbc2924e900b6453",
+      "source_url": "https://github.com/lucas-albers-lz4/hermes-agent.git"
+    },
+    {
+      "bytes": 10447,
+      "path": "hermes-agent/skills/creative/comfyui/scripts/comfyui_setup.sh",
+      "sha256": "9284df8240cc5c626bb02d865ace02fd49ccdd35e9583ed34de8f9e417f5e74d",
+      "source_commit": "c69b6471e677d7ff23b5cef0cbc2924e900b6453",
+      "source_url": "https://github.com/lucas-albers-lz4/hermes-agent.git"
+    },
+    {
+      "bytes": 921,
+      "path": "hermes-agent/skills/creative/manim-video/scripts/setup.sh",
+      "sha256": "e7563c458764c1b369c26f874cf94acbe43db8f9a3b1e0d9d735230f5d895bae",
+      "source_commit": "c69b6471e677d7ff23b5cef0cbc2924e900b6453",
+      "source_url": "https://github.com/lucas-albers-lz4/hermes-agent.git"
+    },
+    {
+      "bytes": 2911,
+      "path": "hermes-agent/skills/creative/p5js/scripts/render.sh",
+      "sha256": "10a5e45d1a9d3dc867fbd7cea3b744f8d335ec03bf85a77d3a1852f315adf9e2",
+      "source_commit": "c69b6471e677d7ff23b5cef0cbc2924e900b6453",
+      "source_url": "https://github.com/lucas-albers-lz4/hermes-agent.git"
+    },
+    {
+      "bytes": 833,
+      "path": "hermes-agent/skills/creative/p5js/scripts/serve.sh",
+      "sha256": "65c28a2bff1dbf74f86fe027ead37eaa02da02a146c33cef4af36bc0b51c9917",
+      "source_commit": "c69b6471e677d7ff23b5cef0cbc2924e900b6453",
+      "source_url": "https://github.com/lucas-albers-lz4/hermes-agent.git"
+    },
+    {
+      "bytes": 2475,
+      "path": "hermes-agent/skills/creative/p5js/scripts/setup.sh",
+      "sha256": "27750af377cec00485ffa26fcc7bd2452167bdf73f15d4997bda49a8f4b780c3",
+      "source_commit": "c69b6471e677d7ff23b5cef0cbc2924e900b6453",
+      "source_url": "https://github.com/lucas-albers-lz4/hermes-agent.git"
+    },
+    {
+      "bytes": 4468,
+      "path": "hermes-agent/skills/creative/touchdesigner-mcp/scripts/setup.sh",
+      "sha256": "173ef326c534751b38677e698f93a4baa76f9ae07bb0d26bec4beba565db45f7",
+      "source_commit": "c69b6471e677d7ff23b5cef0cbc2924e900b6453",
+      "source_url": "https://github.com/lucas-albers-lz4/hermes-agent.git"
+    },
+    {
+      "bytes": 2556,
+      "path": "hermes-agent/skills/github/github-auth/scripts/gh-env.sh",
+      "sha256": "eb04179d859635b56cdd0da71da59cd5d94d7a69c9a856f9f562d1cd5cb9412f",
+      "source_commit": "c69b6471e677d7ff23b5cef0cbc2924e900b6453",
+      "source_url": "https://github.com/lucas-albers-lz4/hermes-agent.git"
+    },
+    {
+      "bytes": 13442,
+      "path": "hermes-agent/tests/install/install-update-e2e.sh",
+      "sha256": "e5200e582c26a1f3109349b710b408aa9bbbc867a68ea6559491d14aa319d108",
+      "source_commit": "c69b6471e677d7ff23b5cef0cbc2924e900b6453",
+      "source_url": "https://github.com/lucas-albers-lz4/hermes-agent.git"
+    },
+    {
+      "bytes": 649,
+      "path": "usrmanage/openwrt-feed/luci-app-usrmanage/root/etc/uci-defaults/91-usrmanage-readonly-observer",
+      "sha256": "7c3156878a0715e9bfe9bb7f6e6149e5c80bcfbc0de05680507828582fe291a2",
+      "source_commit": "94d8c899799d57f323f38ffab02405b6460e17f8",
+      "source_url": "https://github.com/lucas-albers-lz4/usrmanage.git"
+    },
+    {
+      "bytes": 425,
+      "path": "usrmanage/openwrt-feed/luci-app-usrmanage/root/etc/uci-defaults/92-usrmanage-diagnostic-rpc",
+      "sha256": "01131858b8ef95071eb6105ffbb7363bdf4d878088ff060febc44dc71ece331e",
+      "source_commit": "94d8c899799d57f323f38ffab02405b6460e17f8",
+      "source_url": "https://github.com/lucas-albers-lz4/usrmanage.git"
+    },
+    {
+      "bytes": 9636,
+      "path": "usrmanage/openwrt-feed/luci-app-usrmanage/root/usr/libexec/rpcd/usrmanage",
+      "sha256": "5d425a02b80e3d237121d6a474a0087e2fcf25290af2dc96c6d8c0a5766dcfab",
+      "source_commit": "94d8c899799d57f323f38ffab02405b6460e17f8",
+      "source_url": "https://github.com/lucas-albers-lz4/usrmanage.git"
+    },
+    {
+      "bytes": 622,
+      "path": "usrmanage/openwrt-feed/usrmanage/files/etc/uci-defaults/90-usrmanage",
+      "sha256": "6e4034526c4ee9567ef71720dbfa0c10887d54c69ab7c9c11789e6cab742f81c",
+      "source_commit": "94d8c899799d57f323f38ffab02405b6460e17f8",
+      "source_url": "https://github.com/lucas-albers-lz4/usrmanage.git"
+    },
+    {
+      "bytes": 447,
+      "path": "usrmanage/openwrt-feed/usrmanage/files/etc/uci-defaults/91-usrmanage-diagnostic-rpc",
+      "sha256": "4874575d8d928120e0f585229c0c5e79829e7ae1e218e6d17cdffa34e985b997",
+      "source_commit": "94d8c899799d57f323f38ffab02405b6460e17f8",
+      "source_url": "https://github.com/lucas-albers-lz4/usrmanage.git"
+    },
+    {
+      "bytes": 6808,
+      "path": "usrmanage/openwrt-feed/usrmanage/files/usr/lib/usrmanage/usrmanage-health.sh",
+      "sha256": "1207588640d44397a95665a4202ce8ab5ba157b4a362dd94f641af9b3f9982d8",
+      "source_commit": "94d8c899799d57f323f38ffab02405b6460e17f8",
+      "source_url": "https://github.com/lucas-albers-lz4/usrmanage.git"
+    },
+    {
+      "bytes": 68298,
+      "path": "usrmanage/openwrt-feed/usrmanage/files/usr/lib/usrmanage/usrmanage-lib.sh",
+      "sha256": "6e7eeb3f6331cacaf0add993334e8a3fc08c3dd1d63c51e95f5207a9c5f1742b",
+      "source_commit": "94d8c899799d57f323f38ffab02405b6460e17f8",
+      "source_url": "https://github.com/lucas-albers-lz4/usrmanage.git"
+    },
+    {
+      "bytes": 38218,
+      "path": "usrmanage/openwrt-feed/usrmanage/files/usr/lib/usrmanage/usrmanage-luci-login.sh",
+      "sha256": "f8962af14fd7df58603dc2a6696450f0955df20ffae207a2161c24a0be6f524a",
+      "source_commit": "94d8c899799d57f323f38ffab02405b6460e17f8",
+      "source_url": "https://github.com/lucas-albers-lz4/usrmanage.git"
+    },
+    {
+      "bytes": 7511,
+      "path": "usrmanage/openwrt-feed/usrmanage/files/usr/sbin/usrmanage",
+      "sha256": "5da2a578f27fee6b57c91cccea232f5d6d58ed924865011cd4273a8c1abca61d",
+      "source_commit": "94d8c899799d57f323f38ffab02405b6460e17f8",
+      "source_url": "https://github.com/lucas-albers-lz4/usrmanage.git"
+    },
+    {
+      "bytes": 462,
+      "path": "usrmanage/scripts/build-dual-release.sh",
+      "sha256": "702d9a77242d0cec2328ae298711163c7fc0b7d2584290e338d49cd7c1257202",
+      "source_commit": "94d8c899799d57f323f38ffab02405b6460e17f8",
+      "source_url": "https://github.com/lucas-albers-lz4/usrmanage.git"
+    },
+    {
+      "bytes": 3004,
+      "path": "usrmanage/scripts/docker-sdk.sh",
+      "sha256": "d903c6a90978acd92d11118ccfcb5ce77eed7a92662e3dc1aee42297c38c1281",
+      "source_commit": "94d8c899799d57f323f38ffab02405b6460e17f8",
+      "source_url": "https://github.com/lucas-albers-lz4/usrmanage.git"
+    },
+    {
+      "bytes": 5340,
+      "path": "usrmanage/scripts/download-openwrt-x86-64.sh",
+      "sha256": "d8e6c9538f131dd9ceebe22499fba850299fd06a5629a6287cf3ef3cf29403c4",
+      "source_commit": "94d8c899799d57f323f38ffab02405b6460e17f8",
+      "source_url": "https://github.com/lucas-albers-lz4/usrmanage.git"
+    },
+    {
+      "bytes": 453,
+      "path": "usrmanage/scripts/hooks/pre-commit-z3-fast",
+      "sha256": "1da73181c628c08c00ff8bd11a4e5ad1e8939bcacd88ebd5cfebe969e29891e3",
+      "source_commit": "94d8c899799d57f323f38ffab02405b6460e17f8",
+      "source_url": "https://github.com/lucas-albers-lz4/usrmanage.git"
+    },
+    {
+      "bytes": 2512,
+      "path": "usrmanage/scripts/lib/capture-guest-reset.sh",
+      "sha256": "7f9805ed71b2ffed721a5b6ff7041bfab22a40047845737e7f1e782143f3b18f",
+      "source_commit": "94d8c899799d57f323f38ffab02405b6460e17f8",
+      "source_url": "https://github.com/lucas-albers-lz4/usrmanage.git"
+    },
+    {
+      "bytes": 3261,
+      "path": "usrmanage/scripts/lib/feed-keys.sh",
+      "sha256": "3363f8bae59980e08f335149afcbde10a732c2cec569aecfbd5ed256770ff833",
+      "source_commit": "94d8c899799d57f323f38ffab02405b6460e17f8",
+      "source_url": "https://github.com/lucas-albers-lz4/usrmanage.git"
+    },
+    {
+      "bytes": 20132,
+      "path": "usrmanage/scripts/lib/feed-publish.sh",
+      "sha256": "d5e3635cee45584f216e8a28afb84686e869a2982f7c6ab0e0c12add50e52112",
+      "source_commit": "94d8c899799d57f323f38ffab02405b6460e17f8",
+      "source_url": "https://github.com/lucas-albers-lz4/usrmanage.git"
+    },
+    {
+      "bytes": 1495,
+      "path": "usrmanage/scripts/lib/qemu-lab-net.sh",
+      "sha256": "d4aa27f462f9d4fd028c7b1aeb2e8650c014a220c67b8811d9583689f7b5ebf7",
+      "source_commit": "94d8c899799d57f323f38ffab02405b6460e17f8",
+      "source_url": "https://github.com/lucas-albers-lz4/usrmanage.git"
+    },
+    {
+      "bytes": 18695,
+      "path": "usrmanage/scripts/lib/sdk-matrix.sh",
+      "sha256": "4ae49e1a7ac148aa09edb196f03079aa64fb0251d4193152b22757c7423c95ff",
+      "source_commit": "94d8c899799d57f323f38ffab02405b6460e17f8",
+      "source_url": "https://github.com/lucas-albers-lz4/usrmanage.git"
+    },
+    {
+      "bytes": 1716,
+      "path": "usrmanage/scripts/playwright-luci.sh",
+      "sha256": "33d5990ef20e3d15d6e26f4880b51839d2c5dcd49b94ebd09223fc30d828ed0b",
+      "source_commit": "94d8c899799d57f323f38ffab02405b6460e17f8",
+      "source_url": "https://github.com/lucas-albers-lz4/usrmanage.git"
+    },
+    {
+      "bytes": 1516,
+      "path": "usrmanage/scripts/publish-packages.sh",
+      "sha256": "6f0d07534ee47df5f8eea0235592e27e5fec86983507124a09817416db17a99b",
+      "source_commit": "94d8c899799d57f323f38ffab02405b6460e17f8",
+      "source_url": "https://github.com/lucas-albers-lz4/usrmanage.git"
+    },
+    {
+      "bytes": 3167,
+      "path": "usrmanage/scripts/qemu-install-from-feed.sh",
+      "sha256": "e7c257f7ab1fda1b1add45fa49a70fa2a1e679999ee11ec46b02517bc01cae89",
+      "source_commit": "94d8c899799d57f323f38ffab02405b6460e17f8",
+      "source_url": "https://github.com/lucas-albers-lz4/usrmanage.git"
+    },
+    {
+      "bytes": 7022,
+      "path": "usrmanage/scripts/qemu-lab-prepare-image.sh",
+      "sha256": "e23fa0385e47674d98d60c897904815a1626037b34c5a36eb03fc408144d4cf4",
+      "source_commit": "94d8c899799d57f323f38ffab02405b6460e17f8",
+      "source_url": "https://github.com/lucas-albers-lz4/usrmanage.git"
+    },
+    {
+      "bytes": 25408,
+      "path": "usrmanage/scripts/qemu-smoke-usrmanage.sh",
+      "sha256": "be1f531a60fffe23d5ee1d1ae09125eced5fb1272670054b6ff423feae2a00f8",
+      "source_commit": "94d8c899799d57f323f38ffab02405b6460e17f8",
+      "source_url": "https://github.com/lucas-albers-lz4/usrmanage.git"
+    },
+    {
+      "bytes": 1116,
+      "path": "usrmanage/scripts/qemu-wait-guest.sh",
+      "sha256": "3fe560518d2d0015591cb7608554bcef1408d58a0bb06c6aaa0380eb6c414151",
+      "source_commit": "94d8c899799d57f323f38ffab02405b6460e17f8",
+      "source_url": "https://github.com/lucas-albers-lz4/usrmanage.git"
+    },
+    {
+      "bytes": 5851,
+      "path": "usrmanage/scripts/run-openwrt-x86-qemu.sh",
+      "sha256": "a8a74efc6543de7fac30e1419dde28f1792e73104ebae928321b6df755dd6fa3",
+      "source_commit": "94d8c899799d57f323f38ffab02405b6460e17f8",
+      "source_url": "https://github.com/lucas-albers-lz4/usrmanage.git"
+    },
+    {
+      "bytes": 1816,
+      "path": "usrmanage/scripts/shellcheck.sh",
+      "sha256": "2309d695b39537631381ca237ebb6be586e14c5ccc98da73a3421234c58cc141",
+      "source_commit": "94d8c899799d57f323f38ffab02405b6460e17f8",
+      "source_url": "https://github.com/lucas-albers-lz4/usrmanage.git"
+    },
+    {
+      "bytes": 4076,
+      "path": "usrmanage/scripts/smoke-host.sh",
+      "sha256": "c38cedd4fea1e5418d8681a6131016da5e61d69a6b533aff94612bcbb37b96ec",
+      "source_commit": "94d8c899799d57f323f38ffab02405b6460e17f8",
+      "source_url": "https://github.com/lucas-albers-lz4/usrmanage.git"
+    },
+    {
+      "bytes": 5388,
+      "path": "usrmanage/scripts/smoke-package-layout.sh",
+      "sha256": "decad035e495b932473c4f5c8561f92e439d815b2261bceae7b5f30e38eec3b8",
+      "source_commit": "94d8c899799d57f323f38ffab02405b6460e17f8",
+      "source_url": "https://github.com/lucas-albers-lz4/usrmanage.git"
+    },
+    {
+      "bytes": 674,
+      "path": "usrmanage/scripts/test-activity.sh",
+      "sha256": "827c8ec6f78abad52388b028859e1a8f1f148565e804e7ef3ec7ca3a507ec10e",
+      "source_commit": "94d8c899799d57f323f38ffab02405b6460e17f8",
+      "source_url": "https://github.com/lucas-albers-lz4/usrmanage.git"
+    },
+    {
+      "bytes": 4171,
+      "path": "usrmanage/scripts/usrmanage-linkcheck.sh",
+      "sha256": "1d8f7695a6a6abc06ae979e33faba1f048db14ad782bf52bb74342b4f62bb92b",
+      "source_commit": "94d8c899799d57f323f38ffab02405b6460e17f8",
+      "source_url": "https://github.com/lucas-albers-lz4/usrmanage.git"
+    },
+    {
+      "bytes": 4269,
+      "path": "usrmanage/scripts/validate-feed-keys.sh",
+      "sha256": "c9bbe55b2714eeb42612b3746747a09c2ad1c04a1911e73b4901e5938a81d5d9",
+      "source_commit": "94d8c899799d57f323f38ffab02405b6460e17f8",
+      "source_url": "https://github.com/lucas-albers-lz4/usrmanage.git"
+    },
+    {
+      "bytes": 2193,
+      "path": "usrmanage/scripts/validate-feed-smoke.sh",
+      "sha256": "273e447eac55f0d12752d65462b619f8f833db9de5093b5e0a85f5d7fc9e61c8",
+      "source_commit": "94d8c899799d57f323f38ffab02405b6460e17f8",
+      "source_url": "https://github.com/lucas-albers-lz4/usrmanage.git"
+    },
+    {
+      "bytes": 3822,
+      "path": "usrmanage/scripts/verify-reproducible-build.sh",
+      "sha256": "49257a9133451d71f175721ba4a79612a469f95b46fe371f7abff5295084572e",
+      "source_commit": "94d8c899799d57f323f38ffab02405b6460e17f8",
+      "source_url": "https://github.com/lucas-albers-lz4/usrmanage.git"
+    },
+    {
+      "bytes": 1761,
+      "path": "usrmanage/scripts/wait-feed-pages.sh",
+      "sha256": "5bf72481311deca74686ce33c2dd714a76d739b01fecd3969ef0a30c6f850936",
+      "source_commit": "94d8c899799d57f323f38ffab02405b6460e17f8",
+      "source_url": "https://github.com/lucas-albers-lz4/usrmanage.git"
+    },
+    {
+      "bytes": 613,
+      "path": "usrmanage/tests/lib.sh",
+      "sha256": "0a27b991f139e2c21b97e4ead93c4031af2b153d79b702e1b07bc2122e060653",
+      "source_commit": "94d8c899799d57f323f38ffab02405b6460e17f8",
+      "source_url": "https://github.com/lucas-albers-lz4/usrmanage.git"
+    },
+    {
+      "bytes": 2463,
+      "path": "usrmanage/tests/test_docs_screenshot_contract.sh",
+      "sha256": "f31f8e4330988b847c310ef9fbf65af13a80c52f2e86f457ec2173271501c8a0",
+      "source_commit": "94d8c899799d57f323f38ffab02405b6460e17f8",
+      "source_url": "https://github.com/lucas-albers-lz4/usrmanage.git"
+    },
+    {
+      "bytes": 6380,
+      "path": "usrmanage/tests/test_doctor.sh",
+      "sha256": "74faf186b4d8da251ff64fdc85dbd1174bb33dcf05d9ddd16ffdea3840bd219d",
+      "source_commit": "94d8c899799d57f323f38ffab02405b6460e17f8",
+      "source_url": "https://github.com/lucas-albers-lz4/usrmanage.git"
+    },
+    {
+      "bytes": 4049,
+      "path": "usrmanage/tests/test_download_gzip_gate.sh",
+      "sha256": "628aa09be2182a7896e8ec0975246139e313adf3fbe311264213fa2c743d51a8",
+      "source_commit": "94d8c899799d57f323f38ffab02405b6460e17f8",
+      "source_url": "https://github.com/lucas-albers-lz4/usrmanage.git"
+    },
+    {
+      "bytes": 9684,
+      "path": "usrmanage/tests/test_health.sh",
+      "sha256": "8378df7f770c88ee3e10124873eb0421f6747f7c35d1c32c1b3c803bc7b9d5ed",
+      "source_commit": "94d8c899799d57f323f38ffab02405b6460e17f8",
+      "source_url": "https://github.com/lucas-albers-lz4/usrmanage.git"
+    },
+    {
+      "bytes": 55083,
+      "path": "usrmanage/tests/test_luci_login.sh",
+      "sha256": "08803a26116c936981e6289b12fbe90d6bdfa28c9321cea43a324973167e9916",
+      "source_commit": "94d8c899799d57f323f38ffab02405b6460e17f8",
+      "source_url": "https://github.com/lucas-albers-lz4/usrmanage.git"
+    },
+    {
+      "bytes": 5754,
+      "path": "usrmanage/tests/test_mutator_flows.sh",
+      "sha256": "8895ebf4ae4d0ec2fad7bc7043da59b18f457157e9ab36ed098566bd085753f4",
+      "source_commit": "94d8c899799d57f323f38ffab02405b6460e17f8",
+      "source_url": "https://github.com/lucas-albers-lz4/usrmanage.git"
+    },
+    {
+      "bytes": 7389,
+      "path": "usrmanage/tests/test_mutators-busybox-fallback.sh",
+      "sha256": "2bfa795bdfc93182834a58af1715cc67a4e616e2a450cc276254dbd22eeda4e0",
+      "source_commit": "94d8c899799d57f323f38ffab02405b6460e17f8",
+      "source_url": "https://github.com/lucas-albers-lz4/usrmanage.git"
+    },
+    {
+      "bytes": 15893,
+      "path": "usrmanage/tests/test_mutators.sh",
+      "sha256": "1fc361097fe88c85dc01b2ca26c9dc23f9d0c18ae9e3dca4677504c6eaf3e253",
+      "source_commit": "94d8c899799d57f323f38ffab02405b6460e17f8",
+      "source_url": "https://github.com/lucas-albers-lz4/usrmanage.git"
+    },
+    {
+      "bytes": 11290,
+      "path": "usrmanage/tests/test_password_control.sh",
+      "sha256": "06cfaada6c3812a57ae41361bc7696c47b6b5284c887f54d9cc7aeeeafab5218",
+      "source_commit": "94d8c899799d57f323f38ffab02405b6460e17f8",
+      "source_url": "https://github.com/lucas-albers-lz4/usrmanage.git"
+    },
+    {
+      "bytes": 8109,
+      "path": "usrmanage/tests/test_password_prompt_echo.sh",
+      "sha256": "4127e059c7a3acbd3b7375e25c7c92a3205520713f19517fda6538b4f2b30b44",
+      "source_commit": "94d8c899799d57f323f38ffab02405b6460e17f8",
+      "source_url": "https://github.com/lucas-albers-lz4/usrmanage.git"
+    },
+    {
+      "bytes": 9748,
+      "path": "usrmanage/tests/test_password_sha512_pin.sh",
+      "sha256": "d2525a10269925791d75ef0769ab2a46be21da983afa080eca86fb2a14ca8bd0",
+      "source_commit": "94d8c899799d57f323f38ffab02405b6460e17f8",
+      "source_url": "https://github.com/lucas-albers-lz4/usrmanage.git"
+    },
+    {
+      "bytes": 11200,
+      "path": "usrmanage/tests/test_phase1_foundation.sh",
+      "sha256": "69d20e47dbfa67478a69d6496949d136506423f072de46969e79902c427c71ea",
+      "source_commit": "94d8c899799d57f323f38ffab02405b6460e17f8",
+      "source_url": "https://github.com/lucas-albers-lz4/usrmanage.git"
+    },
+    {
+      "bytes": 7041,
+      "path": "usrmanage/tests/test_policy.sh",
+      "sha256": "c9fd42ea4dd85845938d68537efd6d8ada85fb9d13b95cb0c603db84c7a28e30",
+      "source_commit": "94d8c899799d57f323f38ffab02405b6460e17f8",
+      "source_url": "https://github.com/lucas-albers-lz4/usrmanage.git"
+    },
+    {
+      "bytes": 8972,
+      "path": "usrmanage/tests/test_qemu_net_seed.sh",
+      "sha256": "0abdc8ddc99925efcf5b6e209633a85fe5a0c81b28f2edabca6a928377da3048",
+      "source_commit": "94d8c899799d57f323f38ffab02405b6460e17f8",
+      "source_url": "https://github.com/lucas-albers-lz4/usrmanage.git"
+    },
+    {
+      "bytes": 850,
+      "path": "usrmanage/tests/test_qemu_smoke_contract.sh",
+      "sha256": "19a7656ae092fab2cfb12b31f87c58140e9671457d225a84d45f2180ee20b3b8",
+      "source_commit": "94d8c899799d57f323f38ffab02405b6460e17f8",
+      "source_url": "https://github.com/lucas-albers-lz4/usrmanage.git"
+    },
+    {
+      "bytes": 3819,
+      "path": "usrmanage/tests/test_read_paths.sh",
+      "sha256": "a1bf48e4d4a1b5756cd620489243b86418ba8bcce4c1da43814e36f72cd973c2",
+      "source_commit": "94d8c899799d57f323f38ffab02405b6460e17f8",
+      "source_url": "https://github.com/lucas-albers-lz4/usrmanage.git"
+    },
+    {
+      "bytes": 5242,
+      "path": "usrmanage/tests/test_reproducible_build_contract.sh",
+      "sha256": "355aefe0441faa722688452c77934ba528ee0b24254c3a8166644e1e9019a5d3",
+      "source_commit": "94d8c899799d57f323f38ffab02405b6460e17f8",
+      "source_url": "https://github.com/lucas-albers-lz4/usrmanage.git"
+    },
+    {
+      "bytes": 5697,
+      "path": "usrmanage/tests/test_rpcd_list_acl.sh",
+      "sha256": "8154d640f84d64a2797022612e223fb65925ce69e0b14adb888f516e8e0533ab",
+      "source_commit": "94d8c899799d57f323f38ffab02405b6460e17f8",
+      "source_url": "https://github.com/lucas-albers-lz4/usrmanage.git"
+    },
+    {
+      "bytes": 2475,
+      "path": "usrmanage/tests/test_rpcd_session_sid.sh",
+      "sha256": "d64a2b0c2974d5a046b8b5ffce741b64708f419c597e0b8623397cd7bd6c2082",
+      "source_commit": "94d8c899799d57f323f38ffab02405b6460e17f8",
+      "source_url": "https://github.com/lucas-albers-lz4/usrmanage.git"
+    },
+    {
+      "bytes": 4326,
+      "path": "usrmanage/tests/test_rpcd_show_acl.sh",
+      "sha256": "7bee656e83d89e3c69bc12422fc6b5ac1afd7af383ec8e94009c49c54b468517",
+      "source_commit": "94d8c899799d57f323f38ffab02405b6460e17f8",
+      "source_url": "https://github.com/lucas-albers-lz4/usrmanage.git"
+    },
+    {
+      "bytes": 32277,
+      "path": "usrmanage/tests/test_sdk_matrix_digests.sh",
+      "sha256": "eb1eca7019a5af2c715b7f4e3a898a149b94316ca8e95c25a31107e3bf54ced2",
+      "source_commit": "94d8c899799d57f323f38ffab02405b6460e17f8",
+      "source_url": "https://github.com/lucas-albers-lz4/usrmanage.git"
+    },
+    {
+      "bytes": 7030,
+      "path": "usrmanage/tests/test_sdk_matrix_release_inputs.sh",
+      "sha256": "2373be8c386a79fca4f0eefc01c1120d709eff89d281ded6bd6b15e828648fc1",
+      "source_commit": "94d8c899799d57f323f38ffab02405b6460e17f8",
+      "source_url": "https://github.com/lucas-albers-lz4/usrmanage.git"
+    },
+    {
+      "bytes": 6011,
+      "path": "usrmanage/tests/test_validators.sh",
+      "sha256": "0273388d47e8190e058e07a2aa87a7e3c96081a25944fd5e7e880371e3389c84",
+      "source_commit": "94d8c899799d57f323f38ffab02405b6460e17f8",
+      "source_url": "https://github.com/lucas-albers-lz4/usrmanage.git"
+    }
+  ],
+  "materialized_files": 260,
+  "schema_version": "1"
+}

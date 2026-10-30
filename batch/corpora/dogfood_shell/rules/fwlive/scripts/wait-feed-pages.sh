@@ -1,0 +1,70 @@
+#!/usr/bin/env bash
+# Wait until GitHub Pages feed URLs respond (post-deploy).
+#
+#   ./scripts/wait-feed-pages.sh https://lucas-albers-lz4.github.io/fwlive-packages
+#   ./scripts/wait-feed-pages.sh --apk-25.12 BASE_URL   # explicit 25.12 APK readiness check
+set -euo pipefail
+
+wait_feed_validate_int() {
+	local name="$1" val="$2" min="$3" max="$4"
+	if [[ ! "$val" =~ ^[0-9]+$ ]]; then
+		echo "invalid ${name}: '${val}' (want ${min}-${max})" >&2
+		return 1
+	fi
+	if ((10#$val < min || 10#$val > max)); then
+		echo "invalid ${name}: ${val} (want ${min}-${max})" >&2
+		return 1
+	fi
+}
+
+APK_25_12=0
+if [[ "${1:-}" == "--apk-25.12" ]]; then
+	APK_25_12=1
+	shift
+fi
+
+BASE="${1:?usage: wait-feed-pages.sh [--apk-25.12] BASE_URL}"
+BASE="${BASE%/}"
+MAX_WAIT="${FEED_PAGES_WAIT_SEC:-300}"
+INTERVAL="${FEED_PAGES_WAIT_INTERVAL:-10}"
+wait_feed_validate_int FEED_PAGES_WAIT_SEC "$MAX_WAIT" 1 7200
+wait_feed_validate_int FEED_PAGES_WAIT_INTERVAL "$INTERVAL" 1 120
+
+if [[ "$APK_25_12" -eq 1 ]]; then
+	urls=(
+		"${BASE}/25.12/all/packages.adb"
+		"${BASE}/fwlive-feed.rsa.pub"
+	)
+else
+	urls=(
+		"${BASE}/24.10/Packages.gz"
+		"${BASE}/23.05/Packages.gz"
+		"${BASE}/25.12/all/packages.adb"
+		"${BASE}/public.key"
+		"${BASE}/fwlive-feed.rsa.pub"
+	)
+fi
+
+deadline=$((SECONDS + MAX_WAIT))
+echo "Waiting for feed URLs under ${BASE} (max ${MAX_WAIT}s)..." >&2
+
+while (( SECONDS < deadline )); do
+	ok=1
+	for u in "${urls[@]}"; do
+		code="$(curl -sS -L -o /dev/null -w '%{http_code}' \
+			--connect-timeout 10 --max-time 30 -I -- "$u" || true)"
+		[[ -n "$code" ]] || code=000
+		if [[ "$code" != 200 ]]; then
+			ok=0
+			echo "  pending: $u (HTTP ${code})" >&2
+		fi
+	done
+	if [[ $ok -eq 1 ]]; then
+		echo "All feed URLs reachable." >&2
+		exit 0
+	fi
+	sleep "$INTERVAL"
+done
+
+echo "Timeout waiting for GitHub Pages feed at ${BASE}" >&2
+exit 1

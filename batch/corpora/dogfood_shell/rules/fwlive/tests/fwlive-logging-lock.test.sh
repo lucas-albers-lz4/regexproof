@@ -1,0 +1,777 @@
+#!/usr/bin/env bash
+# Concurrency test for the WAN logging lock (#151).
+#
+# Evidence for enable/disable_wan_logging under two write-ACL callers:
+#   A) A general read-modify-write (counter) canary proves the flock helper
+#      itself serializes: WITHOUT the lock the counter loses updates, WITH
+#      the lock it never does (the harness is sensitive to lost updates).
+#   B) The REAL enable_wan_logging / disable_wan_logging functions, run
+#      concurrently against a stubbed shared UCI store, leave a committed
+#      firewall.<zone>.log bit equal to some serial-execution outcome and
+#      succeed with well-formed ok/changed JSON. That oracle accepts every
+#      value one enable plus one disable can produce, so it cannot observe a
+#      lost update. The UCI stub fails set and commit unless flock -n on the
+#      lock path fails — i.e. the exclusive lock is still held at the write
+#      (#1245).
+#
+# BusyBox flock has no -w timeout, so production polls `flock -n` for a
+# bounded interval. The critical section stays short (read->compute->set->
+# commit); firewall reload runs outside the lock. Tests run hermetically by
+# pointing lock and generation state at temp paths.
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+LOGGING_SH="$ROOT/openwrt-feed/luci-app-fwlive/root/usr/libexec/fwlive-logging.sh"
+export FWLIVE_WAN_LOG_LOCK_FILE
+
+WORK="$(mktemp -d)"
+trap 'rm -rf "$WORK"' EXIT
+FWLIVE_WAN_LOG_LOCK_FILE="$WORK/fwlive-logging.lock"
+FWLIVE_WAN_LOG_GENERATION_FILE="$WORK/runtime/wan-log-generation"
+export FWLIVE_WAN_LOG_GENERATION_FILE
+
+die() { echo "fwlive-logging-lock test FAIL: $*" >&2; exit 1; }
+ok() { echo "fwlive-logging-lock test OK: $*"; }
+
+# Verify both supported shell providers at the lock entry point. These checks
+# must precede the canary: a missing lock is normal, a FIFO must never be opened.
+cat > "$WORK/type-child.sh" <<'EOF'
+#!/bin/sh
+. "$1"
+case "$2" in
+	regular)
+		acquire_wan_log_lock || exit 2
+		release_wan_log_lock
+		[ -f "$FWLIVE_WAN_LOG_LOCK_FILE" ] || exit 3
+		;;
+	reject)
+		if acquire_wan_log_lock; then
+			release_wan_log_lock
+			exit 4
+		fi
+		( : >&9 ) 2>/dev/null && exit 5
+		;;
+esac
+exit 0
+EOF
+for shell in dash busybox; do
+	shell_argv=("$shell")
+	[ "$shell" != busybox ] || shell_argv+=(sh)
+	lock="$WORK/type-$shell.lock"
+	FWLIVE_WAN_LOG_LOCK_FILE="$lock" timeout 3 "${shell_argv[@]}" \
+		"$WORK/type-child.sh" "$LOGGING_SH" regular \
+		|| die "$shell missing lock must be created and acquired"
+	inode=$(stat -c '%i' "$lock")
+	FWLIVE_WAN_LOG_LOCK_FILE="$lock" timeout 3 "${shell_argv[@]}" \
+		"$WORK/type-child.sh" "$LOGGING_SH" regular \
+		|| die "$shell existing regular lock must be acquired"
+	[ "$(stat -c '%i' "$lock")" = "$inode" ] || die "$shell must retain the lock inode"
+	for kind in fifo directory symlink; do
+		rejected="$WORK/type-$shell-$kind"
+		case "$kind" in
+			fifo) mkfifo "$rejected" ;;
+			directory) mkdir "$rejected" ;;
+			symlink) ln -s "$lock" "$rejected" ;;
+		esac
+		FWLIVE_WAN_LOG_LOCK_FILE="$rejected" timeout 3 "${shell_argv[@]}" \
+			"$WORK/type-child.sh" "$LOGGING_SH" reject \
+			|| die "$shell $kind lock must fail closed without blocking or opening fd 9"
+	done
+	ok "$shell creates missing locks, preserves regular lock inode and rejects non-regular locks"
+done
+
+# --- Part A: canary read-modify-write counter (harness sensitivity) --------
+# usage: $0 <logging-sh> <dir> <locked|unlocked>
+cat > "$WORK/canary.sh" <<'EOF'
+#!/bin/sh
+. "$1"
+dir="$2"
+mode="$3"
+if [ "$mode" = locked ]; then
+	acquire_wan_log_lock || exit 3
+fi
+sleep 0.05
+n=$(cat "$dir/counter" 2>/dev/null || printf '0')
+sleep 0.20
+n=$((n + 1))
+printf '%s' "$n" > "$dir/counter"
+if [ "$mode" = locked ]; then
+	release_wan_log_lock
+fi
+EOF
+chmod +x "$WORK/canary.sh"
+
+run_counter() {
+	mode="$1"
+	dir="$WORK/counter-$mode"
+	mkdir -p "$dir"
+	printf '0' > "$dir/counter"
+	for _ in 1 2; do
+		sh "$WORK/canary.sh" "$LOGGING_SH" "$dir" "$mode" &
+	done
+	wait
+	cat "$dir/counter"
+}
+
+counter_lost=0
+for _ in 1 2 3 4 5; do
+	final=$(run_counter unlocked)
+	if [ "$final" -lt 2 ]; then
+		counter_lost=$((counter_lost + 1))
+	fi
+done
+[ "$counter_lost" -ge 1 ] \
+	|| die "unlocked read-modify-write never lost an update (harness not sensitive)"
+ok "unlocked read-modify-write loses updates ($counter_lost/5 rounds show lost update)"
+
+for _ in 1 2 3 4 5; do
+	final=$(run_counter locked)
+	[ "$final" -eq 2 ] || die "locked counter final=$final expected 2 (lost update under flock)"
+done
+ok "flock-serialized read-modify-write never loses an update (5/5 rounds end at 2)"
+
+# A PATH-first flock failure must fail closed instead of entering the
+# critical section without an exclusive lock.
+FLOCK_SHADOW="$WORK/flock-shadow"
+mkdir -p "$FLOCK_SHADOW"
+cat > "$FLOCK_SHADOW/flock" <<'EOF'
+#!/bin/sh
+printf '%s\n' "$*" >> "$FLOCK_MARKER"
+exit 127
+EOF
+chmod +x "$FLOCK_SHADOW/flock"
+cat > "$WORK/flock-child.sh" <<'EOF'
+#!/bin/sh
+. "$1"
+if acquire_wan_log_lock; then
+	exit 2
+fi
+[ -e "$2" ] || exit 3
+EOF
+chmod +x "$WORK/flock-child.sh"
+FLOCK_MARKER="$WORK/flock-called" \
+PATH="$FLOCK_SHADOW:$PATH" \
+FWLIVE_WAN_LOG_LOCK_FILE="$WORK/path-shadow.lock" \
+	sh "$WORK/flock-child.sh" "$LOGGING_SH" "$WORK/path-shadow.lock" \
+	|| die "PATH-shadowed flock must fail closed"
+[ -s "$WORK/flock-called" ] || die "PATH-shadowed flock stub did not run"
+ok "PATH-shadowed flock fails closed"
+
+# BusyBox flock has no timed wait; the production helper polls non-blocking
+# flock and gives up at its configured budget. Shadow sleep so this stays fast.
+WAIT_SHADOW="$WORK/wait-shadow"
+mkdir -p "$WAIT_SHADOW"
+cat > "$WAIT_SHADOW/flock" <<'EOF'
+#!/bin/sh
+printf '%s\n' "$*" >> "$FLOCK_WAIT_MARKER"
+case "$*" in
+	'-n 9') exit 1 ;;
+	'-u 9') exit 0 ;;
+esac
+exit 2
+EOF
+cat > "$WAIT_SHADOW/sleep" <<'EOF'
+#!/bin/sh
+printf '%s\n' "$*" >> "$SLEEP_WAIT_MARKER"
+exit 0
+EOF
+chmod +x "$WAIT_SHADOW/flock" "$WAIT_SHADOW/sleep"
+cat > "$WORK/wait-child.sh" <<'EOF'
+#!/bin/sh
+. "$1"
+WAN_LOG_LOCK_WAIT_SEC=2
+if acquire_wan_log_lock; then
+	exit 2
+fi
+( : >&9 ) 2>/dev/null && exit 3
+exit 0
+EOF
+chmod +x "$WORK/wait-child.sh"
+FLOCK_WAIT_MARKER="$WORK/flock-wait-called" \
+SLEEP_WAIT_MARKER="$WORK/sleep-wait-called" \
+PATH="$WAIT_SHADOW:$PATH" \
+FWLIVE_WAN_LOG_LOCK_FILE="$WORK/busy.lock" \
+	sh "$WORK/wait-child.sh" "$LOGGING_SH" \
+	|| die "busy lock must time out and close fd 9"
+[ "$(wc -l < "$WORK/flock-wait-called")" -eq 3 ] \
+	|| die "two-second budget must make 3 nonblocking attempts"
+[ "$(wc -l < "$WORK/sleep-wait-called")" -eq 2 ] \
+	|| die "two-second budget must sleep only between attempts"
+ok "busy lock times out after bounded nonblocking retries and closes fd 9"
+
+# --- Part B: real functions, concurrent enable/disable on shared UCI -------
+# Serial-outcome oracle plus ownership-at-commit (#1245). The oracle cannot
+# prove a lost update is impossible; the UCI stub fails writes unless the
+# exclusive lock is still held.
+# usage: $0 <logging-sh> <dir> <enable|disable> <seed>
+cat > "$WORK/child.sh" <<'EOF'
+#!/bin/sh
+. "$1"
+dir="$2"
+op="$3"
+seed="$4"
+
+COMMIT_FILE="$dir/log"
+STAGED=''
+STAGED_PENDING=0
+STAGED_DELETE=0
+
+json_escape() { cat; }
+check_nf_log_ipv4() { return 0; }
+check_nf_log_ipv6() { return 0; }
+reload_firewall() { return 0; }
+logger() { return 0; }
+
+# flock -n on a second open succeeds only when this process does not hold
+# LOCK_EX on the logging lock (fd 9). Fail set/commit in that case.
+wan_log_lock_must_be_held() {
+	flock -n "$WAN_LOG_LOCK_FILE" true 2>/dev/null && return 1
+	return 0
+}
+
+uci() {
+	case "$1" in
+		-q)
+			case "$2" in
+				changes)
+					if [ "$STAGED_PENDING" = 1 ]; then
+						if [ "$STAGED_DELETE" = 1 ]; then
+							printf '%s\n' '-firewall.@zone[0].log'
+						else
+							printf "firewall.@zone[0].log='%s'\n" "$STAGED"
+						fi
+					fi
+					;;
+				show)
+					printf "firewall.@zone[0]=zone\nfirewall.@zone[0].name='wan'\nfirewall.@zone[0].network='wan'\n"
+					;;
+				get)
+					case "$3" in
+						'firewall.@zone[0]') printf 'zone\n' ;;
+						'firewall.@zone[0].name') printf 'wan\n' ;;
+						'firewall.@zone[0].network') printf 'wan\n' ;;
+						*) cat "$COMMIT_FILE" 2>/dev/null ;;
+					esac
+					;;
+			esac
+			return 0
+			;;
+		set)
+			wan_log_lock_must_be_held || return 1
+			STAGED="${2#*=}"
+			STAGED_DELETE=0
+			STAGED_PENDING=1
+			sleep "0.0$((seed % 3 + 1))"
+			;;
+		delete)
+			wan_log_lock_must_be_held || return 1
+			STAGED=''
+			STAGED_DELETE=1
+			STAGED_PENDING=1
+			sleep "0.0$((seed % 3 + 1))"
+			;;
+		commit)
+			wan_log_lock_must_be_held || return 1
+			sleep "0.0$((seed % 3 + 1))"
+			if [ -n "$STAGED" ]; then
+				printf '%s' "$STAGED" > "$COMMIT_FILE"
+			else
+				rm -f "$COMMIT_FILE"
+			fi
+			STAGED_PENDING=0
+			STAGED_DELETE=0
+			;;
+	esac
+	return 0
+}
+
+case "$op" in
+	enable) enable_wan_logging ;;
+	disable) disable_wan_logging ;;
+esac
+EOF
+chmod +x "$WORK/child.sh"
+
+# A final committed value is a valid serial outcome if some order of the two
+# concurrent toggles (bit-0 set / bit-0 clear) could have produced it.
+final_allowed() {
+	init="$1"
+	final="$2"
+	if [ -z "$init" ]; then
+		[ "$final" = 'empty' ] || [ "$final" = '1' ]
+		return
+	fi
+	if [ "$final" = "$init" ] || [ "$final" = "$((init | 1))" ]; then
+		return 0
+	fi
+	cleared=$((init & ~1))
+	if [ "$cleared" -eq 0 ]; then
+		[ "$final" = 'empty' ]
+		return
+	fi
+	[ "$final" = "$cleared" ]
+}
+
+check_json() {
+	case "$1" in
+		*'"error":"no_wan_zone"'*) return 1 ;;
+		'{"ok":true,'*) return 0 ;;
+		*) return 1 ;;
+	esac
+}
+
+# Isolated callers: the concurrent sweep can pass if a sibling still holds
+# the shared lock while this caller already released it. Each op must fail
+# its own UCI write unless it holds the lock.
+for op in enable disable; do
+	dir="$WORK/ownership-$op"
+	mkdir -p "$dir"
+	if [ "$op" = enable ]; then
+		rm -f "$dir/log"
+	else
+		printf '%s' 1 > "$dir/log"
+	fi
+	FWLIVE_WAN_LOG_BASELINE_FILE="$dir/baseline" \
+		sh "$WORK/child.sh" "$LOGGING_SH" "$dir" "$op" 0 > "$dir/out" 2>&1 \
+		|| die "$op caller did not hold the lock at its UCI write"
+	check_json "$(cat "$dir/out")" \
+		|| die "$op caller returned invalid JSON"
+done
+
+sweep_fail=0
+failures="$WORK/failures"
+: > "$failures"
+
+trial_id=0
+for init in '' 1 2 3; do
+	for trial in 0 1 2 3 4 5 6 7; do
+		trial_id=$((trial_id + 1))
+		dir="$WORK/t$trial_id"
+		mkdir -p "$dir"
+		if [ -z "$init" ]; then
+			rm -f "$dir/log"
+		else
+			printf '%s' "$init" > "$dir/log"
+		fi
+		if [ $((trial_id % 2)) -eq 0 ]; then
+			op1=enable; op2=disable
+		else
+			op1=disable; op2=enable
+		fi
+		FWLIVE_WAN_LOG_BASELINE_FILE="$dir/baseline" \
+			sh "$WORK/child.sh" "$LOGGING_SH" "$dir" "$op1" "$((trial_id * 7))" > "$dir/out1" 2>&1 &
+		p1=$!
+		FWLIVE_WAN_LOG_BASELINE_FILE="$dir/baseline" \
+			sh "$WORK/child.sh" "$LOGGING_SH" "$dir" "$op2" "$((trial_id * 13 + 3))" > "$dir/out2" 2>&1 &
+		p2=$!
+		wait "$p1" || { sweep_fail=1; echo "child1 rc=$? init=$init trial=$trial" >> "$failures"; }
+		wait "$p2" || { sweep_fail=1; echo "child2 rc=$? init=$init trial=$trial" >> "$failures"; }
+		final=$(cat "$dir/log" 2>/dev/null || true)
+		[ -n "$final" ] || final=empty
+		if ! final_allowed "$init" "$final"; then
+			sweep_fail=1
+			echo "init=$init final=$final not a serial outcome" >> "$failures"
+		fi
+		out1=$(cat "$dir/out1")
+		out2=$(cat "$dir/out2")
+		check_json "$out1" || { sweep_fail=1; echo "child1 bad json init=$init: $out1" >> "$failures"; }
+		check_json "$out2" || { sweep_fail=1; echo "child2 bad json init=$init: $out2" >> "$failures"; }
+	done
+done
+
+if [ "$sweep_fail" -ne 0 ]; then
+	cat "$failures" >&2
+	die "concurrent sweep produced an inconsistent state or malformed JSON"
+fi
+ok "real enable/disable: 32 concurrent trials -> serial-consistent log bit, lock held at set/commit, well-formed JSON"
+
+# --- Part C: reload-failure conditional rollback (luna fold 2026-08-10) -----
+# A failed reload must only roll back to the pre-commit value if the CURRENT
+# value is still what THIS caller committed. If a concurrent toggle changed it
+# after our commit, rollback must be SKIPPED (else the stale rollback clobbers
+# the newer toggle).
+# usage: $0 <logging-sh> <dir> <previous> <committed> <generation> [aba]
+# -> writes the post-rollback value to stdout
+cat > "$WORK/rollback-child.sh" <<'EOF'
+#!/bin/sh
+. "$1"
+dir="$2"
+previous="$3"
+committed="$4"
+generation="$5"
+reload_mode="${6:-steady}"
+COMMIT_FILE="$dir/log"
+WAN_LOG_GENERATION_FILE="$FWLIVE_WAN_LOG_GENERATION_FILE"
+STAGED=''
+STAGED_PENDING=0
+STAGED_DELETE=0
+# uci stub (mirrors the child.sh one — keep it minimal for reload_and_report).
+uci() {
+	case "$1" in
+		-q)
+			case "$2" in
+				changes)
+					if [ "$STAGED_PENDING" = 1 ]; then
+						if [ "$STAGED_DELETE" = 1 ]; then
+							printf '%s\n' '-firewall.wan.log'
+						else
+							printf "firewall.wan.log='%s'\n" "$STAGED"
+						fi
+					fi
+					;;
+				set)
+					STAGED="${3#*=}"
+					STAGED_DELETE=0
+					STAGED_PENDING=1
+					;;
+				delete)
+					STAGED=''
+					STAGED_DELETE=1
+					STAGED_PENDING=1
+					;;
+				show) printf "firewall.@zone[0].name='wan'\n" ;;
+				get) cat "$COMMIT_FILE" 2>/dev/null ;;
+			esac
+			return 0
+			;;
+		set)
+			STAGED="${2#*=}"
+			STAGED_DELETE=0
+			STAGED_PENDING=1
+			;;
+		delete)
+			STAGED=''
+			STAGED_DELETE=1
+			STAGED_PENDING=1
+			;;
+		commit)
+			if [ -n "$STAGED" ]; then
+				printf '%s' "$STAGED" > "$COMMIT_FILE"
+			else
+				rm -f "$COMMIT_FILE"
+			fi
+			STAGED_PENDING=0
+			STAGED_DELETE=0
+			;;
+	esac
+	return 0
+}
+reload_firewall() {
+	if [ "$reload_mode" = aba ]; then
+		printf '0' > "$COMMIT_FILE"
+		wan_log_generation_bump >/dev/null || return 2
+		printf '1' > "$COMMIT_FILE"
+		wan_log_generation_bump >/dev/null || return 2
+	elif [ "$reload_mode" = reacquire_fail ]; then
+		# Keep the reload path itself independent of the lock, then make the
+		# subsequent production reacquisition fail immediately at safe setup.
+		printf 'file' > "$dir/not-a-directory"
+		WAN_LOG_LOCK_FILE="$dir/not-a-directory/lock"
+	fi
+	return 1
+}   # reload ALWAYS fails in this part
+logger() { printf '%s\n' "$*" >> "$dir/logger"; }
+# zone = wan (first zone section)
+find_wan_zone_section() { printf 'wan'; }
+wan_zone_log_value() { cat "$COMMIT_FILE" 2>/dev/null || true; }
+zone_json='{"zone":"wan"}'
+reload_and_report_wan_log wan "$previous" "$committed" fail-msg success-msg "$zone_json" "$generation" > "$dir/json" 2>&1
+cat "$COMMIT_FILE" 2>/dev/null || true
+EOF
+chmod +x "$WORK/rollback-child.sh"
+
+# C1: current still == committed -> rollback restores the previous value.
+mkdir -p "$WORK/rb1"
+printf '1' > "$WORK/rb1/log"        # current value: 1 (what we committed)
+printf '1\n' > "$FWLIVE_WAN_LOG_GENERATION_FILE"
+out=$(sh "$WORK/rollback-child.sh" "$LOGGING_SH" "$WORK/rb1" "" "1" "1")
+[ -z "$out" ] || die "C1: expected rollback to restore previous (empty), got '$out'; $(cat "$WORK/rb1/json"); log=$(cat "$WORK/rb1/logger")"
+ok "reload failure + unchanged value -> rollback restores previous"
+
+# C2: current != committed (concurrent toggle changed it) -> rollback SKIPPED.
+mkdir -p "$WORK/rb2"
+printf '2' > "$WORK/rb2/log"        # current value: 2 (NEWER commit by B)
+printf '2\n' > "$FWLIVE_WAN_LOG_GENERATION_FILE"
+out=$(sh "$WORK/rollback-child.sh" "$LOGGING_SH" "$WORK/rb2" "" "1" "1")
+[ "$out" = "2" ] || die "C2: expected rollback skipped (value stays 2), got '$out'"
+ok "reload failure + concurrent change -> rollback skipped (newer toggle preserved)"
+
+# C3: the committed value returns to 1 after a disable and re-enable. The
+# generation changed twice, so the value-only ABA must not trigger rollback.
+mkdir -p "$WORK/rb3"
+printf '1' > "$WORK/rb3/log"
+printf '1\n' > "$FWLIVE_WAN_LOG_GENERATION_FILE"
+out=$(sh "$WORK/rollback-child.sh" "$LOGGING_SH" "$WORK/rb3" "" "1" "1" aba)
+[ "$out" = "1" ] || die "C3: ABA must preserve later enable, got '$out'"
+[ "$(cat "$FWLIVE_WAN_LOG_GENERATION_FILE")" = 3 ] \
+	|| die "C3: ABA generation must advance twice"
+ok "reload failure + off/on ABA -> later enable preserved by generation check"
+
+# C4: if the rollback cannot reacquire its lock, it reports reload failure
+# without changing or restoring UCI. The invalid path makes the real lock helper
+# fail at setup, without spending the retry budget.
+mkdir -p "$WORK/rb4"
+printf '1' > "$WORK/rb4/log"
+printf '1\n' > "$FWLIVE_WAN_LOG_GENERATION_FILE"
+out=$(sh "$WORK/rollback-child.sh" "$LOGGING_SH" "$WORK/rb4" "" "1" "1" reacquire_fail)
+[ "$out" = "1" ] || die "C4: failed rollback reacquisition changed committed value, got '$out'"
+grep -Fq '"error":"firewall_reload_failed"' "$WORK/rb4/json" \
+	|| die "C4: failed rollback reacquisition must retain reload-failure JSON"
+grep -Fq 'rollback lock unavailable — skipped' "$WORK/rb4/logger" \
+	|| die "C4: failed rollback reacquisition must be logged"
+[ "$(cat "$FWLIVE_WAN_LOG_GENERATION_FILE")" = 1 ] \
+	|| die "C4: unavailable reacquisition must not advance generation"
+ok "reload failure + rollback lock setup failure -> rollback skipped with state preserved"
+
+# C5: a later cooperating write can fail after advancing the shared revision.
+# Run A's real enable flow; while A is in reload, run B's actual
+# commit_wan_log_change under the real flock helper and make only B's UCI commit
+# fail. Its intent generation must invalidate A's rollback even though UCI
+# still contains A's value.
+RACE_DIR="$WORK/later-failed-write"
+mkdir -m 0700 "$RACE_DIR"
+cat > "$RACE_DIR/uci-stubs.sh" <<'EOF'
+uci() {
+	case "$*" in
+		'-q show firewall')
+			printf "firewall.@zone[0]=zone\nfirewall.@zone[0].name='wan'\nfirewall.@zone[0].network='wan'\n"
+			;;
+		'-q changes firewall')
+			if [ -f "$RACE_STAGE" ]; then
+				_staged=$(cat "$RACE_STAGE")
+				if [ "$_staged" = __unset__ ]; then _staged=''; fi
+				printf "firewall.@zone[0].log='%s'\n" "$_staged"
+			fi
+			;;
+		'-q get firewall.@zone[0]') printf 'zone\n' ;;
+		'-q get firewall.@zone[0].name') printf 'wan\n' ;;
+		'-q get firewall.@zone[0].network') printf 'wan\n' ;;
+		'-q get firewall.@zone[0].log')
+			[ -f "$RACE_CURRENT" ] || return 1
+			cat "$RACE_CURRENT"
+			;;
+		'set firewall.@zone[0].log='*)
+			printf '%s' "${2#*=}" > "$RACE_STAGE"
+			;;
+		'-q set firewall.@zone[0].log='*)
+			printf '%s' "${3#*=}" > "$RACE_STAGE"
+			;;
+		'delete firewall.@zone[0].log'|'-q delete firewall.@zone[0].log')
+			printf '%s' __unset__ > "$RACE_STAGE"
+			;;
+		'commit firewall')
+			_count=$(cat "$RACE_COMMIT_COUNT")
+			_count=$((_count + 1))
+			printf '%s\n' "$_count" > "$RACE_COMMIT_COUNT"
+			# A's first commit succeeds. B's later commit fails after its
+			# generation bump, leaving committed UCI unchanged.
+			[ "$_count" -ne 2 ] || return 1
+			[ -f "$RACE_STAGE" ] || return 0
+			_staged=$(cat "$RACE_STAGE")
+			if [ "$_staged" = __unset__ ]; then
+				rm -f "$RACE_CURRENT"
+			else
+				printf '%s' "$_staged" > "$RACE_CURRENT"
+			fi
+			rm -f "$RACE_STAGE"
+			;;
+		'-q revert firewall.@zone[0].log') rm -f "$RACE_STAGE" ;;
+		*) return 0 ;;
+	esac
+	return 0
+}
+EOF
+cat > "$RACE_DIR/runner.sh" <<'EOF'
+#!/bin/sh
+set -eu
+role="$1"
+logging_sh="$2"
+dir="$3"
+RACE_CURRENT="$dir/current"
+RACE_STAGE="$dir/staged"
+RACE_COMMIT_COUNT="$dir/commit-count"
+FWLIVE_WAN_LOG_LOCK_FILE="$dir/lock"
+FWLIVE_WAN_LOG_GENERATION_FILE="$dir/runtime/wan-log-generation"
+FWLIVE_WAN_LOG_BASELINE_FILE="$dir/baseline"
+export RACE_CURRENT RACE_STAGE RACE_COMMIT_COUNT
+export FWLIVE_WAN_LOG_LOCK_FILE FWLIVE_WAN_LOG_GENERATION_FILE FWLIVE_WAN_LOG_BASELINE_FILE
+. "$logging_sh"
+. "$dir/uci-stubs.sh"
+check_nf_log_ipv4() { return 0; }
+check_nf_log_ipv6() { return 0; }
+logger() { printf '%s\n' "$*" >> "$dir/logger"; }
+
+if [ "$role" = later ]; then
+	acquire_wan_log_lock || exit 10
+	_before=$(wan_log_generation_read) || exit 11
+	if commit_wan_log_change '@zone[0]' '{"zone":"wan"}' ''; then
+		_rc=0
+	else
+		_rc=$?
+	fi
+	_after=$(wan_log_generation_read) || exit 12
+	release_wan_log_lock
+	printf '%s:%s:%s\n' "$_rc" "$_before" "$_after" > "$dir/later-meta"
+	exit 0
+fi
+
+reload_firewall() {
+	sh "$dir/runner.sh" later "$logging_sh" "$dir" > "$dir/later-json"
+	return 1
+}
+enable_wan_logging > "$dir/primary-json"
+EOF
+chmod +x "$RACE_DIR/runner.sh"
+printf '0\n' > "$RACE_DIR/commit-count"
+sh "$RACE_DIR/runner.sh" primary "$LOGGING_SH" "$RACE_DIR" \
+	|| die "C5: cooperating failed-write fixture did not complete"
+grep -Fq '"error":"firewall_reload_failed"' "$RACE_DIR/primary-json" \
+	|| die "C5: primary caller must report its reload failure"
+grep -Fq '"error":"uci_commit_failed"' "$RACE_DIR/later-json" \
+	|| die "C5: later cooperating write must report its failed commit"
+[ "$(cat "$RACE_DIR/later-meta")" = '1:1:2' ] \
+	|| die "C5: later failed write must fail at generation 1 and advance to 2"
+[ "$(cat "$RACE_DIR/runtime/wan-log-generation")" = 2 ] \
+	|| die "C5: generation must retain the later failed-write bump"
+[ "$(cat "$RACE_DIR/current")" = 1 ] \
+	|| die "C5: later failed write must leave A's committed value unchanged"
+[ "$(cat "$RACE_DIR/commit-count")" = 2 ] \
+	|| die "C5: stale rollback must not issue a third commit"
+[ ! -e "$RACE_DIR/staged" ] \
+	|| die "C5: failed later write must clean only its own staging"
+grep -Fq 'WAN log changed concurrently or revision unavailable' "$RACE_DIR/logger" \
+	|| die "C5: primary rollback must log its generation-mismatch skip"
+ok "later cooperating failed commit advances generation and prevents the earlier rollback"
+
+# --- Part D: lock file mode 0600 (issue #167) ---------------------------------
+stat_mode() {
+	m=$(stat -c '%a' "$1" 2>/dev/null || stat -f '%OLp' "$1")
+	printf '%s' "$m" | sed 's/^0*//'
+}
+
+rm -f "$FWLIVE_WAN_LOG_LOCK_FILE"
+umask 022
+# shellcheck disable=SC1090
+. "$LOGGING_SH"
+acquire_wan_log_lock || die "acquire_wan_log_lock failed for mode check"
+release_wan_log_lock
+[ "$(stat_mode "$FWLIVE_WAN_LOG_LOCK_FILE")" = "600" ] \
+	|| die "lock mode $(stat_mode "$FWLIVE_WAN_LOG_LOCK_FILE") want 600"
+ok "new lock file is mode 0600"
+
+install -m 0644 /dev/null "$FWLIVE_WAN_LOG_LOCK_FILE"
+acquire_wan_log_lock || die "acquire on pre-existing 0644 failed"
+release_wan_log_lock
+[ "$(stat_mode "$FWLIVE_WAN_LOG_LOCK_FILE")" = "600" ] \
+	|| die "pre-existing 0644 lock not tightened (got $(stat_mode "$FWLIVE_WAN_LOG_LOCK_FILE"))"
+ok "pre-existing 0644 lock tightened to 0600"
+
+# --- Part E: symlink at lock path rejected (#204) ----------------------------
+rm -f "$FWLIVE_WAN_LOG_LOCK_FILE"
+decoy="$WORK/decoy-lock-target"
+printf 'precious-content' > "$decoy"
+ln -s "$decoy" "$FWLIVE_WAN_LOG_LOCK_FILE"
+if acquire_wan_log_lock; then
+	die "acquire_wan_log_lock succeeded on symlink lock path"
+fi
+[ "$(cat "$decoy")" = "precious-content" ] \
+	|| die "symlink target truncated (got '$(cat "$decoy")')"
+ok "symlink at lock path rejected; decoy content preserved"
+
+# --- Part F: wan_log_lock_dir_safe without GNU/BusyBox stat -c (#232) -------
+# Production calls this only when FWLIVE_WAN_LOG_LOCK_FILE is unset. Host CI
+# has GNU stat, so shadow it to prove the BusyBox STAT=n path.
+nostat="$WORK/nostat-bin"
+mkdir -p "$nostat"
+cat > "$nostat/stat" <<'EOF'
+#!/bin/sh
+echo "stat should not be required (#232)" >&2
+exit 127
+EOF
+chmod +x "$nostat/stat"
+
+safe_dir="$WORK/lock-dir-safe"
+mkdir -m 0755 "$safe_dir"
+# shellcheck disable=SC1090
+. "$LOGGING_SH"
+PATH="$nostat:$PATH" wan_log_lock_dir_safe "$safe_dir" \
+	|| die "wan_log_lock_dir_safe failed on euid-owned 0755 dir with stat shadowed"
+ok "wan_log_lock_dir_safe succeeds without stat (0755, euid-owned)"
+
+group_w="$WORK/lock-dir-group-w"
+mkdir -m 0775 "$group_w"
+if PATH="$nostat:$PATH" wan_log_lock_dir_safe "$group_w"; then
+	die "wan_log_lock_dir_safe accepted group-writable dir"
+fi
+ok "wan_log_lock_dir_safe rejects group-writable dir"
+
+other_w="$WORK/lock-dir-other-w"
+mkdir -m 0757 "$other_w"
+if PATH="$nostat:$PATH" wan_log_lock_dir_safe "$other_w"; then
+	die "wan_log_lock_dir_safe accepted other-writable dir"
+fi
+ok "wan_log_lock_dir_safe rejects other-writable dir"
+
+symlink_dir="$WORK/lock-dir-symlink"
+ln -s "$safe_dir" "$symlink_dir"
+if PATH="$nostat:$PATH" wan_log_lock_dir_safe "$symlink_dir"; then
+	die "wan_log_lock_dir_safe accepted symlink dir"
+fi
+ok "wan_log_lock_dir_safe rejects symlink dir"
+
+# --- Part G: exec open failure must not abort the shell (#244) --------------
+# A bare `exec 9>bad 2>/dev/null || return 1` aborts dash/ash on redirect
+# failure. Prove (1) the probe idiom survives and (2) acquire_wan_log_lock
+# fail-closed paths return without killing the test shell.
+probe_rc=0
+dash -c '
+fail_open() {
+	f="/nonexistent-dir-fwlive-$$/x.lock"
+	( exec 9>>"$f" ) 2>/dev/null || return 1
+	exec 9>>"$f"
+	echo should_not_reach
+}
+if fail_open; then exit 10; fi
+echo survived
+' >/dev/null || probe_rc=$?
+[ "$probe_rc" -eq 0 ] || die "probe idiom aborted dash (rc=$probe_rc)"
+ok "subshell probe idiom returns without aborting dash (#244)"
+
+touch "$WORK/not-a-dir"
+FWLIVE_WAN_LOG_LOCK_FILE="$WORK/not-a-dir/x.lock"
+WAN_LOG_LOCK_FILE="$FWLIVE_WAN_LOG_LOCK_FILE"
+# shellcheck disable=SC1090
+. "$LOGGING_SH"
+set +e
+acquire_wan_log_lock
+acq_rc=$?
+set -e
+[ "$acq_rc" -ne 0 ] || die "acquire_wan_log_lock succeeded with file-as-parent path"
+ok "acquire_wan_log_lock returns non-zero without aborting shell (#244)"
+
+# Success path must not leave fd 2 pointed at /dev/null. Run acquire in a
+# child shell whose stderr we capture entirely — a silenced fd 2 yields an
+# empty probe file.
+FWLIVE_WAN_LOG_LOCK_FILE="$WORK/fwlive-logging.lock"
+WAN_LOG_LOCK_FILE="$FWLIVE_WAN_LOG_LOCK_FILE"
+rm -f "$FWLIVE_WAN_LOG_LOCK_FILE"
+cat > "$WORK/acq-stderr.sh" <<EOF
+#!/bin/sh
+set -e
+FWLIVE_WAN_LOG_LOCK_FILE="$FWLIVE_WAN_LOG_LOCK_FILE"
+WAN_LOG_LOCK_FILE="\$FWLIVE_WAN_LOG_LOCK_FILE"
+# shellcheck disable=SC1090
+. "$LOGGING_SH"
+acquire_wan_log_lock
+echo "stderr-still-open" >&2
+release_wan_log_lock
+EOF
+chmod +x "$WORK/acq-stderr.sh"
+err_probe="$WORK/stderr-probe"
+dash "$WORK/acq-stderr.sh" 2>"$err_probe" \
+	|| die "acq-stderr child failed"
+grep -q 'stderr-still-open' "$err_probe" \
+	|| die "stderr was silenced after successful acquire_wan_log_lock (probe='$(cat "$err_probe")')"
+ok "successful acquire_wan_log_lock preserves stderr (#244)"
+
+echo "fwlive-logging-lock tests passed"

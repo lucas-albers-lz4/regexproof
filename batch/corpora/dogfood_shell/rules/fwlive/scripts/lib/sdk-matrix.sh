@@ -1,0 +1,782 @@
+#!/usr/bin/env bash
+# OpenWrt SDK build matrix helpers (official ghcr.io/openwrt/sdk images).
+# Source from other scripts; do not execute directly.
+#
+# Host/CI only (Linux builder) — Bash required (arrays, [[ ]], local, BASH_SOURCE,
+# printf %q). This file never ships to the device.
+# OpenWrt runtime shell (rpcd/libexec under openwrt-feed/) runs under BusyBox ash
+# and must stay POSIX; do not copy Bash-isms from here into those scripts.
+set -euo pipefail
+
+# shellcheck source=feeds-lock.sh
+source "$(dirname "${BASH_SOURCE[0]}")/feeds-lock.sh"
+
+SDK_MATRIX_TARGETS=(armsr-armv8 x86-64)
+SDK_MATRIX_VERSIONS=(snapshot 25.12 24.10 23.05)
+
+sdk_matrix_root() {
+	local here
+	here="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+	printf '%s' "$here"
+}
+
+# Normalize line aliases to the pinned patch. Explicit X.Y.Z passes through
+# unchanged so an off-pin value cannot silently run the pinned cell (#804).
+sdk_matrix_version_patch() {
+	case "$1" in
+		snapshot | SNAPSHOT | latest | '') printf '%s' '' ;;
+		25.12) printf '%s' '25.12.5' ;;
+		24.10) printf '%s' '24.10.8' ;;
+		23.05) printf '%s' '23.05.5' ;;
+		25.12.* | 24.10.* | 23.05.*) printf '%s' "$1" ;;
+		*) printf '%s' "$1" ;;
+	esac
+}
+
+sdk_matrix_version_label() {
+	local patch
+	patch="$(sdk_matrix_version_patch "$1")"
+	if [[ -z "$patch" ]]; then
+		printf '%s' 'snapshot'
+	else
+		printf '%s' "$patch"
+	fi
+}
+
+# One patch label per supported release cell (not snapshot). CI cache-dir
+# pre-create must use these so a point-release bump cannot drift (#519).
+sdk_matrix_release_version_labels() {
+	local v
+	for v in "${SDK_MATRIX_VERSIONS[@]}"; do
+		case "$v" in
+			snapshot | SNAPSHOT | latest | '') continue ;;
+		esac
+		printf '%s\n' "$(sdk_matrix_version_label "$v")"
+	done
+}
+
+# OpenWrt 25.12 and snapshots use apk; supported older release lines use ipk.
+# Keep this mapping beside the SDK version mapping so package-producing jobs do
+# not guess from filenames or silently inspect the wrong artifact type.
+sdk_matrix_package_format() {
+	case "$1" in
+		25.12 | 25.12.* | snapshot | SNAPSHOT | latest | '') printf '%s' 'apk' ;;
+		23.05 | 23.05.* | 24.10 | 24.10.*)
+			printf '%s' 'ipk'
+			;;
+		*)
+			echo "unknown package format for SDK version: $1" >&2
+			return 1
+			;;
+	esac
+}
+
+sdk_matrix_image_tag() {
+	local target="$1" version="$2" patch
+	patch="$(sdk_matrix_version_patch "$version")"
+	if [[ -z "$patch" ]]; then
+		printf '%s' "$target"
+	else
+		printf '%s' "${target}-${patch}"
+	fi
+}
+
+sdk_matrix_package_arch() {
+	case "$1" in
+		armsr-armv8) printf '%s' 'aarch64_generic' ;;
+		x86-64) printf '%s' 'x86_64' ;;
+		*) echo "unknown SDK target: $1 (expected armsr-armv8 or x86-64)" >&2; return 1 ;;
+	esac
+}
+
+sdk_matrix_volume_name() {
+	local target="$1" version="$2" patch tslug
+	patch="$(sdk_matrix_version_patch "$version")"
+	tslug="${target//-/_}"
+	if [[ -z "$patch" ]]; then
+		if [[ "$target" == "armsr-armv8" ]]; then
+			printf '%s' 'openwrt_sdk_official'
+		else
+			printf '%s' "openwrt_sdk_${tslug}_snapshot"
+		fi
+	else
+		local vslug="${patch//./_}"
+		printf '%s' "openwrt_sdk_${tslug}_${vslug}"
+	fi
+}
+
+sdk_matrix_resolve() {
+	local target="${1:-armsr-armv8}" version="${2:-snapshot}"
+	SDK_MATRIX_TARGET="$target"
+	SDK_MATRIX_VERSION="$version"
+	SDK_MATRIX_VERSION_LABEL="$(sdk_matrix_version_label "$version")"
+	# Labels are path/shell data in compose scripts — reject metacharacters / traversal.
+	case "$SDK_MATRIX_VERSION_LABEL" in
+		'' | *[!a-zA-Z0-9._-]* | *..*)
+			echo "sdk-matrix: invalid version label '$SDK_MATRIX_VERSION_LABEL'" >&2
+			return 1
+			;;
+	esac
+	SDK_MATRIX_IMAGE="ghcr.io/openwrt/sdk:$(sdk_matrix_image_tag "$target" "$version")"
+	SDK_MATRIX_VOLUME="$(sdk_matrix_volume_name "$target" "$version")"
+	SDK_MATRIX_PACKAGE_ARCH="$(sdk_matrix_package_arch "$target")"
+	SDK_MATRIX_OUT_DIR="$(sdk_matrix_root)/out/${SDK_MATRIX_PACKAGE_ARCH}/${SDK_MATRIX_VERSION_LABEL}"
+}
+
+sdk_matrix_digest_cache_path() {
+	local target="$1" version="$2" patch base
+	patch="$(sdk_matrix_version_patch "$version")"
+	base="${SDK_MATRIX_DIGEST_CACHE_DIR:-$(sdk_matrix_root)/out/.sdk-digests}"
+	printf '%s' "${base}/${target}_${patch}"
+}
+
+sdk_matrix_digest_is_repo_qualified() {
+	# Docker needs repo@sha256:<hex>, not a bare @sha256:<image-id>.
+	case "$1" in
+		?*@sha256:?*) return 0 ;;
+		*) return 1 ;;
+	esac
+}
+
+sdk_matrix_inspect_repo_digest() {
+	# Inspect already-local image ref; print matching RepoDigest or fail.
+	# RepoDigests[0] is not trusted: match THIS repo prefix literally
+	# (index()==1; dots in ghcr.io are not wildcards).
+	# Image-ID fallback (@sha256:<id>) is for manifest recording only and
+	# must not be persisted as a docker image ref.
+	local image="$1" repo digests digest id
+	if [[ "$image" == *@sha256:* ]]; then
+		repo="${image%%@*}"
+	else
+		repo="${image%%:*}"
+	fi
+	digests="$(docker image inspect --format '{{range .RepoDigests}}{{println .}}{{end}}' "$image" 2>/dev/null || true)"
+	digest="$(printf '%s\n' "$digests" | awk -v r="$repo" 'index($0, r "@sha256:") == 1 {print; exit}')"
+	if [[ -n "$digest" ]]; then
+		printf '%s' "$digest"
+		return 0
+	fi
+	id="$(docker image inspect --format '{{.Id}}' "$image" 2>/dev/null || true)"
+	if [[ -n "$id" ]]; then
+		digest="@sha256:${id#sha256:}"
+		echo "WARNING: SDK image ${image} has no ${repo} RepoDigest (locally built?); recording image ID fallback ${digest}" >&2
+		printf '%s' "$digest"
+		return 0
+	fi
+	echo "ERROR: cannot resolve SDK image digest for ${image} (no ${repo} RepoDigest, no image ID)" >&2
+	return 1
+}
+
+# Always re-resolve the registry tag. Skipping pull when the tag exists locally
+# would record a stale digest if the tag moved upstream (luna fold).
+# With target/version: resolve that cell then pull. With no args: pull the
+# already-resolved SDK_MATRIX_IMAGE (do not default to another cell).
+sdk_matrix_pull() {
+	local target="${1:-}" version="${2:-}"
+	if [[ -n "$target" ]]; then
+		sdk_matrix_resolve "$target" "${version:?sdk_matrix_pull: version required with target}"
+	else
+		: "${SDK_MATRIX_IMAGE:?sdk_matrix_resolve first}"
+	fi
+	echo "→ pulling ${SDK_MATRIX_IMAGE}..." >&2
+	docker pull "$SDK_MATRIX_IMAGE"
+}
+
+sdk_matrix_pull_and_pin() {
+	# Pull the mutable tag once, pin SDK_MATRIX_IMAGE to repo@sha256, cache digest.
+	local target="${1:-${SDK_MATRIX_TARGET:-}}" version="${2:-${SDK_MATRIX_VERSION:-}}" digest cache
+	[[ -n "$target" && -n "$version" ]] || {
+		echo "sdk-matrix: pull_and_pin needs target/version (or sdk_matrix_resolve first)" >&2
+		return 1
+	}
+	sdk_matrix_pull "$target" "$version" || {
+		echo "sdk-matrix: failed to pull ${SDK_MATRIX_IMAGE}" >&2
+		return 1
+	}
+	digest="$(sdk_matrix_inspect_repo_digest "$SDK_MATRIX_IMAGE")" || return 1
+	if sdk_matrix_digest_is_repo_qualified "$digest"; then
+		cache="$(sdk_matrix_digest_cache_path "$target" "$version")"
+		mkdir -p "$(dirname "$cache")"
+		printf '%s\n' "$digest" > "$cache"
+		chmod 0644 "$cache" 2>/dev/null || true
+		SDK_MATRIX_IMAGE="$digest"
+	fi
+	printf '%s' "$digest"
+}
+
+sdk_matrix_read_digest_cache() {
+	# Print non-empty cached digest or return 1 (never print empty).
+	local target="$1" version="$2" cache digest
+	cache="$(sdk_matrix_digest_cache_path "$target" "$version")"
+	[[ -f "$cache" ]] || return 1
+	digest="$(tr -d ' \n\r\t' < "$cache")"
+	[[ -n "$digest" ]] || return 1
+	printf '%s' "$digest"
+}
+
+# Prefer a pin file from sdk_matrix_pull_and_pin so write_manifest does not
+# re-pull a possibly moved tag. No-arg form uses the already-resolved cell.
+sdk_matrix_image_digest() {
+	local target="${1:-${SDK_MATRIX_TARGET:-}}" version="${2:-${SDK_MATRIX_VERSION:-}}" digest
+	[[ -n "$target" && -n "$version" ]] || {
+		echo "ERROR: cannot resolve SDK image digest (sdk_matrix_resolve first)" >&2
+		return 1
+	}
+	if digest="$(sdk_matrix_read_digest_cache "$target" "$version")"; then
+		printf '%s' "$digest"
+		return 0
+	fi
+	sdk_matrix_pull_and_pin "$target" "$version"
+}
+
+sdk_matrix_validate_target() {
+	local t
+	for t in "${SDK_MATRIX_TARGETS[@]}"; do
+		[[ "$1" == "$t" ]] && return 0
+	done
+	echo "invalid --target $1 (choose: ${SDK_MATRIX_TARGETS[*]})" >&2
+	return 1
+}
+
+sdk_matrix_validate_version() {
+	local v
+	for v in "${SDK_MATRIX_VERSIONS[@]}"; do
+		[[ "$1" == "$v" ]] && return 0
+	done
+	case "$1" in
+		latest | SNAPSHOT) return 0 ;;
+	esac
+	# Numeric patch only — `25.12.*` would accept 25.12.foo / 25.12. (#637 luna).
+	# Off-pin patches are rejected so --version 24.10.9 cannot silently
+	# build the pinned cell (#804).
+	if [[ "$1" =~ ^(23\.05|24\.10|25\.12)\.[0-9]+$ ]]; then
+		local line pinned
+		line="${BASH_REMATCH[1]}"
+		pinned="$(sdk_matrix_version_patch "$line")"
+		if [[ "$1" != "$pinned" ]]; then
+			echo "invalid --version $1 (pinned patch is ${pinned})" >&2
+			return 1
+		fi
+		return 0
+	fi
+	echo "invalid --version $1 (choose: snapshot | 23.05 | 24.10 | 25.12 [.<patch>] | latest | SNAPSHOT)" >&2
+	return 1
+}
+
+# Reject a cache-root path containing any symlink component or '..' (luna r8:
+# a final-component -L test is bypassed by 'dl/sub/..' / 'dl/./sub' spellings
+# that resolve through the link to a real final component). Cache roots are
+# never legitimately behind a symlink or a '..' component.
+sdk_matrix_reject_symlink_path() {
+	local p="$1" head="" comp
+	# read splits on IFS=/ but stops at a newline — reject all control
+	# characters so a control-bearing component cannot truncate the walk
+	# (luna r13/r14).
+	case "$p" in
+		*[[:cntrl:]]*) return 1 ;;
+	esac
+	[[ "$p" == /* ]] && head="/" || head="."
+	IFS=/ read -r -a comps <<< "$p"
+	for comp in "${comps[@]}"; do
+		[[ -z "$comp" || "$comp" == "." ]] && continue
+		[[ "$comp" == ".." ]] && return 1
+		head="${head%/}/$comp"
+		[[ -L "$head" ]] && return 1
+	done
+	return 0
+}
+
+# A cached-feed symlink is acceptable iff it originates INSIDE the feeds
+# cache tree and either is the exact src-link exception (feeds/<ver>/fwlive ->
+# /work/fwlive/openwrt-feed — a container path, unresolvable on the host) or
+# its fully-resolved target stays INSIDE the feeds cache tree. The origin
+# rule blocks location-blind exceptions (a link in dl/ cannot claim the
+# src-link target; luna r15); the resolution rule covers every legitimate
+# link class at once — top-level OpenWrt-generated links (base ->
+# base_root/package, *.index / *.targetindex) AND tracked symlinks inside the
+# pinned OpenWrt/LuCI checkouts (base-files os-release, netifd ifdown, LuCI
+# Bootstrap links) — while rejecting absolute-target, escaping (..), and
+# CHAINED links (e.g. evil.index -> fwlive) that resolve outside the cache
+# (luna r14).
+sdk_matrix_link_ok() {
+	local link="$1" feeds_root="$2" ldir resolved
+	ldir="${link%/*}"
+	case "$ldir/" in
+		"${feeds_root}"/*) ;;
+		*) return 1 ;;
+	esac
+	# Exact src-link exception. Raw-byte comparison via readlink -n + cmp:
+	# command substitution strips trailing newlines, which would let a target
+	# '/work/fwlive/openwrt-feed\n' masquerade as the allowed one (luna r16).
+	if [[ "$link" == "${feeds_root}/fwlive" ]] \
+		&& readlink -n "$link" 2>/dev/null \
+			| cmp -s - <(printf '%s' "/work/fwlive/openwrt-feed"); then
+		return 0
+	fi
+	resolved="$(readlink -f "$link" 2>/dev/null)" || return 1
+	case "$resolved" in
+		"${feeds_root}"/*) return 0 ;;
+		*) return 1 ;;
+	esac
+}
+
+# Scan both cache trees for ownership/mode/symlink violations. Symlink modes
+# are meaningless (links are always 0777) so mode checks skip them; symlinks
+# are validated by sdk_matrix_link_ok (resolution-based, luna r14). Print the
+# first violation; a nonzero status means the scan itself failed (fail
+# closed).
+sdk_matrix_cache_scan() {
+	local feeds_root="$SDK_MATRIX_FEEDS_CACHE" out l tmp links_rc=0
+	while [[ "$feeds_root" == */ && "$feeds_root" != "/" ]]; do
+		feeds_root="${feeds_root%/}"
+	done
+	out="$(find "$SDK_MATRIX_DL_CACHE" "$SDK_MATRIX_FEEDS_CACHE" \( \
+			\( ! -user 1000 -o ! -group 1000 \) -o \
+			\( ! -type l \( ! -perm -u+r -o \
+				\( ! -path "*/\.git/*" ! -perm -u+w \) -o ! -perm -g+r -o ! -perm -o+r \) \) -o \
+			\( ! -type l \( -perm -g+w -o -perm -o+w \) \) -o \
+			\( -type d \( ! -perm -u+x -o ! -perm -g+x -o ! -perm -o+x \) \) \
+		\) -print -quit 2>&1)" || return 1
+	[[ -n "$out" ]] && { printf '%s\n' "$out"; return 0; }
+	# NUL-delimited enumeration via a temp file (command substitution would
+	# strip NULs and concatenate paths): a newline-bearing link NAME must not
+	# split the list (luna r15), and find's own status fails closed (luna r15
+	# Minor).
+	tmp="$(mktemp)" || return 1
+	find "$SDK_MATRIX_DL_CACHE" "$SDK_MATRIX_FEEDS_CACHE" -type l -print0 > "$tmp" 2>/dev/null || links_rc=$?
+	if [[ "$links_rc" -ne 0 ]]; then
+		rm -f "$tmp"
+		return 1
+	fi
+	while IFS= read -r -d '' l; do
+		[[ -n "$l" ]] || continue
+		if ! sdk_matrix_link_ok "$l" "$feeds_root"; then
+			printf '%s\n' "$l"
+			rm -f "$tmp"
+			return 0
+		fi
+	done < "$tmp"
+	rm -f "$tmp"
+	return 0
+}
+
+sdk_matrix_cache_dirs() {
+	local root="$1" version_label="$2" dl_uid dl_gid feeds_uid feeds_gid scan_out scan_rc
+	SDK_MATRIX_DL_CACHE="${OWRT_SDK_DL_CACHE:-${root}/.ci-sdk-cache/dl}"
+	SDK_MATRIX_FEEDS_CACHE="${OWRT_SDK_FEEDS_CACHE:-${root}/.ci-sdk-cache/feeds/${version_label}}"
+	# Normalize trailing slashes on env overrides so -path patterns and
+	# symlink walks see consistent paths (luna r12 Minor).
+	while [[ "$SDK_MATRIX_DL_CACHE" == */ && "$SDK_MATRIX_DL_CACHE" != "/" ]]; do
+		SDK_MATRIX_DL_CACHE="${SDK_MATRIX_DL_CACHE%/}"
+	done
+	while [[ "$SDK_MATRIX_FEEDS_CACHE" == */ && "$SDK_MATRIX_FEEDS_CACHE" != "/" ]]; do
+		SDK_MATRIX_FEEDS_CACHE="${SDK_MATRIX_FEEDS_CACHE%/}"
+	done
+	# Cache roots must be real directories. Validate the path BEFORE any
+	# mutation: mkdir -p through a symlink would create dirs outside the
+	# intended cache tree (luna r9), a regular file in place of a root fails
+	# closed, and a symlink ANYWHERE in the root path fails closed
+	# (component-wise lstat — a final-component -L test is bypassed by
+	# 'dl/sub/..' / 'dl/./sub' spellings; luna r8).
+	sdk_matrix_reject_symlink_path "$SDK_MATRIX_DL_CACHE" || {
+		echo "sdk-matrix: .ci-sdk-cache roots must be real directories, not symlinks" >&2
+		return 1
+	}
+	sdk_matrix_reject_symlink_path "$SDK_MATRIX_FEEDS_CACHE" || {
+		echo "sdk-matrix: .ci-sdk-cache roots must be real directories, not symlinks" >&2
+		return 1
+	}
+	mkdir -p "$SDK_MATRIX_DL_CACHE" "$SDK_MATRIX_FEEDS_CACHE" || return 1
+	if [[ ! -d "$SDK_MATRIX_DL_CACHE" || ! -d "$SDK_MATRIX_FEEDS_CACHE" ]]; then
+		echo "sdk-matrix: .ci-sdk-cache roots must be directories" >&2
+		return 1
+	fi
+	# buildbot (uid 1000) must write bind mounts; Actions runner is often 1001.
+	# Least privilege: own as buildbot; owner rwx only for write; group/other read+traverse.
+	# Fail closed (no world-writable, no ACL mask footguns). CI pre-chowns via
+	# sudo in the workflow "Prepare SDK cache dirs" step, so by the time we run
+	# the dirs are usually already buildbot-owned — and a non-root runner CANNOT
+	# chown uid-1000-owned files (EPERM, v0.1.36 publish regression). Skip the
+	# mutation only when BOTH cache trees are fully buildbot-owned; enforce when
+	# we can (root); otherwise fail closed.
+	dl_uid="$(stat -c %u "$SDK_MATRIX_DL_CACHE" 2>/dev/null)" || return 1
+	dl_gid="$(stat -c %g "$SDK_MATRIX_DL_CACHE" 2>/dev/null)" || return 1
+	feeds_uid="$(stat -c %u "$SDK_MATRIX_FEEDS_CACHE" 2>/dev/null)" || return 1
+	feeds_gid="$(stat -c %g "$SDK_MATRIX_FEEDS_CACHE" 2>/dev/null)" || return 1
+	if [[ "$dl_uid" != "1000" || "$dl_gid" != "1000" || "$feeds_uid" != "1000" || "$feeds_gid" != "1000" ]]; then
+		if ! chown -R 1000:1000 "$SDK_MATRIX_DL_CACHE" "$SDK_MATRIX_FEEDS_CACHE" 2>/dev/null; then
+			echo "sdk-matrix: cannot chown .ci-sdk-cache to buildbot (uid 1000)" >&2
+			echo "sdk-matrix: run once: sudo chown -R 1000:1000 .ci-sdk-cache && sudo chmod -R u=rwX,g=rX,o=rX .ci-sdk-cache" >&2
+			return 1
+		fi
+	fi
+	# Nested entries must match too, for root AND non-root callers (a root
+	# caller would otherwise chmod a stray wrong-owned file into a state uid
+	# 1000 cannot write). The scan also validates MODES — buildbot (owner)
+	# must be able to write and the runner (group/other) to read/traverse
+	# (cache save + probe); a correct-owner-but-unwritable cache must not
+	# pass, and group/other WRITE bits are rejected (least privilege). Symlink
+	# modes are meaningless (links are always 0777) so mode checks skip them;
+	# instead the ONLY symlink allowed anywhere in the trees is the feeds
+	# src-link (`/work/fwlive/openwrt-feed`), which is how the local package
+	# feed materializes. Scan errors (unreadable subtree) fail closed — a
+	# hidden error must never read as a clean tree.
+	scan_rc=0
+	scan_out="$(sdk_matrix_cache_scan)" || scan_rc=$?
+	if [[ "$scan_rc" -ne 0 ]]; then
+		echo "sdk-matrix: cannot verify .ci-sdk-cache ownership/modes (scan failed)" >&2
+		echo "sdk-matrix: run once: sudo chown -R 1000:1000 .ci-sdk-cache && sudo chmod -R u=rwX,g=rX,o=rX .ci-sdk-cache" >&2
+		return 1
+	fi
+	if [[ -n "$scan_out" ]]; then
+		# Wrong ownership, modes, or disallowed symlinks found: root repairs
+		# recursively (tree becomes uniform); a non-root caller cannot fix
+		# them — fail closed. Root RESCANS after repair: chmod cannot change
+		# symlink modes, so a still-flagged tree (e.g. a disallowed symlink)
+		# fails closed (luna r10).
+		if [[ "$(id -u)" -eq 0 ]]; then
+			if ! chown -R 1000:1000 "$SDK_MATRIX_DL_CACHE" "$SDK_MATRIX_FEEDS_CACHE" 2>/dev/null \
+				|| ! chmod -R u=rwX,g=rX,o=rX "$SDK_MATRIX_DL_CACHE" "$SDK_MATRIX_FEEDS_CACHE"; then
+				echo "sdk-matrix: cannot fix .ci-sdk-cache ownership/modes (uid 1000 buildbot)" >&2
+				echo "sdk-matrix: run once: sudo chown -R 1000:1000 .ci-sdk-cache && sudo chmod -R u=rwX,g=rX,o=rX .ci-sdk-cache" >&2
+				return 1
+			fi
+			scan_rc=0
+			scan_out="$(sdk_matrix_cache_scan)" || scan_rc=$?
+			if [[ "$scan_rc" -ne 0 || -n "$scan_out" ]]; then
+				echo "sdk-matrix: cannot repair .ci-sdk-cache (unresolvable ownership/mode/symlink state)" >&2
+				echo "sdk-matrix: first violation: $scan_out" >&2
+				echo "sdk-matrix: run once: sudo chown -R 1000:1000 .ci-sdk-cache && sudo chmod -R u=rwX,g=rX,o=rX .ci-sdk-cache" >&2
+				return 1
+			fi
+		else
+			echo "sdk-matrix: cannot fix .ci-sdk-cache ownership/modes (uid 1000 buildbot)" >&2
+			echo "sdk-matrix: first violation: $scan_out" >&2
+			echo "sdk-matrix: run once: sudo chown -R 1000:1000 .ci-sdk-cache && sudo chmod -R u=rwX,g=rX,o=rX .ci-sdk-cache" >&2
+			return 1
+		fi
+	fi
+	# chmod only as root or the owner — the workflow's sudo chown already set
+	# modes in CI, and a non-owner runner cannot chmod either.
+	if [[ "$(id -u)" -eq 0 || "$(stat -c %u "$SDK_MATRIX_DL_CACHE" 2>/dev/null)" == "$(id -u)" ]]; then
+		if ! chmod -R u=rwX,g=rX,o=rX "$SDK_MATRIX_DL_CACHE" "$SDK_MATRIX_FEEDS_CACHE"; then
+			echo "sdk-matrix: chmod failed on .ci-sdk-cache" >&2
+			return 1
+		fi
+	fi
+}
+
+sdk_matrix_compose_run() {
+	local root
+	root="$(sdk_matrix_root)"
+	sdk_matrix_cache_dirs "$root" "$SDK_MATRIX_VERSION_LABEL" || return 1
+	(
+		cd "$root"
+		OWRT_SDK_IMAGE="$SDK_MATRIX_IMAGE" \
+		OWRT_SDK_VOLUME="$SDK_MATRIX_VOLUME" \
+		OWRT_SDK_DL_CACHE="$SDK_MATRIX_DL_CACHE" \
+		OWRT_SDK_FEEDS_CACHE="$SDK_MATRIX_FEEDS_CACHE" \
+		docker compose run --rm sdk "$@"
+	)
+}
+
+sdk_matrix_feeds_lock_path() {
+	local label
+	label="$(sdk_matrix_version_label "$1")"
+	printf '%s/scripts/feeds.lock/%s/feeds.conf' "$(sdk_matrix_root)" "$label"
+}
+
+sdk_matrix_feeds_ready() {
+	# Require .config, upstream feed .git dirs, package present, and lock stamp
+	# matching the pinned feeds.conf so a restored cache cannot skip refresh
+	# after pin changes or partial-cache failure.
+	# Pass version label as \$1 (data), never interpolate into shell source.
+	# Every check names itself so a failed readiness probe explains WHY
+	# "Run: ./scripts/docker-sdk.sh setup" was printed (2026-08-25 publish
+	# regression: the probe failed silently and the setup hint was useless).
+	sdk_matrix_compose_run sh -c '
+		stamp=/builder/feeds/.fwlive-feeds.lock.sha
+		lock=/work/fwlive/scripts/feeds.lock/$1/feeds.conf
+		test -f /builder/.config || { echo "probe: missing /builder/.config" >&2; exit 1; }
+		test -f "$lock" && test -f "$stamp" || { echo "probe: missing lock or stamp" >&2; exit 1; }
+		cur=$(sha256sum "$lock" | awk "{print \$1}")
+		old=$(cat "$stamp")
+		[ -n "$cur" ] && [ "$cur" = "$old" ] || { echo "probe: lock stamp mismatch" >&2; exit 1; }
+		{ [ -d /builder/feeds/base/.git ] || [ -d /builder/feeds/base_root/.git ]; } || { echo "probe: missing base .git" >&2; exit 1; }
+		[ -d /builder/feeds/packages/.git ] || { echo "probe: missing packages .git" >&2; exit 1; }
+		[ -d /builder/feeds/luci/.git ] || { echo "probe: missing luci .git" >&2; exit 1; }
+		find -L /builder/feeds -maxdepth 8 -path "*/luci-app-fwlive/Makefile" 2>/dev/null | grep -q . \
+			|| { echo "probe: luci-app-fwlive Makefile not found" >&2; exit 1; }
+		# shellcheck disable=SC1091
+		. /work/fwlive/scripts/lib/feeds-lock.sh
+		feeds_lock_assert_heads "$lock" /builder/feeds base packages luci \
+			|| { echo "probe: feed HEAD/pin mismatch" >&2; exit 2; }
+	' sh "$SDK_MATRIX_VERSION_LABEL"
+}
+
+sdk_matrix_feeds_base_packages() {
+	printf '%s' 'liblua libucode libubox libubus libuci rpcd'
+}
+
+sdk_matrix_feeds_setup() {
+	local lock_path base_pkgs base_pkgs_q
+	lock_path="$(sdk_matrix_feeds_lock_path "$SDK_MATRIX_VERSION")"
+	base_pkgs="$(sdk_matrix_feeds_base_packages)"
+	# Escape each package so they remain separate argv tokens inside sh -ec "…".
+	# shellcheck disable=SC2086 # intentional word-split of space-separated package list
+	base_pkgs_q="$(printf '%q ' ${base_pkgs})"
+	[[ -f "$lock_path" ]] || {
+		echo "missing pinned feeds lock: $lock_path" >&2
+		return 1
+	}
+	feeds_lock_require_pins "$lock_path" || return 1
+	# Retry feeds update: git.openwrt.org (and mirrors) drop TLS under CI load.
+	# HTTP/1.1 reduces curl-35 / gnutls_handshake failures (openwrt/openwrt#21854).
+	# Wipe clones when update OR pin/HEAD check fails so a poisoned cache can recover.
+	# \$1 = version label (data); base package list is host-escaped into the script body.
+	sdk_matrix_compose_run sh -ec "
+		label=\$1
+		cd /builder
+		export TERM=dumb
+		if [ ! -f Makefile ]; then echo 'Running ./setup.sh ...'; ./setup.sh; fi
+		test -f Makefile
+
+		cp /work/fwlive/scripts/feeds.lock/\$label/feeds.conf feeds.conf
+		grep -q '^src-link fwlive' feeds.conf || echo 'src-link fwlive /work/fwlive/openwrt-feed' >> feeds.conf
+
+		git config --global http.version HTTP/1.1 || true
+
+		# shellcheck disable=SC1091
+		. /work/fwlive/scripts/lib/feeds-lock.sh
+
+		ok=0
+		i=1
+		while [ \"\$i\" -le 3 ]; do
+			if ./scripts/feeds update base luci packages; then
+				if feeds_lock_assert_heads /work/fwlive/scripts/feeds.lock/\$label/feeds.conf /builder/feeds base packages luci; then
+					ok=1
+					break
+				fi
+				echo \"feeds-lock: pin/HEAD check failed (attempt \$i/3); wiping feed clones\" >&2
+			else
+				echo \"feeds update failed (attempt \$i/3); wiping feed clones\" >&2
+			fi
+			rm -rf feeds/base feeds/base_root feeds/packages feeds/luci
+			if [ \"\$i\" -eq 3 ]; then
+				break
+			fi
+			sleep \$((i * 5))
+			i=\$((i + 1))
+		done
+		[ \"\$ok\" -eq 1 ] || { echo 'feeds update failed after 3 attempts' >&2; exit 1; }
+
+		./scripts/feeds install -p base ${base_pkgs_q}
+		./scripts/feeds install luci-base
+		./scripts/feeds update fwlive
+		./scripts/feeds install luci-app-fwlive
+		rm -rf tmp
+		make defconfig
+		sha256sum /work/fwlive/scripts/feeds.lock/\$label/feeds.conf \
+			| awk '{print \$1}' > feeds/.fwlive-feeds.lock.sha
+	" sh "$SDK_MATRIX_VERSION_LABEL"
+}
+
+# Epoch for reproducible package timestamps (override via SOURCE_DATE_EPOCH env).
+sdk_matrix_source_date_epoch() {
+	if [[ -n "${SOURCE_DATE_EPOCH:-}" ]]; then
+		printf '%s' "$SOURCE_DATE_EPOCH"
+		return
+	fi
+	local root epoch
+	root="$(sdk_matrix_root)"
+	if git -C "$root" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+		epoch="$(git -C "$root" log -1 --format=%ct 2>/dev/null || true)"
+		if [[ -n "$epoch" ]]; then
+			printf '%s' "$epoch"
+			return
+		fi
+	fi
+	printf '%s' '0'
+}
+
+# Parallel make jobs on the build host (override: OWRT_MAKE_JOBS=16).
+sdk_matrix_default_jobs() {
+	if [[ -n "${OWRT_MAKE_JOBS:-}" ]]; then
+		printf '%s' "$OWRT_MAKE_JOBS"
+		return
+	fi
+	local n=4
+	if command -v nproc >/dev/null 2>&1; then
+		n="$(nproc)"
+	fi
+	# Balanced default on multi-core hosts; cap to avoid runaway load in CI/small VMs.
+	if (( n > 16 )); then
+		n=16
+	elif (( n >= 8 )); then
+		n=8
+	fi
+	printf '%s' "$n"
+}
+
+sdk_matrix_clear_builder_package_artifacts() {
+	local arch="$SDK_MATRIX_PACKAGE_ARCH"
+	sdk_matrix_compose_run sh -ec '
+		arch=$1
+		for dir in "/builder/bin/packages/$arch" "/builder/bin/packages/$arch/fwlive"; do
+			[ -d "$dir" ] || continue
+			rm -f "$dir"/luci-app-fwlive_*.ipk \
+				"$dir"/luci-app-fwlive_*.apk \
+				"$dir"/luci-app-fwlive-*.apk
+		done
+	' sh "$arch"
+}
+
+sdk_matrix_make() {
+	local -a args=() quoted
+	local jobs has_j=0
+
+	sdk_matrix_feeds_ready \
+		|| { echo "Run: ./scripts/docker-sdk.sh setup --target $SDK_MATRIX_TARGET --version $SDK_MATRIX_VERSION" >&2; return 1; }
+	sdk_matrix_clean_package || return 1
+	sdk_matrix_clear_builder_package_artifacts || return 1
+
+	jobs="$(sdk_matrix_default_jobs)"
+	for arg in "$@"; do
+		case "$arg" in
+			-j | -j*) has_j=1 ;;
+		esac
+		args+=("$arg")
+	done
+	[[ $has_j -eq 0 ]] && args=(-j"$jobs" "${args[@]}")
+	quoted="$(printf ' %q' "${args[@]}")"
+	local sde
+	sde="$(sdk_matrix_source_date_epoch)"
+	echo "→ SOURCE_DATE_EPOCH=${sde} make package/luci-app-fwlive/compile V=s${quoted}" >&2
+	sdk_matrix_compose_run sh -ec "cd /builder && export TERM=dumb SOURCE_DATE_EPOCH=${sde} && make package/luci-app-fwlive/compile V=s${quoted}"
+}
+
+sdk_matrix_clean_package() {
+	sdk_matrix_feeds_ready \
+		|| { echo "Run: ./scripts/docker-sdk.sh setup --target $SDK_MATRIX_TARGET --version $SDK_MATRIX_VERSION" >&2; return 1; }
+	sdk_matrix_compose_run sh -ec 'cd /builder && export TERM=dumb && make package/luci-app-fwlive/clean V=s'
+}
+
+# Fill nameref array with matching luci-app-fwlive ipk/apk paths under dest.
+sdk_matrix_out_package_candidates() {
+	local dest="$1"
+	local -n _sdk_matrix_pkgs="$2"
+	local nullglob_was=0
+	_sdk_matrix_pkgs=()
+	[[ -d "$dest" ]] || return 0
+	shopt -q nullglob && nullglob_was=1
+	shopt -s nullglob
+	_sdk_matrix_pkgs=(
+		"${dest}"/luci-app-fwlive_*_all.ipk
+		"${dest}"/luci-app-fwlive-*.apk
+		"${dest}"/luci-app-fwlive_*.apk
+		"${dest}"/fwlive/luci-app-fwlive_*_all.ipk
+		"${dest}"/fwlive/luci-app-fwlive-*.apk
+		"${dest}"/fwlive/luci-app-fwlive_*.apk
+	)
+	[[ $nullglob_was -eq 1 ]] || shopt -u nullglob
+}
+
+# True when dest holds a luci-app-fwlive ipk/apk (fwlive/ subdir or dest root).
+sdk_matrix_out_has_package() {
+	local dest="$1"
+	local -a candidates=()
+	local f
+	sdk_matrix_out_package_candidates "$dest" candidates
+	for f in "${candidates[@]}"; do
+		[[ -f "$f" ]] && return 0
+	done
+	return 1
+}
+
+# Drop leftover luci-app-fwlive artifacts so a reused out/ cannot satisfy copy_out.
+sdk_matrix_clear_out_packages() {
+	local dest="$1"
+	local -a candidates=()
+	local f
+	sdk_matrix_out_package_candidates "$dest" candidates
+	for f in "${candidates[@]}"; do
+		rm -f "$f" || return 1
+	done
+}
+
+sdk_matrix_copy_out() {
+	local root out_mount dest_host out_uid out_gid
+	root="$(sdk_matrix_root)"
+	out_mount="${root}/out"
+	dest_host="${out_mount}/${SDK_MATRIX_PACKAGE_ARCH}/${SDK_MATRIX_VERSION_LABEL}"
+	# Refuse symlinked destinations before mkdir or mounting. Copy-out writes
+	# through a root-running container, so the output path must stay in the tree.
+	sdk_matrix_reject_symlink_path "$out_mount" || {
+		echo "sdk-matrix: output path must not traverse symlinks: ${out_mount}" >&2
+		return 1
+	}
+	sdk_matrix_reject_symlink_path "$dest_host" || {
+		echo "sdk-matrix: output path must not traverse symlinks: ${dest_host}" >&2
+		return 1
+	}
+	out_uid="$(id -u)" || return 1
+	out_gid="$(id -g)" || return 1
+	if [[ ! "$out_uid" =~ ^[0-9]+$ || ! "$out_gid" =~ ^[0-9]+$ ]]; then
+		echo "sdk-matrix: invalid host uid/gid for output ownership" >&2
+		return 1
+	fi
+	mkdir -p "$dest_host"
+	# SDK image runs as buildbot (uid 1000); GHA workspace is often uid 1001 — copy as root.
+	# Pass the same dl/feeds bind mounts as compose_run so defaults do not clobber /builder.
+	sdk_matrix_cache_dirs "$root" "$SDK_MATRIX_VERSION_LABEL" || return 1
+	# Reused out/ may still hold a matching ipk/apk from an earlier build.
+	# Clear those paths before copy so the post-copy existence check is
+	# fail-closed for this invocation (docker copy also uses || true).
+	sdk_matrix_clear_out_packages "$dest_host" || return 1
+	if ! (
+		cd "$root"
+		OWRT_SDK_IMAGE="$SDK_MATRIX_IMAGE" \
+		OWRT_SDK_VOLUME="$SDK_MATRIX_VOLUME" \
+		OWRT_SDK_DL_CACHE="$SDK_MATRIX_DL_CACHE" \
+		OWRT_SDK_FEEDS_CACHE="$SDK_MATRIX_FEEDS_CACHE" \
+		docker compose run --rm --user root -v "${out_mount}:/out" sdk sh -ec "
+			dest=/out/${SDK_MATRIX_PACKAGE_ARCH}/${SDK_MATRIX_VERSION_LABEL}
+			mkdir -p \"\$dest\"
+			if [ -d /builder/bin/packages/${SDK_MATRIX_PACKAGE_ARCH}/fwlive ]; then
+				cp -a /builder/bin/packages/${SDK_MATRIX_PACKAGE_ARCH}/fwlive \"\$dest/\"
+			else
+				cp -a /builder/bin/packages/${SDK_MATRIX_PACKAGE_ARCH}/. \"\$dest/\"
+			fi
+			chmod -R a+rX /out
+			# cp -a restores the SDK owner on existing output directories too.
+			# Return only directory ownership to the caller so a later clean
+			# reproducibility pass can unlink the root-copied package files.
+			find \"\$dest\" -type d -exec chown ${out_uid}:${out_gid} {} +
+			ls -la \"\$dest\"/fwlive/luci-app-fwlive* 2>/dev/null || ls -la \"\$dest\"/luci-app-fwlive* 2>/dev/null || true
+		"
+	); then
+		echo "sdk-matrix: docker copy-out failed for ${dest_host}" >&2
+		return 1
+	fi
+	if ! sdk_matrix_out_has_package "$dest_host"; then
+		echo "sdk-matrix: no luci-app-fwlive package artifact under ${dest_host}" >&2
+		echo "sdk-matrix: expected luci-app-fwlive_*_all.ipk or luci-app-fwlive-*.apk (or luci-app-fwlive_*.apk)" >&2
+		return 1
+	fi
+	echo "Packages under: ${SDK_MATRIX_OUT_DIR}/" >&2
+}
+
+sdk_matrix_print_row() {
+	printf '  %-14s %-10s  %s\n' "$1" "$2" "$(sdk_matrix_image_tag "$1" "$2")"
+}
+
+sdk_matrix_list() {
+	echo "SDK build matrix (Linux x86_64 host → ghcr.io/openwrt/sdk):" >&2
+	echo "  target         version    image tag" >&2
+	local target version
+	for target in "${SDK_MATRIX_TARGETS[@]}"; do
+		for version in "${SDK_MATRIX_VERSIONS[@]}"; do
+			sdk_matrix_print_row "$target" "$version"
+		done
+	done
+}

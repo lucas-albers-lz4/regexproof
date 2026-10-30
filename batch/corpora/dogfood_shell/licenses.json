@@ -1,0 +1,24 @@
+{
+  "files": [
+    {
+      "bytes": 627,
+      "file": "usrmanage-LICENSE",
+      "repository": "usrmanage",
+      "sha256": "1799af5b3b06e46b49e5285669d5db2a8f107a38725ffdfc9103c8a536f99461"
+    },
+    {
+      "bytes": 11354,
+      "file": "fwlive-LICENSE",
+      "repository": "fwlive",
+      "sha256": "d1d9bd380ab277605c5b684aa104a753e7376f70a173d4ddada405b2f4d3b12d"
+    },
+    {
+      "bytes": 1070,
+      "file": "hermes-agent-LICENSE",
+      "repository": "hermes-agent",
+      "sha256": "821556e6336796450ab852d375117b48a4887e71d255794fd6318d99982a5ab6"
+    }
+  ],
+  "note": "happycow had zero shell files admitted by the shell corpus filter; no happycow source files are distributed.",
+  "schema_version": "1"
+}

@@ -1,0 +1,14 @@
+{
+  "additional_surface_outside_probe_scope": {},
+  "candidate_url": "https://github.com/lucas-albers-lz4",
+  "corpus": "dogfood_shell",
+  "corpus_pin": "sha256:7b5a176215b6719362357f9570739ec763e209c8b900b1fef8c5b8a9830bc6d5",
+  "reason": "910/977 = 0.9314 encodable on the full pinned POSIX shell source snapshot; complete_run; parse-error=0; no budget breaches. Follow-on mine accepted; this is not a security-tool admission.",
+  "regex_sites": 977,
+  "schema_version": "1",
+  "sites_by_bucket": {
+    "posix-shell": 977
+  },
+  "smith_decision": "go",
+  "supersedes": "go (2026-08-12 admission gate)"
+}

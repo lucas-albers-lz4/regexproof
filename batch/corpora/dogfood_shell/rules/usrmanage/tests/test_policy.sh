@@ -1,0 +1,197 @@
+#!/bin/sh
+# Host tests for password policy presets (openwrt / standard / strict).
+set -e
+
+ROOT=$(cd "$(dirname "$0")/.." && pwd)
+LIB="$ROOT/openwrt-feed/usrmanage/files/usr/lib/usrmanage/usrmanage-lib.sh"
+
+TMP=$(mktemp -d)
+trap 'rm -rf "$TMP"' EXIT
+
+export USRMANAGE_ETC="$TMP/etc"
+export USRMANAGE_REGISTRY="$TMP/etc/users"
+export USRMANAGE_AUDIT_DIR="$TMP/log"
+export USRMANAGE_AUDIT="$TMP/log/audit.log"
+export USRMANAGE_LOCK="$TMP/lock/usrmanage.lock"
+export USRMANAGE_INCOMPLETE="$TMP/etc/incomplete"
+export USRMANAGE_PASSWD="$TMP/passwd"
+export USRMANAGE_SHADOW="$TMP/shadow"
+export USRMANAGE_GROUP="$TMP/group"
+export USRMANAGE_SUDOERS="$TMP/sudoers"
+export USRMANAGE_SRC=cli
+export USRMANAGE_ACTOR=testhost
+export USRMANAGE_TEST_OVERRIDES=1
+export USRMANAGE_DRY_RUN=1
+
+mkdir -p "$USRMANAGE_ETC" "$USRMANAGE_AUDIT_DIR" "$(dirname "$USRMANAGE_LOCK")" "$TMP/bin" "$TMP/uci"
+touch "$USRMANAGE_REGISTRY" "$USRMANAGE_AUDIT"
+printf 'root:x:0:0:root:/root:/bin/ash\nops:x:1002:1002:ops:/home/ops:/bin/ash\n' > "$USRMANAGE_PASSWD"
+printf 'root:$6$salt$hash:0:99999:7:::\nops:$6$salt$ophash:0:99999:7:::\n' > "$USRMANAGE_SHADOW"
+printf 'root:x:0:\nwheel:x:10:ops\n' > "$USRMANAGE_GROUP"
+printf 'ops\n' > "$USRMANAGE_REGISTRY"
+printf '%%wheel ALL=(ALL:ALL) ALL\n' > "$USRMANAGE_SUDOERS"
+chmod 0440 "$USRMANAGE_SUDOERS"
+
+# Hermetic uci: key=value store for usrmanage.policy.*
+cat > "$TMP/bin/uci" <<'UCI'
+#!/bin/sh
+store="${TMP:?}/uci/store"
+mkdir -p "$(dirname "$store")"
+touch "$store"
+while [ "$1" = "-q" ]; do shift; done
+case "$1" in
+	get)
+		key=$2
+		awk -F= -v k="$key" '$1==k { print substr($0, index($0,"=")+1); exit }' "$store"
+		;;
+	set)
+		pair=$2
+		key=${pair%%=*}
+		val=${pair#*=}
+		# Section type assign (usrmanage.policy=usrmanage) — ignore value shape.
+		if [ "${UCI_FAIL_KEY:-}" = "$key" ]; then
+			exit 1
+		fi
+		_tmp=$(mktemp)
+		awk -F= -v k="$key" -v v="$val" '
+			$1==k { next }
+			{ print }
+			END { print k "=" v }
+		' "$store" > "$_tmp" && mv "$_tmp" "$store"
+		;;
+	commit) : > "$TMP/uci/committed" ;;
+	changes) ;;
+	*) exit 0 ;;
+esac
+UCI
+chmod +x "$TMP/bin/uci"
+export PATH="$TMP/bin:$PATH"
+export TMP
+
+# shellcheck disable=SC1090
+. "$LIB"
+. "$ROOT/tests/lib.sh"
+
+fail=0
+ok() { echo "ok: $*"; }
+bad() { echo "FAIL: $*" >&2; fail=1; }
+
+# Factory default
+um_policy_load
+[ "$UM_POL_PRESET" = "openwrt" ] && ok "default preset openwrt" || bad "default preset=$UM_POL_PRESET"
+[ "$UM_POL_MIN_LENGTH" = "8" ] && ok "default min_length 8" || bad "default min=$UM_POL_MIN_LENGTH"
+
+# Named presets: apply → save → load round-trip
+# cell: name:min:lower:upper:digit:special
+for _cell in 'standard:10:1:1:1:0' 'strict:12:1:1:1:1' 'openwrt:8:0:0:0:0'; do
+	_p=${_cell%%:*}
+	_rest=${_cell#*:}
+	_min=${_rest%%:*}
+	_rest=${_rest#*:}
+	_lo=${_rest%%:*}
+	_rest=${_rest#*:}
+	_up=${_rest%%:*}
+	_rest=${_rest#*:}
+	_di=${_rest%%:*}
+	_sp=${_rest#*:}
+	um_policy_apply_preset_values "$_p" || bad "apply $_p"
+	um_with_lock um_policy_save || bad "save $_p"
+	um_policy_load
+	[ "$UM_POL_PRESET" = "$_p" ] && ok "preset $_p round-trip" || bad "preset $_p got $UM_POL_PRESET"
+	[ "$UM_POL_MIN_LENGTH" = "$_min" ] && ok "preset $_p min_length $_min" \
+		|| bad "preset $_p min=$UM_POL_MIN_LENGTH want $_min"
+	[ "$UM_POL_REQUIRE_LOWER" = "$_lo" ] && [ "$UM_POL_REQUIRE_UPPER" = "$_up" ] \
+		&& [ "$UM_POL_REQUIRE_DIGIT" = "$_di" ] && [ "$UM_POL_REQUIRE_SPECIAL" = "$_sp" ] \
+		&& ok "preset $_p toggles" \
+		|| bad "preset $_p toggles lo=$UM_POL_REQUIRE_LOWER up=$UM_POL_REQUIRE_UPPER di=$UM_POL_REQUIRE_DIGIT sp=$UM_POL_REQUIRE_SPECIAL"
+	case "$_p" in
+		openwrt) [ "$(um_policy_label "$_p")" = "OpenWrt" ] && ok "label OpenWrt" || bad "label $(um_policy_label "$_p")" ;;
+		standard) [ "$(um_policy_label "$_p")" = "Standard" ] && ok "label Standard" || bad "label $(um_policy_label "$_p")" ;;
+		strict) [ "$(um_policy_label "$_p")" = "Strict" ] && ok "label Strict" || bad "label $(um_policy_label "$_p")" ;;
+	esac
+done
+
+# #175: fail closed on each UCI write; a failed field must not reach commit.
+um_policy_apply_preset_values standard
+rm -f "$TMP/uci/committed"
+if UCI_FAIL_KEY=usrmanage.policy.require_upper um_policy_save; then
+	bad "policy save should fail when a UCI field write fails"
+else
+	ok "policy save propagates failed UCI field write"
+fi
+[ ! -f "$TMP/uci/committed" ] && ok "failed UCI write does not commit" || bad "failed UCI write still committed"
+unset UCI_FAIL_KEY
+um_policy_apply_preset_values openwrt
+um_with_lock um_policy_save || bad "save openwrt after failed set"
+um_policy_load
+[ "$UM_POL_PRESET" = "openwrt" ] && ok "policy state restored after failed-set fixture" || bad "post-failure policy state=$UM_POL_PRESET"
+
+# um_policy_set_fields custom → detect
+um_policy_set_fields custom 14 1 1 1 1 0 || bad "set_fields custom"
+[ "$UM_POL_PRESET" = "custom" ] && ok "custom detects as custom" || bad "custom got $UM_POL_PRESET"
+[ "$UM_POL_MIN_LENGTH" = "14" ] && ok "custom min_length 14" || bad "custom min=$UM_POL_MIN_LENGTH"
+
+# Password gate under strict
+um_policy_apply_preset_values strict
+printf 'Short1!\n' > "$TMP/pol_in"
+if um_password_capture_fd ops 3 3<"$TMP/pol_in" 2>"$TMP/pol.err"; then
+	bad "strict should reject Short1!"
+else
+	ok "strict rejects short password"
+fi
+[ "${UM_POL_FAIL_REASON:-}" = "min_length" ] \
+	&& ok "strict fail reason token: min_length" \
+	|| bad "strict fail reason: want min_length, got '${UM_POL_FAIL_REASON:-}'"
+
+printf 'StrictPass12!\n' > "$TMP/pol2_in"
+if um_password_capture_fd ops 3 3<"$TMP/pol2_in" 2>"$TMP/pol2.err"; then
+	ok "strict accepts matching password"
+else
+	bad "strict rejected good password: reason=${UM_POL_FAIL_REASON:-} $(cat "$TMP/pol2.err")"
+fi
+
+# Restore openwrt
+um_policy_apply_preset_values openwrt
+um_with_lock um_policy_save
+um_policy_load
+[ "$UM_POL_PRESET" = "openwrt" ] && ok "restored openwrt" || bad "restore got $UM_POL_PRESET"
+
+# --- P1 #169: set-policy audits success and invalid_policy denial ---
+CLI="$ROOT/openwrt-feed/usrmanage/files/usr/sbin/usrmanage"
+# Bypass um_require_root in hermetic host tests.
+cat > "$TMP/bin/id" <<'ID'
+#!/bin/sh
+case "$1" in
+	-u) printf '0\n' ;;
+	-un) printf 'root\n' ;;
+	*) printf 'uid=0(root) gid=0(root)\n' ;;
+esac
+ID
+chmod +x "$TMP/bin/id"
+
+: > "$USRMANAGE_AUDIT"
+if "$CLI" set-policy --preset standard >/dev/null 2>"$TMP/setpol.err"; then
+	grep -q 'policy user=-' "$USRMANAGE_AUDIT" \
+		&& grep -q 'result=ok' "$USRMANAGE_AUDIT" \
+		&& grep -q 'preset=standard' "$USRMANAGE_AUDIT" \
+		&& ok "P1 set-policy success audited" \
+		|| bad "P1 set-policy success audit: $(cat "$USRMANAGE_AUDIT")"
+else
+	bad "P1 set-policy standard failed: $(cat "$TMP/setpol.err")"
+fi
+
+: > "$USRMANAGE_AUDIT"
+if "$CLI" set-policy --preset bogus >/dev/null 2>"$TMP/setpol_bad.err"; then
+	bad "P1 set-policy bogus should fail"
+else
+	grep -q 'denied user=-' "$USRMANAGE_AUDIT" \
+		&& grep -q 'invalid_policy' "$USRMANAGE_AUDIT" \
+		&& ok "P1 set-policy invalid_policy audited" \
+		|| bad "P1 set-policy denial audit: $(cat "$USRMANAGE_AUDIT")"
+fi
+
+if [ "$fail" -ne 0 ]; then
+	echo "test_policy: FAILED" >&2
+	exit 1
+fi
+echo "test_policy: ok"

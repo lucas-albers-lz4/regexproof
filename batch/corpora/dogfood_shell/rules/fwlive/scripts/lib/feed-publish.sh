@@ -1,0 +1,885 @@
+#!/usr/bin/env bash
+# Shared helpers for staging signed opkg/apk feeds.
+# Source from publish-packages.sh — do not execute directly.
+set -euo pipefail
+
+# shellcheck source=sdk-matrix.sh
+source "$(dirname "${BASH_SOURCE[0]}")/sdk-matrix.sh"
+
+feed_publish_root() {
+	if [[ -n "${FEED_PUBLISH_ROOT:-}" ]]; then
+		printf '%s' "$FEED_PUBLISH_ROOT"
+		return 0
+	fi
+	local here
+	here="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+	printf '%s' "$here"
+}
+
+# Keep a single leading separator even when pwd preserves a // spelling.
+feed_publish_physical_dir() {
+	local physical
+	physical="$(cd "$1" && pwd -P)" || return 1
+	while [[ "$physical" == //* ]]; do physical="${physical#/}"; done
+	printf '%s' "$physical"
+}
+
+feed_publish_abspath() {
+	local path="$1" parent base
+	if [[ "$path" != /* ]]; then
+		path="$(feed_publish_root)/${path#./}"
+	fi
+	parent="$(feed_publish_physical_dir "$(dirname "$path")")" || return 1
+	base="$(basename "$path")"
+	if [[ "$base" == / ]]; then printf '%s' /; else printf '%s/%s' "${parent%/}" "$base"; fi
+}
+
+# Resolve staging to a physical path so a symlink to / cannot bypass the clear guard.
+feed_publish_canonical_staging() {
+	local path="$1" parent
+	path="$(feed_publish_abspath "$path")" || return 1
+	if [[ -d "$path" ]]; then
+		feed_publish_physical_dir "$path"
+		return
+	fi
+	if [[ -e "$path" || -L "$path" ]]; then
+		echo "feed_publish: staging path is not a directory: $path" >&2
+		return 1
+	fi
+	parent="$(feed_publish_physical_dir "$(dirname "$path")")" || return 1
+	printf '%s/%s' "${parent%/}" "$(basename "$path")"
+}
+
+# A separate read-only helper lets guard fixtures supply a protected home
+# without changing the process HOME or attempting any filesystem deletion.
+feed_publish_physical_home() {
+	if [[ -n "${HOME:-}" && -d "$HOME" ]]; then
+		feed_publish_physical_dir "$HOME"
+	fi
+}
+
+feed_publish_path_under() {
+	local child="$1" parent="$2"
+	[[ -n "$parent" && ( "$child" == "$parent" || "$child" == "$parent"/* ) ]]
+}
+
+# In-repo rm -rf is only root-level feed-staging* or a directory under out/.
+feed_publish_staging_allowlisted() {
+	local canonical="$1" root="$2" root_prefix="${2%/}/" relative
+	if [[ "$canonical" == "${root_prefix}"* ]]; then
+		relative="${canonical#"$root_prefix"}"
+		if [[ "$relative" != */* &&
+			( "$relative" == feed-staging || "$relative" == feed-staging-* ) ]]; then
+			return 0
+		fi
+	fi
+	[[ "$canonical" == "${root}/out/"* ]]
+}
+
+# Refuse rm -rf of /, $HOME, the repo root, a non-staging path inside the
+# repo (including scripts/), or a path outside $ROOT/$RUNNER_TEMP unless
+# allow_outside=1. Prints the canonical path on success (#766, #917).
+feed_publish_assert_staging_clearable() {
+	local staging="$1"
+	local allow_outside="${2:-0}"
+	local canonical root home runner
+	if [[ -z "$staging" ]]; then
+		echo "feed_publish: empty staging path" >&2
+		return 1
+	fi
+	canonical="$(feed_publish_canonical_staging "$staging")" || return 1
+	root="$(feed_publish_physical_dir "$(feed_publish_root)")" || return 1
+	home="$(feed_publish_physical_home)" || return 1
+	runner=""
+	if [[ -n "${RUNNER_TEMP:-}" && -d "$RUNNER_TEMP" ]]; then
+		runner="$(feed_publish_physical_dir "$RUNNER_TEMP")" || return 1
+	fi
+	if [[ "$canonical" == "/" ]]; then
+		echo "feed_publish: refusing to clear /" >&2
+		return 1
+	fi
+	if [[ -n "$home" && "$canonical" == "$home" ]]; then
+		echo "feed_publish: refusing to clear \$HOME" >&2
+		return 1
+	fi
+	if [[ "$canonical" == "$root" ]]; then
+		echo "feed_publish: refusing to clear the repository root" >&2
+		return 1
+	fi
+	if [[ -n "$runner" ]] && feed_publish_path_under "$canonical" "$runner"; then
+		printf '%s' "$canonical"
+		return 0
+	fi
+	if feed_publish_path_under "$canonical" "$root"; then
+		if ! feed_publish_staging_allowlisted "$canonical" "$root"; then
+			echo "feed_publish: refusing to clear ${canonical} (not an allowlisted staging path)" >&2
+			return 1
+		fi
+		printf '%s' "$canonical"
+		return 0
+	fi
+	if [[ "$allow_outside" == "1" ]]; then
+		printf '%s' "$canonical"
+		return 0
+	fi
+	echo "feed_publish: staging path must be inside the repo or RUNNER_TEMP (got $canonical)" >&2
+	return 1
+}
+
+# Map a patch or line label → GitHub Pages feed directory (24.10.x → 24.10).
+# Numeric patches only — `24.10.*` would accept 24.10.foo (#806 luna).
+feed_publish_line_key() {
+	case "$1" in
+		23.05) printf '%s' '23.05' ;;
+		24.10) printf '%s' '24.10' ;;
+		25.12) printf '%s' '25.12' ;;
+		snapshot | SNAPSHOT | latest | '') printf '%s' 'snapshot' ;;
+		*)
+			if [[ "$1" =~ ^(23\.05|24\.10|25\.12)\.[0-9]+$ ]]; then
+				printf '%s' "${BASH_REMATCH[1]}"
+				return 0
+			fi
+			echo "feed_publish: unmapped version label '$1'" >&2
+			return 1
+			;;
+	esac
+}
+
+# Map user version key → feed directory name on GitHub Pages.
+feed_publish_feed_dir() {
+	feed_publish_line_key "$(sdk_matrix_version_label "$1")"
+}
+
+# Expected luci-app-fwlive PKG_VERSION for artifact selection.
+# FWLIVE_PKG_VERSION overrides the Makefile (publish callers / host tests).
+feed_publish_pkg_version() {
+	if [[ -n "${FWLIVE_PKG_VERSION:-}" ]]; then
+		printf '%s' "$FWLIVE_PKG_VERSION"
+		return 0
+	fi
+	local makefile ver
+	# Read the source tree, not FEED_PUBLISH_ROOT (that is the out/ fixture).
+	makefile="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)/openwrt-feed/luci-app-fwlive/Makefile"
+	ver="$(sed -n 's/^PKG_VERSION:=//p' "$makefile" | head -1)"
+	[[ -n "$ver" ]] || {
+		echo "feed_publish_pkg_version: PKG_VERSION missing in ${makefile}" >&2
+		return 1
+	}
+	printf '%s' "$ver"
+}
+
+# Locales published on the binary feed (luci.mk package names). Gated upstream by
+# tests/fwlive-i18n.test.js before a release tag is cut from green master.
+feed_publish_i18n_locales() {
+	printf '%s\n' de ru zh-cn
+}
+
+# $3 = package basename prefix (e.g. luci-app-fwlive, luci-i18n-fwlive-de).
+feed_publish_find_named_artifact() {
+	local dir="$1"
+	local pkg_version="$2"
+	local prefix="$3"
+	local f base
+	[[ -n "$dir" && -n "$pkg_version" && -n "$prefix" ]] || {
+		echo "feed_publish_find_named_artifact: dir, PKG_VERSION, and prefix are required" >&2
+		return 1
+	}
+	shopt -s nullglob
+	local candidates=( "${dir}/${prefix}"_*_all.ipk "${dir}/${prefix}"-*.apk "${dir}/${prefix}"_*.apk )
+	shopt -u nullglob
+	local matched=()
+	for f in "${candidates[@]}"; do
+		base="${f##*/}"
+		case "$base" in
+			*"_${pkg_version}_"*|*"_${pkg_version}-"*|*"-${pkg_version}-"*)
+				matched+=("$f")
+				;;
+		esac
+	done
+	if [[ ${#matched[@]} -lt 1 ]]; then
+		echo "no ${prefix} artifact matching PKG_VERSION ${pkg_version} under ${dir}/" >&2
+		return 1
+	fi
+	ls -1t "${matched[@]}" 2>/dev/null | head -1
+}
+
+# LuCI translation package versions are generated independently from the app's
+# PKG_VERSION (often from the build date). Select the sole artifact for the
+# locale and fail closed when stale output makes the choice ambiguous.
+feed_publish_find_i18n_artifact() {
+	local dir="$1"
+	local prefix="$2"
+	local f
+	[[ -n "$dir" && -n "$prefix" ]] || {
+		echo "feed_publish_find_i18n_artifact: dir and package prefix are required" >&2
+		return 1
+	}
+	shopt -s nullglob
+	local candidates=( "${dir}/${prefix}"_[0-9]*_all.ipk "${dir}/${prefix}"-[0-9]*.apk "${dir}/${prefix}"_[0-9]*.apk )
+	shopt -u nullglob
+	if [[ ${#candidates[@]} -eq 0 ]]; then
+		echo "no ${prefix} artifact under ${dir}/" >&2
+		return 1
+	fi
+	if [[ ${#candidates[@]} -ne 1 ]]; then
+		echo "ambiguous ${prefix} artifacts under ${dir}/:" >&2
+		for f in "${candidates[@]}"; do
+			echo "  ${f##*/}" >&2
+		done
+		return 2
+	fi
+	printf '%s' "${candidates[0]}"
+}
+
+# $1 = SDK version label (out/x86_64/<label>/fwlive). $2 = expected PKG_VERSION.
+feed_publish_find_artifact() {
+	local version_label="$1"
+	local pkg_version="${2:-}"
+	local root dir
+	root="$(feed_publish_root)"
+	dir="${root}/out/x86_64/${version_label}/fwlive"
+	if [[ -z "$pkg_version" ]]; then
+		echo "feed_publish_find_artifact: expected package version is required" >&2
+		return 1
+	fi
+	feed_publish_find_named_artifact "$dir" "$pkg_version" luci-app-fwlive
+}
+
+# Resolve app + i18n paths for a matrix cell into FEED_PUBLISH_ARTIFACTS.
+# Exit 0 when all are present; 1 when the app is missing (cell not built);
+# 2 when the app exists but a locale is missing (partial set — must not publish).
+feed_publish_resolve_artifacts() {
+	local version_label="$1"
+	local pkg_version="${2:-}"
+	local root dir lang prefix path rc
+	FEED_PUBLISH_ARTIFACTS=()
+	root="$(feed_publish_root)"
+	dir="${root}/out/x86_64/${version_label}/fwlive"
+	if [[ -z "$pkg_version" ]]; then
+		echo "feed_publish_resolve_artifacts: expected package version is required" >&2
+		return 1
+	fi
+	if ! path="$(feed_publish_find_named_artifact "$dir" "$pkg_version" luci-app-fwlive 2>/dev/null)"; then
+		return 1
+	fi
+	FEED_PUBLISH_ARTIFACTS=("$path")
+	while IFS= read -r lang; do
+		[[ -n "$lang" ]] || continue
+		prefix="luci-i18n-fwlive-${lang}"
+		if path="$(feed_publish_find_i18n_artifact "$dir" "$prefix")"; then
+			:
+		else
+			rc=$?
+			if [[ "$rc" -eq 2 ]]; then
+				echo "feed_publish_resolve_artifacts: ambiguous i18n set for ${version_label} (${prefix})" >&2
+			else
+				echo "feed_publish_resolve_artifacts: incomplete i18n set for ${version_label} (missing ${prefix})" >&2
+			fi
+			FEED_PUBLISH_ARTIFACTS=()
+			return 2
+		fi
+		FEED_PUBLISH_ARTIFACTS+=("$path")
+	done < <(feed_publish_i18n_locales)
+	return 0
+}
+
+# App plus every i18n locale for a matrix cell. Prints paths only on full success.
+feed_publish_find_artifacts() {
+	local rc
+	feed_publish_resolve_artifacts "$@" || return $?
+	printf '%s\n' "${FEED_PUBLISH_ARTIFACTS[@]}"
+}
+
+# Abort on a partial set (rc 2). Treat a missing app as an empty cell (rc 1).
+feed_publish_resolve_artifacts_or_abort() {
+	local version_label="$1" pkg_version="$2" rc
+	feed_publish_resolve_artifacts "$version_label" "$pkg_version"
+	rc=$?
+	case "$rc" in
+		0) return 0 ;;
+		1) FEED_PUBLISH_ARTIFACTS=(); return 0 ;;
+		*) return 1 ;;
+	esac
+}
+
+# Map SDK output dir (e.g. 23.05.5) → feed/release key (e.g. 23.05).
+feed_publish_release_key() {
+	feed_publish_line_key "$1"
+}
+
+# GitHub Releases require unique asset basenames; each OpenWrt line builds the same _all.ipk name.
+feed_publish_release_asset_basename() {
+	local path="$1"
+	local ver_label base key
+	ver_label="$(basename "$(dirname "$(dirname "$path")")")"
+	base="$(basename "$path")"
+	key="$(feed_publish_release_key "$ver_label")"
+	if [[ "$base" == *.ipk ]]; then
+		printf '%s' "${base/_all.ipk/_${key}_all.ipk}"
+	else
+		printf '%s' "$base"
+	fi
+}
+
+# Copy built artifacts into a flat dir with unique release asset names.
+feed_publish_stage_release_assets() {
+	local dest="$1"
+	local pkg_version="${2:-}"
+	local ver ver_label path name
+	if [[ -z "$pkg_version" ]]; then
+		pkg_version="$(feed_publish_pkg_version)" || return 1
+	fi
+	mkdir -p "$dest"
+	find "$dest" -mindepth 1 -maxdepth 1 -exec rm -rf {} +
+	for ver in 23.05 24.10 25.12; do
+		ver_label="$(sdk_matrix_version_label "$ver")"
+		feed_publish_resolve_artifacts_or_abort "$ver_label" "$pkg_version" || return 1
+		[[ ${#FEED_PUBLISH_ARTIFACTS[@]} -gt 0 ]] || continue
+		for path in "${FEED_PUBLISH_ARTIFACTS[@]}"; do
+			name="$(feed_publish_release_asset_basename "$path")"
+			if [[ -e "${dest}/${name}" ]]; then
+				echo "duplicate release asset name: ${name} (${path})" >&2
+				return 1
+			fi
+			cp -a "$path" "${dest}/${name}"
+		done
+	done
+}
+
+# Pinned usign revision for host-side opkg feed signing (no fixed /tmp path;
+# fresh build per call). Same pin as the sibling usrmanage feed-publish helper.
+# Resolved via: git ls-remote https://github.com/openwrt/usign master
+USIGN_PIN_SHA='c4c72b1b07945ee192361dc751291a7c98d6adcd'
+
+feed_publish_ensure_usign() {
+	if command -v usign >/dev/null 2>&1; then
+		return 0
+	fi
+	# Prefer the SDK's host usign when a prior docker-sdk build left it on disk.
+	local sdk_usign root
+	root="$(feed_publish_root)"
+	for sdk_usign in \
+		"${root}/.sdk"/openwrt-sdk-*/staging_dir/host/bin/usign \
+		/builder/staging_dir/host/bin/usign; do
+		if [[ -x "$sdk_usign" ]]; then
+			export PATH="$(dirname "$sdk_usign"):${PATH}"
+			command -v usign >/dev/null && return 0
+		fi
+	done
+	local build_dir rc
+	command -v cmake >/dev/null 2>&1 || {
+		echo "usign build needs cmake (pinned ${USIGN_PIN_SHA}); install cmake or put usign on PATH" >&2
+		return 1
+	}
+	# Fresh unpredictable mktemp -d each invocation (issue #131 / #166): no
+	# fixed /tmp path to pre-create, and the source is commit-pinned.
+	build_dir="$(mktemp -d "${TMPDIR:-/tmp}/fwlive-usign.XXXXXX")" || return 1
+	echo "→ building pinned usign (${USIGN_PIN_SHA}) in ${build_dir}..." >&2
+	rc=0
+	(
+		set -e
+		git init -q "${build_dir}/src"
+		git -C "${build_dir}/src" remote add origin "https://github.com/openwrt/usign.git"
+		git -C "${build_dir}/src" fetch -q --depth 1 origin "${USIGN_PIN_SHA}"
+		git -C "${build_dir}/src" checkout -q "${USIGN_PIN_SHA}"
+		test "$(git -C "${build_dir}/src" rev-parse HEAD)" = "${USIGN_PIN_SHA}"
+		cmake -S "${build_dir}/src" -B "${build_dir}/build" >/dev/null
+		make -C "${build_dir}/build" -j"$(nproc 2>/dev/null || echo 2)" >/dev/null
+		ln -sf "${build_dir}/build/usign" "${build_dir}/usign"
+	) || rc=1
+	if [[ "$rc" -ne 0 ]]; then
+		rm -rf "$build_dir"
+		echo "usign build failed (pinned ${USIGN_PIN_SHA})" >&2
+		return 1
+	fi
+	# Build dir lives for the process lifetime: PATH points into it and usign
+	# is invoked later. Random per-process name; /tmp reaped on reboot.
+	export PATH="${build_dir}:${PATH}"
+	command -v usign >/dev/null
+}
+
+feed_publish_ipkg_index_script() {
+	local ver_label="$1"
+	local cache sha expected_hash dest got tmp
+	cache="${FEED_PUBLISH_IPKG_INDEX_CACHE:-/tmp/fwlive-ipkg-make-index}"
+	# Pin to immutable commit SHAs (not mutable branches) and declare the
+	# expected sha256 of ipkg-make-index.sh per OpenWrt version. The fetch URL
+	# + hash pin defeats TOFU (issue #131): a branch ref can move, but a commit
+	# SHA + verified hash cannot.
+	case "$ver_label" in
+		23.05.5) sha='33063b4ccf00d39393796499b23df55187b192dc'; expected_hash='f19c5013c38d2dc54a95457dd372cb4b6a077ca6ddf7ef3da982b7b6e49b6d06' ;;
+		24.10.8) sha='0b795ce79e23b553aa184080c390f9ce92a2b6d4'; expected_hash='f19c5013c38d2dc54a95457dd372cb4b6a077ca6ddf7ef3da982b7b6e49b6d06' ;;
+		25.12.5) sha='f0a60eee2fe051741c643ea6118718aae1ef17fb'; expected_hash='f19c5013c38d2dc54a95457dd372cb4b6a077ca6ddf7ef3da982b7b6e49b6d06' ;;
+		*)
+			echo "feed_publish: unmapped ipkg index label '${ver_label}'" >&2
+			return 1
+			;;
+	esac
+
+	# The returned path is ALWAYS a fresh private mktemp file that has been
+	# verified in this invocation. The cache is only ever a READ-ONLY SOURCE:
+	# its copy is re-verified before use, and the executed file is never the
+	# cache path itself — closing the TOCTOU window (a cache file swapped
+	# after verification, or a symlinked cache entry, cannot redirect what we
+	# execute, because we execute the private verified copy).
+	local verified
+	verified="$(mktemp "${TMPDIR:-/tmp}/fwlive-ipkg-index.XXXXXX")"
+
+	# Seed from cache if present and valid (fast path); else fetch pinned.
+	dest="${cache}/ipkg-make-index-${ver_label}.sh"
+	if [[ -f "$dest" ]]; then
+		got="$(sha256sum "$dest" 2>/dev/null | awk '{print $1}')"
+		if [[ "$got" == "$expected_hash" ]]; then
+			cp "$dest" "$verified"
+		else
+			rm -f "$dest"
+		fi
+	fi
+	# Verify the seeded private file (empty if cache was absent/invalid).
+	got="$(sha256sum "$verified" | awk '{print $1}')"
+	if [[ "$got" != "$expected_hash" ]]; then
+		# Cache was absent/invalid: fetch pinned, into the private file.
+		echo "→ fetching ipkg-make-index.sh (${ver_label}) pinned to ${sha:0:12}..." >&2
+		if ! curl -fsSL "https://raw.githubusercontent.com/openwrt/openwrt/${sha}/scripts/ipkg-make-index.sh" -o "$verified"; then
+			echo "failed to fetch ipkg-make-index.sh for ${ver_label}" >&2
+			rm -f "$verified"
+			return 1
+		fi
+		got="$(sha256sum "$verified" | awk '{print $1}')"
+		if [[ "$got" != "$expected_hash" ]]; then
+			echo "ipkg-make-index.sh sha256 mismatch for ${ver_label}: expected ${expected_hash}, got ${got}" >&2
+			rm -f "$verified"
+			return 1
+		fi
+		# Refresh the cache (best-effort; the verified file is what we return).
+		mkdir -p "$cache"
+		rm -f "$dest"
+		cp "$verified" "$dest"
+	fi
+	chmod +x "$verified"
+	printf '%s' "$verified"
+}
+
+# Probe SDK volumes for mkhash. Run via command substitution so SDK_MATRIX_*
+# mutations cannot leak into the caller (#814).
+feed_publish_probe_mkhash() {
+	local ver mkhash=""
+	for ver in 25.12 24.10 23.05; do
+		sdk_matrix_resolve x86-64 "$ver" 2>/dev/null || continue
+		if sdk_matrix_feeds_ready 2>/dev/null; then
+			mkhash="$(sdk_matrix_compose_run sh -c 'test -x /builder/staging_dir/host/bin/mkhash && echo /builder/staging_dir/host/bin/mkhash' 2>/dev/null | tr -d '\r' || true)"
+			[[ -n "$mkhash" ]] && break
+		fi
+	done
+	printf '%s' "$mkhash"
+}
+
+feed_publish_stage_opkg_host() {
+	local pkg_dir="$1" ver_label="$2"
+	local index_script raw mkhash prev_return
+	index_script="$(feed_publish_ipkg_index_script "$ver_label")"
+	# Restore any caller RETURN trap after removing the private index script (#812).
+	prev_return="$(trap -p RETURN)"
+	trap 'rm -f "$index_script"; if [[ -n "${prev_return:-}" ]]; then eval "$prev_return"; else trap - RETURN; fi' RETURN
+	raw="$(mktemp)"
+	# Host indexer must use a host-executable mkhash. The SDK probe path
+	# /builder/staging_dir/host/bin/mkhash is not resolvable on the host (#1282).
+	# ipkg-make-index.sh uses $MKHASH sha256 (OpenWrt mkhash), not sha256sum alone.
+	mkhash="$(command -v mkhash || true)"
+	if [[ -z "$mkhash" || "$mkhash" == /builder/* ]]; then
+		echo "feed_publish: host mkhash not found on PATH" >&2
+		rm -f "$raw"
+		return 1
+	fi
+	if ! ( cd "$pkg_dir" && MKHASH="$mkhash" "$index_script" . >"$raw" ); then
+		echo "ipkg-make-index failed for ${ver_label}" >&2
+		cat "$raw" >&2
+		rm -f "$raw"
+		return 1
+	fi
+	if ! grep -vE '^(Maintainer|LicenseFiles|Source|SourceName|Require|SourceDateEpoch)' "$raw" > "${pkg_dir}/Packages"; then
+		echo "Packages filter failed for ${ver_label}" >&2
+		rm -f "$raw"
+		return 1
+	fi
+	rm -f "$raw"
+	[[ -s "${pkg_dir}/Packages" ]] || {
+		echo "empty Packages index for ${ver_label}" >&2
+		return 1
+	}
+	gzip -9cn "${pkg_dir}/Packages" > "${pkg_dir}/Packages.gz"
+	feed_publish_ensure_usign || {
+		echo "usign not available (install or run after docker-sdk build)" >&2
+		return 1
+	}
+	usign -S -m "${pkg_dir}/Packages" -s "$OPKG_FEED_SECRET_KEY" -x "${pkg_dir}/Packages.sig"
+}
+
+feed_publish_apply_sdk_pin() {
+	# Prefer build-time digest pin; otherwise pull-and-pin now (R7).
+	local version_key="$1" _pin
+	sdk_matrix_resolve x86-64 "$version_key"
+	if _pin="$(sdk_matrix_read_digest_cache x86-64 "$version_key")"; then
+		SDK_MATRIX_IMAGE="$_pin"
+		return 0
+	fi
+	sdk_matrix_pull_and_pin x86-64 "$version_key" >/dev/null
+}
+
+# Copy signing binaries out of the compose-managed SDK volume (no secrets).
+# Secret-touching docker run must not mount /builder: compose prefixes volume
+# names, so `docker run -v $SDK_MATRIX_VOLUME:/builder` is a different volume.
+#
+# The SDK's usign/mkhash/apk are runas wrapper scripts: `bin/<tool>` execs
+# `../lib/ld-linux-x86-64.so.2` with LD_PRELOAD=runas.so against the hidden
+# real binary `bin/.<tool>.bin`. Export the wrapper into /feed/tools AND the
+# shared-lib tree into /feed/lib (a sibling mount) so the wrapper's ../lib
+# resolution survives outside /builder.
+#
+# Export uses the dedicated `sdk-export` compose service (SDK volume only,
+# NO workspace mount) as the invoking uid — the workspace holds the signing
+# keys, so the export container must never see it. Only world-readable
+# *.so* libs are copied (the 0600 buildbot-owned meson/ templates are not
+# needed by the runas wrappers), so root is not required.
+feed_publish_export_opkg_tools() {
+	local tools_dir="$1" lib_dir="$2" root
+	root="$(feed_publish_root)"
+	(
+		cd "$root"
+		OWRT_SDK_IMAGE="$SDK_MATRIX_IMAGE" \
+		OWRT_SDK_VOLUME="$SDK_MATRIX_VOLUME" \
+		docker compose run --rm --user "$(id -u):$(id -g)" \
+			-v "${tools_dir}:/feed/tools" \
+			-v "${lib_dir}:/feed/lib" \
+			sdk-export sh -ec '
+				set -e
+				cp -a /builder/staging_dir/host/bin/usign /feed/tools/usign
+				cp -a /builder/staging_dir/host/bin/.usign.bin /feed/tools/.usign.bin
+				cp -a /builder/staging_dir/host/bin/mkhash /feed/tools/mkhash
+				cp -a /builder/staging_dir/host/bin/.mkhash.bin /feed/tools/.mkhash.bin
+				cp -a /builder/scripts/ipkg-make-index.sh /feed/tools/ipkg-make-index.sh
+				cp -a /builder/staging_dir/host/lib/*.so* /feed/lib/
+				chmod a+x /feed/tools/usign /feed/tools/.usign.bin /feed/tools/mkhash /feed/tools/.mkhash.bin /feed/tools/ipkg-make-index.sh
+			'
+	)
+}
+
+feed_publish_export_apk_tools() {
+	local tools_dir="$1" lib_dir="$2" root
+	root="$(feed_publish_root)"
+	(
+		cd "$root"
+		OWRT_SDK_IMAGE="$SDK_MATRIX_IMAGE" \
+		OWRT_SDK_VOLUME="$SDK_MATRIX_VOLUME" \
+		docker compose run --rm --user "$(id -u):$(id -g)" \
+			-v "${tools_dir}:/feed/tools" \
+			-v "${lib_dir}:/feed/lib" \
+			sdk-export sh -ec '
+				set -e
+				cp -a /builder/staging_dir/host/bin/apk /feed/tools/apk
+				cp -a /builder/staging_dir/host/bin/.apk.bin /feed/tools/.apk.bin
+				cp -a /builder/staging_dir/host/lib/*.so* /feed/lib/
+				chmod a+x /feed/tools/apk /feed/tools/.apk.bin
+			'
+	)
+}
+
+feed_publish_stage_opkg_sdk() {
+	local version_key="$1" pkg_dir="$2"
+	local key_abs tools_dir lib_dir rc
+	pkg_dir="$(feed_publish_abspath "$pkg_dir")"
+	key_abs="$(feed_publish_abspath "$OPKG_FEED_SECRET_KEY")"
+	feed_publish_apply_sdk_pin "$version_key" \
+		|| { echo "failed to pin SDK image for opkg sign" >&2; return 1; }
+	sdk_matrix_feeds_ready \
+		|| { echo "run docker-sdk.sh build --version ${version_key} before staging opkg feed" >&2; return 1; }
+	tools_dir="$(mktemp -d "${TMPDIR:-/tmp}/fwlive-sign-tools.XXXXXX")"
+	lib_dir="$(mktemp -d "${TMPDIR:-/tmp}/fwlive-sign-lib.XXXXXX")"
+	if ! feed_publish_export_opkg_tools "$tools_dir" "$lib_dir"; then
+		rm -rf "$tools_dir" "$lib_dir"
+		echo "failed to export opkg signing tools from SDK volume" >&2
+		return 1
+	fi
+	# Compose v2 `run` has no --network. Secret mounts use docker run
+	# --network none with exported tools only (no /builder).
+	# Tools mount at /feed/tools and libs at /feed/lib (siblings) so the
+	# runas wrapper's ../lib resolution works; pkgdir stays a plain mount.
+	# Guard with `if` so a failed sign still cleans up the temp dirs
+	# (the script runs under `set -e`).
+	if docker run --rm --network none --user root --platform linux/amd64 \
+		-v "${pkg_dir}:/feed/pkgdir" \
+		-v "${key_abs}:/feed/opkg-secret.key:ro" \
+		-v "${tools_dir}:/feed/tools:ro" \
+		-v "${lib_dir}:/feed/lib:ro" \
+		"$SDK_MATRIX_IMAGE" \
+		sh -ec '
+			set -e
+			USIGN=/feed/tools/usign
+			INDEX=/feed/tools/ipkg-make-index.sh
+			MKHASH=/feed/tools/mkhash
+			export PATH="/feed/tools:$PATH"
+			export MKHASH
+			test -x "$USIGN"
+			test -x "$INDEX"
+			test -x "$MKHASH"
+			cd /feed/pkgdir
+			RAW="$(mktemp)"
+			"$INDEX" . >"$RAW"
+			grep -vE "^(Maintainer|LicenseFiles|Source|SourceName|Require|SourceDateEpoch)" "$RAW" > Packages
+			rm -f "$RAW"
+			test -s Packages
+			gzip -9cn Packages > Packages.gz
+			if ! "$USIGN" -S -m Packages -s /feed/opkg-secret.key -x Packages.sig; then
+				echo "usign failed: OPKG_FEED_SECRET_KEY must be the full usign secret from:" >&2
+				echo "  usign -G -s opkg-secret.key -p public.key -c \"fwlive opkg feed\"" >&2
+				echo "(not the apk RSA key; include both comment and base64 lines)" >&2
+				exit 1
+			fi
+			'
+	then
+		rc=0
+	else
+		rc=$?
+	fi
+	rm -rf "$tools_dir" "$lib_dir"
+	return "$rc"
+}
+
+feed_publish_stage_opkg() {
+	local version_key="$1" staging="$2"
+	local pkg_version="${3:-}"
+	local ver_label feed_dir artifact pkg_dir ready_rc ready_out
+	if [[ -z "$pkg_version" ]]; then
+		pkg_version="$(feed_publish_pkg_version)" || return 1
+	fi
+	ver_label="$(sdk_matrix_version_label "$version_key")"
+	feed_dir="${staging}/$(feed_publish_feed_dir "$version_key")"
+	feed_publish_resolve_artifacts "$ver_label" "$pkg_version" || {
+		echo "missing or incomplete built ipk/i18n for ${ver_label} under out/x86_64/${ver_label}/fwlive/" >&2
+		return 1
+	}
+	artifact="${FEED_PUBLISH_ARTIFACTS[0]}"
+	mkdir -p "$feed_dir"
+	for path in "${FEED_PUBLISH_ARTIFACTS[@]}"; do
+		cp -a "$path" "$feed_dir/"
+	done
+	[[ -n "${OPKG_FEED_SECRET_KEY:-}" ]] || {
+		echo "OPKG_FEED_SECRET_KEY must point to usign secret key file" >&2
+		return 1
+	}
+	pkg_dir="$feed_dir"
+	sdk_matrix_resolve x86-64 "$version_key"
+	ready_rc=0
+	ready_out=""
+	ready_out="$(sdk_matrix_feeds_ready 2>&1)" || ready_rc=$?
+	if [[ "$ready_rc" -eq 0 ]]; then
+		echo "  index+sign via SDK (${SDK_MATRIX_IMAGE})" >&2
+		feed_publish_stage_opkg_sdk "$version_key" "$pkg_dir" || return 1
+	elif [[ "$ready_rc" -eq 2 ]]; then
+		printf '%s\n' "$ready_out" >&2
+		echo "feed integrity failed; refusing host-sign fallback" >&2
+		return 1
+	else
+		echo "  index+sign on host (no SDK volume)" >&2
+		feed_publish_stage_opkg_host "$pkg_dir" "$ver_label" || return 1
+	fi
+	printf '%s' "$artifact"
+}
+
+feed_publish_stage_apk() {
+	local version_key="$1" staging="$2"
+	local pkg_version="${3:-}"
+	local ver_label feed_dir artifact pkg_dir
+	if [[ -z "$pkg_version" ]]; then
+		pkg_version="$(feed_publish_pkg_version)" || return 1
+	fi
+	ver_label="$(sdk_matrix_version_label "$version_key")"
+	feed_dir="${staging}/$(feed_publish_feed_dir "$version_key")/all"
+	feed_publish_resolve_artifacts "$ver_label" "$pkg_version" || {
+		echo "missing or incomplete built apk/i18n for ${ver_label} under out/x86_64/${ver_label}/fwlive/" >&2
+		return 1
+	}
+	artifact="${FEED_PUBLISH_ARTIFACTS[0]}"
+	mkdir -p "$feed_dir"
+	for path in "${FEED_PUBLISH_ARTIFACTS[@]}"; do
+		cp -a "$path" "$feed_dir/"
+	done
+	pkg_dir="$feed_dir"
+	[[ -n "${APK_FEED_SECRET_KEY:-}" ]] || {
+		echo "APK_FEED_SECRET_KEY must point to RSA private key for apk mkndx --sign" >&2
+		return 1
+	}
+	feed_publish_apply_sdk_pin "$version_key" \
+		|| { echo "failed to pin SDK image for apk sign" >&2; return 1; }
+	ready_rc=0
+	ready_out=""
+	ready_out="$(sdk_matrix_feeds_ready 2>&1)" || ready_rc=$?
+	if [[ "$ready_rc" -eq 2 ]]; then
+		printf '%s\n' "$ready_out" >&2
+		echo "feed integrity failed; refusing apk staging" >&2
+		return 1
+	elif [[ "$ready_rc" -ne 0 ]]; then
+		echo "run docker-sdk.sh build --version ${version_key} before staging apk feed" >&2
+		return 1
+	fi
+	local key_abs tools_dir lib_dir rc
+	pkg_dir="$(feed_publish_abspath "$pkg_dir")"
+	key_abs="$(feed_publish_abspath "$APK_FEED_SECRET_KEY")"
+	tools_dir="$(mktemp -d "${TMPDIR:-/tmp}/fwlive-sign-tools.XXXXXX")"
+	lib_dir="$(mktemp -d "${TMPDIR:-/tmp}/fwlive-sign-lib.XXXXXX")"
+	if ! feed_publish_export_apk_tools "$tools_dir" "$lib_dir"; then
+		rm -rf "$tools_dir" "$lib_dir"
+		echo "failed to export apk signing tools from SDK volume" >&2
+		return 1
+	fi
+	if docker run --rm --network none --user root --platform linux/amd64 \
+		-v "${pkg_dir}:/feed/pkgdir" \
+		-v "${key_abs}:/feed/apk-secret.rsa:ro" \
+		-v "${tools_dir}:/feed/tools:ro" \
+		-v "${lib_dir}:/feed/lib:ro" \
+		"$SDK_MATRIX_IMAGE" \
+		sh -ec '
+			set -e
+			APK=/feed/tools/apk
+			test -x "$APK"
+			cd /feed/pkgdir
+			"$APK" mkndx --allow-untrusted --sign /feed/apk-secret.rsa --output packages.adb *.apk
+			'
+	then
+		rc=0
+	else
+		rc=$?
+	fi
+	rm -rf "$tools_dir" "$lib_dir"
+	[[ "$rc" -eq 0 ]] || return "$rc"
+	printf '%s' "$artifact"
+}
+
+feed_publish_copy_keys() {
+	local staging="$1"
+	[[ -n "${OPKG_FEED_PUBLIC_KEY:-}" && -f "$OPKG_FEED_PUBLIC_KEY" ]] || {
+		echo "missing OPKG_FEED_PUBLIC_KEY (public.key)" >&2
+		return 1
+	}
+	[[ -n "${APK_FEED_PUBLIC_KEY:-}" && -f "$APK_FEED_PUBLIC_KEY" ]] || {
+		echo "missing APK_FEED_PUBLIC_KEY (fwlive-feed.rsa.pub)" >&2
+		return 1
+	}
+	cp -a "$OPKG_FEED_PUBLIC_KEY" "${staging}/public.key" || return 1
+	cp -a "$APK_FEED_PUBLIC_KEY" "${staging}/fwlive-feed.rsa.pub" || return 1
+}
+
+feed_publish_lock_pins() {
+	local version_key="$1"
+	local lock_path pair name sha
+	lock_path="$(sdk_matrix_feeds_lock_path "$version_key")"
+	feeds_lock_require_pins "$lock_path" || return 1
+	FEED_PUBLISH_LOCK_SHA256="$(sha256sum "$lock_path" | awk '{print $1}')"
+	FEED_PUBLISH_FEED_BASE=""
+	FEED_PUBLISH_FEED_PACKAGES=""
+	FEED_PUBLISH_FEED_LUCI=""
+	while IFS= read -r pair || [[ -n "$pair" ]]; do
+		[[ -n "$pair" ]] || continue
+		name="${pair%% *}"
+		sha="${pair#* }"
+		sha="${sha%% *}"
+		case "$name" in
+			base) FEED_PUBLISH_FEED_BASE="$sha" ;;
+			packages) FEED_PUBLISH_FEED_PACKAGES="$sha" ;;
+			luci) FEED_PUBLISH_FEED_LUCI="$sha" ;;
+		esac
+	done <<EOF
+$(feeds_lock_each_pin "$lock_path")
+EOF
+	[[ -n "$FEED_PUBLISH_FEED_BASE" && -n "$FEED_PUBLISH_FEED_PACKAGES" && -n "$FEED_PUBLISH_FEED_LUCI" ]] || {
+		echo "feeds-lock: missing base/packages/luci pin for $version_key" >&2
+		return 1
+	}
+}
+
+feed_publish_write_manifest() {
+	local staging="$1" git_tag="${2:-unknown}"
+	local pkg_version="${3:-}"
+	local manifest ver artifact ver_label sum sdk_digest sdk_image
+	local path artifacts_json
+	if [[ -z "$pkg_version" ]]; then
+		pkg_version="$(feed_publish_pkg_version)" || return 1
+	fi
+	manifest="${staging}/manifest.json"
+	: > "$manifest"
+	printf '{\n  "git_tag": "%s",\n  "packages": [\n' "${git_tag//\"/\\\"}" >> "$manifest"
+	local first=1
+	for ver in 23.05 24.10 25.12; do
+		ver_label="$(sdk_matrix_version_label "$ver")"
+		artifact=""
+		artifacts_json=""
+		feed_publish_resolve_artifacts_or_abort "$ver_label" "$pkg_version" || return 1
+		[[ ${#FEED_PUBLISH_ARTIFACTS[@]} -gt 0 ]] || continue
+		for path in "${FEED_PUBLISH_ARTIFACTS[@]}"; do
+			[[ -n "$artifact" ]] || artifact="$path"
+			sum="$(sha256sum "$path" | awk '{print $1}')"
+			if [[ -n "$artifacts_json" ]]; then
+				artifacts_json+=', '
+			fi
+			artifacts_json+='{"file": "'"${path##*/}"'", "sha256": "'"$sum"'"}'
+		done
+		sum="$(sha256sum "$artifact" | awk '{print $1}')"
+		# Record the immutable digest of the SDK image this cell was built from
+		# (mutable tag → digest makes the release attributable). Per-cell:
+		# resolve target×version, then inspect the pulled image.
+		sdk_matrix_resolve x86-64 "$ver"
+		# Explicit failure propagation (luna fold 2026-08-10): a command
+		# substitution's non-zero status is swallowed unless checked —
+		# without `|| return 1` an unresolvable digest would silently
+		# record an empty sdk_digest and the release would proceed.
+		sdk_digest="$(sdk_matrix_image_digest)" || return 1
+		sdk_image="ghcr.io/openwrt/sdk:$(sdk_matrix_image_tag x86-64 "$ver")"
+		feed_publish_lock_pins "$ver" || return 1
+		[[ $first -eq 1 ]] || printf ',\n' >> "$manifest"
+		first=0
+		printf '    {"openwrt": "%s", "file": "%s", "sha256": "%s", "artifacts": [%s], "sdk_image": "%s", "sdk_digest": "%s", "feeds_lock_sha256": "%s", "feeds": {"base": "%s", "packages": "%s", "luci": "%s"}}' \
+			"$ver" "$(basename "$artifact")" "$sum" "$artifacts_json" "$sdk_image" "$sdk_digest" \
+			"$FEED_PUBLISH_LOCK_SHA256" "$FEED_PUBLISH_FEED_BASE" \
+			"$FEED_PUBLISH_FEED_PACKAGES" "$FEED_PUBLISH_FEED_LUCI" >> "$manifest"
+	done
+	printf '\n  ]\n}\n' >> "$manifest"
+}
+
+# Write the release notes body for tag $2 into $1 from CHANGELOG.md (repo root
+# of $FEED_PUBLISH_ROOT). GitHub's --generate-notes lists merged PRs in the
+# tag range only — direct commits and versions cut in the same hour leave an
+# effectively empty body (v0.1.39 never existed, v0.1.40 shipped with only the
+# compare link). The CHANGELOG fold is the authoritative record; use it.
+# Returns 0 and writes the file when the section exists; non-zero (caller
+# falls back to --generate-notes) when CHANGELOG.md or the version section is
+# missing. Trailing footer: feed/install pointers + previous/compare links.
+feed_publish_release_notes_file() {
+	local out="$1" tag="$2" root prev changelog
+	[[ "$tag" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]] || return 1
+	root="$(feed_publish_root)"
+	changelog="$root/CHANGELOG.md"
+	[[ -f "$changelog" ]] || return 1
+	# Section: from '## [vX.Y.Z]' up to (excluding) the next '## [' heading.
+	local ver="$tag"
+	python3 - "$changelog" "$ver" "$out" <<'PY' || return 1
+import re, sys
+path, ver, out = sys.argv[1:4]
+text = open(path, encoding="utf-8").read()
+m = re.search(r"^## \[%s\].*?(?=^## \[|\Z)" % re.escape(ver), text, re.M | re.S)
+if not m:
+	sys.exit(1)
+open(out, "w", encoding="utf-8").write(m.group(0).rstrip() + "\n")
+PY
+	# Footer: stable usage pointers + lineage links (previous tag if known).
+	prev="$(git -C "$root" tag --sort=v:refname 2>/dev/null |
+		awk -v want="$tag" 'prev && $0==want {print prev} {prev=$0}' | head -1)"
+	{
+		printf '\n**Install (recommended):** signed feed — see [docs/binary-feed.md](https://github.com/lucas-albers-lz4/fwlive/blob/master/docs/binary-feed.md) · Manual download: the assets below\n\n'
+		if [[ -n "$prev" ]]; then
+			printf '**Full Changelog**: https://github.com/lucas-albers-lz4/fwlive/compare/%s...%s\n' "$prev" "$tag"
+		else
+			printf '**Package versions**: PKG_VERSION %s = APP_VERSION (lockstep)\n' "${tag#v}"
+		fi
+	} >> "$out" || return 1
+	return 0
+}
