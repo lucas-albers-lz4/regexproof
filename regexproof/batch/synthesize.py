@@ -229,6 +229,9 @@ def synthesize_compiled(
                         witness=witness,
                         domain_note=domain_note,
                         ground_truth_status=gt_status,
+                        replay_engine_versions=getattr(gt_result, "engine_versions", None)
+                        if result == "sat"
+                        else None,
                     )
                 )
                 key = (f"synth:{corpus}:{regex_id}", bad_char)

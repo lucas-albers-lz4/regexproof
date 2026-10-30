@@ -108,6 +108,8 @@ def _compile_one_record(
         "corpus": corpus_slug,
         "corpus_slug": corpus_slug,
     }
+    if cr.meta and cr.meta.get("engine_versions"):
+        row["engine_versions"] = dict(cr.meta["engine_versions"])
     if cr.unencodable_reason == "timeout":
         row["result"] = "timeout"
     script = serialize_mirror(cr.mirror) if cr.encodable else None

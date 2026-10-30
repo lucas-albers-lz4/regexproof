@@ -43,6 +43,21 @@ def _go_version() -> str | None:
     return m.group(1) if m else None
 
 
+def _java_version() -> str | None:
+    try:
+        out = subprocess.check_output(
+            ["java", "-version"], text=True, stderr=subprocess.STDOUT, shell=False
+        )
+    except (OSError, subprocess.CalledProcessError):
+        return None
+    match = re.search(r'(?i)version "([^"]+)"', out)
+    if match:
+        return match.group(1)
+    # OpenJDK 9+ may omit the word "version" on some vendor builds.
+    match = re.search(r"(?im)^openjdk\s+(\d+(?:\.\d+)*(?:\+[^\s]+)?)", out)
+    return match.group(1) if match else None
+
+
 def _z3_version() -> str:
     import z3
 
@@ -84,6 +99,16 @@ def assert_job(job: str, cfg: dict) -> list[str]:
             errors.append("python.golden_repro_version is not configured")
         elif actual != expected:
             errors.append(f"python {actual} != golden repro pin {expected}")
+    elif job == "java":
+        java_cfg = cfg.get("java") or {}
+        want_major = int(java_cfg.get("major") or 0)
+        actual = _java_version()
+        if actual is None:
+            errors.append("java runtime not available")
+        elif not want_major or int(actual.split(".", 1)[0]) != want_major:
+            errors.append(f"java {actual} major != pin {want_major}")
+        else:
+            print(f"java: ok ({java_cfg.get('distribution', 'unknown')} {actual})")
     elif job == "golden":
         if mm not in py["minors"]:
             errors.append(f"python {mm} not in golden minors {py['minors']}")
@@ -216,7 +241,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument(
         "--job",
         required=True,
-        choices=("proof", "golden", "golden-repro", "redos"),
+        choices=("proof", "golden", "golden-repro", "java", "redos"),
     )
     ap.add_argument(
         "--config",

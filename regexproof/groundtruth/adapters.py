@@ -69,14 +69,16 @@ semantics; single-session framing is the designed protocol for all dialects).
 
 from __future__ import annotations
 
+import json
 import subprocess
 import sys
 import tempfile
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from enum import StrEnum
 from pathlib import Path
 
 from regexproof.compiler.re2 import replay_argv as _re2_replay_argv
+from regexproof.compiler.java import replay_argv as _java_replay_argv
 
 _ROOT = Path(__file__).resolve().parents[2]
 
@@ -84,6 +86,7 @@ _ECMA_MATCH = _ROOT / "helpers" / "ecma" / "match.mjs"
 _PY_MATCH = _ROOT / "helpers" / "python" / "match.py"
 _PCRE2_MATCH = _ROOT / "helpers" / "pcre2" / "match.py"
 _PERL_MATCH = _ROOT / "helpers" / "perl" / "match.py"
+_JAVA_MATCH = _ROOT / "helpers" / "java" / "match.py"
 _YARA_MATCH = _ROOT / "helpers" / "yara" / "match.py"
 
 # Helper exit-code contract (documented above): 2 = engine/compile error,
@@ -136,6 +139,7 @@ class ReplayResult:
 
     verdict: ReplayVerdict
     detail: str = ""
+    engine_versions: dict[str, str] = field(default_factory=dict)
 
     @property
     def accepted(self) -> bool:
@@ -348,7 +352,10 @@ def _parse_batch_lines(stdout: str, n: int) -> list[ReplayVerdict] | None:
 
 def _broadcast(result: ReplayResult, n: int) -> list[ReplayResult]:
     """Replicate one ReplayResult across all witnesses of a failed batch."""
-    return [ReplayResult(result.verdict, result.detail) for _ in range(n)]
+    return [
+        ReplayResult(result.verdict, result.detail, dict(result.engine_versions))
+        for _ in range(n)
+    ]
 
 
 # ---------------------------------------------------------------------------
@@ -501,6 +508,38 @@ def _helper_match_replay(
 
 
 # ---------------------------------------------------------------------------
+# java — helpers/java uses the JDK's Pattern directly and honors call_kind.
+# ---------------------------------------------------------------------------
+def _java_replay(pattern, flags, call_kind, witness, *, timeout_s: float):
+    proc = _subprocess_verdict(
+        _java_replay_argv(pattern, flags or "", call_kind),
+        data=witness.encode("utf-8"),
+        text=False,
+        timeout_s=timeout_s,
+    )
+    if isinstance(proc, ReplayResult):
+        return proc
+    result = _rc_result(
+        proc,
+        compile_error=_COMPILE_ERROR_RC,
+        unavailable=_UNAVAILABLE_RC,
+        label="java/PatternRunner",
+    )
+    try:
+        record = json.loads(proc.stdout.strip() or "{}")
+    except json.JSONDecodeError:
+        record = {}
+    version = record.get("version")
+    if version:
+        return ReplayResult(
+            result.verdict,
+            result.detail,
+            engine_versions={"java": str(version)},
+        )
+    return result
+
+
+# ---------------------------------------------------------------------------
 # pcre / perl — helpers/*/match.py, stdin search runners
 # ---------------------------------------------------------------------------
 def _pcre_replay(pattern, flags, call_kind, witness, *, timeout_s: float):
@@ -569,6 +608,7 @@ _DISPATCH = {
     "py_re": _py_re_replay,
     "ecma": _ecma_replay,
     "re2": _re2_replay,
+    "java": _java_replay,
     "pcre": _pcre_replay,
     "perl": _perl_replay,
     "yara": _yara_replay,

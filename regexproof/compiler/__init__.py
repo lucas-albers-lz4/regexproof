@@ -29,6 +29,15 @@ def compiler_source_fingerprint() -> str:
         digest.update(b"\0")
         digest.update(contents.encode("utf-8"))
         digest.update(b"\0")
+    # base is <repo>/regexproof/compiler; parents[1] is the repository root.
+    java_helpers = base.parents[1] / "helpers" / "java"
+    for source in sorted(java_helpers.glob("*")):
+        if not source.is_file():
+            continue
+        digest.update(str(source.name).encode("utf-8"))
+        digest.update(b"\0")
+        digest.update(source.read_bytes())
+        digest.update(b"\0")
     return digest.hexdigest()
 
 
@@ -75,6 +84,12 @@ def _compile_dialect(
         from regexproof.compiler.pcre import compile_pcre
 
         return compile_pcre(
+            pattern, flags=flags, call_kind=call_kind, max_length=max_length
+        )
+    if dialect == "java":
+        from regexproof.compiler.java import compile_java
+
+        return compile_java(
             pattern, flags=flags, call_kind=call_kind, max_length=max_length
         )
     if dialect == "posix-shell":
@@ -156,6 +171,12 @@ def compile_pattern(
         if cache is not None:
             from regexproof.compiler.cache import mirror_cache_key
 
+            engine_version = None
+            if dialect == "java":
+                from regexproof.compiler.java import java_engine_version
+
+                engine_version = java_engine_version()
+
             cache_key = mirror_cache_key(
                 pattern,
                 flags,
@@ -166,6 +187,7 @@ def compile_pattern(
                 COMPILER_VERSION,
                 z3.get_version_string(),
                 max_length,
+                engine_version,
             )
             artifact = cache.get(cache_key)
             if artifact is not None:

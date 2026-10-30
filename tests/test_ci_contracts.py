@@ -210,6 +210,29 @@ def test_golden_repro_toolchain_rejects_python_patch_drift(monkeypatch):
     assert any("!= golden repro pin" in error for error in errors)
 
 
+def test_java_toolchain_is_explicitly_pinned(monkeypatch):
+    import importlib.util
+    import tomllib
+
+    path = ROOT / "scripts" / "ci-assert-toolchain.py"
+    spec = importlib.util.spec_from_file_location("ci_assert_toolchain_java", path)
+    module = importlib.util.module_from_spec(spec)
+    assert spec.loader is not None
+    spec.loader.exec_module(module)
+    cfg = tomllib.loads((ROOT / "ci" / "toolchain.toml").read_text())
+
+    monkeypatch.setattr(module, "_java_version", lambda: "17.0.20+1-LTS")
+    assert module.assert_job("java", cfg) == []
+    monkeypatch.setattr(module, "_java_version", lambda: "21.0.2")
+    errors = module.assert_job("java", cfg)
+    assert any("major != pin 17" in error for error in errors)
+
+    workflow = (ROOT / ".github" / "workflows" / "ci.yml").read_text()
+    assert "actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad" in workflow
+    assert 'java-version: "17"' in workflow
+    assert "ci-assert-toolchain.py --job java" in workflow
+
+
 def test_ci_assert_toolchain_proof_job():
     proc = subprocess.run(
         [sys.executable, str(ROOT / "scripts" / "ci-assert-toolchain.py"), "--job", "proof"],

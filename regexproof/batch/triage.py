@@ -40,6 +40,8 @@ def triage_records_from_compiled(compiled: list[dict[str, Any]]) -> list[dict[st
             row["negated"] = bool(rec.get("negated"))
         if rec.get("selector") is not None:
             row["selector"] = bool(rec.get("selector"))
+        if rec.get("engine_versions"):
+            row["engine_versions"] = dict(rec["engine_versions"])
         out.append(row)
     out.sort(key=lambda r: r["regex_id"])
     return out
