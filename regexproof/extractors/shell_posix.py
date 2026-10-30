@@ -251,7 +251,9 @@ def _skip_shell_backtick(src: str, start: int) -> int | None:
     return None
 
 
-def _skip_shell_expansion(src: str, start: int) -> tuple[int, bool] | None:
+def _skip_shell_expansion(
+    src: str, start: int, *, double_quoted: bool = False
+) -> tuple[int, bool] | None:
     """Consume one unescaped parameter or command expansion after ``$``."""
     if src.startswith("$(", start):
         return _skip_shell_command_substitution(src, start)
@@ -259,6 +261,12 @@ def _skip_shell_expansion(src: str, start: int) -> tuple[int, bool] | None:
         return start + 1, False
     nxt = src[start + 1]
     if nxt in "'\"":
+        if double_quoted:
+            # Within an existing double-quoted word, `$"` / `$'` are
+            # ordinary dollar-plus-quote characters. Treating the trailing
+            # regex anchor in `"^$HOME$"` as the start of a localized string
+            # loses the entire shell word.
+            return start + 1, False
         # Bash ANSI-C quotes ($'...') and localized quotes ($"...") alter
         # the shell word; keep the whole fragment opaque and reject it.
         i = start + 2
@@ -385,7 +393,7 @@ def _read_shell_word(src: str, start: int) -> _ShellWord | None:
                 i += 2
                 continue
             if c == "$":
-                expansion = _skip_shell_expansion(src, i)
+                expansion = _skip_shell_expansion(src, i, double_quoted=True)
                 if expansion is None:
                     return None
                 end, command = expansion

@@ -162,6 +162,18 @@ def test_double_quoted_escaped_dollar_is_static():
     assert recs[0].get("unencodable_reason") is None
 
 
+def test_double_quoted_regex_end_anchor_is_not_a_shell_quote_prefix():
+    rec = extract(r'''grep -E "^literal$" file''')[0]
+    assert rec["pattern"] == "^literal$"
+    assert rec.get("unencodable_reason") is None
+
+
+def test_double_quoted_expansion_with_end_anchor_fails_closed():
+    rec = extract(r'''grep -E "^$HOME/.local/bin$" file''')[0]
+    assert rec["pattern"] == "^$HOME/.local/bin$"
+    assert rec["unencodable_reason"] == "dynamic-shell-expansion"
+
+
 @pytest.mark.parametrize(
     "src",
     [
