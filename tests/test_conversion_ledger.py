@@ -33,6 +33,55 @@ def test_is_scanner_ndjson_skips_inventory_frozen_and_triage():
     assert not cl.is_scanner_ndjson(Path("gitleaks.json"))
 
 
+def test_historical_fraction_is_excluded_from_conversion_ledger_aggregate(tmp_path: Path):
+    gen = tmp_path / "generated"
+    gen.mkdir()
+    (gen / "current_encodable_fraction.json").write_text(
+        json.dumps({"pilot": "current", "sample_size": 5, "encodable": 4}) + "\n",
+        encoding="utf-8",
+    )
+    (gen / "aidevops_encodable_fraction.json").write_text(
+        json.dumps(
+            {
+                "pilot": "aidevops",
+                "sample_size": 11330,
+                "encodable": 10212,
+                "measurement_status": "historical_pre_615_shell_extractor",
+                "measurement_note": "rerun before current use",
+            }
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    result = cl.yara_encodable_split(gen)
+    assert result["fraction_all_n"] == 5
+    assert result["fraction_all_encodable"] == 4
+    assert result["excluded_non_current_measurements"] == [
+        {
+            "corpus": "aidevops",
+            "measurement_status": "historical_pre_615_shell_extractor",
+            "measurement_note": "rerun before current use",
+        }
+    ]
+    upstream = tmp_path / "upstream.jsonl"
+    upstream.write_text("", encoding="utf-8")
+    aggregate = cl.aggregate(
+        gen_dir=gen,
+        upstream_path=upstream,
+        security_tools=frozenset(),
+        mine_ledger_path=gen / "candidate-ledger.json",
+        queue_path=gen / "mine-queue.json",
+        prior_starvation_history=[],
+    )
+    assert aggregate["yara_split"]["fraction_all_n"] == 5
+    assert len(aggregate["yara_split"]["excluded_non_current_measurements"]) == 1
+    md = cl.render_md(aggregate)
+    assert (
+        "non-current fraction artifacts excluded from inventory aggregate | "
+        "aidevops (historical_pre_615_shell_extractor) |"
+    ) in md
+
+
 def test_classify_scanner_rows_funnel_buckets():
     rows = [
         {

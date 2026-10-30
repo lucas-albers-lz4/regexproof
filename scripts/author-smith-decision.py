@@ -68,6 +68,14 @@ def main(argv: list[str] | None = None) -> int:
     args = ap.parse_args(argv)
     gate = load_json(args.gate)
     fraction = load_json(args.fraction)
+    measurement_status = str(fraction.get("measurement_status") or "")
+    if measurement_status and measurement_status != "current":
+        print(
+            f"error: refusing Smith decision from non-current fraction "
+            f"measurement_status={measurement_status!r}",
+            file=sys.stderr,
+        )
+        return 2
     gate_corpus = str(gate.get("corpus") or "")
     frac_pilot = str(fraction.get("pilot") or "")
     frac_corpus = str(fraction.get("corpus") or "")
@@ -106,6 +114,10 @@ def main(argv: list[str] | None = None) -> int:
         "sites_by_bucket": buckets,
         "additional_surface_outside_probe_scope": extra,
     }
+    if measurement_status:
+        record["measurement_status"] = measurement_status
+        if fraction.get("measurement_note"):
+            record["measurement_note"] = fraction["measurement_note"]
     if jsonschema is None:
         print("error: jsonschema is required", file=sys.stderr)
         return 2

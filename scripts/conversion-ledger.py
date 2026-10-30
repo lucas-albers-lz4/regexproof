@@ -823,8 +823,19 @@ def yara_encodable_split(gen: Path) -> dict[str, Any]:
     yara_ok = 0
     all_unenc_reasons: Counter[str] = Counter()
     yara_unenc_reasons: Counter[str] = Counter()
+    excluded_measurements: list[dict[str, Any]] = []
     for path in sorted(gen.glob("*_encodable_fraction.json")):
         data = _read_json(path)
+        measurement_status = str(data.get("measurement_status") or "")
+        if measurement_status and measurement_status != "current":
+            excluded_measurements.append(
+                {
+                    "corpus": str(data.get("pilot") or data.get("corpus") or path.stem.removesuffix("_encodable_fraction")),
+                    "measurement_status": measurement_status,
+                    "measurement_note": data.get("measurement_note"),
+                }
+            )
+            continue
         n = int(data.get("sample_size") or 0)
         ok = int(data.get("encodable") or 0)
         if n <= 0:
@@ -866,6 +877,7 @@ def yara_encodable_split(gen: Path) -> dict[str, Any]:
         "yara_share_of_unencodable": _ratio(yara_unenc, all_unenc),
         "fullword_share_of_unencodable": _ratio(fw_all, all_unenc),
         "fullword_share_of_yara_unencodable": _ratio(fw_yara, yara_unenc),
+        "excluded_non_current_measurements": excluded_measurements,
     }
 
 
@@ -1202,6 +1214,11 @@ def render_md(data: dict[str, Any]) -> str:
     r = data["rates"]
     up = data["upstream"]
     split = data["security_tool_split"]
+    excluded_measurements = data["yara_split"]["excluded_non_current_measurements"]
+    excluded_summary = ", ".join(
+        "{} ({})".format(item["corpus"], item["measurement_status"])
+        for item in excluded_measurements
+    ) or "none"
 
     def pct(val: float | None) -> str:
         if val is None:
@@ -1262,6 +1279,8 @@ def render_md(data: dict[str, Any]) -> str:
         f"| pipeline accepted (incl. own-code) / SAT GT | {pct(r['pipeline_accepted_per_gt'])} |",
         f"| pipeline accepted / extracted | {pct(r['pipeline_accepted_per_extracted'])} |",
         f"| encodable / extracted excluding YARA inventories | {pct(r['encodable_fraction_excluding_yara'])} |",
+        f"| non-current fraction artifacts excluded from inventory aggregate | "
+        f"{excluded_summary} |",
         f"| YARA share of inventory unencodable | {pct(r['yara_share_of_unencodable'])} |",
         f"| `fullword-boundary` share of inventory unencodable | {pct(r['fullword_share_of_unencodable'])} |",
         "",
