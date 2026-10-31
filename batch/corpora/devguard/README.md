@@ -1,7 +1,7 @@
 # devguard corpus
 
 Pinned l3montree-dev/devguard first-party dependency-firewall package-name
-regexes (Go re2) for Smith triage-trial keep
+regexes (Go re2); Smith `go` supersedes the triage-trial keep
 (see `sweep/accuracy-flywheel/TRIAGE-TRIAL-REVIEW.md`). Mocks/tests excluded.
 
 ## Materialize
@@ -16,6 +16,8 @@ test "$(git -C /tmp/devguard rev-parse HEAD)" = "$PIN"
 ```
 
 Gate: `properties/generated/devguard_gate_decision.json` (also `l3montree-dev-devguard_gate_decision.json`; `triage-trial`).
+Smith: `properties/generated/devguard_smith_decision.json` (`go`; supersedes
+`triage-trial`; 9/9 = 1.0000 encodable).
 Security-tool: `private_first` via `SECURITY_TOOL_CORPORA`.
 
 ## Measure / batch

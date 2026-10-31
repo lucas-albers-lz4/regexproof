@@ -1,7 +1,7 @@
 # llm-honeypot-intelligence corpus
 
 Pinned Leviticus-Triage/llm-honeypot-intelligence live YARA (`rules/yara` only;
-archive snapshots excluded) for Smith triage-trial keep
+archive snapshots excluded); Smith `go` supersedes the triage-trial keep
 (see `sweep/accuracy-flywheel/TRIAGE-TRIAL-REVIEW.md`).
 
 ## Materialize
@@ -16,6 +16,8 @@ test "$(git -C /tmp/llm-honeypot-intelligence rev-parse HEAD)" = "$PIN"
 ```
 
 Gate: `properties/generated/llm-honeypot-intelligence_gate_decision.json` (also `Leviticus-Triage-llm-honeypot-intelligence_gate_decision.json`; `triage-trial`).
+Smith: `properties/generated/llm-honeypot-intelligence_smith_decision.json` (`go`; supersedes
+`triage-trial`; 68/68 = 1.0000 encodable).
 Security-tool: `private_first` via `SECURITY_TOOL_CORPORA`.
 
 ## Measure / batch

@@ -1,6 +1,6 @@
 # inhale corpus
 
-Pinned netspooky/inhale YARA pack for Smith triage-trial keep
+Pinned netspooky/inhale YARA pack; Smith `go` supersedes the triage-trial keep
 (see `sweep/accuracy-flywheel/TRIAGE-TRIAL-REVIEW.md`).
 
 ## Materialize
@@ -15,6 +15,8 @@ test "$(git -C /tmp/inhale rev-parse HEAD)" = "$PIN"
 ```
 
 Gate: `properties/generated/inhale_gate_decision.json` (also `netspooky-inhale_gate_decision.json`; `triage-trial`).
+Smith: `properties/generated/inhale_smith_decision.json` (`go`; supersedes
+`triage-trial`; 306/372 = 0.8226 encodable).
 Security-tool: `private_first` via `SECURITY_TOOL_CORPORA`.
 
 ## Measure / batch
