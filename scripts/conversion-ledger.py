@@ -881,6 +881,92 @@ def yara_encodable_split(gen: Path) -> dict[str, Any]:
     }
 
 
+def _normalized_measurement_id(value: Any) -> str:
+    return str(value or "").strip().casefold()
+
+
+def _fraction_status_index(
+    reports: list[tuple[Path, dict[str, Any]]],
+) -> dict[str, dict[str, Any]]:
+    """Index explicit measurement statuses by report filename, rejecting ambiguity.
+
+    The filename stem preserves report selection (`coreruleset` versus
+    `coreruleset_sample`); the declared corpus fields are validated but are
+    not used as the join key.
+    """
+    indexed: dict[str, dict[str, Any]] = {}
+    for path, report in reports:
+        status = str(report.get("measurement_status") or "")
+        if not status:
+            continue
+        declared = [
+            _normalized_measurement_id(report.get(field))
+            for field in ("pilot", "corpus")
+            if report.get(field)
+        ]
+        if not declared:
+            raise ValueError(
+                f"non-current fraction {path.name} has no pilot/corpus identifier"
+            )
+        if len(set(declared)) > 1:
+            raise ValueError(
+                f"non-current fraction {path.name} has conflicting pilot/corpus identifiers"
+            )
+        stem = path.name.removesuffix("_encodable_fraction.json")
+        key = _normalized_measurement_id(stem)
+        if not key:
+            raise ValueError(f"non-current fraction {path.name} has empty report identifier")
+        if key in indexed:
+            raise ValueError(
+                f"duplicate normalized non-current fraction report identifier: {stem!r}"
+            )
+        indexed[key] = {
+            "measurement_status": status,
+            "measurement_note": report.get("measurement_note"),
+            "declared_corpus": declared[0],
+        }
+    return indexed
+
+
+def _fraction_reports(gen: Path) -> list[tuple[Path, dict[str, Any]]]:
+    return [
+        (path, _read_json(path))
+        for path in sorted(gen.glob("*_encodable_fraction.json"))
+    ]
+
+
+def _validated_historical_summary(
+    path: Path,
+    data: dict[str, Any],
+    measurement: dict[str, Any],
+    matching_paths: list[Path],
+) -> dict[str, Any]:
+    """Validate an unambiguous summary-to-fraction historical status join."""
+    summary_stem = path.name.removesuffix("_batch_summary.json")
+    if len(matching_paths) != 1:
+        raise ValueError(
+            f"non-current fraction {summary_stem!r} matches "
+            f"{len(matching_paths)} batch summaries"
+        )
+    summary_corpus = _normalized_measurement_id(data.get("corpus"))
+    if not summary_corpus:
+        raise ValueError(
+            f"batch summary {path.name} has no corpus identifier for status join"
+        )
+    if summary_corpus != measurement["declared_corpus"]:
+        raise ValueError(
+            f"batch summary {path.name} corpus identifier does not match "
+            "its non-current fraction report"
+        )
+    return {
+        "corpus": str(data.get("corpus")),
+        "measurement_status": measurement["measurement_status"],
+        "measurement_note": measurement.get("measurement_note"),
+        "sites_extracted": int(data.get("extracted") or 0),
+        "sites_encodable": int(data.get("encodable") or 0),
+    }
+
+
 def aggregate(
     *,
     gen_dir: Path | None = None,
@@ -900,37 +986,26 @@ def aggregate(
     summary_triage = 0
     n_summaries = 0
     excluded_batch_summaries: list[dict[str, Any]] = []
-    measurement_by_corpus: dict[str, dict[str, Any]] = {}
-    for fraction_path in sorted(gen.glob("*_encodable_fraction.json")):
-        fraction = _read_json(fraction_path)
-        corpus = str(
-            fraction.get("pilot")
-            or fraction.get("corpus")
-            or fraction_path.name.removesuffix("_encodable_fraction.json")
-        )
-        if fraction.get("measurement_status"):
-            measurement_by_corpus[corpus] = {
-                "measurement_status": fraction["measurement_status"],
-                "measurement_note": fraction.get("measurement_note"),
-            }
-    for path in sorted(gen.glob("*_batch_summary.json")):
+    fraction_reports = _fraction_reports(gen)
+    measurement_by_report = _fraction_status_index(fraction_reports)
+    summary_paths = sorted(gen.glob("*_batch_summary.json"))
+    summary_paths_by_id: dict[str, list[Path]] = defaultdict(list)
+    for path in summary_paths:
+        summary_paths_by_id[
+            _normalized_measurement_id(path.name.removesuffix("_batch_summary.json"))
+        ].append(path)
+    for path in summary_paths:
         data = _read_json(path)
         if "extracted" not in data:
             continue
-        corpus = str(
-            data.get("corpus") or path.name.removesuffix("_batch_summary.json")
-        )
-        measurement = measurement_by_corpus.get(corpus) or {}
+        summary_stem = path.name.removesuffix("_batch_summary.json")
+        summary_key = _normalized_measurement_id(summary_stem)
+        measurement = measurement_by_report.get(summary_key) or {}
         status = str(measurement.get("measurement_status") or "")
         if status and status != "current":
+            matching_paths = summary_paths_by_id.get(summary_key, [])
             excluded_batch_summaries.append(
-                {
-                    "corpus": corpus,
-                    "measurement_status": status,
-                    "measurement_note": measurement.get("measurement_note"),
-                    "sites_extracted": int(data.get("extracted") or 0),
-                    "sites_encodable": int(data.get("encodable") or 0),
-                }
+                _validated_historical_summary(path, data, measurement, matching_paths)
             )
             continue
         n_summaries += 1

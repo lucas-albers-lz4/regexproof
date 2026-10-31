@@ -6,6 +6,8 @@ import importlib.util
 import json
 from pathlib import Path
 
+import pytest
+
 ROOT = Path(__file__).resolve().parents[1]
 
 
@@ -110,6 +112,61 @@ def test_historical_fraction_is_excluded_from_conversion_ledger_aggregate(tmp_pa
         "non-current batch summaries excluded from site totals | "
         "aidevops (historical_pre_615_shell_extractor) |"
     ) in md
+
+
+def test_historical_status_index_rejects_missing_conflicting_and_duplicate_ids():
+    historical = {"measurement_status": "historical", "pilot": "aidevops"}
+    with pytest.raises(ValueError, match="no pilot/corpus identifier"):
+        cl._fraction_status_index(
+            [(Path("aidevops_encodable_fraction.json"), {"measurement_status": "historical"})]
+        )
+
+    with pytest.raises(ValueError, match="conflicting pilot/corpus"):
+        cl._fraction_status_index(
+            [
+                (
+                    Path("aidevops_encodable_fraction.json"),
+                    {**historical, "corpus": "other"},
+                )
+            ]
+        )
+
+    with pytest.raises(ValueError, match="duplicate normalized"):
+        cl._fraction_status_index(
+            [
+                (Path("Aidevops_encodable_fraction.json"), historical),
+                (Path("aidevops_encodable_fraction.json"), historical),
+            ]
+        )
+
+
+def test_historical_status_join_rejects_ambiguous_casefolded_summaries():
+    measurement = {
+        "measurement_status": "historical",
+        "declared_corpus": "yara-rules",
+    }
+    matches = [
+        Path("Yara-Rules_batch_summary.json"),
+        Path("yara-rules_batch_summary.json"),
+    ]
+    with pytest.raises(ValueError, match="matches 2 batch summaries"):
+        cl._validated_historical_summary(
+            matches[0], {"corpus": "yara-rules"}, measurement, matches
+        )
+
+
+def test_historical_status_join_rejects_missing_or_mismatched_summary_id():
+    measurement = {
+        "measurement_status": "historical",
+        "declared_corpus": "aidevops",
+    }
+    path = Path("aidevops_batch_summary.json")
+    with pytest.raises(ValueError, match="no corpus identifier"):
+        cl._validated_historical_summary(path, {}, measurement, [path])
+    with pytest.raises(ValueError, match="does not match"):
+        cl._validated_historical_summary(
+            path, {"corpus": "other"}, measurement, [path]
+        )
 
 
 def test_classify_scanner_rows_funnel_buckets():
