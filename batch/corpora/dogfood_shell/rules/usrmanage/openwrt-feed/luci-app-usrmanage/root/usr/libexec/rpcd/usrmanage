@@ -1,0 +1,349 @@
+#!/bin/sh
+# SPDX-License-Identifier: Apache-2.0
+# Copyright 2026 Lucas Albers <lucas.b.albers@gmail.com>
+#
+# rpcd plugin: ubus object "usrmanage"
+# Passwords are never accepted as ubus JSON string args for mutation methods
+# that set credentials — use the "password" field which is read and passed
+# to the CLI on stdin / password-fd only within this root process, never logged.
+
+USRMANAGE_BIN="${USRMANAGE_BIN:-/usr/sbin/usrmanage}"
+
+read_input() {
+	INPUT=
+	if [ -n "$3" ]; then
+		INPUT=$3
+	else
+		INPUT=$(cat)
+	fi
+}
+
+json_get() {
+	_key=$1
+	printf '%s' "$INPUT" | jsonfilter -e "@.${_key}" 2>/dev/null
+}
+
+json_get_bool() {
+	_key=$1
+	_v=$(json_get "$_key")
+	case "$_v" in
+		true|1|yes) printf '1' ;;
+		*) printf '0' ;;
+	esac
+}
+
+sanitize_actor() {
+	_raw=$1
+	case "$_raw" in
+		''|*[!A-Za-z0-9._@-]*)
+			printf '%s' "unknown"
+			return 0
+			;;
+	esac
+	_alen=${#_raw}
+	if [ "$_alen" -lt 1 ] || [ "$_alen" -gt 64 ]; then
+		printf '%s' "unknown"
+		return 0
+	fi
+	printf '%s' "$_raw"
+}
+
+# SID from the request JSON body (uhttpd injects ubus_rpc_session). rpcd exec
+# plugins do not setenv RPC_SESSION — reading env was a permanent false-green
+# (S1 #168). Requires INPUT from read_input. Exactly 32 hex chars.
+session_sid() {
+	_sid=$(json_get ubus_rpc_session)
+	case "$_sid" in
+		''|*[!0-9a-fA-F]*) return 1 ;;
+	esac
+	[ "${#_sid}" -eq 32 ] || return 1
+	printf '%s' "$_sid"
+}
+
+session_actor() {
+	# Test harness override only — production LuCI never sets this.
+	if [ -n "${USRMANAGE_ACTOR:-}" ]; then
+		sanitize_actor "$USRMANAGE_ACTOR"
+		return 0
+	fi
+	_sid=$(session_sid) || {
+		printf '%s' "unknown"
+		return 0
+	}
+	command -v ubus >/dev/null 2>&1 || {
+		printf '%s' "unknown"
+		return 0
+	}
+	_u=$(ubus call session get "{\"ubus_rpc_session\":\"${_sid}\"}" 2>/dev/null \
+		| jsonfilter -e '@.values.username' 2>/dev/null) || _u=
+	if [ -n "$_u" ]; then
+		sanitize_actor "$_u"
+		return 0
+	fi
+	printf '%s' "unknown"
+}
+
+session_has_write_acl() {
+	# Issue #149: `list --all` enumerates every passwd row >= UID floor, so
+	# honor `all` only for sessions holding the usrmanage WRITE acl. Probe is
+	# the read-only session "access" check; ANY failure fails closed (plain
+	# managed-user list). SID from request body, 32-hex pinned (S1 #168).
+	_sid=$(session_sid) || return 1
+	command -v ubus >/dev/null 2>&1 || return 1
+	_acc=$(ubus call session access "{\"ubus_rpc_session\":\"${_sid}\",\"scope\":\"ubus\",\"object\":\"usrmanage\",\"function\":\"add\"}" 2>/dev/null \
+		| jsonfilter -e '@.access' 2>/dev/null) || return 1
+	case "$_acc" in
+		true|1) return 0 ;;
+	esac
+	return 1
+}
+
+run_cli() {
+	# Explicit argv only — never unquoted $* (issue #3 C2).
+	# Always return 0 so ubus delivers CLI JSON (incl. ok:false) instead of
+	# treating a non-zero CLI exit as an RPC failure (issue #3 M8).
+	_actor=$(session_actor)
+	USRMANAGE_SRC=luci USRMANAGE_ACTOR="$_actor" "$USRMANAGE_BIN" "$@" || true
+	return 0
+}
+
+password_has_control() {
+	# 0 if the value contains a C0 control char or DEL (#72 P2). Mirrors
+	# um_str_has_control in usrmanage-lib.sh; rejects before the CLI pipe so
+	# embedded newlines/tabs never reach --password-fd.
+	_s=$1
+	[ -n "$_s" ] || return 1
+	_nl=$(printf '\nx')
+	_nl=${_nl%x}
+	case "$_s" in
+		*"$_nl"*) return 0 ;;
+	esac
+	printf '%s' "$_s" | awk 'BEGIN {
+		RS = ""; ORS = ""
+		for (n = 1; n < 128; n++)
+			ord[sprintf("%c", n)] = n
+	}
+	{
+		for (i = 1; i <= length($0); i++) {
+			c = substr($0, i, 1)
+			o = ord[c] + 0
+			if ((o > 0 && o < 32) || o == 127) {
+				found = 1
+				exit
+			}
+		}
+	}
+	END { if (found) exit 0; exit 1 }'
+}
+
+run_password_cli() {
+	# Shared: read password, resolve actor, reject empty, pipe to CLI on fd 0, scrub.
+	# Password extraction avoids command substitution (luna fold 2026-08-10):
+	# `_pass=$(json_get password)` strips trailing newlines, so a JSON
+	# password ending in \n silently became clean before the control check —
+	# the exact truncation P2 must reject. Extract to a private temp file
+	# instead and read lines: an embedded OR trailing newline in the value
+	# then appears as a second line and is rejected.
+	_pass_file="$(mktemp)"
+	_pass=
+	printf '%s' "$INPUT" | jsonfilter -e '@.password' > "$_pass_file" 2>/dev/null || true
+	# Sequential reads on ONE fd (luna fold 2026-08-10): a re-opened fd
+	# would re-read line 1, so acceptance would wrongly depend on line 1
+	# having a trailing newline instead of a second line existing. Real
+	# OpenWrt jsonfilter terminates each value with \n, so:
+	#   clean  "NewSecret1"      -> file "NewSecret1\n"  -> 1 line
+	#   trailing "NewSecret1\n"  -> file "NewSecret1\n\n" -> 2 lines
+	#   embedded "...\n..."      -> 2+ lines
+	exec 3< "$_pass_file"
+	IFS= read -r _pass <&3 || true   # EOF-without-newline: content still in _pass
+	if IFS= read -r _extra <&3; then # genuine second line (empty line = trailing \n)
+		_pass=
+		exec 3<&-
+		rm -f "$_pass_file"
+		printf '{"ok":false,"error":"password_control_chars"}\n'
+		return 0
+	fi
+	exec 3<&-
+	rm -f "$_pass_file"
+	_actor=$(session_actor)
+	if [ -z "$_pass" ]; then
+		printf '{"ok":false,"error":"password_required"}\n'
+		return 0
+	fi
+	if password_has_control "$_pass"; then
+		_pass=
+		printf '{"ok":false,"error":"password_control_chars"}\n'
+		return 0
+	fi
+	printf '%s\n' "$_pass" | USRMANAGE_SRC=luci USRMANAGE_ACTOR="$_actor" \
+		"$USRMANAGE_BIN" "$@" --password-fd 0 --json || true
+	_pass=
+	return 0
+}
+
+run_manage_password() {
+	_name=$1
+	_role=$2
+	_luci=$3
+	if [ "$_luci" = "1" ]; then
+		run_password_cli add "$_name" --role "$_role" --luci-login
+	else
+		run_password_cli add "$_name" --role "$_role"
+	fi
+}
+
+run_passwd() {
+	_name=$1
+	run_password_cli passwd "$_name"
+}
+
+run_set_policy() {
+	_preset=$(json_get preset)
+	_min=$(json_get min_length)
+	_rej=$(json_get_bool reject_username)
+	_low=$(json_get_bool require_lower)
+	_up=$(json_get_bool require_upper)
+	_dig=$(json_get_bool require_digit)
+	_spe=$(json_get_bool require_special)
+	case "$_preset" in
+		openwrt|standard|strict)
+			run_cli set-policy --preset "$_preset" --json
+			;;
+		custom)
+			run_cli set-policy --preset custom \
+				--min-length "$_min" \
+				--reject-username "$_rej" \
+				--require-lower "$_low" \
+				--require-upper "$_up" \
+				--require-digit "$_dig" \
+				--require-special "$_spe" \
+				--json
+			;;
+		*)
+			printf '{"ok":false,"error":"invalid_preset"}\n'
+			;;
+	esac
+}
+
+case "$1" in
+	list)
+		echo '{'
+		echo '  "list": { "all": false },'
+		echo '  "show": { "name": "" },'
+		echo '  "audit": { "last": 50 },'
+		echo '  "doctor": {},'
+		echo '  "health": {},'
+		echo '  "policy": {},'
+		echo '  "get_policy": {},'
+		echo '  "set_policy": { "preset": "", "min_length": 8, "reject_username": true, "require_lower": false, "require_upper": false, "require_digit": false, "require_special": false },'
+		echo '  "add": { "name": "", "role": "", "password": "", "luci_login": false },'
+		echo '  "del": { "name": "", "purge_home": false },'
+		echo '  "set_role": { "name": "", "role": "" },'
+		echo '  "set_luci_login": { "name": "", "mode": "" },'
+		echo '  "passwd": { "name": "", "password": "" }'
+		echo '}'
+		;;
+	call)
+		METHOD=$2
+		# health: zero params; ignore hostile body; never read_input (stdin/argv blob).
+		if [ "$METHOD" = "health" ]; then
+			run_cli health --json
+			exit 0
+		fi
+		command -v jsonfilter >/dev/null 2>&1 || {
+			printf '{"ok":false,"error":"jsonfilter_required"}\n'
+			exit 1
+		}
+		read_input "$@"
+		case "$METHOD" in
+			list)
+				_all=$(json_get_bool all)
+				if [ "$_all" = "1" ]; then
+					# Issue #149: diagnostic/read-only sessions must not
+					# enumerate system users — write acl gate or plain list.
+					session_has_write_acl || _all=0
+				fi
+				if [ "$_all" = "1" ]; then
+					run_cli list --json --all
+				else
+					run_cli list --json
+				fi
+				;;
+			show)
+				_name=$(json_get name)
+				# Issue #158: `show` probes any system user; readonly sessions
+				# must not bypass the #149 write-ACL gate. Fail closed without
+				# calling the CLI (no existence oracle via not_found).
+				if ! session_has_write_acl; then
+					printf '{"ok":false,"error":"access_denied"}\n'
+				else
+					run_cli show "$_name" --json
+				fi
+				;;
+			audit)
+				_last=$(json_get last)
+				case "$_last" in
+					''|*[!0-9]*) _last=50 ;;
+				esac
+				run_cli audit --json --last "$_last"
+				;;
+			doctor)
+				run_cli doctor --json
+				;;
+			policy)
+				run_cli policy --json
+				;;
+			get_policy)
+				run_cli policy --json --full
+				;;
+			set_policy)
+				run_set_policy
+				;;
+			add)
+				_name=$(json_get name)
+				_role=$(json_get role)
+				_luci=$(json_get_bool luci_login)
+				run_manage_password "$_name" "$_role" "$_luci"
+				;;
+			del)
+				_name=$(json_get name)
+				_purge=$(json_get_bool purge_home)
+				if [ "$_purge" = "1" ]; then
+					run_cli del "$_name" --purge-home --json
+				else
+					run_cli del "$_name" --json
+				fi
+				;;
+			set_role)
+				_name=$(json_get name)
+				_role=$(json_get role)
+				run_cli set-role "$_name" --role "$_role" --json
+				;;
+		set_luci_login)
+			_name=$(json_get name)
+			_mode=$(json_get mode)
+			if [ -z "$_mode" ]; then
+				# Back-compat: pre-#87 callers used {"enable": bool}.
+				_en=$(json_get_bool enable)
+				[ "$_en" = "1" ] && _mode=enable || _mode=disable
+			fi
+			case "$_mode" in
+				enable|1|on)
+					run_cli set-luci-login "$_name" --enable --json
+					;;
+				disable|0|off) run_cli set-luci-login "$_name" --disable --json ;;
+				reset)        run_cli set-luci-login "$_name" --reset --json ;;
+				*)            printf '{"ok":false,"error":"invalid_luci_login_mode"}\n' ;;
+			esac
+			;;
+			passwd)
+				_name=$(json_get name)
+				run_passwd "$_name"
+				;;
+			*)
+				printf '{"error":"Method not found"}\n'
+				exit 1
+				;;
+		esac
+		;;
+esac

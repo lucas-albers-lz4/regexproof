@@ -1,0 +1,408 @@
+#!/usr/bin/env bash
+# Run Firewall Live View unit tests and CLI checks (no browser).
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$ROOT"
+
+NODE="${NODE:-}"
+if [[ -z "$NODE" ]]; then
+	if command -v node >/dev/null 2>&1; then
+		NODE=node
+	elif command -v nodejs >/dev/null 2>&1; then
+		NODE=nodejs
+	else
+		echo "Install nodejs (e.g. apt install nodejs) to run fwlive tests." >&2
+		exit 1
+	fi
+fi
+
+# Missing tools fail closed. FWLIVE_ALLOW_SKIP=1 is a loud opt-out only.
+# This runner never runs npm ci (#802).
+if [[ "${CI:-}" == "true" && "${FWLIVE_ALLOW_SKIP:-}" == "1" ]]; then
+	echo "FAIL: FWLIVE_ALLOW_SKIP=1 is not allowed in CI." >&2
+	exit 1
+fi
+fwlive_runner_gate_skips=0
+fwlive_skip_missing() {
+	local name="$1" hint="$2"
+	if [[ "${FWLIVE_ALLOW_SKIP:-}" == "1" ]]; then
+		fwlive_runner_gate_skips=$((fwlive_runner_gate_skips + 1))
+		echo "SKIP: ${name} not on PATH (${hint}). FWLIVE_ALLOW_SKIP=1" >&2
+		return 0
+	fi
+	echo "FAIL: ${name} not on PATH (${hint}). Install it, or set FWLIVE_ALLOW_SKIP=1 to skip this gate." >&2
+	exit 1
+}
+
+# shellcheck source=lib/fwlive-test-busybox-awk.sh
+source "$ROOT/scripts/lib/fwlive-test-busybox-awk.sh"
+
+echo "== fwlive JS/CSS lint stack (#290) ==" >&2
+if [[ ! -x "$ROOT/node_modules/.bin/eslint" ||
+	! -x "$ROOT/node_modules/.bin/prettier" ||
+	! -x "$ROOT/node_modules/.bin/stylelint" ]]; then
+	fwlive_skip_missing "eslint/prettier/stylelint" "run npm ci"
+else
+	(cd "$ROOT" && npm run lint:js)
+	echo "== fwlive ESLint AMD-wrap virtual filename (#375 / #377) ==" >&2
+	bash "$ROOT/tests/fwlive-eslint-amd-wrap.test.sh"
+	echo "== fwlive ESLint core Node/CommonJS (#581) ==" >&2
+	bash "$ROOT/tests/fwlive-eslint-core.test.sh"
+	(cd "$ROOT" && npm run lint:format)
+	(cd "$ROOT" && npm run lint:css)
+fi
+if command -v ruff >/dev/null 2>&1; then
+	echo "== fwlive ruff (Python) ==" >&2
+	ruff check "$ROOT/tests" "$ROOT/scripts"
+else
+	fwlive_skip_missing ruff "install ruff for #290 L3"
+fi
+
+echo "== fwlive view syntax (node --check) ==" >&2
+"$NODE" --check openwrt-feed/luci-app-fwlive/htdocs/luci-static/resources/view/status/fwlive.js
+
+echo "== fwlive SPDX headers on shipped surface (#291 / #445) ==" >&2
+PKG="$ROOT/openwrt-feed/luci-app-fwlive"
+# shellcheck source=lib/fwlive-spdx-pot-gates.sh
+source "$ROOT/scripts/lib/fwlive-spdx-pot-gates.sh"
+# Walk Makefile + root/ + htdocs/ so a new shipped file is covered by
+# construction (#445). Skip docs (*.md) and JSON (LuCI ACL/menu must stay
+# strict JSON). htdocs uses the same skip rule as root/: luci.mk installs
+# the whole tree, not only js/css.
+fwlive_spdx_check_pkg "$PKG"
+echo "OK: SPDX headers present on shipped JS/CSS/shell/Makefile" >&2
+
+echo "== fwlive shellcheck (libexec/rpcd) ==" >&2
+bash "$ROOT/scripts/fwlive-shellcheck.sh"
+bash "$ROOT/tests/fwlive-shellcheck-tabs.test.sh"
+
+echo "== fwlive invariant rules, shipped JS (ast-grep) ==" >&2
+bash "$ROOT/scripts/fwlive-ast-grep.sh"
+bash "$ROOT/tests/fwlive-ast-grep-rules.test.sh"
+
+echo "== fwlive .pot #: paths are repo-relative (#256 / #444) ==" >&2
+fwlive_pot_check_pkg "$PKG"
+echo "OK: no absolute #: refs in luci-app-fwlive.pot" >&2
+
+echo "== fwlive SPDX/.pot fail-closed regression (#444 / #445) ==" >&2
+bash "$ROOT/tests/fwlive-spdx-pot-gates.test.sh"
+
+echo "== fwlive upstream-cut invariants + .pot parity (#273) ==" >&2
+bash "$ROOT/tests/fwlive-upstream-cut.test.sh"
+bash "$ROOT/tests/fwlive-upstream-cut-mode.test.sh"
+bash "$ROOT/tests/fwlive-upstream-cut-gate-contract.test.sh"
+
+echo "== fwlive source-to-POT drift (#334 / #454) ==" >&2
+"$NODE" tests/fwlive-i18n-source.test.js
+
+echo "== fwlive parser sync (core vs LuCI) ==" >&2
+"$NODE" tests/fwlive-parser-sync.test.js
+
+echo "== fwlive parser/filter ==" >&2
+"$NODE" tests/fwlive-parser-filter.test.js
+
+echo "== fwlive firewall filter (fixtures) ==" >&2
+"$NODE" tests/fwlive-firewall-filter.test.js
+
+echo "== fwlive shell filter parity ==" >&2
+"$NODE" tests/fwlive-shell-filter.test.js
+
+echo "== fwlive classify spec ==" >&2
+"$NODE" tests/fwlive-classify-spec.test.js
+
+echo "== fwlive KV RegExp cache ==" >&2
+"$NODE" tests/fwlive-kv-regexp-cache.test.js
+
+echo "== fwlive parser corpus pin (#240 C1) ==" >&2
+"$NODE" tests/fwlive-parser-corpus.test.js
+
+echo "== fwlive BusyBox awk lane skip policy ==" >&2
+bash tests/fwlive-test-busybox-awk.test.sh
+
+if command -v busybox >/dev/null 2>&1; then
+	echo "== fwlive shell filter parity (busybox sh) ==" >&2
+	SH='busybox sh' "$NODE" tests/fwlive-shell-filter.test.js
+
+	echo "== fwlive parser corpus pin (#240 C1, busybox sh) ==" >&2
+	SH='busybox sh' "$NODE" tests/fwlive-parser-corpus.test.js
+
+	echo "== fwlive BusyBox awk >= 1.37 (classifier + rpcd selftest) ==" >&2
+	if fwlive_test_prepare_busybox_awk "$ROOT"; then
+		fwlive_test_assert_busybox_awk_lane "$FWLIVE_BUSYBOX_AWK_BIN"
+		"${FWLIVE_BUSYBOX_AWK_BIN}/awk" -f \
+			"${ROOT}/openwrt-feed/luci-app-fwlive/root/usr/libexec/fwlive-is-firewall-event.awk" </dev/null
+		PATH="${FWLIVE_BUSYBOX_AWK_BIN}:${PATH}" busybox sh \
+			"${ROOT}/openwrt-feed/luci-app-fwlive/root/usr/libexec/rpcd/fwlive" __selftest
+		PATH="${FWLIVE_BUSYBOX_AWK_BIN}:${PATH}" SH='busybox sh' "$NODE" tests/fwlive-shell-filter.test.js
+	else
+		lane_status=$?
+		[[ "$lane_status" -eq 2 ]] || exit "$lane_status"
+	fi
+else
+	fwlive_skip_missing busybox "$(
+		if [[ "$(uname -s)" == Darwin ]]; then
+			printf '%s' 'macOS: brew install busybox'
+		else
+			printf '%s' 'Linux: apt install busybox'
+		fi
+	)"
+fi
+
+echo "== fwlive codegen freshness ==" >&2
+"$NODE" tests/fwlive-codegen.test.js
+
+echo "== real jshn compatibility (#316) ==" >&2
+python3 tests/fwlive-jshn-compat.test.py
+
+echo "== fwlive logging ==" >&2
+FWLIVE_LOGGING_VIA_RUNNER=1 bash tests/fwlive-logging.test.sh
+
+echo "== fwlive rpcd security ==" >&2
+FWLIVE_LOGGING_VIA_RUNNER=1 "$NODE" tests/fwlive-rpcd-security.test.js
+
+echo "== fwlive schema (stage 2) ==" >&2
+"$NODE" tests/fwlive-schema.test.js
+
+echo "== fwlive menu depends (ACL-only / #70) ==" >&2
+"$NODE" tests/fwlive-menu-depends.test.js
+
+echo "== fwlive theme CSS (LuCI dark mode / tint resilience) ==" >&2
+"$NODE" tests/fwlive-theme-css.test.js
+
+echo "== fwlive theme tint helpers ==" >&2
+"$NODE" tests/fwlive-theme-tint.test.js
+
+echo "== fwlive view tint persistence ==" >&2
+"$NODE" tests/fwlive-view-tint-persistence.test.js
+echo "== fwlive view tint fallback (#770) ==" >&2
+"$NODE" tests/fwlive-view-tint-fallback.test.js
+
+echo "== fwlive extracted modules smoke ==" >&2
+"$NODE" tests/fwlive-modules-smoke.test.js
+echo "== fwlive keyed table reuse (#784) ==" >&2
+"$NODE" tests/fwlive-table-keyed.test.js
+echo "== fwlive filter-link identity (#1375) ==" >&2
+"$NODE" tests/fwlive-filter-link-identity.test.js
+echo "== fwlive scroll followLive (#782) ==" >&2
+"$NODE" tests/fwlive-view-scroll.test.js
+
+echo "== fwlive render policy ==" >&2
+"$NODE" tests/fwlive-render-policy.test.js
+
+echo "== fwlive render scheduler ==" >&2
+"$NODE" tests/fwlive-render-scheduler.test.js
+
+echo "== fwlive view poll contract (#233 / #240) =="
+"$NODE" tests/fwlive-view-poll-error.test.js
+echo "== fwlive view filter cache (#996) =="
+"$NODE" tests/fwlive-view-filter-cache.test.js
+echo "== fwlive retained-row staleness (#902) =="
+"$NODE" tests/fwlive-view-staleness.test.js
+
+echo "== fwlive view logging toggles (#365 A2) =="
+"$NODE" tests/fwlive-view-logging-toggle.test.js
+
+echo "== fwlive rule-name diagnostics (#1038) =="
+"$NODE" tests/fwlive-view-rules-diagnostics.test.js
+
+echo "== fwlive rpc.declare expect contract (#369) =="
+"$NODE" tests/fwlive-rpc-expect.test.js
+
+echo "== fwlive view poll guard (#240) =="
+"$NODE" tests/fwlive-view-poll-guard.test.js
+echo "== fwlive view rAF harness (#790) =="
+"$NODE" tests/fwlive-view-raf.test.js
+echo "== fwlive poll coordinator (#352) =="
+"$NODE" tests/fwlive-poll-coordinator.test.js
+echo "== fwlive harness fidelity (#837 #836) =="
+"$NODE" tests/fwlive-harness-fidelity.test.js
+echo "== fwlive view Layer 2 backoff =="
+"$NODE" tests/fwlive-view-layer2-backoff.test.js
+echo "== fwlive view pause queued paint (#1279) ==" >&2
+"$NODE" tests/fwlive-view-pause-queued-paint.test.js
+echo "== fwlive view fetch budget (#347) ==" >&2
+"$NODE" tests/fwlive-view-fetch-budget.test.js
+echo "== fwlive view clear entries ==" >&2
+"$NODE" tests/fwlive-view-clear-entries.test.js
+echo "== fwlive view buffer full (#1333) ==" >&2
+"$NODE" tests/fwlive-view-buffer-full.test.js
+"$NODE" tests/fwlive-layer2-performance-rpc.test.mjs
+bash tests/qemu-forwarding-slo-net.test.sh
+python3 tests/qemu-highrate-controls.test.py
+echo "== qemu-forwarding-slo source-contract / static wiring checks (#517) ==" >&2
+bash tests/qemu-forwarding-slo-harness.test.sh
+echo "== qemu ACL session source-contract / static wiring checks (#517) ==" >&2
+bash tests/qemu-acl-session-harness.test.sh
+
+echo "== qemu-wait-guest / feed-smoke source-contract (#839 / #838) ==" >&2
+bash tests/qemu-wait-guest-feed-smoke.test.sh
+echo "== qemu image mount ownership (#1095) ==" >&2
+bash tests/qemu-lab-prepare-image.test.sh
+echo "== qemu budget fixture shim (#1062) ==" >&2
+"$NODE" tests/qemu-budget-split-shim.test.js
+
+echo "== qemu lab ports (#816 #809) ==" >&2
+bash tests/qemu-lab-ports.test.sh
+echo "== qemu lifecycle pidfile / start probe (#815 #805 #808) ==" >&2
+bash tests/qemu-lifecycle.test.sh
+echo "== qemu logging-uninstall source-contract / static wiring checks (#517) ==" >&2
+bash tests/qemu-logging-uninstall-smoke.test.sh
+bash tests/qemu-install-artifact-mode.test.sh
+bash tests/validate-matrix-artifact.test.sh
+bash tests/qemu-smoke-log-pipeline.test.sh
+bash tests/qemu-reset-wan-logging.test.sh
+bash tests/qemu-security-gaps-smoke.test.sh
+echo "== fwlive ping-log lab helpers (#1286 #1287) ==" >&2
+bash tests/fwlive-ping-log-helpers.test.sh
+echo "== UCI option-scoped rollback source contract (#1199) ==" >&2
+bash tests/qemu-uci-stage-revert-smoke.test.sh
+
+echo "== fwlive LuCI-accurate E() harness (#149) ==" >&2
+"$NODE" tests/fwlive-e-harness.test.js
+
+echo "== fwlive hostname cache ==" >&2
+"$NODE" tests/fwlive-hostname-cache.test.js
+
+echo "== fwlive i18n (PO completeness) ==" >&2
+"$NODE" tests/fwlive-i18n.test.js
+
+echo "== fwlive pause/resume buffer ==" >&2
+"$NODE" tests/fwlive-pause-resume-buffer.test.js
+
+echo "== fwlive filter negate toggle ==" >&2
+"$NODE" tests/fwlive-filter-negate.test.js
+
+echo "== fwlive proto filter (menu + custom) ==" >&2
+"$NODE" tests/fwlive-proto-filter.test.js
+echo "== fwlive chip sink and applyHash (#393) ==" >&2
+"$NODE" tests/fwlive-chips-hash.test.js
+
+echo "== formal TLC host orchestration (#1087, #1121) ==" >&2
+bash tests/formal-ci-paths.test.sh
+bash tests/formal-tlc-tooling.test.sh
+bash tests/formal-rollback-trace-pilot.test.sh
+bash tests/formal-rollback-trace-expanded.test.sh
+bash tests/formal-rollback-trace-count.test.sh
+
+echo "== fwlive feed artifact selection (#495) ==" >&2
+bash tests/feed-publish-find-artifact.test.sh
+
+echo "== fwlive feed staging clear guard (#766) ==" >&2
+bash tests/feed-publish-staging-guard.test.sh
+
+echo "== fwlive feed copy-keys / Packages filter (#803 #821) ==" >&2
+bash tests/feed-publish-copy-keys.test.sh
+
+echo "== fwlive host Packages mkhash (#1282) ==" >&2
+bash tests/feed-publish-host-mkhash.test.sh
+
+echo "== fwlive feed release assets ==" >&2
+bash tests/feed-publish-release-assets.test.sh
+
+echo "== fwlive feed deploy downgrade guard (#590) ==" >&2
+bash tests/guard-feed-deploy.test.sh
+
+echo "== fwlive package payload layout (R9a) ==" >&2
+bash tests/fwlive-package-payload.test.sh
+
+echo "== fwlive package lifecycle hook (#389 / #420) ==" >&2
+bash tests/fwlive-package-lifecycle.test.sh
+
+echo "== fwlive apk payload refuses host apk ==" >&2
+bash tests/fwlive-package-payload-apk-host.test.sh
+
+echo "== fwlive SDK apk helper (#420) ==" >&2
+bash tests/sdk-apk.test.sh
+
+echo "== fwlive packaging CI path gate (#557) ==" >&2
+bash tests/packaging-ci-paths.test.sh
+
+echo "== fwlive CI workflow pins (#817 #842) ==" >&2
+bash tests/ci-workflow-pins.test.sh
+python3 tests/release-tag-validation.test.py
+
+echo "== fwlive SDK package format mapping ==" >&2
+bash tests/sdk-matrix-package-format.test.sh
+
+echo "== fwlive SDK release version labels (#519) ==" >&2
+bash tests/sdk-matrix-release-labels.test.sh
+
+echo "== fwlive release pin-site parity (#891) ==" >&2
+bash tests/pin-sites.test.sh
+
+echo "== fwlive SDK publish/verify release-line parity (#745) ==" >&2
+bash tests/sdk-matrix-release-line-parity.test.sh
+
+echo "== fwlive SDK copy-out artifact check ==" >&2
+bash tests/sdk-matrix-copy-out.test.sh
+
+echo "== fwlive SDK digest pin-cache (R7) ==" >&2
+bash tests/sdk-matrix-digests.test.sh
+
+echo "== fwlive SDK cache ownership (runner chown regression) ==" >&2
+bash tests/sdk-matrix-cache-owner.test.sh
+
+echo "== fwlive verify-reproducible --target arch (#518) ==" >&2
+bash tests/verify-reproducible-target-arch.test.sh
+
+echo "== fwlive feed-keys mode (0600) ==" >&2
+bash tests/feed-keys-mode.test.sh
+
+echo "== fwlive validate-feed-keys mode path (0600) ==" >&2
+bash tests/validate-feed-keys-mode.test.sh
+
+echo "== fwlive wait-feed-pages APK key (#421) ==" >&2
+bash tests/wait-feed-pages.test.sh
+echo "== fwlive feed/sdk wave 15 (#814 #813 #812 #811) ==" >&2
+bash tests/feed-sdk-wave15.test.sh
+
+echo "== fwlive feed-index version oracles (#421) ==" >&2
+bash tests/feed-index-version.test.sh
+
+echo "== fwlive feed-install version assert (#421) ==" >&2
+bash tests/qemu-install-from-feed.test.sh
+
+echo "== fwlive README feed install snippet (#1235) ==" >&2
+bash tests/readme-feed-install-snippet.test.sh
+
+echo "== fwlive agent-build-and-deploy ipk-only (#434) ==" >&2
+bash tests/agent-build-and-deploy-ipk.test.sh
+
+echo "== fwlive minimal-build-sdk deploy glob (#1289) ==" >&2
+bash tests/minimal-build-sdk-deploy-glob.test.sh
+
+echo "== fwlive fetch-pin gate ==" >&2
+bash tests/fetch-pin-gate.test.sh
+
+echo "== fwlive feeds.lock src-git pins (#411) ==" >&2
+bash tests/feeds-lock-pins.test.sh
+
+echo "== fwlive adaptive cap (#306 Layer 1) ==" >&2
+bash tests/fwlive-adaptive-cap.test.sh
+
+echo "== fwlive adaptive cap trajectory (#1241) ==" >&2
+bash tests/fwlive-adaptive-trajectory.test.sh
+
+echo "== fwlive logging lock (race) ==" >&2
+bash tests/fwlive-logging-lock.test.sh
+bash tests/fwlive-generation-limit.test.sh
+
+echo "== fwlive rules map (nft) ==" >&2
+"$NODE" tests/fwlive-rules-map.test.js
+
+echo "== fwlive linkcheck classifier ==" >&2
+python3 tests/fwlive-linkcheck-classify.test.py
+echo "== fwlive linkcheck same-file anchor (#942) ==" >&2
+bash tests/fwlive-linkcheck-anchor.test.sh
+echo "== fwlive linkcheck external retry (#461) ==" >&2
+bash tests/fwlive-linkcheck-external.test.sh
+
+echo "== fwlive CLI pipeline ==" >&2
+"$NODE" tests/fwlive-cli-pipeline.test.js
+
+echo "== fwlive fork census (#308 Phase 0a) ==" >&2
+bash "$ROOT/scripts/fork-census.sh" --skip-parse \
+	--expect-filter 7 --expect-poll 10
+
+echo "All fwlive tests passed ($fwlive_runner_gate_skips runner-level gate skips; per-suite SKIPPED output is separate)." >&2

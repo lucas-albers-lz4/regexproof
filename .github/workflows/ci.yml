@@ -158,6 +158,44 @@ jobs:
       - name: CI contract tests (NDJSON / json-legacy)
         run: pytest -q tests/test_ci_contracts.py
 
+  dogfood_shell_corpus:
+    name: dogfood_shell materialized wave
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: "3.13"
+      - name: Install package and pinned solver
+        run: pip install -e ".[dev]"
+      - name: Install pinned PCRE2 helper for POSIX shell compilation
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y pcre2-utils=10.42-4ubuntu2.1
+          test "$(pcre2grep --version | head -1)" = "pcre2grep version 10.42 2022-12-11"
+      - name: Assert toolchain pins
+        run: python scripts/ci-assert-toolchain.py --job proof
+      - name: Remeasure the full pinned shell snapshot
+        run: python scripts/measure-corpus-fraction.py --corpus dogfood_shell --assert-determinism
+      - name: Regenerate aggregate conversion ledger on Linux
+        run: python scripts/conversion-ledger.py
+      - name: Publish generated Linux ledger artifacts
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: dogfood-shell-conversion-ledger-linux
+          path: |
+            properties/generated/conversion-ledger.json
+            properties/generated/conversion-ledger.md
+          if-no-files-found: error
+          retention-days: 3
+      - name: Require committed conversion ledger to match
+        run: git diff --exit-code -- properties/generated/conversion-ledger.json properties/generated/conversion-ledger.md
+      - name: Verify source provenance and recorded measurement
+        run: pytest -q tests/test_dogfood_shell_corpus.py
+
   golden_tests:
     name: Golden tests (Python ${{ matrix.python-version }})
     needs: matrix

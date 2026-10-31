@@ -1,0 +1,20 @@
+#!/bin/sh
+# SPDX-License-Identifier: Apache-2.0
+# Create runtime dirs for usrmanage. Wheel group is created on demand by
+# um_ensure_wheel_group in the CLI (single implementation — issue #3 M6).
+
+mkdir -p /var/log/usrmanage /var/lock /etc/usrmanage
+chmod 750 /var/log/usrmanage
+chmod 755 /etc/usrmanage
+touch /var/log/usrmanage/audit.log
+chmod 0640 /var/log/usrmanage/audit.log
+touch /etc/usrmanage/users
+chmod 0640 /etc/usrmanage/users
+
+# Ensure sudoers fragment mode
+if [ -f /etc/sudoers.d/usrmanage ]; then
+	chmod 0440 /etc/sudoers.d/usrmanage
+	chown root:root /etc/sudoers.d/usrmanage 2>/dev/null || true
+fi
+
+exit 0

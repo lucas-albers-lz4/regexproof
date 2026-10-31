@@ -1,0 +1,28 @@
+{
+  "compiler_fingerprint": "35ea1f238a9e",
+  "extractor_schema_version": "2",
+  "fraction_report_sha256": "ba1fc9465d817709e922b42ad42877f34c6bd136f5d847a265b2f488243eb2ea",
+  "inventory_sha256": "b51cb6cc7dc9356ddc4d0993804c78bec2ad4904e8df7cfc1664404217c078ec",
+  "materialized_bytes": 2194905,
+  "materialized_shell_files": 260,
+  "measurement_command": "python scripts/measure-corpus-fraction.py --corpus dogfood_shell --assert-determinism",
+  "measurement_environment": {
+    "os": "macOS-15.7.9-arm64-arm-64bit",
+    "python": "3.13.16",
+    "z3": "5.0.0"
+  },
+  "regexproof_commit": "c17a782d3362d0a2d1ebbc8a7b084c777cb73109",
+  "result": {
+    "budget_breaches": null,
+    "complete_run": true,
+    "encodable": 910,
+    "fraction": 0.9314,
+    "parse_errors": 0,
+    "sample_size": 977
+  },
+  "schema_version": "1",
+  "snapshot_date": "2026-10-29",
+  "source_files_sha256": "cf3ae7a49c90c9ed6de0dfe38ad15a13d3cc1fe17ec46a48bf005282bff890ab",
+  "source_pins_sha256": "7b5a176215b6719362357f9570739ec763e209c8b900b1fef8c5b8a9830bc6d5",
+  "source_selection": "git archive at source-pins.json commits; batch _is_shell_script filter; MAX_FILE_BYTES cap"
+}

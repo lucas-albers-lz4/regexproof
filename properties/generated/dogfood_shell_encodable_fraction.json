@@ -1,0 +1,43 @@
+{
+  "budget": {
+    "max_disk_mb": 500,
+    "max_mem_mb": 2048,
+    "max_patterns": 5000,
+    "max_wall_s": 900,
+    "redos_wall_s": 180
+  },
+  "budget_breaches": null,
+  "commit": null,
+  "compiler_fingerprint": "35ea1f238a9e",
+  "complete_run": true,
+  "corpus_pin": "sha256:7b5a176215b6719362357f9570739ec763e209c8b900b1fef8c5b8a9830bc6d5",
+  "decision": "go",
+  "decision_rule": "go iff encodable/sample_size >= 0.3",
+  "dialect": "posix-shell",
+  "encodable": 910,
+  "engine_versions": {
+    "python": "3.13.16",
+    "z3": "5.0.0"
+  },
+  "extractor_schema_version": "2",
+  "fraction": 0.9314,
+  "go_no_go_threshold": 0.3,
+  "id_formula": "v2-domain-optional-ascii-default",
+  "inventory_path": "properties/generated/dogfood_shell-inventory.ndjson",
+  "path": "batch/corpora/dogfood_shell/rules",
+  "pilot": "dogfood_shell",
+  "reasons": {
+    "dynamic-shell-expansion": 40,
+    "gnu-extension": 1,
+    "gnu-word-boundary": 1,
+    "internal-anchor": 14,
+    "ok": 910,
+    "per-alternative-anchor": 10,
+    "unclosed-group": 1
+  },
+  "sample_size": 977,
+  "schema_version": "1",
+  "scope": "full_corpus",
+  "unclassified_parse_errors": 0,
+  "wall_s": 3.817
+}

@@ -1,0 +1,26 @@
+{
+  "snapshot_date": "2026-10-29",
+  "source_method": "public GitHub default branch shallow clone; tree materialized via git archive",
+  "repositories": {
+    "usrmanage": {
+      "url": "https://github.com/lucas-albers-lz4/usrmanage.git",
+      "commit": "94d8c899799d57f323f38ffab02405b6460e17f8",
+      "commit_date": "2026-10-12T15:38:31-06:00"
+    },
+    "fwlive": {
+      "url": "https://github.com/lucas-albers-lz4/fwlive.git",
+      "commit": "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e",
+      "commit_date": "2026-10-22T20:18:49-06:00"
+    },
+    "happycow": {
+      "url": "https://github.com/lucas-albers-lz4/happycow.git",
+      "commit": "6b5274a5865ad1e1ad4ae7726608ca4c9e514102",
+      "commit_date": "2026-09-13T17:11:28Z"
+    },
+    "hermes-agent": {
+      "url": "https://github.com/lucas-albers-lz4/hermes-agent.git",
+      "commit": "c69b6471e677d7ff23b5cef0cbc2924e900b6453",
+      "commit_date": "2026-08-18T16:44:32-07:00"
+    }
+  }
+}
