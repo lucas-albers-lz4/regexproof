@@ -869,6 +869,29 @@ def build_report(document: Any) -> dict[str, Any]:
         ),
     }
     dispositions = Counter(row["disposition"]["status"] for row in rows)
+    result_breakdown = Counter(row["result"] for row in rows)
+    ground_truth_status_breakdown = Counter(
+        row["ground_truth_status"] for row in gt_rows
+    )
+    filed_disposition_breakdown = Counter(
+        row["disposition"]["status"] for row in filed_rows
+    )
+    ground_truth_identities = [
+        {
+            "repo_id": row["repo_id"],
+            "url": row["url"],
+            "pin": row["pin"],
+            "site": row["site"],
+            "question_id": row["question_id"],
+            "ground_truth_status": row["ground_truth_status"],
+        }
+        for row in gt_rows
+    ]
+    ground_truth_identities.sort(
+        key=lambda row: (
+            row["repo_id"], row["url"], row["pin"], row["site"], row["question_id"]
+        )
+    )
     return {
         "schema_version": CHECKPOINT_SCHEMA_VERSION,
         "cohort_id": cohort["cohort_id"],
@@ -878,6 +901,22 @@ def build_report(document: Any) -> dict[str, Any]:
         "rates": rates,
         "disposition_breakdown": {
             status: dispositions[status] for status in sorted(dispositions)
+        },
+        "reconciliation": {
+            "schema_version": "1",
+            "result_breakdown": {
+                "sat": result_breakdown["sat"],
+                "unsat": result_breakdown["unsat"],
+            },
+            "ground_truth_status_breakdown": {
+                status: ground_truth_status_breakdown[status]
+                for status in sorted(ground_truth_status_breakdown)
+            },
+            "filed_disposition_breakdown": {
+                status: filed_disposition_breakdown[status]
+                for status in sorted(filed_disposition_breakdown)
+            },
+            "ground_truth_identities": ground_truth_identities,
         },
         "sample_sizes": {
             "unit": "human product properties",

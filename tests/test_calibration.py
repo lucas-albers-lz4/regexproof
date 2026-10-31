@@ -2,12 +2,18 @@
 
 from __future__ import annotations
 
+import json
+from copy import deepcopy
+from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
 
 from regexproof.mine import calibration
 from regexproof.mine.cohort_manifest import build_manifest
+from regexproof.mine.conversion_checkpoint import build_report as build_conversion_report
+
+ROOT = Path(__file__).resolve().parents[1]
 
 
 def _manifest(*repo_ids: str):
@@ -209,3 +215,171 @@ def test_artifact_rejects_reordered_observations(monkeypatch, tmp_path):
     artifact["observations"] = list(reversed(artifact["observations"]))
     with pytest.raises(calibration.CalibrationError, match="frozen cohort order"):
         calibration.validate_artifact(artifact)
+
+
+def test_closeout_binds_and_reports_conversion_checkpoint_separately():
+    manifest = _manifest("one", "two")
+    artifact = {
+        "schema_version": "1",
+        "canonicalization_version": calibration.CANONICALIZATION_VERSION,
+        "cohort_id": manifest["cohort_id"],
+        "manifest_digest": manifest["manifest_digest"],
+        "cohort": manifest,
+        "observations": [
+            {
+                "repo_id": repo["repo_id"],
+                "url": repo["url"],
+                "pin": repo["pin"],
+                "dialect_family": repo["dialect_family"],
+                "sites": 2,
+                "novel_sites": 1,
+                "new_reject_buckets": [],
+                "canonical_ids": [
+                    [repo["repo_id"], "", "py_re"],
+                    [repo["repo_id"] + "-second", "", "py_re"],
+                ],
+                "product_properties": [],
+            }
+            for repo in manifest["repos"]
+        ],
+        "failures": [],
+    }
+    checkpoint = {
+        "schema_version": "2",
+        "cohort_id": manifest["cohort_id"],
+        "manifest_digest": manifest["manifest_digest"],
+        "product_coverage_digest": "a" * 64,
+        "counts": {
+            "asked": 2,
+            "sat": 2,
+            "ground_truthed": 2,
+            "filed": 2,
+            "private_first": 2,
+            "accepted": 0,
+        },
+        "disposition_breakdown": {"private_first": 2},
+        "reconciliation": {
+            "schema_version": "1",
+            "result_breakdown": {"sat": 2, "unsat": 0},
+            "ground_truth_status_breakdown": {"reproduced": 2},
+        "filed_disposition_breakdown": {"private_first": 2},
+            "ground_truth_identities": [
+                {
+                    "repo_id": repo["repo_id"],
+                    "url": repo["url"],
+                    "pin": repo["pin"],
+                    "site": f"{repo['repo_id']}:{index}",
+                    "question_id": f"question-{index}",
+                    "ground_truth_status": "reproduced",
+                }
+                for index, repo in enumerate(manifest["repos"])
+            ],
+        },
+    }
+    closeout = calibration.build_closeout(artifact, conversion_report=checkpoint)
+    conversion = closeout["conversion_checkpoint"]
+    assert closeout["conversion_checkpoint_supplied"] is True
+    assert closeout["product_denominator"] == 2
+    assert closeout["observation_product_denominator"] == 0
+    assert conversion["counts"] == checkpoint["counts"]
+    assert conversion["disposition_breakdown"] == {"private_first": 2}
+    assert conversion["report_sha256"] == calibration.dumps_digest(checkpoint)
+    assert closeout["ground_truth_replay"] == {
+        "status": "unavailable", "reported_rows": 2, "verified_rows": 0
+    }
+    assert "Asked: 2; SAT: 2; ground-truthed: 2; filed: 2" in calibration.render_closeout(closeout)
+    assert "Replay verification unavailable: 0 verified; 2 reported" in calibration.render_closeout(closeout)
+
+    unknown_disposition = deepcopy(checkpoint)
+    unknown_disposition["disposition_breakdown"] = {"totally_fake": 2}
+    with pytest.raises(calibration.CalibrationError, match="disposition breakdown is invalid"):
+        calibration.build_closeout(artifact, conversion_report=unknown_disposition)
+
+    contradictory_private = deepcopy(checkpoint)
+    contradictory_private["counts"]["private_first"] = 0
+    with pytest.raises(calibration.CalibrationError, match="private_first count does not match"):
+        calibration.build_closeout(
+            artifact,
+            conversion_report=contradictory_private,
+        )
+    contradictory_accepted = deepcopy(checkpoint)
+    contradictory_accepted["counts"]["accepted"] = 2
+    with pytest.raises(calibration.CalibrationError, match="accepted count does not match"):
+        calibration.build_closeout(
+            artifact,
+            conversion_report=contradictory_accepted,
+        )
+
+
+def test_closeout_rejects_conversion_checkpoint_from_another_cohort():
+    manifest = _manifest("one", "two")
+    artifact = {
+        "schema_version": "1",
+        "canonicalization_version": calibration.CANONICALIZATION_VERSION,
+        "cohort_id": manifest["cohort_id"],
+        "manifest_digest": manifest["manifest_digest"],
+        "cohort": manifest,
+        "observations": [],
+        "failures": [],
+    }
+    checkpoint = {
+        "schema_version": "2",
+        "cohort_id": "other-cohort",
+        "manifest_digest": manifest["manifest_digest"],
+        "product_coverage_digest": "a" * 64,
+        "counts": {
+            "asked": 0,
+            "sat": 0,
+            "ground_truthed": 0,
+            "filed": 0,
+            "private_first": 0,
+            "accepted": 0,
+        },
+        "disposition_breakdown": {},
+    }
+    with pytest.raises(calibration.CalibrationError, match="cohort_id"):
+        calibration.build_closeout(artifact, conversion_report=checkpoint)
+
+
+def test_committed_twenty_repo_closeout_reconciles_conversion_evidence():
+    evidence = ROOT / "properties" / "calibration" / "2026-09-12-calibration-20-r2"
+    checkpoint = json.loads((evidence / "conversion-checkpoint.json").read_text())
+    report = build_conversion_report(checkpoint)
+    assert report == json.loads((evidence / "conversion-report.json").read_text())
+    assert report["counts"] == {
+        "asked": 2,
+        "sat": 2,
+        "ground_truthed": 2,
+        "filed": 2,
+        "private_first": 2,
+        "accepted": 0,
+    }
+    assert report["disposition_breakdown"] == {"private_first": 2}
+
+    source_rows = [
+        json.loads(line)
+        for line in (ROOT / "properties" / "generated" / "Doberman-Core_conversion.ndjson")
+        .read_text()
+        .splitlines()
+        if line.strip()
+    ]
+    assert [row["canonical"] for row in checkpoint["rows"]] == source_rows
+    upstream_rows = [
+        json.loads(line)
+        for line in (ROOT / "docs" / "conversion-upstream.jsonl").read_text().splitlines()
+        if line.strip()
+    ]
+    upstream_by_key = {
+        (row["site"], row["question_id"]): row
+        for row in upstream_rows
+        if row.get("site") and row.get("question_id")
+    }
+    for row in checkpoint["rows"]:
+        upstream = upstream_by_key[(row["site"], row["question_id"])]
+        assert row["disposition"]["status"] == upstream["status"]
+        assert row["disposition"]["filed_at"] == upstream["filed_at"]
+
+    observation = json.loads((evidence / "canonical-observations.json").read_text())
+    closeout = calibration.build_closeout(observation, conversion_report=report)
+    assert closeout == json.loads((evidence / "closeout.json").read_text())
+    assert calibration.render_closeout(closeout) == (evidence / "closeout.md").read_text()
