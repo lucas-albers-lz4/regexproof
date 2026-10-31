@@ -150,6 +150,31 @@ This pin records which source snapshot the candidate came from. Queue
 that a person inspected, accepted, or proved the candidate, and it does not
 increment `properties_asked`.
 
+Candidate identity is `(site, question_id)`. One source location can support
+multiple independent questions; every claim, adoption, skip, and review-time
+record must retain its question ID. Site-only transitions fail when that site
+has multiple queued questions, and exact duplicate pairs are rejected.
+
+This is queue schema version 2. Version 1 queue artifacts cannot be
+transitioned because they do not preserve question IDs or materialized source
+identity. The loader refuses them and asks the operator to preserve their
+existing statuses and migrate explicitly; it never guesses identities or
+discards claimed/contracted state.
+
+Queue stubs also retain `source_path` and `source_pin`, which identify the
+materialized file and its actual repository commit. For aggregated corpora,
+these values come from `batch/corpora/<cluster>/source-files.json`; the
+contract's `site` stays unchanged. Pass `source_path` to
+`context-extractor.py --source-path` while keeping the original contract site
+in `--site`. For `dogfood_shell`, the contract site omits the `fwlive/`
+repository prefix under `rules/`; the materialized file is pinned to
+`6b1b1f8e4342f675ed04a137998b95a7b7e93e3e`. The B1 fixture is a separate
+historical copy from `a3d6c5421bf0a1df96d6c6caddda144be52283b3`; queue
+provenance does not imply those sources are the same revision.
+Review-minute `--pin` uses the aggregate corpus snapshot pin (including
+`sha256:` pins) so one wave has a single identity; the queue row retains the
+file-level `source_pin` for its exact repository source.
+
 Take the top 15. **Read 50–150 lines around each call site.** That read is
 the quality gate (happycow interpolated `re.search` already had `re.escape`;
 usrmanage P5 “no `=` in values” was false because audit lines embed

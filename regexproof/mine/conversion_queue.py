@@ -24,6 +24,7 @@ import pathlib
 from typing import Any
 
 QUEUE_ROOT = pathlib.Path("properties/conversion_queue")
+QUEUE_SCHEMA_VERSION = "2"
 
 STATUSES = frozenset(
     {
@@ -57,7 +58,212 @@ def corpus_snapshot_pin(cluster: str) -> str:
     return pin.strip()
 
 
+def _site_path(site: str) -> str:
+    parts = str(site or "").rsplit(":", 2)
+    if len(parts) != 3 or not parts[1].isdigit():
+        raise SystemExit(
+            f"conversion_queue: site {site!r} must be path:line:token"
+        )
+    return parts[0]
+
+
+def _assert_clean_provenance_files(
+    paths: list[pathlib.Path], *, repo_root: pathlib.Path | None = None
+) -> None:
+    """Require source indexes and their digest record to be committed."""
+    import subprocess
+
+    root = repo_root or pathlib.Path(__file__).resolve().parents[2]
+    try:
+        relative = [path.resolve().relative_to(root.resolve()).as_posix() for path in paths]
+    except ValueError:
+        return
+    try:
+        tracked = subprocess.run(
+            ["git", "ls-files", "--error-unmatch", "--", *relative],
+            cwd=root,
+            capture_output=True,
+            text=True,
+            check=False,
+            timeout=10,
+        )
+        clean = subprocess.run(
+            ["git", "status", "--porcelain", "--", *relative],
+            cwd=root,
+            capture_output=True,
+            text=True,
+            check=False,
+            timeout=10,
+        )
+    except OSError as exc:
+        raise SystemExit(
+            f"conversion_queue: cannot verify committed source provenance: {exc}"
+        ) from exc
+    if tracked.returncode != 0 or clean.returncode != 0 or clean.stdout.strip():
+        raise SystemExit(
+            "conversion_queue: source-files/source-pins/measurement-provenance "
+            "must be tracked and clean before queue use"
+        )
+
+
+def materialized_source_identity(cluster: str, site: str) -> dict[str, str]:
+    """Resolve a site path to its materialized path and source provenance.
+
+    Aggregated corpora may add a repository directory when materializing
+    files. Their source-files.json is authoritative; suffix mapping must be
+    unique. Single-repository corpora use the site path relative to ``rules``.
+    """
+    import hashlib
+    import json
+    from pathlib import PurePosixPath
+
+    from regexproof.batch.manifests import CORPUS_MANIFESTS
+
+    manifest = CORPUS_MANIFESTS.get(cluster)
+    if manifest is None:
+        raise SystemExit(f"conversion_queue: no corpus manifest for {cluster!r}")
+    source_path = _site_path(site).replace("\\", "/")
+    relative = PurePosixPath(source_path)
+    if relative.is_absolute() or ".." in relative.parts or not relative.parts:
+        raise SystemExit(
+            f"conversion_queue: unsafe source path {source_path!r} in site {site!r}"
+        )
+    snapshot_pin = corpus_snapshot_pin(cluster)
+    rules_path = pathlib.Path(manifest.get("path") or manifest.get("full_path") or "")
+    index_path = rules_path.parent / "source-files.json" if rules_path else None
+    if index_path is None or not index_path.is_file():
+        return {"source_path": relative.as_posix(), "source_pin": snapshot_pin}
+
+    try:
+        index_bytes = index_path.read_bytes()
+        records = json.loads(index_bytes)["files"]
+        pins_path = index_path.parent / "source-pins.json"
+        provenance_path = index_path.parent / "measurement-provenance.json"
+        pins_bytes = pins_path.read_bytes()
+        provenance = json.loads(provenance_path.read_text(encoding="utf-8"))
+        pins = json.loads(pins_bytes)
+    except (OSError, json.JSONDecodeError, KeyError, TypeError) as exc:
+        raise SystemExit(
+            f"conversion_queue: invalid materialized source provenance beside "
+            f"{index_path}: {exc}"
+        ) from exc
+
+    index_digest = hashlib.sha256(index_bytes).hexdigest()
+    pins_digest = hashlib.sha256(pins_bytes).hexdigest()
+    if provenance.get("source_files_sha256") != index_digest:
+        raise SystemExit(
+            f"conversion_queue: source-files index digest {index_digest} does not "
+            f"match measurement provenance {provenance_path}"
+        )
+    if provenance.get("source_pins_sha256") != pins_digest:
+        raise SystemExit(
+            f"conversion_queue: source-pins digest {pins_digest} does not match "
+            f"measurement provenance {provenance_path}"
+        )
+    if snapshot_pin != f"sha256:{pins_digest}":
+        raise SystemExit(
+            f"conversion_queue: corpus pin {snapshot_pin!r} does not bind "
+            f"source-pins.json digest {pins_digest}"
+        )
+
+    repositories = pins.get("repositories")
+    if not isinstance(repositories, dict) or not isinstance(records, list):
+        raise SystemExit(
+            f"conversion_queue: malformed source-pins or source-files data for {cluster}"
+        )
+    for record in records:
+        if not isinstance(record, dict) or not isinstance(record.get("path"), str):
+            raise SystemExit(
+                f"conversion_queue: malformed source-files row in {index_path}"
+            )
+        source_repo = record["path"].split("/", 1)[0]
+        repository = repositories.get(source_repo)
+        if not isinstance(repository, dict):
+            raise SystemExit(
+                f"conversion_queue: source path {record['path']!r} has no pinned "
+                "repository in source-pins.json"
+            )
+        if (
+            record.get("source_commit") != repository.get("commit")
+            or record.get("source_url") != repository.get("url")
+        ):
+            raise SystemExit(
+                f"conversion_queue: source provenance for {record['path']!r} "
+                "conflicts with source-pins.json"
+            )
+
+    # These tracked files jointly bind the aggregate source pin, path index,
+    # and recorded measurement. Refuse a dirty local provenance set.
+    _assert_clean_provenance_files(
+        [index_path, pins_path, provenance_path]
+    )
+    matches = []
+    for record in records:
+        candidate = record.get("path") if isinstance(record, dict) else None
+        if isinstance(candidate, str) and (
+            candidate == source_path or candidate.endswith("/" + source_path)
+        ):
+            matches.append(record)
+    if len(matches) != 1:
+        raise SystemExit(
+            f"conversion_queue: site {site!r} maps to {len(matches)} files in "
+            f"{index_path}; source mapping must be unique"
+        )
+    record = matches[0]
+    mapped = PurePosixPath(record["path"])
+    if mapped.is_absolute() or ".." in mapped.parts:
+        raise SystemExit(
+            f"conversion_queue: unsafe materialized source path {record['path']!r}"
+        )
+    source_pin = record.get("source_commit")
+    if not isinstance(source_pin, str) or not source_pin.strip():
+        raise SystemExit(
+            f"conversion_queue: source index has no pin for {record['path']!r}"
+        )
+    materialized = (rules_path.resolve() / mapped.as_posix()).resolve()
+    try:
+        materialized.relative_to(rules_path.resolve())
+    except ValueError as exc:
+        raise SystemExit(
+            f"conversion_queue: materialized path {record['path']!r} escapes "
+            f"the rules root {rules_path}"
+        ) from exc
+    if not materialized.is_file():
+        raise SystemExit(
+            f"conversion_queue: materialized source {materialized} is missing"
+        )
+    data = materialized.read_bytes()
+    expected_bytes = record.get("bytes")
+    expected_sha256 = record.get("sha256")
+    if len(data) != expected_bytes or hashlib.sha256(data).hexdigest() != expected_sha256:
+        raise SystemExit(
+            f"conversion_queue: materialized source bytes for {record['path']!r} "
+            "do not match source-files.json"
+        )
+    result = {"source_path": mapped.as_posix(), "source_pin": source_pin.strip()}
+    for key in ("sha256", "source_url"):
+        value = record.get(key)
+        if value is not None:
+            if not isinstance(value, str) or not value.strip():
+                raise SystemExit(
+                    f"conversion_queue: invalid {key} for {record['path']!r}"
+                )
+            result[f"source_{key}" if key == "sha256" else key] = value.strip()
+    return result
+
+
 def _validate_queue_identity(q: dict[str, Any], cluster: str) -> None:
+    version = q.get("schema_version")
+    if version == "1":
+        raise SystemExit(
+            "conversion_queue: legacy schema v1 queue lacks question/source identity; "
+            "preserve its review states and migrate it explicitly before transition"
+        )
+    if version != QUEUE_SCHEMA_VERSION:
+        raise SystemExit(
+            f"conversion_queue: unsupported queue schema_version {version!r}; "
+            f"expected {QUEUE_SCHEMA_VERSION!r}"
+        )
     if q.get("cluster") != cluster:
         actual = q.get("cluster")
         raise SystemExit(
@@ -65,6 +271,7 @@ def _validate_queue_identity(q: dict[str, Any], cluster: str) -> None:
             f"artifact declares {actual!r}"
         )
     expected_pin = corpus_snapshot_pin(cluster)
+    seen = set()
     for row in q.get("candidate_sites", []):
         if row.get("corpus") != cluster:
             raise SystemExit(
@@ -77,6 +284,32 @@ def _validate_queue_identity(q: dict[str, Any], cluster: str) -> None:
                 f"conversion_queue: site {row.get('site')!r} pin does not match "
                 "manifest snapshot"
             )
+        question_id = row.get("question_id")
+        if not isinstance(question_id, str) or not question_id.strip():
+            raise SystemExit(
+                f"conversion_queue: site {row.get('site')!r} has no question_id"
+            )
+        identity = (row.get("site"), question_id)
+        if identity in seen:
+            raise SystemExit(
+                f"conversion_queue: duplicate candidate identity {identity!r}"
+            )
+        seen.add(identity)
+        expected_source = materialized_source_identity(
+            cluster, str(row.get("site") or "")
+        )
+        for key, expected in expected_source.items():
+            if row.get(key) != expected:
+                raise SystemExit(
+                    f"conversion_queue: site {row.get('site')!r} {key} does not "
+                    "match the materialized source manifest"
+                )
+        for key in ("source_sha256", "source_url"):
+            if key in row and key not in expected_source:
+                raise SystemExit(
+                    f"conversion_queue: site {row.get('site')!r} has unsupported "
+                    f"{key} provenance for its materialized source"
+                )
 
 # Skip-reason vocabulary (Luna r3 #3): forced close-out accepts ONLY these
 # reasons — an arbitrary nonblank string must not satisfy the requirement.
@@ -96,7 +329,7 @@ def queue_path(cluster: str) -> pathlib.Path:
 
 def empty_queue(cluster: str, *, generation: int, wave_id: str) -> dict[str, Any]:
     return {
-        "schema_version": "1",
+        "schema_version": QUEUE_SCHEMA_VERSION,
         "cluster": cluster,
         "wave_id": wave_id,
         "wave_generation": generation,
@@ -155,8 +388,27 @@ def emit(
             f"conversion_queue: emit refused — cluster {cluster!r} is not a "
             "plain cluster name"
         )
+    path = (pathlib.Path(root) if root is not None else QUEUE_ROOT) / f"{cluster}.json"
+    if path.exists() or path.is_symlink():
+        try:
+            existing = json.loads(path.read_text(encoding="utf-8"))
+            existing_version = (
+                existing.get("schema_version") if isinstance(existing, dict) else None
+            )
+        except (OSError, json.JSONDecodeError):
+            existing_version = "invalid"
+        if existing_version == "1":
+            raise SystemExit(
+                f"conversion_queue: emit refused — legacy schema v1 queue exists at "
+                f"{path}; preserve its review states and migrate/archive explicitly"
+            )
+        raise SystemExit(
+            f"conversion_queue: emit refused — queue already exists at {path}; "
+            "preserve its review state and migrate/archive explicitly"
+        )
     expected_pin = corpus_snapshot_pin(cluster)
     q = empty_queue(cluster, generation=generation, wave_id=wave_id)
+    seen_identities = set()
     for i, item in enumerate(ranked, start=1):
         row_corpus = item.get("corpus")
         if row_corpus != cluster:
@@ -175,9 +427,23 @@ def emit(
                 f"conversion_queue: emit refused — candidate {item.get('site')!r} "
                 f"pin {pin.strip()!r} does not match manifest pin {expected_pin!r}"
             )
+        site = str(item.get("site") or "")
+        question_id = item.get("question_id")
+        if not isinstance(question_id, str) or not question_id.strip():
+            raise SystemExit(
+                f"conversion_queue: candidate {site!r} has no question_id"
+            )
+        identity = (site, question_id)
+        if identity in seen_identities:
+            raise SystemExit(
+                f"conversion_queue: duplicate candidate identity {identity!r}"
+            )
+        seen_identities.add(identity)
+        source_identity = materialized_source_identity(cluster, site)
         row = {
             "rank": i,
-            "site": str(item.get("site") or ""),
+            "site": site,
+            "question_id": question_id,
             "status": "emitted",
             "reasons": [],
             "created_at": clock_iso or "unknown_date",
@@ -205,38 +471,59 @@ def emit(
         ):
             if key in item:
                 row[key] = item[key]
+        row.update(source_identity)
+        for key in ("source_sha256", "source_url"):
+            if key in item and item[key] != source_identity.get(key):
+                raise SystemExit(
+                    f"conversion_queue: candidate {identity!r} {key} conflicts "
+                    "with materialized source manifest"
+                )
+            if key in source_identity:
+                row[key] = source_identity[key]
         q["candidate_sites"].append(row)
-    path = (pathlib.Path(root) if root is not None else QUEUE_ROOT) / f"{cluster}.json"
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(q, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     return path
 
 
-def _row(q: dict[str, Any], site: str) -> dict[str, Any]:
+def _row(
+    q: dict[str, Any], site: str, question_id: str | None = None
+) -> dict[str, Any]:
     cluster = q.get("cluster")
     if not isinstance(cluster, str) or not cluster.strip():
         raise SystemExit("conversion_queue: queue has no valid cluster identity")
     expected_pin = corpus_snapshot_pin(cluster)
-    for r in q["candidate_sites"]:
-        if r["site"] == site:
-            if r.get("corpus") != cluster:
-                raise SystemExit(
-                    f"conversion_queue: site {site!r} corpus does not match queue "
-                    f"cluster {cluster!r}; refusing review transition"
-                )
-            pin = r.get("pin")
-            if not isinstance(pin, str) or not pin.strip():
-                raise SystemExit(
-                    f"conversion_queue: site {site!r} has no nonblank corpus "
-                    "snapshot pin; refusing review transition"
-                )
-            if pin.strip() != expected_pin:
-                raise SystemExit(
-                    f"conversion_queue: site {site!r} pin does not match manifest "
-                    "snapshot; refusing review transition"
-                )
-            return r
-    raise SystemExit(f"conversion_queue: site {site!r} not in queue {q['cluster']}")
+    matches = [r for r in q["candidate_sites"] if r.get("site") == site]
+    if question_id is not None:
+        matches = [r for r in matches if r.get("question_id") == question_id]
+    if len(matches) > 1:
+        raise SystemExit(
+            f"conversion_queue: site {site!r} has multiple questions; "
+            "question_id is required"
+        )
+    if not matches:
+        identity = f"{site!r}/{question_id!r}" if question_id is not None else repr(site)
+        raise SystemExit(
+            f"conversion_queue: candidate {identity} not in queue {q['cluster']}"
+        )
+    row = matches[0]
+    if row.get("corpus") != cluster:
+        raise SystemExit(
+            f"conversion_queue: site {site!r} corpus does not match queue "
+            f"cluster {cluster!r}; refusing review transition"
+        )
+    pin = row.get("pin")
+    if not isinstance(pin, str) or not pin.strip():
+        raise SystemExit(
+            f"conversion_queue: site {site!r} has no nonblank corpus "
+            "snapshot pin; refusing review transition"
+        )
+    if pin.strip() != expected_pin:
+        raise SystemExit(
+            f"conversion_queue: site {site!r} pin does not match manifest "
+            "snapshot; refusing review transition"
+        )
+    return row
 
 
 def _queue_lock_path(cluster: str, root: pathlib.Path | None = None) -> pathlib.Path:
@@ -257,6 +544,7 @@ def claim(
     cluster: str,
     site: str,
     *,
+    question_id: str | None = None,
     corpus_status: str,
     ledger_state: dict[str, Any],
     generation: int,
@@ -279,7 +567,7 @@ def claim(
                 f"conversion_queue: claim refused — corpus {cluster} is "
                 f"{corpus_status!r}, not {GATED_GO!r}"
             )
-        row = _row(q, site)
+        row = _row(q, site, question_id)
         if int(row.get("rank") or 999) > 15:
             raise SystemExit(
                 f"conversion_queue: claim refused — {site} is rank "
@@ -350,6 +638,7 @@ def contract(
     cluster: str,
     site: str,
     *,
+    question_id: str | None = None,
     contract: dict[str, Any],
     root: pathlib.Path | None = None,
     lock_log: pathlib.Path | None = None,
@@ -361,7 +650,7 @@ def contract(
 
     def _contract() -> dict[str, Any]:
         q = load_queue(cluster, root)
-        row = _row(q, site)
+        row = _row(q, site, question_id)
         if row["status"] != "claimed":
             raise SystemExit(
                 f"conversion_queue: contract refused — {site} status is "
@@ -401,6 +690,22 @@ def contract(
                 f"conversion_queue: contract refused — {site} is a stub "
                 "(provenance=stub); stubs never become contracts directly"
             )
+        contract_site = contract.get("site")
+        if contract_site is not None and contract_site != row["site"]:
+            raise SystemExit(
+                f"conversion_queue: contract refused — contract site {contract_site!r} "
+                f"does not match queued site {row['site']!r}"
+            )
+        contract_question = contract.get("question_id") or contract.get("name")
+        if (
+            contract_question is not None
+            and contract_question != row.get("question_id")
+        ):
+            raise SystemExit(
+                f"conversion_queue: contract refused — question identity "
+                f"{contract_question!r} does not match queued question "
+                f"{row.get('question_id')!r}"
+            )
         row["status"] = "contracted"
         row["contract"] = contract
         _write(q, root)
@@ -413,6 +718,7 @@ def skip(
     cluster: str,
     site: str,
     *,
+    question_id: str | None = None,
     reason: str,
     note: str = "",
     root: pathlib.Path | None = None,
@@ -430,7 +736,7 @@ def skip(
     status = f"skipped_{reason}"
     def _skip() -> dict[str, Any]:
         q = load_queue(cluster, root)
-        row = _row(q, site)
+        row = _row(q, site, question_id)
         if row["status"] == "contracted":
             raise SystemExit(
                 f"conversion_queue: skip refused — {site} is contracted; a live "

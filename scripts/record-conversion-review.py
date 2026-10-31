@@ -34,7 +34,10 @@ from regexproof.mine.conversion_review_minutes import (  # noqa: E402
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--corpus", required=True)
-    parser.add_argument("--pin", required=True, help="40-char lowercase source SHA")
+    parser.add_argument(
+        "--pin", required=True,
+        help="aggregate corpus snapshot pin (Git SHA-1 or sha256 digest)",
+    )
     parser.add_argument("--wave-id", required=True)
     parser.add_argument("--idiom-bucket", required=True)
     parser.add_argument("--site", required=True, help="ranked source site")
@@ -51,7 +54,11 @@ def main(argv: list[str] | None = None) -> int:
         ),
     )
     parser.add_argument("--active-minutes", required=True, type=float)
-    parser.add_argument("--question-id", help="required for --outcome contracted")
+    parser.add_argument(
+        "--question-id",
+        required=True,
+        help="candidate question identity from the ranked queue",
+    )
     parser.add_argument(
         "--log",
         type=Path,

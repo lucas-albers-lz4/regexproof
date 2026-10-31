@@ -23,7 +23,7 @@ LOG_PATH = (
     / "generated"
     / "conversion_review_minutes.jsonl"
 )
-PIN_RE = re.compile(r"^[0-9a-f]{40}$")
+PIN_RE = re.compile(r"^(?:[0-9a-f]{40}|sha256:[0-9a-f]{64})$")
 ID_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.-]*$")
 OUTCOMES = frozenset(
     {
@@ -97,7 +97,7 @@ def _validate_row(row: Any, index: int) -> dict[str, Any]:
     pin = _required_text(row["pin"], f"{context}.pin")
     if PIN_RE.fullmatch(pin) is None:
         raise ConversionReviewError(
-            f"{context}.pin must be 40 lowercase hexadecimal characters"
+            f"{context}.pin must be a Git SHA-1 or sha256:<64 lowercase hex> corpus pin"
         )
     _required_text(row["site"], f"{context}.site")
     if not isinstance(row["rank"], int) or isinstance(row["rank"], bool):
@@ -105,24 +105,15 @@ def _validate_row(row: Any, index: int) -> dict[str, Any]:
     if not 1 <= row["rank"] <= 15:
         raise ConversionReviewError(f"{context}.rank must be in the top 15")
     question_id = row["question_id"]
-    if question_id is not None:
-        question_id = _required_text(question_id, f"{context}.question_id")
-        if ID_RE.fullmatch(question_id) is None:
-            raise ConversionReviewError(
-                f"{context}.question_id must be a plain identifier"
-            )
+    question_id = _required_text(question_id, f"{context}.question_id")
+    if ID_RE.fullmatch(question_id) is None:
+        raise ConversionReviewError(
+            f"{context}.question_id must be a plain identifier"
+        )
     outcome = _required_text(row["outcome"], f"{context}.outcome")
     if outcome not in OUTCOMES:
         raise ConversionReviewError(
             f"{context}.outcome must be one of {sorted(OUTCOMES)}"
-        )
-    if outcome == "contracted" and question_id is None:
-        raise ConversionReviewError(
-            f"{context}.question_id is required for a contracted site"
-        )
-    if outcome != "contracted" and question_id is not None:
-        raise ConversionReviewError(
-            f"{context}.question_id must be omitted for a skipped site"
         )
     if row["source"] != "stopwatch":
         raise ConversionReviewError(f"{context}.source must be 'stopwatch'")
@@ -150,7 +141,7 @@ def load_rows(path: pathlib.Path | None = None) -> list[dict[str, Any]]:
         return []
     rows: list[dict[str, Any]] = []
     seen_ids: set[str] = set()
-    seen_reviews: set[tuple[str, str, str]] = set()
+    seen_reviews: set[tuple[str, str, str, str | None]] = set()
     wave_dimensions: dict[tuple[str, str], tuple[str, str]] = {}
     wave_ranks: dict[tuple[str, str], set[int]] = {}
     for index, line in enumerate(source.read_text(encoding="utf-8").splitlines(), 1):
@@ -164,7 +155,9 @@ def load_rows(path: pathlib.Path | None = None) -> list[dict[str, Any]]:
             ) from exc
         row = _validate_row(raw, index)
         measurement_id = row["measurement_id"]
-        review_key = (row["corpus"], row["wave_id"], row["site"])
+        review_key = (
+            row["corpus"], row["wave_id"], row["site"], row["question_id"]
+        )
         if measurement_id in seen_ids:
             raise ConversionReviewError(
                 f"{source}:{index}: duplicate measurement_id {measurement_id}"
@@ -208,7 +201,7 @@ def append_row(
     question_id: str | None = None,
     path: pathlib.Path | None = None,
 ) -> dict[str, Any]:
-    """Append one completed human review, refusing duplicate site/wave rows."""
+    """Append one completed review, refusing duplicate candidate identities."""
     row = {
         "schema_version": "1",
         "measurement_id": str(uuid.uuid4()),
@@ -237,7 +230,7 @@ def append_row(
         fh.seek(0)
         existing_text = fh.read()
         existing_ids: set[str] = set()
-        existing_reviews: set[tuple[str, str, str]] = set()
+        existing_reviews: set[tuple[str, str, str, str | None]] = set()
         existing_wave_dimensions: dict[tuple[str, str], tuple[str, str]] = {}
         existing_wave_ranks: dict[tuple[str, str], set[int]] = {}
         for index, line in enumerate(existing_text.splitlines(), 1):
@@ -255,7 +248,9 @@ def append_row(
                     f"{old['measurement_id']}"
                 )
             existing_ids.add(old["measurement_id"])
-            old_review_key = (old["corpus"], old["wave_id"], old["site"])
+            old_review_key = (
+                old["corpus"], old["wave_id"], old["site"], old["question_id"]
+            )
             if old_review_key in existing_reviews:
                 raise ConversionReviewError(
                     f"{dest}:{index}: duplicate completed review for "
@@ -279,11 +274,13 @@ def append_row(
                     f"duplicate rank {old['rank']}"
                 )
             ranks.add(old["rank"])
-        review_key = (row["corpus"], row["wave_id"], row["site"])
+        review_key = (
+            row["corpus"], row["wave_id"], row["site"], row["question_id"]
+        )
         if review_key in existing_reviews:
             raise ConversionReviewError(
-                f"review already recorded for {row['corpus']}/{row['wave_id']} "
-                f"{row['site']}"
+                f"duplicate completed review for {row['corpus']}/{row['wave_id']} "
+                f"{row['site']}/{row['question_id']}"
             )
         wave_key = (row["corpus"], row["wave_id"])
         dimensions = (row["pin"], row["idiom_bucket"])
