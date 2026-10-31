@@ -61,6 +61,29 @@ def test_java_rejects_known_semantic_gaps():
     assert compile_pattern("foo", "m", "java").unencodable_reason == "java-flag"
 
 
+def test_java_identity_escapes_for_ascii_punctuation_match_jdk():
+    # This form occurs in the pinned java-html-sanitizer corpus. Java permits
+    # escaping punctuation as an identity escape; the shared AST treats these
+    # as the literal punctuation characters they denote.
+    pattern = r"[a-zA-Z0-9\:\-_\.]+"
+    compiled = compile_pattern(pattern, dialect="java", call_kind="fullmatch")
+    assert compiled.encodable, compiled.unencodable_reason
+    for value in ("abc", "a:b", "a-b", "a_b", "a.b", "a/b", "a:b!"):
+        solver = z3.Solver()
+        solver.add(z3.InRe(z3.StringVal(value), compiled.mirror))
+        mirror_accepts = solver.check() == z3.sat
+        proc = subprocess.run(
+            replay_argv(pattern, "", "fullmatch"),
+            input=value,
+            capture_output=True,
+            text=True,
+            check=False,
+            timeout=30,
+        )
+        assert proc.returncode in (0, 1), proc.stderr
+        assert mirror_accepts == (proc.returncode == 0), value
+
+
 @pytest.mark.parametrize(
     ("pattern", "accepted", "rejected"),
     [
