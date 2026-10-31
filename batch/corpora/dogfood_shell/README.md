@@ -62,10 +62,32 @@ The 977-row count matches extraction from the complete pinned source trees.
 
 ## Prior intake and scope
 
-The original admission decision remains at
+### Pin refresh rule
+
+The source SHAs in [`source-pins.json`](source-pins.json) are a deliberate
+refresh for the October 2026 materialized mining snapshot. They replace the
+P1 admission record's earlier `corpus_pin: local`; they do not rewrite its
+historical denominator or decision. The original admission record remains at
 [`properties/generated/dogfood_shell_gate_decision.json`](../../../properties/generated/dogfood_shell_gate_decision.json).
-The frozen pins above refresh that earlier `corpus_pin: local` decision for
-this materialized mine; the historical gate record is unchanged.
+
+For any later corpus refresh, first choose and record an exact commit SHA for
+each source repository. Then rematerialize from those SHAs with the documented
+shell-file filter and size limit, refresh `source-files.json` and applicable
+license evidence, and rerun extraction, the encodability measurement, and the
+Smith gate. Update the corpus pin and provenance digests with those outputs.
+Never follow a moving default branch, update only one pin, or mine a refreshed
+tree against the 2026-08-12 P1 denominator. A refresh is a new measured
+snapshot; it is not an implicit update to the admission evidence.
+
+The B1 normalize-idempotency contract uses a separate historical fixture:
+[`tests/fixtures/fwlive-normalize_log_prefix.sh`](../../../tests/fixtures/fwlive-normalize_log_prefix.sh)
+records the function verbatim from fwlive commit
+`a3d6c5421bf0a1df96d6c6caddda144be52283b3` (2026-09-06). The corpus pin for
+fwlive is newer (`6b1b1f8e4342f675ed04a137998b95a7b7e93e3e`, 2026-10-22).
+That corpus refresh does not retarget or overwrite the B1 fixture: its
+ground-truth replay remains tied to the recorded 2026-09-06 bytes. If that
+fixture is intentionally refreshed, update its source pin and extracted
+function together, then rerun the B1 harness and ground-truth checks.
 
 This corpus is not a security tool. Findings follow the repository's
 public-first disclosure policy. It covers the POSIX shell regex surface only;
