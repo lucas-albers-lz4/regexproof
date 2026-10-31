@@ -113,12 +113,21 @@
     "accepted_upstream": 1,
     "batch_shape5_asked": 3,
     "batch_shape5_sat": 2,
-    "batch_summaries": 100,
-    "batch_summary_findings": 15777,
-    "batch_triage_rows": 125626,
+    "batch_summaries": 99,
+    "batch_summary_findings": 10938,
+    "batch_triage_rows": 124508,
     "classification_rows": 14103,
     "disclosed_private_first": 2198,
     "disclosed_public_ok": 0,
+    "excluded_non_current_batch_summaries": [
+      {
+        "corpus": "aidevops",
+        "measurement_note": "This full-corpus fraction predates the #615 shell extractor expansion guard. Rerun before treating the fraction as current; it is not issue-closure evidence.",
+        "measurement_status": "historical_pre_615_shell_extractor",
+        "sites_encodable": 10212,
+        "sites_extracted": 11330
+      }
+    ],
     "existence_proofs": 3,
     "false_positives_filed": 7,
     "mutation_guards": 644,
@@ -142,8 +151,8 @@
     "scanner_ndjson_files": 108,
     "scanner_rows": 15777,
     "scanner_rule_diff_sat": 0,
-    "sites_encodable": 201097,
-    "sites_extracted": 326723,
+    "sites_encodable": 190885,
+    "sites_extracted": 315393,
     "third_party_public": 0,
     "would_open_public_upstream": 0
   },
@@ -392,7 +401,7 @@
   "rates": {
     "accepted_per_extracted": 3e-06,
     "accepted_per_gt": 0.125,
-    "encodable_fraction": 0.615497,
+    "encodable_fraction": 0.605229,
     "encodable_fraction_all_inventories": 0.609744,
     "encodable_fraction_excluding_yara": 0.609135,
     "encodable_fraction_yara": 0.609899,
@@ -400,7 +409,7 @@
     "gt_per_sat": 1.0,
     "pipeline_accepted_per_extracted": 3e-06,
     "pipeline_accepted_per_gt": 0.125,
-    "property_asked_per_encodable": 0.000204,
+    "property_asked_per_encodable": 0.000215,
     "sat_per_property_asked": 0.195122,
     "yara_share_of_unencodable": 0.796123
   },

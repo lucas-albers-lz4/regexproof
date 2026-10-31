@@ -8,8 +8,9 @@ Heap's-law / singleton novelty saturates **compiler coverage**. This artifact sa
 
 | stage | count |
 |---|---|
-| sites extracted (batch summaries) | 326,723 |
-| sites encodable | 201,097 |
+| sites extracted (batch summaries) | 315,393 |
+| sites encodable | 190,885 |
+| non-current batch summaries excluded from site totals | aidevops (historical_pre_615_shell_extractor) |
 | scanner NDJSON rows | 15,777 |
 | planned inventory stubs | 386 |
 | classification rows (usage/intent/triage kinds) | 14,103 |
@@ -36,7 +37,7 @@ Heap's-law / singleton novelty saturates **compiler coverage**. This artifact sa
 
 | rate | value |
 |---|---|
-| encodable / extracted | 0.6155 |
+| encodable / extracted | 0.6052 |
 | properties asked / encodable | 0.0002 |
 | SAT / properties asked | 0.1951 |
 | ground-truthed / SAT | 1.0000 |
