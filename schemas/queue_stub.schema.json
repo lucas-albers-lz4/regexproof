@@ -2,10 +2,11 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/lucas-albers-lz4/regexproof/schemas/queue_stub.schema.json",
   "title": "conversion queue stub",
-  "description": "Cluster-conversion-rank stub (#551 Phase C REVISION 8). QUEUE-ONLY: a stub never increments properties_asked (it is not a contract). Candidate identity is (site, question_id). pin identifies the corpus snapshot; source_path/source_pin identify the actual materialized source file and its source commit. None of these fields establish human review or an outcome. provenance=stub is enforced structurally; additionalProperties is false so no stray field can smuggle contract semantics.",
+  "description": "Version 2 cluster-conversion-rank stub (#551 Phase C REVISION 8). QUEUE-ONLY: a stub never increments properties_asked (it is not a contract). Candidate identity is (site, question_id). pin identifies the corpus snapshot; source_path/source_pin identify the actual materialized source file and its source commit. None of these fields establish human review or an outcome. provenance=stub is enforced structurally; additionalProperties is false so no stray field can smuggle contract semantics.",
   "type": "object",
   "additionalProperties": false,
   "required": [
+    "schema_version",
     "provenance",
     "corpus",
     "pin",
@@ -17,6 +18,7 @@
     "suggested_shape"
   ],
   "properties": {
+    "schema_version": { "const": "2" },
     "provenance": {
       "const": "stub",
       "description": "Queue-only marker; human adoption changes the provenance, never the stub row."

@@ -18,6 +18,41 @@ from regexproof.mine import conversion_queue as cq
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 
 
+def _write_indexed_corpus(corpus_root, file_specs):
+    import hashlib
+
+    rules = corpus_root / "rules"
+    rules.mkdir(parents=True, exist_ok=True)
+    repositories = {}
+    rows = []
+    for repo, relative, content, commit in file_specs:
+        url = f"https://example.test/{repo}.git"
+        repositories[repo] = {"url": url, "commit": commit}
+        mapped = pathlib.PurePosixPath(repo, relative).as_posix()
+        path = rules / mapped
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(content)
+        rows.append({
+            "path": mapped,
+            "bytes": len(content),
+            "sha256": hashlib.sha256(content).hexdigest(),
+            "source_commit": commit,
+            "source_url": url,
+        })
+    pins_bytes = json.dumps({"repositories": repositories}).encode()
+    files_bytes = json.dumps({"files": rows}).encode()
+    (corpus_root / "source-pins.json").write_bytes(pins_bytes)
+    (corpus_root / "source-files.json").write_bytes(files_bytes)
+    (corpus_root / "measurement-provenance.json").write_text(
+        json.dumps({
+            "source_pins_sha256": hashlib.sha256(pins_bytes).hexdigest(),
+            "source_files_sha256": hashlib.sha256(files_bytes).hexdigest(),
+        }),
+        encoding="utf-8",
+    )
+    return rules, f"sha256:{hashlib.sha256(pins_bytes).hexdigest()}"
+
+
 def _ranked():
     return [
         {
@@ -549,6 +584,7 @@ def test_stub_schema_rejects_contract_fields():
     import jsonschema
 
     ok = {
+        "schema_version": "2",
         "provenance": "stub",
         "corpus": "ow",
         "pin": "p",
@@ -570,6 +606,10 @@ def test_stub_schema_rejects_contract_fields():
     bad2["provenance"] = "human"  # const violation
     with pytest.raises(jsonschema.ValidationError):
         jsonschema.validate(bad2, schema)
+
+    bad_version = dict(ok, schema_version="1")
+    with pytest.raises(jsonschema.ValidationError):
+        jsonschema.validate(bad_version, schema)
 
     for blank in ("", "  "):
         bad_pin = dict(ok, pin=blank)
@@ -595,6 +635,7 @@ def test_stub_emitter_rejects_contract_fields(tmp_path):
     with pytest.raises(SystemExit, match=r"contract field|Additional properties"):
         mod.validate_stub(
             {
+                "schema_version": "2",
                 "provenance": "stub",
                 "corpus": "ow",
                 "pin": "p",
@@ -645,6 +686,7 @@ def test_stub_emitter_end_to_end(tmp_path):
     assert r.returncode == 0, r.stderr
     q = json.loads(out.read_text(encoding="utf-8"))
     assert q["cluster"] == "openwrt_packages"
+    assert q["schema_version"] == "2"
     assert q["wave_generation"] == 1
     assert len(q["candidate_sites"]) >= 1  # non-empty (Luna r1 #1)
     from regexproof.batch.manifests import CORPUS_MANIFESTS
@@ -699,26 +741,90 @@ def test_materialized_source_mapping_rejects_ambiguous_suffix(tmp_path, monkeypa
     from regexproof.batch.manifests import CORPUS_MANIFESTS
 
     corpus_root = tmp_path / "ambiguous"
-    rules = corpus_root / "rules"
-    rules.mkdir(parents=True)
-    (corpus_root / "source-files.json").write_text(
-        json.dumps({
-            "files": [
-                {"path": "repo-a/path/check.sh", "source_commit": "a" * 40},
-                {"path": "repo-b/path/check.sh", "source_commit": "b" * 40},
-            ]
-        }),
-        encoding="utf-8",
+    rules, corpus_pin = _write_indexed_corpus(
+        corpus_root,
+        [
+            ("repo-a", "path/check.sh", b"repo a\n", "a" * 40),
+            ("repo-b", "path/check.sh", b"repo b\n", "b" * 40),
+        ],
     )
     monkeypatch.setitem(
         CORPUS_MANIFESTS,
         "ambiguous_materialization",
-        {"path": rules, "corpus_pin": "snapshot-pin"},
+        {"path": rules, "corpus_pin": corpus_pin},
     )
     with pytest.raises(SystemExit, match="maps to 2 files"):
         cq.materialized_source_identity(
             "ambiguous_materialization", "path/check.sh:1:token"
         )
+
+
+def test_dirty_source_files_index_without_matching_provenance_fails(tmp_path, monkeypatch):
+    from regexproof.batch.manifests import CORPUS_MANIFESTS
+
+    corpus_root = tmp_path / "indexed"
+    rules, corpus_pin = _write_indexed_corpus(
+        corpus_root,
+        [("repo-a", "path/check.sh", b"pinned bytes\n", "a" * 40)],
+    )
+    monkeypatch.setitem(
+        CORPUS_MANIFESTS,
+        "indexed_corpus",
+        {"path": rules, "corpus_pin": corpus_pin},
+    )
+    assert cq.materialized_source_identity(
+        "indexed_corpus", "path/check.sh:1:token"
+    )["source_path"] == "repo-a/path/check.sh"
+    index_path = corpus_root / "source-files.json"
+    index = json.loads(index_path.read_text(encoding="utf-8"))
+    index["files"][0]["path"] = "repo-a/path/other.sh"
+    index_path.write_text(json.dumps(index), encoding="utf-8")
+    with pytest.raises(SystemExit, match="source-files index digest"):
+        cq.materialized_source_identity(
+            "indexed_corpus", "path/check.sh:1:token"
+        )
+
+
+def test_dirty_provenance_files_fail_even_when_digests_agree(tmp_path):
+    import hashlib
+
+    repo = tmp_path / "git-repo"
+    corpus = repo / "batch/corpora/example"
+    corpus.mkdir(parents=True)
+    index = corpus / "source-files.json"
+    pins = corpus / "source-pins.json"
+    provenance = corpus / "measurement-provenance.json"
+    pins_bytes = b'{"repositories":{}}'
+    files_bytes = b'{"files":[]}'
+    pins.write_bytes(pins_bytes)
+    index.write_bytes(files_bytes)
+    provenance.write_text(
+        json.dumps({
+            "source_pins_sha256": hashlib.sha256(pins_bytes).hexdigest(),
+            "source_files_sha256": hashlib.sha256(files_bytes).hexdigest(),
+        }),
+        encoding="utf-8",
+    )
+    subprocess.run(["git", "init", "-q", str(repo)], check=True)
+    subprocess.run(["git", "-C", str(repo), "config", "user.email", "test@example.test"], check=True)
+    subprocess.run(["git", "-C", str(repo), "config", "user.name", "Test"], check=True)
+    subprocess.run(["git", "-C", str(repo), "add", "."], check=True)
+    subprocess.run(["git", "-C", str(repo), "commit", "-qm", "snapshot"], check=True)
+    cq._assert_clean_provenance_files([index, pins, provenance], repo_root=repo)
+
+    # An attacker can update source-files and its digest record together; a
+    # dirty working tree still cannot use that unreviewed provenance change.
+    changed_files = b'{"files":[{"path":"forged"}]}'
+    index.write_bytes(changed_files)
+    provenance.write_text(
+        json.dumps({
+            "source_pins_sha256": hashlib.sha256(pins_bytes).hexdigest(),
+            "source_files_sha256": hashlib.sha256(changed_files).hexdigest(),
+        }),
+        encoding="utf-8",
+    )
+    with pytest.raises(SystemExit, match="must be tracked and clean"):
+        cq._assert_clean_provenance_files([index, pins, provenance], repo_root=repo)
 
 
 def test_emitter_refuses_noncanonical_output(tmp_path):
@@ -892,6 +998,14 @@ def test_transition_refuses_queue_cluster_mismatch_without_cross_file_write(tmp_
         )
     assert json.loads(path.read_text(encoding="utf-8"))["cluster"] == "dogfood_shell"
     assert not (tmp_path / "dogfood_shell.json").exists()
+
+
+def test_legacy_queue_schema_requires_explicit_migration(tmp_path):
+    path, q = _queue(tmp_path)
+    q["schema_version"] = "1"
+    path.write_text(json.dumps(q), encoding="utf-8")
+    with pytest.raises(SystemExit, match="legacy schema v1 queue"):
+        cq.load_queue("openwrt_packages", root=tmp_path)
 
 
 # --- context extractor ------------------------------------------------------

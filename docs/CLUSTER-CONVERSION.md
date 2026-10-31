@@ -155,6 +155,12 @@ multiple independent questions; every claim, adoption, skip, and review-time
 record must retain its question ID. Site-only transitions fail when that site
 has multiple queued questions, and exact duplicate pairs are rejected.
 
+This is queue schema version 2. Version 1 queue artifacts cannot be
+transitioned because they do not preserve question IDs or materialized source
+identity. The loader refuses them and asks the operator to preserve their
+existing statuses and migrate explicitly; it never guesses identities or
+discards claimed/contracted state.
+
 Queue stubs also retain `source_path` and `source_pin`, which identify the
 materialized file and its actual repository commit. For aggregated corpora,
 these values come from `batch/corpora/<cluster>/source-files.json`; the

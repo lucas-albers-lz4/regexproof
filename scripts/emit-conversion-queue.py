@@ -168,6 +168,7 @@ def main(argv: list[str] | None = None) -> int:
             raise SystemExit(f"stub emitter: row {site!r} has no question identity")
         source_identity = cq.materialized_source_identity(args.corpus, site)
         stub = {
+            "schema_version": "2",
             "provenance": "stub",
             "corpus": args.corpus,
             "pin": corpus_pin,

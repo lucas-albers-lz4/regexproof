@@ -24,6 +24,7 @@ import pathlib
 from typing import Any
 
 QUEUE_ROOT = pathlib.Path("properties/conversion_queue")
+QUEUE_SCHEMA_VERSION = "2"
 
 STATUSES = frozenset(
     {
@@ -66,6 +67,43 @@ def _site_path(site: str) -> str:
     return parts[0]
 
 
+def _assert_clean_provenance_files(
+    paths: list[pathlib.Path], *, repo_root: pathlib.Path | None = None
+) -> None:
+    """Require source indexes and their digest record to be committed."""
+    import subprocess
+
+    root = repo_root or pathlib.Path(__file__).resolve().parents[2]
+    try:
+        relative = [path.resolve().relative_to(root.resolve()).as_posix() for path in paths]
+    except ValueError:
+        return
+    try:
+        tracked = subprocess.run(
+            ["git", "ls-files", "--error-unmatch", "--", *relative],
+            cwd=root,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        clean = subprocess.run(
+            ["git", "status", "--porcelain", "--", *relative],
+            cwd=root,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+    except OSError as exc:
+        raise SystemExit(
+            f"conversion_queue: cannot verify committed source provenance: {exc}"
+        ) from exc
+    if tracked.returncode != 0 or clean.returncode != 0 or clean.stdout.strip():
+        raise SystemExit(
+            "conversion_queue: source-files/source-pins/measurement-provenance "
+            "must be tracked and clean before queue use"
+        )
+
+
 def materialized_source_identity(cluster: str, site: str) -> dict[str, str]:
     """Resolve a site path to its materialized path and source provenance.
 
@@ -73,6 +111,7 @@ def materialized_source_identity(cluster: str, site: str) -> dict[str, str]:
     files. Their source-files.json is authoritative; suffix mapping must be
     unique. Single-repository corpora use the site path relative to ``rules``.
     """
+    import hashlib
     import json
     from pathlib import PurePosixPath
 
@@ -94,11 +133,68 @@ def materialized_source_identity(cluster: str, site: str) -> dict[str, str]:
         return {"source_path": relative.as_posix(), "source_pin": snapshot_pin}
 
     try:
-        records = json.loads(index_path.read_text(encoding="utf-8"))["files"]
+        index_bytes = index_path.read_bytes()
+        records = json.loads(index_bytes)["files"]
+        pins_path = index_path.parent / "source-pins.json"
+        provenance_path = index_path.parent / "measurement-provenance.json"
+        pins_bytes = pins_path.read_bytes()
+        provenance = json.loads(provenance_path.read_text(encoding="utf-8"))
+        pins = json.loads(pins_bytes)
     except (OSError, json.JSONDecodeError, KeyError, TypeError) as exc:
         raise SystemExit(
-            f"conversion_queue: invalid materialized source index {index_path}: {exc}"
+            f"conversion_queue: invalid materialized source provenance beside "
+            f"{index_path}: {exc}"
         ) from exc
+
+    index_digest = hashlib.sha256(index_bytes).hexdigest()
+    pins_digest = hashlib.sha256(pins_bytes).hexdigest()
+    if provenance.get("source_files_sha256") != index_digest:
+        raise SystemExit(
+            f"conversion_queue: source-files index digest {index_digest} does not "
+            f"match measurement provenance {provenance_path}"
+        )
+    if provenance.get("source_pins_sha256") != pins_digest:
+        raise SystemExit(
+            f"conversion_queue: source-pins digest {pins_digest} does not match "
+            f"measurement provenance {provenance_path}"
+        )
+    if snapshot_pin != f"sha256:{pins_digest}":
+        raise SystemExit(
+            f"conversion_queue: corpus pin {snapshot_pin!r} does not bind "
+            f"source-pins.json digest {pins_digest}"
+        )
+
+    repositories = pins.get("repositories")
+    if not isinstance(repositories, dict) or not isinstance(records, list):
+        raise SystemExit(
+            f"conversion_queue: malformed source-pins or source-files data for {cluster}"
+        )
+    for record in records:
+        if not isinstance(record, dict) or not isinstance(record.get("path"), str):
+            raise SystemExit(
+                f"conversion_queue: malformed source-files row in {index_path}"
+            )
+        source_repo = record["path"].split("/", 1)[0]
+        repository = repositories.get(source_repo)
+        if not isinstance(repository, dict):
+            raise SystemExit(
+                f"conversion_queue: source path {record['path']!r} has no pinned "
+                "repository in source-pins.json"
+            )
+        if (
+            record.get("source_commit") != repository.get("commit")
+            or record.get("source_url") != repository.get("url")
+        ):
+            raise SystemExit(
+                f"conversion_queue: source provenance for {record['path']!r} "
+                "conflicts with source-pins.json"
+            )
+
+    # These tracked files jointly bind the aggregate source pin, path index,
+    # and recorded measurement. Refuse a dirty local provenance set.
+    _assert_clean_provenance_files(
+        [index_path, pins_path, provenance_path]
+    )
     matches = []
     for record in records:
         candidate = record.get("path") if isinstance(record, dict) else None
@@ -122,6 +218,26 @@ def materialized_source_identity(cluster: str, site: str) -> dict[str, str]:
         raise SystemExit(
             f"conversion_queue: source index has no pin for {record['path']!r}"
         )
+    materialized = (rules_path.resolve() / mapped.as_posix()).resolve()
+    try:
+        materialized.relative_to(rules_path.resolve())
+    except ValueError as exc:
+        raise SystemExit(
+            f"conversion_queue: materialized path {record['path']!r} escapes "
+            f"the rules root {rules_path}"
+        ) from exc
+    if not materialized.is_file():
+        raise SystemExit(
+            f"conversion_queue: materialized source {materialized} is missing"
+        )
+    data = materialized.read_bytes()
+    expected_bytes = record.get("bytes")
+    expected_sha256 = record.get("sha256")
+    if len(data) != expected_bytes or hashlib.sha256(data).hexdigest() != expected_sha256:
+        raise SystemExit(
+            f"conversion_queue: materialized source bytes for {record['path']!r} "
+            "do not match source-files.json"
+        )
     result = {"source_path": mapped.as_posix(), "source_pin": source_pin.strip()}
     for key in ("sha256", "source_url"):
         value = record.get(key)
@@ -135,6 +251,17 @@ def materialized_source_identity(cluster: str, site: str) -> dict[str, str]:
 
 
 def _validate_queue_identity(q: dict[str, Any], cluster: str) -> None:
+    version = q.get("schema_version")
+    if version == "1":
+        raise SystemExit(
+            "conversion_queue: legacy schema v1 queue lacks question/source identity; "
+            "preserve its review states and migrate it explicitly before transition"
+        )
+    if version != QUEUE_SCHEMA_VERSION:
+        raise SystemExit(
+            f"conversion_queue: unsupported queue schema_version {version!r}; "
+            f"expected {QUEUE_SCHEMA_VERSION!r}"
+        )
     if q.get("cluster") != cluster:
         actual = q.get("cluster")
         raise SystemExit(
@@ -200,7 +327,7 @@ def queue_path(cluster: str) -> pathlib.Path:
 
 def empty_queue(cluster: str, *, generation: int, wave_id: str) -> dict[str, Any]:
     return {
-        "schema_version": "1",
+        "schema_version": QUEUE_SCHEMA_VERSION,
         "cluster": cluster,
         "wave_id": wave_id,
         "wave_generation": generation,
