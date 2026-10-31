@@ -49,3 +49,19 @@ def test_duplicate_site_question_review_is_rejected(tmp_path):
     append_row(**common)
     with pytest.raises(ConversionReviewError, match="duplicate completed review"):
         append_row(**common)
+
+
+def test_aggregate_sha256_corpus_pin_is_accepted(tmp_path):
+    row = append_row(
+        corpus="dogfood_shell",
+        pin="sha256:" + "b" * 64,
+        wave_id="dogfood-wave",
+        idiom_bucket="normalize",
+        site="openwrt-feed/luci-app-fwlive/root/usr/libexec/rpcd/fwlive:97:normalize_log_prefix",
+        rank=1,
+        outcome="skipped_out_of_scope",
+        active_minutes=1.5,
+        question_id="DF-dogfood-shell-normalize-fixpoint",
+        path=tmp_path / "reviews.jsonl",
+    )
+    assert row["pin"] == "sha256:" + "b" * 64

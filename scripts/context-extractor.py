@@ -23,6 +23,7 @@ Usage::
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import pathlib
 import sys
@@ -33,6 +34,9 @@ MIN_WINDOW = 50
 MAX_WINDOW = 150
 # Context files above this size are refused (Luna r2 #7 — unbounded reads).
 MAX_FILE_BYTES = 8 * 1024 * 1024
+ROOT = pathlib.Path(__file__).resolve().parent.parent
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 
 
 def parse_site(site: str) -> tuple[str, int, str]:
@@ -56,6 +60,7 @@ def extract_window(
     *,
     min_window: int = MIN_WINDOW,
     max_window: int = MAX_WINDOW,
+    expected_sha256: str = "",
 ) -> dict:
     """Return a bounded 50-150 line window centered on ``line`` (Luna r1
     #8: the window NEVER exceeds ``max_window``, even at file edges — a
@@ -81,7 +86,15 @@ def extract_window(
     # repository's other extraction paths are capped too.
     if full.stat().st_size > MAX_FILE_BYTES:
         sys.exit(f"error: {path} is {full.stat().st_size} bytes (> {MAX_FILE_BYTES})")
-    lines = full.read_text(encoding="utf-8", errors="replace").splitlines()
+    content = full.read_bytes()
+    if expected_sha256:
+        actual_sha256 = hashlib.sha256(content).hexdigest()
+        if actual_sha256 != expected_sha256:
+            sys.exit(
+                f"error: {path} SHA-256 {actual_sha256} does not match "
+                f"source manifest {expected_sha256}"
+            )
+    lines = content.decode("utf-8", errors="replace").splitlines()
     total = len(lines)
     if line > total:
         sys.exit(f"error: line {line} exceeds file length {total}")
@@ -237,9 +250,24 @@ def main(argv: list[str] | None = None) -> int:
     if not args.corpus or args.checkout is None or not args.site:
         ap.error("--corpus, --checkout and --site are required (unless --validate)")
 
-    site_path, line, token = parse_site(args.site)
-    source_path = args.source_path or site_path
-    window = extract_window(args.checkout, source_path, line, token=token)
+    from regexproof.mine.conversion_queue import materialized_source_identity
+
+    _, line, token = parse_site(args.site)
+    source_identity = materialized_source_identity(args.corpus, args.site)
+    expected_path = source_identity["source_path"]
+    if args.source_path and args.source_path != expected_path:
+        sys.exit(
+            f"error: --source-path {args.source_path!r} does not match the "
+            f"materialized source manifest path {expected_path!r} for {args.site!r}"
+        )
+    source_path = expected_path
+    window = extract_window(
+        args.checkout,
+        source_path,
+        line,
+        token=token,
+        expected_sha256=source_identity.get("source_sha256", ""),
+    )
     out: dict = window
     if args.review_form:
         out = review_form(

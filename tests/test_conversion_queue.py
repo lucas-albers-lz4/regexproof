@@ -924,12 +924,7 @@ def test_extractor_window_around_target(tmp_path):
 
 
 def test_extractor_uses_materialized_path_without_changing_contract_site(tmp_path):
-    tree = tmp_path / "tree"
-    mapped = tree / "fwlive" / "openwrt-feed" / "luci-app-fwlive" / "root/usr/libexec/rpcd"
-    mapped.mkdir(parents=True)
-    (mapped / "fwlive").write_text(
-        "\n".join(f"line {i}" for i in range(1, 201)), encoding="utf-8"
-    )
+    tree = ROOT / "batch" / "corpora" / "dogfood_shell" / "rules"
     contract_site = (
         "openwrt-feed/luci-app-fwlive/root/usr/libexec/rpcd/fwlive:100:normalize_log_prefix"
     )
@@ -953,6 +948,53 @@ def test_extractor_uses_materialized_path_without_changing_contract_site(tmp_pat
     assert form["site"] == contract_site
     assert form["window"]["path"] == source_path
     assert form["window"]["target_line"] == 100
+
+
+def test_extractor_rejects_wrong_materialized_path_for_site(tmp_path):
+    tree = ROOT / "batch" / "corpora" / "dogfood_shell" / "rules"
+    contract_site = (
+        "openwrt-feed/luci-app-fwlive/root/usr/libexec/rpcd/fwlive:97:normalize_log_prefix"
+    )
+    wrong_path = (
+        "fwlive/openwrt-feed/luci-app-fwlive/root/usr/libexec/fwlive-logging.sh"
+    )
+    r = subprocess.run(
+        [
+            sys.executable, str(ROOT / "scripts" / "context-extractor.py"),
+            "--corpus", "dogfood_shell", "--checkout", str(tree),
+            "--site", contract_site, "--source-path", wrong_path,
+        ],
+        capture_output=True,
+        text=True,
+    )
+    assert r.returncode != 0
+    assert "does not match the materialized source manifest path" in r.stderr
+
+
+def test_extractor_rejects_materialized_bytes_that_miss_manifest_hash(tmp_path):
+    tree = tmp_path / "tree"
+    mapped = tree / "fwlive" / "openwrt-feed" / "luci-app-fwlive" / "root/usr/libexec/rpcd"
+    mapped.mkdir(parents=True)
+    (mapped / "fwlive").write_text(
+        "\n".join(f"line {i}" for i in range(1, 201)), encoding="utf-8"
+    )
+    contract_site = (
+        "openwrt-feed/luci-app-fwlive/root/usr/libexec/rpcd/fwlive:100:normalize_log_prefix"
+    )
+    source_path = (
+        "fwlive/openwrt-feed/luci-app-fwlive/root/usr/libexec/rpcd/fwlive"
+    )
+    r = subprocess.run(
+        [
+            sys.executable, str(ROOT / "scripts" / "context-extractor.py"),
+            "--corpus", "dogfood_shell", "--checkout", str(tree),
+            "--site", contract_site, "--source-path", source_path,
+        ],
+        capture_output=True,
+        text=True,
+    )
+    assert r.returncode != 0
+    assert "does not match source manifest" in r.stderr
 
 
 def test_extractor_bounded_window_at_edge(tmp_path):
@@ -1007,7 +1049,11 @@ def test_extractor_rejects_checkout_escape(tmp_path):
             capture_output=True, text=True,
         )
         assert r.returncode != 0, f"escape not blocked: {site}"
-        assert "outside the checkout" in r.stderr or "not found" in r.stderr
+        assert (
+            "outside the checkout" in r.stderr
+            or "not found" in r.stderr
+            or "unsafe source path" in r.stderr
+        )
 
 
 def test_review_form_validation_enforced(tmp_path):

@@ -23,7 +23,7 @@ LOG_PATH = (
     / "generated"
     / "conversion_review_minutes.jsonl"
 )
-PIN_RE = re.compile(r"^[0-9a-f]{40}$")
+PIN_RE = re.compile(r"^(?:[0-9a-f]{40}|sha256:[0-9a-f]{64})$")
 ID_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.-]*$")
 OUTCOMES = frozenset(
     {
@@ -97,7 +97,7 @@ def _validate_row(row: Any, index: int) -> dict[str, Any]:
     pin = _required_text(row["pin"], f"{context}.pin")
     if PIN_RE.fullmatch(pin) is None:
         raise ConversionReviewError(
-            f"{context}.pin must be 40 lowercase hexadecimal characters"
+            f"{context}.pin must be a Git SHA-1 or sha256:<64 lowercase hex> corpus pin"
         )
     _required_text(row["site"], f"{context}.site")
     if not isinstance(row["rank"], int) or isinstance(row["rank"], bool):

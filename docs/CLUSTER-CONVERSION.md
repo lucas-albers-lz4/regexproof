@@ -165,6 +165,9 @@ repository prefix under `rules/`; the materialized file is pinned to
 `6b1b1f8e4342f675ed04a137998b95a7b7e93e3e`. The B1 fixture is a separate
 historical copy from `a3d6c5421bf0a1df96d6c6caddda144be52283b3`; queue
 provenance does not imply those sources are the same revision.
+Review-minute `--pin` uses the aggregate corpus snapshot pin (including
+`sha256:` pins) so one wave has a single identity; the queue row retains the
+file-level `source_pin` for its exact repository source.
 
 Take the top 15. **Read 50–150 lines around each call site.** That read is
 the quality gate (happycow interpolated `re.search` already had `re.escape`;
