@@ -43,7 +43,10 @@ def _java_reject(pattern: str) -> str | None:
                 # Java uses ``\b`` as backspace inside a class; the shared
                 # parser represents it as a zero-width boundary.
                 return "java-escape"
-            if escape not in "dDsSwWbntrx" and escape not in r"\.^$*+?()[]{}|-":
+            # Java permits identity-escaping punctuation; ':' is the only
+            # additional escaped literal needed by the pinned corpus beyond
+            # the shared parser's existing metacharacter escapes below.
+            if escape not in "dDsSwWbntrx" and escape not in r"\.^$*+?()[]{}|-:":
                 return "java-escape"
             i += 2
             continue
