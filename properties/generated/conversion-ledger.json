@@ -113,13 +113,13 @@
     "accepted_upstream": 1,
     "batch_shape5_asked": 3,
     "batch_shape5_sat": 2,
-    "batch_summaries": 99,
-    "batch_summary_findings": 10938,
-    "batch_triage_rows": 124508,
+    "batch_summaries": 100,
+    "batch_summary_findings": 15777,
+    "batch_triage_rows": 125626,
     "classification_rows": 14103,
     "disclosed_private_first": 2198,
     "disclosed_public_ok": 0,
-    "excluded_non_current_batch_summaries": [
+    "excluded_non_current_site_totals": [
       {
         "corpus": "aidevops",
         "measurement_note": "This full-corpus fraction predates the #615 shell extractor expansion guard. Rerun before treating the fraction as current; it is not issue-closure evidence.",
