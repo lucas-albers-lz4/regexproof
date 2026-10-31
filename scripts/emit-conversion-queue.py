@@ -73,19 +73,12 @@ def resolve_corpus_pin(corpus: str) -> str:
     those sites to the configured corpus snapshot; it never invents a pin or
     treats the binding as evidence of human review.
     """
-    from regexproof.batch.manifests import CORPUS_MANIFESTS
+    from regexproof.mine.conversion_queue import corpus_snapshot_pin
 
-    manifest = CORPUS_MANIFESTS.get(corpus)
-    if manifest is None:
-        raise SystemExit(
-            f"stub emitter: no corpus manifest for {corpus!r}; cannot bind queue pin"
-        )
-    pin = manifest.get("corpus_pin") or manifest.get("commit")
-    if not isinstance(pin, str) or not pin.strip():
-        raise SystemExit(
-            f"stub emitter: corpus {corpus!r} has no nonblank corpus_pin/commit"
-        )
-    return pin.strip()
+    try:
+        return corpus_snapshot_pin(corpus)
+    except SystemExit as exc:
+        raise SystemExit(f"stub emitter: {exc}") from exc
 
 
 def check_item_pin(item: dict, corpus_pin: str, *, site: str) -> None:
@@ -143,6 +136,12 @@ def main(argv: list[str] | None = None) -> int:
     # Check source records before ranking: the ranker currently coalesces
     # pin/corpus_pin, which could otherwise hide contradictory provenance.
     for record in records:
+        row_corpus = record.get("corpus")
+        if row_corpus != args.corpus:
+            raise SystemExit(
+                f"stub emitter: row {record.get('site')!r} belongs to corpus "
+                f"{row_corpus!r}, not --corpus {args.corpus!r}"
+            )
         check_item_pin(record, corpus_pin, site=str(record.get("site") or ""))
     # Conversion rows are adopted contract candidate sites — the pattern-based
     # scanner drops do not apply (Luna r1 fold #1: the documented input must

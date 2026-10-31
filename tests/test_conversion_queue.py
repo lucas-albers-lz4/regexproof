@@ -23,7 +23,7 @@ def _ranked():
         {
             "site": f"net/demo/files/etc/init.d/demo:{i}:token_{i}",
             "corpus": "openwrt_packages",
-            "pin": "abc123",
+            "pin": "e99adbc49f7a11d0377c8135fe706c7757b9e68c",
             "idiom_bucket": "validator-charsets",
             "provenance": "stub",
             "suggested_shape": "NUL-free ASCII",
@@ -644,6 +644,23 @@ def test_stub_emitter_rejects_conflicting_row_pin(tmp_path):
     assert not out.exists()
 
 
+def test_stub_emitter_rejects_source_from_wrong_corpus(tmp_path):
+    ndjson = tmp_path / "dogfood.ndjson"
+    ndjson.write_text(json.dumps({
+        "site": "packages/system/files/etc/rc.common:10:host",
+        "corpus": "dogfood_shell",
+    }) + "\n", encoding="utf-8")
+    out = tmp_path / "queue" / "openwrt_packages.json"
+    r = subprocess.run([
+        sys.executable, str(ROOT / "scripts" / "emit-conversion-queue.py"),
+        "--ndjson", str(ndjson), "--corpus", "openwrt_packages",
+        "--wave-id", "ow_w1", "-o", str(out),
+    ], capture_output=True, text=True)
+    assert r.returncode != 0
+    assert "not --corpus 'openwrt_packages'" in r.stderr
+    assert not out.exists()
+
+
 def test_stub_emitter_rejects_missing_manifest(tmp_path):
     ndjson = tmp_path / "input.ndjson"
     ndjson.write_text(json.dumps({"site": "net/demo/app.sh:10:host"}) + "\n", encoding="utf-8")
@@ -660,8 +677,37 @@ def test_stub_emitter_rejects_missing_manifest(tmp_path):
 
 def test_queue_emit_rejects_missing_pin(tmp_path):
     with pytest.raises(SystemExit, match="no nonblank corpus snapshot pin"):
-        cq.emit("ow", wave_id="w1", generation=0,
-                ranked=[{"site": "net/demo/a.sh:1:tok"}], root=tmp_path)
+        cq.emit(
+            "openwrt_packages",
+            wave_id="w1",
+            generation=0,
+            ranked=[{"site": "net/demo/a.sh:1:tok", "corpus": "openwrt_packages"}],
+            root=tmp_path,
+        )
+
+
+def test_queue_emit_rejects_wrong_corpus_or_manifest_pin(tmp_path):
+    site = "net/demo/a.sh:1:tok"
+    with pytest.raises(SystemExit, match="belongs to corpus 'dogfood_shell'"):
+        cq.emit(
+            "openwrt_packages",
+            wave_id="w1",
+            generation=0,
+            ranked=[{
+                "site": site,
+                "corpus": "dogfood_shell",
+                "pin": "e99adbc49f7a11d0377c8135fe706c7757b9e68c",
+            }],
+            root=tmp_path,
+        )
+    with pytest.raises(SystemExit, match="does not match manifest pin"):
+        cq.emit(
+            "openwrt_packages",
+            wave_id="w1",
+            generation=0,
+            ranked=[{"site": site, "corpus": "openwrt_packages", "pin": "arbitrary"}],
+            root=tmp_path,
+        )
 
 
 def test_queue_row_with_blank_pin_refuses_transition(tmp_path):
@@ -669,6 +715,34 @@ def test_queue_row_with_blank_pin_refuses_transition(tmp_path):
     q["candidate_sites"][0]["pin"] = "  "
     with pytest.raises(SystemExit, match="no nonblank corpus snapshot pin"):
         cq._row(q, q["candidate_sites"][0]["site"])
+
+
+def test_queue_row_with_mismatched_corpus_or_pin_refuses_transition(tmp_path):
+    _, q = _queue(tmp_path)
+    row = q["candidate_sites"][0]
+    site = row["site"]
+    row["corpus"] = "dogfood_shell"
+    with pytest.raises(SystemExit, match="corpus does not match queue cluster"):
+        cq._row(q, site)
+    row["corpus"] = "openwrt_packages"
+    row["pin"] = "arbitrary"
+    with pytest.raises(SystemExit, match="pin does not match manifest snapshot"):
+        cq._row(q, site)
+
+
+def test_transition_refuses_queue_cluster_mismatch_without_cross_file_write(tmp_path):
+    path, q = _queue(tmp_path)
+    q["cluster"] = "dogfood_shell"
+    path.write_text(json.dumps(q), encoding="utf-8")
+    with pytest.raises(SystemExit, match="queue identity mismatch"):
+        cq.skip(
+            "openwrt_packages",
+            q["candidate_sites"][0]["site"],
+            reason="out_of_scope",
+            root=tmp_path,
+        )
+    assert json.loads(path.read_text(encoding="utf-8"))["cluster"] == "dogfood_shell"
+    assert not (tmp_path / "dogfood_shell.json").exists()
 
 
 # --- context extractor ------------------------------------------------------

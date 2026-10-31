@@ -14,6 +14,14 @@ import pytest
 from regexproof.mine import corpus_lock as cl
 
 
+@pytest.fixture(autouse=True)
+def _test_corpus_manifest(monkeypatch):
+    """The lock fixtures use the short `ow` name as a local test corpus."""
+    from regexproof.batch.manifests import CORPUS_MANIFESTS
+
+    monkeypatch.setitem(CORPUS_MANIFESTS, "ow", {"corpus_pin": "fixture-snapshot"})
+
+
 def _log(tmp_path: pathlib.Path) -> pathlib.Path:
     return tmp_path / "corpus_events.jsonl"
 
