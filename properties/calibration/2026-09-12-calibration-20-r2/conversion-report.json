@@ -1,0 +1,111 @@
+{
+  "cohort_id": "2026-09-12-calibration-20-r2",
+  "counts": {
+    "accepted": 0,
+    "asked": 2,
+    "filed": 2,
+    "ground_truthed": 2,
+    "private_first": 2,
+    "sat": 2
+  },
+  "disposition_breakdown": {
+    "private_first": 2
+  },
+  "filing_interpretation": {
+    "accepted_is_not_third_party_remediation": true,
+    "accepted_statuses": [
+      "fixed_upstream"
+    ],
+    "filed_at_also_counts_as_filed": true,
+    "filed_plan_is_not_filed": true,
+    "filed_statuses": [
+      "filed",
+      "fixed_upstream",
+      "private_first"
+    ],
+    "private_first_is_filed": true,
+    "third_party_remediation_requires_separate_classification": true
+  },
+  "idiom_interpretation": {
+    "compiler_saturation_measured_elsewhere": true,
+    "product_conversion_checkpoint_is_not_compiler_saturation": true,
+    "zero_gt_to_filed_does_not_prove_idiom_exhaustion": true
+  },
+  "intervals": {
+    "method": "wilson_score_95_two_sided",
+    "target_width_meaning": "maximum interval width over all success counts at the target sample size; it describes worst-case precision, not this cohort's observed rate",
+    "targets": {
+      "100": {
+        "max_width": "0.192336939417",
+        "successes_at_max_width": 50
+      },
+      "50": {
+        "max_width": "0.267109713863",
+        "successes_at_max_width": 25
+      }
+    }
+  },
+  "manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+  "product_coverage_digest": "264c2ad18a6412c79b434047b6370946c45cb4d4641a50fdb4fd096b837b9095",
+  "rates": {
+    "accepted_per_ground_truthed": "0",
+    "filed_per_ground_truthed": "1",
+    "ground_truthed_per_sat": "1",
+    "private_first_per_ground_truthed": "1",
+    "sat_per_asked": "1"
+  },
+  "reconciliation": {
+    "filed_disposition_breakdown": {
+      "private_first": 2
+    },
+    "ground_truth_identities": [
+      {
+        "ground_truth_status": "reproduced",
+        "pin": "53ae43c5298a2426c6696147fdd75e2a4aef10e2",
+        "question_id": "PY-doberman-windows-root-token",
+        "repo_id": "fu351/Doberman-Core",
+        "site": "fu351/Doberman-Core@53ae43c5298a2426c6696147fdd75e2a4aef10e2:src/doberman/engine/rules/commands.py:266:_WINDOWS_ROOT_RE",
+        "url": "https://github.com/fu351/Doberman-Core"
+      },
+      {
+        "ground_truth_status": "reproduced",
+        "pin": "53ae43c5298a2426c6696147fdd75e2a4aef10e2",
+        "question_id": "PY-doberman-disk-wipe-token",
+        "repo_id": "fu351/Doberman-Core",
+        "site": "fu351/Doberman-Core@53ae43c5298a2426c6696147fdd75e2a4aef10e2:src/doberman/engine/rules/commands.py:434:_DISK_WIPE",
+        "url": "https://github.com/fu351/Doberman-Core"
+      }
+    ],
+    "ground_truth_status_breakdown": {
+      "reproduced": 2
+    },
+    "result_breakdown": {
+      "sat": 2,
+      "unsat": 0
+    },
+    "schema_version": "1"
+  },
+  "sample_sizes": {
+    "asked": 2,
+    "ground_truthed": 2,
+    "sat": 2,
+    "unit": "human product properties"
+  },
+  "schema_version": "2",
+  "target_status": {
+    "100": {
+      "observed": 2,
+      "reached": false,
+      "shortfall": 98,
+      "status": "sub_target",
+      "target": 100
+    },
+    "50": {
+      "observed": 2,
+      "reached": false,
+      "shortfall": 48,
+      "status": "sub_target",
+      "target": 50
+    }
+  }
+}

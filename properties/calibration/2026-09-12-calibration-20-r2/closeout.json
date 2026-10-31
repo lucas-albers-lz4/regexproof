@@ -3,7 +3,41 @@
   "compiler_stop": false,
   "continue_to_20": false,
   "continue_to_30": true,
-  "conversion_checkpoint_supplied": false,
+  "conversion_checkpoint": {
+    "cohort_id": "2026-09-12-calibration-20-r2",
+    "counts": {
+      "accepted": 0,
+      "asked": 2,
+      "filed": 2,
+      "ground_truthed": 2,
+      "private_first": 2,
+      "sat": 2
+    },
+    "disposition_breakdown": {
+      "private_first": 2
+    },
+    "ground_truth_replay": {
+      "reported_rows": 2,
+      "status": "unavailable",
+      "verified_rows": 0
+    },
+    "manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+    "product_coverage_digest": "264c2ad18a6412c79b434047b6370946c45cb4d4641a50fdb4fd096b837b9095",
+    "reconciliation": {
+      "filed_disposition_breakdown": {
+        "private_first": 2
+      },
+      "ground_truth_status_breakdown": {
+        "reproduced": 2
+      },
+      "result_breakdown": {
+        "sat": 2,
+        "unsat": 0
+      }
+    },
+    "report_sha256": "f46b61ac69905ba06e61f4284450bf1c698d01dadaea2fa0df60013f5aca1c80"
+  },
+  "conversion_checkpoint_supplied": true,
   "decision": "continue",
   "failures": [],
   "families": {
@@ -24,8 +58,14 @@
       "status": "productive"
     }
   },
+  "ground_truth_replay": {
+    "reported_rows": 2,
+    "status": "unavailable",
+    "verified_rows": 0
+  },
   "manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
-  "product_denominator": 0,
-  "reason": "ecma has not met the strict trailing novelty rule; go_re has not met the strict trailing novelty rule; posix-shell has not met the strict trailing novelty rule; py_re has not met the strict trailing novelty rule; human product-property denominator is below 50; PR4 conversion checkpoint was not supplied",
+  "observation_product_denominator": 0,
+  "product_denominator": 2,
+  "reason": "ecma has not met the strict trailing novelty rule; go_re has not met the strict trailing novelty rule; posix-shell has not met the strict trailing novelty rule; py_re has not met the strict trailing novelty rule; human product-property denominator is below 50",
   "schema_version": "1"
 }

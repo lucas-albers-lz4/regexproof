@@ -143,7 +143,7 @@ and emits a close-out memo. Missing or partial repositories prevent a
 saturation report; a family with fewer than two completed repositories is
 explicitly `insufficient_data`.
 
-## Current calibration state (2026-10-08)
+## Current calibration state (2026-10-31)
 
 The newest complete bundle is
 `properties/calibration/2026-09-12-calibration-20-r2/`: 20 pinned repositories,
@@ -152,23 +152,38 @@ productive under the strict trailing-two rule: ECMA 0.9259, Go 1.0000,
 POSIX-shell 0.9474, and Python `re` 0.9792. The rule therefore supports
 preparing a 30-repository increment; it does not establish product value.
 
-The same cohort's product denominator is **0**, and no PR4 checkpoint was
-supplied. Human product rows in the global conversion ledger are not a
-substitute for a frozen-cohort coverage manifest. For a complete 20-repository
-run, the close-out now sets `continue_to_20` false and resolves
-`continue_to_30` from the compiler stop result. The product denominator and
-PR4 checkpoint remain separate reasons to continue product work.
+The frozen-cohort PR4 checkpoint is now supplied at
+`properties/calibration/2026-09-12-calibration-20-r2/conversion-checkpoint.json`.
+Its report records 2 asked, 2 SAT, 2 ground-truthed, 2 private-first filed, and
+0 accepted properties. The two dispositions reconcile to
+`docs/conversion-upstream.jsonl`; both are `private_first`. The cohort's
+product denominator is **2**, below the 50-property checkpoint. The original
+canonical observation artifact still carries zero product rows, so the closeout
+preserves that separate value as `observation_product_denominator: 0` and uses
+the bound PR4 checkpoint for the human product denominator. The checkpoint
+digest and report hash are retained in the close-out JSON and Markdown.
+The source checkpoint reports two ground-truthed rows, but executable replay
+against the pinned product paths is unavailable in this artifact; the closeout
+marks zero rows independently verified and does not treat those reported rows
+as verified ground truth.
+
+The refreshed close-out sets `continue_to_20` false and `continue_to_30` true.
+Compiler novelty remains productive in all four families; the product result
+is still below its first denominator checkpoint. Both arms therefore remain
+visible without treating compiler coverage as accepted security value.
 
 Next actions:
 
 1. Prepare a new 30-repository manifest by retaining the exact 20-r2 cohort
    pins and adding ten eligible, independent repositories across the measured
    families. Freeze its digest before checkout or observation work.
-2. In parallel, work a conversion wave on an admitted cluster and create the
-   independent product coverage manifest for the cohort. Do not count the
-   global ledger or synthesized/agent-derived rows toward its denominator.
-3. Run the calibration only after all exact-pin checkouts are ready; publish
-   the observation, failure, saturation, and close-out artifacts together.
+2. Work another bounded conversion wave on the frozen cohort, adding only
+   human-adopted contracts with ground-truth and disposition evidence to the
+   independent product coverage manifest. Do not count the global ledger or
+   synthesized/agent-derived rows toward its denominator.
+3. Run the next calibration only after all exact-pin checkouts are ready;
+   publish the observation, failure, saturation, conversion-checkpoint, and
+   close-out artifacts together.
 
 The mine job is active intake, not processing. Current run status and the
 working tree's as-of date belong in [`MINE-SETUP.md`](MINE-SETUP.md); do not
