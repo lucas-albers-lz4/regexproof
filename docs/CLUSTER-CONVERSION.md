@@ -141,6 +141,15 @@ paragraph (trust map) plus a token list. Examples:
 - Agent runtime: tool-call args, shell spawn, URL/path allowlists, prompt
   gates, secret redaction
 
+The generated review queue binds each stub to the corpus manifest's
+`corpus_pin` (or its source `commit` where that is the manifest identity).
+Any row-level `pin` or `corpus_pin` must agree with that value; missing
+manifests, missing identities, and conflicting row identities fail closed.
+This pin records which source snapshot the candidate came from. Queue
+`provenance=stub` remains a pre-review marker: the snapshot pin does not show
+that a person inspected, accepted, or proved the candidate, and it does not
+increment `properties_asked`.
+
 Take the top 15. **Read 50–150 lines around each call site.** That read is
 the quality gate (happycow interpolated `re.search` already had `re.escape`;
 usrmanage P5 “no `=` in values” was false because audit lines embed

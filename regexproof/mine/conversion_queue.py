@@ -109,6 +109,12 @@ def emit(
         )
     q = empty_queue(cluster, generation=generation, wave_id=wave_id)
     for i, item in enumerate(ranked, start=1):
+        pin = item.get("pin")
+        if not isinstance(pin, str) or not pin.strip():
+            raise SystemExit(
+                f"conversion_queue: emit refused — candidate {item.get('site')!r} "
+                "has no nonblank corpus snapshot pin"
+            )
         row = {
             "rank": i,
             "site": str(item.get("site") or ""),
@@ -149,6 +155,12 @@ def emit(
 def _row(q: dict[str, Any], site: str) -> dict[str, Any]:
     for r in q["candidate_sites"]:
         if r["site"] == site:
+            pin = r.get("pin")
+            if not isinstance(pin, str) or not pin.strip():
+                raise SystemExit(
+                    f"conversion_queue: site {site!r} has no nonblank corpus "
+                    "snapshot pin; refusing review transition"
+                )
             return r
     raise SystemExit(f"conversion_queue: site {site!r} not in queue {q['cluster']}")
 
