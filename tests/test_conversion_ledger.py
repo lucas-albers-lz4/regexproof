@@ -134,10 +134,28 @@ def test_historical_status_index_rejects_missing_conflicting_and_duplicate_ids()
     with pytest.raises(ValueError, match="duplicate normalized"):
         cl._fraction_status_index(
             [
-                (Path("Aidevops_encodable_fraction.json"), historical),
+                (Path("aidevops_encodable_fraction.json"), historical),
                 (Path("aidevops_encodable_fraction.json"), historical),
             ]
         )
+
+    distinct = cl._fraction_status_index(
+        [
+            (Path("Yara-Rules_encodable_fraction.json"), historical),
+            (Path("yara-rules_encodable_fraction.json"), historical),
+        ]
+    )
+    assert set(distinct) == {"Yara-Rules", "yara-rules"}
+
+
+def test_fraction_status_summary_join_prefers_exact_selection_id():
+    upper = {"measurement_status": "historical-upper"}
+    lower = {"measurement_status": "historical-lower"}
+    indexed = {"Yara-Rules": upper, "yara-rules": lower}
+    assert cl._measurement_for_summary("Yara-Rules", indexed) is upper
+    assert cl._measurement_for_summary("yara-rules", indexed) is lower
+    with pytest.raises(ValueError, match="ambiguous non-current fraction reports"):
+        cl._measurement_for_summary("YARA-RULES", indexed)
 
 
 def test_historical_status_join_rejects_ambiguous_casefolded_summaries():

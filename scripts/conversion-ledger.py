@@ -912,8 +912,8 @@ def _fraction_status_index(
             raise ValueError(
                 f"non-current fraction {path.name} has conflicting pilot/corpus identifiers"
             )
-        stem = path.name.removesuffix("_encodable_fraction.json")
-        key = _normalized_measurement_id(stem)
+        stem = path.name.removesuffix("_encodable_fraction.json").strip()
+        key = stem
         if not key:
             raise ValueError(f"non-current fraction {path.name} has empty report identifier")
         if key in indexed:
@@ -933,6 +933,26 @@ def _fraction_reports(gen: Path) -> list[tuple[Path, dict[str, Any]]]:
         (path, _read_json(path))
         for path in sorted(gen.glob("*_encodable_fraction.json"))
     ]
+
+
+def _measurement_for_summary(
+    summary_stem: str, indexed: dict[str, dict[str, Any]]
+) -> dict[str, Any]:
+    """Resolve an exact selection first; only unique casefold fallback is safe."""
+    exact = indexed.get(summary_stem.strip())
+    if exact is not None:
+        return exact
+    normalized = _normalized_measurement_id(summary_stem)
+    fallback = [
+        item
+        for stem, item in indexed.items()
+        if _normalized_measurement_id(stem) == normalized
+    ]
+    if len(fallback) > 1:
+        raise ValueError(
+            f"batch summary {summary_stem!r} has ambiguous non-current fraction reports"
+        )
+    return fallback[0] if fallback else {}
 
 
 def _validated_historical_summary(
@@ -990,20 +1010,23 @@ def aggregate(
     measurement_by_report = _fraction_status_index(fraction_reports)
     summary_paths = sorted(gen.glob("*_batch_summary.json"))
     summary_paths_by_id: dict[str, list[Path]] = defaultdict(list)
+    summary_paths_by_exact_id: dict[str, list[Path]] = defaultdict(list)
     for path in summary_paths:
-        summary_paths_by_id[
-            _normalized_measurement_id(path.name.removesuffix("_batch_summary.json"))
-        ].append(path)
+        summary_stem = path.name.removesuffix("_batch_summary.json").strip()
+        summary_paths_by_id[_normalized_measurement_id(summary_stem)].append(path)
+        summary_paths_by_exact_id[summary_stem].append(path)
     for path in summary_paths:
         data = _read_json(path)
         if "extracted" not in data:
             continue
         summary_stem = path.name.removesuffix("_batch_summary.json")
         summary_key = _normalized_measurement_id(summary_stem)
-        measurement = measurement_by_report.get(summary_key) or {}
+        measurement = _measurement_for_summary(summary_stem, measurement_by_report)
         status = str(measurement.get("measurement_status") or "")
         if status and status != "current":
-            matching_paths = summary_paths_by_id.get(summary_key, [])
+            matching_paths = summary_paths_by_exact_id.get(summary_stem.strip(), [])
+            if not matching_paths:
+                matching_paths = summary_paths_by_id.get(summary_key, [])
             excluded_batch_summaries.append(
                 _validated_historical_summary(path, data, measurement, matching_paths)
             )
