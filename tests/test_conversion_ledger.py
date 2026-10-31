@@ -1173,3 +1173,211 @@ def test_contract_queue_health_absent_until_phase_c(tmp_path: Path):
     )
     qh4 = cl.contract_queue_health(gen, clock_iso="2026-08-21")
     assert qh4["median_age_days"] >= 0.0
+
+
+def test_conversion_yield_uses_exact_interval_and_distinct_boundary_sites():
+    rows = [
+        _wave_row(
+            site="repo/a.py:1:0",
+            question_id="q1",
+            contract=_human_contract(site="repo/a.py:1:0"),
+            result="sat",
+            ground_truth_status="reproduced",
+        ),
+        _wave_row(
+            regex_id="b" * 32,
+            site="repo/a.py:1:0",
+            question_id="q2",
+            contract=_human_contract(site="repo/a.py:1:0"),
+            result="sat",
+            ground_truth_status="reproduced",
+        ),
+        _wave_row(
+            regex_id="c" * 32,
+            site="repo/b.py:2:0",
+            question_id="q3",
+            contract=_human_contract(site="repo/b.py:2:0"),
+            result="sat",
+            ground_truth_status=None,
+        ),
+        _wave_row(
+            regex_id="d" * 32,
+            site="repo/internal.py:3:0",
+            question_id="q4",
+            ground_truth_status="reproduced",
+            contract=_human_contract(
+                site="repo/internal.py:3:0", trust="internal"
+            ),
+        ),
+    ]
+
+    result = cl.conversion_yield_metrics(rows)
+
+    assert result["contracted_boundary_sites"] == 2
+    assert result["ground_truthed_finding_sites"] == 1
+    assert result["reporting_mode"] == "raw_count"
+    assert result["confidence_interval"]["method"] == "clopper_pearson_exact"
+    assert result["confidence_interval"]["confidence_level"] == 0.95
+    assert result["confidence_interval"]["lower"] == pytest.approx(0.01257912)
+    assert result["confidence_interval"]["upper"] == pytest.approx(0.98742088)
+    assert result["findings_per_site_wilson_95"]["lower"] == pytest.approx(
+        0.094531, abs=1e-6
+    )
+    assert result["findings_per_site_wilson_95"]["upper"] == pytest.approx(
+        0.905469, abs=1e-6
+    )
+    assert result["findings_per_10k_sites"] is None
+
+
+def test_conversion_yield_switches_to_per_10k_at_50_boundary_sites():
+    rows = [
+        _wave_row(
+            regex_id=f"{i:032x}",
+            site=f"repo/site-{i}.py:1:0",
+            question_id=f"q{i}",
+            contract=_human_contract(site=f"repo/site-{i}.py:1:0"),
+            result="sat" if i == 0 else "unsat",
+            ground_truth_status="reproduced" if i == 0 else None,
+        )
+        for i in range(50)
+    ]
+
+    result = cl.conversion_yield_metrics(rows)
+
+    assert result["contracted_boundary_sites"] == 50
+    assert result["ground_truthed_finding_sites"] == 1
+    assert result["reporting_mode"] == "findings_per_10k"
+    assert result["findings_per_10k_sites"] == 200.0
+    assert result["confidence_interval"] is None
+    assert result["findings_per_site_wilson_95"] is not None
+
+
+def test_time_to_acceptance_kaplan_meier_censors_open_and_excludes_unknown_dates():
+    rows = [
+        {
+            "id": "accepted",
+            "status": "fixed_upstream",
+            "filed_at": "2026-01-01",
+            "resolved_at": "2026-01-11",
+        },
+        {
+            "id": "open",
+            "status": "private_first",
+            "filed_at": "2026-01-01",
+            "resolved_at": None,
+        },
+        {
+            "id": "closed-not-accepted",
+            "status": "wont_file",
+            "filed_at": "2026-01-02",
+            "resolved_at": "2026-01-07",
+        },
+        {
+            "id": "unknown-backfill",
+            "status": "fixed_upstream",
+            "filed_at": None,
+            "resolved_at": None,
+            "backfilled": True,
+            "disposition_date": "unknown_date",
+        },
+    ]
+
+    result = cl.time_to_acceptance(rows, as_of_date="2026-01-21")
+
+    assert result["method"] == "kaplan_meier"
+    assert result["as_of_date"] == "2026-01-21"
+    assert result["observations"] == 3
+    assert result["accepted_events"] == 1
+    assert result["right_censored"] == 2
+    assert result["excluded_unknown_date"] == 1
+    assert result["median_days"] == 10
+    assert result["survival_curve"] == [
+        {
+            "day": 5,
+            "at_risk": 3,
+            "accepted": 0,
+            "censored": 1,
+            "survival_probability": 1.0,
+        },
+        {
+            "day": 10,
+            "at_risk": 2,
+            "accepted": 1,
+            "censored": 0,
+            "survival_probability": 0.5,
+        },
+        {
+            "day": 20,
+            "at_risk": 1,
+            "accepted": 0,
+            "censored": 1,
+            "survival_probability": 0.5,
+        },
+    ]
+
+
+def test_aggregate_and_markdown_report_yield_and_time_to_acceptance(tmp_path: Path):
+    gen = tmp_path / "generated"
+    gen.mkdir()
+    rows = [
+        _wave_row(
+            site="repo/accepted.py:1:0",
+            question_id="accepted-q",
+            contract=_human_contract(site="repo/accepted.py:1:0"),
+            ground_truth_status="reproduced",
+        ),
+        _wave_row(
+            regex_id="b" * 32,
+            site="repo/open.py:2:0",
+            question_id="open-q",
+            contract=_human_contract(site="repo/open.py:2:0"),
+            result="unsat",
+            ground_truth_status=None,
+        ),
+    ]
+    (gen / "demo_conversion.ndjson").write_text(
+        "\n".join(json.dumps(row) for row in rows) + "\n", encoding="utf-8"
+    )
+    upstream = tmp_path / "upstream.jsonl"
+    upstream.write_text(
+        "\n".join(
+            json.dumps(row)
+            for row in (
+                {
+                    "id": "CU-A",
+                    "corpus": "demo",
+                    "site": "repo/accepted.py:1:0",
+                    "question_id": "accepted-q",
+                    "status": "fixed_upstream",
+                    "filed_at": "2026-01-01",
+                    "resolved_at": "2026-01-11",
+                },
+                {
+                    "id": "CU-B",
+                    "corpus": "demo",
+                    "site": "repo/open.py:2:0",
+                    "question_id": "open-q",
+                    "status": "private_first",
+                    "filed_at": "2026-01-01",
+                    "resolved_at": None,
+                },
+            )
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
+    data = cl.aggregate(
+        gen_dir=gen,
+        upstream_path=upstream,
+        security_tools=frozenset(),
+    )
+    markdown = cl.render_md(data)
+
+    assert data["conversion_yield"]["contracted_boundary_sites"] == 2
+    assert data["conversion_yield"]["ground_truthed_finding_sites"] == 1
+    assert data["time_to_acceptance"]["method"] == "kaplan_meier"
+    assert data["time_to_acceptance"]["median_days"] == 10
+    assert "Clopper-Pearson exact 95% interval" in markdown
+    assert "Kaplan-Meier" in markdown
+    assert "median time to acceptance: **10 days**" in markdown
