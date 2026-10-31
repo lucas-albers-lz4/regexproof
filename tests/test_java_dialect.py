@@ -85,6 +85,54 @@ def test_java_identity_escapes_for_ascii_punctuation_match_jdk():
 
 
 @pytest.mark.parametrize(
+    ("pattern", "reason"),
+    [
+        (r"a++", "unsupported-syntax"),
+        (r"(?>a)", "inline-flag"),
+        (r"(?<name>a)", "lookaround"),
+        (r"\cA", "java-escape"),
+        (r"\141", "java-escape"),
+        (r"\u0041", "java-escape"),
+        (r"\R", "java-escape"),
+        (r"\X", "java-escape"),
+        (r"\Qabc\E", "java-escape"),
+    ],
+)
+def test_java_supported_but_unlowered_constructs_fail_closed(pattern, reason):
+    parse = subprocess.run(
+        [sys.executable, str(HELPER), "parse", pattern, ""],
+        capture_output=True,
+        text=True,
+        check=False,
+        timeout=30,
+    )
+    assert parse.returncode == 0, parse.stderr
+    assert __import__("json").loads(parse.stdout)["ok"] is True
+    compiled = compile_pattern(pattern, dialect="java", call_kind="fullmatch")
+    assert compiled.unencodable_reason == reason
+
+
+@pytest.mark.parametrize("pattern", [r"\x41", r"\x{41}"])
+def test_java_hex_escapes_lower_to_the_same_ascii_literal(pattern):
+    compiled = compile_pattern(pattern, dialect="java", call_kind="fullmatch")
+    assert compiled.encodable, compiled.unencodable_reason
+    for value in ("A", "a", "x41", ""):
+        solver = z3.Solver()
+        solver.add(z3.InRe(z3.StringVal(value), compiled.mirror))
+        mirror_accepts = solver.check() == z3.sat
+        proc = subprocess.run(
+            replay_argv(pattern, "", "fullmatch"),
+            input=value,
+            capture_output=True,
+            text=True,
+            check=False,
+            timeout=30,
+        )
+        assert proc.returncode in (0, 1), proc.stderr
+        assert mirror_accepts == (proc.returncode == 0), (pattern, value)
+
+
+@pytest.mark.parametrize(
     ("pattern", "accepted", "rejected"),
     [
         (r"[a[b]]", {"a", "b"}, {"]", "e", "q", "_"}),
