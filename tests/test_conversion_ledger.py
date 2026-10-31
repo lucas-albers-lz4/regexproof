@@ -183,6 +183,79 @@ def test_summary_aggregate_excludes_only_exact_case_marked_variant():
     assert cl._measurement_for_summary("other", {}, same_id_summary_count=1) == {}
 
 
+def test_aggregate_counts_case_distinct_current_summary_next_to_historical(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+):
+    gen = tmp_path / "generated"
+    gen.mkdir()
+    (gen / "Yara-Rules_encodable_fraction.json").write_text(
+        json.dumps(
+            {
+                "pilot": "Yara-Rules",
+                "sample_size": 10,
+                "encodable": 6,
+                "measurement_status": "historical_pre_615_shell_extractor",
+            }
+        ),
+        encoding="utf-8",
+    )
+    lower_summary = gen / "yara-rules_batch_summary.json"
+    lower_summary.write_text(
+        json.dumps(
+            {"corpus": "yara-rules", "extracted": 10, "encodable": 6, "findings": 1}
+        ),
+        encoding="utf-8",
+    )
+    upper_summary = gen / "Yara-Rules_batch_summary.json"
+    original_glob = Path.glob
+    original_read_json = cl._read_json
+
+    def virtual_case_collision(self: Path, pattern: str):
+        matches = list(original_glob(self, pattern))
+        if self == gen and pattern == "*_batch_summary.json":
+            return iter([*matches, upper_summary])
+        return iter(matches)
+
+    def read_virtual_summary(path: Path):
+        if path == upper_summary:
+            return {
+                "corpus": "Yara-Rules",
+                "extracted": 10,
+                "encodable": 6,
+                "findings": 1,
+            }
+        return original_read_json(path)
+
+    monkeypatch.setattr(Path, "glob", virtual_case_collision)
+    monkeypatch.setattr(cl, "_read_json", read_virtual_summary)
+    upstream = tmp_path / "upstream.jsonl"
+    upstream.write_text("", encoding="utf-8")
+
+    result = cl.aggregate(
+        gen_dir=gen,
+        upstream_path=upstream,
+        security_tools=frozenset(),
+        mine_ledger_path=gen / "candidate-ledger.json",
+        queue_path=gen / "mine-queue.json",
+        prior_starvation_history=[],
+    )
+
+    funnel = result["funnel"]
+    assert funnel["batch_summaries"] == 2
+    assert funnel["sites_extracted"] == 10
+    assert funnel["sites_encodable"] == 6
+    assert funnel["batch_summary_findings"] == 2
+    assert funnel["excluded_non_current_site_totals"] == [
+        {
+            "corpus": "Yara-Rules",
+            "measurement_status": "historical_pre_615_shell_extractor",
+            "measurement_note": None,
+            "sites_extracted": 10,
+            "sites_encodable": 6,
+        }
+    ]
+
+
 def test_historical_status_join_rejects_ambiguous_casefolded_summaries():
     measurement = {
         "measurement_status": "historical",
