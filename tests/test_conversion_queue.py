@@ -1008,6 +1008,31 @@ def test_legacy_queue_schema_requires_explicit_migration(tmp_path):
         cq.load_queue("openwrt_packages", root=tmp_path)
 
 
+def test_emit_preserves_existing_legacy_contract_state(tmp_path):
+    path = tmp_path / "openwrt_packages.json"
+    legacy = cq.empty_queue("openwrt_packages", generation=0, wave_id="old-wave")
+    legacy["schema_version"] = "1"
+    legacy["candidate_sites"] = [
+        {
+            "rank": 1,
+            "site": "net/demo/a.sh:1:check",
+            "status": "contracted",
+            "contract": {"guarantee": "old contracted property"},
+        }
+    ]
+    original = (json.dumps(legacy, indent=2, sort_keys=True) + "\n").encode()
+    path.write_bytes(original)
+    with pytest.raises(SystemExit, match="preserve its review states"):
+        cq.emit(
+            "openwrt_packages",
+            wave_id="new-wave",
+            generation=1,
+            ranked=_ranked(),
+            root=tmp_path,
+        )
+    assert path.read_bytes() == original
+
+
 # --- context extractor ------------------------------------------------------
 
 

@@ -386,6 +386,24 @@ def emit(
             f"conversion_queue: emit refused — cluster {cluster!r} is not a "
             "plain cluster name"
         )
+    path = (pathlib.Path(root) if root is not None else QUEUE_ROOT) / f"{cluster}.json"
+    if path.exists() or path.is_symlink():
+        try:
+            existing = json.loads(path.read_text(encoding="utf-8"))
+            existing_version = (
+                existing.get("schema_version") if isinstance(existing, dict) else None
+            )
+        except (OSError, json.JSONDecodeError):
+            existing_version = "invalid"
+        if existing_version == "1":
+            raise SystemExit(
+                f"conversion_queue: emit refused — legacy schema v1 queue exists at "
+                f"{path}; preserve its review states and migrate/archive explicitly"
+            )
+        raise SystemExit(
+            f"conversion_queue: emit refused — queue already exists at {path}; "
+            "preserve its review state and migrate/archive explicitly"
+        )
     expected_pin = corpus_snapshot_pin(cluster)
     q = empty_queue(cluster, generation=generation, wave_id=wave_id)
     seen_identities = set()
@@ -461,7 +479,6 @@ def emit(
             if key in source_identity:
                 row[key] = source_identity[key]
         q["candidate_sites"].append(row)
-    path = (pathlib.Path(root) if root is not None else QUEUE_ROOT) / f"{cluster}.json"
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(q, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     return path
