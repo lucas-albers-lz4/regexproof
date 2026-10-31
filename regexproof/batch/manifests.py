@@ -3845,6 +3845,22 @@ CORPUS_MANIFESTS: dict[str, CorpusManifest] = {
         "commit": "de1b93347a9783e3d2ec7b5297306bf66c9fbaa1",
         "budget": budget_as_dict(BUDGET_VALIDATOR),
     },
+    "AlienVaultLabs": {
+        "corpus_type": "rule_corpus",
+        # Smith no-go after novelty-collapse review. Keep registered only so
+        # the pinned compiler-coverage measurement is reproducible; not a wave.
+        # Materialize: ln -sfn <checkout> batch/corpora/AlienVaultLabs/rules
+        "path": ROOT / "batch" / "corpora" / "AlienVaultLabs" / "rules",
+        "glob": "**/*.yar,**/*.yara",
+        "dialect": "yara",
+        "extractor": "yara",
+        "repo": "AlienVault-Labs/AlienVaultLabs",
+        "security_tool": True,
+        "lift_inline": False,
+        "corpus_pin": "347a57b31829b6f8e3280e0fd6a0ed49e5453c67",
+        "commit": "347a57b31829b6f8e3280e0fd6a0ed49e5453c67",
+        "budget": budget_as_dict(BUDGET_VALIDATOR),
+    },
     "yarasigs": {
         "corpus_type": "rule_corpus",
         # Materialize: ln -sfn /tmp/0day1day-yarasigs-yarasigs/signatures \\
