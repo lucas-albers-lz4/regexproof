@@ -899,9 +899,39 @@ def aggregate(
     summary_findings = 0
     summary_triage = 0
     n_summaries = 0
+    excluded_batch_summaries: list[dict[str, Any]] = []
+    measurement_by_corpus: dict[str, dict[str, Any]] = {}
+    for fraction_path in sorted(gen.glob("*_encodable_fraction.json")):
+        fraction = _read_json(fraction_path)
+        corpus = str(
+            fraction.get("pilot")
+            or fraction.get("corpus")
+            or fraction_path.name.removesuffix("_encodable_fraction.json")
+        )
+        if fraction.get("measurement_status"):
+            measurement_by_corpus[corpus] = {
+                "measurement_status": fraction["measurement_status"],
+                "measurement_note": fraction.get("measurement_note"),
+            }
     for path in sorted(gen.glob("*_batch_summary.json")):
         data = _read_json(path)
         if "extracted" not in data:
+            continue
+        corpus = str(
+            data.get("corpus") or path.name.removesuffix("_batch_summary.json")
+        )
+        measurement = measurement_by_corpus.get(corpus) or {}
+        status = str(measurement.get("measurement_status") or "")
+        if status and status != "current":
+            excluded_batch_summaries.append(
+                {
+                    "corpus": corpus,
+                    "measurement_status": status,
+                    "measurement_note": measurement.get("measurement_note"),
+                    "sites_extracted": int(data.get("extracted") or 0),
+                    "sites_encodable": int(data.get("encodable") or 0),
+                }
+            )
             continue
         n_summaries += 1
         extracted += int(data.get("extracted") or 0)
@@ -1056,6 +1086,7 @@ def aggregate(
         "batch_summaries": n_summaries,
         "sites_extracted": extracted,
         "sites_encodable": encodable,
+        "excluded_non_current_batch_summaries": excluded_batch_summaries,
         "batch_triage_rows": summary_triage,
         "batch_summary_findings": summary_findings,
         "scanner_ndjson_files": len(scanner_files),
@@ -1246,6 +1277,8 @@ def render_md(data: dict[str, Any]) -> str:
         "|---|---|",
         f"| sites extracted (batch summaries) | {n(f['sites_extracted'])} |",
         f"| sites encodable | {n(f['sites_encodable'])} |",
+        f"| non-current batch summaries excluded from site totals | "
+        f"{', '.join('{} ({})'.format(x['corpus'], x['measurement_status']) for x in f['excluded_non_current_batch_summaries']) or 'none'} |",
         f"| scanner NDJSON rows | {n(f['scanner_rows'])} |",
         f"| planned inventory stubs | {n(f['planned_stubs'])} |",
         f"| classification rows (usage/intent/triage kinds) | {n(f['classification_rows'])} |",

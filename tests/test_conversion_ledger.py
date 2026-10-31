@@ -53,6 +53,20 @@ def test_historical_fraction_is_excluded_from_conversion_ledger_aggregate(tmp_pa
         + "\n",
         encoding="utf-8",
     )
+    (gen / "current_batch_summary.json").write_text(
+        json.dumps(
+            {"corpus": "current", "extracted": 5, "encodable": 4}
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    (gen / "aidevops_batch_summary.json").write_text(
+        json.dumps(
+            {"corpus": "aidevops", "extracted": 11330, "encodable": 10212}
+        )
+        + "\n",
+        encoding="utf-8",
+    )
     result = cl.yara_encodable_split(gen)
     assert result["fraction_all_n"] == 5
     assert result["fraction_all_encodable"] == 4
@@ -75,9 +89,25 @@ def test_historical_fraction_is_excluded_from_conversion_ledger_aggregate(tmp_pa
     )
     assert aggregate["yara_split"]["fraction_all_n"] == 5
     assert len(aggregate["yara_split"]["excluded_non_current_measurements"]) == 1
+    assert aggregate["funnel"]["batch_summaries"] == 1
+    assert aggregate["funnel"]["sites_extracted"] == 5
+    assert aggregate["funnel"]["sites_encodable"] == 4
+    assert aggregate["funnel"]["excluded_non_current_batch_summaries"] == [
+        {
+            "corpus": "aidevops",
+            "measurement_status": "historical_pre_615_shell_extractor",
+            "measurement_note": "rerun before current use",
+            "sites_extracted": 11330,
+            "sites_encodable": 10212,
+        }
+    ]
     md = cl.render_md(aggregate)
     assert (
         "non-current fraction artifacts excluded from inventory aggregate | "
+        "aidevops (historical_pre_615_shell_extractor) |"
+    ) in md
+    assert (
+        "non-current batch summaries excluded from site totals | "
         "aidevops (historical_pre_615_shell_extractor) |"
     ) in md
 
