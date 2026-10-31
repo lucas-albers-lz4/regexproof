@@ -46,9 +46,13 @@ def _load_ranker():
 def validate_stub(row: dict) -> None:
     """Validate one stub row against the queue-stub schema. A stub with
     contract semantics (guarantee/input_source/trust/declared_domain) is
-    REJECTED — those are adoption-record fields, not stub fields."""
+    REJECTED — those are adoption-record fields, not stub fields. Its pin
+    identifies the corpus snapshot only; it does not indicate human review."""
     import jsonschema
 
+    pin = row.get("pin")
+    if not isinstance(pin, str) or not pin.strip():
+        raise SystemExit("stub emitter: pin must be a nonblank corpus snapshot identity")
     schema = json.loads(STUB_SCHEMA.read_text(encoding="utf-8"))
     try:
         jsonschema.validate(row, schema)
@@ -60,6 +64,46 @@ def validate_stub(row: dict) -> None:
                 f"stub emitter: stub carries contract field {banned!r} — "
                 "contract fields belong in an adopted property contract"
             )
+
+
+def resolve_corpus_pin(corpus: str) -> str:
+    """Resolve the immutable snapshot identity from the batch manifest.
+
+    Conversion NDJSON rows often have no pin of their own. The queue binds
+    those sites to the configured corpus snapshot; it never invents a pin or
+    treats the binding as evidence of human review.
+    """
+    from regexproof.mine.conversion_queue import corpus_snapshot_pin
+
+    try:
+        return corpus_snapshot_pin(corpus)
+    except SystemExit as exc:
+        raise SystemExit(f"stub emitter: {exc}") from exc
+
+
+def check_item_pin(item: dict, corpus_pin: str, *, site: str) -> None:
+    """Reject row-level pins that disagree with the canonical corpus pin."""
+    observed = []
+    for key in ("pin", "corpus_pin"):
+        value = item.get(key)
+        if value is None:
+            continue
+        if not isinstance(value, str) or not value.strip():
+            raise SystemExit(
+                f"stub emitter: row {site!r} has blank/invalid {key}; refusing pin fallback"
+            )
+        observed.append((key, value.strip()))
+    distinct = {value for _, value in observed}
+    if len(distinct) > 1:
+        raise SystemExit(
+            f"stub emitter: row {site!r} has conflicting pin and corpus_pin values"
+        )
+    if distinct and next(iter(distinct)) != corpus_pin:
+        key, value = observed[0]
+        raise SystemExit(
+            f"stub emitter: row {site!r} {key} {value!r} conflicts with "
+            f"corpus manifest pin {corpus_pin!r}"
+        )
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -88,6 +132,17 @@ def main(argv: list[str] | None = None) -> int:
 
     ranker = _load_ranker()
     records = ranker.load_ndjson(args.ndjson)
+    corpus_pin = resolve_corpus_pin(args.corpus)
+    # Check source records before ranking: the ranker currently coalesces
+    # pin/corpus_pin, which could otherwise hide contradictory provenance.
+    for record in records:
+        row_corpus = record.get("corpus")
+        if row_corpus != args.corpus:
+            raise SystemExit(
+                f"stub emitter: row {record.get('site')!r} belongs to corpus "
+                f"{row_corpus!r}, not --corpus {args.corpus!r}"
+            )
+        check_item_pin(record, corpus_pin, site=str(record.get("site") or ""))
     # Conversion rows are adopted contract candidate sites — the pattern-based
     # scanner drops do not apply (Luna r1 fold #1: the documented input must
     # not produce an empty queue). rank_sites keeps path/test-name drops.
@@ -98,11 +153,13 @@ def main(argv: list[str] | None = None) -> int:
 
     stubs = []
     for item in keep:
+        site = str(item.get("site") or "")
+        check_item_pin(item, corpus_pin, site=site)
         stub = {
             "provenance": "stub",
             "corpus": args.corpus,
-            "pin": str(item.get("pin") or item.get("corpus_pin") or ""),
-            "site": str(item.get("site") or ""),
+            "pin": corpus_pin,
+            "site": site,
             "idiom_bucket": str(item.get("idiom_bucket") or "unclassified"),
             "suggested_shape": str(item.get("suggested_shape") or ""),
         }

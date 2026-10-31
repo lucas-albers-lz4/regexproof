@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/lucas-albers-lz4/regexproof/schemas/queue_stub.schema.json",
   "title": "conversion queue stub",
-  "description": "Cluster-conversion-rank stub (#551 Phase C REVISION 8). QUEUE-ONLY: a stub never increments properties_asked (it is not a contract). provenance=stub is enforced structurally; additionalProperties is false so no stray field can smuggle contract semantics.",
+  "description": "Cluster-conversion-rank stub (#551 Phase C REVISION 8). QUEUE-ONLY: a stub never increments properties_asked (it is not a contract). pin identifies the corpus snapshot only and does not establish human review or an outcome. provenance=stub is enforced structurally; additionalProperties is false so no stray field can smuggle contract semantics.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -19,7 +19,7 @@
       "description": "Queue-only marker; human adoption changes the provenance, never the stub row."
     },
     "corpus": { "type": "string" },
-    "pin": { "type": "string" },
+    "pin": { "type": "string", "minLength": 1, "pattern": "\\S" },
     "site": {
       "type": "string",
       "description": "file:line:token reference (canonical site form)."

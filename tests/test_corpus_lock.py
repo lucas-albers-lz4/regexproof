@@ -14,6 +14,14 @@ import pytest
 from regexproof.mine import corpus_lock as cl
 
 
+@pytest.fixture(autouse=True)
+def _test_corpus_manifest(monkeypatch):
+    """The lock fixtures use the short `ow` name as a local test corpus."""
+    from regexproof.batch.manifests import CORPUS_MANIFESTS
+
+    monkeypatch.setitem(CORPUS_MANIFESTS, "ow", {"corpus_pin": "fixture-snapshot"})
+
+
 def _log(tmp_path: pathlib.Path) -> pathlib.Path:
     return tmp_path / "corpus_events.jsonl"
 
@@ -81,7 +89,7 @@ def test_force_close_records_flag(tmp_path):
     # non-contracted top-15 candidate (Luna r1 #4 / r2 #3).
     from regexproof.mine import conversion_queue as cq
 
-    ranked = [{"site": "net/demo/a.sh:1:tok", "corpus": "ow", "provenance": "stub"}]
+    ranked = [{"site": "net/demo/a.sh:1:tok", "corpus": "ow", "pin": "fixture-snapshot", "provenance": "stub"}]
     cq.emit("ow", wave_id="w1", generation=0, ranked=ranked, root=tmp_path)
     cl.wave_close(
         "ow", "w1", force=True,
@@ -108,7 +116,7 @@ def test_forced_close_rejects_off_vocabulary_reason(tmp_path):
     refused — 'bogus' is not a queue skip reason."""
     from regexproof.mine import conversion_queue as cq
 
-    ranked = [{"site": "net/demo/a.sh:1:tok", "corpus": "ow", "provenance": "stub"}]
+    ranked = [{"site": "net/demo/a.sh:1:tok", "corpus": "ow", "pin": "fixture-snapshot", "provenance": "stub"}]
     cq.emit("ow", wave_id="w1", generation=0, ranked=ranked, root=tmp_path)
     log = _log(tmp_path)
     cl.wave_open("ow", "w1", log=log)
@@ -250,7 +258,7 @@ def test_forced_close_enforces_queue_skip_reasons(tmp_path):
     from regexproof.mine import conversion_queue as cq
 
     ranked = [
-        {"site": f"net/demo/a.sh:{i}:tok", "corpus": "ow", "provenance": "stub",
+        {"site": f"net/demo/a.sh:{i}:tok", "corpus": "ow", "pin": "fixture-snapshot", "provenance": "stub",
          "idiom_bucket": "validator-charsets-and-captures"}
         for i in range(1, 4)
     ]

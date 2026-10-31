@@ -38,6 +38,46 @@ STATUSES = frozenset(
 )
 GATED_GO = "gated:go"
 
+
+def corpus_snapshot_pin(cluster: str) -> str:
+    """Return the required manifest snapshot identity for a queue corpus."""
+    from regexproof.batch.manifests import CORPUS_MANIFESTS
+
+    manifest = CORPUS_MANIFESTS.get(cluster)
+    if manifest is None:
+        raise SystemExit(
+            f"conversion_queue: no corpus manifest for {cluster!r}; "
+            "cannot bind queue to a source snapshot"
+        )
+    pin = manifest.get("corpus_pin") or manifest.get("commit")
+    if not isinstance(pin, str) or not pin.strip():
+        raise SystemExit(
+            f"conversion_queue: corpus {cluster!r} has no nonblank corpus_pin/commit"
+        )
+    return pin.strip()
+
+
+def _validate_queue_identity(q: dict[str, Any], cluster: str) -> None:
+    if q.get("cluster") != cluster:
+        actual = q.get("cluster")
+        raise SystemExit(
+            f"conversion_queue: queue identity mismatch — requested {cluster!r}, "
+            f"artifact declares {actual!r}"
+        )
+    expected_pin = corpus_snapshot_pin(cluster)
+    for row in q.get("candidate_sites", []):
+        if row.get("corpus") != cluster:
+            raise SystemExit(
+                f"conversion_queue: site {row.get('site')!r} corpus does not match "
+                f"queue cluster {cluster!r}"
+            )
+        pin = row.get("pin")
+        if not isinstance(pin, str) or pin.strip() != expected_pin:
+            raise SystemExit(
+                f"conversion_queue: site {row.get('site')!r} pin does not match "
+                "manifest snapshot"
+            )
+
 # Skip-reason vocabulary (Luna r3 #3): forced close-out accepts ONLY these
 # reasons — an arbitrary nonblank string must not satisfy the requirement.
 SKIP_REASONS = frozenset(
@@ -68,7 +108,15 @@ def load_queue(cluster: str, root: pathlib.Path | None = None) -> dict[str, Any]
     path = (pathlib.Path(root) if root is not None else QUEUE_ROOT) / f"{cluster}.json"
     if not path.is_file():
         raise SystemExit(f"conversion_queue: no queue artifact for {cluster}")
-    return json.loads(path.read_text(encoding="utf-8"))
+    q = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(q, dict):
+        actual = q.get("cluster") if isinstance(q, dict) else None
+        raise SystemExit(
+            f"conversion_queue: queue identity mismatch — requested {cluster!r}, "
+            f"artifact declares {actual!r}"
+        )
+    _validate_queue_identity(q, cluster)
+    return q
 
 
 def emit(
@@ -107,8 +155,26 @@ def emit(
             f"conversion_queue: emit refused — cluster {cluster!r} is not a "
             "plain cluster name"
         )
+    expected_pin = corpus_snapshot_pin(cluster)
     q = empty_queue(cluster, generation=generation, wave_id=wave_id)
     for i, item in enumerate(ranked, start=1):
+        row_corpus = item.get("corpus")
+        if row_corpus != cluster:
+            raise SystemExit(
+                f"conversion_queue: emit refused — candidate {item.get('site')!r} "
+                f"belongs to corpus {row_corpus!r}, not queue corpus {cluster!r}"
+            )
+        pin = item.get("pin")
+        if not isinstance(pin, str) or not pin.strip():
+            raise SystemExit(
+                f"conversion_queue: emit refused — candidate {item.get('site')!r} "
+                "has no nonblank corpus snapshot pin"
+            )
+        if pin.strip() != expected_pin:
+            raise SystemExit(
+                f"conversion_queue: emit refused — candidate {item.get('site')!r} "
+                f"pin {pin.strip()!r} does not match manifest pin {expected_pin!r}"
+            )
         row = {
             "rank": i,
             "site": str(item.get("site") or ""),
@@ -147,8 +213,28 @@ def emit(
 
 
 def _row(q: dict[str, Any], site: str) -> dict[str, Any]:
+    cluster = q.get("cluster")
+    if not isinstance(cluster, str) or not cluster.strip():
+        raise SystemExit("conversion_queue: queue has no valid cluster identity")
+    expected_pin = corpus_snapshot_pin(cluster)
     for r in q["candidate_sites"]:
         if r["site"] == site:
+            if r.get("corpus") != cluster:
+                raise SystemExit(
+                    f"conversion_queue: site {site!r} corpus does not match queue "
+                    f"cluster {cluster!r}; refusing review transition"
+                )
+            pin = r.get("pin")
+            if not isinstance(pin, str) or not pin.strip():
+                raise SystemExit(
+                    f"conversion_queue: site {site!r} has no nonblank corpus "
+                    "snapshot pin; refusing review transition"
+                )
+            if pin.strip() != expected_pin:
+                raise SystemExit(
+                    f"conversion_queue: site {site!r} pin does not match manifest "
+                    "snapshot; refusing review transition"
+                )
             return r
     raise SystemExit(f"conversion_queue: site {site!r} not in queue {q['cluster']}")
 
@@ -375,6 +461,10 @@ def _write(q: dict[str, Any], root: pathlib.Path | None = None) -> None:
     truncate the artifact — Luna r1 #11)."""
     import os
 
+    cluster = q.get("cluster")
+    if not isinstance(cluster, str) or not cluster.strip():
+        raise SystemExit("conversion_queue: refusing write without queue cluster identity")
+    _validate_queue_identity(q, cluster)
     path = (pathlib.Path(root) if root is not None else QUEUE_ROOT) / f"{q['cluster']}.json"
     path.parent.mkdir(parents=True, exist_ok=True)
     tmp = path.with_suffix(".json.tmp")
