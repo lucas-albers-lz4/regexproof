@@ -113,20 +113,20 @@
     "accepted_upstream": 1,
     "batch_shape5_asked": 3,
     "batch_shape5_sat": 2,
-    "batch_summaries": 100,
-    "batch_summary_findings": 15777,
-    "batch_triage_rows": 125626,
-    "classification_rows": 14103,
-    "disclosed_private_first": 2198,
+    "batch_summaries": 99,
+    "batch_summary_findings": 15760,
+    "batch_triage_rows": 122742,
+    "classification_rows": 14090,
+    "disclosed_private_first": 2185,
     "disclosed_public_ok": 0,
     "existence_proofs": 3,
     "false_positives_filed": 7,
     "mutation_guards": 644,
     "other_rows": 0,
-    "planned_stubs": 386,
-    "pr_dry_run_findings": 15777,
-    "pr_dry_run_private_first": 2386,
-    "pr_dry_runs": 100,
+    "planned_stubs": 382,
+    "pr_dry_run_findings": 15760,
+    "pr_dry_run_private_first": 2369,
+    "pr_dry_runs": 99,
     "properties_asked": 41,
     "properties_asked_distinct": 41,
     "properties_asked_synthesized": 644,
@@ -139,11 +139,11 @@
     "rule_diff_report_sat_gt": 10,
     "sat_ground_truthed": 8,
     "sat_unique_sites": 6,
-    "scanner_ndjson_files": 108,
-    "scanner_rows": 15777,
+    "scanner_ndjson_files": 107,
+    "scanner_rows": 15760,
     "scanner_rule_diff_sat": 0,
-    "sites_encodable": 201097,
-    "sites_extracted": 326723,
+    "sites_encodable": 200416,
+    "sites_extracted": 323158,
     "third_party_public": 0,
     "would_open_public_upstream": 0
   },
@@ -162,7 +162,7 @@
     "admission_per_week, admission from GO gate-decision artifacts (not the",
     "lagging candidate ledger). unknown_date rows are excluded from median",
     "time-to-acceptance; time-to-acceptance is Kaplan-Meier or median of",
-    "closed rows only — never censored + closed mixed in a plain median."
+    "closed rows only \u2014 never censored + closed mixed in a plain median."
   ],
   "per_wave": [
     {
@@ -392,17 +392,17 @@
   "rates": {
     "accepted_per_extracted": 3e-06,
     "accepted_per_gt": 0.125,
-    "encodable_fraction": 0.615497,
-    "encodable_fraction_all_inventories": 0.618677,
-    "encodable_fraction_excluding_yara": 0.648403,
-    "encodable_fraction_yara": 0.609899,
-    "fullword_share_of_unencodable": 0.774019,
+    "encodable_fraction": 0.62018,
+    "encodable_fraction_all_inventories": 0.613949,
+    "encodable_fraction_excluding_yara": 0.609135,
+    "encodable_fraction_yara": 0.615196,
+    "fullword_share_of_unencodable": 0.775579,
     "gt_per_sat": 1.0,
     "pipeline_accepted_per_extracted": 3e-06,
     "pipeline_accepted_per_gt": 0.125,
-    "property_asked_per_encodable": 0.000204,
+    "property_asked_per_encodable": 0.000205,
     "sat_per_property_asked": 0.195122,
-    "yara_share_of_unencodable": 0.789811
+    "yara_share_of_unencodable": 0.791832
   },
   "rule_diff_reports": {
     "crs_cross_engine_rule_diff_report.json": {
@@ -614,21 +614,28 @@
     }
   ],
   "yara_split": {
-    "encodable_fraction_all": 0.618677,
-    "encodable_fraction_excluding_yara": 0.648403,
-    "encodable_fraction_yara": 0.609899,
-    "fraction_all_encodable": 228799,
-    "fraction_all_n": 369820,
-    "fraction_excluding_yara_encodable": 54663,
-    "fraction_excluding_yara_n": 84304,
-    "fraction_yara_encodable": 174136,
-    "fraction_yara_n": 285516,
-    "fullword_boundary_all": 109153,
-    "fullword_boundary_yara": 109153,
-    "fullword_share_of_unencodable": 0.774019,
-    "fullword_share_of_yara_unencodable": 0.980005,
-    "unencodable_all": 141021,
-    "unencodable_yara": 111380,
-    "yara_share_of_unencodable": 0.789811
+    "encodable_fraction_all": 0.613949,
+    "encodable_fraction_excluding_yara": 0.609135,
+    "encodable_fraction_yara": 0.615196,
+    "excluded_non_current_measurements": [
+      {
+        "corpus": "aidevops",
+        "measurement_note": "This full-corpus fraction predates the #615 shell extractor expansion guard. Rerun before treating the fraction as current; it is not issue-closure evidence.",
+        "measurement_status": "historical_pre_615_shell_extractor"
+      }
+    ],
+    "fraction_all_encodable": 217906,
+    "fraction_all_n": 354925,
+    "fraction_excluding_yara_encodable": 44451,
+    "fraction_excluding_yara_n": 72974,
+    "fraction_yara_encodable": 173455,
+    "fraction_yara_n": 281951,
+    "fullword_boundary_all": 106269,
+    "fullword_boundary_yara": 106269,
+    "fullword_share_of_unencodable": 0.775579,
+    "fullword_share_of_yara_unencodable": 0.979474,
+    "unencodable_all": 137019,
+    "unencodable_yara": 108496,
+    "yara_share_of_unencodable": 0.791832
   }
 }
