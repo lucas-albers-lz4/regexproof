@@ -936,12 +936,19 @@ def _fraction_reports(gen: Path) -> list[tuple[Path, dict[str, Any]]]:
 
 
 def _measurement_for_summary(
-    summary_stem: str, indexed: dict[str, dict[str, Any]]
+    summary_stem: str,
+    indexed: dict[str, dict[str, Any]],
+    *,
+    same_id_summary_count: int = 1,
 ) -> dict[str, Any]:
     """Resolve an exact selection first; only unique casefold fallback is safe."""
     exact = indexed.get(summary_stem.strip())
     if exact is not None:
         return exact
+    # Distinct summaries that differ only by case are separate corpus IDs on
+    # Linux. Do not apply one variant's historical status to its sibling.
+    if same_id_summary_count > 1:
+        return {}
     normalized = _normalized_measurement_id(summary_stem)
     fallback = [
         item
@@ -1021,7 +1028,11 @@ def aggregate(
             continue
         summary_stem = path.name.removesuffix("_batch_summary.json")
         summary_key = _normalized_measurement_id(summary_stem)
-        measurement = _measurement_for_summary(summary_stem, measurement_by_report)
+        measurement = _measurement_for_summary(
+            summary_stem,
+            measurement_by_report,
+            same_id_summary_count=len(summary_paths_by_id.get(summary_key, [])),
+        )
         status = str(measurement.get("measurement_status") or "")
         if status and status != "current":
             matching_paths = summary_paths_by_exact_id.get(summary_stem.strip(), [])

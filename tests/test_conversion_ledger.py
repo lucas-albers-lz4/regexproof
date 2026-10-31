@@ -158,6 +158,25 @@ def test_fraction_status_summary_join_prefers_exact_selection_id():
         cl._measurement_for_summary("YARA-RULES", indexed)
 
 
+def test_summary_aggregate_excludes_only_exact_case_marked_variant():
+    marked = {"measurement_status": "historical-upper"}
+    indexed = {"Yara-Rules": marked}
+    # Same casefolded ID is ambiguous as a fallback; the exact marked path is
+    # excluded, while its distinct lowercase sibling remains current.
+    assert cl._measurement_for_summary(
+        "Yara-Rules", indexed, same_id_summary_count=2
+    ) is marked
+    assert cl._measurement_for_summary(
+        "yara-rules", indexed, same_id_summary_count=2
+    ) == {}
+    # A unique case-insensitive match is a supported fallback; zero matches
+    # leave the summary on the legacy/current path.
+    assert cl._measurement_for_summary(
+        "AIDEVOPS", {"aidevops": marked}, same_id_summary_count=1
+    ) is marked
+    assert cl._measurement_for_summary("other", {}, same_id_summary_count=1) == {}
+
+
 def test_historical_status_join_rejects_ambiguous_casefolded_summaries():
     measurement = {
         "measurement_status": "historical",
