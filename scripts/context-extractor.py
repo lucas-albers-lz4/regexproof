@@ -217,6 +217,11 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--corpus", default="")
     ap.add_argument("--checkout", type=pathlib.Path, default=None)
     ap.add_argument("--site", default="", help="path:line:token")
+    ap.add_argument(
+        "--source-path",
+        default="",
+        help="materialized file path from a queue row (preserves --site identity)",
+    )
     ap.add_argument("--input-format-constraint", default="")
     ap.add_argument("--review-form", action="store_true", help="emit review form")
     ap.add_argument("-o", "--output", type=pathlib.Path)
@@ -232,8 +237,9 @@ def main(argv: list[str] | None = None) -> int:
     if not args.corpus or args.checkout is None or not args.site:
         ap.error("--corpus, --checkout and --site are required (unless --validate)")
 
-    path, line, token = parse_site(args.site)
-    window = extract_window(args.checkout, path, line, token=token)
+    site_path, line, token = parse_site(args.site)
+    source_path = args.source_path or site_path
+    window = extract_window(args.checkout, source_path, line, token=token)
     out: dict = window
     if args.review_form:
         out = review_form(

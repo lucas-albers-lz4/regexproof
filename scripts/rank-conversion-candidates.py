@@ -217,6 +217,11 @@ def rank_sites(
         row: dict[str, Any] = {
             "score": pts,
             "site": rec.get("site"),
+            # Queue identity is (site, question_id), not site alone: one
+            # implementation site may have several independent properties.
+            "question_id": (
+                rec.get("question_id") or rec.get("name")
+            ),
             "file": _path_of(rec),
             "idiom_bucket": rec.get("idiom_bucket"),
             "corpus": rec.get("corpus"),
@@ -234,7 +239,13 @@ def rank_sites(
             if rec.get(key) is not None:
                 row[key] = rec[key]
         scored.append(row)
-    scored.sort(key=lambda r: (-int(r["score"]), str(r["site"] or "")))
+    scored.sort(
+        key=lambda r: (
+            -int(r["score"]),
+            str(r["site"] or ""),
+            str(r["question_id"] or ""),
+        )
+    )
     keep = scored[:limit]
     return {
         "schema_version": "1",

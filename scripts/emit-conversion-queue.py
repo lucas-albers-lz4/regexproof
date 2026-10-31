@@ -143,6 +143,12 @@ def main(argv: list[str] | None = None) -> int:
                 f"{row_corpus!r}, not --corpus {args.corpus!r}"
             )
         check_item_pin(record, corpus_pin, site=str(record.get("site") or ""))
+        question_id = record.get("question_id") or record.get("name")
+        if not isinstance(question_id, str) or not question_id.strip():
+            raise SystemExit(
+                f"stub emitter: row {record.get('site')!r} has no canonical "
+                "question_id/name"
+            )
     # Conversion rows are adopted contract candidate sites — the pattern-based
     # scanner drops do not apply (Luna r1 fold #1: the documented input must
     # not produce an empty queue). rank_sites keeps path/test-name drops.
@@ -155,13 +161,21 @@ def main(argv: list[str] | None = None) -> int:
     for item in keep:
         site = str(item.get("site") or "")
         check_item_pin(item, corpus_pin, site=site)
+        question_id = item.get("question_id")
+        if isinstance(question_id, str):
+            question_id = question_id.strip()
+        if not question_id:
+            raise SystemExit(f"stub emitter: row {site!r} has no question identity")
+        source_identity = cq.materialized_source_identity(args.corpus, site)
         stub = {
             "provenance": "stub",
             "corpus": args.corpus,
             "pin": corpus_pin,
             "site": site,
+            "question_id": question_id,
             "idiom_bucket": str(item.get("idiom_bucket") or "unclassified"),
             "suggested_shape": str(item.get("suggested_shape") or ""),
+            **source_identity,
         }
         signals = {}
         for key in ("capture_group", "charset_class", "path_vocabulary", "trust_guess"):

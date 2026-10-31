@@ -22,6 +22,7 @@ def _ranked():
     return [
         {
             "site": f"net/demo/files/etc/init.d/demo:{i}:token_{i}",
+            "question_id": f"demo-property-{i}",
             "corpus": "openwrt_packages",
             "pin": "e99adbc49f7a11d0377c8135fe706c7757b9e68c",
             "idiom_bucket": "validator-charsets",
@@ -66,6 +67,50 @@ def test_emit_creates_queue_with_ranked_rows(tmp_path):
     assert len(q["candidate_sites"]) == 19
     assert q["candidate_sites"][0]["rank"] == 1
     assert q["candidate_sites"][0]["status"] == "emitted"
+    assert q["candidate_sites"][0]["question_id"] == "demo-property-1"
+    assert q["candidate_sites"][0]["source_path"] == "net/demo/files/etc/init.d/demo"
+    assert q["candidate_sites"][0]["source_pin"] == (
+        "e99adbc49f7a11d0377c8135fe706c7757b9e68c"
+    )
+
+
+def test_same_site_different_questions_keep_separate_queue_identity(tmp_path):
+    site = "net/demo/files/etc/init.d/demo:10:check"
+    ranked = [
+        {
+            "site": site,
+            "question_id": qid,
+            "corpus": "openwrt_packages",
+            "pin": "e99adbc49f7a11d0377c8135fe706c7757b9e68c",
+        }
+        for qid in ("question-alpha", "question-beta")
+    ]
+    _, q = _queue(tmp_path, ranked=ranked)
+    assert [(row["site"], row["question_id"]) for row in q["candidate_sites"]] == [
+        (site, "question-alpha"),
+        (site, "question-beta"),
+    ]
+    with pytest.raises(SystemExit, match="question_id is required"):
+        cq._row(q, site)
+    assert cq._row(q, site, "question-beta")["question_id"] == "question-beta"
+
+
+def test_duplicate_site_question_pair_is_rejected(tmp_path):
+    site = "net/demo/files/etc/init.d/demo:10:check"
+    duplicate = {
+        "site": site,
+        "question_id": "question-alpha",
+        "corpus": "openwrt_packages",
+        "pin": "e99adbc49f7a11d0377c8135fe706c7757b9e68c",
+    }
+    with pytest.raises(SystemExit, match="duplicate candidate identity"):
+        cq.emit(
+            "openwrt_packages",
+            wave_id="w1",
+            generation=0,
+            ranked=[duplicate, duplicate],
+            root=tmp_path,
+        )
 
 
 # --- claim guards ----------------------------------------------------------
@@ -197,6 +242,34 @@ def test_contract_allowed_in_active_wave(tmp_path):
         root=tmp_path, lock_log=log,
     )
     assert row["status"] == "contracted"
+
+
+def test_contract_cannot_change_question_identity(tmp_path):
+    import json
+
+    _, q = _queue(tmp_path)
+    row = q["candidate_sites"][0]
+    site = row["site"]
+    question_id = row["question_id"]
+    cq.claim(
+        q["cluster"], site,
+        question_id=question_id,
+        corpus_status="gated:go",
+        ledger_state={}, generation=0, root=tmp_path,
+        lock_log=_open_wave(tmp_path),
+    )
+    q = cq.load_queue(q["cluster"], root=tmp_path)
+    q["candidate_sites"][0]["provenance"] = "human"
+    (tmp_path / f"{q['cluster']}.json").write_text(
+        json.dumps(q, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
+    with pytest.raises(SystemExit, match="does not match queued question"):
+        cq.contract(
+            q["cluster"], site,
+            question_id=question_id,
+            contract={"name": "different-question"},
+            root=tmp_path,
+        )
 
 
 def test_contract_refused_when_claim_wave_blank(tmp_path):
@@ -480,6 +553,9 @@ def test_stub_schema_rejects_contract_fields():
         "corpus": "ow",
         "pin": "p",
         "site": "a/b.sh:1:x",
+        "question_id": "demo-property",
+        "source_path": "a/b.sh",
+        "source_pin": "p",
         "idiom_bucket": "b",
         "suggested_shape": "s",
     }
@@ -523,6 +599,9 @@ def test_stub_emitter_rejects_contract_fields(tmp_path):
                 "corpus": "ow",
                 "pin": "p",
                 "site": "a/b.sh:1:x",
+                "question_id": "demo-property",
+                "source_path": "a/b.sh",
+                "source_pin": "p",
                 "idiom_bucket": "b",
                 "suggested_shape": "s",
                 "guarantee": "smuggled",
@@ -545,6 +624,7 @@ def test_stub_emitter_end_to_end(tmp_path):
                     "declared_domain": "x",
                     "trust": "config",
                 },
+                    "name": "host-is-safe",
                 "corpus": "openwrt_packages",
                 "idiom_bucket": "validator-charsets",
                 "family": "OW-packages",
@@ -573,6 +653,72 @@ def test_stub_emitter_end_to_end(tmp_path):
         assert row["status"] == "emitted"
         assert row.get("provenance") == "stub"
         assert row["pin"] == expected_pin
+        assert row["question_id"] == "host-is-safe"
+
+
+def test_dogfood_queue_preserves_question_and_materialized_source_identity(tmp_path):
+    real = ROOT / "properties" / "generated" / "dogfood_shell_conversion.ndjson"
+    out = tmp_path / "queue" / "dogfood_shell.json"
+    r = subprocess.run(
+        [
+            sys.executable, str(ROOT / "scripts" / "emit-conversion-queue.py"),
+            "--ndjson", str(real), "--corpus", "dogfood_shell",
+            "--wave-id", "dogfood_w1", "--generation", "1", "-o", str(out),
+        ],
+        capture_output=True,
+        text=True,
+    )
+    assert r.returncode == 0, r.stderr
+    q = json.loads(out.read_text(encoding="utf-8"))
+    rows = q["candidate_sites"]
+    assert len(rows) == 2
+    assert rows[0]["site"] == rows[1]["site"]
+    assert {row["question_id"] for row in rows} == {
+        "DF-dogfood-shell-normalize-fixpoint",
+        "DF-dogfood-shell-normalize-idempotent",
+    }
+    expected_path = (
+        "fwlive/openwrt-feed/luci-app-fwlive/root/usr/libexec/rpcd/fwlive"
+    )
+    assert all(row["source_path"] == expected_path for row in rows)
+    assert all(
+        row["source_pin"] == "6b1b1f8e4342f675ed04a137998b95a7b7e93e3e"
+        for row in rows
+    )
+    assert all(
+        row["source_sha256"] == "958d4c946abbb757bede85ba5c15a908d5510b9859a04f5e4d711bf8b6a7ac16"
+        for row in rows
+    )
+    assert q["candidate_sites"][0]["pin"].startswith("sha256:")
+    assert q["candidate_sites"][0]["source_pin"] != q["candidate_sites"][0]["pin"]
+    with pytest.raises(SystemExit, match="multiple questions"):
+        cq._row(q, rows[0]["site"])
+
+
+def test_materialized_source_mapping_rejects_ambiguous_suffix(tmp_path, monkeypatch):
+    from regexproof.batch.manifests import CORPUS_MANIFESTS
+
+    corpus_root = tmp_path / "ambiguous"
+    rules = corpus_root / "rules"
+    rules.mkdir(parents=True)
+    (corpus_root / "source-files.json").write_text(
+        json.dumps({
+            "files": [
+                {"path": "repo-a/path/check.sh", "source_commit": "a" * 40},
+                {"path": "repo-b/path/check.sh", "source_commit": "b" * 40},
+            ]
+        }),
+        encoding="utf-8",
+    )
+    monkeypatch.setitem(
+        CORPUS_MANIFESTS,
+        "ambiguous_materialization",
+        {"path": rules, "corpus_pin": "snapshot-pin"},
+    )
+    with pytest.raises(SystemExit, match="maps to 2 files"):
+        cq.materialized_source_identity(
+            "ambiguous_materialization", "path/check.sh:1:token"
+        )
 
 
 def test_emitter_refuses_noncanonical_output(tmp_path):
@@ -585,6 +731,7 @@ def test_emitter_refuses_noncanonical_output(tmp_path):
     ndjson.write_text(
         json.dumps(
             {"site": "net/demo/files/etc/init.d/demo:1:token_1",
+             "name": "demo-question",
              "corpus": "openwrt_packages", "wave_id": "ow_w1",
              "generation": 1}
         )
@@ -695,6 +842,7 @@ def test_queue_emit_rejects_wrong_corpus_or_manifest_pin(tmp_path):
             generation=0,
             ranked=[{
                 "site": site,
+                "question_id": "demo-question",
                 "corpus": "dogfood_shell",
                 "pin": "e99adbc49f7a11d0377c8135fe706c7757b9e68c",
             }],
@@ -705,7 +853,8 @@ def test_queue_emit_rejects_wrong_corpus_or_manifest_pin(tmp_path):
             "openwrt_packages",
             wave_id="w1",
             generation=0,
-            ranked=[{"site": site, "corpus": "openwrt_packages", "pin": "arbitrary"}],
+            ranked=[{"site": site, "question_id": "demo-question",
+                     "corpus": "openwrt_packages", "pin": "arbitrary"}],
             root=tmp_path,
         )
 
@@ -772,6 +921,38 @@ def test_extractor_window_around_target(tmp_path):
     assert out["target_line"] == 100
     assert 50 <= out["window_lines"] <= 150
     assert any(line["is_target"] and line["line"] == 100 for line in out["lines"])
+
+
+def test_extractor_uses_materialized_path_without_changing_contract_site(tmp_path):
+    tree = tmp_path / "tree"
+    mapped = tree / "fwlive" / "openwrt-feed" / "luci-app-fwlive" / "root/usr/libexec/rpcd"
+    mapped.mkdir(parents=True)
+    (mapped / "fwlive").write_text(
+        "\n".join(f"line {i}" for i in range(1, 201)), encoding="utf-8"
+    )
+    contract_site = (
+        "openwrt-feed/luci-app-fwlive/root/usr/libexec/rpcd/fwlive:100:normalize_log_prefix"
+    )
+    source_path = (
+        "fwlive/openwrt-feed/luci-app-fwlive/root/usr/libexec/rpcd/fwlive"
+    )
+    out_path = tmp_path / "review.json"
+    r = subprocess.run(
+        [
+            sys.executable, str(ROOT / "scripts" / "context-extractor.py"),
+            "--corpus", "dogfood_shell", "--checkout", str(tree),
+            "--site", contract_site, "--source-path", source_path,
+            "--review-form", "--input-format-constraint", "single-line text",
+            "-o", str(out_path),
+        ],
+        capture_output=True,
+        text=True,
+    )
+    assert r.returncode == 0, r.stderr
+    form = json.loads(out_path.read_text(encoding="utf-8"))
+    assert form["site"] == contract_site
+    assert form["window"]["path"] == source_path
+    assert form["window"]["target_line"] == 100
 
 
 def test_extractor_bounded_window_at_edge(tmp_path):

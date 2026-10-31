@@ -51,7 +51,11 @@ def main(argv: list[str] | None = None) -> int:
         ),
     )
     parser.add_argument("--active-minutes", required=True, type=float)
-    parser.add_argument("--question-id", help="required for --outcome contracted")
+    parser.add_argument(
+        "--question-id",
+        required=True,
+        help="candidate question identity from the ranked queue",
+    )
     parser.add_argument(
         "--log",
         type=Path,
