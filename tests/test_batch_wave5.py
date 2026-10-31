@@ -87,6 +87,27 @@ def test_fold_auto_nogo_below_scale(tmp_path):
     assert body["decision"] == "no-go"
 
 
+def test_auto_nogo_does_not_mutate_golden_gate_labels(tmp_path):
+    draft = load_probe_draft(FIXTURES / "probe_draft_wtforms_shaped.json")
+    repo = tmp_path / "repo"
+    generated = repo / "properties" / "generated"
+    generated.mkdir(parents=True)
+    gate_labels = generated / "gate-labels.json"
+    original = b'{"sentinel":"golden labels stay operator-controlled"}\\n'
+    gate_labels.write_bytes(original)
+
+    outcome, decision, _note = batch_nogo.fold_auto_nogo(
+        draft,
+        generated_dir=generated,
+        ledger_path=_ledger(tmp_path),
+        repo_root=repo,
+    )
+
+    assert outcome == "auto_nogo"
+    assert decision is not None and decision.is_file()
+    assert gate_labels.read_bytes() == original
+
+
 def test_fold_needs_human_ledger_failure_is_incomplete(tmp_path):
     draft = load_probe_draft(FIXTURES / "probe_draft_wtforms_shaped.json")
     draft = json.loads(json.dumps(draft))
