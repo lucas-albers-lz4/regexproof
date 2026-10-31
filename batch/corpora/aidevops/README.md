@@ -48,6 +48,17 @@ python scripts/measure-corpus-fraction.py --corpus aidevops \
 python -m regexproof.batch --corpus aidevops
 ```
 
+Current measurement (post-#615 shell extractor, compiler fingerprint
+`35ea1f238a9e`): **10,198 / 11,422 = 0.8928** encodable, `complete_run=true`,
+`--assert-determinism` byte-identical across two runs. The extractor now finds
+11,422 site instances versus 11,330 under the pre-#615 extractor, so the earlier
+10,212/11,330 figure is superseded and is no longer treated as current.
+
+28 rows remain in the `parse-error` bucket. Sampled rows show the extractor
+stopped mid-character-class (`^[[:space:`, `^#[[:space:`), so they are
+extraction truncations, not corpus patterns; they are not counted as encodable
+and no saturation claim is made from this corpus.
+
 Do **not** pass `--with-redos` for conversion wave P1. Leave
 `WAVE_CORPORA` unchanged. Commit `_batch_summary.json` only with a
 conversion-ledger regen in the same PR. Gate 0 stop if encodable

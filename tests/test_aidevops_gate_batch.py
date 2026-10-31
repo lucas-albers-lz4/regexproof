@@ -90,19 +90,18 @@ def test_aidevops_smith_decision_reconciles_with_measured_fraction():
     jsonschema.validate(instance=smith, schema=smith_decision_schema())
     assert smith["corpus_pin"] == CORPUS_MANIFESTS["aidevops"]["corpus_pin"]
     assert smith["smith_decision"] == "go"
-    assert smith["regex_sites"] == fraction["sample_size"] == 11330
-    assert smith["sites_by_bucket"] == {"posix-shell": 11330}
-    assert smith["measurement_status"] == "historical_pre_615_shell_extractor"
-    assert "Historical" in smith["reason"]
-    assert "not current acceptance or issue-closure evidence" in smith["reason"]
+    assert smith["regex_sites"] == fraction["sample_size"] == 11422
+    assert smith["sites_by_bucket"] == {"posix-shell": 11422}
+    assert "measurement_status" not in smith
+    assert "historical" not in smith["reason"].lower()
+    assert "not current" not in smith["reason"].lower()
     assert fraction["scope"] == "full_corpus"
-    assert fraction["measurement_status"] == "historical_pre_615_shell_extractor"
-    assert "predates the #615 shell extractor expansion guard" in fraction["measurement_note"]
-    assert "not issue-closure evidence" in fraction["measurement_note"]
+    assert "measurement_status" not in fraction
     assert fraction["complete_run"] is True
     assert fraction["budget_breaches"] is None
-    assert fraction["encodable"] == 10212
-    assert fraction["fraction"] == 0.9013
-    assert fraction["unclassified_parse_errors"] == 63
+    assert fraction["encodable"] == 10198
+    assert fraction["fraction"] == 0.8928
+    assert fraction["unclassified_parse_errors"] == 28
+    assert fraction["reasons"]["parse-error"] == 28
     assert f"{fraction['encodable']:,}/{fraction['sample_size']:,}" in smith["reason"]
     assert f"{fraction['fraction']:.4f}" in smith["reason"]
