@@ -162,7 +162,7 @@
     "admission_per_week, admission from GO gate-decision artifacts (not the",
     "lagging candidate ledger). unknown_date rows are excluded from median",
     "time-to-acceptance; time-to-acceptance is Kaplan-Meier or median of",
-    "closed rows only \u2014 never censored + closed mixed in a plain median."
+    "closed rows only — never censored + closed mixed in a plain median."
   ],
   "per_wave": [
     {
