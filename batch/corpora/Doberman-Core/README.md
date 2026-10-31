@@ -1,7 +1,7 @@
 # Doberman-Core corpus
 
 Pinned fu351/Doberman-Core first-party policy/secrets/command detectors
-(py_re) for Smith triage-trial keep
+(py_re); Smith `go` supersedes the triage-trial keep
 (see `sweep/accuracy-flywheel/TRIAGE-TRIAL-REVIEW.md`). Tests excluded.
 
 ## Materialize
@@ -16,6 +16,8 @@ test "$(git -C /tmp/Doberman-Core rev-parse HEAD)" = "$PIN"
 ```
 
 Gate: `properties/generated/Doberman-Core_gate_decision.json` (also `fu351-Doberman-Core_gate_decision.json`; `triage-trial`).
+Smith: `properties/generated/Doberman-Core_smith_decision.json` (`go`; supersedes
+`triage-trial`; 40/69 = 0.5797 encodable).
 Security-tool: `private_first` via `SECURITY_TOOL_CORPORA`.
 
 ## Measure / batch
