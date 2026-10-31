@@ -12,6 +12,7 @@ from __future__ import annotations
 import hashlib
 import importlib.util
 import json
+import re
 import subprocess
 from collections import defaultdict
 from pathlib import Path
@@ -404,9 +405,18 @@ def saturation_envelope(artifact: Mapping[str, Any]) -> dict[str, Any]:
     }
 
 
-def build_closeout(artifact: Mapping[str, Any], *, conversion_report: Mapping[str, Any] | None = None) -> dict[str, Any]:
+def build_closeout(
+    artifact: Mapping[str, Any],
+    *,
+    conversion_report: Mapping[str, Any] | None = None,
+) -> dict[str, Any]:
     """Build the 10-repository decision without treating missing data as saturation."""
     checked = validate_artifact(artifact)
+    conversion_summary = (
+        _conversion_checkpoint_summary(conversion_report, checked)
+        if conversion_report is not None
+        else None
+    )
     expected_count = len(checked["cohort"]["repos"])
     if checked["failures"] or len(checked["observations"]) != expected_count:
         observed_by_family: dict[str, int] = defaultdict(int)
@@ -445,6 +455,9 @@ def build_closeout(artifact: Mapping[str, Any], *, conversion_report: Mapping[st
             "continue_to_30": "pending_20_repo_run",
             "failures": checked["failures"],
             "families": incomplete_families,
+            "conversion_checkpoint_supplied": conversion_summary is not None,
+            "conversion_checkpoint": conversion_summary,
+            "ground_truth_replay": conversion_summary["ground_truth_replay"] if conversion_summary else None,
         }
     report = build_report(saturation_envelope(checked))
     families: dict[str, Any] = {}
@@ -459,7 +472,12 @@ def build_closeout(artifact: Mapping[str, Any], *, conversion_report: Mapping[st
             status = "productive"
             reasons.append(f"{family} has not met the strict trailing novelty rule")
         families[family] = {"status": status, "repo_count": data["repo_count"]}
-    if report["product_denominator"] < 50:
+    product_denominator = (
+        conversion_summary["counts"]["asked"]
+        if conversion_summary is not None
+        else report["product_denominator"]
+    )
+    if product_denominator < 50:
         reasons.append("human product-property denominator is below 50")
     if conversion_report is None:
         reasons.append("PR4 conversion checkpoint was not supplied")
@@ -482,10 +500,162 @@ def build_closeout(artifact: Mapping[str, Any], *, conversion_report: Mapping[st
         "failures": [],
         "families": families,
         "compiler_stop": report["compiler_stop"],
-        "product_denominator": report["product_denominator"],
-        "conversion_checkpoint_supplied": conversion_report is not None,
+        "product_denominator": product_denominator,
+        "observation_product_denominator": report["product_denominator"],
+        "conversion_checkpoint_supplied": conversion_summary is not None,
+        "conversion_checkpoint": conversion_summary,
+        "ground_truth_replay": conversion_summary["ground_truth_replay"] if conversion_summary else None,
     }
     return result
+
+
+def _conversion_checkpoint_summary(
+    conversion_report: Mapping[str, Any],
+    artifact: Mapping[str, Any],
+) -> dict[str, Any]:
+    """Validate and retain the PR4 funnel summary bound to this exact cohort."""
+    if not isinstance(conversion_report, Mapping):
+        raise CalibrationError("conversion checkpoint report must be an object")
+    if conversion_report.get("schema_version") != "2":
+        raise CalibrationError("conversion checkpoint report has an unsupported schema")
+    for field in ("cohort_id", "manifest_digest"):
+        if conversion_report.get(field) != artifact.get(field):
+            raise CalibrationError(
+                f"conversion checkpoint {field} does not match calibration artifact"
+            )
+    coverage_digest = conversion_report.get("product_coverage_digest")
+    if not isinstance(coverage_digest, str) or re.fullmatch(
+        r"[0-9a-f]{64}", coverage_digest
+    ) is None:
+        raise CalibrationError(
+            "conversion checkpoint product_coverage_digest must be a lowercase SHA-256"
+        )
+    counts = conversion_report.get("counts")
+    expected_counts = {
+        "asked",
+        "sat",
+        "ground_truthed",
+        "filed",
+        "private_first",
+        "accepted",
+    }
+    if not isinstance(counts, Mapping) or set(counts) != expected_counts:
+        raise CalibrationError("conversion checkpoint counts have an invalid shape")
+    if any(type(counts[key]) is not int or counts[key] < 0 for key in expected_counts):
+        raise CalibrationError("conversion checkpoint counts must be non-negative integers")
+    if not (
+        counts["asked"] >= counts["sat"] >= counts["ground_truthed"]
+        and counts["ground_truthed"] >= counts["filed"] >= counts["private_first"]
+        and counts["filed"] >= counts["accepted"]
+    ):
+        raise CalibrationError("conversion checkpoint counts are not monotonic")
+    reconciliation = conversion_report.get("reconciliation")
+    if not isinstance(reconciliation, Mapping) or reconciliation.get(
+        "schema_version"
+    ) != "1":
+        raise CalibrationError("conversion checkpoint reconciliation is missing or unsupported")
+    result_breakdown = reconciliation.get("result_breakdown")
+    if (
+        not isinstance(result_breakdown, Mapping)
+        or set(result_breakdown) != {"sat", "unsat"}
+        or any(type(value) is not int or value < 0 for value in result_breakdown.values())
+        or sum(result_breakdown.values()) != counts["asked"]
+        or result_breakdown["sat"] != counts["sat"]
+    ):
+        raise CalibrationError("conversion checkpoint results do not reconcile to counts")
+    breakdown = conversion_report.get("disposition_breakdown")
+    allowed_dispositions = {
+        "filed_plan", "filed", "private_first", "fixed_upstream", "wont_file",
+        "false_positive", "approval_missing", "out_of_scope_redos",
+    }
+    if not isinstance(breakdown, Mapping) or any(
+        key not in allowed_dispositions or type(value) is not int or value < 0
+        for key, value in breakdown.items()
+    ):
+        raise CalibrationError("conversion checkpoint disposition breakdown is invalid")
+    if sum(breakdown.values()) != counts["asked"]:
+        raise CalibrationError(
+            "conversion checkpoint dispositions do not reconcile to asked count"
+        )
+    if breakdown.get("private_first", 0) != counts["private_first"]:
+        raise CalibrationError(
+            "conversion checkpoint private_first count does not match dispositions"
+        )
+    if breakdown.get("fixed_upstream", 0) != counts["accepted"]:
+        raise CalibrationError(
+            "conversion checkpoint accepted count does not match dispositions"
+        )
+    ground_truth_breakdown = reconciliation.get("ground_truth_status_breakdown")
+    if not isinstance(ground_truth_breakdown, Mapping) or any(
+        key not in {"reproduced", "PASS"}
+        or type(value) is not int
+        or value <= 0
+        for key, value in ground_truth_breakdown.items()
+    ):
+        raise CalibrationError("conversion checkpoint ground-truth breakdown is invalid")
+    if sum(ground_truth_breakdown.values()) != counts["ground_truthed"]:
+        raise CalibrationError(
+            "conversion checkpoint ground-truth statuses do not reconcile to count"
+        )
+    filed_breakdown = reconciliation.get("filed_disposition_breakdown")
+    if not isinstance(filed_breakdown, Mapping) or any(
+        key not in breakdown
+        or key == "filed_plan"
+        or type(value) is not int
+        or value < 0
+        or value > breakdown[key]
+        for key, value in filed_breakdown.items()
+    ):
+        raise CalibrationError("conversion checkpoint filed breakdown is invalid")
+    if sum(filed_breakdown.values()) != counts["filed"]:
+        raise CalibrationError(
+            "conversion checkpoint filed dispositions do not reconcile to count"
+        )
+    if filed_breakdown.get("private_first", 0) != counts["private_first"]:
+        raise CalibrationError(
+            "conversion checkpoint private_first filing count does not reconcile"
+        )
+    if filed_breakdown.get("fixed_upstream", 0) != counts["accepted"]:
+        raise CalibrationError(
+            "conversion checkpoint accepted filing count does not reconcile"
+        )
+    gt_identities = reconciliation.get("ground_truth_identities")
+    if not isinstance(gt_identities, list) or len(gt_identities) != counts["ground_truthed"]:
+        raise CalibrationError("conversion checkpoint ground-truth identities are incomplete")
+    identity_keys = []
+    gt_status_counts: defaultdict[str, int] = defaultdict(int)
+    for item in gt_identities:
+        if not isinstance(item, Mapping) or set(item) != {
+            "repo_id", "url", "pin", "site", "question_id", "ground_truth_status"
+        }:
+            raise CalibrationError("conversion checkpoint ground-truth identity is invalid")
+        identity_keys.append(
+            (item["repo_id"], item["url"], item["pin"], item["site"], item["question_id"])
+        )
+        gt_status_counts[str(item["ground_truth_status"])] += 1
+    if len(set(identity_keys)) != len(identity_keys) or dict(gt_status_counts) != dict(
+        ground_truth_breakdown
+    ):
+        raise CalibrationError("conversion checkpoint ground-truth identities do not reconcile")
+    replay_summary = {
+        "status": "unavailable",
+        "reported_rows": counts["ground_truthed"],
+        "verified_rows": 0,
+    }
+    return {
+        "cohort_id": conversion_report["cohort_id"],
+        "manifest_digest": conversion_report["manifest_digest"],
+        "product_coverage_digest": coverage_digest,
+        "report_sha256": dumps_digest(conversion_report),
+        "counts": dict(counts),
+        "disposition_breakdown": dict(breakdown),
+        "reconciliation": {
+            "result_breakdown": dict(result_breakdown),
+            "ground_truth_status_breakdown": dict(ground_truth_breakdown),
+            "filed_disposition_breakdown": dict(filed_breakdown),
+        },
+        "ground_truth_replay": replay_summary,
+    }
 
 
 def dumps(value: Mapping[str, Any]) -> str:
@@ -511,6 +681,7 @@ def render_closeout(closeout: Mapping[str, Any]) -> str:
         f"- Manifest digest: `{closeout['manifest_digest']}`",
         f"- Continue to 20: **{str(closeout['continue_to_20']).lower()}**",
         f"- Continue to 30: **{continue_to_30}**",
+        f"- Human product-property denominator: **{closeout.get('product_denominator', 0)}**",
         "",
         f"Reason: {closeout['reason']}",
         "",
@@ -519,6 +690,28 @@ def render_closeout(closeout: Mapping[str, Any]) -> str:
     ]
     for family, data in sorted(closeout.get("families", {}).items()):
         lines.append(f"- `{family}`: {data['status']} ({data['repo_count']} repos)")
+    conversion = closeout.get("conversion_checkpoint")
+    if conversion is not None:
+        counts = conversion["counts"]
+        lines.extend(
+            [
+                "",
+                "Conversion checkpoint counts (separate from compiler saturation):",
+                "",
+                "- Asked: {asked}; SAT: {sat}; ground-truthed: {ground_truthed}; "
+                "filed: {filed}; private-first: {private_first}; accepted: {accepted}".format(
+                    **counts
+                ),
+                f"- Product coverage digest: `{conversion['product_coverage_digest']}`",
+                f"- Report SHA-256: `{conversion['report_sha256']}`",
+            ]
+        )
+    replay = closeout.get("ground_truth_replay")
+    if replay is not None:
+        lines.append(
+            f"- Replay verification unavailable: {replay['verified_rows']} verified; "
+            f"{replay['reported_rows']} reported by checkpoint"
+        )
     if closeout.get("failures"):
         lines.extend(["", "Skipped/failed repositories:", ""])
         for failure in closeout["failures"]:

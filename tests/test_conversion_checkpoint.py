@@ -176,6 +176,19 @@ def test_funnel_counts_preserve_filing_and_disposition_distinctions():
         "private_first": 1,
         "wont_file": 2,
     }
+    reconciliation = report["reconciliation"]
+    assert reconciliation["schema_version"] == "1"
+    assert reconciliation["result_breakdown"] == {"sat": 7, "unsat": 1}
+    assert reconciliation["ground_truth_status_breakdown"] == {
+        "PASS": 5,
+        "reproduced": 2,
+    }
+    assert reconciliation["filed_disposition_breakdown"] == {
+        "filed": 2,
+        "fixed_upstream": 1,
+        "private_first": 1,
+    }
+    assert len(reconciliation["ground_truth_identities"]) == 7
     assert report["filing_interpretation"]["private_first_is_filed"] is True
     assert report["filing_interpretation"]["accepted_is_not_third_party_remediation"]
     assert report["idiom_interpretation"]["product_conversion_checkpoint_is_not_compiler_saturation"]
