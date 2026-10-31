@@ -8,9 +8,9 @@ Heap's-law / singleton novelty saturates **compiler coverage**. This artifact sa
 
 | stage | count |
 |---|---|
-| sites extracted (batch summaries) | 315,393 |
-| sites encodable | 190,885 |
-| non-current batch summary site totals excluded | aidevops (historical_pre_615_shell_extractor) |
+| sites extracted (batch summaries) | 326,723 |
+| sites encodable | 201,097 |
+| non-current batch summary site totals excluded | none |
 | scanner NDJSON rows | 15,777 |
 | planned inventory stubs | 386 |
 | classification rows (usage/intent/triage kinds) | 14,103 |
@@ -37,16 +37,16 @@ Heap's-law / singleton novelty saturates **compiler coverage**. This artifact sa
 
 | rate | value |
 |---|---|
-| encodable / extracted | 0.6052 |
+| encodable / extracted | 0.6155 |
 | properties asked / encodable | 0.0002 |
 | SAT / properties asked | 0.1951 |
 | ground-truthed / SAT | 1.0000 |
 | pipeline accepted (incl. own-code) / SAT GT | 0.1250 |
 | pipeline accepted / extracted | 3.00e-06 |
-| encodable / extracted excluding YARA inventories | 0.6091 |
-| non-current fraction artifacts excluded from inventory aggregate | aidevops (historical_pre_615_shell_extractor) |
-| YARA share of inventory unencodable | 0.7961 |
-| `fullword-boundary` share of inventory unencodable | 0.7802 |
+| encodable / extracted excluding YARA inventories | 0.6475 |
+| non-current fraction artifacts excluded from inventory aggregate | none |
+| YARA share of inventory unencodable | 0.7892 |
+| `fullword-boundary` share of inventory unencodable | 0.7735 |
 
 ## Headline conversion yield (#551)
 
