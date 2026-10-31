@@ -1012,7 +1012,7 @@ def aggregate(
     summary_findings = 0
     summary_triage = 0
     n_summaries = 0
-    excluded_batch_summaries: list[dict[str, Any]] = []
+    excluded_non_current_site_totals: list[dict[str, Any]] = []
     fraction_reports = _fraction_reports(gen)
     measurement_by_report = _fraction_status_index(fraction_reports)
     summary_paths = sorted(gen.glob("*_batch_summary.json"))
@@ -1026,6 +1026,9 @@ def aggregate(
         data = _read_json(path)
         if "extracted" not in data:
             continue
+        n_summaries += 1
+        summary_findings += int(data.get("findings") or 0)
+        summary_triage += int(data.get("triage") or 0)
         summary_stem = path.name.removesuffix("_batch_summary.json")
         summary_key = _normalized_measurement_id(summary_stem)
         measurement = _measurement_for_summary(
@@ -1038,15 +1041,12 @@ def aggregate(
             matching_paths = summary_paths_by_exact_id.get(summary_stem.strip(), [])
             if not matching_paths:
                 matching_paths = summary_paths_by_id.get(summary_key, [])
-            excluded_batch_summaries.append(
+            excluded_non_current_site_totals.append(
                 _validated_historical_summary(path, data, measurement, matching_paths)
             )
             continue
-        n_summaries += 1
         extracted += int(data.get("extracted") or 0)
         encodable += int(data.get("encodable") or 0)
-        summary_findings += int(data.get("findings") or 0)
-        summary_triage += int(data.get("triage") or 0)
 
     scanner_files = scanner_ndjson_files(gen)
     all_rows: list[dict[str, Any]] = []
@@ -1195,7 +1195,7 @@ def aggregate(
         "batch_summaries": n_summaries,
         "sites_extracted": extracted,
         "sites_encodable": encodable,
-        "excluded_non_current_batch_summaries": excluded_batch_summaries,
+        "excluded_non_current_site_totals": excluded_non_current_site_totals,
         "batch_triage_rows": summary_triage,
         "batch_summary_findings": summary_findings,
         "scanner_ndjson_files": len(scanner_files),
@@ -1386,8 +1386,8 @@ def render_md(data: dict[str, Any]) -> str:
         "|---|---|",
         f"| sites extracted (batch summaries) | {n(f['sites_extracted'])} |",
         f"| sites encodable | {n(f['sites_encodable'])} |",
-        f"| non-current batch summaries excluded from site totals | "
-        f"{', '.join('{} ({})'.format(x['corpus'], x['measurement_status']) for x in f['excluded_non_current_batch_summaries']) or 'none'} |",
+        f"| non-current batch summary site totals excluded | "
+        f"{', '.join('{} ({})'.format(x['corpus'], x['measurement_status']) for x in f['excluded_non_current_site_totals']) or 'none'} |",
         f"| scanner NDJSON rows | {n(f['scanner_rows'])} |",
         f"| planned inventory stubs | {n(f['planned_stubs'])} |",
         f"| classification rows (usage/intent/triage kinds) | {n(f['classification_rows'])} |",
