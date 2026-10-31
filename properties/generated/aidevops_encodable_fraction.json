@@ -24,6 +24,8 @@
   "fraction": 0.9013,
   "go_no_go_threshold": 0.3,
   "id_formula": "v2-domain-optional-ascii-default",
+  "measurement_status": "historical_pre_615_shell_extractor",
+  "measurement_note": "This full-corpus fraction predates the #615 shell extractor expansion guard. Rerun before treating the fraction as current; it is not issue-closure evidence.",
   "inventory_path": "properties/generated/aidevops-inventory.ndjson",
   "path": "batch/corpora/aidevops/rules",
   "pilot": "aidevops",

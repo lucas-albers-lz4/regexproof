@@ -68,6 +68,8 @@ def test_author_smith_decision_requires_flag(tmp_path: Path):
         "fraction": 0.9,
         "dialect": "py_re",
         "corpus_pin": "abc",
+        "measurement_status": "current",
+        "measurement_note": "measured on current extractor",
     }
     gpath = tmp_path / "example_gate_decision.json"
     fpath = tmp_path / "example_encodable_fraction.json"
@@ -101,6 +103,8 @@ def test_author_smith_decision_requires_flag(tmp_path: Path):
     assert rec["regex_sites"] == 10
     assert rec["sites_by_bucket"] == {"py_re": 10}
     assert rec["additional_surface_outside_probe_scope"] == {}
+    assert rec["measurement_status"] == "current"
+    assert rec["measurement_note"] == "measured on current extractor"
     assert "WAVE_CORPORA" in proc.stderr
 
 
@@ -151,6 +155,49 @@ def test_author_smith_buckets_follow_fraction_not_full_probe(tmp_path: Path):
     rec = json.loads(out.read_text(encoding="utf-8"))
     assert rec["sites_by_bucket"] == {"yara": 15}
     assert rec["additional_surface_outside_probe_scope"] == {"posix-shell": 5}
+
+
+def test_author_smith_refuses_historical_fraction(tmp_path: Path):
+    gate = {
+        "schema_version": "1",
+        "corpus": "example",
+        "candidate_url": "https://github.com/acme/example",
+        "decision": "go",
+    }
+    fraction = {
+        "pilot": "example",
+        "sample_size": 10,
+        "fraction": 0.9,
+        "measurement_status": "historical_pre_615_shell_extractor",
+    }
+    gpath = tmp_path / "example_gate_decision.json"
+    fpath = tmp_path / "example_encodable_fraction.json"
+    out = tmp_path / "example_smith_decision.json"
+    gpath.write_text(json.dumps(gate), encoding="utf-8")
+    fpath.write_text(json.dumps(fraction), encoding="utf-8")
+    proc = subprocess.run(
+        [
+            sys.executable,
+            str(AUTHOR),
+            "--gate",
+            str(gpath),
+            "--fraction",
+            str(fpath),
+            "--decision",
+            "go",
+            "--reason",
+            "historical must fail closed",
+            "-o",
+            str(out),
+            "--allow-outside-generated",
+        ],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert proc.returncode == 2
+    assert "refusing Smith decision from non-current fraction" in proc.stderr
+    assert not out.exists()
 
 
 def test_author_smith_decision_missing_decision_exits(tmp_path: Path):

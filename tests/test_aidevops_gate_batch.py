@@ -10,7 +10,7 @@ import jsonschema
 
 from regexproof.batch.manifests import CORPUS_MANIFESTS, WAVE_CORPORA
 from regexproof.batch.runner import check_admission_gates
-from regexproof.schemas import gate_decision_schema
+from regexproof.schemas import gate_decision_schema, smith_decision_schema
 
 ROOT = Path(__file__).resolve().parents[1]
 GENERATED = ROOT / "properties" / "generated"
@@ -79,3 +79,30 @@ def test_aidevops_batch_summary_reconciles_with_probe():
     assert delta <= 0.10, f"extracted={extracted} probe={probe_n} delta={delta}"
     assert summary["complete_run"] is True
     assert summary["encodable"] / extracted >= 0.30
+
+
+def test_aidevops_smith_decision_reconciles_with_measured_fraction():
+    smith_path = GENERATED / "aidevops_smith_decision.json"
+    fraction_path = GENERATED / "aidevops_encodable_fraction.json"
+    smith = json.loads(smith_path.read_text(encoding="utf-8"))
+    fraction = json.loads(fraction_path.read_text(encoding="utf-8"))
+
+    jsonschema.validate(instance=smith, schema=smith_decision_schema())
+    assert smith["corpus_pin"] == CORPUS_MANIFESTS["aidevops"]["corpus_pin"]
+    assert smith["smith_decision"] == "go"
+    assert smith["regex_sites"] == fraction["sample_size"] == 11330
+    assert smith["sites_by_bucket"] == {"posix-shell": 11330}
+    assert smith["measurement_status"] == "historical_pre_615_shell_extractor"
+    assert "Historical" in smith["reason"]
+    assert "not current acceptance or issue-closure evidence" in smith["reason"]
+    assert fraction["scope"] == "full_corpus"
+    assert fraction["measurement_status"] == "historical_pre_615_shell_extractor"
+    assert "predates the #615 shell extractor expansion guard" in fraction["measurement_note"]
+    assert "not issue-closure evidence" in fraction["measurement_note"]
+    assert fraction["complete_run"] is True
+    assert fraction["budget_breaches"] is None
+    assert fraction["encodable"] == 10212
+    assert fraction["fraction"] == 0.9013
+    assert fraction["unclassified_parse_errors"] == 63
+    assert f"{fraction['encodable']:,}/{fraction['sample_size']:,}" in smith["reason"]
+    assert f"{fraction['fraction']:.4f}" in smith["reason"]

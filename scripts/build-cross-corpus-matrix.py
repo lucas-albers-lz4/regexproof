@@ -71,20 +71,7 @@ def main() -> int:
                 )
             continue
         d = json.loads(path.read_text(encoding="utf-8"))
-        rows.append(
-            {
-                "corpus": name,
-                "scope": d.get("scope"),
-                "decision": d.get("decision"),
-                "fraction": d.get("fraction"),
-                "encodable": d.get("encodable"),
-                "sample_size": d.get("sample_size"),
-                "unclassified_parse_errors": d.get("unclassified_parse_errors", 0),
-                "reasons": d.get("reasons"),
-                "corpus_pin": d.get("corpus_pin"),
-                "complete_run": d.get("complete_run"),
-            }
-        )
+        rows.append(fraction_matrix_row(name, d))
     report = {
         "schema_version": "1",
         "wave": WAVE,
@@ -100,20 +87,41 @@ def main() -> int:
         "",
         NOTE,
         "",
-        "| Corpus | Decision | Fraction | Encodable | Size | scope | parse-error |",
-        "|---|---|---|---|---|---|---|",
+        "| Corpus | Decision | Fraction | Encodable | Size | scope | parse-error | measurement status |",
+        "|---|---|---|---|---|---|---|---|",
     ]
     for r in rows:
         lines.append(
             f"| {r['corpus']} | {r.get('decision')} | {r.get('fraction')} | "
             f"{r.get('encodable')} | {r.get('sample_size')} | "
-            f"{r.get('scope')} | {r.get('unclassified_parse_errors')} |"
+            f"{r.get('scope')} | {r.get('unclassified_parse_errors')} | "
+            f"{r.get('measurement_status', 'unmarked')} |"
         )
     (OUT / "cross_corpus_matrix.md").write_text(
         "\n".join(lines) + "\n", encoding="utf-8"
     )
     print(f"wrote {len(rows)} rows → properties/generated/cross_corpus_matrix.json")
     return 0
+
+
+def fraction_matrix_row(name: str, data: dict) -> dict:
+    """Project a fraction report while retaining historical status provenance."""
+    row = {
+        "corpus": name,
+        "scope": data.get("scope"),
+        "decision": data.get("decision"),
+        "fraction": data.get("fraction"),
+        "encodable": data.get("encodable"),
+        "sample_size": data.get("sample_size"),
+        "unclassified_parse_errors": data.get("unclassified_parse_errors", 0),
+        "reasons": data.get("reasons"),
+        "corpus_pin": data.get("corpus_pin"),
+        "complete_run": data.get("complete_run"),
+    }
+    if data.get("measurement_status"):
+        row["measurement_status"] = data["measurement_status"]
+        row["measurement_note"] = data.get("measurement_note")
+    return row
 
 
 if __name__ == "__main__":

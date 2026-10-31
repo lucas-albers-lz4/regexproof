@@ -6,6 +6,8 @@ import importlib.util
 import json
 from pathlib import Path
 
+import pytest
+
 ROOT = Path(__file__).resolve().parents[1]
 
 
@@ -31,6 +33,256 @@ def test_is_scanner_ndjson_skips_inventory_frozen_and_triage():
     assert not cl.is_scanner_ndjson(Path("hippo_java_triage.ndjson"))
     assert not cl.is_scanner_ndjson(Path("java-html-sanitizer_triage.ndjson"))
     assert not cl.is_scanner_ndjson(Path("gitleaks.json"))
+
+
+def test_historical_fraction_is_excluded_from_conversion_ledger_aggregate(tmp_path: Path):
+    gen = tmp_path / "generated"
+    gen.mkdir()
+    (gen / "current_encodable_fraction.json").write_text(
+        json.dumps({"pilot": "current", "sample_size": 5, "encodable": 4}) + "\n",
+        encoding="utf-8",
+    )
+    (gen / "aidevops_encodable_fraction.json").write_text(
+        json.dumps(
+            {
+                "pilot": "aidevops",
+                "sample_size": 11330,
+                "encodable": 10212,
+                "measurement_status": "historical_pre_615_shell_extractor",
+                "measurement_note": "rerun before current use",
+            }
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    (gen / "current_batch_summary.json").write_text(
+        json.dumps(
+            {"corpus": "current", "extracted": 5, "encodable": 4, "findings": 2}
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    (gen / "aidevops_batch_summary.json").write_text(
+        json.dumps(
+            {
+                "corpus": "aidevops",
+                "extracted": 11330,
+                "encodable": 10212,
+                "findings": 1,
+            }
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    result = cl.yara_encodable_split(gen)
+    assert result["fraction_all_n"] == 5
+    assert result["fraction_all_encodable"] == 4
+    assert result["excluded_non_current_measurements"] == [
+        {
+            "corpus": "aidevops",
+            "measurement_status": "historical_pre_615_shell_extractor",
+            "measurement_note": "rerun before current use",
+        }
+    ]
+    upstream = tmp_path / "upstream.jsonl"
+    upstream.write_text("", encoding="utf-8")
+    aggregate = cl.aggregate(
+        gen_dir=gen,
+        upstream_path=upstream,
+        security_tools=frozenset(),
+        mine_ledger_path=gen / "candidate-ledger.json",
+        queue_path=gen / "mine-queue.json",
+        prior_starvation_history=[],
+    )
+    assert aggregate["yara_split"]["fraction_all_n"] == 5
+    assert len(aggregate["yara_split"]["excluded_non_current_measurements"]) == 1
+    assert aggregate["funnel"]["batch_summaries"] == 2
+    assert aggregate["funnel"]["sites_extracted"] == 5
+    assert aggregate["funnel"]["sites_encodable"] == 4
+    assert aggregate["funnel"]["batch_summary_findings"] == 3
+    assert aggregate["funnel"]["excluded_non_current_site_totals"] == [
+        {
+            "corpus": "aidevops",
+            "measurement_status": "historical_pre_615_shell_extractor",
+            "measurement_note": "rerun before current use",
+            "sites_extracted": 11330,
+            "sites_encodable": 10212,
+        }
+    ]
+    md = cl.render_md(aggregate)
+    assert (
+        "non-current fraction artifacts excluded from inventory aggregate | "
+        "aidevops (historical_pre_615_shell_extractor) |"
+    ) in md
+    assert (
+        "non-current batch summary site totals excluded | "
+        "aidevops (historical_pre_615_shell_extractor) |"
+    ) in md
+
+
+def test_historical_status_index_rejects_missing_conflicting_and_duplicate_ids():
+    historical = {"measurement_status": "historical", "pilot": "aidevops"}
+    with pytest.raises(ValueError, match="no pilot/corpus identifier"):
+        cl._fraction_status_index(
+            [(Path("aidevops_encodable_fraction.json"), {"measurement_status": "historical"})]
+        )
+
+    with pytest.raises(ValueError, match="conflicting pilot/corpus"):
+        cl._fraction_status_index(
+            [
+                (
+                    Path("aidevops_encodable_fraction.json"),
+                    {**historical, "corpus": "other"},
+                )
+            ]
+        )
+
+    with pytest.raises(ValueError, match="duplicate normalized"):
+        cl._fraction_status_index(
+            [
+                (Path("aidevops_encodable_fraction.json"), historical),
+                (Path("aidevops_encodable_fraction.json"), historical),
+            ]
+        )
+
+    distinct = cl._fraction_status_index(
+        [
+            (Path("Yara-Rules_encodable_fraction.json"), historical),
+            (Path("yara-rules_encodable_fraction.json"), historical),
+        ]
+    )
+    assert set(distinct) == {"Yara-Rules", "yara-rules"}
+
+
+def test_fraction_status_summary_join_prefers_exact_selection_id():
+    upper = {"measurement_status": "historical-upper"}
+    lower = {"measurement_status": "historical-lower"}
+    indexed = {"Yara-Rules": upper, "yara-rules": lower}
+    assert cl._measurement_for_summary("Yara-Rules", indexed) is upper
+    assert cl._measurement_for_summary("yara-rules", indexed) is lower
+    with pytest.raises(ValueError, match="ambiguous non-current fraction reports"):
+        cl._measurement_for_summary("YARA-RULES", indexed)
+
+
+def test_summary_aggregate_excludes_only_exact_case_marked_variant():
+    marked = {"measurement_status": "historical-upper"}
+    indexed = {"Yara-Rules": marked}
+    # Same casefolded ID is ambiguous as a fallback; the exact marked path is
+    # excluded, while its distinct lowercase sibling remains current.
+    assert cl._measurement_for_summary(
+        "Yara-Rules", indexed, same_id_summary_count=2
+    ) is marked
+    assert cl._measurement_for_summary(
+        "yara-rules", indexed, same_id_summary_count=2
+    ) == {}
+    # A unique case-insensitive match is a supported fallback; zero matches
+    # leave the summary on the legacy/current path.
+    assert cl._measurement_for_summary(
+        "AIDEVOPS", {"aidevops": marked}, same_id_summary_count=1
+    ) is marked
+    assert cl._measurement_for_summary("other", {}, same_id_summary_count=1) == {}
+
+
+def test_aggregate_counts_case_distinct_current_summary_next_to_historical(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+):
+    gen = tmp_path / "generated"
+    gen.mkdir()
+    (gen / "Yara-Rules_encodable_fraction.json").write_text(
+        json.dumps(
+            {
+                "pilot": "Yara-Rules",
+                "sample_size": 10,
+                "encodable": 6,
+                "measurement_status": "historical_pre_615_shell_extractor",
+            }
+        ),
+        encoding="utf-8",
+    )
+    lower_summary = gen / "yara-rules_batch_summary.json"
+    lower_summary.write_text(
+        json.dumps(
+            {"corpus": "yara-rules", "extracted": 10, "encodable": 6, "findings": 1}
+        ),
+        encoding="utf-8",
+    )
+    upper_summary = gen / "Yara-Rules_batch_summary.json"
+    original_glob = Path.glob
+    original_read_json = cl._read_json
+
+    def virtual_case_collision(self: Path, pattern: str):
+        matches = list(original_glob(self, pattern))
+        if self == gen and pattern == "*_batch_summary.json":
+            return iter([*matches, upper_summary])
+        return iter(matches)
+
+    def read_virtual_summary(path: Path):
+        if path == upper_summary:
+            return {
+                "corpus": "Yara-Rules",
+                "extracted": 10,
+                "encodable": 6,
+                "findings": 1,
+            }
+        return original_read_json(path)
+
+    monkeypatch.setattr(Path, "glob", virtual_case_collision)
+    monkeypatch.setattr(cl, "_read_json", read_virtual_summary)
+    upstream = tmp_path / "upstream.jsonl"
+    upstream.write_text("", encoding="utf-8")
+
+    result = cl.aggregate(
+        gen_dir=gen,
+        upstream_path=upstream,
+        security_tools=frozenset(),
+        mine_ledger_path=gen / "candidate-ledger.json",
+        queue_path=gen / "mine-queue.json",
+        prior_starvation_history=[],
+    )
+
+    funnel = result["funnel"]
+    assert funnel["batch_summaries"] == 2
+    assert funnel["sites_extracted"] == 10
+    assert funnel["sites_encodable"] == 6
+    assert funnel["batch_summary_findings"] == 2
+    assert funnel["excluded_non_current_site_totals"] == [
+        {
+            "corpus": "Yara-Rules",
+            "measurement_status": "historical_pre_615_shell_extractor",
+            "measurement_note": None,
+            "sites_extracted": 10,
+            "sites_encodable": 6,
+        }
+    ]
+
+
+def test_historical_status_join_rejects_ambiguous_casefolded_summaries():
+    measurement = {
+        "measurement_status": "historical",
+        "declared_corpus": "yara-rules",
+    }
+    matches = [
+        Path("Yara-Rules_batch_summary.json"),
+        Path("yara-rules_batch_summary.json"),
+    ]
+    with pytest.raises(ValueError, match="matches 2 batch summaries"):
+        cl._validated_historical_summary(
+            matches[0], {"corpus": "yara-rules"}, measurement, matches
+        )
+
+
+def test_historical_status_join_rejects_missing_or_mismatched_summary_id():
+    measurement = {
+        "measurement_status": "historical",
+        "declared_corpus": "aidevops",
+    }
+    path = Path("aidevops_batch_summary.json")
+    with pytest.raises(ValueError, match="no corpus identifier"):
+        cl._validated_historical_summary(path, {}, measurement, [path])
+    with pytest.raises(ValueError, match="does not match"):
+        cl._validated_historical_summary(
+            path, {"corpus": "other"}, measurement, [path]
+        )
 
 
 def test_classify_scanner_rows_funnel_buckets():

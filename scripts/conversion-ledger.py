@@ -823,8 +823,19 @@ def yara_encodable_split(gen: Path) -> dict[str, Any]:
     yara_ok = 0
     all_unenc_reasons: Counter[str] = Counter()
     yara_unenc_reasons: Counter[str] = Counter()
+    excluded_measurements: list[dict[str, Any]] = []
     for path in sorted(gen.glob("*_encodable_fraction.json")):
         data = _read_json(path)
+        measurement_status = str(data.get("measurement_status") or "")
+        if measurement_status and measurement_status != "current":
+            excluded_measurements.append(
+                {
+                    "corpus": str(data.get("pilot") or data.get("corpus") or path.stem.removesuffix("_encodable_fraction")),
+                    "measurement_status": measurement_status,
+                    "measurement_note": data.get("measurement_note"),
+                }
+            )
+            continue
         n = int(data.get("sample_size") or 0)
         ok = int(data.get("encodable") or 0)
         if n <= 0:
@@ -866,6 +877,120 @@ def yara_encodable_split(gen: Path) -> dict[str, Any]:
         "yara_share_of_unencodable": _ratio(yara_unenc, all_unenc),
         "fullword_share_of_unencodable": _ratio(fw_all, all_unenc),
         "fullword_share_of_yara_unencodable": _ratio(fw_yara, yara_unenc),
+        "excluded_non_current_measurements": excluded_measurements,
+    }
+
+
+def _normalized_measurement_id(value: Any) -> str:
+    return str(value or "").strip().casefold()
+
+
+def _fraction_status_index(
+    reports: list[tuple[Path, dict[str, Any]]],
+) -> dict[str, dict[str, Any]]:
+    """Index explicit measurement statuses by report filename, rejecting ambiguity.
+
+    The filename stem preserves report selection (`coreruleset` versus
+    `coreruleset_sample`); the declared corpus fields are validated but are
+    not used as the join key.
+    """
+    indexed: dict[str, dict[str, Any]] = {}
+    for path, report in reports:
+        status = str(report.get("measurement_status") or "")
+        if not status:
+            continue
+        declared = [
+            _normalized_measurement_id(report.get(field))
+            for field in ("pilot", "corpus")
+            if report.get(field)
+        ]
+        if not declared:
+            raise ValueError(
+                f"non-current fraction {path.name} has no pilot/corpus identifier"
+            )
+        if len(set(declared)) > 1:
+            raise ValueError(
+                f"non-current fraction {path.name} has conflicting pilot/corpus identifiers"
+            )
+        stem = path.name.removesuffix("_encodable_fraction.json").strip()
+        key = stem
+        if not key:
+            raise ValueError(f"non-current fraction {path.name} has empty report identifier")
+        if key in indexed:
+            raise ValueError(
+                f"duplicate normalized non-current fraction report identifier: {stem!r}"
+            )
+        indexed[key] = {
+            "measurement_status": status,
+            "measurement_note": report.get("measurement_note"),
+            "declared_corpus": declared[0],
+        }
+    return indexed
+
+
+def _fraction_reports(gen: Path) -> list[tuple[Path, dict[str, Any]]]:
+    return [
+        (path, _read_json(path))
+        for path in sorted(gen.glob("*_encodable_fraction.json"))
+    ]
+
+
+def _measurement_for_summary(
+    summary_stem: str,
+    indexed: dict[str, dict[str, Any]],
+    *,
+    same_id_summary_count: int = 1,
+) -> dict[str, Any]:
+    """Resolve an exact selection first; only unique casefold fallback is safe."""
+    exact = indexed.get(summary_stem.strip())
+    if exact is not None:
+        return exact
+    # Distinct summaries that differ only by case are separate corpus IDs on
+    # Linux. Do not apply one variant's historical status to its sibling.
+    if same_id_summary_count > 1:
+        return {}
+    normalized = _normalized_measurement_id(summary_stem)
+    fallback = [
+        item
+        for stem, item in indexed.items()
+        if _normalized_measurement_id(stem) == normalized
+    ]
+    if len(fallback) > 1:
+        raise ValueError(
+            f"batch summary {summary_stem!r} has ambiguous non-current fraction reports"
+        )
+    return fallback[0] if fallback else {}
+
+
+def _validated_historical_summary(
+    path: Path,
+    data: dict[str, Any],
+    measurement: dict[str, Any],
+    matching_paths: list[Path],
+) -> dict[str, Any]:
+    """Validate an unambiguous summary-to-fraction historical status join."""
+    summary_stem = path.name.removesuffix("_batch_summary.json")
+    if len(matching_paths) != 1:
+        raise ValueError(
+            f"non-current fraction {summary_stem!r} matches "
+            f"{len(matching_paths)} batch summaries"
+        )
+    summary_corpus = _normalized_measurement_id(data.get("corpus"))
+    if not summary_corpus:
+        raise ValueError(
+            f"batch summary {path.name} has no corpus identifier for status join"
+        )
+    if summary_corpus != measurement["declared_corpus"]:
+        raise ValueError(
+            f"batch summary {path.name} corpus identifier does not match "
+            "its non-current fraction report"
+        )
+    return {
+        "corpus": str(data.get("corpus")),
+        "measurement_status": measurement["measurement_status"],
+        "measurement_note": measurement.get("measurement_note"),
+        "sites_extracted": int(data.get("extracted") or 0),
+        "sites_encodable": int(data.get("encodable") or 0),
     }
 
 
@@ -887,15 +1012,41 @@ def aggregate(
     summary_findings = 0
     summary_triage = 0
     n_summaries = 0
-    for path in sorted(gen.glob("*_batch_summary.json")):
+    excluded_non_current_site_totals: list[dict[str, Any]] = []
+    fraction_reports = _fraction_reports(gen)
+    measurement_by_report = _fraction_status_index(fraction_reports)
+    summary_paths = sorted(gen.glob("*_batch_summary.json"))
+    summary_paths_by_id: dict[str, list[Path]] = defaultdict(list)
+    summary_paths_by_exact_id: dict[str, list[Path]] = defaultdict(list)
+    for path in summary_paths:
+        summary_stem = path.name.removesuffix("_batch_summary.json").strip()
+        summary_paths_by_id[_normalized_measurement_id(summary_stem)].append(path)
+        summary_paths_by_exact_id[summary_stem].append(path)
+    for path in summary_paths:
         data = _read_json(path)
         if "extracted" not in data:
             continue
         n_summaries += 1
-        extracted += int(data.get("extracted") or 0)
-        encodable += int(data.get("encodable") or 0)
         summary_findings += int(data.get("findings") or 0)
         summary_triage += int(data.get("triage") or 0)
+        summary_stem = path.name.removesuffix("_batch_summary.json")
+        summary_key = _normalized_measurement_id(summary_stem)
+        measurement = _measurement_for_summary(
+            summary_stem,
+            measurement_by_report,
+            same_id_summary_count=len(summary_paths_by_id.get(summary_key, [])),
+        )
+        status = str(measurement.get("measurement_status") or "")
+        if status and status != "current":
+            matching_paths = summary_paths_by_exact_id.get(summary_stem.strip(), [])
+            if not matching_paths:
+                matching_paths = summary_paths_by_id.get(summary_key, [])
+            excluded_non_current_site_totals.append(
+                _validated_historical_summary(path, data, measurement, matching_paths)
+            )
+            continue
+        extracted += int(data.get("extracted") or 0)
+        encodable += int(data.get("encodable") or 0)
 
     scanner_files = scanner_ndjson_files(gen)
     all_rows: list[dict[str, Any]] = []
@@ -1044,6 +1195,7 @@ def aggregate(
         "batch_summaries": n_summaries,
         "sites_extracted": extracted,
         "sites_encodable": encodable,
+        "excluded_non_current_site_totals": excluded_non_current_site_totals,
         "batch_triage_rows": summary_triage,
         "batch_summary_findings": summary_findings,
         "scanner_ndjson_files": len(scanner_files),
@@ -1202,6 +1354,11 @@ def render_md(data: dict[str, Any]) -> str:
     r = data["rates"]
     up = data["upstream"]
     split = data["security_tool_split"]
+    excluded_measurements = data["yara_split"]["excluded_non_current_measurements"]
+    excluded_summary = ", ".join(
+        "{} ({})".format(item["corpus"], item["measurement_status"])
+        for item in excluded_measurements
+    ) or "none"
 
     def pct(val: float | None) -> str:
         if val is None:
@@ -1229,6 +1386,8 @@ def render_md(data: dict[str, Any]) -> str:
         "|---|---|",
         f"| sites extracted (batch summaries) | {n(f['sites_extracted'])} |",
         f"| sites encodable | {n(f['sites_encodable'])} |",
+        f"| non-current batch summary site totals excluded | "
+        f"{', '.join('{} ({})'.format(x['corpus'], x['measurement_status']) for x in f['excluded_non_current_site_totals']) or 'none'} |",
         f"| scanner NDJSON rows | {n(f['scanner_rows'])} |",
         f"| planned inventory stubs | {n(f['planned_stubs'])} |",
         f"| classification rows (usage/intent/triage kinds) | {n(f['classification_rows'])} |",
@@ -1262,6 +1421,8 @@ def render_md(data: dict[str, Any]) -> str:
         f"| pipeline accepted (incl. own-code) / SAT GT | {pct(r['pipeline_accepted_per_gt'])} |",
         f"| pipeline accepted / extracted | {pct(r['pipeline_accepted_per_extracted'])} |",
         f"| encodable / extracted excluding YARA inventories | {pct(r['encodable_fraction_excluding_yara'])} |",
+        f"| non-current fraction artifacts excluded from inventory aggregate | "
+        f"{excluded_summary} |",
         f"| YARA share of inventory unencodable | {pct(r['yara_share_of_unencodable'])} |",
         f"| `fullword-boundary` share of inventory unencodable | {pct(r['fullword_share_of_unencodable'])} |",
         "",
