@@ -85,6 +85,7 @@ def _assert_clean_provenance_files(
             capture_output=True,
             text=True,
             check=False,
+            timeout=10,
         )
         clean = subprocess.run(
             ["git", "status", "--porcelain", "--", *relative],
@@ -92,6 +93,7 @@ def _assert_clean_provenance_files(
             capture_output=True,
             text=True,
             check=False,
+            timeout=10,
         )
     except OSError as exc:
         raise SystemExit(
