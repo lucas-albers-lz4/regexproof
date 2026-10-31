@@ -115,6 +115,15 @@ Extracted sites use `call_kind=fullmatch` to mirror
 Unicode `\p{…}`, `\Q…\E` quote escapes, truncated/unbalanced literals, and
 `"…" + "…"` concatenations (not folded) reject — never silent widen
 ([#103](https://github.com/lucas-albers-lz4/regexproof/issues/103)).
+The current extractor still emits the prior `java→pcre` records. Treat native
+compilation as a candidate check until each record is re-extracted with its
+original Java call site, accepted by the native compiler, and differentially
+replayed against the pinned JDK over its declared input domain. Do not add a
+PCRE fallback for native rejects. The native parser also intentionally rejects
+valid Java constructs it cannot lower, including possessive quantifiers,
+atomic/named groups, control/octal/Unicode escapes, `\R`, and `\X`; the
+compiler tests assert these stay fail-closed. Hex escapes `\xhh` and `\x{…}`
+are lowered as literals and have JDK replay coverage.
 
 ## Practical rules
 
