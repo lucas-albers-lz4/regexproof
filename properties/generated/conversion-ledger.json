@@ -428,16 +428,16 @@
     "accepted_per_extracted": 3e-06,
     "accepted_per_gt": 0.125,
     "encodable_fraction": 0.605229,
-    "encodable_fraction_all_inventories": 0.609744,
+    "encodable_fraction_all_inventories": 0.611285,
     "encodable_fraction_excluding_yara": 0.609135,
-    "encodable_fraction_yara": 0.609899,
-    "fullword_share_of_unencodable": 0.780205,
+    "encodable_fraction_yara": 0.611832,
+    "fullword_share_of_unencodable": 0.780223,
     "gt_per_sat": 1.0,
     "pipeline_accepted_per_extracted": 3e-06,
     "pipeline_accepted_per_gt": 0.125,
     "property_asked_per_encodable": 0.000215,
     "sat_per_property_asked": 0.195122,
-    "yara_share_of_unencodable": 0.796123
+    "yara_share_of_unencodable": 0.796146
   },
   "rule_diff_reports": {
     "crs_cross_engine_rule_diff_report.json": {
@@ -672,9 +672,9 @@
     }
   ],
   "yara_split": {
-    "encodable_fraction_all": 0.609744,
+    "encodable_fraction_all": 0.611285,
     "encodable_fraction_excluding_yara": 0.609135,
-    "encodable_fraction_yara": 0.609899,
+    "encodable_fraction_yara": 0.611832,
     "excluded_non_current_measurements": [
       {
         "corpus": "aidevops",
@@ -682,18 +682,18 @@
         "measurement_status": "historical_pre_615_shell_extractor"
       }
     ],
-    "fraction_all_encodable": 218587,
-    "fraction_all_n": 358490,
+    "fraction_all_encodable": 220034,
+    "fraction_all_n": 359953,
     "fraction_excluding_yara_encodable": 44451,
     "fraction_excluding_yara_n": 72974,
-    "fraction_yara_encodable": 174136,
-    "fraction_yara_n": 285516,
-    "fullword_boundary_all": 109153,
-    "fullword_boundary_yara": 109153,
-    "fullword_share_of_unencodable": 0.780205,
-    "fullword_share_of_yara_unencodable": 0.980005,
-    "unencodable_all": 139903,
-    "unencodable_yara": 111380,
-    "yara_share_of_unencodable": 0.796123
+    "fraction_yara_encodable": 175583,
+    "fraction_yara_n": 286979,
+    "fullword_boundary_all": 109168,
+    "fullword_boundary_yara": 109168,
+    "fullword_share_of_unencodable": 0.780223,
+    "fullword_share_of_yara_unencodable": 0.979999,
+    "unencodable_all": 139919,
+    "unencodable_yara": 111396,
+    "yara_share_of_unencodable": 0.796146
   }
 }
