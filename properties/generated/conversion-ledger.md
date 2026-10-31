@@ -48,6 +48,30 @@ Heap's-law / singleton novelty saturates **compiler coverage**. This artifact sa
 | YARA share of inventory unencodable | 0.7961 |
 | `fullword-boundary` share of inventory unencodable | 0.7802 |
 
+## Headline conversion yield (#551)
+
+Unit: distinct `(corpus, canonical_site)` with an adopted boundary contract;
+a finding is a site with at least one ground-truthed SAT property.
+- contracted boundary sites: **36** (per-10k threshold: 50)
+- ground-truthed finding sites: **6**
+- reported yield: **raw count 6; Clopper-Pearson exact 95% interval: proportion [0.063720, 0.328116]; raw-count scale [2.2939, 11.8122]**
+- findings per site (Wilson score 95%): **0.1667**; interval [0.078704, 0.318908]
+
+## Time-to-acceptance (#551)
+
+Kaplan-Meier estimate from `filed_at`; `fixed_upstream` is the acceptance event.
+Open filing dispositions are right-censored at the deterministic artifact cutoff;
+dated non-accepting closures are censored at `resolved_at` or a known
+`disposition_date`. Backfilled `unknown_date` rows are excluded.
+- artifact cutoff: **2026-09-13**
+- observations: 2; accepted events: 0; right-censored: 2
+- excluded unknown-date rows: 6; excluded without usable dates: 8
+- median time to acceptance: **not reached**
+
+| days from filing | at risk | accepted | censored | KM survival |
+|---:|---:|---:|---:|---:|
+| 0 | 2 | 0 | 2 | 1.000000 |
+
 ## Security-tool split (scanner product kinds)
 
 Asked in tools: 10. Asked elsewhere: 31. SAT in tools: 4. SAT elsewhere: 4.

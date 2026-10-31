@@ -486,6 +486,217 @@ def _ratio(num: int, den: int) -> float | None:
     return round(num / den, 6)
 
 
+def conversion_yield_metrics(rows: list[dict[str, Any]]) -> dict[str, Any]:
+    """Headline finding yield per distinct contracted boundary site (#551).
+
+    A finding unit is a contracted boundary site with at least one SAT result
+    that passed ground-truth replay. The denominator is distinct
+    ``(corpus, canonical_site)`` among adopted contracts whose trust is
+    ``untrusted-input`` or ``config``. Below 50 sites, report the raw count and
+    its two-sided exact Clopper-Pearson interval; at 50 or more, report per
+    10,000 sites. Wilson is retained for the findings-per-site rate.
+    """
+    from regexproof.stats.intervals import clopper_pearson, wilson_ci
+
+    boundary_sites: set[tuple[str, str]] = set()
+    finding_sites: set[tuple[str, str]] = set()
+    for rec in rows:
+        if not counts_as_conversion_asked(rec):
+            continue
+        contract = rec.get("contract")
+        if not isinstance(contract, dict) or contract.get("trust") not in {
+            "untrusted-input",
+            "config",
+        }:
+            continue
+        site = canonical_site(str(rec.get("site") or ""))
+        corpus = str(rec.get("corpus") or "")
+        if not site:
+            continue
+        key = (corpus, site)
+        boundary_sites.add(key)
+        if rec.get("result") in SAT_RESULTS and is_ground_truthed(rec):
+            finding_sites.add(key)
+
+    trials = len(boundary_sites)
+    successes = len(finding_sites)
+    rate = successes / trials if trials else None
+    confidence_interval = None
+    wilson = None
+    findings_per_10k = None
+    if trials:
+        wilson_lower, wilson_upper = wilson_ci(successes, trials, confidence=0.95)
+        wilson = {
+            "method": "wilson_score",
+            "confidence_level": 0.95,
+            "lower": round(wilson_lower, 8),
+            "upper": round(wilson_upper, 8),
+        }
+        if trials < 50:
+            lower, upper = clopper_pearson(successes, trials, confidence=0.95)
+            confidence_interval = {
+                "method": "clopper_pearson_exact",
+                "confidence_level": 0.95,
+                "scale": "proportion",
+                "lower": round(lower, 8),
+                "upper": round(upper, 8),
+                "count_lower": round(lower * trials, 8),
+                "count_upper": round(upper * trials, 8),
+            }
+        else:
+            findings_per_10k = round(successes / trials * 10_000, 6)
+
+    return {
+        "unit": "distinct boundary site",
+        "site_key": "(corpus, canonical_site)",
+        "finding_definition": "site with at least one ground-truthed SAT property",
+        "threshold_sites": 50,
+        "contracted_boundary_sites": trials,
+        "ground_truthed_finding_sites": successes,
+        "findings_per_site": round(rate, 8) if rate is not None else None,
+        "findings_per_site_wilson_95": wilson,
+        "reporting_mode": "raw_count" if trials < 50 else "findings_per_10k",
+        "findings_per_10k_sites": findings_per_10k,
+        "confidence_interval": confidence_interval,
+    }
+
+
+def _date_value(value: Any) -> date | None:
+    """Parse an ISO date/timestamp as a UTC calendar date or return None."""
+    if isinstance(value, datetime):
+        parsed = value
+    elif isinstance(value, date):
+        return value
+    elif isinstance(value, str) and value.strip() and value != "unknown_date":
+        text = value.strip()
+        try:
+            return date.fromisoformat(text)
+        except ValueError:
+            try:
+                parsed = datetime.fromisoformat(text.replace("Z", "+00:00"))
+            except ValueError:
+                return None
+    else:
+        return None
+    if parsed.tzinfo is not None:
+        parsed = parsed.astimezone(timezone.utc)
+    return parsed.date()
+
+
+def time_to_acceptance(
+    rows: list[dict[str, Any]], as_of_date: str | date | None = None
+) -> dict[str, Any]:
+    """Kaplan-Meier time-to-acceptance in days from filing (#551).
+
+    ``fixed_upstream`` is an acceptance event. A dated non-accepting closure is
+    right-censored at its resolution date; open filing dispositions are
+    right-censored at the supplied artifact date. When omitted, the cutoff is
+    the latest known filing/resolution/disposition date in the curated input,
+    keeping regeneration deterministic. Backfilled ``unknown_date`` rows and
+    rows without a usable filing or endpoint date are excluded.
+    """
+    open_statuses = {"filed", "filed_plan", "private_first", "approval_missing"}
+    valid_rows = [
+        row
+        for row in rows
+        if row.get("disposition_date") != "unknown_date"
+    ]
+    known_dates = [
+        parsed
+        for row in valid_rows
+        for field in ("filed_at", "resolved_at", "disposition_date")
+        if (parsed := _date_value(row.get(field))) is not None
+    ]
+    if as_of_date is None:
+        cutoff = max(known_dates) if known_dates else None
+    else:
+        cutoff = _date_value(as_of_date)
+        if cutoff is None:
+            raise ValueError("as_of_date must be an ISO date or timestamp")
+
+    observations: list[tuple[int, bool]] = []
+    excluded_unknown_date = sum(
+        1 for row in rows if row.get("disposition_date") == "unknown_date"
+    )
+    excluded_missing_date = 0
+    excluded_invalid_duration = 0
+    for row in rows:
+        if row.get("disposition_date") == "unknown_date":
+            continue
+        filed = _date_value(row.get("filed_at"))
+        if filed is None:
+            excluded_missing_date += 1
+            continue
+        status = str(row.get("status") or "")
+        resolved = _date_value(row.get("resolved_at"))
+        disposition = _date_value(row.get("disposition_date"))
+        if status == "fixed_upstream":
+            end = resolved or disposition
+            accepted = True
+        elif resolved is not None or disposition is not None:
+            end = resolved or disposition
+            accepted = False
+        elif status in open_statuses:
+            end = cutoff
+            accepted = False
+        else:
+            end = None
+            accepted = False
+        if end is None:
+            excluded_missing_date += 1
+            continue
+        duration = (end - filed).days
+        if duration < 0:
+            excluded_invalid_duration += 1
+            continue
+        observations.append((duration, accepted))
+
+    grouped: dict[int, dict[str, int]] = defaultdict(lambda: {"accepted": 0, "censored": 0})
+    for duration, accepted in observations:
+        grouped[duration]["accepted" if accepted else "censored"] += 1
+
+    at_risk = len(observations)
+    survival = 1.0
+    median_days = None
+    curve: list[dict[str, Any]] = []
+    for day in sorted(grouped):
+        events = grouped[day]["accepted"]
+        censored = grouped[day]["censored"]
+        if events:
+            survival *= (at_risk - events) / at_risk
+        survival = round(survival, 8)
+        curve.append(
+            {
+                "day": day,
+                "at_risk": at_risk,
+                "accepted": events,
+                "censored": censored,
+                "survival_probability": survival,
+            }
+        )
+        if median_days is None and survival <= 0.5:
+            median_days = day
+        at_risk -= events + censored
+
+    accepted_events = sum(1 for _, accepted in observations if accepted)
+    right_censored = len(observations) - accepted_events
+    return {
+        "method": "kaplan_meier",
+        "time_unit": "days",
+        "time_origin": "filed_at",
+        "acceptance_event": "status=fixed_upstream",
+        "as_of_date": cutoff.isoformat() if cutoff else None,
+        "observations": len(observations),
+        "accepted_events": accepted_events,
+        "right_censored": right_censored,
+        "excluded_unknown_date": excluded_unknown_date,
+        "excluded_missing_date": excluded_missing_date,
+        "excluded_invalid_duration": excluded_invalid_duration,
+        "median_days": median_days,
+        "survival_curve": curve,
+    }
+
+
 def _read_json(path: Path) -> Any:
     return json.loads(path.read_text(encoding="utf-8"))
 
@@ -1110,6 +1321,8 @@ def aggregate(
         shape5_unsat += summary["properties_unsat"]
 
     up = _upstream_counts(upstream_rows)
+    conversion_yield = conversion_yield_metrics(all_rows + conversion_rows)
+    acceptance_timing = time_to_acceptance(upstream_rows)
 
     # --- #554 Phase A: per-wave hops, shape mix, starvation -----------------
     upstream_index = upstream_join_index(upstream_rows)
@@ -1324,6 +1537,8 @@ def aggregate(
         ],
         "funnel": funnel,
         "rates": rates,
+        "conversion_yield": conversion_yield,
+        "time_to_acceptance": acceptance_timing,
         "security_tool_split": {
             "properties_asked_in_tools": asked_in_tools,
             "properties_asked_not_tools": asked_not_tools,
@@ -1359,6 +1574,41 @@ def render_md(data: dict[str, Any]) -> str:
         "{} ({})".format(item["corpus"], item["measurement_status"])
         for item in excluded_measurements
     ) or "none"
+    yield_data = data.get("conversion_yield") or {}
+    exact_ci = yield_data.get("confidence_interval") or {}
+    wilson_ci_95 = yield_data.get("findings_per_site_wilson_95") or {}
+    exact_text = (
+        f"[{exact_ci['lower']:.6f}, {exact_ci['upper']:.6f}]"
+        if exact_ci
+        else "n/a"
+    )
+    exact_count_text = (
+        f"[{exact_ci['count_lower']:.4f}, {exact_ci['count_upper']:.4f}]"
+        if exact_ci
+        else "n/a"
+    )
+    wilson_text = (
+        f"[{wilson_ci_95['lower']:.6f}, {wilson_ci_95['upper']:.6f}]"
+        if wilson_ci_95
+        else "n/a"
+    )
+    yield_sites = int(yield_data.get("contracted_boundary_sites") or 0)
+    finding_sites = int(yield_data.get("ground_truthed_finding_sites") or 0)
+    if exact_ci:
+        headline_yield_text = (
+            f"raw count {finding_sites}; Clopper-Pearson exact 95% interval: "
+            f"proportion {exact_text}; raw-count scale {exact_count_text}"
+        )
+    elif yield_sites >= 50:
+        headline_yield_text = (
+            f"{yield_data['findings_per_10k_sites']:.6f} ground-truthed finding sites "
+            "per 10,000 contracted boundary sites"
+        )
+    else:
+        headline_yield_text = "raw count unavailable: no contracted boundary sites"
+    timing = data.get("time_to_acceptance") or {}
+    median_days = timing.get("median_days")
+    median_text = f"{median_days} days" if median_days is not None else "not reached"
 
     def pct(val: float | None) -> str:
         if val is None:
@@ -1425,6 +1675,37 @@ def render_md(data: dict[str, Any]) -> str:
         f"{excluded_summary} |",
         f"| YARA share of inventory unencodable | {pct(r['yara_share_of_unencodable'])} |",
         f"| `fullword-boundary` share of inventory unencodable | {pct(r['fullword_share_of_unencodable'])} |",
+        "",
+        "## Headline conversion yield (#551)",
+        "",
+        "Unit: distinct `(corpus, canonical_site)` with an adopted boundary contract;",
+        "a finding is a site with at least one ground-truthed SAT property.",
+        f"- contracted boundary sites: **{yield_sites}** (per-10k threshold: 50)",
+        f"- ground-truthed finding sites: **{finding_sites}**",
+        f"- reported yield: **{headline_yield_text}**",
+        f"- findings per site (Wilson score 95%): **{pct(yield_data.get('findings_per_site'))}**; "
+        f"interval {wilson_text}",
+        "",
+        "## Time-to-acceptance (#551)",
+        "",
+        "Kaplan-Meier estimate from `filed_at`; `fixed_upstream` is the acceptance event.",
+        "Open filing dispositions are right-censored at the deterministic artifact cutoff;",
+        "dated non-accepting closures are censored at `resolved_at` or a known",
+        "`disposition_date`. Backfilled `unknown_date` rows are excluded.",
+        f"- artifact cutoff: **{timing.get('as_of_date') or 'n/a'}**",
+        f"- observations: {timing.get('observations', 0)}; accepted events: "
+        f"{timing.get('accepted_events', 0)}; right-censored: {timing.get('right_censored', 0)}",
+        f"- excluded unknown-date rows: {timing.get('excluded_unknown_date', 0)}; "
+        f"excluded without usable dates: {timing.get('excluded_missing_date', 0)}",
+        f"- median time to acceptance: **{median_text}**",
+        "",
+        "| days from filing | at risk | accepted | censored | KM survival |",
+        "|---:|---:|---:|---:|---:|",
+        *[
+            f"| {point['day']} | {point['at_risk']} | {point['accepted']} | "
+            f"{point['censored']} | {point['survival_probability']:.6f} |"
+            for point in timing.get("survival_curve", [])
+        ],
         "",
         "## Security-tool split (scanner product kinds)",
         "",

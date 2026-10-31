@@ -150,6 +150,8 @@ Ledger JSON (`schema_version: "1"`) field groups:
 |---|---|
 | funnel | `sites_extracted`, `sites_encodable`, `scanner_rows`, `planned_stubs`, `classification_rows`, `properties_asked`, `properties_asked_synthesized`, `properties_sat`, `properties_sat_synthesized`, `sat_unique_sites`, `sat_ground_truthed`, `rule_diff_report_sat`, `disclosed_private_first`, `pr_dry_run_private_first`, `accepted_upstream`, `existence_proofs`, `third_party_public`, … |
 | rates | `encodable_fraction`, `pipeline_accepted_per_gt`, `pipeline_accepted_per_extracted` (aliases `accepted_per_gt` / `accepted_per_extracted` for one release). These pipeline rates include own-code usrmanage; they are **not** a wild-bug conversion rate. |
+| conversion_yield (#551) | `contracted_boundary_sites`, `ground_truthed_finding_sites`, `findings_per_site`, `findings_per_site_wilson_95`, `confidence_interval`, `reporting_mode`, `findings_per_10k_sites`. Unit: distinct `(corpus, canonical_site)` with an adopted contract whose trust is `untrusted-input` or `config`; a finding is a site with ≥1 ground-truthed SAT property. |
+| time_to_acceptance (#551) | `method`, `as_of_date`, `observations`, `accepted_events`, `right_censored`, exclusion counts, `median_days`, `survival_curve`. Kaplan-Meier time from `filed_at`; `fixed_upstream` is the acceptance event. |
 | security_tool_split | asked/SAT in vs not in `SECURITY_TOOL_CORPORA` |
 | upstream | curated `docs/conversion-upstream.jsonl` status counts |
 | per_wave (#554) | one row per top-level `(wave_id, idiom_bucket)`: `properties_asked` → `properties_sat` → `sat_ground_truthed` → `filed` → `accepted`, plus `shape_counts` / `shape_mix`. Join: curated rows on canonical `(site, question_id)`; `filed` = status `filed` / `private_first` / `fixed_upstream` (or `filed_at` set); `accepted` = `fixed_upstream`. GT→filed is the currently empty hop and is highlighted in the MD. |
@@ -176,11 +178,15 @@ findings, contracts, conversion-checkpoint rows, or additional
 ### Headline findings metric (#554, additive to encodable fraction)
 
 Until the contracted boundary-site denominator crosses the committed
-threshold (**n ≥ 50**): raw finding counts with a **Clopper-Pearson**
-(exact) interval; findings per site use **Wilson**. Per-10k thereafter.
-Encodable fraction stays the compiler headline (why.md three-claim
-separation). Bootstrap CIs elsewhere: B=10000, 95% BCa with
-percentile/exact-binomial fallback.
+threshold (**n ≥ 50**): raw ground-truthed finding-site counts with a two-sided
+**Clopper-Pearson exact 95% interval**. Findings per site always use a two-sided
+**Wilson 95% interval**; at n ≥ 50, the headline is findings per 10,000
+contracted boundary sites. The denominator is distinct `(corpus,
+canonical_site)` pairs with an adopted contract whose trust is
+`untrusted-input` or `config`; the numerator is those sites with at least one
+SAT result that passed ground-truth replay. Encodable fraction stays the
+compiler headline (why.md three-claim separation). Bootstrap CIs elsewhere:
+B=10000, 95% BCa with percentile/exact-binomial fallback.
 
 ### Shape-3/5 ground-truth discipline
 
@@ -215,9 +221,14 @@ AGENTS.md must match or cite them — enforced by
   optional-with-reason for backfilled rows.
 - **Backfill rule:** backfilled rows carry `reason_code` plus
   `disposition_date` = ISO date or the explicit enum value `unknown_date`.
-- **Censoring-aware time-to-acceptance:** `unknown_date` rows are excluded
-  from medians; report via Kaplan-Meier or state "median of closed rows
-  only" — never mix censored + closed rows in a plain median.
+- **Censoring-aware time-to-acceptance (#551):** ledger uses a Kaplan-Meier
+  estimate from `filed_at`, with `fixed_upstream` as the acceptance event.
+  Open filing dispositions are right-censored at the deterministic artifact
+  cutoff (latest known curated filing/resolution/disposition date); dated
+  non-accepting closures are censored at their `resolved_at` / disposition
+  date. Backfilled `unknown_date` rows and rows without usable dates are
+  excluded. The median is reported as not reached when the survival curve does
+  not cross 0.5; censored and accepted rows are never mixed in a plain median.
 - **Coverage join (#554):** every GT-confirmed SAT row in
   `*_conversion.ndjson` (`result` sat/gap, non-synthesized product kind,
   `ground_truth_status` reproduced/PASS) needs a curated row;
