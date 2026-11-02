@@ -21,7 +21,6 @@ def test_committed_baseline_has_at_least_five_rows():
     assert all(r["measurement_id"] for r in rows)
     s = summarize(COMMITTED)
     assert s["baseline_floor_met"] is True
-    assert s["active_minutes"]["n"] == 0  # seed rows have no stopwatch yet
 
 
 def test_append_stopwatch_row(tmp_path: Path):
@@ -84,3 +83,171 @@ def test_does_not_touch_freeze():
     # Loading/summarizing the minutes log must not rewrite the freeze.
     summarize(COMMITTED)
     assert FREEZE.read_bytes() == before
+
+
+def test_report_uses_only_stopwatch_samples_for_pre_post_speedup(tmp_path: Path):
+    log = tmp_path / "m.jsonl"
+    rows = [
+        {
+            "source": "seed-artifact-timestamps",
+            "decision": "go",
+            "decision_date": "2026-08-13",
+            "active_minutes": None,
+            "wall_minutes": None,
+        },
+        {
+            "source": "stopwatch",
+            "decision": "go",
+            "decision_date": "2026-08-20",
+            "active_minutes": 20.0,
+            "wall_minutes": 50.0,
+        },
+        {
+            "source": "stopwatch",
+            "decision": "triage-trial",
+            "decision_date": "2026-08-27",
+            "active_minutes": 5.0,
+            "wall_minutes": None,
+        },
+        {
+            "source": "stopwatch",
+            "decision": "go",
+            "decision_date": "2026-08-24",
+            "active_minutes": 100.0,
+            "wall_minutes": None,
+        },
+        {
+            "source": "stopwatch",
+            "decision": "go",
+            "decision_date": "2026-08-23",
+            "active_minutes": 100.0,
+        },
+        {
+            "source": "stopwatch",
+            "decision": "go",
+            "decision_date": "2026-08-25",
+            "active_minutes": 100.0,
+        },
+    ]
+    log.write_text("\n".join(json.dumps(row) for row in rows) + "\n")
+
+    report = summarize(
+        log,
+        rollout_cutoff_date="2026-08-24",
+        rollout_cutoff_evidence="test fixture rollout record",
+    )
+
+    assert report["baseline_floor_met"] is True
+    assert report["provenance"]["seed_records"] == 1
+    assert report["provenance"]["stopwatch_records"] == 5
+    assert report["provenance"]["stopwatch_active_samples"] == 5
+    assert report["provenance"]["period_cutoff_is_operator_assumption"] is True
+    assert report["provenance"]["period_cutoff_evidence"] == "test fixture rollout record"
+    assert report["periods"]["pre_cutoff"]["seed_records"] == 1
+    assert report["periods"]["pre_cutoff"]["active_minutes"]["median"] == 20.0
+    assert report["periods"]["post_cutoff"]["active_minutes"]["median"] == 5.0
+    assert report["periods"]["unclassified"]["active_minutes"]["n"] == 3
+    assert report["pre_post_active_ratio"] == {
+        "ratio": 4.0,
+        "status": "measured",
+        "interpretation": "active_time_ratio_conditional_on_operator_cutoff",
+    }
+
+
+def test_speedup_is_unavailable_without_measured_pre_and_post_samples(tmp_path: Path):
+    log = tmp_path / "m.jsonl"
+    seed_rows = [
+        {
+            "source": "seed-artifact-timestamps",
+            "decision": "go",
+            "decision_date": "2026-08-13",
+            "active_minutes": None,
+        }
+        for _ in range(5)
+    ]
+    log.write_text("\n".join(json.dumps(row) for row in seed_rows) + "\n")
+    report = summarize(log)
+    assert report["baseline_floor_met"] is True
+    assert report["provenance"]["seed_records"] == 5
+    assert report["provenance"]["stopwatch_active_samples"] == 0
+    assert report["periods"]["unclassified"]["records"] == 5
+    assert report["pre_post_active_ratio"]["ratio"] is None
+    assert report["pre_post_active_ratio"]["status"] == "insufficient_measured_samples"
+
+
+def test_cutoff_requires_evidence(tmp_path: Path):
+    with pytest.raises(ValueError, match="evidence reference is required"):
+        summarize(tmp_path / "m.jsonl", rollout_cutoff_date="2026-08-24")
+
+
+def test_zero_post_median_does_not_emit_infinite_speedup(tmp_path: Path):
+    log = tmp_path / "m.jsonl"
+    rows = [
+        {
+            "source": "stopwatch",
+            "decision": "go",
+            "decision_date": "2026-08-20",
+            "active_minutes": 2.0,
+        },
+        {
+            "source": "stopwatch",
+            "decision": "go",
+            "decision_date": "2026-08-27",
+            "active_minutes": 0.0,
+        },
+    ]
+    log.write_text("\n".join(json.dumps(row) for row in rows) + "\n")
+    report = summarize(
+        log,
+        rollout_cutoff_date="2026-08-24",
+        rollout_cutoff_evidence="test fixture rollout record",
+    )
+    assert report["pre_post_active_ratio"]["ratio"] is None
+    assert report["pre_post_active_ratio"]["status"] == "undefined_zero_post_median"
+
+
+def test_non_survivors_and_malformed_active_values_are_excluded(tmp_path: Path):
+    log = tmp_path / "m.jsonl"
+    rows = [
+        {
+            "source": "stopwatch",
+            "decision": "go",
+            "decision_date": "2026-08-20",
+            "active_minutes": 10.0,
+        },
+        {
+            "source": "stopwatch",
+            "decision": "go",
+            "decision_date": "2026-08-27",
+            "active_minutes": 5.0,
+        },
+        {
+            "source": "stopwatch",
+            "decision": "no-go",
+            "decision_date": "2026-08-27",
+            "active_minutes": 1000.0,
+        },
+        *[
+            {
+                "source": "stopwatch",
+                "decision": "go",
+                "decision_date": "2026-08-27",
+                "active_minutes": value,
+            }
+            for value in ("bad", "NaN", "Infinity", -2, True)
+        ],
+    ]
+    log.write_text("\n".join(json.dumps(row) for row in rows) + "\n")
+    report = summarize(
+        log,
+        rollout_cutoff_date="2026-08-24",
+        rollout_cutoff_evidence="test fixture rollout record",
+    )
+    assert report["provenance"]["stopwatch_active_samples"] == 2
+    assert report["active_minutes"]["median"] == 7.5
+    assert report["provenance"]["excluded_active_values"] == {
+        "non_survivor": 1,
+        "invalid_value": 5,
+        "not_stopwatch": 0,
+    }
+    assert report["pre_post_active_ratio"]["ratio"] == 2.0
