@@ -156,6 +156,103 @@ def test_record_and_projection(tmp_path):
     assert "survivor_rate" not in proj
 
 
+def test_timing_projection_separates_clone_and_handles_zero_and_large_walks(tmp_path):
+    p = _state(tmp_path)
+    # Legacy row: clone only, with no new timing fields.
+    batch_state.record_outcome(
+        "d1", "https://x/legacy", "a" * 40, "needs_human",
+        extra={"clone_ms": 900}, path=p,
+    )
+    batch_state.record_outcome(
+        "d1", "https://x/large", "b" * 40, "auto_nogo",
+        extra={
+            "clone_ms": 100,
+            "probe_ms": 500,
+            "walk_ms": 0,
+            "inventory_ms": 400,
+            "files_walked": 10_001,
+            "walk_completed": True,
+            "inventory_completed": True,
+        },
+        path=p,
+    )
+    batch_state.record_outcome(
+        "d1", "https://x/empty", "c" * 40, "error",
+        extra={
+            "probe_ms": 50,
+            "walk_ms": 0,
+            "inventory_ms": None,
+            "files_walked": 0,
+            "walk_completed": True,
+            "inventory_completed": False,
+        },
+        path=p,
+    )
+    batch_state.record_outcome(
+        "d1", "https://x/inventory-error", "d" * 40, "error",
+        extra={
+            "probe_ms": 900,
+            "walk_ms": 30,
+            "inventory_ms": None,
+            "files_walked": 20_001,
+            "walk_completed": True,
+            "inventory_completed": False,
+        },
+        path=p,
+    )
+
+    proj = batch_state.projection(path=p)
+    timing = proj["timings"]
+    assert proj["clone_ms_p95"] == 900  # legacy projection unchanged
+    assert timing["terminal_probe_by_outcome"]["auto_nogo"] == {"n": 1, "p50_ms": 500, "p95_ms": 500}
+    assert timing["terminal_probe_by_outcome"]["error"] == {"n": 2, "p50_ms": 475, "p95_ms": 900}
+    assert timing["stage_completed"]["walk_ms"] == {"n": 3, "p50_ms": 0, "p95_ms": 30}
+    assert timing["stage_completed"]["inventory_ms"] == {"n": 1, "p50_ms": 400, "p95_ms": 400}
+    large = timing["stage_completed"]["walk_by_files_walked"]
+    assert large["file_count_samples"] == 3
+    assert large["over_10000_file_samples"] == 2
+    assert large["fully_instrumented_over_10000_samples"] == 1
+    paired = large["fully_instrumented_over_10000"]
+    assert paired["probe_ms"] == {"n": 1, "p50_ms": 500, "p95_ms": 500}
+    assert paired["walk_ms"]["n"] == 1  # measured zero is not missing
+    assert paired["inventory_ms"]["n"] == 1
+    assert paired["final_outcomes"] == {"auto_nogo": 1}
+    assert timing["trigger_evaluation"]["status"] == "not_evaluated"
+
+
+def test_retry_begin_resets_optional_timing_fields(tmp_path):
+    p = _state(tmp_path)
+    batch_state.record_outcome(
+        "d1", "https://x/y", "a" * 40, "needs_human",
+        extra={
+            "probe_ms": 123,
+            "files_walked": 10_001,
+            "walk_ms": 20,
+            "walk_completed": True,
+            "inventory_completed": True,
+        },
+        path=p,
+    )
+    batch_state.begin_item("d1", "https://x/y", "a" * 40, path=p)
+    row = next(iter(batch_state.load_state(path=p)["rows"].values()))
+    assert row["completed_at"] == ""
+    assert "probe_ms" not in row
+    assert "files_walked" not in row
+    assert "walk_completed" not in row
+    assert "inventory_completed" not in row
+    proj = batch_state.projection(path=p)
+    assert proj["timings"]["stage_completed"]["walk_ms"]["n"] == 0
+
+
+def test_legacy_state_rows_without_new_timings_still_project(tmp_path):
+    p = _state(tmp_path)
+    batch_state.record_outcome("d1", "https://x/y", "a" * 40, "ok", path=p)
+    proj = batch_state.projection(path=p)
+    assert proj["clone_ms_p95"] is None
+    assert proj["timings"]["stage_completed"]["walk_ms"]["n"] == 0
+    assert proj["timings"]["stage_completed"]["walk_by_files_walked"]["file_count_samples"] == 0
+
+
 def test_keyed_rows_no_duplicates(tmp_path):
     """Luna r1 #11: keyed state — recording the same (digest, url, pin)
     twice must UPSERT, not append."""
@@ -350,6 +447,46 @@ def test_default_probe_cap_consistent_with_max(tmp_path):
     row = next(iter(st["rows"].values()))
     assert row["outcome"] == "error"
     assert "empty worktree" in str(row.get("error") or "")
+    assert isinstance(row.get("probe_ms"), int) and row["probe_ms"] >= 0
+    assert isinstance(row.get("walk_ms"), int) and row["walk_ms"] >= 0
+    assert isinstance(row.get("inventory_ms"), int) and row["inventory_ms"] >= 0
+    assert row.get("files_walked") == 0  # measured empty walk, distinct from unavailable
+    assert row.get("walk_completed") is True
+    assert row.get("inventory_completed") is True
+    timings = bs.projection(path=tmp_path / "state.json")["timings"]
+    assert timings["stage_completed"]["walk_ms"]["n"] == 1
+    assert timings["stage_completed"]["inventory_ms"]["n"] == 1
+    assert timings["terminal_probe_by_outcome"]["error"]["n"] == 1
+
+
+def test_probe_records_timing_for_terminal_disk_admission_failure(tmp_path):
+    import importlib.util
+    from unittest import mock
+    from regexproof.mine import disk_admission
+
+    root = pathlib.Path(__file__).resolve().parent.parent
+    spec = importlib.util.spec_from_file_location("bp_disk_fail", root / "scripts" / "batch-probe.py")
+    assert spec is not None and spec.loader is not None
+    batch_probe = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(batch_probe)
+    state = tmp_path / "state.json"
+    with mock.patch.object(disk_admission, "reserve", return_value=False):
+        rc = batch_probe.main([  # type: ignore[attr-defined]
+            "--url", "https://github.com/openwrt/packages",
+            "--pin", "a" * 40,
+            "--state", str(state),
+        ])
+    assert rc == 2
+    row = next(iter(batch_state.load_state(path=state)["rows"].values()))
+    assert row["outcome"] == "disk_budget"
+    assert isinstance(row.get("probe_ms"), int) and row["probe_ms"] >= 0
+    assert row.get("walk_ms") is None
+    assert row.get("inventory_ms") is None
+    assert row.get("walk_completed") is False
+    assert row.get("inventory_completed") is False
+    assert batch_state.projection(path=state)["timings"]["stage_completed"]["walk_ms"]["n"] == 0
+    assert batch_state.projection(path=state)["timings"]["terminal_probe_by_outcome"]["disk_budget"]["n"] == 1
+    assert row.get("files_walked") is None
 
 
 def test_lease_renew_extends_expiry(tmp_path):
