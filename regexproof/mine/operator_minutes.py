@@ -125,13 +125,19 @@ def summarize(
             raise ValueError("rollout_cutoff_evidence requires rollout_cutoff_date")
         cutoff = None
     else:
+        if isinstance(rollout_cutoff_date, datetime):
+            raise ValueError("rollout_cutoff_date must be a date, not a datetime")
         if isinstance(rollout_cutoff_date, date):
             cutoff = rollout_cutoff_date
-        else:
+        elif isinstance(rollout_cutoff_date, str):
             try:
-                cutoff = date.fromisoformat(str(rollout_cutoff_date))
+                cutoff = date.fromisoformat(rollout_cutoff_date)
             except ValueError as exc:
                 raise ValueError("rollout_cutoff_date must be YYYY-MM-DD") from exc
+            if cutoff.isoformat() != rollout_cutoff_date:
+                raise ValueError("rollout_cutoff_date must be YYYY-MM-DD")
+        else:
+            raise ValueError("rollout_cutoff_date must be a date or YYYY-MM-DD string")
         if not rollout_cutoff_evidence or not rollout_cutoff_evidence.strip():
             raise ValueError(
                 "an explicit rollout_cutoff_evidence reference is required with the cutoff date"

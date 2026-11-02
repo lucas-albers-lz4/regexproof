@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+from datetime import date, datetime
 from pathlib import Path
 
 import pytest
@@ -178,6 +179,27 @@ def test_speedup_is_unavailable_without_measured_pre_and_post_samples(tmp_path: 
 def test_cutoff_requires_evidence(tmp_path: Path):
     with pytest.raises(ValueError, match="evidence reference is required"):
         summarize(tmp_path / "m.jsonl", rollout_cutoff_date="2026-08-24")
+
+
+@pytest.mark.parametrize(
+    "cutoff", [datetime(2026, 8, 24), "20260824", "2026-08-24T00:00:00"]
+)
+def test_cutoff_rejects_datetime_and_noncanonical_date_strings(tmp_path: Path, cutoff):
+    with pytest.raises(ValueError, match="rollout_cutoff_date"):
+        summarize(
+            tmp_path / "m.jsonl",
+            rollout_cutoff_date=cutoff,
+            rollout_cutoff_evidence="test fixture rollout record",
+        )
+
+
+def test_cutoff_accepts_date_object(tmp_path: Path):
+    report = summarize(
+        tmp_path / "m.jsonl",
+        rollout_cutoff_date=date(2026, 8, 24),
+        rollout_cutoff_evidence="test fixture rollout record",
+    )
+    assert report["provenance"]["period_cutoff_date"] == "2026-08-24"
 
 
 def test_zero_post_median_does_not_emit_infinite_speedup(tmp_path: Path):
