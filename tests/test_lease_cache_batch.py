@@ -489,6 +489,135 @@ def test_probe_records_timing_for_terminal_disk_admission_failure(tmp_path):
     assert row.get("files_walked") is None
 
 
+def test_probe_timing_uses_isolated_monotonic_stage_intervals(tmp_path):
+    """The recorded values must match each actual elapsed interval.
+
+    A controlled clock makes walk, inventory, and whole-probe timing
+    distinguishable. The 10,001-file result also exercises the large-repo
+    cohort using timings emitted by batch-probe itself.
+    """
+    import importlib.util
+    import time as real_time
+    from types import SimpleNamespace
+    from unittest import mock
+
+    from regexproof.admission import clone_cache
+    from regexproof.admission import draft as draft_module
+    from regexproof.admission import clone as clone_module
+    from regexproof.mine import disk_admission, lease_registry
+    from regexproof.mine import batch_nogo
+
+    root = pathlib.Path(__file__).resolve().parent.parent
+    spec = importlib.util.spec_from_file_location(
+        "bp_clocked", root / "scripts" / "batch-probe.py"
+    )
+    assert spec is not None and spec.loader is not None
+    batch_probe = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(batch_probe)
+
+    class Clock:
+        now = 10.0
+
+        def monotonic(self):
+            return self.now
+
+        def advance(self, seconds):
+            self.now += seconds
+
+    clock = Clock()
+    fake_time = SimpleNamespace(
+        monotonic=clock.monotonic,
+        strftime=real_time.strftime,
+        gmtime=real_time.gmtime,
+    )
+    cache_dir = tmp_path / "cache"
+    cache_dir.mkdir()
+    worktree = tmp_path / "worktree"
+    worktree.mkdir()
+    generated = tmp_path / "generated"
+    generated.mkdir()
+    ledger = tmp_path / "candidate-ledger.json"
+    state = tmp_path / "state.json"
+
+    def walk(*args, **kwargs):
+        clock.advance(0.125)
+        return 10_001
+
+    def inventory(*args, **kwargs):
+        clock.advance(0.375)
+        return {
+            "schema_version": "1",
+            "corpus": "demo",
+            "probe": {"regex_sites": 7},
+            "fields_remaining": [],
+        }
+
+    def fold(*args, **kwargs):
+        clock.advance(0.075)
+        return "needs_human", None, "review required"
+
+    def cleanup(*args, **kwargs):
+        clock.advance(10)
+
+    entry = {"cache_hit": True, "dir": str(cache_dir), "owner_pid": 1}
+    with (
+        mock.patch.object(batch_probe, "time", fake_time),
+        mock.patch.object(disk_admission, "reserve", return_value=True),
+        mock.patch.object(clone_cache, "cache_acquire", return_value=entry),
+        mock.patch.object(clone_cache, "worktree_for", return_value=worktree),
+        mock.patch.object(clone_cache, "worktree_remove", side_effect=cleanup),
+        mock.patch.object(clone_cache, "release", side_effect=cleanup),
+        mock.patch.object(lease_registry, "renew", return_value=entry),
+        mock.patch.object(disk_admission, "release", side_effect=cleanup),
+        mock.patch.object(clone_module, "enforce_disk_budget", return_value=None),
+        mock.patch.object(batch_probe, "_walk_and_heartbeat", side_effect=walk),
+        mock.patch.object(draft_module, "build_draft", side_effect=inventory),
+        mock.patch.object(batch_nogo, "fold_auto_nogo", side_effect=fold),
+    ):
+        rc = batch_probe.main(
+            [
+                "--url",
+                "https://example.test/repo",
+                "--pin",
+                "a" * 40,
+                "--corpus",
+                "demo",
+                "--state",
+                str(state),
+                "--walk-root",
+                str(tmp_path / "staged"),
+                "--generated",
+                str(generated),
+                "--ledger",
+                str(ledger),
+            ]
+        )
+
+    assert rc == 0
+    row = next(iter(batch_state.load_state(path=state)["rows"].values()))
+    assert row["outcome"] == "needs_human"
+    assert row["walk_ms"] == 125
+    assert row["inventory_ms"] == 375
+    assert row["probe_ms"] == 575  # walk + inventory + terminal fold
+    assert row["files_walked"] == 10_001
+    assert row["walk_completed"] is True
+    assert row["inventory_completed"] is True
+    assert clock.now == 40.575  # cleanup occurs after the terminal timing is recorded
+
+    timing = batch_state.projection(path=state)["timings"]
+    assert timing["terminal_probe_by_outcome"]["needs_human"] == {
+        "n": 1,
+        "p50_ms": 575,
+        "p95_ms": 575,
+    }
+    large = timing["stage_completed"]["walk_by_files_walked"]
+    assert large["over_10000_file_samples"] == 1
+    assert large["fully_instrumented_over_10000_samples"] == 1
+    assert large["fully_instrumented_over_10000"]["probe_ms"]["p95_ms"] == 575
+    assert large["fully_instrumented_over_10000"]["walk_ms"]["p95_ms"] == 125
+    assert large["fully_instrumented_over_10000"]["inventory_ms"]["p95_ms"] == 375
+
+
 def test_lease_renew_extends_expiry(tmp_path):
     """Luna r3 #5: renew() extends a live lease's expiry under the lock and
     refuses when the lease is gone/expired/foreign."""
