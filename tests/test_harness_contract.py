@@ -26,7 +26,7 @@ def test_fwlive_prefix_guard_contract_is_adopted():
     )
     assert contract_is_adopted(contract)
     assert contract["trust"] == "untrusted-input"
-    assert contract["adoption"]["authority"] == "direct_user_approval"
+    assert contract["adoption"]["authority"] == "standing_user_delegation"
     assert "NON_FIREWALL_PREFIX" in contract["site"]
     assert "evaluateClassifySpec" in contract["guarantee"]
 

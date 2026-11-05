@@ -8,9 +8,9 @@
   "provenance": "agent_derived",
   "adoption": {
     "status": "approved",
-    "authority": "direct_user_approval",
+    "authority": "standing_user_delegation",
     "approved_on": "2026-11-05",
-    "rationale": "Maintainer selected issue #677 option A and then asked to land this exact call-path contract. Source shows the live-view filter consumes the prefix-guard boolean as an early-out on mixed syslog (kernel nf_log plus local daemons). Trust class is the logd msg haystack.",
+    "rationale": "Issue #677 option A authorizes adopting this call-path contract under standing agent-contract authority. Source shows the live-view filter consumes the prefix-guard boolean as an early-out on mixed syslog (kernel nf_log plus local daemons). Trust class is the logd msg haystack.",
     "evidence": [
       "fwlive origin/master 6b1b1f8e4342f675ed04a137998b95a7b7e93e3e: core/fwlive-log.js CLASSIFY_SPEC, normalizeNetfilterMessage, classifyTrim, isFirewallEvent, filterLogEntries, statsLogEntries; rpcd fetch_firewall_logs ubus log read; generated awk non_fw_prefix",
       "regexproof issue #677 option A maintainer decision and call-path determination comments (2026-11-05)"
