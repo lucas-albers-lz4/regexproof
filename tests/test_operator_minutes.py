@@ -261,6 +261,16 @@ def test_positive_ratio_underflow_is_not_reported_as_zero(tmp_path: Path):
     assert report["pre_post_active_ratio"]["ratio"] is None
 
 
+def test_oversized_integer_active_sample_is_excluded(tmp_path: Path):
+    log = tmp_path / "m.jsonl"
+    log.write_text(json.dumps({
+        "source": "stopwatch", "decision": "go", "active_minutes": 10**1000,
+    }) + "\n")
+    report = summarize(log)
+    assert report["active_minutes"]["n"] == 0
+    assert report["provenance"]["excluded_active_values"]["invalid_value"] == 1
+
+
 @pytest.mark.parametrize("cutoff", ["0001-01-01", "9999-12-31"])
 def test_cutoff_at_date_limits_is_supported(tmp_path: Path, cutoff: str):
     log = tmp_path / "m.jsonl"

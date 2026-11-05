@@ -103,7 +103,7 @@ def _active_sample(row: dict[str, Any]) -> tuple[float | None, str | None]:
         return None, "invalid_value"
     try:
         minutes = float(value)
-    except (TypeError, ValueError):
+    except (TypeError, ValueError, OverflowError):
         return None, "invalid_value"
     if not math.isfinite(minutes) or minutes < 0:
         return None, "invalid_value"
