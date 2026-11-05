@@ -1,0 +1,19 @@
+{
+  "schema_version": "1",
+  "site": "lucas-albers-lz4/fwlive core/fwlive-log.js:isFirewallEvent NON_FIREWALL_PREFIX.test after normalizeNetfilterMessage and classifyTrim",
+  "guarantee": "If the post-normalize, post-trim message matches NON_FIREWALL_PREFIX (/i, no /u; start-anchored CLASSIFY_SPEC daemon name followed by end or a code unit outside ASCII alnum, underscore, and hyphen), isFirewallEvent returns false and the line is excluded from the firewall-event set before evaluateClassifySpec. A non-match does not mean the line is a firewall event. This record does not claim raw-log correspondence, DOM safety, shell engine equivalence, or as-written Unicode case-folding, and it does not register a harness property.",
+  "input_source": "logd records from ubus log.read in rpcd fetch_firewall_logs; the haystack is entry.msg after normalizeNetfilterMessage (one ASCII space before a glued CLASSIFY_SPEC glue key) and classifyTrim (strip space, tab, LF, CR, NBSP). LuCI sessions never receive log.read. The prefix vocabulary is trusted CLASSIFY_SPEC; the string is not.",
+  "trust": "untrusted-input",
+  "declared_domain": "Finite JavaScript UTF-16 code-unit sequences supplied to the guard, including NUL and isolated surrogates. Empty msg is a separate early-return, not this regex. No ASCII-only or length restriction exists at this consumer. Shell awk non_fw_prefix is a generated parity mirror, not the theorem domain. Pin: fwlive origin/master 6b1b1f8e4342f675ed04a137998b95a7b7e93e3e.",
+  "provenance": "agent_derived",
+  "adoption": {
+    "status": "approved",
+    "authority": "direct_user_approval",
+    "approved_on": "2026-11-05",
+    "rationale": "Maintainer selected issue #677 option A and then asked to land this exact call-path contract. Source shows the live-view filter consumes the prefix-guard boolean as an early-out on mixed syslog (kernel nf_log plus local daemons). Trust class is the logd msg haystack.",
+    "evidence": [
+      "fwlive origin/master 6b1b1f8e4342f675ed04a137998b95a7b7e93e3e: core/fwlive-log.js CLASSIFY_SPEC, normalizeNetfilterMessage, classifyTrim, isFirewallEvent, filterLogEntries, statsLogEntries; rpcd fetch_firewall_logs ubus log read; generated awk non_fw_prefix",
+      "regexproof issue #677 option A maintainer decision and call-path determination comments (2026-11-05)"
+    ]
+  }
+}

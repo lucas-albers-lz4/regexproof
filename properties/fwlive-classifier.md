@@ -2,7 +2,13 @@
 
 Source: `lucas-albers-lz4/fwlive` umbrella issue #120 (2026-08). Target: the
 LuCI firewall-log classifier (`core/fwlive-log.js` → generated `log.js` +
-shell classifier). These are **ECMA (JS) regexes** on untrusted log input.
+shell classifier). These are **ECMA (JS) regexes** on untrusted log input. The adopted
+prefix-guard contract is
+[`fwlive-non-firewall-prefix-contract.json`](fwlive-non-firewall-prefix-contract.json)
+([#677](https://github.com/lucas-albers-lz4/regexproof/issues/677) option A):
+the first theorem boundary is the post-normalize, post-`classifyTrim`
+string, trust class `untrusted-input`. The record does not register a
+harness property or count a solver result.
 
 ## Why JS patterns matter here
 
