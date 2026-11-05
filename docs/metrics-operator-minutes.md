@@ -40,8 +40,37 @@ survivors only. Deterministic `auto_nogo` walks are **not** survivors — do
 not start a stopwatch on them. The unattended drain is
 `python3 scripts/batch-run.py --limit N` (hashed `batch/manifest.json`,
 resume on `(manifest_digest, url, pin)`). `batch_state.projection()["clone_ms_p95"]`
-is the Phase-2 clone-time evidence Wave 4 (#563) is waiting on; do not
-activate that trigger until a real drain has populated it.
+is a clone-time metric and must not be treated as walk or end-to-end probe
+time for Wave 4 (#563).
+
+The batch state also records optional monotonic timing fields on new terminal
+probe rows: `probe_ms` (from item start until just before the terminal outcome
+is recorded, excluding final cleanup), `walk_ms` (the streamed filesystem
+traversal), and `inventory_ms` (the full `build_draft` inventory/extraction
+pass, including classification). Completed walks pair these with
+`files_walked`, plus explicit `walk_completed` and `inventory_completed` flags.
+Final `outcome` does not determine stage completion: an error after a completed
+walk/inventory still contributes a valid stage sample. `0` files is a measured
+empty walk, while `null` means that count was unavailable. `clone_ms` is retained unchanged as the legacy field;
+it is separate from these timings, and none of these values should be inferred
+from one another.
+Pre-instrumentation rows remain valid and contribute no timing sample. A retry
+replaces the keyed row, so an incomplete/retried attempt is not counted twice.
+An incomplete fold remains retryable and does not become a completed state row;
+crashed or otherwise incomplete attempts are not included in the state summary.
+
+`python3 scripts/pipeline-status.py --json` exposes stage-completion-based
+timings, including a `files_walked > 10000` cohort with paired end-to-end probe,
+walk, and inventory timings when both stages completed. Probe durations are
+also grouped by final outcome, so terminal errors remain visible without
+mislabeling stage completion.
+Timing p50 is the median; p95 uses the nearest-rank
+observation and includes `n` so small samples remain visible. The plain status
+report labels these as monotonic timings, separate from `clone_ms`. These
+summaries are observations only: they do not decide whether p95 “binds,” because
+no latency threshold is configured, and they do not activate parallel walk.
+The #563 decision still requires an explicit binding threshold and enough
+large-repository samples to make its p95 meaningful.
 
 ## Conversion-site review clock
 

@@ -156,6 +156,103 @@ def test_record_and_projection(tmp_path):
     assert "survivor_rate" not in proj
 
 
+def test_timing_projection_separates_clone_and_handles_zero_and_large_walks(tmp_path):
+    p = _state(tmp_path)
+    # Legacy row: clone only, with no new timing fields.
+    batch_state.record_outcome(
+        "d1", "https://x/legacy", "a" * 40, "needs_human",
+        extra={"clone_ms": 900}, path=p,
+    )
+    batch_state.record_outcome(
+        "d1", "https://x/large", "b" * 40, "auto_nogo",
+        extra={
+            "clone_ms": 100,
+            "probe_ms": 500,
+            "walk_ms": 0,
+            "inventory_ms": 400,
+            "files_walked": 10_001,
+            "walk_completed": True,
+            "inventory_completed": True,
+        },
+        path=p,
+    )
+    batch_state.record_outcome(
+        "d1", "https://x/empty", "c" * 40, "error",
+        extra={
+            "probe_ms": 50,
+            "walk_ms": 0,
+            "inventory_ms": None,
+            "files_walked": 0,
+            "walk_completed": True,
+            "inventory_completed": False,
+        },
+        path=p,
+    )
+    batch_state.record_outcome(
+        "d1", "https://x/inventory-error", "d" * 40, "error",
+        extra={
+            "probe_ms": 900,
+            "walk_ms": 30,
+            "inventory_ms": None,
+            "files_walked": 20_001,
+            "walk_completed": True,
+            "inventory_completed": False,
+        },
+        path=p,
+    )
+
+    proj = batch_state.projection(path=p)
+    timing = proj["timings"]
+    assert proj["clone_ms_p95"] == 900  # legacy projection unchanged
+    assert timing["terminal_probe_by_outcome"]["auto_nogo"] == {"n": 1, "p50_ms": 500, "p95_ms": 500}
+    assert timing["terminal_probe_by_outcome"]["error"] == {"n": 2, "p50_ms": 475, "p95_ms": 900}
+    assert timing["stage_completed"]["walk_ms"] == {"n": 3, "p50_ms": 0, "p95_ms": 30}
+    assert timing["stage_completed"]["inventory_ms"] == {"n": 1, "p50_ms": 400, "p95_ms": 400}
+    large = timing["stage_completed"]["walk_by_files_walked"]
+    assert large["file_count_samples"] == 3
+    assert large["over_10000_file_samples"] == 2
+    assert large["fully_instrumented_over_10000_samples"] == 1
+    paired = large["fully_instrumented_over_10000"]
+    assert paired["probe_ms"] == {"n": 1, "p50_ms": 500, "p95_ms": 500}
+    assert paired["walk_ms"]["n"] == 1  # measured zero is not missing
+    assert paired["inventory_ms"]["n"] == 1
+    assert paired["final_outcomes"] == {"auto_nogo": 1}
+    assert timing["trigger_evaluation"]["status"] == "not_evaluated"
+
+
+def test_retry_begin_resets_optional_timing_fields(tmp_path):
+    p = _state(tmp_path)
+    batch_state.record_outcome(
+        "d1", "https://x/y", "a" * 40, "needs_human",
+        extra={
+            "probe_ms": 123,
+            "files_walked": 10_001,
+            "walk_ms": 20,
+            "walk_completed": True,
+            "inventory_completed": True,
+        },
+        path=p,
+    )
+    batch_state.begin_item("d1", "https://x/y", "a" * 40, path=p)
+    row = next(iter(batch_state.load_state(path=p)["rows"].values()))
+    assert row["completed_at"] == ""
+    assert "probe_ms" not in row
+    assert "files_walked" not in row
+    assert "walk_completed" not in row
+    assert "inventory_completed" not in row
+    proj = batch_state.projection(path=p)
+    assert proj["timings"]["stage_completed"]["walk_ms"]["n"] == 0
+
+
+def test_legacy_state_rows_without_new_timings_still_project(tmp_path):
+    p = _state(tmp_path)
+    batch_state.record_outcome("d1", "https://x/y", "a" * 40, "ok", path=p)
+    proj = batch_state.projection(path=p)
+    assert proj["clone_ms_p95"] is None
+    assert proj["timings"]["stage_completed"]["walk_ms"]["n"] == 0
+    assert proj["timings"]["stage_completed"]["walk_by_files_walked"]["file_count_samples"] == 0
+
+
 def test_keyed_rows_no_duplicates(tmp_path):
     """Luna r1 #11: keyed state — recording the same (digest, url, pin)
     twice must UPSERT, not append."""
@@ -350,6 +447,175 @@ def test_default_probe_cap_consistent_with_max(tmp_path):
     row = next(iter(st["rows"].values()))
     assert row["outcome"] == "error"
     assert "empty worktree" in str(row.get("error") or "")
+    assert isinstance(row.get("probe_ms"), int) and row["probe_ms"] >= 0
+    assert isinstance(row.get("walk_ms"), int) and row["walk_ms"] >= 0
+    assert isinstance(row.get("inventory_ms"), int) and row["inventory_ms"] >= 0
+    assert row.get("files_walked") == 0  # measured empty walk, distinct from unavailable
+    assert row.get("walk_completed") is True
+    assert row.get("inventory_completed") is True
+    timings = bs.projection(path=tmp_path / "state.json")["timings"]
+    assert timings["stage_completed"]["walk_ms"]["n"] == 1
+    assert timings["stage_completed"]["inventory_ms"]["n"] == 1
+    assert timings["terminal_probe_by_outcome"]["error"]["n"] == 1
+
+
+def test_probe_records_timing_for_terminal_disk_admission_failure(tmp_path):
+    import importlib.util
+    from unittest import mock
+    from regexproof.mine import disk_admission
+
+    root = pathlib.Path(__file__).resolve().parent.parent
+    spec = importlib.util.spec_from_file_location("bp_disk_fail", root / "scripts" / "batch-probe.py")
+    assert spec is not None and spec.loader is not None
+    batch_probe = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(batch_probe)
+    state = tmp_path / "state.json"
+    with mock.patch.object(disk_admission, "reserve", return_value=False):
+        rc = batch_probe.main([  # type: ignore[attr-defined]
+            "--url", "https://github.com/openwrt/packages",
+            "--pin", "a" * 40,
+            "--state", str(state),
+        ])
+    assert rc == 2
+    row = next(iter(batch_state.load_state(path=state)["rows"].values()))
+    assert row["outcome"] == "disk_budget"
+    assert isinstance(row.get("probe_ms"), int) and row["probe_ms"] >= 0
+    assert row.get("walk_ms") is None
+    assert row.get("inventory_ms") is None
+    assert row.get("walk_completed") is False
+    assert row.get("inventory_completed") is False
+    assert batch_state.projection(path=state)["timings"]["stage_completed"]["walk_ms"]["n"] == 0
+    assert batch_state.projection(path=state)["timings"]["terminal_probe_by_outcome"]["disk_budget"]["n"] == 1
+    assert row.get("files_walked") is None
+
+
+def test_probe_timing_uses_isolated_monotonic_stage_intervals(tmp_path):
+    """The recorded values must match each actual elapsed interval.
+
+    A controlled clock makes walk, inventory, and whole-probe timing
+    distinguishable. The 10,001-file result also exercises the large-repo
+    cohort using timings emitted by batch-probe itself.
+    """
+    import importlib.util
+    import time as real_time
+    from types import SimpleNamespace
+    from unittest import mock
+
+    from regexproof.admission import clone_cache
+    from regexproof.admission import draft as draft_module
+    from regexproof.admission import clone as clone_module
+    from regexproof.mine import disk_admission, lease_registry
+    from regexproof.mine import batch_nogo
+
+    root = pathlib.Path(__file__).resolve().parent.parent
+    spec = importlib.util.spec_from_file_location(
+        "bp_clocked", root / "scripts" / "batch-probe.py"
+    )
+    assert spec is not None and spec.loader is not None
+    batch_probe = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(batch_probe)
+
+    class Clock:
+        now = 10.0
+
+        def monotonic(self):
+            return self.now
+
+        def advance(self, seconds):
+            self.now += seconds
+
+    clock = Clock()
+    fake_time = SimpleNamespace(
+        monotonic=clock.monotonic,
+        strftime=real_time.strftime,
+        gmtime=real_time.gmtime,
+    )
+    cache_dir = tmp_path / "cache"
+    cache_dir.mkdir()
+    worktree = tmp_path / "worktree"
+    worktree.mkdir()
+    generated = tmp_path / "generated"
+    generated.mkdir()
+    ledger = tmp_path / "candidate-ledger.json"
+    state = tmp_path / "state.json"
+
+    def walk(*args, **kwargs):
+        clock.advance(0.125)
+        return 10_001
+
+    def inventory(*args, **kwargs):
+        clock.advance(0.375)
+        return {
+            "schema_version": "1",
+            "corpus": "demo",
+            "probe": {"regex_sites": 7},
+            "fields_remaining": [],
+        }
+
+    def fold(*args, **kwargs):
+        clock.advance(0.075)
+        return "needs_human", None, "review required"
+
+    def cleanup(*args, **kwargs):
+        clock.advance(10)
+
+    entry = {"cache_hit": True, "dir": str(cache_dir), "owner_pid": 1}
+    with (
+        mock.patch.object(batch_probe, "time", fake_time),
+        mock.patch.object(disk_admission, "reserve", return_value=True),
+        mock.patch.object(clone_cache, "cache_acquire", return_value=entry),
+        mock.patch.object(clone_cache, "worktree_for", return_value=worktree),
+        mock.patch.object(clone_cache, "worktree_remove", side_effect=cleanup),
+        mock.patch.object(clone_cache, "release", side_effect=cleanup),
+        mock.patch.object(lease_registry, "renew", return_value=entry),
+        mock.patch.object(disk_admission, "release", side_effect=cleanup),
+        mock.patch.object(clone_module, "enforce_disk_budget", return_value=None),
+        mock.patch.object(batch_probe, "_walk_and_heartbeat", side_effect=walk),
+        mock.patch.object(draft_module, "build_draft", side_effect=inventory),
+        mock.patch.object(batch_nogo, "fold_auto_nogo", side_effect=fold),
+    ):
+        rc = batch_probe.main(
+            [
+                "--url",
+                "https://example.test/repo",
+                "--pin",
+                "a" * 40,
+                "--corpus",
+                "demo",
+                "--state",
+                str(state),
+                "--walk-root",
+                str(tmp_path / "staged"),
+                "--generated",
+                str(generated),
+                "--ledger",
+                str(ledger),
+            ]
+        )
+
+    assert rc == 0
+    row = next(iter(batch_state.load_state(path=state)["rows"].values()))
+    assert row["outcome"] == "needs_human"
+    assert row["walk_ms"] == 125
+    assert row["inventory_ms"] == 375
+    assert row["probe_ms"] == 575  # walk + inventory + terminal fold
+    assert row["files_walked"] == 10_001
+    assert row["walk_completed"] is True
+    assert row["inventory_completed"] is True
+    assert clock.now == 40.575  # cleanup occurs after the terminal timing is recorded
+
+    timing = batch_state.projection(path=state)["timings"]
+    assert timing["terminal_probe_by_outcome"]["needs_human"] == {
+        "n": 1,
+        "p50_ms": 575,
+        "p95_ms": 575,
+    }
+    large = timing["stage_completed"]["walk_by_files_walked"]
+    assert large["over_10000_file_samples"] == 1
+    assert large["fully_instrumented_over_10000_samples"] == 1
+    assert large["fully_instrumented_over_10000"]["probe_ms"]["p95_ms"] == 575
+    assert large["fully_instrumented_over_10000"]["walk_ms"]["p95_ms"] == 125
+    assert large["fully_instrumented_over_10000"]["inventory_ms"]["p95_ms"] == 375
 
 
 def test_lease_renew_extends_expiry(tmp_path):

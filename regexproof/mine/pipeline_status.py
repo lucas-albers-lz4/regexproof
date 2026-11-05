@@ -213,6 +213,41 @@ def render_status(snap: dict[str, Any]) -> str:
         f"needs_human backlog: {snap.get('needs_human_backlog')}",
         f"NO-GO dominant reason: {snap.get('nogo_dominant') or 'n/a'}",
     ]
+    probe = snap.get("probe_projection") or {}
+    timings = probe.get("timings") or {}
+    stages = timings.get("stage_completed") or {}
+    walk = stages.get("walk_ms") or {}
+    inventory = stages.get("inventory_ms") or {}
+    large = stages.get("walk_by_files_walked") or {}
+    paired = large.get("fully_instrumented_over_10000") or {}
+    large_probe = paired.get("probe_ms") or {}
+    large_walk = paired.get("walk_ms") or {}
+    large_inventory = paired.get("inventory_ms") or {}
+    outcome_probes = timings.get("terminal_probe_by_outcome") or {}
+    lines.append(
+        "completed-stage timings (monotonic ms; separate from clone_ms): "
+        f"walk p95={walk.get('p95_ms')} (n={walk.get('n', 0)}), "
+        f"inventory p95={inventory.get('p95_ms')} "
+        f"(n={inventory.get('n', 0)}); >10k walked="
+        f"{large.get('over_10000_file_samples', 0)}, fully measured="
+        f"{large.get('fully_instrumented_over_10000_samples', 0)}, "
+        f"probe p95={large_probe.get('p95_ms')} (n={large_probe.get('n', 0)}), "
+        f"walk p95={large_walk.get('p95_ms')} (n={large_walk.get('n', 0)}), "
+        f"inventory p95={large_inventory.get('p95_ms')} "
+        f"(n={large_inventory.get('n', 0)})"
+    )
+    by_outcome = ", ".join(
+        f"{outcome}:n={record.get('n', 0)},p95={record.get('p95_ms')}"
+        for outcome, record in outcome_probes.items()
+    ) or "none"
+    lines.append(f"terminal probe_ms by final outcome: {by_outcome}")
+    outcomes = paired.get("final_outcomes") or {}
+    lines.append(f">10k fully measured final outcomes: {outcomes or 'none'}")
+    trigger = timings.get("trigger_evaluation") or {}
+    lines.append(
+        f"parallel-walk trigger: {trigger.get('status', 'not_evaluated')} "
+        f"({trigger.get('reason', 'no timing assessment')})"
+    )
     return "\n".join(lines) + "\n"
 
 
