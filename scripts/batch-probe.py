@@ -159,6 +159,29 @@ def main(argv: list[str] | None = None) -> int:
     t0 = time.monotonic()
     entry = None
     wt = None
+    walk_ms = None
+    inventory_ms = None
+    files_walked = None
+    walk_completed = False
+    inventory_completed = False
+
+    def _timing_extra() -> dict[str, int | None]:
+        """Monotonic timings; probe_ms stops before outcome write and cleanup."""
+        return {
+            "probe_ms": max(0, round((time.monotonic() - t0) * 1000)),
+            "walk_ms": walk_ms,
+            "inventory_ms": inventory_ms,
+            "files_walked": files_walked,
+            "walk_completed": walk_completed,
+            "inventory_completed": inventory_completed,
+        }
+
+    def _record_timed(outcome: str, extra: dict | None = None) -> None:
+        fields = dict(extra or {})
+        # Keep the established fields intact; new timing fields are additive.
+        fields.update(_timing_extra())
+        _record(digest, args.url, args.pin, outcome, fields, args.state)
+
     # Begin the keyed state item (resume-safe: started_at set, completed_at
     # filled by record_outcome).
     batch_state.begin_item(digest, args.url, args.pin, path=args.state)
@@ -170,10 +193,9 @@ def main(argv: list[str] | None = None) -> int:
         path=None if args.state is None else args.state.with_name("admission.json"),
     )
     if not admitted:
-        _record(digest, args.url, args.pin, "disk_budget",
-                {"corpus": args.corpus, "worker_count": args.worker_count,
-                 "error": "disk admission refused (W=0 or budget exhausted)"},
-                args.state)
+        _record_timed("disk_budget",
+                      {"corpus": args.corpus, "worker_count": args.worker_count,
+                       "error": "disk admission refused (W=0 or budget exhausted)"})
         print(f"disk_budget: admission refused W={args.worker_count} "
               f"cap={probe_cap}MB max={args.max_disk_mb}MB")
         return 2
@@ -197,20 +219,17 @@ def main(argv: list[str] | None = None) -> int:
                 outcome = "disk_budget"
             else:
                 outcome = "error"
-            _record(digest, args.url, args.pin, outcome,
-                    {"corpus": args.corpus, "error": msg[:200]}, args.state)
+            _record_timed(outcome, {"corpus": args.corpus, "error": msg[:200]})
             print(f"{outcome}: {args.url}@{args.pin[:12]} ({msg[:120]})")
             return 2 if outcome in ("lease_reject", "disk_budget", "cache_miss_reprobe") else 3
         except CloneError as exc:
             # Clone/fetch failures surface as CloneError (Luna r1 #3: they
             # were previously uncaught → no state row, traceback).
-            _record(digest, args.url, args.pin, "clone_timeout",
-                    {"corpus": args.corpus, "error": str(exc)[:200]}, args.state)
+            _record_timed("clone_timeout", {"corpus": args.corpus, "error": str(exc)[:200]})
             print(f"clone_timeout: {args.url}@{args.pin[:12]} ({str(exc)[:120]})")
             return 3
         except subprocess.TimeoutExpired as exc:
-            _record(digest, args.url, args.pin, "clone_timeout",
-                    {"corpus": args.corpus, "error": str(exc)[:200]}, args.state)
+            _record_timed("clone_timeout", {"corpus": args.corpus, "error": str(exc)[:200]})
             print(f"clone_timeout: {args.url}@{args.pin[:12]} (timeout)")
             return 3
 
@@ -240,8 +259,7 @@ def main(argv: list[str] | None = None) -> int:
             enforce_disk_budget(wt, args.max_disk_mb)
         except (CloneError, SystemExit, subprocess.TimeoutExpired) as exc:
             # Worktree timeouts were uncaught (Luna r2 #3) — record + exit.
-            _record(digest, args.url, args.pin, "disk_budget",
-                    {"corpus": args.corpus, "error": str(exc)[:200]}, args.state)
+            _record_timed("disk_budget", {"corpus": args.corpus, "error": str(exc)[:200]})
             print(f"disk_budget: {str(exc)[:160]}")
             return 2
 
@@ -250,11 +268,17 @@ def main(argv: list[str] | None = None) -> int:
         # Then WALK the worktree (with the lease heartbeat) and write a
         # staged probe draft (Luna r1 #2: a probe that only creates a
         # worktree is not a probe).
-        walked = _walk_and_heartbeat(
-            wt,
-            url=args.url, pin=args.pin, owner_pid=owner,
-            registry_path=registry_path,
-        )
+        walk_started = time.monotonic()
+        try:
+            walked = _walk_and_heartbeat(
+                wt,
+                url=args.url, pin=args.pin, owner_pid=owner,
+                registry_path=registry_path,
+            )
+            files_walked = walked
+            walk_completed = True
+        finally:
+            walk_ms = max(0, round((time.monotonic() - walk_started) * 1000))
         staged_root = args.walk_root or (ROOT / "properties" / "staged_probes")
         staged_root.mkdir(parents=True, exist_ok=True)
         import hashlib
@@ -268,6 +292,9 @@ def main(argv: list[str] | None = None) -> int:
             "cache_hit": is_hit,
             "clone_ms": clone_ms,
             "files_walked": walked,
+            "walk_ms": walk_ms,
+            "walk_completed": walk_completed,
+            "inventory_completed": inventory_completed,
             "probe_fetch_bytes": probe_fetch_bytes,
             "at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         }
@@ -290,14 +317,21 @@ def main(argv: list[str] | None = None) -> int:
                 args.url, args.pin, owner_pid=owner, path=registry_path,
             )
 
-        inventory = build_draft(
-            wt,
-            pin=args.pin,
-            pin_probed=args.pin,
-            repo_name=args.corpus or "probe",
-            candidate_url=args.url,
-            heartbeat=_inventory_heartbeat,
-        )
+        inventory_started = time.monotonic()
+        try:
+            inventory = build_draft(
+                wt,
+                pin=args.pin,
+                pin_probed=args.pin,
+                repo_name=args.corpus or "probe",
+                candidate_url=args.url,
+                heartbeat=_inventory_heartbeat,
+            )
+            inventory_completed = True
+        finally:
+            inventory_ms = max(0, round((time.monotonic() - inventory_started) * 1000))
+        draft["inventory_ms"] = inventory_ms
+        draft["inventory_completed"] = inventory_completed
         draft.update(
             {
                 "draft": True,
@@ -319,15 +353,13 @@ def main(argv: list[str] | None = None) -> int:
         # --cache-root nested worktrees once produced files_walked=0 with a
         # real checkout elsewhere).
         if walked <= 0:
-            _record(
-                digest, args.url, args.pin, "error",
+            _record_timed(
+                "error",
                 {
                     "corpus": args.corpus,
-                    "files_walked": walked,
                     "draft": str(draft_path),
                     "error": "empty worktree walk — refuse auto-NO-GO",
                 },
-                args.state,
             )
             print(f"error: {args.url}@{args.pin[:12]} empty worktree walk")
             return 3
@@ -339,6 +371,8 @@ def main(argv: list[str] | None = None) -> int:
                 repo_root=ROOT,
             )
         except IncompleteFoldError as exc:
+            # Do not complete the keyed state row here: batch-run treats an
+            # empty completed_at as retryable. A retry resets attempt timings.
             print(f"incomplete: {args.url}@{args.pin[:12]} ({exc})")
             return 3
 
@@ -354,13 +388,17 @@ def main(argv: list[str] | None = None) -> int:
             "lifecycle_bytes": probe_fetch_bytes,  # probe_fetch only
             "clone_ms": clone_ms,
             "files_walked": walked,
+            "walk_ms": walk_ms,
+            "inventory_ms": inventory_ms,
+            "walk_completed": walk_completed,
+            "inventory_completed": inventory_completed,
             "regex_sites": int((draft.get("probe") or {}).get("regex_sites") or 0),
             "draft": str(draft_path),
             "note": note[:200],
         }
         if decision_path is not None:
             extra["decision"] = str(decision_path)
-        _record(digest, args.url, args.pin, outcome, extra, args.state)
+        _record_timed(outcome, extra)
         print(
             f"{outcome}: {args.url}@{args.pin[:12]} hit={is_hit} "
             f"sites={extra['regex_sites']} walk={walked} clone_ms={clone_ms}"

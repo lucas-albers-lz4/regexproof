@@ -128,6 +128,11 @@ def test_pipeline_status_snapshot(tmp_path: Path):
     text = render_status(snap)
     assert "latest mine-day drain: 2" in text
     assert "backlog weeks: 4.0" in text
+    assert "completed-stage timings (monotonic ms; separate from clone_ms)" in text
+    assert "terminal probe_ms by final outcome: none" in text
+    assert ">10k walked=0, fully measured=0" in text
+    assert "probe p95=None (n=0), walk p95=None (n=0)" in text
+    assert "parallel-walk trigger: not_evaluated" in text
     weekly = render_weekly(snap)
     assert "What changed this week" in weekly
     assert "below-scale=1" in weekly

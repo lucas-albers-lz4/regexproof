@@ -213,6 +213,34 @@ def _rebuild_counts(reg: dict[str, Any]) -> None:
     reg["manifest_digests"] = {d: {"count": counts[d]} for d in counts}
 
 
+def _timing_summary(rows: list[dict[str, Any]], field: str) -> dict[str, Any]:
+    """Summarize present, finite, nonnegative millisecond observations.
+
+    Zero is a measured value. A missing or null field is an unavailable
+    observation, which is common for terminal failures before a stage starts.
+    """
+    import math
+    import statistics
+
+    values: list[int | float] = []
+    for row in rows:
+        value = row.get(field)
+        if isinstance(value, bool) or not isinstance(value, (int, float)):
+            continue
+        if not math.isfinite(value) or value < 0:
+            continue
+        values.append(value)
+    values.sort()
+    if not values:
+        return {"n": 0, "p50_ms": None, "p95_ms": None}
+    p95_index = max(0, math.ceil(0.95 * len(values)) - 1)
+    return {
+        "n": len(values),
+        "p50_ms": statistics.median(values),
+        "p95_ms": values[p95_index],
+    }
+
+
 def _write(reg: dict[str, Any], path: pathlib.Path | None = None) -> None:
     """Crash-safe install (Luna r1 #12): write temp, fsync, then atomically
     replace the state. The PREVIOUS verified state becomes .bak only after
@@ -291,6 +319,30 @@ def projection(path: pathlib.Path | None = None) -> dict[str, Any]:
     from regexproof.mine.batch_nogo import WALK_COMPLETED
 
     walked_ok = [r for r in rows if r.get("outcome") in WALK_COMPLETED]
+    walk_completed_rows = [r for r in rows if r.get("walk_completed") is True]
+    inventory_completed_rows = [r for r in rows if r.get("inventory_completed") is True]
+    paired_walk_rows = [
+        r for r in walk_completed_rows
+        if isinstance(r.get("files_walked"), int)
+        and not isinstance(r.get("files_walked"), bool)
+        and r["files_walked"] >= 0
+    ]
+    large_walk_rows = [r for r in paired_walk_rows if r["files_walked"] > 10_000]
+    large_fully_instrumented_rows = [
+        r for r in large_walk_rows if r.get("inventory_completed") is True
+    ]
+    terminal_probe_rows = [r for r in rows if r.get("probe_ms") is not None]
+    terminal_probe_by_outcome = {
+        outcome: _timing_summary(
+            [r for r in terminal_probe_rows if r.get("outcome") == outcome],
+            "probe_ms",
+        )
+        for outcome in sorted({str(r.get("outcome") or "") for r in terminal_probe_rows})
+    }
+    large_outcome_counts: dict[str, int] = {}
+    for row in large_fully_instrumented_rows:
+        outcome = str(row.get("outcome") or "")
+        large_outcome_counts[outcome] = large_outcome_counts.get(outcome, 0) + 1
     return {
         "rows": len(rows),
         "cache_hits": len(hits),
@@ -299,5 +351,27 @@ def projection(path: pathlib.Path | None = None) -> dict[str, Any]:
         "lifecycle_bytes": lifecycle,
         "clone_ms_p50": p50,
         "clone_ms_p95": p95,
+        "timings": {
+            "terminal_probe_by_outcome": terminal_probe_by_outcome,
+            "stage_completed": {
+                "walk_ms": _timing_summary(walk_completed_rows, "walk_ms"),
+                "inventory_ms": _timing_summary(inventory_completed_rows, "inventory_ms"),
+                "walk_by_files_walked": {
+                    "file_count_samples": len(paired_walk_rows),
+                    "over_10000_file_samples": len(large_walk_rows),
+                    "fully_instrumented_over_10000_samples": len(large_fully_instrumented_rows),
+                    "fully_instrumented_over_10000": {
+                        "probe_ms": _timing_summary(large_fully_instrumented_rows, "probe_ms"),
+                        "walk_ms": _timing_summary(large_fully_instrumented_rows, "walk_ms"),
+                        "inventory_ms": _timing_summary(large_fully_instrumented_rows, "inventory_ms"),
+                        "final_outcomes": large_outcome_counts,
+                    },
+                },
+            },
+            "trigger_evaluation": {
+                "status": "not_evaluated",
+                "reason": "Timings do not activate parallel walk; no binding threshold is configured.",
+            },
+        },
         "probe_success_rate": (len(walked_ok) / len(rows)) if rows else None,
     }
