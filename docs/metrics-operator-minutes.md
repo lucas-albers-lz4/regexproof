@@ -30,14 +30,17 @@ timeout must not dominate).
 
 Seed ≥5 rows **before Wave 5 unattended scale** (Phase 2 cache/batch already
 landed; the unattended manifest loop is Wave 5). Seed rows may have
-`active_minutes: null` when only a calendar `decision_date` exists; they still
-count toward the ≥5-row floor so pre/post Wave 5 can be compared once
-stopwatch rows exist.
+`active_minutes: null` when only a calendar `decision_date` exists; they count
+toward the historical row-count floor only. They are not active-time samples,
+and the five seed rows alone cannot establish a pre-Wave-5 active-time median.
 
-Post Wave 5: same jsonl, `source: "stopwatch"`. Speedup =
+Use the same jsonl for genuine measurements with `source: "stopwatch"`. A
+pre/post active-time ratio is
 `median(active_minutes)_pre / median(active_minutes)_post` on human-reviewed
-survivors only. Deterministic `auto_nogo` walks are **not** survivors — do
-not start a stopwatch on them. The unattended drain is
+survivors only, conditional on a supplied cutoff supported by rollout evidence.
+The program does not infer rollout start from the implementation merge date.
+Deterministic `auto_nogo` walks are **not** survivors — do not start a stopwatch
+on them. The unattended drain is
 `python3 scripts/batch-run.py --limit N` (hashed `batch/manifest.json`,
 resume on `(manifest_digest, url, pin)`). `batch_state.projection()["clone_ms_p95"]`
 is a clone-time metric and must not be treated as walk or end-to-end probe
@@ -71,6 +74,28 @@ summaries are observations only: they do not decide whether p95 “binds,” bec
 no latency threshold is configured, and they do not activate parallel walk.
 The #563 decision still requires an explicit binding threshold and enough
 large-repository samples to make its p95 meaningful.
+
+Run `python3 scripts/operator-minutes-report.py` for a provenance-aware summary.
+It treats only finite, nonnegative `active_minutes` from `source: "stopwatch"`
+rows with a human-survivor decision (`go` or `triage-trial`) as measured
+samples. By default it leaves every row's period unclassified and reports no
+pre/post comparison. It does not infer when unattended scale actually started
+from the Wave 5 merge date.
+
+To compare periods, an operator must supply both an evidence-backed cutoff date
+and a reference to that evidence, for example:
+
+```text
+python3 scripts/operator-minutes-report.py \
+  --rollout-cutoff-date YYYY-MM-DD \
+  --rollout-cutoff-evidence <run record or other rollout evidence>
+```
+
+This cutoff is an explicit operator assumption, not a date inferred by the
+program. Since `decision_date` is day-only, the cutoff date and both adjacent
+dates are unclassified. A pre/post ratio is emitted only when both periods have
+valid stopwatch survivor samples. This cannot create the missing pre-Wave-5
+active-time baseline: the current seed rows have null active times.
 
 ## Conversion-site review clock
 
