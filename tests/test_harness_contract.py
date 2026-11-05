@@ -14,6 +14,21 @@ from regexproof.schemas import load_schema
 import regexproof.harness.properties  # noqa: F401
 
 ROOT = Path(__file__).resolve().parents[1]
+FWLIVE_PREFIX_CONTRACT = ROOT / "properties/fwlive-non-firewall-prefix-contract.json"
+
+
+def test_fwlive_prefix_guard_contract_is_adopted():
+    contract = json.loads(FWLIVE_PREFIX_CONTRACT.read_text(encoding="utf-8"))
+    validate(
+        contract,
+        load_schema("property_contract.schema.json"),
+        format_checker=FormatChecker(),
+    )
+    assert contract_is_adopted(contract)
+    assert contract["trust"] == "untrusted-input"
+    assert contract["adoption"]["authority"] == "standing_user_delegation"
+    assert "NON_FIREWALL_PREFIX" in contract["site"]
+    assert "evaluateClassifySpec" in contract["guarantee"]
 
 
 def test_registry_properties_are_product_reportable():
