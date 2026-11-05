@@ -228,6 +228,47 @@ def test_zero_post_median_does_not_emit_infinite_speedup(tmp_path: Path):
     assert report["pre_post_active_ratio"]["status"] == "undefined_zero_post_median"
 
 
+def test_large_finite_samples_produce_strict_json(tmp_path: Path):
+    log = tmp_path / "m.jsonl"
+    rows = [
+        {"source": "stopwatch", "decision": "go", "decision_date": "2026-08-20",
+         "active_minutes": 1e308, "wall_minutes": 1e308},
+        {"source": "stopwatch", "decision": "go", "decision_date": "2026-08-20",
+         "active_minutes": 1e308, "wall_minutes": 1e308},
+        {"source": "stopwatch", "decision": "go", "decision_date": "2026-08-27",
+         "active_minutes": 5e-324},
+    ]
+    log.write_text("\n".join(json.dumps(row) for row in rows) + "\n")
+    report = summarize(log, rollout_cutoff_date="2026-08-24", rollout_cutoff_evidence="fixture")
+    assert report["periods"]["pre_cutoff"]["active_minutes"]["median"] == 1e308
+    assert report["wall_minutes"]["median"] == 1e308
+    assert report["pre_post_active_ratio"]["status"] == "undefined_ratio_overflow"
+    assert report["pre_post_active_ratio"]["ratio"] is None
+    json.dumps(report, allow_nan=False)
+
+
+def test_positive_ratio_underflow_is_not_reported_as_zero(tmp_path: Path):
+    log = tmp_path / "m.jsonl"
+    rows = [
+        {"source": "stopwatch", "decision": "go", "decision_date": "2026-08-20",
+         "active_minutes": 5e-324},
+        {"source": "stopwatch", "decision": "go", "decision_date": "2026-08-27",
+         "active_minutes": 1e308},
+    ]
+    log.write_text("\n".join(json.dumps(row) for row in rows) + "\n")
+    report = summarize(log, rollout_cutoff_date="2026-08-24", rollout_cutoff_evidence="fixture")
+    assert report["pre_post_active_ratio"]["status"] == "undefined_ratio_underflow"
+    assert report["pre_post_active_ratio"]["ratio"] is None
+
+
+@pytest.mark.parametrize("cutoff", ["0001-01-01", "9999-12-31"])
+def test_cutoff_at_date_limits_is_supported(tmp_path: Path, cutoff: str):
+    log = tmp_path / "m.jsonl"
+    log.write_text(json.dumps({"decision_date": cutoff}) + "\n")
+    report = summarize(log, rollout_cutoff_date=cutoff, rollout_cutoff_evidence="fixture")
+    assert report["periods"]["unclassified"]["records"] == 1
+
+
 def test_non_survivors_and_malformed_active_values_are_excluded(tmp_path: Path):
     log = tmp_path / "m.jsonl"
     rows = [

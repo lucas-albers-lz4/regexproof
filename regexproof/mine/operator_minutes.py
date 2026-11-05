@@ -7,7 +7,7 @@ import math
 import pathlib
 import statistics
 import uuid
-from datetime import date, datetime, timedelta, timezone
+from datetime import date, datetime, timezone
 from typing import Any
 
 LOG_PATH = pathlib.Path(__file__).resolve().parents[2] / "properties" / "generated" / "operator_minutes.jsonl"
@@ -77,8 +77,14 @@ def load_rows(path: pathlib.Path | None = None) -> list[dict[str, Any]]:
 def _median_mean(values: list[float]) -> dict[str, float | None]:
     if not values:
         return {"median": None, "mean": None, "n": 0}
+    ordered = sorted(values)
+    middle = len(ordered) // 2
+    median = ordered[middle]
+    if len(ordered) % 2 == 0:
+        lower = ordered[middle - 1]
+        median = lower + (median - lower) / 2
     return {
-        "median": statistics.median(values),
+        "median": median,
         "mean": statistics.mean(values),
         "n": len(values),
     }
@@ -169,9 +175,9 @@ def summarize(
             continue
         if cutoff is None:
             periods["unclassified"].append(row)
-        elif decision_date < cutoff - timedelta(days=1):
+        elif (decision_date - cutoff).days < -1:
             periods["pre_cutoff"].append(row)
-        elif decision_date > cutoff + timedelta(days=1):
+        elif (decision_date - cutoff).days > 1:
             periods["post_cutoff"].append(row)
         else:
             periods["unclassified"].append(row)
@@ -201,11 +207,25 @@ def summarize(
     pre = period_report["pre_cutoff"]["active_minutes"]
     post = period_report["post_cutoff"]["active_minutes"]
     if pre["n"] and post["n"] and post["median"] != 0:
-        comparison: dict[str, Any] = {
-            "ratio": pre["median"] / post["median"],
-            "status": "measured",
-            "interpretation": "active_time_ratio_conditional_on_operator_cutoff",
-        }
+        ratio = pre["median"] / post["median"]
+        if ratio == 0 and pre["median"] > 0:
+            comparison: dict[str, Any] = {
+                "ratio": None,
+                "status": "undefined_ratio_underflow",
+                "reason": "The measured ratio is below the positive floating-point range.",
+            }
+        elif math.isfinite(ratio):
+            comparison = {
+                "ratio": ratio,
+                "status": "measured",
+                "interpretation": "active_time_ratio_conditional_on_operator_cutoff",
+            }
+        else:
+            comparison = {
+                "ratio": None,
+                "status": "undefined_ratio_overflow",
+                "reason": "The measured ratio exceeds the finite floating-point range.",
+            }
     elif pre["n"] and post["n"]:
         comparison = {
             "ratio": None,
