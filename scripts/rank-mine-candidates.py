@@ -39,7 +39,7 @@ from regexproof.mine.tree import (  # noqa: E402  # ROOT bootstrap above
     materialize_tree_features,
 )
 
-# Opt-in rank filters (operator shortlist). Live mine drain stays score-v1.
+# Opt-in rank filters (operator shortlist). Live mine admit/queue stays score-v1.
 _QUERY_FAMILIES = ("security", "rules", "validators", "testdata", "other")
 _GATE_DECISIONS = ("go", "no-go", "triage-trial")
 
@@ -103,8 +103,8 @@ def main(argv: list[str] | None = None) -> int:
         default=0,
         help=(
             "Max uncached GitHub tree calls. Cached responses do not consume "
-            "the budget; 0 disables fresh probes (score-v2 still joins the "
-            "tracked mine-tree-features.json)."
+            "the budget; 0 disables fresh probes (score-v1.5 and score-v2 "
+            "still join the tracked mine-tree-features.json)."
         ),
     )
     ap.add_argument(
@@ -117,13 +117,13 @@ def main(argv: list[str] | None = None) -> int:
         "--tree-features",
         type=Path,
         default=ROOT / "properties" / "generated" / "mine-tree-features.json",
-        help="Tracked pin-aware tree features used by score-v2.",
+        help="Tracked pin-aware tree features used by score-v1.5 and score-v2.",
     )
     ap.add_argument(
         "--allocator",
         choices=("score-v1", "score-v1.5", "score-v2"),
-        default="score-v1",
-        help="Score allocator (default: score-v1; v1.5 adds the tree overlay).",
+        default="score-v1.5",
+        help="Score allocator (default: score-v1.5 live drain; --allocator score-v1 reproduces v1).",
     )
     ap.add_argument(
         "--deny-list",
@@ -206,7 +206,11 @@ def main(argv: list[str] | None = None) -> int:
     # feature.  Join the decisions (by URL) and attach the decision-time
     # probe + pin (E3 semantics: never the ledger's mined pin).
     decisions_by_url: dict[str, dict[str, Any]] = {}
-    if args.allocator == "score-v2" or not args.skip_gated or args.decision:
+    if (
+        args.allocator in ("score-v1.5", "score-v2")
+        or not args.skip_gated
+        or args.decision
+    ):
         gen = args.generated.expanduser().resolve()
         for path in sorted(gen.glob("*_gate_decision.json")):
             try:
@@ -269,9 +273,10 @@ def main(argv: list[str] | None = None) -> int:
                 c["pin_probed"] = mined
         pool.append(c)
     tree_features = {}
-    if args.allocator == "score-v2" and pool:
-        # score-v2 uses the committed materialized artifact by default. A
-        # caller can still select a writable cache for budgeted live probes.
+    if args.allocator in ("score-v1.5", "score-v2") and pool:
+        # Live v1.5 and opt-in v2 join the committed tree artifact at
+        # budget 0. A caller can still select a writable cache for
+        # budgeted live probes.
         cache_path = args.tree_cache or args.tree_features
         tree_features, _calls = materialize_tree_features(
             _http_session() if args.tree_probe_budget > 0 else None,

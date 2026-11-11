@@ -2,7 +2,7 @@
 
 Fit a small logistic model on the Phase 0 **train** half only. Features are
 pre-probe (ledger + materialized tree). Walked ``regex_sites`` is the label
-source, never a feature. Live drain stays score-v1; this module does not
+source, never a feature. This surrogate is not live_rollout and does not
 roll out score-v2.
 """
 

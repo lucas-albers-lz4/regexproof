@@ -44,7 +44,9 @@ Legacy CLIs `scripts/probe-corpus-admission.py` (single) and
 `scripts/batch-probe.py` (leased batch) still run; they point at
 `python -m regexproof.probe`.
 
-Operator shortlists (stdout only; do not change live mine drain):
+Operator shortlists (stdout only). Default allocator is **score-v1.5**;
+pass `--allocator score-v1` to reproduce historical v1 totals. Daily mine
+admit/queue drain stays v1.
 
 ```bash
 python scripts/rank-mine-candidates.py --limit 10 --exclude-family rules

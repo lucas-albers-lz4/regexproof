@@ -124,8 +124,7 @@ jobs:
           PY
       - name: Install busybox (OW-packages product engine)
         run: |
-          sudo apt-get update
-          sudo apt-get install -y busybox
+          bash scripts/ci-apt-get.sh busybox
           busybox sed --help | head -1
       - name: Named mutation-coverage gate
         run: python scripts/z3-verify.py --check-mutation-coverage
@@ -173,8 +172,7 @@ jobs:
         run: pip install -e ".[dev]"
       - name: Install pinned PCRE2 helper for POSIX shell compilation
         run: |
-          sudo apt-get update
-          sudo apt-get install -y pcre2-utils=10.42-4ubuntu2.1
+          bash scripts/ci-apt-get.sh pcre2-utils=10.42-4ubuntu2.1
           test "$(pcre2grep --version | head -1)" = "pcre2grep version 10.42 2022-12-11"
       - name: Assert toolchain pins
         run: python scripts/ci-assert-toolchain.py --job proof
@@ -235,8 +233,7 @@ jobs:
         run: go build -o go-re2 .
       - name: Install YARA + PCRE2 + busybox (Wave 2 + E2 mirror-fidelity)
         run: |
-          sudo apt-get update
-          sudo apt-get install -y yara pcre2-utils busybox
+          bash scripts/ci-apt-get.sh yara pcre2-utils busybox
           yara -v
           pcre2grep --version | head -1
           busybox sed --help | head -1
@@ -294,8 +291,7 @@ jobs:
         run: go build -o go-re2 .
       - name: Install YARA + PCRE2 + busybox (Wave 2 + E2 mirror-fidelity)
         run: |
-          sudo apt-get update
-          sudo apt-get install -y yara pcre2-utils busybox
+          bash scripts/ci-apt-get.sh yara pcre2-utils busybox
           yara -v
           pcre2grep --version | head -1
           busybox sed --help | head -1
@@ -389,8 +385,7 @@ jobs:
         run: go build -o go-re2 .
       - name: Install YARA + PCRE2 + busybox (Wave 2 + E2 mirror-fidelity)
         run: |
-          sudo apt-get update
-          sudo apt-get install -y yara pcre2-utils busybox
+          bash scripts/ci-apt-get.sh yara pcre2-utils busybox
           yara -v
           pcre2grep --version | head -1
           busybox sed --help | head -1
@@ -440,8 +435,7 @@ jobs:
         run: go build -o go-re2 .
       - name: Install YARA + PCRE2 + busybox (Wave 2 + E2 mirror-fidelity)
         run: |
-          sudo apt-get update
-          sudo apt-get install -y yara pcre2-utils busybox
+          bash scripts/ci-apt-get.sh yara pcre2-utils busybox
           yara -v
           pcre2grep --version | head -1
           busybox sed --help | head -1
@@ -641,8 +635,7 @@ jobs:
         run: go build -o go-re2 .
       - name: Install YARA + PCRE2 + busybox (Wave 2 + E2 mirror-fidelity)
         run: |
-          sudo apt-get update
-          sudo apt-get install -y yara pcre2-utils busybox
+          bash scripts/ci-apt-get.sh yara pcre2-utils busybox
           yara -v
           pcre2grep --version | head -1
           busybox sed --help | head -1
@@ -813,8 +806,7 @@ jobs:
       - name: Install YARA + PCRE2 + busybox
         if: steps.paths.outputs.changed == 'true'
         run: |
-          sudo apt-get update
-          sudo apt-get install -y yara pcre2-utils busybox
+          bash scripts/ci-apt-get.sh yara pcre2-utils busybox
       - name: Install package
         if: steps.paths.outputs.changed == 'true'
         run: pip install -e ".[dev]"
