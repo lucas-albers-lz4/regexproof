@@ -23194,6 +23194,13 @@
     },
     {
       "archived": false,
+      "audit": {
+        "auto_filed": true,
+        "auto_filed_at": "2026-11-11T15:58:59Z",
+        "needs_human_review": false,
+        "template_fired": "below-scale",
+        "updated_at": "2026-11-11T15:58:59Z"
+      },
       "default_branch": "main",
       "first_seen": "2026-09-05T15:34:30Z",
       "fork": false,
@@ -23209,6 +23216,14 @@
     },
     {
       "archived": false,
+      "audit": {
+        "auto_filed": false,
+        "human_resolved": true,
+        "human_review_reason": "auto-NO-GO refused: security_boundary=deterministic-true (routes to human review)",
+        "needs_human_review": false,
+        "re_evaluate": false,
+        "updated_at": "2026-11-11T16:01:05Z"
+      },
       "capped": true,
       "default_branch": "main",
       "first_seen": "2026-09-05T15:34:30Z",
@@ -23225,6 +23240,16 @@
     },
     {
       "archived": false,
+      "audit": {
+        "auto_filed": false,
+        "human_resolved": true,
+        "human_review_reason": "auto-NO-GO refused: security_boundary=deterministic-true (routes to human review)",
+        "needs_human_review": false,
+        "promoted_at": "2026-11-11T16:03:33Z",
+        "promoted_via": "bulk-review",
+        "re_evaluate": false,
+        "updated_at": "2026-11-11T16:03:33Z"
+      },
       "capped": true,
       "default_branch": "main",
       "first_seen": "2026-09-05T15:34:30Z",
@@ -23241,6 +23266,16 @@
     },
     {
       "archived": false,
+      "audit": {
+        "auto_filed": false,
+        "human_resolved": true,
+        "human_review_reason": "auto-NO-GO refused: security_boundary=deterministic-true (routes to human review)",
+        "needs_human_review": false,
+        "promoted_at": "2026-11-11T16:03:33Z",
+        "promoted_via": "bulk-review",
+        "re_evaluate": false,
+        "updated_at": "2026-11-11T16:03:33Z"
+      },
       "capped": true,
       "default_branch": "main",
       "first_seen": "2026-09-05T15:34:30Z",
@@ -23257,6 +23292,14 @@
     },
     {
       "archived": false,
+      "audit": {
+        "auto_filed": false,
+        "human_resolved": true,
+        "human_review_reason": "auto-NO-GO refused: security_boundary=deterministic-true (routes to human review)",
+        "needs_human_review": false,
+        "re_evaluate": false,
+        "updated_at": "2026-11-11T16:03:34Z"
+      },
       "capped": true,
       "default_branch": "main",
       "first_seen": "2026-09-05T15:34:30Z",
@@ -24770,6 +24813,13 @@
     },
     {
       "archived": false,
+      "audit": {
+        "auto_filed": true,
+        "auto_filed_at": "2026-11-11T16:02:48Z",
+        "needs_human_review": false,
+        "template_fired": "below-scale",
+        "updated_at": "2026-11-11T16:02:48Z"
+      },
       "capped": true,
       "default_branch": "main",
       "first_seen": "2026-09-15T17:23:20Z",
@@ -24927,6 +24977,14 @@
     },
     {
       "archived": false,
+      "audit": {
+        "auto_filed": false,
+        "human_resolved": true,
+        "human_review_reason": "auto-NO-GO refused: security_boundary=unknown with non-zero sites (routes to human review)",
+        "needs_human_review": false,
+        "re_evaluate": false,
+        "updated_at": "2026-11-11T16:01:11Z"
+      },
       "default_branch": "main",
       "first_seen": "2026-09-16T17:21:24Z",
       "fork": false,
@@ -25240,6 +25298,13 @@
     },
     {
       "archived": false,
+      "audit": {
+        "auto_filed": true,
+        "auto_filed_at": "2026-11-11T15:58:49Z",
+        "needs_human_review": false,
+        "template_fired": "below-scale",
+        "updated_at": "2026-11-11T15:58:49Z"
+      },
       "default_branch": "main",
       "first_seen": "2026-09-18T16:49:31Z",
       "fork": false,
@@ -26480,6 +26545,14 @@
     },
     {
       "archived": false,
+      "audit": {
+        "auto_filed": false,
+        "human_resolved": true,
+        "human_review_reason": "auto-NO-GO refused: security_boundary=unknown with non-zero sites (routes to human review)",
+        "needs_human_review": false,
+        "re_evaluate": false,
+        "updated_at": "2026-11-11T16:03:33Z"
+      },
       "capped": true,
       "default_branch": "main",
       "first_seen": "2026-09-26T16:42:07Z",
@@ -26957,6 +27030,14 @@
     },
     {
       "archived": false,
+      "audit": {
+        "auto_filed": false,
+        "human_resolved": true,
+        "human_review_reason": "auto-NO-GO refused: security_boundary=unknown with non-zero sites (routes to human review)",
+        "needs_human_review": false,
+        "re_evaluate": false,
+        "updated_at": "2026-11-11T16:01:05Z"
+      },
       "default_branch": "main",
       "first_seen": "2026-09-29T18:30:25Z",
       "fork": false,
@@ -27900,6 +27981,14 @@
     },
     {
       "archived": false,
+      "audit": {
+        "auto_filed": false,
+        "human_resolved": true,
+        "human_review_reason": "auto-NO-GO refused: security_boundary=unknown with non-zero sites (routes to human review)",
+        "needs_human_review": false,
+        "re_evaluate": false,
+        "updated_at": "2026-11-11T16:01:05Z"
+      },
       "default_branch": "main",
       "first_seen": "2026-10-05T21:12:42Z",
       "fork": false,
@@ -28059,6 +28148,14 @@
     },
     {
       "archived": false,
+      "audit": {
+        "auto_filed": false,
+        "human_resolved": true,
+        "human_review_reason": "auto-NO-GO refused: security_boundary=deterministic-true (routes to human review)",
+        "needs_human_review": false,
+        "re_evaluate": false,
+        "updated_at": "2026-11-11T16:03:34Z"
+      },
       "capped": true,
       "default_branch": "master",
       "first_seen": "2026-10-06T18:49:51Z",
@@ -28374,6 +28471,14 @@
     },
     {
       "archived": false,
+      "audit": {
+        "auto_filed": false,
+        "human_resolved": true,
+        "human_review_reason": "auto-NO-GO refused: security_boundary=unknown with non-zero sites (routes to human review)",
+        "needs_human_review": false,
+        "re_evaluate": false,
+        "updated_at": "2026-11-11T16:01:05Z"
+      },
       "default_branch": "master",
       "first_seen": "2026-10-09T02:01:23Z",
       "fork": false,
@@ -29338,6 +29443,16 @@
     },
     {
       "archived": false,
+      "audit": {
+        "auto_filed": false,
+        "human_resolved": true,
+        "human_review_reason": "auto-NO-GO refused: security_boundary=deterministic-true (routes to human review)",
+        "needs_human_review": false,
+        "promoted_at": "2026-11-11T16:01:00Z",
+        "promoted_via": "bulk-review",
+        "re_evaluate": false,
+        "updated_at": "2026-11-11T16:01:00Z"
+      },
       "capped": true,
       "default_branch": "main",
       "first_seen": "2026-10-15T17:22:02Z",
@@ -29354,6 +29469,14 @@
     },
     {
       "archived": false,
+      "audit": {
+        "auto_filed": false,
+        "human_resolved": true,
+        "human_review_reason": "auto-NO-GO refused: security_boundary=unknown with non-zero sites (routes to human review)",
+        "needs_human_review": false,
+        "re_evaluate": false,
+        "updated_at": "2026-11-11T16:01:05Z"
+      },
       "capped": true,
       "default_branch": "master",
       "first_seen": "2026-10-15T17:22:02Z",
@@ -29370,6 +29493,14 @@
     },
     {
       "archived": false,
+      "audit": {
+        "auto_filed": false,
+        "human_resolved": true,
+        "human_review_reason": "auto-NO-GO refused: security_boundary=unknown with non-zero sites (routes to human review)",
+        "needs_human_review": false,
+        "re_evaluate": false,
+        "updated_at": "2026-11-11T16:03:34Z"
+      },
       "capped": true,
       "default_branch": "master",
       "first_seen": "2026-10-15T17:22:02Z",
@@ -29386,6 +29517,13 @@
     },
     {
       "archived": false,
+      "audit": {
+        "auto_filed": true,
+        "auto_filed_at": "2026-11-11T16:03:22Z",
+        "needs_human_review": false,
+        "template_fired": "below-scale",
+        "updated_at": "2026-11-11T16:03:22Z"
+      },
       "capped": true,
       "default_branch": "master",
       "first_seen": "2026-10-15T17:22:02Z",
@@ -29402,6 +29540,13 @@
     },
     {
       "archived": false,
+      "audit": {
+        "auto_filed": true,
+        "auto_filed_at": "2026-11-11T16:03:25Z",
+        "needs_human_review": false,
+        "template_fired": "below-scale",
+        "updated_at": "2026-11-11T16:03:25Z"
+      },
       "capped": true,
       "default_branch": "main",
       "first_seen": "2026-10-15T17:22:02Z",

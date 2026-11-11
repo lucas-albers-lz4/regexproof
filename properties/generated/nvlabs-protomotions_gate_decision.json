@@ -1,0 +1,59 @@
+{
+  "candidate_url": "https://github.com/nvlabs/protomotions",
+  "conditions": [
+    {
+      "evidence": "Predicted buckets present (1) but not treated as novel surface.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Security-boundary condition not asserted met.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "13 sites < 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "nvlabs-protomotions",
+  "corpus_pin": "607ca7a0bb92e261120bcab8d9f97f28b3130ffc",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-11-11",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "py_re": 13
+    },
+    "flags": {
+      "i": 2
+    },
+    "pin": "607ca7a0bb92e261120bcab8d9f97f28b3130ffc",
+    "pin_mined": null,
+    "pin_probed": "607ca7a0bb92e261120bcab8d9f97f28b3130ffc",
+    "predicted_buckets": {
+      "inline-flag": 2
+    },
+    "regex_sites": 13,
+    "regex_sites_per_file": {
+      "data/scripts/bvh.py": 1,
+      "examples/data/rigv1-vaulting/g1-obstacle.py": 1,
+      "examples/data/rigv1-vaulting/rigv1-obstacle.py": 1,
+      "examples/visualize_smpl_motion.py": 1,
+      "protomotions/components/pose_lib.py": 1,
+      "protomotions/envs/motion_manager/motion_manager.py": 1,
+      "protomotions/robot_configs/base.py": 1,
+      "protomotions/simulator/base_simulator/config.py": 1,
+      "protomotions/tests/test_isaaclab_actuator_groups.py": 1,
+      "protomotions/tests/test_pretrained_model_cards.py": 2,
+      "protomotions/tests/test_smoothness_calculator.py": 1,
+      "usd_convert/convert_robot_mjcf_to_usda.py": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 13 regex sites (auto-NO-GO bar 200); dialects [py_re:13]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

@@ -1,0 +1,104 @@
+{
+  "candidate_url": "https://github.com/bahmni/openmrs-module-bahmniapps",
+  "conditions": [
+    {
+      "evidence": "Predicted buckets present (3) but not treated as novel surface.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Not a security boundary (probe.security_boundary=unknown).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "219 sites < 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "bahmni-openmrs-module-bahmniapps",
+  "corpus_pin": "2dec21d6d1b06d87d9881f4ed39a6e3cb59b7466",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-11-11",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 219
+    },
+    "flags": {
+      "d": 4,
+      "g": 56,
+      "i": 67,
+      "v": 4
+    },
+    "pin": "2dec21d6d1b06d87d9881f4ed39a6e3cb59b7466",
+    "pin_mined": null,
+    "pin_probed": "2dec21d6d1b06d87d9881f4ed39a6e3cb59b7466",
+    "predicted_buckets": {
+      "inline-flag": 67,
+      "stateful": 56,
+      "v-flag": 4
+    },
+    "regex_sites": 219,
+    "regex_sites_per_file": {
+      "micro-frontends/src/next-ui/Components/EditObservationForm/EditObservationForm.spec.jsx": 5,
+      "micro-frontends/src/next-ui/Components/ErrorNotification/ErrorNotification.spec.jsx": 4,
+      "micro-frontends/src/next-ui/Components/OtNotes/SavePopup.jsx": 2,
+      "micro-frontends/src/next-ui/Components/ProviderNotificationPatients/PatientsList.spec.jsx": 1,
+      "micro-frontends/src/next-ui/Components/SearchAllergen/SearchAllergen.jsx": 1,
+      "micro-frontends/src/next-ui/Components/SelectReactions/SelectReactions.jsx": 1,
+      "micro-frontends/src/next-ui/Components/VariableDoseProtocol/VariableDoseProtocolModal.jsx": 1,
+      "micro-frontends/src/next-ui/Components/VariableDoseProtocol/VariableDoseProtocolModal.spec.jsx": 10,
+      "micro-frontends/src/next-ui/Components/ViewObservationForm/FileViewer/BuildFileViewer/BuildFileViewer.spec.jsx": 8,
+      "micro-frontends/src/next-ui/Components/ViewObservationForm/FileViewer/FileViewerModal/FileViewerModal.spec.jsx": 1,
+      "micro-frontends/src/next-ui/Components/ViewObservationForm/ViewObservationForm.spec.jsx": 17,
+      "micro-frontends/src/next-ui/Containers/providerNotifications/ProviderNotifications.spec.jsx": 12,
+      "micro-frontends/src/next-ui/utils/FormDisplayControl/FormView.js": 2,
+      "micro-frontends/src/utils/bridge-builder.js": 1,
+      "micro-frontends/webpack.config.js": 5,
+      "ui/app/clinical/common/controllers/visitController.js": 2,
+      "ui/app/clinical/common/models/fhirDosingUtils.js": 1,
+      "ui/app/clinical/common/services/cdssService.js": 2,
+      "ui/app/clinical/consultation/controllers/addTreatmentController.js": 1,
+      "ui/app/clinical/consultation/controllers/conceptSetPageController.js": 1,
+      "ui/app/clinical/consultation/controllers/consultationController.js": 2,
+      "ui/app/clinical/consultation/directives/cdssAlertRow.js": 1,
+      "ui/app/common/app-framework/models/appDescriptor.js": 3,
+      "ui/app/common/app-framework/services/appService.js": 1,
+      "ui/app/common/concept-set/directives/conceptSetGroup.js": 1,
+      "ui/app/common/concept-set/services/conceptGroupFormatService.js": 1,
+      "ui/app/common/displaycontrols/navigationlinks/directives/navigationLinks.js": 1,
+      "ui/app/common/displaycontrols/observation/directives/bahmniObservation.js": 3,
+      "ui/app/common/displaycontrols/patientprofile/filters/titleCase.js": 1,
+      "ui/app/common/models/documentImage.js": 1,
+      "ui/app/common/patient-search/controllers/patientsListController.js": 1,
+      "ui/app/common/services/formPrintService.js": 2,
+      "ui/app/common/ui-helper/directives/conceptAutocomplete.js": 1,
+      "ui/app/common/ui-helper/filters/formatDecimalValues.js": 1,
+      "ui/app/common/ui-helper/filters/thumbnail.js": 2,
+      "ui/app/common/ui-helper/services/messagingService.js": 1,
+      "ui/app/common/util/init.js": 1,
+      "ui/app/common/util/modernizr.tests.js": 1,
+      "ui/app/common/util/stringFormat.js": 1,
+      "ui/app/common/util/translationUtil.js": 3,
+      "ui/app/home/controllers/loginController.js": 1,
+      "ui/app/home/controllers/loginLocationController.js": 1,
+      "ui/app/lib/chart/c3-0.4.10.min.js": 1,
+      "ui/app/lib/chart/d3-3.5.5.min.js": 25,
+      "ui/app/lib/jquery/jquery-ui-1.10.4.custom.min.js": 62,
+      "ui/app/lib/magnific-popup/jquery.magnific-popup.js": 10,
+      "ui/app/lib/modernizr.custom.80690.js": 1,
+      "ui/app/lib/react/react-dom.production.min.js": 3,
+      "ui/app/lib/react/react.production.min.js": 2,
+      "ui/app/registration/controllers/searchPatientController.js": 3,
+      "ui/app/registration/services/addressHierarchyService.js": 2,
+      "ui/app/reports/controllers/myReportsController.js": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 219 regex sites (auto-NO-GO bar 200); dialects [ecma:219]; boundary=unknown.",
+  "schema_version": "1"
+}

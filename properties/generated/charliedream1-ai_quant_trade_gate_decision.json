@@ -1,0 +1,63 @@
+{
+  "candidate_url": "https://github.com/charliedream1/ai_quant_trade",
+  "conditions": [
+    {
+      "evidence": "Predicted buckets present (2) but not treated as novel surface.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Security-boundary condition not asserted met.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "34 sites < 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "charliedream1-ai_quant_trade",
+  "corpus_pin": "b612402909b9b8b2e2826527305906ed32da2307",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-11-11",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 2
+    },
+    "dialect": {
+      "posix-shell": 2,
+      "py_re": 32
+    },
+    "flags": {
+      "i": 5,
+      "s": 6
+    },
+    "pin": "b612402909b9b8b2e2826527305906ed32da2307",
+    "pin_mined": null,
+    "pin_probed": "b612402909b9b8b2e2826527305906ed32da2307",
+    "predicted_buckets": {
+      "inline-flag": 11,
+      "lookaround": 2
+    },
+    "regex_sites": 34,
+    "regex_sites_per_file": {
+      ".cloudflare/scripts/build.sh": 1,
+      "a_全网优秀资源/10_大模型/07_skill包/vibe_trading_skills/ashare-pre-st-filter/scripts/fetch_sina_penalties.py": 8,
+      "a_全网优秀资源/10_大模型/07_skill包/vibe_trading_skills/cross-market-strategy/example_signal_engine.py": 7,
+      "egs_aide/看盘神器/v2/src/excel_monitor/core/backup_sources.py": 1,
+      "egs_aide/看盘神器/v2/video_generator/generate_video.py": 1,
+      "egs_data/股票/eastmoney/eastmoney_news_guba.py": 2,
+      "egs_skill/broker-research-analyst/scripts/pdf_downloader.py": 1,
+      "egs_skill/broker-research-analyst/scripts/report_validator.py": 7,
+      "egs_trade/rl/a002_finRL_tutorial/a01_Stock_NeurIPS2018/run_e2e.py": 3,
+      "scripts/build_docs.sh": 1,
+      "zz_scripts/check_docs_build.py": 2
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 34 regex sites (auto-NO-GO bar 200); dialects [posix-shell:2, py_re:32]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

@@ -1,0 +1,81 @@
+{
+  "candidate_url": "https://github.com/huggingface/smollm",
+  "conditions": [
+    {
+      "evidence": "Predicted buckets present (2) but not treated as novel surface.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Not a security boundary (probe.security_boundary=unknown).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "67 sites < 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "huggingface-smollm",
+  "corpus_pin": "438be18dae658a638f3a6976fdf5190bb6d68619",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-11-11",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "(?s)": 2,
+      "lookaround": 3
+    },
+    "dialect": {
+      "posix-shell": 2,
+      "py_re": 65
+    },
+    "flags": {
+      "i": 2,
+      "s": 1
+    },
+    "pin": "438be18dae658a638f3a6976fdf5190bb6d68619",
+    "pin_mined": null,
+    "pin_probed": "438be18dae658a638f3a6976fdf5190bb6d68619",
+    "predicted_buckets": {
+      "inline-flag": 5,
+      "lookaround": 3
+    },
+    "regex_sites": 67,
+    "regex_sites_per_file": {
+      "text/data/smoltalk/summarization/pipelines/email_summaries.py": 1,
+      "text/evaluation/smollm2/math_utils.py": 10,
+      "text/evaluation/smollm2/tasks.py": 1,
+      "vision/data/datasets_processing_scripts/build_concatenation_datasets_sft/build_ds_sft.py": 2,
+      "vision/data/datasets_processing_scripts/build_websight_v02/python_scripts/03_filtering_html_codes.py": 1,
+      "vision/data/datasets_processing_scripts/build_websight_v02/python_scripts/04_screenshot_html_codes.py": 1,
+      "vision/data/datasets_processing_scripts/create_fine_tuning_datasets/create_table_datasets.py": 2,
+      "vision/m4/evaluation/custom_metrics/utils.py": 4,
+      "vision/m4/models/vgpt2/evaluation_captioning_in_context_vgpt2.py": 1,
+      "vision/m4/models/vgpt2/evaluation_classification_in_context_vgpt2.py": 1,
+      "vision/m4/models/vgpt2/evaluation_open_ended_vqa_in_context_vgpt2.py": 1,
+      "vision/m4/models/vgpt2/modeling_vgpt2.py": 2,
+      "vision/m4/sourcing/data_collection/processors/dom_tree_simplificator.py": 5,
+      "vision/m4/sourcing/data_collection/processors/pair_filtering.py": 1,
+      "vision/m4/sourcing/data_collection/processors/pre_extraction_simplificator.py": 1,
+      "vision/m4/sourcing/data_collection/processors/web_document_filtering.py": 1,
+      "vision/m4/sourcing/data_collection/utils/filtering_utils.py": 2,
+      "vision/m4/sourcing/data_collection/utils/simplification_utils.py": 10,
+      "vision/m4/sourcing/pmd/cache_path.py": 2,
+      "vision/m4/sourcing/processing/extracting_ngrams/run_document_ngrams_extraction.sh": 2,
+      "vision/m4/testing_utils.py": 2,
+      "vision/m4/training/setup_language_model.py": 1,
+      "vision/m4/training/setup_vision_model.py": 1,
+      "vision/smolvlm2/scripts/create_mixture.py": 2,
+      "vision/smolvlm2/scripts/sort.py": 1,
+      "vision/smolvlm2/smolvlm/conversation.py": 1,
+      "vision/smolvlm2/smolvlm/datasets/dataset.py": 4,
+      "vision/smolvlm2/smolvlm/datasets/dataset_clip_sampling.py": 4
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 67 regex sites (auto-NO-GO bar 200); dialects [posix-shell:2, py_re:65]; boundary=unknown.",
+  "schema_version": "1"
+}

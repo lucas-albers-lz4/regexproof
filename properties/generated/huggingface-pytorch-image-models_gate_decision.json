@@ -1,0 +1,78 @@
+{
+  "candidate_url": "https://github.com/huggingface/pytorch-image-models",
+  "conditions": [
+    {
+      "evidence": "Predicted buckets present (1) but not treated as novel surface.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Not a security boundary (probe.security_boundary=deterministic-false).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "80 sites < 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "huggingface-pytorch-image-models",
+  "corpus_pin": "2836eb01ee3e668acfa0f06548d209ec0c786464",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-11-11",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 1
+    },
+    "dialect": {
+      "py_re": 80
+    },
+    "flags": {},
+    "pin": "2836eb01ee3e668acfa0f06548d209ec0c786464",
+    "pin_mined": null,
+    "pin_probed": "2836eb01ee3e668acfa0f06548d209ec0c786464",
+    "predicted_buckets": {
+      "lookaround": 1
+    },
+    "regex_sites": 80,
+    "regex_sites_per_file": {
+      "convert/convert_lcnetv2_paddle.py": 3,
+      "timm/data/auto_augment.py": 3,
+      "timm/data/imagenet_info.py": 1,
+      "timm/models/_efficientnet_builder.py": 1,
+      "timm/models/_factory.py": 1,
+      "timm/models/_manipulate.py": 2,
+      "timm/models/_registry.py": 1,
+      "timm/models/byobnet.py": 4,
+      "timm/models/convnext.py": 2,
+      "timm/models/csatv2.py": 4,
+      "timm/models/davit.py": 4,
+      "timm/models/densenet.py": 1,
+      "timm/models/edgenext.py": 2,
+      "timm/models/efficientformer.py": 5,
+      "timm/models/fastvit.py": 3,
+      "timm/models/focalnet.py": 3,
+      "timm/models/iformer.py": 4,
+      "timm/models/mambaout.py": 2,
+      "timm/models/metaformer.py": 5,
+      "timm/models/mvitv2.py": 3,
+      "timm/models/pit.py": 1,
+      "timm/models/pvt_v2.py": 2,
+      "timm/models/regnet.py": 3,
+      "timm/models/sequencer.py": 2,
+      "timm/models/swiftformer.py": 2,
+      "timm/models/swin_transformer.py": 1,
+      "timm/models/swin_transformer_v2.py": 1,
+      "timm/models/tresnet.py": 6,
+      "timm/models/vision_transformer.py": 5,
+      "timm/utils/attention_extract.py": 2,
+      "timm/utils/misc.py": 1
+    },
+    "security_boundary": "deterministic-false"
+  },
+  "rationale": "Below admission scale: 80 regex sites (auto-NO-GO bar 200); dialects [py_re:80]; boundary=deterministic-false.",
+  "schema_version": "1"
+}

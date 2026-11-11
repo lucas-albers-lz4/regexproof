@@ -1,0 +1,61 @@
+{
+  "candidate_url": "https://github.com/misiektoja/instagram_monitor",
+  "conditions": [
+    {
+      "evidence": "Predicted buckets present (4) but not treated as novel surface.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Security-boundary condition not asserted met.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "62 sites < 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "misiektoja-instagram_monitor",
+  "corpus_pin": "d5c05880febcf7c081c6f5a035e5d28e8db2e036",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-11-11",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "(?m)": 1,
+      "backref": 1,
+      "lookaround": 7
+    },
+    "dialect": {
+      "py_re": 62
+    },
+    "flags": {
+      "i": 14,
+      "m": 9,
+      "s": 2
+    },
+    "pin": "d5c05880febcf7c081c6f5a035e5d28e8db2e036",
+    "pin_mined": null,
+    "pin_probed": "d5c05880febcf7c081c6f5a035e5d28e8db2e036",
+    "predicted_buckets": {
+      "backref": 1,
+      "inline-flag": 16,
+      "lookaround": 7,
+      "m-flag": 10
+    },
+    "regex_sites": 62,
+    "regex_sites_per_file": {
+      "instagram_monitor.py": 44,
+      "tests/test_browser_e2e.py": 1,
+      "tests/test_documentation.py": 7,
+      "tests/test_packaging.py": 9,
+      "tests/test_parsing_and_useragents.py": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 62 regex sites (auto-NO-GO bar 200); dialects [py_re:62]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

@@ -1,0 +1,63 @@
+{
+  "candidate_url": "https://github.com/simonschubert/linuxcommandlibrary",
+  "conditions": [
+    {
+      "evidence": "Predicted buckets present (5) but not treated as novel surface.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Not a security boundary (probe.security_boundary=unknown).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "23 sites < 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "simonschubert-linuxcommandlibrary",
+  "corpus_pin": "90b3aecfd87b032e1bcca14b34af272285418fe9",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-11-11",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "(?m)": 4,
+      "(?s)": 2,
+      "lookaround": 2,
+      "posix-class": 1
+    },
+    "dialect": {
+      "ecma": 11,
+      "posix-shell": 4,
+      "py_re": 8
+    },
+    "flags": {
+      "g": 10,
+      "s": 2
+    },
+    "pin": "90b3aecfd87b032e1bcca14b34af272285418fe9",
+    "pin_mined": null,
+    "pin_probed": "90b3aecfd87b032e1bcca14b34af272285418fe9",
+    "predicted_buckets": {
+      "inline-flag": 4,
+      "lookaround": 2,
+      "m-flag": 4,
+      "posix-class": 1,
+      "stateful": 10
+    },
+    "regex_sites": 23,
+    "regex_sites_per_file": {
+      "scripts/collect-command-requests.sh": 4,
+      "scripts/fetch-package-installs.py": 8,
+      "websiteBuilder/src/main/resources/scripts/copy.js": 7,
+      "websiteBuilder/src/main/resources/scripts/terminal.js": 4
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 23 regex sites (auto-NO-GO bar 200); dialects [ecma:11, posix-shell:4, py_re:8]; boundary=unknown.",
+  "schema_version": "1"
+}

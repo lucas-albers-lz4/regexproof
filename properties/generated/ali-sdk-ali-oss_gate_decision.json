@@ -1,0 +1,112 @@
+{
+  "candidate_url": "https://github.com/ali-sdk/ali-oss",
+  "conditions": [
+    {
+      "evidence": "Predicted buckets present (4) but not treated as novel surface.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Not a security boundary (probe.security_boundary=unknown).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "132 sites < 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "ali-sdk-ali-oss",
+  "corpus_pin": "fa263d22ca4c6599cb987c3db6325c86c7a5dc6b",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-11-11",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 3
+    },
+    "dialect": {
+      "ecma": 132
+    },
+    "flags": {
+      "g": 27,
+      "i": 4,
+      "m": 1
+    },
+    "pin": "fa263d22ca4c6599cb987c3db6325c86c7a5dc6b",
+    "pin_mined": null,
+    "pin_probed": "fa263d22ca4c6599cb987c3db6325c86c7a5dc6b",
+    "predicted_buckets": {
+      "inline-flag": 4,
+      "lookaround": 3,
+      "m-flag": 1,
+      "stateful": 27
+    },
+    "regex_sites": 132,
+    "regex_sites_per_file": {
+      "browser-build.js": 1,
+      "commitlint.config.js": 1,
+      "example/config/webpack.dev.conf.js": 4,
+      "example/src/main.js": 1,
+      "lib/browser/client.js": 3,
+      "lib/browser/object.js": 1,
+      "lib/client.js": 3,
+      "lib/common/bucket/putBucketLifecycle.js": 3,
+      "lib/common/client/getReqUrl.js": 1,
+      "lib/common/client/getReqUrl.ts": 1,
+      "lib/common/object/asyncSignatureUrl.js": 1,
+      "lib/common/object/copyObject.js": 2,
+      "lib/common/object/getBucketVersions.js": 1,
+      "lib/common/object/signatureUrl.js": 1,
+      "lib/common/signUtils.js": 1,
+      "lib/common/utils/checkBucketName.js": 2,
+      "lib/common/utils/checkBucketName.ts": 2,
+      "lib/common/utils/checkBucketNameTest.js": 2,
+      "lib/common/utils/checkBucketNameTest.ts": 2,
+      "lib/common/utils/checkBucketTag.js": 3,
+      "lib/common/utils/checkBucketTag.ts": 3,
+      "lib/common/utils/checkConfigValid.js": 3,
+      "lib/common/utils/checkConfigValid.ts": 3,
+      "lib/common/utils/checkObjectTag.js": 3,
+      "lib/common/utils/checkObjectTag.ts": 3,
+      "lib/common/utils/checkUserAgent.js": 2,
+      "lib/common/utils/checkUserAgent.ts": 2,
+      "lib/common/utils/dataFix.js": 3,
+      "lib/common/utils/dataFix.ts": 3,
+      "lib/common/utils/encodeString.js": 1,
+      "lib/common/utils/encodeString.ts": 1,
+      "lib/common/utils/formatInventoryConfig.js": 2,
+      "lib/common/utils/formatInventoryConfig.ts": 2,
+      "lib/common/utils/formatObjKey.js": 2,
+      "lib/common/utils/formatObjKey.ts": 2,
+      "lib/common/utils/getStandardRegion.js": 1,
+      "lib/common/utils/getStandardRegion.ts": 1,
+      "lib/common/utils/getStrBytesCount.js": 1,
+      "lib/common/utils/getStrBytesCount.ts": 1,
+      "lib/common/utils/isIP.js": 2,
+      "lib/common/utils/isIP.ts": 2,
+      "lib/common/utils/obj2xml.js": 1,
+      "lib/common/utils/obj2xml.ts": 1,
+      "lib/common/utils/parseRestoreInfo.js": 1,
+      "lib/common/utils/parseRestoreInfo.ts": 1,
+      "lib/object.js": 1,
+      "lib/sts.js": 5,
+      "shims/stream-http/index.js": 1,
+      "shims/stream-http/lib/response.js": 3,
+      "shims/url/index.js": 9,
+      "shims/xhr.js": 1,
+      "task/browser-test-build.js": 1,
+      "task/detect-secrets.js": 1,
+      "test/browser/browser.test.js": 1,
+      "test/config.js": 1,
+      "test/node/cluster.test.js": 15,
+      "test/node/object.test.js": 8,
+      "test/node/sts.test.js": 2
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 132 regex sites (auto-NO-GO bar 200); dialects [ecma:132]; boundary=unknown.",
+  "schema_version": "1"
+}

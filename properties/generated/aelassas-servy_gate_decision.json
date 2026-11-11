@@ -1,0 +1,40 @@
+{
+  "candidate_url": "https://github.com/aelassas/servy",
+  "conditions": [
+    {
+      "evidence": "No novel dialect/flag/encoding surface.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Security-boundary condition not asserted met.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "0 sites < 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "aelassas-servy",
+  "corpus_pin": "9717aafeca983c7938c8a3dcd660f474e472b20b",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-11-11",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {},
+    "flags": {},
+    "pin": "9717aafeca983c7938c8a3dcd660f474e472b20b",
+    "pin_mined": null,
+    "pin_probed": "9717aafeca983c7938c8a3dcd660f474e472b20b",
+    "predicted_buckets": {},
+    "regex_sites": 0,
+    "regex_sites_per_file": {},
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 0 regex sites (auto-NO-GO bar 200); dialects [none]; boundary=deterministic-true.",
+  "schema_version": "1"
+}
