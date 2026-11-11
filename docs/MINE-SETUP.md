@@ -112,6 +112,10 @@ queue drain still uses `SCORE_VERSION` v1).
 v1 totals. Do not treat score-v2 metrics as evidence about what gets scanned.
 The v1 base's load-bearing boundary term is `classify_boundary` on the repo
 name (about +50 of ~101 points); v1.5 adds the frozen tree overlay on top.
+At `--tree-probe-budget 0` (the live default) that overlay still joins
+[`mine-tree-features.json`](../properties/generated/mine-tree-features.json)
+the same way score-v2 does — it does not degrade to a uniform
+`tree_unavailable` penalty.
 Score-v2 is opt-in (`--allocator score-v2`) and is **not** rolled out even
 when `default_allocator_flip_allowed` is true in the weight artifact (#490).
 Raising `DAILY_MINE_CAP` invalidates the v1.5 calibration (see

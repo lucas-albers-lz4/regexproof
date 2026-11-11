@@ -9,8 +9,12 @@ drives auto-NO-GO without a walk."""
 
 from __future__ import annotations
 
+import importlib.util
+import json
 from datetime import date
+from pathlib import Path
 
+from regexproof.mine.ledger import empty_ledger, save_ledger
 from regexproof.mine.score import (
     _TREE_OVERLAY_WEIGHTS,
     _normalize_allocator,
@@ -19,6 +23,19 @@ from regexproof.mine.score import (
     rank_candidates,
     score_version_for_allocator,
 )
+from regexproof.mine.search import SEARCH_QUERIES
+
+ROOT = Path(__file__).resolve().parent.parent
+
+
+def _load_rank_cli():
+    spec = importlib.util.spec_from_file_location(
+        "rank_cli_v15", ROOT / "scripts" / "rank-mine-candidates.py"
+    )
+    assert spec is not None and spec.loader is not None
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
 
 # Fixed eval date — recency scoring must never fall back to the wall clock
 # (a run on a later day would silently change scores).
@@ -145,15 +162,112 @@ def test_allocator_normalization():
 
 def test_rank_and_batch_run_cli_default_is_v15():
     """Operational live-drain default is v1.5; v1 remains an explicit opt-in."""
-    from pathlib import Path
-
-    root = Path(__file__).resolve().parent.parent
-    rank_src = (root / "scripts" / "rank-mine-candidates.py").read_text(encoding="utf-8")
-    batch_src = (root / "scripts" / "batch-run.py").read_text(encoding="utf-8")
+    rank_src = (ROOT / "scripts" / "rank-mine-candidates.py").read_text(encoding="utf-8")
+    batch_src = (ROOT / "scripts" / "batch-run.py").read_text(encoding="utf-8")
     assert 'default="score-v1.5"' in rank_src
     assert 'default="score-v1.5"' in batch_src
     assert "--allocator score-v1 still reproduces" in rank_src or "reproduces v1" in rank_src
     assert "reproduces v1" in batch_src
+    assert 'args.allocator in ("score-v1.5", "score-v2")' in rank_src
+
+
+def test_rank_cli_v15_joins_tracked_tree_features(tmp_path: Path, capsys):
+    """Default score-v1.5 must join mine-tree-features.json at budget 0.
+
+    Offline eval that justified the flip reads that artifact. Live rank
+    used to pass an empty dict and score every row as tree_unavailable.
+    """
+    pin_complete = "a" * 40
+    pin_missing = "b" * 40
+    features = tmp_path / "mine-tree-features.json"
+    features.write_text(
+        json.dumps(
+            {
+                "schema_version": "1",
+                "entries": {
+                    "acme/with-tree": {
+                        pin_complete: {
+                            "complete": True,
+                            "truncated": False,
+                            "security_boundary": "deterministic-true",
+                            "regex_file_type_counts": {".py": 40, ".yara": 12},
+                            "path_count": 300,
+                            "probed_pin": pin_complete,
+                        }
+                    }
+                },
+            },
+            indent=2,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    ledger_path = tmp_path / "candidate-ledger.json"
+    ledger = empty_ledger()
+    ledger["candidates"] = [
+        {
+            "url": "https://github.com/acme/no-tree",
+            "default_branch": "main",
+            "pin": pin_missing,
+            "pushed_date": "2026-08-01",
+            "stars": 50000,
+            "source_query": SEARCH_QUERIES[0],
+            "first_seen": "2026-08-09T00:00:00Z",
+            "status": "mined",
+            "fork": False,
+            "size": 10,
+            "language": "Python",
+            "archived": False,
+        },
+        {
+            "url": "https://github.com/acme/with-tree",
+            "default_branch": "main",
+            "pin": pin_complete,
+            "pushed_date": "2026-08-01",
+            "stars": 10,
+            "source_query": SEARCH_QUERIES[0],
+            "first_seen": "2026-08-09T00:00:00Z",
+            "status": "mined",
+            "fork": False,
+            "size": 10,
+            "language": "Python",
+            "archived": False,
+        },
+    ]
+    save_ledger(ledger_path, ledger)
+    gen = tmp_path / "generated"
+    gen.mkdir()
+    mod = _load_rank_cli()
+    assert (
+        mod.main(
+            [
+                "--ledger",
+                str(ledger_path),
+                "--generated",
+                str(gen),
+                "--tree-features",
+                str(features),
+                "--tree-probe-budget",
+                "0",
+                "--no-deny-list",
+                "--limit",
+                "2",
+            ]
+        )
+        == 0
+    )
+    rows = [
+        json.loads(line)
+        for line in capsys.readouterr().out.splitlines()
+        if line.strip()
+    ]
+    assert [row["url"] for row in rows] == [
+        "https://github.com/acme/with-tree",
+        "https://github.com/acme/no-tree",
+    ]
+    assert rows[0]["allocator"] == "score-v1.5"
+    assert rows[0]["breakdown"]["tree_unavailable"] is False
+    assert rows[1]["breakdown"]["tree_unavailable"] is True
 
 
 def test_tree_counts_never_drive_auto_no_go():
