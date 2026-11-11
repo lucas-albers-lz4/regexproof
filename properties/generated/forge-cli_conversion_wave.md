@@ -41,9 +41,17 @@ The conversion rows are emitted in
 
 ## Stop vs next slice
 
-**Wave 1 idiom slice done.** Do not re-ask URL password charset, Datamesh assignment-value charset, LLM `:287` userinfo charset, JAAS escaped-quote product coverage, or the documented sensitive-key forms. Do not re-ask the unencodable `:280` `[^&]+` query as an ASCII self-cover.
+**STOP this cluster** (`Agenticstiger/forge-cli` @ pinned commit). Wave 1 (`secret-redaction`) and the helper-image slice (#648) are done. No further `FC-forge-cli` conversion waves on this pin.
 
-**Next idiom (same cluster, same pin):** copilot-memory x-api-key/Bearer persistence only if it is shown to be a distinct sink from `redact_secret_text`.
+**Copilot-memory x-api-key/Bearer persistence — rejected.** Wave 1 listed that idiom only if a distinct persistence sink existed. The helper-image P0 audit refutes it: project-memory write path double-redacts via `_coerce_memory_document` before `copilot-memory.json` is written; personal/team memory paths do not reach `_common.py` Bearer/x-api-key regexes. See the P0 evidence table in [`sweep/forge-cli-helper-image/plan.md`](../../sweep/forge-cli-helper-image/plan.md).
+
+**Remaining JAAS / Datamesh / LLM userinfo shape-4 images — not a new wave.** Those sites were already asked in wave 1 as shape 1/2 alphabet or coverage contracts (`_JAAS_CONFIG_RE`, `_SECRET_ERROR_PATTERNS`, `providers.py:287`). Per-token shape-4 image queries are not a distinct idiom slice here; monolithic output-image regexes TIMEOUT, and the registered shape-2 subclaim plus pinned helper replay (#648) already bound the env-key sink.
+
+**Still skipped:** `providers.py:280` `[^&]+` query credentials remain unencodable (`unicode-not-literal`); do not weaken into a self-cover.
+
+Do not re-ask URL password charset, Datamesh assignment-value charset, LLM `:287` userinfo charset, JAAS escaped-quote product coverage, or documented sensitive-key forms.
+
+**No new `properties_asked`** in this close-out. **Do not start the next cluster** in this PR.
 
 **Do not:** packages/LuCI/aidevops/mycelium re-open, Smith drain, `WAVE_CORPORA`, public filing without approval, hostname / JSON `[^"]*` / IPv4-MAC charset, Concat-identity `PRODUCT = MATCH`.
 

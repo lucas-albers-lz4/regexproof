@@ -28,6 +28,8 @@ this candidate, and no public filing is implied.
 
 ## Next contracts to adopt
 
+**Cluster stopped** after #648; the three remaining shape-4 rows below are deferred as DESIGN_TAIL unregistered (no registry entry — do not emit conversion rows).
+
 At most four human contracts are planned, one per distinct helper/sink:
 
 | Site | Product question | Expected shape |
