@@ -10,7 +10,6 @@ from pathlib import Path
 
 from regexproof.mine.ledger import empty_ledger, save_ledger
 from regexproof.mine.score import (
-    SCORE_VERSION,
     SCORE_V2_WEIGHTS_PATH,
     _QUERY_FAMILY,
     _query_family,
@@ -164,7 +163,8 @@ def test_rank_cli_prints_top(tmp_path: Path, capsys):
     assert len(lines) == 1
     row = json.loads(lines[0])
     assert row["url"].endswith("/gitleaks")
-    assert row["score_version"] == SCORE_VERSION
+    assert row["score_version"] == "v1.5"
+    assert row["allocator"] == "score-v1.5"
     assert "breakdown" in row
 
 
