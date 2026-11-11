@@ -130,8 +130,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument(
         "--allocator",
         choices=("score-v1", "score-v1.5", "score-v2"),
-        default="score-v1",
-        help="Live drain allocator (default score-v1; eval flip is offline-only)",
+        default="score-v1.5",
+        help="Live drain allocator (default score-v1.5; --allocator score-v1 reproduces v1)",
     )
     ap.add_argument("--manifest", type=pathlib.Path, default=None)
     ap.add_argument(

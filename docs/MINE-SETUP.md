@@ -104,13 +104,18 @@ persisted). Higher is better; ties break by `url`.
 Not scored yet (needs Smith / live probe): site counts, dialects, encodable
 fraction, compile likelihood.
 
-`mine_run_summary` includes `"allocator": "score-v1"`.
+`mine_run_summary` includes `"allocator": "score-v1"` (day-cap admit /
+queue drain still uses `SCORE_VERSION` v1).
 
-**Live allocator is score-v1.** Do not treat score-v2 metrics as evidence
-about what gets scanned. The production score's load-bearing boundary term is
-`classify_boundary` on the repo name (about +50 of ~101 points). Score-v2 is
-opt-in (`--allocator score-v2`) and is **not** rolled out even when
-`default_allocator_flip_allowed` is true in the weight artifact (#490).
+**Live probe-stream allocator is score-v1.5** (`rank-mine-candidates.py` and
+`batch-run.py` defaults). `--allocator score-v1` still reproduces historical
+v1 totals. Do not treat score-v2 metrics as evidence about what gets scanned.
+The v1 base's load-bearing boundary term is `classify_boundary` on the repo
+name (about +50 of ~101 points); v1.5 adds the frozen tree overlay on top.
+Score-v2 is opt-in (`--allocator score-v2`) and is **not** rolled out even
+when `default_allocator_flip_allowed` is true in the weight artifact (#490).
+Raising `DAILY_MINE_CAP` invalidates the v1.5 calibration (see
+`score_v15_flip_decision.json`).
 
 ### Score-v2 allocator (#432) — comparison only
 
@@ -157,7 +162,7 @@ Operator terms (mine / queue drain / rank / probe / gate / Smith):
 Each stdout line is NDJSON: `url`, `score`, `score_version`, `breakdown`, plus
 stars / query / pushed_date. No network, no writes (tree/density budgets
 default to 0). Wave 9 (#578) adds **soft** screens only — never a hard
-reject, and live drain stays score-v1:
+reject. Live probe rank defaults to score-v1.5; Wave 9 screens stay soft:
 
 - Root-dir deprioritize when the tree summary has `root_dir_names` (new
   probes via `--tree-probe-budget`) or when walked `regex_sites_per_file`

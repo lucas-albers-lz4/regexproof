@@ -396,19 +396,25 @@ def main(argv: list[str] | None = None) -> int:
         "one-sided, AUC-only, no OR alternative",
         "flip_to_v15": flips,
         "action": (
-            "record offline AUC flip to score-v1.5; live drain unchanged"
+            "flip live drain to score-v1.5; --allocator score-v1 still reproduces v1"
             if flips
             else "keep score-v1 (offline AUC and live drain)"
         ),
         "note": "v2 comparison is label reproduction only, never validation",
-        "live_drain": "score-v1 (rank-mine-candidates.py / docs/MINE-SETUP.md)",
+        "live_drain": (
+            "score-v1.5 (rank-mine-candidates.py / batch-run.py); "
+            "mine admit remains score-v1"
+            if flips
+            else "score-v1 (rank-mine-candidates.py / docs/MINE-SETUP.md)"
+        ),
         "designed_mismatch": (
             (
-                "Eval already flipped to v1.5 (flip_to_v15). Live drain is still "
-                "v1. AUC is a global-health statistic; the operational flip of "
-                "the probe stream is a separate, currently unowned decision. A "
-                "firing escape while v1.5 sits unflipped on live drain is a "
-                "designed outcome. No second top-K flip rule (freeze is AUC-only)."
+                "Eval flipped to v1.5 (flip_to_v15). Operational probe-stream "
+                "default is now score-v1.5. AUC is a global-health statistic; "
+                "no second top-K flip rule (freeze is AUC-only). Daily mine "
+                "admit/queue drain stays score-v1 (SCORE_VERSION) until a "
+                "separate cap-raise calibration. --allocator score-v1 still "
+                "reproduces historical v1 totals."
             )
             if flips
             else (

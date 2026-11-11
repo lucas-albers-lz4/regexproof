@@ -3,8 +3,9 @@
 score-v1.5 = the v1 base + a FROZEN tree overlay (file-suffix counts + path
 vocabulary from the tree probe). The overlay NEVER drives auto-NO-GO without
 a walk — the walk is the boundary signal; tree counts only re-rank.
-Live drain stays score-v1; v1.5 is evaluated offline per the P0 frozen
-protocol and flips only if the bootstrap difference CI excludes 0."""
+Live drain default is score-v1.5 after the #550 operational flip.
+`--allocator score-v1` still reproduces v1 totals. The overlay NEVER
+drives auto-NO-GO without a walk."""
 
 from __future__ import annotations
 
@@ -140,6 +141,19 @@ def test_allocator_normalization():
         raise AssertionError("expected ValueError")
     except ValueError:
         pass
+
+
+def test_rank_and_batch_run_cli_default_is_v15():
+    """Operational live-drain default is v1.5; v1 remains an explicit opt-in."""
+    from pathlib import Path
+
+    root = Path(__file__).resolve().parent.parent
+    rank_src = (root / "scripts" / "rank-mine-candidates.py").read_text(encoding="utf-8")
+    batch_src = (root / "scripts" / "batch-run.py").read_text(encoding="utf-8")
+    assert 'default="score-v1.5"' in rank_src
+    assert 'default="score-v1.5"' in batch_src
+    assert "--allocator score-v1 still reproduces" in rank_src or "reproduces v1" in rank_src
+    assert "reproduces v1" in batch_src
 
 
 def test_tree_counts_never_drive_auto_no_go():

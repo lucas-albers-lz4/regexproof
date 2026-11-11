@@ -26,18 +26,19 @@ def test_flip_decision_exists_and_is_shape_checked():
     assert d["eval"]["population_n"] == 875
     assert d["eval"]["split"]["ratio"] == 0.5
     assert d["flip_rule"].startswith("bootstrap BCa difference CI")
-    # Freeze-eval golden: current population flips offline to v1.5; live drain stays v1.
+    # Freeze-eval golden: population flips to v1.5; live drain now follows.
     assert d["flip_to_v15"] is True
     assert d["action"] == (
-        "record offline AUC flip to score-v1.5; live drain unchanged"
+        "flip live drain to score-v1.5; --allocator score-v1 still reproduces v1"
     )
     mismatch = d["designed_mismatch"].lower()
-    assert "live drain is still" in mismatch
+    assert "operational probe-stream default is now score-v1.5" in mismatch
     assert "auc is a global-health statistic" in mismatch
-    assert "operational flip of the probe stream" in mismatch
+    assert "mine admit/queue drain stays score-v1" in mismatch
     assert "no second top-k flip" in mismatch
     assert d["live_drain"] == (
-        "score-v1 (rank-mine-candidates.py / docs/MINE-SETUP.md)"
+        "score-v1.5 (rank-mine-candidates.py / batch-run.py); "
+        "mine admit remains score-v1"
     )
     # precision@K is descriptive only; freeze-eval golden counts.
     assert d["eval"]["precision_at_k"]["k"] == 30

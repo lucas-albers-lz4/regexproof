@@ -122,8 +122,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument(
         "--allocator",
         choices=("score-v1", "score-v1.5", "score-v2"),
-        default="score-v1",
-        help="Score allocator (default: score-v1; v1.5 adds the tree overlay).",
+        default="score-v1.5",
+        help="Score allocator (default: score-v1.5 live drain; --allocator score-v1 reproduces v1).",
     )
     ap.add_argument(
         "--deny-list",
