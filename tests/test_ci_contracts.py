@@ -401,6 +401,19 @@ def test_p1_verified_default_flags_wired():
     assert "pattern: golden-batch-${{ matrix.python-version }}-*" in yml
 
 
+def test_verify_workflow_routes_apt_through_mirror_helper():
+    """Hosted-runner DNS flakes against azure.archive.ubuntu.com must not
+    take down Z3/Golden/dogfood via raw apt-get (#681/#682 CI)."""
+    yml = (ROOT / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
+    helper = ROOT / "scripts" / "ci-apt-get.sh"
+    assert helper.is_file()
+    assert "bash scripts/ci-apt-get.sh" in yml
+    assert "sudo apt-get" not in yml
+    text = helper.read_text(encoding="utf-8")
+    assert "azure.archive.ubuntu.com" in text
+    assert "archive.ubuntu.com" in text
+
+
 def test_timeout_gate_zero_and_allowlist():
     from regexproof.rule_diff.timeout_gate import fail_message, timeout_gate
 
