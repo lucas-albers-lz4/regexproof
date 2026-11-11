@@ -174,7 +174,7 @@ jobs:
       - name: Install pinned PCRE2 helper for POSIX shell compilation
         run: |
           sudo apt-get update
-          sudo apt-get install -y pcre2-utils=10.42-4ubuntu2.1
+          sudo apt-get install -y pcre2-utils=10.42-4ubuntu2.2
           test "$(pcre2grep --version | head -1)" = "pcre2grep version 10.42 2022-12-11"
       - name: Assert toolchain pins
         run: python scripts/ci-assert-toolchain.py --job proof
